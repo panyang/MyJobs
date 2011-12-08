@@ -1,0 +1,47 @@
+{% load i18n %}
+{% comment %}
+widget-loginify.html -- Lets users login using their already connected social account.
+{% endcomment %}
+
+
+<table>
+{% if social_auth.associated %}
+    <thead>
+      <tr>
+	<th colspan="2">
+	  {% trans "Connected Websites" %}<br>
+	  <span class="help-inline">{% trans "You will be automatically logged in to my.jobs when you log in to the following." %}</span>
+	</th>
+      </tr>
+    </thead>
+    <tbody>
+      {% for type, accounts in social_auth.associated.items %}
+    {% for account in accounts %}
+    <tr>
+      <td width="10%">
+	<span class = "social-logo"><img src="/files/social-logos/{{ account.provider|title }}.png" alt="{{ account.provider|title }}logo"><span>
+      </td>
+      <td>
+        <a class="btn danger" href={% url socialauth_disconnect_individual account.provider account.id %}>{% trans "Disconnect" %}</a>
+      </td>
+   {% endfor %}
+   {% endfor %}
+{% endif %}      
+      <tr>
+     <td><b>{% trans "Login With" %}</b></td>
+     <td>
+  {% for name in social_auth.not_associated.oauth %}
+    <a href="{% url socialauth_begin name %}"><img class="socialicon" src="/files/social-icons/{{ name.title }}.png" title="{% trans "connect to your" %} {{ name.title }} {% trans "account" %}"></a>
+  {% endfor %}
+  {% for name in social_auth.not_associated.oauth2 %}
+    <a href="{% url socialauth_begin name %}"><img class="socialicon" src="/files/social-icons/{{ name.title }}.png" alt="{% trans "connect to your" %} {{ name.title }} {% trans "account" %}"></a>
+  {% endfor %}
+  {% for name in social_auth.not_associated.openid %}
+    {% if name != "openid" %}
+    <a href="{% url socialauth_begin name %}"><img class="socialicon" src="/files/social-icons/{{ name.title }}.png" alt="{% trans "connect to your" %} {{ name.title }} {% trans "account" %}"></a>
+    {% endif %}
+  {% endfor %}
+    </td>
+    </tbody>
+  </table>    
+{# end of connectify widget #}

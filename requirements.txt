@@ -1,0 +1,11 @@
+Django==1.2.3
+distribute==0.6.14
+django-extensions==0.4.1
+virtualenv==1.5.1
+virtualenvwrapper==2.5.3
+wsgiref==0.1.2
+django-mobile==0.1.4
+South==0.7.3
+django-sentry==1.10.1
+celery==2.2.7
+django-celery==2.2.4

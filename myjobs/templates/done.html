@@ -1,0 +1,35 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% block page-header-text %}
+<h2>{% trans "Profile" %}</h2><small>{{ user.first_name }} {{ user.last_name }}</small>
+{% endblock page-header-text %}
+
+{% block main-text %}
+<div>
+  <table class="zebra-striped">
+      <thead>
+	<tr>
+	  <th colspan="2">{% trans "Details" %}</th>
+	</tr>
+      </thead>
+    <tbody>
+      {% if user.is_staff %}
+      <tr><td>Id:</td> <td>{{ user.id }}</td></tr>
+      {% endif %}
+      <tr><td>{% trans "User ID" %}:</td> <td>{{ user.username }}</td></tr>
+      <tr><td>{% trans "Email" %}:</td> <td>{{ user.email|default:"Not provided" }}</td></tr>
+      <tr><td>{% trans "First name" %}:</td> <td>{{ user.first_name|default:"Not provided" }}</td></tr>
+      <tr><td>{% trans "Last name" %}:</td> <td>{{ user.last_name|default:"Not provided" }}</td></tr>
+      <tr><td>{% trans "Last loged in with" %}:</td> <td>{{ last_login }}</td></tr>
+     </tbody>
+  </table>
+</div>
+
+{% include "includes/widget-connectify.html" %}
+{% endblock main-text %}
+
+{% block sidebar-a-text %}
+  <div class="alert-message block-message info">
+    {% include "includes/about-dot-jobs.html" %}
+  </div>
+{% endblock sidebar-a-text %}

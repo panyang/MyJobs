@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% comment %}
+logout.html -- implements the page you see when you log out.
+{% endcomment %}
+
+{% block page-header-text%}
+<h1>{% trans "You have Logged Out" %}<small> {% trans "of my.jobs." %}</small></h1>
+{% endblock page-header-text %}
+
+{% block main-text %}
+<div class="alert-message block-message success">
+  <a class="close" href="#">×</a>
+  <p>You have successfully logged out of my.jobs.</p<>
+  <div class="alert-actions">
+    <a class="btn small" href="{% url auth_login %}">{% trans "login again" %}</a>
+  </div>
+ </div>
+  
+Marketing text goes here.<br><br>
+Other things to do that are DirectEmployers go here (so we get juicy traffic).<br><br>
+And so on... 
+{% endblock main-text %}
+
+{% block sidebar-a-text %}
+Put some more marketing-y stuff over here.
+{% endblock sidebar-a-text %}

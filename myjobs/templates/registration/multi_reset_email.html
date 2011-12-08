@@ -1,0 +1,16 @@
+{% load i18n %}
+
+
+{% autoescape off %}
+{% blocktrans %}You're receiving this e-mail because you requested a password reset for your user account at {{ site_name }}.{% endblocktrans %}
+
+{% trans "To reset your password, click on the reset link below:" %}
+
+{% for key,value in credentials.items %}
+  {{ value.user.username }}
+  {{ value.protocol }}://{{ value.domain }}/profile/password/reset/confirm/{{ value.uid }}-{{value.token}} 
+{% endfor %}
+
+{% trans "Thanks for using " %} {{ site_name }}
+
+{% endautoescape %}
