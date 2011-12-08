@@ -1,0 +1,27 @@
+# Compiled Source
+*.pyc
+
+# Editor aritfacts
+*~
+*-
+*#
+*wpr
+*wpu
+
+
+# Log Files
+*.log
+
+# Database files
+*.sql
+*.db
+*.sqlite
+
+# Secret Stuff
+secrets.*
+
+# OS generated
+.DS_Store*
+ehthumbs.db
+Icon?
+Thumbs.db
