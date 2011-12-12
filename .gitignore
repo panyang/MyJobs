@@ -8,7 +8,6 @@
 *wpr
 *wpu
 
-
 # Log Files
 *.log
 
@@ -25,3 +24,5 @@ secrets.*
 ehthumbs.db
 Icon?
 Thumbs.db
+*.directory
+*.settings

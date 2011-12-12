@@ -221,4 +221,5 @@ SendGrid Categories
 *** TODO build django-social-share
 *** TODO add in django-social-share
 *** TODO move to DE Foundation Framework
+*** TODO Move DE Framework to seperate Djanog App. ASAP.
 ** Archive
