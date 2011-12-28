@@ -209,17 +209,4 @@ SendGrid Categories
 - Integrating with social media marketing programs
 - Deliviering job seeker questions to Employers ?
 - Features that will sell to members. More .jobs. 
-  *
-** Tasks
-*** TODO Refactor existing My.Jobs
-- [ ] Break code out of homebrew pattern and into standard django pattern.
-- [ ] rebrand to myjobs
-- [ ] remove customized social-auth to stock social auth (already done in code, just need to remove directory and change imports.
--
-*** TODO Write CRUD views for profile
-*** TODO Change from shorty to django-my-urls
-*** TODO build django-social-share
-*** TODO add in django-social-share
-*** TODO move to DE Foundation Framework
-*** TODO Move DE Framework to seperate Djanog App. ASAP. 
 ** Archive
