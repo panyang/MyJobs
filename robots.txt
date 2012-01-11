@@ -6,3 +6,5 @@ Disallow: /done/
 Disallow: /error/
 Disallow: /admin/
 Disallow: /complete/
+Disallow: /admin/
+Disallow: /settings/
