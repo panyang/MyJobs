@@ -22,6 +22,15 @@ ROOT_PATH = abspath(dirname(__file__))
 #PROJECT_NAME = "app"
 PROJECT_NAME = basename(ROOT_PATH)
 
+<<<<<<< HEAD
+=======
+ADMINS = (
+    ('Mike Seidle', 'mike@directemployers.org'),
+)
+MANAGERS = ADMINS
+
+
+>>>>>>> File maintenance
 
 TIME_ZONE = 'America/New_York'
 LANGUAGE_CODE = 'en-us'
