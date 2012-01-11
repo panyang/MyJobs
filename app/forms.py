@@ -115,7 +115,7 @@ class CredentialResetForm(forms.Form):
         Generates a list of associated accounts and one-use only links for resetting.
         """
         site_name = "my.jobs"
-        from myjobs.sendgrid import send_mail_with_headers as send_mail
+        from app.sendgrid import send_mail_with_headers as send_mail
         c = {}
         for user in self.users_cache:
             if not domain_override:

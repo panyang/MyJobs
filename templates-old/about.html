@@ -1,0 +1,33 @@
+{% extends "base.html" %}
+{% load i18n %}
+{{ site_domain}}
+{% comment %}
+about.html -- the about page
+{% endcomment %}
+
+{% block title-text %}{% trans "About" %}{% endblock title-text %}
+
+{% block heading %}
+<h1>{% trans "About" %}</h1>
+{% endblock heading %}
+
+{% block main %}
+<div class="span14">
+  <div class="alert-message block-message info">
+    The .jobs Universe is a brand new Top LevelDomain (TLD) that
+    provides an interactive, community-driven network of job related
+    sites.</div>
+<p>.jobs sites feature:</p>
+<ul>
+<li>Direct connection to hundreds of thousands of jobs from companies like IBM, Conoco Philips, Newell Rubbermaid, AT&amp;T and hundreds of other large and small organizations.</li>
+<li>Direct connection to federal, state and local government agencies, educational institutions and non-profit organizations jobs are available.</li>
+<li>New jobs are added daily with special emphasis on veterans and military, people with disabilities, diversity, green jobs and many others.</li>
+<li>Share and Follow tabs make it a seamless and intuitive way to utilize social networking within your job search on The .jobs Universe.</li>
+<li>Many unique personalization tools offer an enhanced experience for all visitors.</li>
+</ul>
+<p>Since October 2001, DirectEmployers Association has been committed to making the connection between employers and job seekers more efficient, quicker and easier, and The .jobs Universe is the next big step.</p>
+</div>  
+{% endblock main %}
+
+{% block featurebox %}
+{% endblock sidebar-a %}

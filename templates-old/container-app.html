@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <title>my.jobs - edit profile</title>
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <!-- Le HTML5 shim, for IE6-8 support of HTML elements -->
+    <!--[if lt IE 9]>
+      <script src="http://html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.6.4/jquery.min.js"></script>
+    <script src="../js/bootstrap-alerts.js"></script>
+    <!-- Le styles -->
+    <link href="../bootstrap.css" rel="stylesheet">
+    
+    <style type="text/css">
+      /* Override some defaults */
+      html, body {
+        background-color: #eee;
+      }
+      body {
+        padding-top: 40px; /* 40px to make the container go all the way to the bottom of the topbar */
+      }
+      .container > footer p {
+        text-align: center; /* center align it with the container */
+      }
+      .container {
+        width: 820px; /* downsize our container to make the content feel a bit tighter and more cohesive. NOTE: this removes two full columns from the grid, meaning you only go to 14 columns and not 16. */
+      }
+
+      /* The white background content wrapper */
+      .content {
+        background-color: #fff;
+        padding: 20px;
+        margin: 0 -20px; /* negative indent the amount of the padding to maintain the grid system */
+        -webkit-border-radius: 0 0 6px 6px;
+           -moz-border-radius: 0 0 6px 6px;
+                border-radius: 0 0 6px 6px;
+        -webkit-box-shadow: 0 1px 2px rgba(0,0,0,.15);
+           -moz-box-shadow: 0 1px 2px rgba(0,0,0,.15);
+                box-shadow: 0 1px 2px rgba(0,0,0,.15);
+      }
+
+      /* Page header tweaks */
+      .page-header {
+        background-color: #f5f5f5;
+        padding: 20px 20px 10px;
+        margin: -20px -20px 20px;
+      }
+
+      /* Styles you shouldn't keep as they are for displaying this base example only */
+      .content .span10,
+      .content .span4 {
+        min-height: 500px;
+      }
+      /* Give a quick and non-cross-browser friendly divider */
+      .content .span4 {
+        margin-left: 0;
+        padding-left: 19px;
+        border-left: 1px solid #eee;
+      }
+
+      .topbar .btn {
+        border: 0;
+      }
+
+    </style>
+
+    <!-- Le fav and touch icons -->
+    <link rel="shortcut icon" href="images/favicon.ico">
+    <link rel="apple-touch-icon" href="images/apple-touch-icon.png">
+    <link rel="apple-touch-icon" sizes="72x72" href="images/apple-touch-icon-72x72.png">
+    <link rel="apple-touch-icon" sizes="114x114" href="images/apple-touch-icon-114x114.png">
+  </head>
+
+  <body>
+    <div class="topbar">
+      <div class="fill">
+        <div class="container">
+          <a class="brand" href="#">my.jobs</a>
+          <ul class="nav">
+	    <li><a href="#">About</a></li>
+            <li class="active"><a href="#">Profile</a></li>
+          </ul>
+          <form action="" class="pull-right">
+	    Login Using:
+            <button class="btn" type="submit">T</button>
+            <button class="btn" type="submit">L</button>
+            <button class="btn" type="submit">F</button>
+	    <button class="btn" type="submit">G</button>
+          </form>
+        </div>
+      </div>
+    </div>
+    <div class="container">
+      <div class="content">
+        <div class="page-header">
+          <h1>Edit Profile <small>make .jobs yours in 10 seconds or less...</small></h1>
+        </div>
+        <div class="row">
+          <div class="span10">
+            <!-- <h2>Your Profile</h2>-->
+	    <div class="alert-message info fade in" data-alert="alert" >
+	       <a class="close" href="#">&times;</a>
+	      <p><strong>Personalize your experinece:</strong> Take a
+        second to complete your profile.</p>
+	    </div>
+	    <div class="alert-message error fade in" data-alert="alert" >
+	       <a class="close" href="#">&times;</a>
+	      <p><strong>We Have a Problem</strong> Here's what went wrong</p>
+	    </div>
+	    <div class="alert-message warning fade in" data-alert="alert" >
+	       <a class="close" href="#">&times;</a>
+	      <p><strong>Warning</strong> Here's what you need to look out for.</p>
+	    </div>
+	    <div class="alert-message success fade in" data-alert="alert" >
+	       <a class="close" href="#">&times;</a>
+	      <p><strong>Great Success!</strong> You've updated your profile.</p>
+	    </div>
+	     <form>
+	       <fieldset>
+	         <div class="clearfix">
+	           <label for="xlInput">Name</label>
+	           <div class="input">
+	             <input class="xlarge" id="Name" name="xlInput" size="30" type="text" />
+	           </div>
+	    </div><!-- /clearfix -->
+	  <div class="clearfix">
+	     <label for="xlInput">Email Address</label>
+	     <div class="input">
+	      <input class="xlarge" id="email" name="xlInput" size="30" type="text" /><br>
+	      	    <span class="help-inline">We never sell your email
+        address to third parties.</span>
+	     </div>
+	  </div><!-- /clearfix -->
+	  <div class="clearfix">
+	    <div class="input">
+	      <ul class="inputs-list">
+	        <li>
+	          <label>
+	            <input type="checkbox" name="optionsCheckboxes" value="option1" />
+	            <span>Allow .jobs sites to contact you.</span>
+	          </label>
+	          <span class="help-block">
+	            <strong>Note:</strong> We seriously hate spam, too.
+	          </span>
+	        </li>
+	      </ul>
+	    </div>
+	  </div><!-- /clearfix -->
+
+	  <div class="actions">
+	    <input type="submit" class="btn primary" value="Save changes">&nbsp;<button type="reset" class="btn">Cancel</button>
+	  </div>
+	  </fieldset>
+	  </form>	  
+	  </div>
+          <div class="span4">
+           <h3>Privacy Info</h3>
+	    <p>We believe that finding a job should not require your
+          personal information be sold to anyone. Our policy is to never
+          sell your personal information and to always respect your
+          privacy.</p>
+	   <a class="btn info">Privacy Policy</a>
+	    <h3>About .jobs</h3>
+	    <p>.Jobs is a network of (1022) direct-to-employer job boards. We only list
+        jobs from the actual employers. No headhunters. No
+        start-your-own business offers. No fake jobs designed to trick
+        you into giving your personal information away.</p>
+	   <a class="btn info">More</a>
+          </div>
+        </div>
+      </div>
+
+      <footer>
+        <p>a service of <b><a
+        href="http://directemployers.com">DirectEmployers</a></b></p>
+      </footer>
+
+    </div> <!-- /container -->
+
+  </body>
+</html>

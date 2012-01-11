@@ -1,0 +1,14 @@
+{% extends base %}
+{% load i18n %}
+{% block page-header-text %}
+<h1>{% trans "404 Error"%}</h1>
+<small>{% trans "We can't find the page you are looking for"</small>
+{% endblock page-header-text %}
+{% block content %}
+We could not find the page you were looking for, but we did find this
+cute picture of a corgi in a hot dog costume.<br>
+<br>
+<img src="http://mrg.bz/QqfKI8">
+{% endblock content %}
+{% sidebar-a-text %}
+{% endblock featurebox-content %}

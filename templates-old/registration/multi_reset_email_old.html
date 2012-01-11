@@ -1,0 +1,29 @@
+{% load i18n %}
+{% load url from future %}
+
+{% autoescape off %}
+{% blocktrans %}You're receiving this e-mail because you requested a password reset for your user account at {{ site_name }}.{% endblocktrans %}
+Live?
+{{ credentials }}
+{% trans "To reset your password, click on the reset link below:" %}
+{% block reset_link %}
+{% for key,value in credentials.items %}
+    {{ key }} {{ value }}
+    {{ value.items.token }}
+    {{ value.email }}
+{% endfor %}
+{% for r in rev %}
+  {{ rev.0 }} {{ rev.1 }}
+{% endfor %}
+{% for credential in credentails %}
+    {{ credential.email }} 
+    {{ credential.protocol }}://{{ credential.domain }}
+    {% trans "Your username, in case you've forgotten:" %} {{ credential.username }}
+{% endfor %}
+{% endblock reset_link %}
+
+{% trans "Thanks for using our site!" %}
+
+{% blocktrans %}The {{ site_name }} team{% endblocktrans %}
+
+{% endautoescape %}

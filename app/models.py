@@ -35,7 +35,7 @@ class UserProfile(models.Model):
     opt_in_dotjobs = models.BooleanField(
         _('Receive messages from dotjobs site owners'), default=True,
         help_text=_('Checking this allows employers who own\
-                     .jobs Career Microsites to communicate with you.'))
+                    .jobs Career Microsites to communicate with you.'))
     enable_public_profile = models.BooleanField(
         _("Activate Public Profile"), default=True,
         help_text=_("Check if you want your public profile to be visible."))    
@@ -62,5 +62,6 @@ def create_user_profile(sender, instance, created, **kwargs):
 
     if created:
         UserProfile.objects.create(user=instance)
+
 # Activate Signal Handlers
 post_save.connect(create_user_profile, sender=User)
