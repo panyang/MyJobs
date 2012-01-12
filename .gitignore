@@ -25,6 +25,7 @@ local_settings.py
 
 # Log Files
 *.log
+logfile
 
 # OS generated
 .DS_Store*
