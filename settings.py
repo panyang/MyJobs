@@ -21,6 +21,7 @@ TEMPLATE_DEBUG = True
 ROOT_PATH = abspath(dirname(__file__))
 #PROJECT_NAME = "app"
 PROJECT_NAME = basename(ROOT_PATH)
+print PROJECT_NAME
 
 <<<<<<< HEAD
 =======

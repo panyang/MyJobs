@@ -12,30 +12,12 @@ import logging
 
 log = logging.getLogger(__name__)
 
-def validate_unique_user(value):
-    if value == User.objects.get(username__iexact=value):
-        raise ValidationError(_("%s is not available." % value))
-    
-class GetMissingRegistrationData(forms.Form):
-    """Form for getting missing email and username from users who social auth"""
-    username = forms.CharField(label=_("Username"), max_length=80, 
-                               validators=[validate_unique_user])
-    email = forms.EmailField(label=_("Email Address"),
-        help_text=_("Having an email address allows you\
-        to retrieve your account settings"))
-    
-    def save(self, user):
-        """Saves user info
-        
-        parameters:
-        
-        user -- a User object
-        """ 
-        pass
-        
+class GetEmail(forms.Form):
+    """Form for getting the email from users who social auth"""
+    email=forms.EmailField(label=_("Email Address"),hel
 
 class EditUserProfile(forms.Form):
-    """Form that lets user quickly edit their personal settings"""    
+    """Form that lets user quickly edit their personal settings"""
     first_name = forms.CharField(label=_("First Name"), 
                                  max_length=40)
     last_name = forms.CharField(label=_("Last Name"),
@@ -44,42 +26,14 @@ class EditUserProfile(forms.Form):
     opt_in_myjobs = forms.BooleanField(label=_("Receive messages from my.jobs"))
     opt_in_dotjobs = forms.BooleanField(
         label=_('Receive messages from dotjobs site owners'), 
+        default=True,
         help_text=_('Checking this allows employers who own\
-        .jobs Career Microsites to communicate with you.'))
-    activate_public_profile = forms.BooleanField(
-        label=_("Activate Public Profile"),
-        help_text=_("Check here to enable your public profile"))
-    headline = forms.CharField(max_length=255, 
-                               help_text=_("You in one senetence."))
-    summary = forms.CharField(label=_("Summary"), max_length=4095,
-            help_text=_("Short summary of you.", widget=forms.Textarea))
-    
-    def save(self):
-        """saves user profile to UserProfile and auth.User models"""
-        # Make sure we have a valid user
-        try:
-            u = User.objects.get(username__iexact=self.cleaned_data["username"])
-        except DoesNotExist:
-            HttpResponse("Forbidden", status=403, mimetype="text/plain")
-        # first save all the auth.User stuff
-        u.first_name = self.cleaned_data["first_name"]
-        u.last_name = self.cleaned_data["last_name"]
-        u.username = self.cleaned_data["username"]
-        u.email = self.cleaned_data["email"]
-        # Now the profile stuff
-        u.profile.opt_in_myjobs = self.cleaned_data["opt_in_myjobs"]
-        u.profile.opt_in_dotjobs = self.cleaned_data["opt_in_dotjobs"]        
-        u.profile.activate_public_profile = self.cleaned_data["activate_public_profile"]
-        u.profile.public_headline = self.cleaned_data["headline"]
-        u.profile.public_summary = self.cleaned_data["summary"]
-        # Now that it is set, save and done
-        u.save()
-        
-  
+                     .jobs Career Microsites to communicate with you.'))    
+
 class CredentialResetForm(forms.Form):
-    """Implements form for requesting password reset."""
-    credential = forms.CharField(label=_("Username or Email"), 
-                                 max_length=75)
+    credential = forms.CharField(label=_("Username or Email"),
+                            max_length=75)
+
     users_cache = []
 
     def clean_credential(self):
@@ -115,7 +69,7 @@ class CredentialResetForm(forms.Form):
         Generates a list of associated accounts and one-use only links for resetting.
         """
         site_name = "my.jobs"
-        from app.sendgrid import send_mail_with_headers as send_mail
+        from myjobs.sendgrid import send_mail_with_headers as send_mail
         c = {}
         for user in self.users_cache:
             if not domain_override:
@@ -145,4 +99,3 @@ class CredentialResetForm(forms.Form):
         send_mail(_("Password reset on %s") % site_name,
                   t.render(Context(credentials)),
                   from_email, [user.email], headers=h.as_django_email_header())
-
