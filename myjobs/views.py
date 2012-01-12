@@ -29,11 +29,12 @@ def home(request):
     Sends already authenticated users the home page for authenticated users
     """
     if request.user.is_authenticated():
-        return HttpResponseRedirect('/done')
+        return HttpResponseRedirect('/profile')
     else:
-        return HttpResponseRedirect('/profile/login')
+        return HttpResponseRedirect('/')
     #return render_to_response('login.html', {'version': version},
     #                              RequestContext(request))
+
 
 @login_required
 def done(request):
@@ -46,8 +47,7 @@ def error(request):
     """Error view"""
     messages = get_messages(request)
     return render_to_response('error.html', {'version': version,
-                                             'messages': messages},
-                              RequestContext(request))
+                              'messages': messages}, RequestContext(request))
 
 def logout(request):
     """Logs out user"""
