@@ -21,13 +21,6 @@ class CustomUser(models.Model):
     def is_authenticated(self):
         return True
 
-
-def facebook_extra_values(sender, user, response, details, **kwargs):
-    return False
-
-pre_update.connect(facebook_extra_values, sender=FacebookBackend)
-
-
 class UserProfile(models.Model):
     """User profile data for my.jobs site."""
     user = models.OneToOneField(User)
@@ -38,10 +31,15 @@ class UserProfile(models.Model):
     opt_in_dotjobs = models.BooleanField(
         _('Receive messages from dotjobs site owners'), default=True,
         help_text=_('Checking this allows employers who own\
-                     dotjobs sites to communicate with you.')
+                     .jobs Career Microsites to communicate with you.')
         )
 
 # Signal Handlers
+def facebook_extra_values(sender, user, response, details, **kwargs):
+    return False
+
+pre_update.connect(facebook_extra_values, sender=FacebookBackend)
+
 def create_user_profile(sender, instance, created, **kwargs):
     """Signal Handler for new users. Creates a UserProfile object
 
@@ -50,5 +48,5 @@ def create_user_profile(sender, instance, created, **kwargs):
 
     if created:
         UserProfile.objects.create(user=instance)
-
+# Activate Signal Handlers
 post_save.connect(create_user_profile, sender=User)
