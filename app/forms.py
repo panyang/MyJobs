@@ -14,7 +14,9 @@ log = logging.getLogger(__name__)
 
 class GetEmail(forms.Form):
     """Form for getting the email from users who social auth"""
-    email=forms.EmailField(label=_("Email Address"),hel
+    email=forms.EmailField(label=_("Email Address"),
+        help_text=_("Having an email address allows you\
+        to retrieve your account settings"))
 
 class EditUserProfile(forms.Form):
     """Form that lets user quickly edit their personal settings"""
@@ -26,9 +28,8 @@ class EditUserProfile(forms.Form):
     opt_in_myjobs = forms.BooleanField(label=_("Receive messages from my.jobs"))
     opt_in_dotjobs = forms.BooleanField(
         label=_('Receive messages from dotjobs site owners'), 
-        default=True,
         help_text=_('Checking this allows employers who own\
-                     .jobs Career Microsites to communicate with you.'))    
+        .jobs Career Microsites to communicate with you.'))    
 
 class CredentialResetForm(forms.Form):
     credential = forms.CharField(label=_("Username or Email"),

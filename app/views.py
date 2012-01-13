@@ -35,9 +35,10 @@ def home(request):
     #return render_to_response('login.html', {'version': version},
     #                              RequestContext(request))
 
+@login_required
 def profile(request):
     """implements user profile view"""
-    
+    pass
     
 @login_required
 def done(request):
