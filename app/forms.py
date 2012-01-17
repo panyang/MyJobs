@@ -43,6 +43,27 @@ class EditUserProfile(forms.Form):
                                help_text=_("You in one senetence."))
     summary = forms.Textarea(label=_("Summary"), null=True, blank=True,
         help_text=_("A brief summary of your experience."))
+    
+    def save(self, username):
+        """saves user profile to UserProfile and auth.User models"""
+        # Make sure we have a valid user
+        try:
+            u = User.objects.get(username__iexact=self.cleaned_data["username"])
+        except DoesNotExist:
+            HttpResponse("Forbidden", status=403, mimetype="text/plain")
+        # first save all the auth.User stuff
+        u.first_name = self.cleaned_data["first_name"]
+        u.last_name = self.cleaned_data["last_name"]
+        u.username = self.cleaned_data["username"]
+        u.email = self.cleaned_data["email"]
+        # Now the profile stuff
+        u.profile.opt_in_myjobs = self.cleaned_data["opt_in_myjobs"]
+        u.profile.opt_in_dotjobs = self.cleaned_data["opt_in_dotjobs"]        
+        u.profile.activate_public_profile = self.cleaned_data["activate_public_profile"]
+        u.profile.public_headline = self.cleaned_data["headline"]
+        u.profile.public_summary = self.cleaned_data["summary"]
+        # Now that it is set, save and done
+        u.save()
 
   
     class CredentialResetForm(forms.Form):
