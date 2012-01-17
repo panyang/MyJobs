@@ -4,7 +4,7 @@ from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.tokens import default_token_generator
 from django.template import RequestContext
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, get_object_or_404
 from django.contrib.messages.api import get_messages
 from django.contrib.auth.models import User
 from social_auth import __version__ as version
@@ -35,7 +35,6 @@ def home(request):
     #return render_to_response('login.html', {'version': version},
     #                              RequestContext(request))
 
-@login_required
 def profile(request, username):
     """implements user profile view.
     
@@ -44,9 +43,31 @@ def profile(request, username):
     Authenticated users goint to someone else's profile get the public profile.
     If no username is passed, 404.
     """
-    url = request.user.get_profile().url
+
+    # throw a 404 if the username does not exist.
+    u = get_object_or_404(User, username=username)
+    if request.user.is_authenticated():
+        # user is logged in
+        if request.user == username:
+            # is looking at own profile so show editable screen
+        else:
+            # not looking at own profile
+            HttpResponseRedirect(u'/public_profile/%s/' % username)
+    else:
+        # not logged in so show public profile for user
+        HttpResponseRedirect(u'/public_profile/%s/' % username)   
     pass
 
+def public_profile(request, username):
+    """implements public user profile
+    
+    not implemented yet... but will contain LinkedIn style public profile"""
+    HttpResponseRedirect("/coming_soon")
+
+def comming_soon(request):
+    """Placeholder for future features"""
+    render_to_response("coming_soon.html")
+    
 @login_required
 def done(request):
     """Login complete view, displays user data"""
