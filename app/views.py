@@ -49,7 +49,8 @@ def profile(request, username):
     if request.user.is_authenticated():
         # user is logged in
         if request.user == username:
-            # is looking at own profile so show editable screen
+            # is looking at own profile
+            render_to_response('myprofile.html', RequestContext(request))
         else:
             # not looking at own profile
             HttpResponseRedirect(u'/public_profile/%s/' % username)

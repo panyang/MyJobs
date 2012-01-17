@@ -19,7 +19,7 @@ class GetEmail(forms.Form):
         to retrieve your account settings"))
 
 class EditUserProfile(forms.Form):
-    """Form that lets user quickly edit their personal settings"""
+    """Form that lets user quickly edit their personal settings"""    
     first_name = forms.CharField(label=_("First Name"), 
                                  max_length=40)
     last_name = forms.CharField(label=_("Last Name"),
@@ -29,7 +29,7 @@ class EditUserProfile(forms.Form):
     opt_in_dotjobs = forms.BooleanField(
         label=_('Receive messages from dotjobs site owners'), 
         help_text=_('Checking this allows employers who own\
-        .jobs Career Microsites to communicate with you.'))    
+        .jobs Career Microsites to communicate with you.')) 
 
 class CredentialResetForm(forms.Form):
     credential = forms.CharField(label=_("Username or Email"),
