@@ -62,10 +62,12 @@ def public_profile(request, username):
     """implements public user profile
     
     not implemented yet... but will contain LinkedIn style public profile"""
+
     HttpResponseRedirect("/coming_soon")
 
 def comming_soon(request):
     """Placeholder for future features"""
+
     render_to_response("coming_soon.html")
     
 @login_required
