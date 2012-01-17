@@ -36,10 +36,17 @@ def home(request):
     #                              RequestContext(request))
 
 @login_required
-def profile(request):
-    """implements user profile view"""
-    pass
+def profile(request, username):
+    """implements user profile view.
     
+    Authenticated users going to their own profile get a profile edit view.
+    Non-Authenticated users going to a profile get the public profile view.
+    Authenticated users goint to someone else's profile get the public profile.
+    If no username is passed, 404.
+    """
+    url = request.user.get_profile().url
+    pass
+
 @login_required
 def done(request):
     """Login complete view, displays user data"""
