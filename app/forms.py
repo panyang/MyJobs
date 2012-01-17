@@ -12,9 +12,15 @@ import logging
 
 log = logging.getLogger(__name__)
 
-class GetEmail(forms.Form):
-    """Form for getting the email from users who social auth"""
-    email=forms.EmailField(label=_("Email Address"),
+def validate_unique_user(value):
+    if value == User.objects.get(username__iexact=value):
+        raise ValidationError(_("%s is not available." % value))
+    
+class GetMissingRegistrationData(forms.Form):
+    """Form for getting missing email and username from users who social auth"""
+    username = forms.charField(label=_("Username"), max_length=80,
+                               validators=[validate_unique_user])
+    email = forms.EmailField(label=_("Email Address"),
         help_text=_("Having an email address allows you\
         to retrieve your account settings"))
 
@@ -29,9 +35,14 @@ class EditUserProfile(forms.Form):
     opt_in_dotjobs = forms.BooleanField(
         label=_('Receive messages from dotjobs site owners'), 
         help_text=_('Checking this allows employers who own\
-        .jobs Career Microsites to communicate with you.')) 
-
-class CredentialResetForm(forms.Form):
+        .jobs Career Microsites to communicate with you.'))
+    activate_public_profile = forms.BooleanField(
+        label=_("Activate Public Profile"),
+        help_text=_("Check here to enable your public profile"))
+    headline = forms.CharField
+    
+    
+    class CredentialResetForm(forms.Form):
     credential = forms.CharField(label=_("Username or Email"),
                             max_length=75)
 
