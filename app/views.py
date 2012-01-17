@@ -59,16 +59,26 @@ def profile(request, username):
         HttpResponseRedirect(u'/public_profile/%s/' % username)   
     pass
 
+@login_required
+def edit_profile (request, username):
+   """implements edit myjobs profile.
+   
+   Only allows logged in user to edit their own profile right now. Should be 
+   pretty easy to make it so an admin can edit other people's profiles.
+   
+   parameters:
+   
+   username -- the username being edited.
+   """
+   if response.method == "POST":
+       form = Us
+   
 def public_profile(request, username):
-    """implements public user profile
-    
-    not implemented yet... but will contain LinkedIn style public profile"""
-
-    HttpResponseRedirect("/coming_soon")
+    """implements public user profile"""
+    render_to_response("/public_profile.html", RequestContext(request, {'username':username})
 
 def comming_soon(request):
     """Placeholder for future features"""
-
     render_to_response("coming_soon.html")
     
 @login_required

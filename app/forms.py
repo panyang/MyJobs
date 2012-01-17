@@ -23,6 +23,16 @@ class GetMissingRegistrationData(forms.Form):
     email = forms.EmailField(label=_("Email Address"),
         help_text=_("Having an email address allows you\
         to retrieve your account settings"))
+    
+    def save(self, user):
+        """Saves user info
+        
+        parameters:
+        
+        user -- a User object
+        """ 
+        
+        
 
 class EditUserProfile(forms.Form):
     """Form that lets user quickly edit their personal settings"""    
@@ -44,7 +54,7 @@ class EditUserProfile(forms.Form):
     summary = forms.Textarea(label=_("Summary"), null=True, blank=True,
         help_text=_("A brief summary of your experience."))
     
-    def save(self, username):
+    def save(self):
         """saves user profile to UserProfile and auth.User models"""
         # Make sure we have a valid user
         try:
@@ -64,7 +74,7 @@ class EditUserProfile(forms.Form):
         u.profile.public_summary = self.cleaned_data["summary"]
         # Now that it is set, save and done
         u.save()
-
+        
   
     class CredentialResetForm(forms.Form):
         credential = forms.CharField(label=_("Username or Email"),
