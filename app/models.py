@@ -24,6 +24,7 @@ class CustomUser(models.Model):
         return True
     
 
+
 class UserProfile(models.Model):
     """User profile data for my.jobs site."""
     user = models.OneToOneField(User)
