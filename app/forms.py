@@ -39,11 +39,14 @@ class EditUserProfile(forms.Form):
     activate_public_profile = forms.BooleanField(
         label=_("Activate Public Profile"),
         help_text=_("Check here to enable your public profile"))
-    headline = forms.CharField
-    
-    
+    headline = forms.CharField(max_length=255, null=True, blank=True, 
+                               help_text=_("You in one senetence."))
+    summary = forms.Textarea(label=_("Summary"), null=True, blank=True,
+        help_text=_("A brief summary of your experience."))
+
+  
     class CredentialResetForm(forms.Form):
-    credential = forms.CharField(label=_("Username or Email"),
+        credential = forms.CharField(label=_("Username or Email"),
                             max_length=75)
 
     users_cache = []
