@@ -18,7 +18,7 @@ def validate_unique_user(value):
     
 class GetMissingRegistrationData(forms.Form):
     """Form for getting missing email and username from users who social auth"""
-    username = forms.charField(label=_("Username"), max_length=80,
+    username = forms.CharField(label=_("Username"), max_length=80, 
                                validators=[validate_unique_user])
     email = forms.EmailField(label=_("Email Address"),
         help_text=_("Having an email address allows you\
@@ -31,7 +31,7 @@ class GetMissingRegistrationData(forms.Form):
         
         user -- a User object
         """ 
-        
+        pass
         
 
 class EditUserProfile(forms.Form):
@@ -49,10 +49,10 @@ class EditUserProfile(forms.Form):
     activate_public_profile = forms.BooleanField(
         label=_("Activate Public Profile"),
         help_text=_("Check here to enable your public profile"))
-    headline = forms.CharField(max_length=255, null=True, blank=True, 
+    headline = forms.CharField(max_length=255, 
                                help_text=_("You in one senetence."))
-    summary = forms.Textarea(label=_("Summary"), null=True, blank=True,
-        help_text=_("A brief summary of your experience."))
+    summary = forms.CharField(label=_("Summary"), max_length=4095,
+            help_text=_("Short summary of you.", widget=forms.Textarea))
     
     def save(self):
         """saves user profile to UserProfile and auth.User models"""
@@ -76,10 +76,10 @@ class EditUserProfile(forms.Form):
         u.save()
         
   
-    class CredentialResetForm(forms.Form):
-        credential = forms.CharField(label=_("Username or Email"),
-                            max_length=75)
-
+class CredentialResetForm(forms.Form):
+    """Implements form for requesting password reset."""
+    credential = forms.CharField(label=_("Username or Email"), 
+                                 max_length=75)
     users_cache = []
 
     def clean_credential(self):

@@ -75,9 +75,9 @@ def edit_profile (request, username):
    
 def public_profile(request, username):
     """implements public user profile"""
-    render_to_response("/public_profile.html", RequestContext(request, {'username':username})
+    render_to_response("/public_profile.html", RequestContext(request, {'username':username}))
 
-def comming_soon(request):
+def coming_soon(request):
     """Placeholder for future features"""
     render_to_response("coming_soon.html")
     
