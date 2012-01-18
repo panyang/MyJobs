@@ -32,7 +32,7 @@ def home(request):
     if request.user.is_authenticated():
         return HttpResponseRedirect('/profile')
     else:
-        return TemplateResponse(request, '/index.html', {})
+        return TemplateResponse(request, 'index.html', {})
     #return render_to_response('login.html', {'version': version},
     #                              RequestContext(request))
 
