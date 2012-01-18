@@ -11,6 +11,11 @@ APP = "%s/app" % abspath(dirname(__file__))
 PROJ_ROOT = abspath(dirname(__file__))
 sys.path.append(APP)
 
+#APP = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
+APP = os.path.abspath(os.path.dirname(__file__))
+PROJ_ROOT = os.path.abspath(os.path.dirname(__file__))
+sys.path.append(APP)
+
 DEBUG = True
 #TEMPLATE_DEBUG = DEBUG
 TEMPLATE_DEBUG = True
@@ -165,9 +170,3 @@ SOCIAL_AUTH_ENABLED_BACKENDS = ('facebook', 'twitter', 'linkedin',
 
 LOGIN_REDIRECT_URL = '/profile'
 LOGOUT_REDIRECT_URL = '/home'
-
-# Support for loading local settings for development
-try:
-    from local_settings import *
-except ImportError, exp:
-    pass
