@@ -11,9 +11,9 @@ APP = "%s/app" % abspath(dirname(__file__))
 PROJ_ROOT = abspath(dirname(__file__))
 sys.path.append(APP)
 
-#APP = os.path.abspath(os.path.dirname(os.path.dirname(__file__)))
-APP = os.path.abspath(os.path.dirname(__file__))
-PROJ_ROOT = os.path.abspath(os.path.dirname(__file__))
+#APP = abspath(dirname(dirname(__file__)))
+APP = abspath(dirname(__file__))
+PROJ_ROOT = abspath(dirname(__file__))
 sys.path.append(APP)
 
 DEBUG = True
@@ -26,7 +26,7 @@ TEMPLATE_DEBUG = True
 ROOT_PATH = abspath(dirname(__file__))
 #PROJECT_NAME = "app"
 PROJECT_NAME = basename(ROOT_PATH)
-print PROJECT_NAME
+
 
 <<<<<<< HEAD
 =======
