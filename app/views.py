@@ -5,6 +5,7 @@ from django.contrib.auth.decorators import login_required
 from django.contrib.auth.tokens import default_token_generator
 from django.template import RequestContext
 from django.shortcuts import render_to_response, get_object_or_404
+from django.template.response import TemplateResponse, SimpleTemplateResponse
 from django.contrib.messages.api import get_messages
 from django.contrib.auth.models import User
 from social_auth import __version__ as version
@@ -31,7 +32,7 @@ def home(request):
     if request.user.is_authenticated():
         return HttpResponseRedirect('/profile')
     else:
-        return HttpResponseRedirect('/')
+        return TemplateResponse(request, '/index.html', {})
     #return render_to_response('login.html', {'version': version},
     #                              RequestContext(request))
 
