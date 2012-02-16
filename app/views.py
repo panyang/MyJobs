@@ -20,6 +20,19 @@ def about(request):
     """About page. Probably a better way to do this"""
     return render_to_response('about.html', RequestContext(request))
 
+  # TODO Write ajax_login_form
+def ajax_login_form(request):
+    """Implements login that can be ajaxed into other websites"""
+    pass
+
+def ajax_share_form(request):
+    """Implemensts 3rd party share widget"""
+    pass
+
+def ajax_user_status(request):
+    """Implements login status/settings widget for use on other websites"""
+    pass
+
 def privacy(request):
     """Privacy page."""
     return render_to_response('privacy.html', RequestContext(request))
@@ -32,14 +45,15 @@ def home(request):
     if request.user.is_authenticated():
         return HttpResponseRedirect('/profile')
     else:
-        return TemplateResponse(request, 'index.html', {})
-    #return render_to_response('login.html', {'version': version},
-    #                              RequestContext(request))
+        #TODO: Fix home page template.
+        #return TemplateResponse(request, 'index.html', {})
+        return render_to_response('registration/login.html', {'version': version},
+                                  RequestContext(request))
 
 def profile(request, username):
     """implements user profile view.
     
-    Authenticated users going to their own profile get a profile edit view.
+    Authenticated users go to their own profile get a profile edit view.
     Non-Authenticated users going to a profile get the public profile view.
     Authenticated users goint to someone else's profile get the public profile.
     If no username is passed, 404.
@@ -60,19 +74,6 @@ def profile(request, username):
         HttpResponseRedirect(u'/public_profile/%s/' % username)   
     pass
 
-@login_required
-def edit_profile (request, username):
-   """implements edit myjobs profile.
-   
-   Only allows logged in user to edit their own profile right now. Should be 
-   pretty easy to make it so an admin can edit other people's profiles.
-   
-   parameters:
-   
-   username -- the username being edited.
-   """
-   if response.method == "POST":
-       form = Us
    
 def public_profile(request, username):
     """implements public user profile"""
@@ -110,7 +111,11 @@ def password_connection(request, is_admin_site=False,
 	                   from_email=None,
 	                   current_app=None,
 	                   extra_context=None):
-    """Universal lost password username connection recovery"""
+    """Universal lost password username connection recovery
+    
+    Allows for users with multiple accounts using the same email address to
+    retreive their credntials.
+    """
     
     if post_reset_redirect is None:
         post_reset_redirect = reverse('auth_password_reset_done')
@@ -135,3 +140,17 @@ def password_connection(request, is_admin_site=False,
     context.update(extra_context or {})
     return render_to_response(template_name, context,
                 context_instance=RequestContext(request, current_app=current_app))
+
+@login_required
+def edit_profile (request, username):
+    """implements edit myjobs profile.
+    
+    Only allows logged in user to edit their own profile right now. Should be 
+    pretty easy to make it so an admin can edit other people's profiles.
+    
+    parameters:
+    
+    username -- the username being edited.
+    """
+    if response.method == "POST":
+        pass

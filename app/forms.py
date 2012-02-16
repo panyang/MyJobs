@@ -145,3 +145,4 @@ class CredentialResetForm(forms.Form):
         send_mail(_("Password reset on %s") % site_name,
                   t.render(Context(credentials)),
                   from_email, [user.email], headers=h.as_django_email_header())
+
