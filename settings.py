@@ -50,7 +50,7 @@ MEDIA_URL = '/uploads/'
 # Don't put anything in this directory yourself; store your static files
 # in apps' "static/" subdirectories and in STATICFILES_DIRS.
 # Example: "/home/media/media.lawrence.com/static/"
-STATIC_ROOT = abspath(join(PROJ_ROOT, 'media', 'static'))
+STATIC_ROOT = abspath(join(PROJ_ROOT, 'files', 'static'))
 
 # URL prefix for static files.
 # Example: "http://media.lawrence.com/static/"
@@ -161,3 +161,8 @@ SOCIAL_AUTH_ENABLED_BACKENDS = ('facebook', 'twitter', 'linkedin',
 
 LOGIN_REDIRECT_URL = '/profile'
 LOGOUT_REDIRECT_URL = '/home'
+
+try:
+    from local_settings import *
+except:
+    pass

@@ -24,3 +24,10 @@
 [16/Feb/2012 18:08:04] WARNING [django.request:142] Not Found: /profilelogin
 [16/Feb/2012 18:08:04] WARNING [django.request:142] Not Found: /profile
 [16/Feb/2012 18:15:12] WARNING [django.request:142] Not Found: /profile
+[17/Feb/2012 15:32:41] WARNING [django.request:142] Not Found: /profile/social_icons/Twitter
+[17/Feb/2012 15:32:42] WARNING [django.request:142] Not Found: /profile/social_icons/Linkedin
+[17/Feb/2012 15:32:43] WARNING [django.request:142] Not Found: /profile/social_icons/Twitter
+[17/Feb/2012 15:32:43] WARNING [django.request:142] Not Found: /profile/social_icons/Linkedin
+[17/Feb/2012 15:34:44] WARNING [django.request:142] Not Found: /profile/social_icons/Twitter
+[17/Feb/2012 15:34:46] WARNING [django.request:142] Not Found: /profile/social_icons/Twitter
+[17/Feb/2012 15:38:32] WARNING [django.request:142] Not Found: /profile/social_icons/Twitter

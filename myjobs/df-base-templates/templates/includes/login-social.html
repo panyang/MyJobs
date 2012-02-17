@@ -1,9 +1,0 @@
-{% load i18n %}
-<div>
-  <h3>{% trans "Login using" %} <a href="http://oauth.net/" title="OAuth">OAuth</a> from:</h3>
-  <ul>
-    {% for name in social_auth.backends %}
-    <li><a rel="nofollow" href="{% url socialauth_begin name %}">{{ name|title }}</a></li>
-    {% endfor %}
-  </ul>
-</div>
