@@ -34,6 +34,7 @@ Icon?
 Thumbs.db
 *.directory
 *.settings
+.directory
 
 # Secret stuff. Shhhhh.
 secret.py
