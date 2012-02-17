@@ -1,2 +1,8 @@
 [Desktop Entry]
 Icon=folder-violet
+
+[Dolphin]
+AdditionalInfoV2=Details_Size,Details_Date,CustomizedDetails
+Timestamp=2012,2,17,8,38,37
+Version=2
+ViewMode=1
