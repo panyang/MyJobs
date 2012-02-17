@@ -10,6 +10,7 @@ from django.contrib.messages.api import get_messages
 from django.contrib.auth.models import User
 from social_auth import __version__ as version
 from app.forms import CredentialResetForm
+from app.helpers import gravatar_link
 
 import logging
 logger = logging.getLogger('__name__')
@@ -30,8 +31,9 @@ def ajax_share_form(request):
     pass
 
 def ajax_user_status(request):
-    """Implements login status/settings widget for use on other websites"""
-    pass
+    """Implements login status/settings widget for use on other websites"""   
+    ctx = {'avatar':gravatar_link(request.user.email)}
+    return render_to_response('user_status.html', ctx, RequestContext(request))
 
 @login_required
 def user_view_profile(request):
