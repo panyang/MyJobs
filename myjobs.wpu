@@ -981,7 +981,11 @@ guimgr.overall-gui-state = {'windowing-policy': 'combined-window',
                           'selection_end': 420,
                           'selection_start': 420},
                          1329441322.402231),
+<<<<<<< HEAD
                         [loc('unknown:<untitled> #34'),
+=======
+                        [loc('unknown:untitled-2.py'),
+>>>>>>> update .gitignore
                          {'attrib-starts': [],
                           'first-line': 0,
                           'folded-linenos': [],
@@ -1113,7 +1117,11 @@ guimgr.overall-gui-state = {'windowing-policy': 'combined-window',
                           'selection_end': 4306,
                           'selection_start': 4306},
                          1329429882.8526199),
+<<<<<<< HEAD
                         [loc('unknown:<untitled> #35'),
+=======
+                        [loc('unknown:untitled-1.py'),
+>>>>>>> update .gitignore
                          {'attrib-starts': [],
                           'first-line': 0,
                           'folded-linenos': [],
@@ -1311,6 +1319,7 @@ guimgr.overall-gui-state = {'windowing-policy': 'combined-window',
         'selection_end': 0,
         'selection_start': 0},
                            loc('app/templates/user_status.html'): {},
+<<<<<<< HEAD
                            loc('app/views.py'): {'attrib-starts': [],
         'first-line': 0,
         'folded-linenos': [],
@@ -1318,6 +1327,16 @@ guimgr.overall-gui-state = {'windowing-policy': 'combined-window',
         'sel-line-start': 506,
         'selection_end': 549,
         'selection_start': 549},
+=======
+                           loc('app/views.py'): {'attrib-starts': [('profile',
+        62)],
+        'first-line': 47,
+        'folded-linenos': [],
+        'sel-line': 65,
+        'sel-line-start': 2419,
+        'selection_end': 2491,
+        'selection_start': 2491},
+>>>>>>> update .gitignore
                            loc('templates/base.html'): {'attrib-starts': [],
         'first-line': 0,
         'folded-linenos': [],

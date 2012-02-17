@@ -40,4 +40,5 @@ Thumbs.db
 # Secret stuff. Shhhhh.
 secret.py
 secrets.py
+
 local_settings.py
