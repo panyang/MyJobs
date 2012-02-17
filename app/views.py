@@ -33,6 +33,14 @@ def ajax_user_status(request):
     """Implements login status/settings widget for use on other websites"""
     pass
 
+@login_required
+def user_view_profile(request):
+    """Login complete view, displays user profile on My.Jobs... unless"""
+    ctx = {'version': version,
+           'last_login': request.session.get('social_auth_last_login_backend')}
+    return render_to_response('done.html', ctx, RequestContext(request))
+
+# TODO: Convert to multilingual-flatpages at some point.
 def privacy(request):
     """Privacy page."""
     return render_to_response('privacy.html', RequestContext(request))
@@ -43,12 +51,12 @@ def home(request):
     Sends already authenticated users the home page for authenticated users
     """
     if request.user.is_authenticated():
-        return HttpResponseRedirect('/profile')
+        return HttpResponseRedirect('/profile/')
     else:
         #TODO: Fix home page template.
-        #return TemplateResponse(request, 'index.html', {})
-        return render_to_response('registration/login.html', {'version': version},
-                                  RequestContext(request))
+        return TemplateResponse(request, 'index.html', {})
+        #return render_to_response('registration/login.html', {'version': version},
+        #                         RequestContext(request))
 
 def profile(request, username):
     """implements user profile view.
