@@ -1,0 +1,747 @@
+<?xml version="1.0" encoding="iso-8859-1"?>
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN"
+               "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml"
+lang="en" xml:lang="en">
+<head>
+<title>project</title>
+<meta http-equiv="Content-Type" content="text/html;charset=iso-8859-1"/>
+<meta name="generator" content="Org-mode"/>
+<meta name="generated" content="2011-11-28 10:03:19 EST"/>
+<meta name="author" content="Mike Seidle"/>
+<meta name="description" content=""/>
+<meta name="keywords" content=""/>
+<style type="text/css">
+ <!--/*--><![CDATA[/*><!--*/
+  html { font-family: Times, serif; font-size: 12pt; }
+  .title  { text-align: center; }
+  .todo   { color: red; }
+  .done   { color: green; }
+  .tag    { background-color: #add8e6; font-weight:normal }
+  .target { }
+  .timestamp { color: #bebebe; }
+  .timestamp-kwd { color: #5f9ea0; }
+  .right  {margin-left:auto; margin-right:0px;  text-align:right;}
+  .left   {margin-left:0px;  margin-right:auto; text-align:left;}
+  .center {margin-left:auto; margin-right:auto; text-align:center;}
+  p.verse { margin-left: 3% }
+  pre {
+	border: 1pt solid #AEBDCC;
+	background-color: #F3F5F7;
+	padding: 5pt;
+	font-family: courier, monospace;
+        font-size: 90%;
+        overflow:auto;
+  }
+  table { border-collapse: collapse; }
+  td, th { vertical-align: top;  }
+  th.right  { text-align:center;  }
+  th.left   { text-align:center;   }
+  th.center { text-align:center; }
+  td.right  { text-align:right;  }
+  td.left   { text-align:left;   }
+  td.center { text-align:center; }
+  dt { font-weight: bold; }
+  div.figure { padding: 0.5em; }
+  div.figure p { text-align: center; }
+  div.inlinetask {
+    padding:10px;
+    border:2px solid gray;
+    margin:10px;
+    background: #ffffcc;
+  }
+  textarea { overflow-x: auto; }
+  .linenr { font-size:smaller }
+  .code-highlighted {background-color:#ffff00;}
+  .org-info-js_info-navigation { border-style:none; }
+  #org-info-js_console-label { font-size:10px; font-weight:bold;
+                               white-space:nowrap; }
+  .org-info-js_search-highlight {background-color:#ffff00; color:#000000;
+                                 font-weight:bold; }
+  /*]]>*/-->
+</style>
+<script type="text/javascript">
+<!--/*--><![CDATA[/*><!--*/
+ function CodeHighlightOn(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(null != target) {
+     elem.cacheClassElem = elem.className;
+     elem.cacheClassTarget = target.className;
+     target.className = "code-highlighted";
+     elem.className   = "code-highlighted";
+   }
+ }
+ function CodeHighlightOff(elem, id)
+ {
+   var target = document.getElementById(id);
+   if(elem.cacheClassElem)
+     elem.className = elem.cacheClassElem;
+   if(elem.cacheClassTarget)
+     target.className = elem.cacheClassTarget;
+ }
+/*]]>*///-->
+</script>
+
+</head>
+<body>
+
+<div id="preamble">
+
+</div>
+
+<div id="content">
+<h1 class="title">project</h1>
+
+
+<div id="table-of-contents">
+<h2>Table of Contents</h2>
+<div id="text-table-of-contents">
+<ul>
+<li><a href="#sec-1">1 CONFIG </a></li>
+<li><a href="#sec-2">2 DirectSeo Social    :SEO-SOCIAL: </a>
+<ul>
+<li><a href="#sec-2-1">2.1 Project Overview </a></li>
+<li><a href="#sec-2-2">2.2 Project Objectives </a></li>
+<li><a href="#sec-2-3">2.3 Definitions </a>
+<ul>
+<li><a href="#sec-2-3-1">2.3.1 Follow </a></li>
+<li><a href="#sec-2-3-2">2.3.2 Organic Talent Community </a></li>
+<li><a href="#sec-2-3-3">2.3.3 Sharing </a></li>
+<li><a href="#sec-2-3-4">2.3.4 Social Messaging </a></li>
+<li><a href="#sec-2-3-5">2.3.5 Smocial </a></li>
+</ul>
+</li>
+<li><a href="#sec-2-4">2.4 Implementation </a>
+<ul>
+<li><a href="#sec-2-4-1">2.4.1 Base off existing django code </a></li>
+<li><a href="#sec-2-4-2">2.4.2 Alerts will be delivered using the user's choice of LinkedIn, Twitter or Facebook </a></li>
+<li><a href="#sec-2-4-3">2.4.3 Twitter Specific </a></li>
+<li><a href="#sec-2-4-4">2.4.4 LinkedIn Specific </a></li>
+<li><a href="#sec-2-4-5">2.4.5 User Inteface </a></li>
+</ul>
+</li>
+<li><a href="#sec-2-5">2.5 Potential Risks </a>
+<ul>
+<li><a href="#sec-2-5-1">2.5.1 3rd Party API limitations </a></li>
+<li><a href="#sec-2-5-2">2.5.2 Must resist urge to do too much. </a></li>
+<li><a href="#sec-2-5-3">2.5.3 Don't be creepy. Make sure we respect end user privacy. </a></li>
+</ul>
+</li>
+<li><a href="#sec-2-6">2.6 Potential Ponies </a></li>
+<li><a href="#sec-2-7">2.7 Market Analysis </a></li>
+<li><a href="#sec-2-8">2.8 Activities </a>
+<ul>
+<li><a href="#sec-2-8-1">2.8.1 Meet with Katie to discuss social features.</a></li>
+<li><a href="#sec-2-8-2">2.8.2 Package URL Shortner into standalone app.</a></li>
+</ul>
+</li>
+<li><a href="#sec-2-9">2.9 Archive </a></li>
+</ul>
+</li>
+</ul>
+</div>
+</div>
+
+<div id="outline-container-1" class="outline-2">
+<h2 id="sec-1"><span class="section-number-2">1</span> CONFIG </h2>
+<div class="outline-text-2" id="text-1">
+
+
+</div>
+
+</div>
+
+<div id="outline-container-2" class="outline-2">
+<h2 id="sec-2"><span class="section-number-2">2</span> DirectSeo Social    :SEO-SOCIAL: </h2>
+<div class="outline-text-2" id="text-2">
+
+
+</div>
+
+<div id="outline-container-2-1" class="outline-3">
+<h3 id="sec-2-1"><span class="section-number-3">2.1</span> Project Overview </h3>
+<div class="outline-text-3" id="text-2-1">
+
+<p><b>tl;dr: Add Social Media integration to DirectSEO to improve UX and traffic</b>
+</p>
+<p>
+Extend social sharing features and implement social alerts so the job
+seekers can subscribe to saved searches. Sharing features will be
+improved to allow DirectEmployers to capture more useful data about
+job shares. Job seekers will be allowed to register on the DirectSeo
+platform using their LinkedIn, Twitter or Facebook account and
+subscribe to alerts for various saved searches. 
+</p>
+</div>
+
+</div>
+
+<div id="outline-container-2-2" class="outline-3">
+<h3 id="sec-2-2"><span class="section-number-3">2.2</span> Project Objectives </h3>
+<div class="outline-text-3" id="text-2-2">
+
+<ol>
+<li>Give job seekers a way to subscribe to alerts for jobs that match a saved search.
+</li>
+<li>Add more social media integration to DirectSEO.
+</li>
+<li>Increase Traffic to DirectSEO sites (industry average 20-30%)
+</li>
+<li>Improve sharing functions by eliminating AddThis and capturing
+      more actionable data on job sharing.
+</li>
+<li>Protect job seeker and employer private information
+</li>
+<li>Build foundation for future My.Jobs portal
+</li>
+</ol>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-2-3" class="outline-3">
+<h3 id="sec-2-3"><span class="section-number-3">2.3</span> Definitions </h3>
+<div class="outline-text-3" id="text-2-3">
+
+
+</div>
+
+<div id="outline-container-2-3-1" class="outline-4">
+<h4 id="sec-2-3-1"><span class="section-number-4">2.3.1</span> Follow </h4>
+<div class="outline-text-4" id="text-2-3-1">
+
+<p>Use the word 'follow' instead of subscribe. It's more friendly,
+and personal.
+</p></div>
+
+</div>
+
+<div id="outline-container-2-3-2" class="outline-4">
+<h4 id="sec-2-3-2"><span class="section-number-4">2.3.2</span> Organic Talent Community </h4>
+<div class="outline-text-4" id="text-2-3-2">
+
+<p>A group of people that are following a Microsite, Employer or specific
+saved search.
+</p></div>
+
+</div>
+
+<div id="outline-container-2-3-3" class="outline-4">
+<h4 id="sec-2-3-3"><span class="section-number-4">2.3.3</span> Sharing </h4>
+<div class="outline-text-4" id="text-2-3-3">
+
+<p>Posting a job, saved search or link from a microsite to a social
+network or sending email to a friend
+</p></div>
+
+</div>
+
+<div id="outline-container-2-3-4" class="outline-4">
+<h4 id="sec-2-3-4"><span class="section-number-4">2.3.4</span> Social Messaging </h4>
+<div class="outline-text-4" id="text-2-3-4">
+
+<p>Sending a message to a person you are connected to on a social network.
+</p></div>
+
+</div>
+
+<div id="outline-container-2-3-5" class="outline-4">
+<h4 id="sec-2-3-5"><span class="section-number-4">2.3.5</span> Smocial </h4>
+<div class="outline-text-4" id="text-2-3-5">
+
+<p>Its social. Its mobile. Its Smocial.
+</p></div>
+</div>
+
+</div>
+
+<div id="outline-container-2-4" class="outline-3">
+<h3 id="sec-2-4"><span class="section-number-3">2.4</span> Implementation </h3>
+<div class="outline-text-3" id="text-2-4">
+
+
+</div>
+
+<div id="outline-container-2-4-1" class="outline-4">
+<h4 id="sec-2-4-1"><span class="section-number-4">2.4.1</span> Base off existing django code </h4>
+<div class="outline-text-4" id="text-2-4-1">
+
+<ul>
+<li id="sec-2-4-1-1">Social Authorization &nbsp;&nbsp;&nbsp;<span class="tag"><span class="REVIEW">REVIEW</span></span><br/>
+<ul>
+<li id="sec-2-4-1-1-1">Support login via FaceBook, LinkedIn, Twitter and Google Logins &nbsp;&nbsp;&nbsp;<span class="tag"><span class="REQUIREMENT">REQUIREMENT</span>&nbsp;<span class="HARD">HARD</span></span><br/>
+</li>
+</ul>
+<ul>
+<li id="sec-2-4-1-1-2">Support additional social networks/auths: Yahoo, FourSquare &nbsp;&nbsp;&nbsp;<span class="tag"><span class="REQUIREMENT">REQUIREMENT</span>&nbsp;<span class="NICETOHAVE">NICETOHAVE</span></span><br/>
+</li>
+</ul>
+<ul>
+<li id="sec-2-4-1-1-3">Collect name and email address from auth provider where possible &nbsp;&nbsp;&nbsp;<span class="tag"><span class="REQUIREMENT">REQUIREMENT</span>&nbsp;<span class="NICETOHAVE">NICETOHAVE</span></span><br/>
+</li>
+</ul>
+<ul>
+<li id="sec-2-4-1-1-4">Support full OAUTH key exchange to enable app support &nbsp;&nbsp;&nbsp;<span class="tag"><span class="REQUIREMENT">REQUIREMENT</span>&nbsp;<span class="HARD">HARD</span></span><br/>
+</li>
+</ul>
+<ul>
+<li id="sec-2-4-1-1-5">NOTE Authentication should be from a single domain <br/>
+<ol>
+<li>Logins through job.jobs to avoid multidomain oauth nightmares.
+</li>
+<li>Use oauth<sub>callback</sub> parameter to redirect users back to original domain.
+</li>
+<li>Care will have to be taken to direct user to job.jobs for social
+   interaction.
+<ul>
+<li>Send to friend
+</li>
+<li>Social share
+</li>
+</ul>
+
+</li>
+</ol>
+
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li id="sec-2-4-1-2">Follow &nbsp;&nbsp;&nbsp;<span class="tag"><span class="REVIEW">REVIEW</span></span><br/>
+Provide a way for DirectSEO users to subscribe to a saved search or
+page (i.e att-wireless.jobs) and get updates via their registered
+social network or email. 
+<ul>
+<li id="sec-2-4-1-2-1">Provide a template tag that places a follow button on the page <br/>
+</li>
+</ul>
+<ul>
+<li id="sec-2-4-1-2-2">When clicked, the follow button should present options for: <br/>
+<ul>
+<li id="sec-2-4-1-2-2-1">How to send the message based on linked social networks + email. <br/>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li id="sec-2-4-1-2-3">All messages should allow: <br/>
+<ul>
+<li id="sec-2-4-1-2-3-1">Easy one-click "unfollow" (unsubscription) <br/>
+</li>
+</ul>
+<ul>
+<li id="sec-2-4-1-2-3-2">The reason why the message was sent (you followed this on ______ date) <br/>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li id="sec-2-4-1-2-4">All followed DirectSEO content will be managed in the user's job.jobs profile. <br/>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li id="sec-2-4-1-3">Social Sharing Buttons <br/>
+Many social sites support sharing information (messaging) two ways: 
+
+<ul>
+<li>"sharing" with your network. Messages appear in your stream and that
+  of your friends. Tools like Google's +1 and Facebook's Like fit this model.
+</li>
+<li>"sending" a personal message to a friend or group of friends.
+</li>
+</ul>
+
+
+<p>
+On most sites, when you click a sharing button, you are only offered
+the "sharing" method. For our social sharing buttons, we should
+support both models where reasonable to allow people to send a job to
+a potential candidate as well as share a job with all of their friends
+</p>
+<ul>
+<li id="sec-2-4-1-3-1">Requirements for all sharing features &nbsp;&nbsp;&nbsp;<span class="tag"><span class="REQUIREMENT">REQUIREMENT</span>&nbsp;<span class="HARD">HARD</span></span><br/>
+<ul>
+<li id="sec-2-4-1-3-1-1">Short URLS using job.jobs URL shortner <br/>
+</li>
+</ul>
+<ul>
+<li id="sec-2-4-1-3-1-2">User can edit message but not job URL. <br/>
+</li>
+</ul>
+<ul>
+<li id="sec-2-4-1-3-1-3">HTML (pretty) Message format for emails. <br/>
+</li>
+</ul>
+<ul>
+<li id="sec-2-4-1-3-1-4">Implement where possible as template tag <br/>
+</li>
+</ul>
+<ul>
+<li id="sec-2-4-1-3-1-5">Log all interactions for future analysis. <br/>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li id="sec-2-4-1-3-2">Support Send to Friend for: <br/>
+<ul>
+<li id="sec-2-4-1-3-2-1">Twitter (direct message) &nbsp;&nbsp;&nbsp;<span class="tag"><span class="REQUIREMENT">REQUIREMENT</span>&nbsp;<span class="HARD">HARD</span></span><br/>
+</li>
+</ul>
+<ul>
+<li id="sec-2-4-1-3-2-2">Facebook (message) &nbsp;&nbsp;&nbsp;<span class="tag"><span class="REQUIREMENT">REQUIREMENT</span>&nbsp;<span class="HARD">HARD</span></span><br/>
+</li>
+</ul>
+<ul>
+<li id="sec-2-4-1-3-2-3">LinkedIn (InMail) &nbsp;&nbsp;&nbsp;<span class="tag"><span class="REQUIREMENT">REQUIREMENT</span>&nbsp;<span class="NICETOHAVE">NICETOHAVE</span></span><br/>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li id="sec-2-4-1-3-3">Support sharing as follows: <br/>
+<ul>
+<li id="sec-2-4-1-3-3-1">Twitter (status update) &nbsp;&nbsp;&nbsp;<span class="tag"><span class="REQUIREMENT">REQUIREMENT</span>&nbsp;<span class="HARD">HARD</span></span><br/>
+</li>
+</ul>
+<ul>
+<li id="sec-2-4-1-3-3-2">Facebook (Like) &nbsp;&nbsp;&nbsp;<span class="tag"><span class="REQUIREMENT">REQUIREMENT</span>&nbsp;<span class="HARD">HARD</span></span><br/>
+</li>
+</ul>
+<ul>
+<li id="sec-2-4-1-3-3-3">LinkedIn (share - stream &amp; groups) &nbsp;&nbsp;&nbsp;<span class="tag"><span class="REQUIREMENT">REQUIREMENT</span>&nbsp;<span class="HARD">HARD</span></span><br/>
+</li>
+</ul>
+<ul>
+<li id="sec-2-4-1-3-3-4">Google+ (+1) &nbsp;&nbsp;&nbsp;<span class="tag"><span class="REQUIREMENT">REQUIREMENT</span>&nbsp;<span class="HARD">HARD</span></span><br/>
+</li>
+</ul>
+<ul>
+<li id="sec-2-4-1-3-3-5">Email &nbsp;&nbsp;&nbsp;<span class="tag"><span class="REQUIREMENT">REQUIREMENT</span>&nbsp;<span class="HARD">HARD</span></span><br/>
+<ul>
+<li>Users often will send jobs to themselves as well as to friends.
+</li>
+</ul>
+
+</li>
+</ul>
+</li>
+</ul>
+</li>
+</ul>
+<ul>
+<li id="sec-2-4-1-4">URL Shortner <br/>
+A URL shortner allows us to control the quality of links and make it
+easier for users to share links. Our URL Shortner will be used to
+embed links in social messages and shares and will provide the
+following features:
+<ul>
+<li id="sec-2-4-1-4-1">Base96 (job.jobs/eIn39) or custom short urls (job.jobs/l/link/to/somewhere) <br/>
+</li>
+</ul>
+<ul>
+<li id="sec-2-4-1-4-2">Permenant redirects for all links. <br/>
+</li>
+</ul>
+<ul>
+<li id="sec-2-4-1-4-3">aliasing of existing URLS to measure all shares and unique shares <br/>
+</li>
+</ul>
+<ul>
+<li id="sec-2-4-1-4-4">appending parameters to URLS so that source and other tracking code can be injected into the URL. <br/>
+</li>
+</ul>
+<ul>
+<li id="sec-2-4-1-4-5">All reasonable data will be normalized and logged for future mining. <br/>
+</li>
+</ul>
+<ul>
+<li id="sec-2-4-1-4-6">Will be packaged as a standalone Djanog app for open sourcing &nbsp;&nbsp;&nbsp;<span class="tag"><span class="REQUIREMENT">REQUIREMENT</span>&nbsp;<span class="NICETOHAVE">NICETOHAVE</span></span><br/>
+</li>
+</ul>
+</li>
+</ul>
+</div>
+
+</div>
+
+<div id="outline-container-2-4-2" class="outline-4">
+<h4 id="sec-2-4-2"><span class="section-number-4">2.4.2</span> Alerts will be delivered using the user's choice of LinkedIn, Twitter or Facebook </h4>
+<div class="outline-text-4" id="text-2-4-2">
+
+<p>(Long Term: support more social networks and possibly email)
+</p></div>
+
+</div>
+
+<div id="outline-container-2-4-3" class="outline-4">
+<h4 id="sec-2-4-3"><span class="section-number-4">2.4.3</span> Twitter Specific </h4>
+<div class="outline-text-4" id="text-2-4-3">
+
+<ul>
+<li id="sec-2-4-3-1">Allow user to choose @message or direct message method (requires user to follow our profile) <br/>
+</li>
+</ul>
+</div>
+
+</div>
+
+<div id="outline-container-2-4-4" class="outline-4">
+<h4 id="sec-2-4-4"><span class="section-number-4">2.4.4</span> LinkedIn Specific </h4>
+<div class="outline-text-4" id="text-2-4-4">
+
+<ul>
+<li id="sec-2-4-4-1">Need to implement share job with group which allows better targeted social sharing. <br/>
+</li>
+</ul>
+</div>
+
+</div>
+
+<div id="outline-container-2-4-5" class="outline-4">
+<h4 id="sec-2-4-5"><span class="section-number-4">2.4.5</span> User Inteface </h4>
+<div class="outline-text-4" id="text-2-4-5">
+
+<ul>
+<li id="sec-2-4-5-1">Requirements <br/>
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<caption></caption>
+<colgroup><col class="left" /><col class="left" /><col class="left" />
+</colgroup>
+<thead>
+<tr><th scope="col" class="left">Browser Support</th><th scope="col" class="left">IE7+, WebKit, Firefox, Mobile</th><th scope="col" class="left"></th></tr>
+<tr><th scope="col" class="left">HTML</th><th scope="col" class="left">HTML4 and HTML 5 should be supported.</th><th scope="col" class="left"></th></tr>
+</thead>
+<tbody>
+<tr><td class="left">UI Tools Needed</td><td class="left">Modial Dialog</td><td class="left">Use: Log In, Log Out, Confirm Changes</td></tr>
+<tr><td class="left">Today</td><td class="left">Grid</td><td class="left">Use: Presentation of saved searches, applied for jobs</td></tr>
+<tr><td class="left"></td><td class="left">Toggle Button</td><td class="left">Use: Show active connections to social networks.</td></tr>
+<tr><td class="left"></td><td class="left">Button W/ Icon</td><td class="left">Use: Presentation of actions (delete, add, etc&hellip;)</td></tr>
+<tr><td class="left"></td><td class="left">Inline labels (see Bootstrap for def)</td><td class="left">Use: Highlighting content</td></tr>
+<tr><td class="left"></td><td class="left">Complete Typography Styling</td><td class="left">Use: Make text easier to skim and read</td></tr>
+<tr><td class="left"></td><td class="left">Grid Layoun</td><td class="left">Use: Make site easier to use, look good</td></tr>
+</tbody>
+<tbody>
+<tr><td class="left">UI Tools Needed</td><td class="left">Bar, Pie and Line Chart</td><td class="left">Use: Display of metric data</td></tr>
+<tr><td class="left">Future</td><td class="left">TopBar</td><td class="left">Use: My.Jobs main Nav</td></tr>
+<tr><td class="left"></td><td class="left"></td><td class="left">More to come&hellip;</td></tr>
+</tbody>
+</table>
+
+
+</li>
+</ul>
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-2-5" class="outline-3">
+<h3 id="sec-2-5"><span class="section-number-3">2.5</span> Potential Risks </h3>
+<div class="outline-text-3" id="text-2-5">
+
+
+</div>
+
+<div id="outline-container-2-5-1" class="outline-4">
+<h4 id="sec-2-5-1"><span class="section-number-4">2.5.1</span> 3rd Party API limitations </h4>
+<div class="outline-text-4" id="text-2-5-1">
+
+</div>
+
+</div>
+
+<div id="outline-container-2-5-2" class="outline-4">
+<h4 id="sec-2-5-2"><span class="section-number-4">2.5.2</span> Must resist urge to do too much. </h4>
+<div class="outline-text-4" id="text-2-5-2">
+
+</div>
+
+</div>
+
+<div id="outline-container-2-5-3" class="outline-4">
+<h4 id="sec-2-5-3"><span class="section-number-4">2.5.3</span> Don't be creepy. Make sure we respect end user privacy. </h4>
+<div class="outline-text-4" id="text-2-5-3">
+
+
+</div>
+</div>
+
+</div>
+
+<div id="outline-container-2-6" class="outline-3">
+<h3 id="sec-2-6"><span class="section-number-3">2.6</span> Potential Ponies </h3>
+<div class="outline-text-3" id="text-2-6">
+
+<ol>
+<li>Open source ready Social Alerts app that can be used in other Django projects.
+</li>
+<li>DE Marketing: Growth of followers on Twitter, Facebook and LinkedIn should add considerable
+       ability to generate future traffic to .jobs sites by simply posting/tweeting.
+</li>
+<li>User profile is the beginning of creating the infrastructure to
+       implement App.ly
+</li>
+<li>Better <b>Social Recruiting</b> demos. Social sharing metrics and
+       subscription metrics should play well to prospective members.
+</li>
+<li>Socially enhanced organic tallent communities that let
+       microsite owner communicate with the community of people who
+       are following a job.
+</li>
+</ol>
+
+</div>
+
+</div>
+
+<div id="outline-container-2-7" class="outline-3">
+<h3 id="sec-2-7"><span class="section-number-3">2.7</span> Market Analysis </h3>
+<div class="outline-text-3" id="text-2-7">
+
+
+<table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<caption></caption>
+<colgroup><col class="left" /><col class="left" /><col class="left" />
+</colgroup>
+<thead>
+<tr><th scope="col" class="left">Feature</th><th scope="col" class="left">Our Model (the new hotness)</th><th scope="col" class="left">Old Busted Job Board Model</th></tr>
+</thead>
+<tbody>
+<tr><td class="left">Talent Communities</td><td class="left">Job Seeker Self-Selected.</td><td class="left">Based on resume search.</td></tr>
+<tr><td class="left"></td><td class="left">Opt-In</td><td class="left">Opt-Out</td></tr>
+</tbody>
+<tbody>
+<tr><td class="left">Communication</td><td class="left">Always Opt-in</td><td class="left">Spammy</td></tr>
+<tr><td class="left"></td><td class="left">Via preferred social networks</td><td class="left">Via email. Limited viral.</td></tr>
+<tr><td class="left"></td><td class="left">(high potential for viral).</td><td class="left"></td></tr>
+<tr><td class="left"></td><td class="left"></td><td class="left">Employers have to pay to</td></tr>
+<tr><td class="left"></td><td class="left">Job Seekers can share with individuals</td><td class="left">communicate with candidates.</td></tr>
+<tr><td class="left"></td><td class="left">or their networks on their preferred</td><td class="left"></td></tr>
+<tr><td class="left"></td><td class="left">social network.</td><td class="left"></td></tr>
+<tr><td class="left"></td><td class="left">Microsite owners can message via</td><td class="left"></td></tr>
+<tr><td class="left"></td><td class="left">preferred social network</td><td class="left"></td></tr>
+</tbody>
+<tbody>
+<tr><td class="left">Privacy Model</td><td class="left">No Personally Identifiable</td><td class="left">Creepy.</td></tr>
+<tr><td class="left"></td><td class="left">Information (PII) retained.</td><td class="left">Tell them your life story</td></tr>
+<tr><td class="left"></td><td class="left"></td><td class="left">and let the job board</td></tr>
+<tr><td class="left"></td><td class="left"></td><td class="left">'monetize' you.</td></tr>
+</tbody>
+<tbody>
+<tr><td class="left">Community Model</td><td class="left">- By Location</td><td class="left">Segmentation based on</td></tr>
+<tr><td class="left"></td><td class="left">- By Microsite</td><td class="left">resume database fields.</td></tr>
+<tr><td class="left"></td><td class="left">- By Employer</td><td class="left"></td></tr>
+<tr><td class="left"></td><td class="left">- By Saved Search (interest)</td><td class="left"></td></tr>
+</tbody>
+<tbody>
+<tr><td class="left">Profile</td><td class="left">Simple. An opt in and a panel</td><td class="left">Lots of work. Enter your</td></tr>
+<tr><td class="left"></td><td class="left">of job searches you are following</td><td class="left">resume and profile your self</td></tr>
+</tbody>
+<tbody>
+<tr><td class="left">Login &amp; Security</td><td class="left">Oauth/OpenID Facebook,LinkedIn, Twitter</td><td class="left">Username/Password</td></tr>
+<tr><td class="left"></td><td class="left">No usernames and passwords on Microsites</td><td class="left"></td></tr>
+<tr><td class="left"></td><td class="left">ever.</td><td class="left"></td></tr>
+</tbody>
+</table>
+
+
+<p>
+SendGrid Categories
+</p><table border="2" cellspacing="0" cellpadding="6" rules="groups" frame="hsides">
+<caption></caption>
+<colgroup><col class="left" /><col class="left" /><col class="left" />
+</colgroup>
+<thead>
+<tr><th scope="col" class="left">Category</th><th scope="col" class="left">Description</th><th scope="col" class="left">Sent by</th></tr>
+</thead>
+<tbody>
+<tr><td class="left">Registration</td><td class="left">Emails sent durring the registration process</td><td class="left">email sent by reg. process</td></tr>
+</tbody>
+<tbody>
+<tr><td class="left">Job<sub>Search</sub></td><td class="left">Email sent by job search.</td><td class="left">must be job search reminder</td></tr>
+</tbody>
+<tbody>
+<tr><td class="left">Share</td><td class="left">Email share.</td><td class="left">Save/share</td></tr>
+</tbody>
+<tbody>
+<tr><td class="left">Password</td><td class="left">Password reset</td><td class="left">Auth / Registration</td></tr>
+</tbody>
+<tbody>
+<tr><td class="left">Admin</td><td class="left">Other admin notices</td><td class="left">Automatic emails</td></tr>
+</tbody>
+<tbody>
+<tr><td class="left">Newsletter</td><td class="left">E-newsletters</td><td class="left"></td></tr>
+</tbody>
+</table>
+
+
+</div>
+
+</div>
+
+<div id="outline-container-2-8" class="outline-3">
+<h3 id="sec-2-8"><span class="section-number-3">2.8</span> Activities </h3>
+<div class="outline-text-3" id="text-2-8">
+
+
+</div>
+
+<div id="outline-container-2-8-1" class="outline-4">
+<h4 id="sec-2-8-1"><span class="section-number-4">2.8.1</span> <span class="todo DONE"> DONE</span> Meet with Katie to discuss social features. &nbsp;&nbsp;&nbsp;<span class="tag"><span class="MEETING">MEETING</span></span></h4>
+<div class="outline-text-4" id="text-2-8-1">
+
+<ul>
+<li>Messaging
+</li>
+<li>Integrating with social media marketing programs
+</li>
+<li>Deliviering job seeker questions to Employers 
+</li>
+<li>Features that will sell to members. More .jobs
+</li>
+</ul>
+
+</div>
+
+</div>
+
+<div id="outline-container-2-8-2" class="outline-4">
+<h4 id="sec-2-8-2"><span class="section-number-4">2.8.2</span> <span class="todo TODO"> TODO</span> Package URL Shortner into standalone app. &nbsp;&nbsp;&nbsp;<span class="tag"><span class="PROJECT">PROJECT</span></span></h4>
+<div class="outline-text-4" id="text-2-8-2">
+
+<p>[ ] Refactor out "Shorty" Refactor in myurls
+[ ] Write example application
+[ ] Add readme
+[ ] Add release notes
+[ ] Package up for Cheese Shop
+[ ] Release announcement on blog
+</p></div>
+</div>
+
+</div>
+
+<div id="outline-container-2-9" class="outline-3">
+<h3 id="sec-2-9"><span class="section-number-3">2.9</span> Archive </h3>
+<div class="outline-text-3" id="text-2-9">
+
+</div>
+</div>
+</div>
+</div>
+
+<div id="postamble">
+<p class="date">Date: 2011-11-28 10:03:19 EST</p>
+<p class="author">Author: Mike Seidle</p>
+<p class="creator">Org version 7.7 with Emacs version 23</p>
+<a href="http://validator.w3.org/check?uri=referer">Validate XHTML 1.0</a>
+
+</div>
+</body>
+</html>

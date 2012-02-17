@@ -1,0 +1,124 @@
+{% load i18n %}
+{% comment %}
+base.html -- implements MyJobs page.
+
+Where practical, the HTML structure is separated from content... so to override
+content only, override whatever-content in your template. To override the 
+structure of the page (e.g. single column for content) you would override 
+whatever.
+{% endcomment %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% block meta %}
+  {% include "includes/meta.html" %}
+  {% endblock meta %}
+  {# use meta-append to add template specific scripts and styles #}
+  {% block meta-append %}{% endblock meta-append %}
+</head>
+<body>
+{% block page %}
+{% block topbar %}
+  {% include "includes/topbar.html" %}
+{% endblock topbar %}
+{% block subpage %}
+<section><div class="section subpage">
+  {# Show messages only if we have messages to show #}
+  {% block message %}
+     {% include "includes/message.html" %}
+  {% endblock message %}
+  {# Header is full content area width #}
+  {% block header %}
+  <div class="wrapper">
+    <div class="row">
+      <div class="span16">
+      {% block header-content %}
+	{{ site_title }}
+      {% endblock header-content %}
+      </div>
+    </div>
+  </div>
+  {% endblock header %}
+  {# to change layouts, override content-area in your template #}
+  {# for custom content, just override the content block #}
+  {% block content-area %}
+    <div class="wrapper">
+      <div class="row">
+	<div class="span-three-fifths">
+	  {% block content %}
+	  Put yo content here
+	  {% endblock content %}
+	</div>
+	{# Sidebar #}
+	{% block focusbox %}
+	  <div class="span-two-fifths">
+	      <div id="focusBox">
+		  {% block focusbox-content %}
+		    <div class="h2block takeover">
+		      <h3>Focus Box Content</h3>
+		      <p>Goes here.</p>
+		    </div>
+		  {% endblock focusbox-content %}    
+	      </div>
+	      </div>
+	  {% endblock focusbox %}
+      </div>
+    </div>
+  {% endblock content-area %}
+</div></section>
+{% endblock subpage %}
+{# Footer Starts Here #}
+{% block footer %}
+<footer><div class="footer">
+  {% block bottomtabs %}      
+  <div id="bottomTabs">
+    <div class="wrapper">
+      {% block bottomtabs-content %}
+   	<div id="robot"></div>
+	<div class="row">
+	    <div class="span-one-fifth">
+		<h3 id="save">Save.</h3>
+		<p>{% trans "Collect jobs you've discovered anywhere in the .jobs universe." %}</p>
+	    </div>
+	    <div class="span-one-fifth">
+		<h3 id="share">{% trans "Share." %}</h3>
+		<p>{% trans "Personalize the jobs you share with your social networks." %}</p>
+	    </div>
+	    <div class="span-one-fifth">
+		<h3 id="socialize">Socialize.</h3>
+		<p>{% trans "Join to promote yourself and the jobs you are sharing." %}</p>
+	    </div>
+	    <div class="span-two-fifths">
+		<h3 id="future">{% trans "Future." %}</h3>
+		<p>{% trans "Verified jobs, sidebar, browser extension, personalized job matching, search cloud, application & interview assistants, job alerts, mobile...and more." %}</p>
+	    </div>
+	</div>
+      {% endblock bottomtabs-content %}
+    </div>
+  </div>
+ {% endblock bottomtabs %}
+{% block bottom-links %}
+  <div class="wrapper" id="bottomLinks">
+  <div class="row">
+    {% block bottom-links-content %}
+      <div class="span-three-fifths">
+	<p>{% trans "A service of" %} <a href="http://directemployers.org">{% trans "DirectEmployers Association" %}</a></p>
+      </div>
+      <div class="span-two-fifths subpageLinks">
+	<p class="pull-right">
+	  <a href="/about">{% trans "About" %}</a>
+	  <a href="/privacy-policy">{% trans "Privacy" %}</a>
+	</p>
+      </div>
+    {% endblock bottom-links-content %}  
+  </div>
+  </div>
+{% endblock bottom-links %}
+</div></footer>
+{% endblock footer %}
+{% endblock page %}
+{% include "includes/analytics.html" %}
+{# Use page-append when you need to insert something just above the /body tag #}
+{% block page-append %}{% endblock page-append %}
+</body>
+</html>

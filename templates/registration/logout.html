@@ -1,0 +1,25 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% comment %}
+logout.html -- implements the page you see when you log out.
+{% endcomment %}
+
+{% block header-content%}
+  <h1>{% trans 'You have Logged Out' %}<small> {% trans 'of my.jobs.' %}</small></h1>
+{% endblock header-content %}
+
+{% block content %}
+  <div class="alert-message block-message success">
+    <a class="close" href="#">×</a>
+    <p>{% trans 'You have successfully logged out of my.jobs.' %}</p<>
+    <div class="alert-actions">
+      <a class="btn small" href="{% url auth_login %}">{% trans "login again" %}</a>
+    </div>
+  </div>
+{% endblock content %}
+
+{% block focusbox-content %}
+<h3>{% trans "Join My.Jobs." %}</h3>
+<p>{% trans "My.Jobs is a tool for managing your job search. Save and share the jobs you are interested in and connect directly with employers." %}
+{% endblock focusbox-content %}
+

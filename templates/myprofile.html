@@ -1,0 +1,50 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% comment %}
+myprofile.html -- implements view my profile. 
+
+Accepts context:
+
+user -- a User object.
+
+{% endcomment %}
+{% block page-header-text %}
+  <h2>{% trans "My Profile" %}</h2>
+  <small>for {{user.username }} - {{ user.first_name }} {{ user.last_name }}</small>
+{% endblock page-header-text %}
+{% block content %}
+<div>
+  <table class="zebra-striped">
+      <thead>
+	<tr>
+	  <th colspan="2">{% trans "Your Details" %}</th>
+	</tr>
+      </thead>
+    <tbody>
+      {# future stuff for user admin #}
+      {% if user.is_staff %}
+      <tr><td>Id:</td> <td>{{ user.id }}</td></tr>
+      {% endif %}
+      <tr><td>{% trans "Your Name" %}:</td> <td>{{ user.first_name }} {{ user.last_name }}</td></tr>
+      <tr><td>{% trans "Email" %}:</td> <td>{{ user.email|default:"Not provided" }}</td></tr>
+      <tr>
+	<td>{% trans "Communication Settings" %}:</td>
+	<td>
+	  <ul>
+	    <li>{% trans "My.Jobs is" %} {% if user.profile.opt_in_myjobs %}<b>{% trans "allowed" %}</b>{% else %}<b>{% trans "not allowed" %}</b>{% endif %} {% trans "to send messages to you." %}</li>
+	    <li>{% trans ".Jobs employers are" %} {% if user.profile.opt_in_myjobs %}<b>{% trans "allowed" %}</b>{% else %}<b>{% trans "not allowed" %}</b>{% endif %} {% trans "to send messages to you." %}</li>
+	  </ul>
+	</td>
+      </tr>
+       <tr><td>{% trans "Last loged in with" %}:</td> <td>{{ last_login }}</td></tr>
+     </tbody>
+  </table>
+</div>
+{% include "includes/widget-connectify.html" %}
+{% endblock content %}
+
+{% block focusbox-content %}
+  <div class="alert-message block-message info">
+    {% include "includes/about-dot-jobs.html" %}
+  </div>
+{% endblock focusbox-content %}

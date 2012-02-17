@@ -1,0 +1,17 @@
+{% load i18n %}
+{% comment %}
+message.html -- Implements standard layout for django messages.
+{% endcomment %}
+{% if messages %}
+  <div class="wrapper">
+    <div class="row">
+      <div class="span16">
+      {% for mesage in messages %}
+	<div class="alert-message {% if message.tags %}{{ message.tags }}{% endif %}">
+	  <a class="close" href="#">&times;</a><p>{{ message }}</p>
+	</div>
+      {% endfor %}
+      </div>
+    </div>
+  </div>
+{% endif %}

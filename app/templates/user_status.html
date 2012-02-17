@@ -1,0 +1,9 @@
+{% load i18n %}
+{% comment %}
+user_status.html -- user status widget
+{% endcomment %}
+{% if user.is_authenticated %}
+    <div id='myjobs-status'>{{ user.first_name}} {{ user.last_name }} <img src="{{ avatar}}" alt="{{ user.first_name }}"> <a class="myjobs btn logout">{% trans "logout" %}</a></div>
+{% else %}
+    <div id='myjobs-status'><a class="myjobs btn join">{% trans "Join My.Jobs" %}</a></div>
+{% endif %}

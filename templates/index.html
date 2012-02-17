@@ -1,0 +1,96 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% comment %}
+index.html -- implements non-authenticated home/landing page for my.jobs.
+{% endcomment %}
+{% block title-content %}{% trans "My.Jobs - Manage your job search." %}{% endblock title-content %}
+{% block page %}
+    <section><div class="leaderBoard">
+        <header><div class="header">
+            <div class="wrapper">
+                <div class="row">
+                    <div class="span8" id="title">
+                        <h1>{% trans 'My.jobs' %}</h1>
+                    </div>
+                    <div class="span8" id="subtitle">
+                        {% trans 'Save. Share. Socialize.' %}<br/>
+                        {% trans 'Forge your path.' %}
+                    </div>
+                </div>
+                <div class="clear"></div>
+            </div>
+            <div class="clear"></div>
+        </div></header>
+            <div class="wrapper" id="leaderBoardContent">
+            <div class="row">
+                <div class="span-three-fifths">
+                    <div id="introText">
+                    <p>
+                        <b>{% trans 'Everyone is unique' %} &mdash; </b>{% trans 'you have your own vision and goals for your career. My.jobs is a reliable and secure personal job assistant which empowers you to build relationships and your future. Take responsibility for your career, forge your path. My.jobs is personalized just for you.' %}
+                            </p>
+                    <p>
+                        <b>{% trans 'Job sharing is just the beginning' %}.</b> {% trans "Create a profile to track jobs you've saved for yourself or shared with friends, family and the world. My.jobs will continue to provide tools to automate tasks and assist you along your career path, making it easier and faster, with you always in control." %}
+                    </p>
+                    </div>
+                </div>
+                <div class="span-two-fifths">
+                    <div id="loginBox">
+                        {% trans 'Sign in with your favorite social account' %}
+                        {% include "includes/widget-connectify.html" %}
+                        <p>
+                            {% trans 'Or you can sign in with your my.jobs account' %}
+                        </p>
+                        {% include "includes/widget-login-username.html" %}           
+                    </div>				
+                </div>
+            </div>
+<div class="clear"></div>
+</div>
+</div></section>
+    <!--persistant footer-->
+    <footer>
+        <div id="bottomTabs">
+            <div class="wrapper">
+                <div id="robot"></div>
+            <div class="row">
+                <div class="span-one-fifth">
+                    <h3 id="save">{% trans "Save." %}</h3>
+                    <p>{% trans "Collect jobs you've discovered anywhere in the .jobs universe." %}</p>
+                </div>
+                <div class="span-one-fifth">
+                    <h3 id="share">{% trans "Share." %}</h3>
+                    <p>{% trans "Personalize the jobs you share with your social networks." %}</p>
+                </div>
+                <div class="span-one-fifth">
+                    <h3 id="socialize">{% trans "Socialize." %}</h3>
+                    <p>{% trans "Join to promote yourself and the jobs you are sharing." %}</p>
+                </div>
+                <div class="span-two-fifths">
+                    <h3 id="future">{% trans "Future." %}</h3>
+                    <p>{% trans "Verified jobs, sidebar, browser extension, personalized job matching, search cloud, application & interview assistants, job alerts, mobile...and more." %} </p>
+                </div>
+            </div>
+            </div>
+        </div>
+            <div class="wrapper" id="bottomLinks">
+            <div class="row">
+                <div class="span-three-fifths">
+                <p>{% trans "A service of" %} <a href="http://directemployers.org">{% trans "DirectEmployers Association" %}</a></p>
+            </div>
+            <div class="span-two-fifths subpageLinks">
+                <p class="pull-right">
+                    <a href="/about">{% trans "About" %}</a>
+                <a href="/privacy-policy">{% trans "Privacy" %}</a>
+                </p>
+            </div>
+            </div>
+        </div>
+    </footer>
+    <div class="clear"></div>
+    <!--[if lt IE 9]>
+    <script src="//html5shim.googlecode.com/svn/trunk/html5.js"></script>
+    <![endif]-->   
+{% endblock page %}
+
+</body>
+</html>

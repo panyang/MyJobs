@@ -1,0 +1,212 @@
+* CONFIG
+#+STARTUP: overview
+#+STARTUP: hidestars
+#+STARTUP: logdone
+#+STARTUP: indent
+#+PROPERTY: Effort_ALL  0:10 0:20 0:30 1:00 2:00 4:00 6:00 8:00
+#+COLUMNS: %38ITEM(Details) %TAGS(Context) %7TODO(To Do) %5Effort(Time){:} %6CLOCKSUM{Total}
+#+PROPERTY: Effort_ALL 0 0:10 0:20 0:30 1:00 2:00 3:00 4:00 8:00
+#+TAGS: { OFFICE(o) DEVELOPMENT (v) TESTING (e) SYSADMIN (s) HOME(h) OTHER (t)} COMPUTER(c) PROJECT(j) READING(r) MEETING(m)
+#+SEQ_TODO: TODO(t) PROPOSED (p) STARTED(s) WAITING(w) APPT(a) DELEGATED(l)| DONE(d) CANCELLED(c) DEFERRED(f)
+  
+* DirectSeo Social    :SEO-SOCIAL:
+** Project Overview 
+*tl;dr: Add Social Media integration to DirectSEO to improve UX and
+traffic*
+
+Extend social sharing features and implement social alerts so the job
+seekers can subscribe to saved searches. Sharing features will be
+improved to allow DirectEmployers to capture more useful data about
+job shares. Job seekers will be allowed to register on the DirectSeo
+platform using their LinkedIn, Twitter or Facebook account and
+subscribe to alerts for various saved searches. 
+
+** Project Objectives
+   1. Give job seekers a way to subscribe to alerts for jobs that match a saved search.
+   2. Add more social media integration to DirectSEO.
+   3. Increase Traffic to DirectSEO sites (industry average 20-30%)
+   4. Improve sharing functions by eliminating AddThis and capturing
+      more actionable data on job sharing.
+   5. Protect job seeker and employer private information
+   6. Build foundation for future My.Jobs portal
+
+** Definitions
+*** Follow
+Use the word 'follow' instead of subscribe. It's more friendly,
+and personal.
+*** Organic Talent Community
+A group of people that are following a Microsite, Employer or specific
+saved search.
+*** Sharing
+Posting a job, saved search or link from a microsite to a social
+network or sending email to a friend
+*** Social Messaging
+Sending a message to a person you are connected to on a social network.
+*** Smocial
+Its social. Its mobile. Its Smocial.
+** Implementation
+*** Base off existing django code
+**** Social Authorization                                            :REVIEW:
+***** Support login via FaceBook, LinkedIn, Twitter and Google Logins :REQUIREMENT:HARD:
+***** Support additional social networks/auths: Yahoo, FourSquare  :REQUIREMENT:NICETOHAVE:
+***** Collect name and email address from auth provider where possible :REQUIREMENT:NICETOHAVE:
+***** Support full OAUTH key exchange to enable app support :REQUIREMENT:HARD:
+***** NOTE Authentication should be from a single domain 
+1. Logins through job.jobs to avoid multidomain oauth nightmares.
+2. Use oauth_callback parameter to redirect users back to original domain.
+3. Care will have to be taken to direct user to job.jobs for social
+   interaction.
+   - Send to friend
+   - Social share
+**** Follow                                                       :REVIEW:
+Provide a way for DirectSEO users to subscribe to a saved search or
+page (i.e att-wireless.jobs) and get updates via their registered
+social network or email. 
+***** Provide a template tag that places a follow button on the page
+***** When clicked, the follow button should present options for:
+****** How to send the message based on linked social networks + email.
+***** All messages should allow:
+****** Easy one-click "unfollow" (unsubscription)
+****** The reason why the message was sent (you followed this on ______ date)
+***** All followed DirectSEO content will be managed in the user's job.jobs profile.
+**** Social Sharing Buttons
+Many social sites support sharing information (messaging) two ways: 
+
+- "sharing" with your network. Messages appear in your stream and that
+  of your friends. Tools like Google's +1 and Facebook's Like fit this model.
+- "sending" a personal message to a friend or group of friends.
+
+On most sites, when you click a sharing button, you are only offered
+the "sharing" method. For our social sharing buttons, we should
+support both models where reasonable to allow people to send a job to
+a potential candidate as well as share a job with all of their friends
+
+*****  Requirements for all sharing features           :REQUIREMENT:HARD:
+****** Short URLS using job.jobs URL shortner
+****** User can edit message but not job URL.
+****** HTML (pretty) Message format for emails.
+****** Implement where possible as template tag
+****** Log all interactions for future analysis.
+***** Support Send to Friend for:
+****** Twitter (direct message)                       :REQUIREMENT:HARD:
+****** Facebook (message)                             :REQUIREMENT:HARD:
+****** LinkedIn (InMail)                        :REQUIREMENT:NICETOHAVE:
+***** Support sharing as follows:
+****** Twitter (status update)                        :REQUIREMENT:HARD:
+****** Facebook (Like)                                :REQUIREMENT:HARD:
+****** LinkedIn (share - stream & groups)             :REQUIREMENT:HARD:
+****** Google+ (+1)                                   :REQUIREMENT:HARD:
+****** Email                                          :REQUIREMENT:HARD:
+- Users often will send jobs to themselves as well as to friends.
+**** URL Shortner
+A URL shortner allows us to control the quality of links and make it
+easier for users to share links. Our URL Shortner will be used to
+embed links in social messages and shares and will provide the
+following features:
+***** Base96 (job.jobs/eIn39) or custom short urls (job.jobs/l/link/to/somewhere)
+***** Permenant redirects for all links.
+***** aliasing of existing URLS to measure all shares and unique shares
+***** appending parameters to URLS so that source and other tracking code can be injected into the URL.
+***** All reasonable data will be normalized and logged for future mining.
+***** Will be packaged as a standalone Djanog app for open sourcing :REQUIREMENT:NICETOHAVE:
+*** Alerts will be delivered using the user's choice of LinkedIn, Twitter or Facebook 
+(Long Term: support more social networks and possibly email)
+*** Twitter Specific
+**** Allow user to choose @message or direct message method (requires user to follow our profile)
+*** LinkedIn Specific
+**** Need to implement share job with group which allows better targeted social sharing.
+*** User Inteface
+**** Requirements
+| Browser Support | IE7+, WebKit, Firefox, Mobile         |                                                       |
+|                 |                                       |                                                       |
+| HTML            | HTML4 and HTML 5 should be supported. |                                                       |
+|-----------------+---------------------------------------+-------------------------------------------------------|
+| UI Tools Needed | Modial Dialog                         | Use: Log In, Log Out, Confirm Changes                 |
+| Today           | Grid                                  | Use: Presentation of saved searches, applied for jobs |
+|                 | Toggle Button                         | Use: Show active connections to social networks.      |
+|                 | Button W/ Icon                        | Use: Presentation of actions (delete, add, etc...)    |
+|                 | Inline labels (see Bootstrap for def) | Use: Highlighting content                             |
+|                 | Complete Typography Styling           | Use: Make text easier to skim and read                |
+|                 | Grid Layoun                           | Use: Make site easier to use, look good               |
+|-----------------+---------------------------------------+-------------------------------------------------------|
+| UI Tools Needed | Bar, Pie and Line Chart               | Use: Display of metric data                           |
+| Future          | TopBar                                | Use: My.Jobs main Nav                                 |
+|                 |                                       | More to come...                                       |
+|-----------------+---------------------------------------+-------------------------------------------------------|
+
+** Potential Risks
+*** 3rd Party API limitations
+*** Must resist urge to do too much.
+*** Don't be creepy. Make sure we respect end user privacy.
+
+** Potential Ponies
+    1. Open source ready Social Alerts app that can be used in other Django projects.
+    2. DE Marketing: Growth of followers on Twitter, Facebook and LinkedIn should add considerable
+       ability to generate future traffic to .jobs sites by simply posting/tweeting.
+    3. User profile is the beginning of creating the infrastructure to
+       implement App.ly
+    4. Better *Social Recruiting* demos. Social sharing metrics and
+       subscription metrics should play well to prospective members.
+    5. Socially enhanced organic tallent communities that let
+       microsite owner communicate with the community of people who
+       are following a job.
+** Market Analysis
+
+| Feature            | Our Model (the new hotness)              | Old Busted Job Board Model   |
+|--------------------+------------------------------------------+------------------------------|
+| Talent Communities | Job Seeker Self-Selected.                | Based on resume search.      |
+|                    | Opt-In                                   | Opt-Out                      |
+|--------------------+------------------------------------------+------------------------------|
+| Communication      | Always Opt-in                            | Spammy                       |
+|                    | Via preferred social networks            | Via email. Limited viral.    |
+|                    | (high potential for viral).              |                              |
+|                    |                                          | Employers have to pay to     |
+|                    | Job Seekers can share with individuals   | communicate with candidates. |
+|                    | or their networks on their preferred     |                              |
+|                    | social network.                          |                              |
+|                    |                                          |                              |
+|                    | Microsite owners can message via         |                              |
+|                    | preferred social network                 |                              |
+|                    |                                          |                              |
+|--------------------+------------------------------------------+------------------------------|
+| Privacy Model      | No Personally Identifiable               | Creepy.                      |
+|                    | Information (PII) retained.              | Tell them your life story    |
+|                    |                                          | and let the job board        |
+|                    |                                          | 'monetize' you.              |
+|--------------------+------------------------------------------+------------------------------|
+| Community Model    | - By Location                            | Segmentation based on        |
+|                    | - By Microsite                           | resume database fields.      |
+|                    | - By Employer                            |                              |
+|                    | - By Saved Search (interest)             |                              |
+|--------------------+------------------------------------------+------------------------------|
+| Profile            | Simple. An opt in and a panel            | Lots of work. Enter your     |
+|                    | of job searches you are following        | resume and profile your self |
+|--------------------+------------------------------------------+------------------------------|
+| Login & Security   | Oauth/OpenID Facebook,LinkedIn, Twitter  | Username/Password            |
+|                    | No usernames and passwords on Microsites |                              |
+|                    | ever.                                    |                              |
+|--------------------+------------------------------------------+------------------------------|
+
+SendGrid Categories
+| Category     | Description                                  | Sent by                     |
+|--------------+----------------------------------------------+-----------------------------|
+| Registration | Emails sent durring the registration process | email sent by reg. process  |
+|--------------+----------------------------------------------+-----------------------------|
+| Job_Search   | Email sent by job search.                    | must be job search reminder |
+|--------------+----------------------------------------------+-----------------------------|
+| Share        | Email share.                                 | Save/share                  |
+|--------------+----------------------------------------------+-----------------------------|
+| Password     | Password reset                               | Auth / Registration         |
+|--------------+----------------------------------------------+-----------------------------|
+| Admin        | Other admin notices                          | Automatic emails            |
+|--------------+----------------------------------------------+-----------------------------|
+| Newsletter   | E-newsletters                                |                             |
+|--------------+----------------------------------------------+-----------------------------|
+
+** Activities
+*** DONE Meet with Katie to discuss social features.              :MEETING:
+- Messaging
+- Integrating with social media marketing programs
+- Deliviering job seeker questions to Employers ?
+- Features that will sell to members. More .jobs. 
+** Archive

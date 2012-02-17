@@ -1,0 +1,20 @@
+{% extends base %}
+{% load i18n %}
+{% comment %}
+404.html -- default 404 error template.
+{% endcomment %}
+{% block header-content %}
+<h1>{% trans "404 Not Found Error"%}</h1>
+<small>{% trans "We can't find the page you are looking for"</small>
+{% endblock header-content %}
+{% block content %}
+{# we should probably do something better than the corgi but for now...#}
+<p>
+    We could not find the page you were looking for, but we did find this
+    cute picture of a corgi in a hot dog costume.<br>
+    <br>
+    <img src="http://mrg.bz/QqfKI8">
+</p>
+{% endblock content %}
+{% block focusbox-content %}
+{% endblock focusbox-content %}

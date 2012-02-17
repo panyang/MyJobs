@@ -1,0 +1,15 @@
+#!wing
+#!version=4.0
+##################################################################
+# Wing IDE project file                                          #
+##################################################################
+[project attributes]
+proj.directory-list = [{'dirloc': loc('.'),
+                        'excludes': [u'myprofile'],
+                        'filter': '*',
+                        'include_hidden': True,
+                        'recursive': True,
+                        'watch_for_changes': True}]
+proj.file-type = 'shared'
+proj.main-file = loc('manage.py')
+testing.test-framework = {loc('manage.py'): ':internal djangotest'}

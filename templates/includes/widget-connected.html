@@ -1,0 +1,35 @@
+{% load i18n %}
+
+{% comment %}
+widget-connected.html -- shows social networks user has connected... or not. 
+
+Context:
+
+Provided by social auth context processor
+{% endcomment %}
+{% if social_auth.associated %}
+<table>
+  <thead>
+    <tr>
+      <th colspan="2">
+	{% trans "Connected Websites" %}<br>
+	<span class="help-inline">{% trans "You will be automatically logged in to my.jobs when you log in to the following." %}</span>
+      </th>
+    </tr>
+  </thead>
+  <tbody>
+  {% for type, accounts in social_auth.associated.items %}
+    {% for account in accounts %}
+      <tr>
+	<td width="10%">
+	  <span class = "social-logo"><img src="{{ STATIC_URL }}social-logos/{{ account.provider|title }}.png" alt="{{ account.provider|title }}logo"><span>
+	</td>
+	<td>
+	  <a class="btn danger" href={% url socialauth_disconnect_individual account.provider account.id %}>{% trans "Disconnect" %}</a>
+	</td>
+      </tr>
+    {% endfor %}
+  {% endfor %}
+  </tbody>
+</table>
+{% endif %}    
