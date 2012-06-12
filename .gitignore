@@ -36,6 +36,7 @@ Thumbs.db
 *.directory
 *.settings
 .directory
+directseo
 
 # Secret stuff. Shhhhh.
 secret.py
