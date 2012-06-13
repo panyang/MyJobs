@@ -8,7 +8,7 @@ if PROJECT_DIR_PARENT not in sys.path:
     sys.path.append(PROJECT_DIR_PARENT)
 
 os.environ['CELERY_LOADER'] = 'django'
-os.environ['DJANGO_SETTINGS_MODULE'] = 'my.settings'
+os.environ['DJANGO_SETTINGS_MODULE'] = 'MyJobs.settings'
 
 import django.core.handlers.wsgi
 application = django.core.handlers.wsgi.WSGIHandler()
