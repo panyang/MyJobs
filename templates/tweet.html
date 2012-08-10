@@ -1,0 +1,23 @@
+{% load i18n %}
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% block meta %}
+  {% include "includes/meta.html" %}
+  {% endblock meta %}
+  {# use meta-append to add template specific scripts and styles #}
+  {% block meta-append %}{% endblock meta-append %}
+</head>
+<body style="background:url(http://png.nlx.org/def-static/images/bgpattern.jpg)">
+  <div id="popup">
+  <h2>{% trans "Share this site on twitter:" %}</h2>
+
+  <form action="/tweet/" method="POST" id="tweet">
+    {% csrf_token %}
+    <textarea id="tweet_area" name="tweet_text" style="width:550px; height:65px;">Managing my job searches on http://my.jobs</textarea><br>
+    <input type="submit" value="Tweet"/>
+  </form>
+  </div>
+</body>
+</html>

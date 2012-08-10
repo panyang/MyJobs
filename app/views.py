@@ -11,7 +11,7 @@ from django.contrib.auth.models import User
 from social_auth import __version__ as version
 from app.forms import CredentialResetForm
 from app.helpers import gravatar_link
-
+from app.share import *
 import logging
 logger = logging.getLogger('__name__')
 
@@ -166,3 +166,10 @@ def edit_profile (request, username):
     """
     if response.method == "POST":
         pass
+
+def tweet (request):
+    api = access_twitter_api(request.user)
+    if request.method == "POST":
+        tweet = request.POST['tweet_text']
+        api.update_status(tweet)
+    return render_to_response("tweet.html", RequestContext(request))

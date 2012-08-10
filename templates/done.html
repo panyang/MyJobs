@@ -34,7 +34,23 @@ done.html -- presents user_view_profile.
 </div>
 <h2> Linked Accounts:</h2>
 {% for account in linked_accounts %}
-<img class="socialbutton" src="{{ STATIC_URL }}social-icons/{{ account.provider }}.png">
+<SCRIPT TYPE="text/javascript">
+function popup(mylink, windowname)
+{
+if (! window.focus)return true;
+var href;
+if (typeof(mylink) == 'string')
+   href=mylink;
+else
+   href=mylink.href;
+window.open(href, windowname, 'width=600,height=400,scrollbars=yes');
+return false;
+}
+
+</SCRIPT>
+<a href="/tweet" onClick="return popup(this, 'notes')">
+  <img class="socialbutton" src="{{ STATIC_URL }}social-icons/{{ account.provider }}.png">
+</a>
 {% endfor %}
 
 <h2>Connect your other accounts:</h2>
