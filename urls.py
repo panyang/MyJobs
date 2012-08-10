@@ -12,5 +12,4 @@ urlpatterns = patterns('',
     url(r'', include('social_auth.urls')),
     # django_registration urls
     (r'^accounts/', include('registration.urls')),
-
 )
