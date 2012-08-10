@@ -27,7 +27,7 @@ def ajax_login_form(request):
     pass
 
 def ajax_share_form(request):
-    """Implemensts 3rd party share widget"""
+    """Implements 3rd party share widget"""
     pass
 
 def ajax_user_status(request):
@@ -170,6 +170,13 @@ def edit_profile (request, username):
 def tweet (request):
     api = access_twitter_api(request.user)
     if request.method == "POST":
-        tweet = request.POST['tweet_text']
-        api.update_status(tweet)
+        import ipdb
+        ipdb.set_trace()
+        if 'tweet_text' in request.POST:
+            tweet = request.POST['tweet_text']
+            api.update_status(tweet)
+        elif 'message_text' in request.POST:
+            username = request.POST['username']
+            message = request.POST['message_text']
+            api.send_direct_message(screen_name=username, text=message)
     return render_to_response("tweet.html", RequestContext(request))
