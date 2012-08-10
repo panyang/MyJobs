@@ -7,4 +7,10 @@ admin.autodiscover()
 urlpatterns = patterns('',
     url('', include('MyJobs.app.urls', namespace='myjobs',
                     app_name='app')),
+    url(r'^admin/', include(admin.site.urls)),
+    # social_auth urls
+    url(r'', include('social_auth.urls')),
+    # django_registration urls
+    (r'^accounts/', include('registration.urls')),
+
 )

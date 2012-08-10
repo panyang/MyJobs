@@ -15,9 +15,4 @@ urlpatterns = patterns('MyJobs.app.views',
     url(r'^error/$', 'error', name='error'),
     url(r'^logout/$', 'logout', name='logout'),
     url(r'^lp/$', 'password_connection', name='lostpassword'),
-    url(r'^admin/', include(admin.site.urls)),
-    # social_auth urls
-    url(r'', include('social_auth.urls')),
-    # django_registration urls
-    (r'^accounts/', include('registration.urls')),
 )
