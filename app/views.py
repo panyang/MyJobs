@@ -38,8 +38,10 @@ def ajax_user_status(request):
 @login_required
 def user_view_profile(request):
     """Login complete view, displays user profile on My.Jobs... unless"""
+
     ctx = {'version': version,
-           'last_login': request.session.get('social_auth_last_login_backend')}
+           'last_login': request.session.get('social_auth_last_login_backend'),
+           'linked_accounts': request.user.social_auth.all()}
     return render_to_response('done.html', ctx, RequestContext(request))
 
 # TODO: Convert to multilingual-flatpages at some point.
