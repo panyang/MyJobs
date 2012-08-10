@@ -43,12 +43,12 @@ if (typeof(mylink) == 'string')
    href=mylink;
 else
    href=mylink.href;
-window.open(href, windowname, 'width=600,height=400,scrollbars=yes');
+window.open(href, windowname, 'width=600,height=400,scrollbars=no');
 return false;
 }
 
 </SCRIPT>
-<a href="/tweet" onClick="return popup(this, 'notes')">
+<a href="/share" onClick="return popup(this, 'notes')">
   <img class="socialbutton" src="{{ STATIC_URL }}social-icons/{{ account.provider }}.png">
 </a>
 {% endfor %}

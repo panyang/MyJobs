@@ -16,5 +16,5 @@ urlpatterns = patterns('MyJobs.app.views',
     url(r'^error/$', 'error', name='error'),
     url(r'^logout/$', 'logout', name='logout'),
     url(r'^lp/$', 'password_connection', name='lostpassword'),
-    url(r'^tweet/$', 'tweet', name='tweet')
+    url(r'^share/$', 'share', name='share'),
 )

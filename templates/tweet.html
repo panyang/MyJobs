@@ -16,7 +16,7 @@
   <form action="/tweet/" method="POST" id="tweet">
     {% csrf_token %}
     <textarea id="tweet_area" name="tweet_text" style="width:550px; height:65px;">Managing my job searches on http://my.jobs</textarea><br>
-    <input type="submit" value="Tweet"/>
+    <input type="submit" name="tweet" value="Tweet"/>
   </form>
   
   <h2>{% trans "Share this as a direct message on Twitter:" %}</h2>
@@ -25,7 +25,14 @@
     {% csrf_token %}
     Username: <input type="text" name="username"><br>
     Message: <textarea id="tweet_area" name="message_text" style="width:550px; height:65px;">Managing my job searches on http://my.jobs</textarea><br>
-    <input type="submit" value="Tweet"/>
+    <input type="submit" name="direct" value="Send"/>
+  </form>
+
+    <h2>{% trans "Share this on LinkedIn:" %}</h2>
+    <form action="/tweet/" method="POST" id="linked_in">
+    {% csrf_token %}
+    <textarea id="tweet_area" name="linkedin_text" style="width:550px; height:65px;">Managing my job searches on http://my.jobs</textarea><br>
+    <input type="submit" name="direct" value="Send"/>
   </form>
 
   </div>

@@ -1,5 +1,5 @@
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect
+from django.http import HttpResponseRedirect, HttpResponse
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.tokens import default_token_generator
@@ -12,6 +12,7 @@ from social_auth import __version__ as version
 from app.forms import CredentialResetForm
 from app.helpers import gravatar_link
 from app.share import *
+import oauth2 as oauth
 import logging
 logger = logging.getLogger('__name__')
 
@@ -167,11 +168,9 @@ def edit_profile (request, username):
     if response.method == "POST":
         pass
 
-def tweet (request):
+def share (request):
     api = access_twitter_api(request.user)
     if request.method == "POST":
-        import ipdb
-        ipdb.set_trace()
         if 'tweet_text' in request.POST:
             tweet = request.POST['tweet_text']
             api.update_status(tweet)
@@ -179,4 +178,26 @@ def tweet (request):
             username = request.POST['username']
             message = request.POST['message_text']
             api.send_direct_message(screen_name=username, text=message)
+        elif 'linkedin_text' in request.POST:
+            key, secret = gather_access_token(request.user, 'linkedin')
+            token = oauth.Token(key=key, secret=secret)
+
+            consumer = oauth.Consumer(key=LINKEDIN_CONSUMER_KEY,
+                                      secret=LINKEDIN_CONSUMER_SECRET)
+
+            uri = 'http://api.linkedin.com/v1/people/~/current-status'
+            body = '<?xml version="1.0" encoding="UTF-8"?><current-status>%s</current-status>' % request.POST['linkedin_text'] 
+            
+            req = oauth.Client(consumer=consumer, token=token)
+            
+            resp, content = req.request(uri=uri, method='PUT', body=body)
+            
+
+            if(content == ''):
+                return HttpResponse('success')
+
+        return HttpResponse(content)        
     return render_to_response("tweet.html", RequestContext(request))
+
+
+
