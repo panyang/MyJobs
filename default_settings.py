@@ -15,7 +15,7 @@ APP = abspath(dirname(__file__))
 PROJ_ROOT = abspath(dirname(__file__))
 sys.path.append(APP)
 
-DEBUG = True
+
 #TEMPLATE_DEBUG = DEBUG
 TEMPLATE_DEBUG = True
 
@@ -67,7 +67,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
     'django.contrib.redirects.middleware.RedirectFallbackMiddleware',
-    'myurls.middleware.MyUrlsFallbackMiddleware',
+#    'myurls.middleware.MyUrlsFallbackMiddleware',
 )
 
 ROOT_URLCONF = 'MyJobs.urls'
@@ -88,8 +88,8 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles', 
     'social_auth',
     'registration',
-    'myurls',
-    'myshare', 
+ #   'myurls',
+#    'myshare', 
     'app',
 )
 
@@ -132,19 +132,6 @@ LOGIN_REDIRECT_URL = '/profile'
 LOGOUT_REDIRECT_URL = '/home'
 
 MANAGERS = ADMINS
-
-#DATABASES = {'default': {'NAME': 'directseo','ENGINE': 'django.db.backends.sqlite3','USER': '','PASSWORD': '','HOST': '','PORT': '',}}
-#DATABASES = {
-#    'default': {
-#        'NAME': 'myjobs',
-#        'ENGINE': 'django.db.backends.mysql',
-#        'USER': '',
-#        'PASSWORD': '',
-#        'HOST': '',
-#        'PORT': '3306'
-#    },
-#}
-
 
 # MyURLS Settings
 # MyUrl Specific Settings
@@ -197,7 +184,7 @@ LOGGING = {
         'logfile': {
             'level':'DEBUG',
             'class':'logging.handlers.RotatingFileHandler',
-            'filename': "/home/web/myjobslogs/logfile",
+            'filename': "/home/ani/myjobslogs/logfile",
             'maxBytes': 50000,
             'backupCount': 2,
             'formatter': 'standard',
