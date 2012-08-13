@@ -168,36 +168,37 @@ def edit_profile (request, username):
     if response.method == "POST":
         pass
 
+        
 def share (request):
-    api = access_twitter_api(request.user)
+    twitter_api = access_twitter_api(request.user)
+    linkedin_api = access_linkedin_api(request.user)
     if request.method == "POST":
         if 'tweet_text' in request.POST:
             tweet = request.POST['tweet_text']
-            api.update_status(tweet)
+            twitter_api.update_status(tweet)
         elif 'message_text' in request.POST:
             username = request.POST['username']
             message = request.POST['message_text']
             api.send_direct_message(screen_name=username, text=message)
         elif 'linkedin_text' in request.POST:
-            key, secret = gather_access_token(request.user, 'linkedin')
-            token = oauth.Token(key=key, secret=secret)
-
-            consumer = oauth.Consumer(key=LINKEDIN_CONSUMER_KEY,
-                                      secret=LINKEDIN_CONSUMER_SECRET)
-
-            uri = 'http://api.linkedin.com/v1/people/~/current-status'
-            body = '<?xml version="1.0" encoding="UTF-8"?><current-status>%s</current-status>' % request.POST['linkedin_text'] 
-            
-            req = oauth.Client(consumer=consumer, token=token)
-            
-            resp, content = req.request(uri=uri, method='PUT', body=body)
-            
-
+            uri = 'http://api.linkedin.com/v1/people/~/shares'
+            body = build_linkedin_share(request.POST['linkedin_text'])
+            resp, content = linkedin_api.request(uri=uri, method='POST',
+                                                 body=body, headers={'Content-Type': 'text/xml'})
             if(content == ''):
                 return HttpResponse('success')
+            else:
+                return HttpResponse(content)
+        elif 'linkedin_mail' in request.POST:
+            uri = 'http://api.linkedin.com/v1/people/~/mailbox'
+            body = build_linkedin_mail(request.POST['ID'], request.POST['linkedin_mail'])
+            resp, content = linkedin_api.request(uri=uri, method='POST',
+                                                 body=body, headers={'Content-Type': 'text/xml'})
+            if(content == ''):
+                return HttpResponse('success')
+            else:
+                return HttpResponse(content)
 
-        return HttpResponse(content)        
     return render_to_response("tweet.html", RequestContext(request))
-
 
 
