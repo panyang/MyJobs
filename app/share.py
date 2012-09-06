@@ -1,4 +1,5 @@
 import tweepy
+import facebook
 from secrets import *
 from default_settings import *
 import oauth2 as oauth
@@ -26,6 +27,9 @@ def access_linkedin_api(user):
                               secret=LINKEDIN_CONSUMER_SECRET)
     return  oauth.Client(consumer=consumer, token=token)
 
+def access_facebook_api(user):
+    access_token = user.social_auth.get(provider='facebook').extra_data['access_token']
+    return facebook.GraphAPI(access_token)
 
 def build_linkedin_share(comment,
                          title=SHARE_DEFAULT_TITLE,

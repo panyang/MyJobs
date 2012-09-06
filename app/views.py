@@ -172,6 +172,7 @@ def edit_profile (request, username):
 def share (request):
     twitter_api = access_twitter_api(request.user)
     linkedin_api = access_linkedin_api(request.user)
+    facebook_api = access_facebook_api(request.user)
     if request.method == "POST":
         if 'tweet_text' in request.POST:
             tweet = request.POST['tweet_text']
@@ -198,7 +199,15 @@ def share (request):
                 return HttpResponse('success')
             else:
                 return HttpResponse(content)
-
+        elif 'fb_status' in request.POST:
+            message = request.POST['fb_status']
+            attachment = {'name': 'My Jobs',
+                          'description': 'Real jobs from real companies.',
+                          'picture': 'http://src.nlx.org/myjobs/icon-80x80.png'}
+            import ipdb
+            ipdb.set_trace()
+            facebook_api.put_object("me","links", picture='http://src.nlx.org/myjobs/icon-80x80.png', message='Managing my job search through my.jobs',link='http://my.jobs',name='My Jobs',caption='Real jobs from real companies')
+            return HttpResponse('success')
     return render_to_response("tweet.html", RequestContext(request))
 
 

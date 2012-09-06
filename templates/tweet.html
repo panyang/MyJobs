@@ -40,7 +40,16 @@ done.html -- presents user_view_profile.
     Message: <textarea name="linkedin_mail" style="width:550px; height:65px;">Managing my job searches on http://my.jobs</textarea><br>
     <input type="submit" name="direct" value="Send"/>
   </form>
-{% endblock content %}
+
+  <h2>{% trans "Share this as a status on Facebook:" %}</h2>
+
+  <form action="/share/" method="POST" id="direct_message">
+    {% csrf_token %}
+    Message: <textarea name="fb_status" style="width:550px; height:65px;">Managing my job searches on http://my.jobs</textarea><br>
+    <input type="submit" name="direct" value="Send"/>
+  </form>
+
+  {% endblock content %}
 
 {% block focusbox-content %}
       <div class="h2block takeover">
