@@ -40,6 +40,7 @@ MEDIA_URL = 'http://src.nlx.org/myjobs/admin/'
 
 STATIC_ROOT = os.path.join(_PATH, 'files', 'static')
 STATIC_URL = 'http://src.nlx.org/myjobs/'
+
 STATICFILES_DIRS = (
     os.path.join(_PATH, 'static'),
 )
@@ -128,7 +129,7 @@ ACCOUNT_ACTIVATION_DAYS = 14
 SOCIAL_AUTH_ENABLED_BACKENDS = ('facebook', 'twitter', 'linkedin', 
                                 'google-oauth2', 'yahoo')
 
-LOGIN_REDIRECT_URL = '/profile'
+LOGIN_REDIRECT_URL = '/redirect'
 LOGOUT_REDIRECT_URL = '/home'
 
 MANAGERS = ADMINS

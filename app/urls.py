@@ -10,6 +10,7 @@ urlpatterns = patterns('MyJobs.app.views',
     #url(r'^$', lambda request: HttpResponsePermanentRedirect('http://jobs.jobs')),
     url(r'^$', 'home', name='home'),
     url(r'^about/$', 'about', name='about'),
+    url(r'^auth/(?P<provider>[\w]+?)/$', 'auth_popup'),
     url(r'^privacy/$', 'privacy', name='privacy'),
     url(r'^profile/$', 'user_view_profile', name='profile'),
     url(r'^done/$', 'done', name='done'),
@@ -17,4 +18,5 @@ urlpatterns = patterns('MyJobs.app.views',
     url(r'^logout/$', 'logout', name='logout'),
     url(r'^lp/$', 'password_connection', name='lostpassword'),
     url(r'^share/$', 'share', name='share'),
+    url(r'^redirect/$', 'login_redirect', name='login_redirect') 
 )

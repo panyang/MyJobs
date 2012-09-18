@@ -39,10 +39,15 @@ def ajax_user_status(request):
 @login_required
 def user_view_profile(request):
     """Login complete view, displays user profile on My.Jobs... unless"""
-
+    linked_accounts = request.user.social_auth.all()
+    account_info = []
+    for account in linked_accounts:
+        account_info.append({'name': account.provider,
+                             'image': STATIC_URL+'social-icons/'+
+                             account.provider.capitalize()+'.png'})
     ctx = {'version': version,
            'last_login': request.session.get('social_auth_last_login_backend'),
-           'linked_accounts': request.user.social_auth.all()}
+           'account_info': account_info}
     return render_to_response('done.html', ctx, RequestContext(request))
 
 # TODO: Convert to multilingual-flatpages at some point.
@@ -55,6 +60,7 @@ def home(request):
     
     Sends already authenticated users the home page for authenticated users
     """
+    request.session['origin'] = 'home'
     if request.user.is_authenticated():
         return HttpResponseRedirect('/profile/')
     else:
@@ -153,14 +159,14 @@ def password_connection(request, is_admin_site=False,
     context.update(extra_context or {})
     return render_to_response(template_name, context,
                 context_instance=RequestContext(request, current_app=current_app))
-
+        
 @login_required
 def edit_profile (request, username):
     """implements edit myjobs profile.
     
     Only allows logged in user to edit their own profile right now. Should be 
     pretty easy to make it so an admin can edit other people's profiles.
-    
+
     parameters:
     
     username -- the username being edited.
@@ -168,6 +174,17 @@ def edit_profile (request, username):
     if response.method == "POST":
         pass
 
+def auth_popup(request, provider):
+    import ipdb
+    ipdb.set_trace()
+    request.session['origin'] = 'share'
+    if request.user.is_authenticated():
+        if request.user.social_auth.get(provider=provider):
+            return HttpResponseRedirect('/share/')
+        else:
+            return HttpResponseRedirect('/associate/'+provider)
+    else:
+        return HttpResponseRedirect('/associate/'+provider)
         
 def share (request):
     twitter_api = access_twitter_api(request.user)
@@ -204,10 +221,14 @@ def share (request):
             attachment = {'name': 'My Jobs',
                           'description': 'Real jobs from real companies.',
                           'picture': 'http://src.nlx.org/myjobs/icon-80x80.png'}
-            import ipdb
-            ipdb.set_trace()
             facebook_api.put_object("me","links", picture='http://src.nlx.org/myjobs/icon-80x80.png', message='Managing my job search through my.jobs',link='http://my.jobs',name='My Jobs',caption='Real jobs from real companies')
             return HttpResponse('success')
     return render_to_response("tweet.html", RequestContext(request))
 
-
+def login_redirect(request):
+    import ipdb
+    ipdb.set_trace()
+    if request.session.get('origin')=='share':
+        return HttpResponseRedirect('/share')
+    else:
+        return HttpResponseRedirect('/profile')

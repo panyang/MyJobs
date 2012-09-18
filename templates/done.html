@@ -32,9 +32,10 @@ done.html -- presents user_view_profile.
      </tbody>
   </table>
 </div>
+
 <h2> Linked Accounts:</h2>
-{% for account in linked_accounts %}
-  <img class="socialbutton" src="{{ STATIC_URL }}social-icons/{{ account.provider.capitalize }}.png">
+{% for account in account_info %}
+  <a href="" id="{{account.name}}"><img class="socialbutton" src="{{account.image}}"></a>
 {% endfor %}
 
 <h2>Connect your other accounts:</h2>
