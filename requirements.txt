@@ -3,3 +3,5 @@ South==0.7.3
 django-debug-toolbar==0.8.5
 django-social-auth
 django-registration
+tweepy==1.10
+facebook-sdk==0.3.2
