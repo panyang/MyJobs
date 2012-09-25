@@ -58,16 +58,3 @@ def build_linkedin_share(comment,
     st_code = ET.SubElement(st_visibility, 'code')
     st_code.text = code
     return base + ET.tostring(status_tree)
-
-def build_linkedin_mail(ID, text):
-    base = '<?xml version="1.0" encoding="UTF-8"?>'
-    mail_tree = ET.Element('mailbox-item')
-    recipients = ET.SubElement(mail_tree, 'recipients')
-    recipient = ET.SubElement(recipients, 'recipient')
-    person = ET.SubElement(recipient, 'person')
-    person.set('path', '/people/%s' % ID)
-    subject = ET.SubElement(mail_tree, 'subject')
-    subject.text= "Test"
-    body = ET.SubElement(mail_tree, 'body')
-    body.text= text
-    return base + ET.tostring(mail_tree)

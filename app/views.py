@@ -173,62 +173,53 @@ def edit_profile (request, username):
     """
     if response.method == "POST":
         pass
+        
+def share (request, provider):
+    if request.method == "POST":
+        if provider == 'linkedin':
+            linkedin_api = access_linkedin_api(request.user)
+            uri = 'http://api.linkedin.com/v1/people/~/shares'
+            body = build_linkedin_share(request.POST['status_text'])
+            resp, content = linkedin_api.request(uri=uri, method='POST',
+                                                 body=body, headers={'Content-Type': 'text/xml'})
+        elif provider == 'facebook':
+            facebook_api = access_facebook_api(request.user)
+            message = request.POST['status_text']
+            attachment = {'name': 'My Jobs',
+                          'description': 'Real jobs from real companies.',
+                          'picture': 'http://src.nlx.org/myjobs/icon-80x80.png'}
+            facebook_api.put_object("me","links",
+                                    picture='http://src.nlx.org/myjobs/icon-80x80.png',
+                                    message='Managing my job search through my.jobs',
+                                    link='http://my.jobs',
+                                    name='My Jobs',
+                                    caption='Real jobs from real companies')
+            return HttpResponse('success')
+        elif provider == 'twitter':
+            twitter_api = access_twitter_api(request.user)
+            tweet = request.POST['status_text']
+            twitter_api.update_status(tweet)
+    else:
+        data_dict={'provider':provider,
+                   'url': request.session.get('share_url')}
+        return render_to_response("tweet.html", data_dict,
+                                  context_instance=RequestContext(request))
 
 def auth_popup(request, provider):
-    import ipdb
-    ipdb.set_trace()
     request.session['origin'] = 'share'
+    request.session['share_provider'] = provider
+    request.session['share_url'] = request.GET.get('url')
     if request.user.is_authenticated():
         if request.user.social_auth.get(provider=provider):
-            return HttpResponseRedirect('/share/')
+            return HttpResponseRedirect('/share/%s' % provider)
         else:
             return HttpResponseRedirect('/associate/'+provider)
     else:
         return HttpResponseRedirect('/associate/'+provider)
-        
-def share (request):
-    twitter_api = access_twitter_api(request.user)
-    linkedin_api = access_linkedin_api(request.user)
-    facebook_api = access_facebook_api(request.user)
-    if request.method == "POST":
-        if 'tweet_text' in request.POST:
-            tweet = request.POST['tweet_text']
-            twitter_api.update_status(tweet)
-        elif 'message_text' in request.POST:
-            username = request.POST['username']
-            message = request.POST['message_text']
-            api.send_direct_message(screen_name=username, text=message)
-        elif 'linkedin_text' in request.POST:
-            uri = 'http://api.linkedin.com/v1/people/~/shares'
-            body = build_linkedin_share(request.POST['linkedin_text'])
-            resp, content = linkedin_api.request(uri=uri, method='POST',
-                                                 body=body, headers={'Content-Type': 'text/xml'})
-            if(content == ''):
-                return HttpResponse('success')
-            else:
-                return HttpResponse(content)
-        elif 'linkedin_mail' in request.POST:
-            uri = 'http://api.linkedin.com/v1/people/~/mailbox'
-            body = build_linkedin_mail(request.POST['ID'], request.POST['linkedin_mail'])
-            resp, content = linkedin_api.request(uri=uri, method='POST',
-                                                 body=body, headers={'Content-Type': 'text/xml'})
-            if(content == ''):
-                return HttpResponse('success')
-            else:
-                return HttpResponse(content)
-        elif 'fb_status' in request.POST:
-            message = request.POST['fb_status']
-            attachment = {'name': 'My Jobs',
-                          'description': 'Real jobs from real companies.',
-                          'picture': 'http://src.nlx.org/myjobs/icon-80x80.png'}
-            facebook_api.put_object("me","links", picture='http://src.nlx.org/myjobs/icon-80x80.png', message='Managing my job search through my.jobs',link='http://my.jobs',name='My Jobs',caption='Real jobs from real companies')
-            return HttpResponse('success')
-    return render_to_response("tweet.html", RequestContext(request))
 
 def login_redirect(request):
-    import ipdb
-    ipdb.set_trace()
     if request.session.get('origin')=='share':
-        return HttpResponseRedirect('/share')
+        provider = request.session.get('share_provider')
+        return HttpResponseRedirect('/share/%s' % provider)
     else:
         return HttpResponseRedirect('/profile')

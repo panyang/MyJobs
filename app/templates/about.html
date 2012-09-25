@@ -10,20 +10,13 @@ about.html -- the about page
 <h1>{% trans "About" %}</h1>
 {% endblock heading-content %}
 {% block content %}
-<SCRIPT TYPE="text/javascript">
-function popup(mylink, windowname)
-{
-if (! window.focus)return true;
-var href;
-if (typeof(mylink) == 'string')
-   href=mylink;
-else
-   href=mylink.href;
-window.open(href, windowname, 'width=800,height=500,scrollbars=yes');
-return false;
-}
-</SCRIPT>
-<a href="/auth/twitter" onClick="return popup(this, 'Authenticate')" id="twitter"><img class="socialbutton" src="{{ STATIC_URL }}social-icons/Twitter.png"></a> <a href="/auth/facebook" onClick="return popup(this, 'Authenticate')" id="facebook"><img class="socialbutton" src="{{ STATIC_URL }}social-icons/Facebook.png"></a><a href="/auth/linkedin" onClick="return popup(this, 'Authenticate')" id="linkedin"><img class="socialbutton" src="{{ STATIC_URL }}social-icons/Linkedin.png"></a>
+
+<div class="share_links">
+<a href="javascript:void(0)" id="twitter"><img class="socialbutton" src="{{ STATIC_URL }}social-icons/Twitter.png"></a>
+<a  href="javascript:void(0)" id="facebook"><img class="socialbutton" src="{{ STATIC_URL }}social-icons/Facebook.png"></a>
+<a href="javascript:void(0)" id="linkedin"><img class="socialbutton" src="{{ STATIC_URL }}social-icons/Linkedin.png"></a>
+</div>
+
 <div class="alert-message block-message info">
     The .jobs Universe is a brand new Top LevelDomain (TLD) that
     provides an interactive, community-driven network of job related

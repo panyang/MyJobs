@@ -39,7 +39,7 @@ MEDIA_ROOT = os.path.join(_PATH, 'files', 'media')
 MEDIA_URL = 'http://src.nlx.org/myjobs/admin/'
 
 STATIC_ROOT = os.path.join(_PATH, 'files', 'static')
-STATIC_URL = 'http://src.nlx.org/myjobs/'
+STATIC_URL = '/files/static/'
 
 STATICFILES_DIRS = (
     os.path.join(_PATH, 'static'),

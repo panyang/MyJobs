@@ -1,60 +1,32 @@
-{% extends "base.html" %}
 {% load i18n %}
-{% comment %}
-done.html -- presents user_view_profile.
-{% endcomment %}
-{% block header-content %}
-<h2>{% trans "Profile" %} <small>{% if user.first_name %}{{ user.first_name }} {{ user.last_name }}{% else %}{{ user.username}}{% endif %}</small></h2>
-{% endblock header-content %}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  {% block meta %}
+  {% include "includes/meta.html" %}
+  {% endblock meta %}
+  <style type="text/css">
+    html, body {
+    overflow: hidden;
+    background: url(http://png.nlx.org/def-static/images/bgpattern.jpg);
+    }
+    #status_form {
+    margin: 20px;
+    }
+  </style>
+  {# use meta-append to add template specific scripts and styles #}
+  {% block meta-append %}{% endblock meta-append %}
+</head>
+<body>
+  <div id="status_form">
+    <h2>{% trans "Share this on " %} {{ provider|capfirst }}: </h2>
 
-{% block content %}
-  <h2>{% trans "Share this as a status on Twitter:" %}</h2>
-
-  <form action="/share/" method="POST" id="tweet">
-    {% csrf_token %}
-    <textarea name="tweet_text" style="width:550px; height:65px;">Managing my job searches on http://my.jobs</textarea><br>
-    <input type="submit" name="tweet" value="Tweet"/>
-  </form>
-  
-  <h2>{% trans "Share this as a direct message on Twitter:" %}</h2>
-
-  <form action="/share/" method="POST" id="direct_message">
-    {% csrf_token %}
-    Username: <input type="text" name="username"><br>
-    Message: <textarea name="message_text" style="width:550px; height:65px;">Managing my job searches on http://my.jobs</textarea><br>
-    <input type="submit" name="direct" value="Send"/>
-  </form>
-
-    <h2>{% trans "Share this on LinkedIn:" %}</h2>
-    <form action="/share/" method="POST" id="linked_in">
-    {% csrf_token %}
-    <textarea name="linkedin_text" style="width:550px; height:65px;">Real jobs for real companies.</textarea><br>
-    <input type="submit" name="direct" value="Send"/>
-  </form>
-
-  <h2>{% trans "Share this as a private message on LinkedIn:" %}</h2>
-
-  <form action="/share/" method="POST" id="direct_message">
-    {% csrf_token %}
-    Email: <input type="text" name="email"><br>
-    Message: <textarea name="linkedin_mail" style="width:550px; height:65px;">Managing my job searches on http://my.jobs</textarea><br>
-    <input type="submit" name="direct" value="Send"/>
-  </form>
-
-  <h2>{% trans "Share this as a status on Facebook:" %}</h2>
-
-  <form action="/share/" method="POST" id="direct_message">
-    {% csrf_token %}
-    Message: <textarea name="fb_status" style="width:550px; height:65px;">Managing my job searches on http://my.jobs</textarea><br>
-    <input type="submit" name="direct" value="Send"/>
-  </form>
-
-  {% endblock content %}
-
-{% block focusbox-content %}
-      <div class="h2block takeover">
-        {% include "includes/about-dot-jobs.html" %}	
-      </div>
-
+    <form action="/share/" method="POST">
+      {% csrf_token %}
+      <textarea name="status_text" style="width:550px; height:65px;">Managing my job searches on {{url}}</textarea><br>
+      <input type="submit" name="send" value="Send"/>
+    </form>
   </div>
-{% endblock focusbox-content %}
+  
+</body>
+</html>

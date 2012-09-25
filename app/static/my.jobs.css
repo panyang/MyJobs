@@ -130,7 +130,6 @@ section .leaderBoard{
 	display: inline-block;
 	margin: 0 6px;
 	}
-
 #loginBox p#socialLogin span a#twitter{
 	background-position: -47px 0;
 	}
@@ -274,6 +273,7 @@ footer{
 #bottomLinks .subpageLinks a{
 	margin-left: 30px;
 	}
+
 .alert-message.block-message.error{
 	margin: 5px 0;
 	background-color: #e16b51;
