@@ -174,24 +174,25 @@ def edit_profile (request, username):
     if response.method == "POST":
         pass
         
-def share (request, provider):    
+def share (request, provider):
+    link = request.session.get('share_url')
     if request.method == "POST":
         if provider == 'linkedin':
             linkedin_api = access_linkedin_api(request.user)
             uri = 'http://api.linkedin.com/v1/people/~/shares'
-            body = build_linkedin_share(request.POST['status_text'])
+            body = build_linkedin_share(request.POST['status_text'],
+            submitted_url=link)
             resp, content = linkedin_api.request(uri=uri, method='POST',
-                                                 body=body, headers={'Content-Type': 'text/xml'})
+                                                 body=body,
+                                                 headers={'Content-Type': 'text/xml'})
         elif provider == 'facebook':
             facebook_api = access_facebook_api(request.user)
             message = request.POST['status_text']
-            attachment = {'name': 'My Jobs',
-                          'description': 'Real jobs from real companies.',
-                          'picture': 'http://src.nlx.org/myjobs/icon-80x80.png'}
+            link = request.session.get('share_url')
             facebook_api.put_object("me","links",
                                     picture='http://src.nlx.org/myjobs/icon-80x80.png',
-                                    message='Managing my job search through my.jobs',
-                                    link='http://my.jobs',
+                                    message=message,
+                                    link=link,
                                     name='My Jobs',
                                     caption='Real jobs from real companies')
         elif provider == 'twitter':
@@ -240,3 +241,9 @@ def login_redirect(request):
         return HttpResponseRedirect('/share/%s' % provider)
     else:
         return HttpResponseRedirect('/profile')
+
+def remove_association(request,provider):
+    request.session['origin'] = 'home'
+    provider=request.user.social_auth.get(provider=provider)
+    provider.delete()
+    return HttpResponseRedirect('/profile')

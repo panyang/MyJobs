@@ -18,5 +18,7 @@ urlpatterns = patterns('MyJobs.app.views',
     url(r'^logout/$', 'logout', name='logout'),
     url(r'^lp/$', 'password_connection', name='lostpassword'),
     url(r'^share/(?P<provider>[\w]+?)$', 'share', name='share'),
-    url(r'^redirect/$', 'login_redirect', name='login_redirect') 
+    url(r'^redirect/$', 'login_redirect', name='login_redirect'),
+    url(r'^remove/(?P<provider>[\w]+?)$', 'remove_association',
+        name='remove_association')
 )

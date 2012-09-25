@@ -21,7 +21,7 @@
   <div id="status_form">
     <h2>{% trans "Share this on " %} {{ provider|capfirst }}: </h2>
 
-    <form action="/share/" method="POST">
+    <form action="/share/{{provider}}" method="POST">
       {% csrf_token %}
       <textarea name="status_text" style="width:550px; height:65px;">Managing my job searches on {{url}}</textarea><br>
       <input type="submit" name="send" value="Send"/>
