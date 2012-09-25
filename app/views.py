@@ -174,7 +174,7 @@ def edit_profile (request, username):
     if response.method == "POST":
         pass
         
-def share (request, provider):
+def share (request, provider):    
     if request.method == "POST":
         if provider == 'linkedin':
             linkedin_api = access_linkedin_api(request.user)
@@ -194,18 +194,29 @@ def share (request, provider):
                                     link='http://my.jobs',
                                     name='My Jobs',
                                     caption='Real jobs from real companies')
-            return HttpResponse('success')
         elif provider == 'twitter':
             twitter_api = access_twitter_api(request.user)
             tweet = request.POST['status_text']
             twitter_api.update_status(tweet)
+                
     else:
         data_dict={'provider':provider,
                    'url': request.session.get('share_url')}
-        return render_to_response("tweet.html", data_dict,
+        return render_to_response("share.html", data_dict,
                                   context_instance=RequestContext(request))
 
+
 def auth_popup(request, provider):
+    """
+    Handles share pop up redirects. If user needs to get authenticated,
+    it redirects to the authentication page. Otherwise, it goes straight to
+    the share form. This also stores session information used in login_redirect
+    and to maintain the data needed for sharing.
+
+    Input:
+    :provider: String name of the third party provider to be shared to.
+    
+    """
     request.session['origin'] = 'share'
     request.session['share_provider'] = provider
     request.session['share_url'] = request.GET.get('url')
@@ -218,6 +229,12 @@ def auth_popup(request, provider):
         return HttpResponseRedirect('/associate/'+provider)
 
 def login_redirect(request):
+    """
+    Handles the redirects coming from the authentication process.
+    By default, this always redirects to the profile page so we use the session
+    information to redirect to the share form when necessary.
+    
+    """
     if request.session.get('origin')=='share':
         provider = request.session.get('share_provider')
         return HttpResponseRedirect('/share/%s' % provider)
