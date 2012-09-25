@@ -39,6 +39,7 @@ def ajax_user_status(request):
 @login_required
 def user_view_profile(request):
     """Login complete view, displays user profile on My.Jobs... unless"""
+    request.session['origin'] = 'main'
     linked_accounts = request.user.social_auth.all()
     account_info = []
     for account in linked_accounts:
@@ -60,7 +61,7 @@ def home(request):
     
     Sends already authenticated users the home page for authenticated users
     """
-    request.session['origin'] = 'home'
+    request.session['origin'] = 'main'
     if request.user.is_authenticated():
         return HttpResponseRedirect('/profile/')
     else:
@@ -105,6 +106,7 @@ def coming_soon(request):
 @login_required
 def done(request):
     """Login complete view, displays user data"""
+    request.session['origin'] = 'main'
     ctx = {'version': version,
            'last_login': request.session.get('social_auth_last_login_backend')}
     return render_to_response('done.html', ctx, RequestContext(request))
@@ -222,7 +224,7 @@ def auth_popup(request, provider):
     request.session['share_provider'] = provider
     request.session['share_url'] = request.GET.get('url')
     if request.user.is_authenticated():
-        if request.user.social_auth.get(provider=provider):
+        if request.user.social_auth.filter(provider=provider):
             return HttpResponseRedirect('/share/%s' % provider)
         else:
             return HttpResponseRedirect('/associate/'+provider)
@@ -243,7 +245,7 @@ def login_redirect(request):
         return HttpResponseRedirect('/profile')
 
 def remove_association(request,provider):
-    request.session['origin'] = 'home'
+    request.session['origin'] = 'main'
     provider=request.user.social_auth.get(provider=provider)
     provider.delete()
     return HttpResponseRedirect('/profile')
