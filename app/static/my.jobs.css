@@ -23,7 +23,10 @@ html,body{
 	padding-top: 6px;
 	padding-bottom: 7px;
 	}
-	
+
+.clear{
+  clear: both;
+    }
 /**/
 
 body{
@@ -291,3 +294,53 @@ footer{
 .topbar .btn {
 	color: white;
 	}
+/*Share window*/
+body#myjobsShareWindow{
+  min-width: 0px;
+  width: 100%;
+  height: 100%;
+  padding: 10px;
+  padding-top: 110px;
+  background: url("http://my.jobs:8000/files/static/images/mydotjobs.png") no-repeat scroll center 20px transparent;
+}      
+#myjobsShareWindow #focusBox.twitter{
+  background-color: #00A0D1;
+}
+#myjobsShareWindow #focusBox.facebook{
+  background-color: #3B5998;
+}
+#myjobsShareWindow #focusBox.linkedin{
+  background-color: #287BBC;
+}
+#myjobsShareWindow h1{
+  color: #000;
+  padding-bottom: 10px;
+  padding-top: 10px;
+  text-indent: 50px;
+  height: 30px;
+  background: url() no-repeat 0px 5px #FFF;
+  margin-bottom: 10px;
+}
+#myjobsShareWindow h1 span{
+  color: #333;
+  font-size: .5em;
+  position: relative;
+  top: -7px;
+}
+#myjobsShareWindow #focusBox.twitter h1{
+  color: #00A0D1;
+  background-image:url(/files/static/social-icons/Twitter.png);
+}
+#myjobsShareWindow #focusBox.facebook h1{
+  color: #3B5998;
+  background-image:url(/files/static/social-icons/Facebook.png);
+}
+#myjobsShareWindow #focusBox.linkedin h1{
+  color: #287BBC;
+  background-image:url(/files/static/social-icons/Linkedin.png);
+}
+#myjobsShareWindow #share_area{
+  display: block;
+  height: 60px;
+  width: 475px;
+}

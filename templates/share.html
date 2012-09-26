@@ -6,71 +6,13 @@
   {% include "includes/meta.html" %}
   {% endblock meta %}
   <link ref="stylesheet" type="text/css" href="http://css.nlx.org/framework/css/def.ui.css">
-  <style type="text/css">
-      html{          
-          overflow: hidden;
-      }
-      body{
-          min-width: 0px;
-          width: 100%;
-          height: 100%;
-          padding: 10px;
-          padding-top: 110px;
-          background: url("http://my.jobs:8000/files/static/images/mydotjobs.png") no-repeat scroll center 20px transparent;
-      }      
-      #focusBox.twitter{
-          background-color: #00A0D1;
-      }
-      #focusBox.facebook{
-          background-color: #3B5998;
-      }
-      #focusBox.linkedin{
-          background-color: #287BBC;
-      }
-      h1{
-          color: #000;
-          padding-bottom: 10px;
-          padding-top: 10px;
-          text-indent: 50px;
-          height: 30px;
-          background: url() no-repeat 0px 5px #FFF;
-          margin-bottom: 10px;
-      }
-      h1 span{
-          color: #333;
-          font-size: .5em;
-          position: relative;
-          top: -7px;
-      }
-      #focusBox.twitter h1{
-          color: #00A0D1;
-          background-image:url( http://my.jobs:8000/files/static/social-icons/Twitter.png);
-      }
-      #focusBox.facebook h1{
-          color: #3B5998;
-          background-image:url( http://my.jobs:8000/files/static/social-icons/Facebook.png);
-      }
-      #focusBox.linkedin h1{
-          color: #287BBC;
-          background-image:url( http://my.jobs:8000/files/static/social-icons/Linkedin.png);
-      }
-      #share_area{
-          display: block;
-          height: 60px;
-          width: 475px;
-      }
-      .clear{
-          clear: both;
-      }
-  </style>
-  <script>
-  //window.resizeTo(570,300);
-  </script>
+  <link ref="stylesheet" type="text/css" href="/files/static/my.jobs.css">
+  <style type="text/css">html{overflow: hidden;}</style>
   {# use meta-append to add template specific scripts and styles #}
   {% block meta-append %}{% endblock meta-append %}
   
 </head>
-<body class="{{provider}}">
+<body class="{{provider}}" id="myjobsShareWindow">
 <div class="wrapper">
 <div class="row">
 <div class="span9">
@@ -80,7 +22,7 @@
         
         <form action="/share/{{provider}}" method="POST">
           {% csrf_token %}
-          <textarea id="share_area" name="status_text">Managing my job searches on {{url}}</textarea>
+          <textarea id="share_area" name="status_text">I'm using {{url}} to find a great job!</textarea>
           <input type="submit" name="send" value="Share" class="btn primary pull-right"/>          
         </form>
         <div class="clear"></div>
