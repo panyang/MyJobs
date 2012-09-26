@@ -1,15 +1,18 @@
-$('#twitter').live('click',function() {
+$('#twitter').live('click',function() {        
     q=location.href;
-    window.open('/auth/twitter/?&url='+encodeURIComponent(q),
-                'Share this on Twitter','toolbar=no,width=660,height=455');
+    share_url = '/auth/twitter/?&url='+encodeURIComponent(q);
+    openShareWindow(share_url,"Twitter");
 });
 $('#facebook').live('click',function() {
     q=location.href;
-    window.open('/auth/facebook/?&url='+encodeURIComponent(q),
-                'Share this on Facebook','toolbar=no,width=660,height=455');
+    share_url = '/auth/facebook/?&url='+encodeURIComponent(q);
+    openShareWindow(share_url,"Twitter");
 });
 $('#linkedin').live('click',function() {
     q=location.href;
-    window.open('/auth/linkedin/?&url='+encodeURIComponent(q),
-                'Share this on Twitter','toolbar=no,width=660,height=455');
+    share_url = '/auth/linkedin/?&url='+encodeURIComponent(q);
+    openShareWindow(share_url,"LinkedIn");
 });
+function openShareWindow(url,name){    
+    window.open(url, 'Share this on '+name,'toolbar=no,width=568,height=360');
+}
