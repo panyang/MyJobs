@@ -227,9 +227,9 @@ def auth_popup(request, provider):
         if request.user.social_auth.filter(provider=provider):
             return HttpResponseRedirect('/share/%s' % provider)
         else:
-            return HttpResponseRedirect('/associate/'+provider)
+            return HttpResponseRedirect('/login/'+provider)
     else:
-        return HttpResponseRedirect('/associate/'+provider)
+        return HttpResponseRedirect('/login/'+provider)
 
 def login_redirect(request):
     """
