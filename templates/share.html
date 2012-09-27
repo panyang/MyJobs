@@ -5,28 +5,31 @@
   {% block meta %}
   {% include "includes/meta.html" %}
   {% endblock meta %}
-  <style type="text/css">
-    html, body {
-    overflow: hidden;
-    background: url(http://png.nlx.org/def-static/images/bgpattern.jpg);
-    }
-    #status_form {
-    margin: 20px;
-    }
-  </style>
+  <link ref="stylesheet" type="text/css" href="http://css.nlx.org/framework/css/def.ui.css">
+  <link ref="stylesheet" type="text/css" href="/files/static/my.jobs.css">
+  <style type="text/css">html{overflow: hidden;}</style>
   {# use meta-append to add template specific scripts and styles #}
   {% block meta-append %}{% endblock meta-append %}
-</head>
-<body>
-  <div id="status_form">
-    <h2>{% trans "Share this on " %} {{ provider|capfirst }}: </h2>
-
-    <form action="/share/{{provider}}" method="POST">
-      {% csrf_token %}
-      <textarea name="status_text" style="width:550px; height:65px;">Managing my job searches on {{url}}</textarea><br>
-      <input type="submit" name="send" value="Send"/>
-    </form>
-  </div>
   
+</head>
+<body class="{{provider}}" id="myjobsShareWindow">
+<div class="wrapper">
+<div class="row">
+<div class="span9">
+    <div class="roundedCorners6 {{provider}}" id="focusBox">
+    <div id="status_form">
+        <h1 class="roundedCorners6"><span>{% trans "Share this on " %}</span> {{ provider|capfirst }}: </h1>
+        
+        <form action="/share/{{provider}}" method="POST">
+          {% csrf_token %}
+          <textarea id="share_area" name="status_text">I'm using {{url}} to find a great job!</textarea>
+          <input type="submit" name="send" value="Share" class="btn primary pull-right"/>          
+        </form>
+        <div class="clear"></div>
+    </div>
+    </div>
+</div>
+</div>
+</div>
 </body>
 </html>
