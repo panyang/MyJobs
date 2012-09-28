@@ -6,12 +6,14 @@ from django.contrib.auth.tokens import default_token_generator
 from django.template import RequestContext
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template.response import TemplateResponse, SimpleTemplateResponse
-from django.contrib.messages.api import get_messages
+from django.contrib import messages
 from django.contrib.auth.models import User
 from social_auth import __version__ as version
 from app.forms import CredentialResetForm
 from app.helpers import gravatar_link
 from app.share import *
+from tweepy.error import *
+from facebook import GraphAPIError
 import oauth2 as oauth
 import logging
 logger = logging.getLogger('__name__')
@@ -113,6 +115,8 @@ def done(request):
 
 def error(request):
     """Error view"""
+    import ipdb
+    ipdb.set_trace()
     messages = get_messages(request)
     return render_to_response('error.html', {'version': version,
                               'messages': messages}, RequestContext(request))
@@ -175,39 +179,47 @@ def edit_profile (request, username):
     """
     if response.method == "POST":
         pass
-        
+
+@login_required
 def share (request, provider):
-    link = request.session.get('share_url')
+    data_dict={'provider':provider,
+               'url': request.session.get('share_url')}
+
     if request.method == "POST":
+        message = request.POST['status_text']
+        link = request.session.get('share_url')
         if provider == 'linkedin':
-            linkedin_api = access_linkedin_api(request.user)
-            uri = 'http://api.linkedin.com/v1/people/~/shares'
-            body = build_linkedin_share(request.POST['status_text'],
-            submitted_url=link)
-            resp, content = linkedin_api.request(uri=uri, method='POST',
-                                                 body=body,
-                                                 headers={'Content-Type': 'text/xml'})
+            try:
+                linkedin_api = access_linkedin_api(request.user)
+                uri = 'http://api.linkedin.com/v1/people/~/shares'
+                body = build_linkedin_share(message,submitted_url=link)
+                resp, content = linkedin_api.request(uri=uri, method='POST',
+                                                     body=body,
+                                                     headers={'Content-Type': 'text/xml'})
+                messages.success(request, "Status successfully posted!")
+            except:
+                messages.error(request, ("%s" % content))
         elif provider == 'facebook':
-            facebook_api = access_facebook_api(request.user)
-            message = request.POST['status_text']
-            link = request.session.get('share_url')
-            facebook_api.put_object("me","links",
-                                    picture='http://src.nlx.org/myjobs/icon-80x80.png',
-                                    message=message,
-                                    link=link,
-                                    name='My Jobs',
-                                    caption='Real jobs from real companies')
+            try:
+                facebook_api = access_facebook_api(request.user)
+                facebook_api.put_object("me","links",
+                                        picture='http://src.nlx.org/myjobs/icon-80x80.png',
+                                        message=message,
+                                        link=link,
+                                        name='My Jobs',
+                                        caption='Real jobs from real companies')
+                message.success(request, "Status successfully posted!")
+            except GraphAPIError, e:
+                messages.error(request, ("%s" % e.reason))                
         elif provider == 'twitter':
             twitter_api = access_twitter_api(request.user)
-            tweet = request.POST['status_text']
-            twitter_api.update_status(tweet)
-                
-    else:
-        data_dict={'provider':provider,
-                   'url': request.session.get('share_url')}
-        return render_to_response("share.html", data_dict,
-                                  context_instance=RequestContext(request))
-
+            try:
+                twitter_api.update_status(message)
+                messages.success(request, "Status successfully posted!")
+            except TweepError, e:
+                messages.error(request, ("%s" % e.reason))                
+    return render_to_response("share.html", data_dict,
+                              context_instance=RequestContext(request))
 
 def auth_popup(request, provider):
     """

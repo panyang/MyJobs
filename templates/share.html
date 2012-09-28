@@ -18,6 +18,13 @@
 <div class="span9">
     <div class="roundedCorners6 {{provider}}" id="focusBox">
     <div id="status_form">
+      {% if messages %}
+      <ul class="messages">
+        {% for message in messages %}
+        <li{% if message.tags %} class="{{ message.tags }}"{% endif %}>{{ message }}</li>
+        {% endfor %}
+      </ul>
+      {% endif %}
         <h1 class="roundedCorners6"><span>{% trans "Share this on " %}</span> {{ provider|capfirst }}: </h1>
         
         <form action="/share/{{provider}}" method="POST">
