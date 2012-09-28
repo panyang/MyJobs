@@ -9,7 +9,6 @@ topbar.html -- Implements basic my.jobs nav.
       <ul class="menu">
 	{% if user.is_authenticated %}
 	  <li class="active"><a href="/profile">{% trans "Profile" %}</a></li>
-      <li><a href="/share">{% trans "Share" %}</a></li>
 	{% endif %}
       </ul> 
       <div class="pull-right">

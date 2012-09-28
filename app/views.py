@@ -14,7 +14,6 @@ from app.helpers import gravatar_link
 from app.share import *
 from tweepy.error import *
 from facebook import GraphAPIError
-import oauth2 as oauth
 import logging
 logger = logging.getLogger('__name__')
 
@@ -115,8 +114,6 @@ def done(request):
 
 def error(request):
     """Error view"""
-    import ipdb
-    ipdb.set_trace()
     messages = get_messages(request)
     return render_to_response('error.html', {'version': version,
                               'messages': messages}, RequestContext(request))
