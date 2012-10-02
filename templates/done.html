@@ -9,16 +9,14 @@ done.html -- presents user_view_profile.
 
 {% block content %}
 <div id="userprofile">
-  {% if user.is_staff %}
   <table class="zebra-striped">
       <thead>
-	<tr>
-	  <th>{% trans "Name" %}</th><th>{% trans "Value" %}
-	</tr>
+	    <tr><th>{% trans "Name" %}</th><th>{% trans "Value" %}</th></tr>
       </thead>
-    <tbody>
-      <tr><td>Id:</td> <td>{{ user.id }}</td></tr>
-      {% endif %}
+      <tbody>
+        {% if user.is_staff %}
+        <tr><td>Id:</td><td>{{ user.id }}</td></tr>
+        {% endif %}
       <tr><td>{% trans "Username" %}</td> <td>{{ user.username }}</td></tr>
       <tr><td>{% trans "Email" %}</td> <td>{{ user.email|default:"Not provided" }}</td></tr>
       <tr><td>{% trans "First name" %}</td> <td>{{ user.first_name|default:"Not provided" }}</td></tr>
@@ -35,6 +33,14 @@ done.html -- presents user_view_profile.
   </table>
 </div>
 
+{% if account_info %}
+<h2>Remove an Account:</h2>
+{% for account in account_info %}
+  <a href="/remove/{{account.name}}"><img class="socialbutton" src="{{account.image}}"></a>
+{% endfor %}
+{% endif %}
+
+<h2>Connect your {% if account_info %}other{% endif %} accounts:</h2>
 {% include "includes/widget-connectify.html" %}
 
 <div id="share_history">

@@ -22,7 +22,6 @@ class CustomUser(models.Model):
     def is_authenticated(self):
         """Always returns true"""
         return True
-    
 
 
 class UserProfile(models.Model):

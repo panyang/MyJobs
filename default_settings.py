@@ -15,7 +15,7 @@ APP = abspath(dirname(__file__))
 PROJ_ROOT = abspath(dirname(__file__))
 sys.path.append(APP)
 
-DEBUG = True
+
 #TEMPLATE_DEBUG = DEBUG
 TEMPLATE_DEBUG = True
 
@@ -39,7 +39,8 @@ MEDIA_ROOT = os.path.join(_PATH, 'files', 'media')
 MEDIA_URL = 'http://src.nlx.org/myjobs/admin/'
 
 STATIC_ROOT = os.path.join(_PATH, 'files', 'static')
-STATIC_URL = 'http://src.nlx.org/myjobs/'
+STATIC_URL = '/files/static/'
+
 STATICFILES_DIRS = (
     os.path.join(_PATH, 'static'),
 )
@@ -67,7 +68,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
     'django.contrib.redirects.middleware.RedirectFallbackMiddleware',
-    'myurls.middleware.MyUrlsFallbackMiddleware',
+#    'myurls.middleware.MyUrlsFallbackMiddleware',
 )
 
 ROOT_URLCONF = 'MyJobs.urls'
@@ -88,8 +89,8 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles', 
     'social_auth',
     'registration',
-    'myurls',
-    'myshare', 
+ #   'myurls',
+#    'myshare', 
     'app',
 )
 
@@ -128,23 +129,10 @@ ACCOUNT_ACTIVATION_DAYS = 14
 SOCIAL_AUTH_ENABLED_BACKENDS = ('facebook', 'twitter', 'linkedin', 
                                 'google-oauth2', 'yahoo')
 
-LOGIN_REDIRECT_URL = '/profile'
+LOGIN_REDIRECT_URL = '/redirect'
 LOGOUT_REDIRECT_URL = '/home'
 
 MANAGERS = ADMINS
-
-#DATABASES = {'default': {'NAME': 'directseo','ENGINE': 'django.db.backends.sqlite3','USER': '','PASSWORD': '','HOST': '','PORT': '',}}
-#DATABASES = {
-#    'default': {
-#        'NAME': 'myjobs',
-#        'ENGINE': 'django.db.backends.mysql',
-#        'USER': '',
-#        'PASSWORD': '',
-#        'HOST': '',
-#        'PORT': '3306'
-#    },
-#}
-
 
 # MyURLS Settings
 # MyUrl Specific Settings
@@ -197,7 +185,7 @@ LOGGING = {
         'logfile': {
             'level':'DEBUG',
             'class':'logging.handlers.RotatingFileHandler',
-            'filename': "/home/web/myjobslogs/logfile",
+            'filename': "/home/ani/myjobslogs/logfile",
             'maxBytes': 50000,
             'backupCount': 2,
             'formatter': 'standard',
