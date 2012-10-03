@@ -67,6 +67,7 @@ whatever.
   {% endblock content-area %}
 </div></section>
 {% endblock subpage %}
+{% endblock page %}
 {# Footer Starts Here #}
 {% block footer %}
 <footer><div class="footer">
@@ -97,10 +98,10 @@ whatever.
     </div>
   </div>
  {% endblock bottomtabs %}
-{% block bottom-links %}
+
     <div id="direct_dotJobsFooter">
         <div class="wrapper" id="bottomLinks">            
-    {% block bottom-links-content %}      
+          
         <div class="row" id="direct_dotjobsFooterContent">
             <div class="span4">
             {% blocktrans %}A Service of {% endblocktrans %}<a href="http://directemployers.org" target="_blank">DirectEmployers</a><p>
@@ -145,13 +146,13 @@ whatever.
       
       
       
-    {% endblock bottom-links-content %}  
+    
   </div>
   </div>
-{% endblock bottom-links %}
+
 </div></footer>
 {% endblock footer %}
-{% endblock page %}
+
 {% include "includes/analytics.html" %}
 {# Use page-append when you need to insert something just above the /body tag #}
 {% block page-append %}{% endblock page-append %}
