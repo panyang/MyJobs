@@ -33,9 +33,9 @@ body{
 	background-color: #574e44;
 	font-family: Arial, Helvetica, sans-serif;
 	}
-a, a:hover{
+/*a, a:hover{
 	color: #fff;
-	}
+	}*/
 header{
 	background: none;
 	}
@@ -291,9 +291,14 @@ footer{
 	width: auto;
 	}
 
+
 .topbar .btn {
-	color: white;
+    margin-top: 2px;
+	padding-top: 2px;	
+	padding-bottom: 2px;
 	}
+
+	
 /*Share window*/
 body#myjobsShareWindow{
   min-width: 0px;
@@ -343,4 +348,67 @@ body#myjobsShareWindow{
   display: block;
   height: 60px;
   width: 475px;
+}
+/*Footer styles*/
+#direct_dotJobsFooter{
+}
+#direct_dotJobsFooter #direct_dotjobsFooterContent{
+    margin: 0 auto;
+    background: none;
+    padding-bottom: 20px;
+}
+#direct_dotJobsFooter a{
+    font-weight: bold;
+}
+#direct_dotJobsFooter a.direct_dotjobsFooterLink:hover,
+#direct_dotJobsFooter a.direct_dotjobsFooterLink:active{
+    background-color: #333;
+    color: #fff;
+    border-left-width: 2px;
+    position: relative;
+    left: -1px;
+    text-decoration: none;
+    -webkit-border-radius: 2px;
+    -moz-border-radius: 2px
+    border-radius: 2px;
+}
+
+a.direct_dotjobsFooterLink{
+    display: block;
+    padding: 6px 11px;
+    margin: 0 0 3px 0;
+    border-left: 1px solid #8c8c8c;    
+}
+#subfooter p{
+    text-align: center;
+}
+
+.social_icon {
+    display: inline-block;
+    margin-top: 4px;
+    margin-right: 3px;
+    width: 24px;
+    height: 26px;
+    background-position: 0px 0px;
+}
+
+.facebook_icon {
+    background-image: url('/files/footer_facebook.png');
+}
+
+.twitter_icon {
+    background-image: url('/files/footer_twitter.png');
+}
+
+.youtube_icon {
+    background-image: url('/files/footer_youtube.png');
+}
+
+.social_icon:hover { background-position: 0px -26px; }
+.social_icon:active { background-position: 0px -52px }
+
+#direct_dotjobsScamAlert {
+    position: absolute;
+    bottom: 0;
+    margin-left: -240px;
 }

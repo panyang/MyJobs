@@ -98,18 +98,53 @@ whatever.
   </div>
  {% endblock bottomtabs %}
 {% block bottom-links %}
-  <div class="wrapper" id="bottomLinks">
-  <div class="row">
-    {% block bottom-links-content %}
-      <div class="span-three-fifths">
-	<p>{% trans "A service of" %} <a href="http://directemployers.org">{% trans "DirectEmployers Association" %}</a></p>
-      </div>
-      <div class="span-two-fifths subpageLinks">
-	<p class="pull-right">
-	  <a href="/about">{% trans "About" %}</a>
-	  <a href="/privacy-policy">{% trans "Privacy" %}</a>
-	</p>
-      </div>
+    <div id="direct_dotJobsFooter">
+        <div class="wrapper" id="bottomLinks">            
+    {% block bottom-links-content %}      
+        <div class="row" id="direct_dotjobsFooterContent">
+            <div class="span4">
+            {% blocktrans %}A Service of {% endblocktrans %}<a href="http://directemployers.org" target="_blank">DirectEmployers</a><p>
+            <a class="social_icon facebook_icon" href="http://www.facebook.com/Universe.jobs/"></a>
+            <a class="social_icon twitter_icon" href="http://twitter.com/dotjobsuniverse/"></a>
+            <a class="social_icon youtube_icon" href="http://www.youtube.com/universedotjobs/"></a>
+            </p>
+            <br>
+            <br>
+            
+            </div>
+            <div class="span4" style="position: relative">
+            <a href="http://about.jobs/" class="direct_dotjobsFooterLink">{% blocktrans %}About{% endblocktrans %}</a>        
+            <a href="http://about.jobs/contact/" class="direct_dotjobsFooterLink">{% blocktrans %}Contact{% endblocktrans %}</a>        
+            <a href="http://about.jobs/privacy-policy/" class="direct_dotjobsFooterLink">{% blocktrans %}Privacy{% endblocktrans %}</a>        
+            <a href="http://about.jobs/terms-of-use/" class="direct_dotjobsFooterLink">{% blocktrans %}Terms{% endblocktrans %}</a>
+            <p id="direct_dotjobsScamAlert" style="font-size: 10px; margin-bottom: 0px;">
+            <a href="https://www.privacyrights.org/Online-Privacy-and-Technology">Privacy &amp; Security tips</a> for online job seekers.</p>
+            </div>
+            <div class="span4">
+            <a href="http://veterans.jobs/" class="direct_dotjobsFooterLink">{% blocktrans %}Veterans Jobs{% endblocktrans %}</a>
+            <a href="http://disability.jobs/" class="direct_dotjobsFooterLink">{% blocktrans %}Disability Jobs{% endblocktrans %}</a>
+            <a href="http://diversity.jobs/" class="direct_dotjobsFooterLink">{% blocktrans %}Diversity Jobs{% endblocktrans %}</a>
+            <a href="http://minority.jobs/" class="direct_dotjobsFooterLink">{% blocktrans %}Minority Jobs{% endblocktrans %}</a>
+            </div>
+            <div class="span4">
+            <a href="http://universe.jobs/" class="direct_dotjobsFooterLink">{% blocktrans %}Online Recruitment Solutions{% endblocktrans %}</a>
+            <a href="http://universe.jobs/employment-marketing/" class="direct_dotjobsFooterLink">{% blocktrans %}Employment Marketing{% endblocktrans %}</a>
+            <a href="http://universe.jobs/talent-acquisition/" class="direct_dotjobsFooterLink">{% blocktrans %}Talent Acquisition{% endblocktrans %}</a>
+            </div>
+        </div>
+        <div class="row" id="subfooter">
+            <div class="span16">
+                <p>The <a href="http://goto.jobs/about.asp">.JOBS Top Level Domain</a> is sponsored by the Society for Human Resource Management (SHRM)<br>
+                The <a href="http://us.jobs/">National Labor Exchange</a> is sponsored by the National Association of State Work Force Agencies (NASWA)
+                </p>
+            </div>
+        </div>
+    </div>
+</div>
+
+      
+      
+      
     {% endblock bottom-links-content %}  
   </div>
   </div>
