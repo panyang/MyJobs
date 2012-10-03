@@ -203,9 +203,9 @@ section .leaderBoard{
     background-image: -o-linear-gradient(#e16b51,#c44e34); 
     background-image: linear-gradient(#e16b51,#c44e34);
 	filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#e16b51', endColorstr='#c44e34', GradientType=0)
-	-moz-box-shadow: 0px 1px 0px 0px #2f2d28;
+	/*-moz-box-shadow: 0px 1px 0px 0px #2f2d28;
 	-webkit-box-shadow: 0px 1px 0px 0px #2f2d28;
-	box-shadow: 0px 1px 0px 0px #2f2d28; 
+	box-shadow: 0px 1px 0px 0px #2f2d28;*/ 
 	margin-top: 2px;
 	padding-left: 25px;
 	padding-right: 25px;
