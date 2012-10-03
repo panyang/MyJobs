@@ -39,11 +39,8 @@ MEDIA_ROOT = os.path.join(_PATH, 'files', 'media')
 MEDIA_URL = 'http://src.nlx.org/myjobs/admin/'
 
 STATIC_ROOT = os.path.join(_PATH, 'files', 'static')
-STATIC_URL = '/files/static/'
+STATIC_URL = '/files/'
 
-STATICFILES_DIRS = (
-    os.path.join(_PATH, 'static'),
-)
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
@@ -185,7 +182,7 @@ LOGGING = {
         'logfile': {
             'level':'DEBUG',
             'class':'logging.handlers.RotatingFileHandler',
-            'filename': "/home/ani/myjobslogs/logfile",
+            'filename': "/home/web/myjobslogs/logfile",
             'maxBytes': 50000,
             'backupCount': 2,
             'formatter': 'standard',
