@@ -2,6 +2,7 @@
 /*For inclusion in def.ui.css*/
 html,body{
 	height: 100%;
+	padding-top: 0;
 	}
 
 .span-one-fifth{
@@ -227,15 +228,15 @@ footer{
 	padding-bottom: 19px;
 	color:#fff;
 	}
-#leaderBoardContent:after{
+/*#leaderBoardContent:after{
 	content: "";
 	position: absolute;
 	margin: -58px auto 0 283px;;
 	width: 163px;
 	height: 85px;
 	background: url(images/robot.png);
-	z-index: 9999;
-	}
+	z-index: 1;
+	}*/
 #bottomTabs h3{
 	padding-top: 25px;
 	color: #fff;

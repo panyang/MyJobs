@@ -16,7 +16,7 @@ whatever.
   {# use meta-append to add template specific scripts and styles #}
   {% block meta-append %}{% endblock meta-append %}
 </head>
-<body>
+<body{% block body_extra %}{% endblock body_extra %}>
 {% block page %}
 {% block topbar %}
   {% include "includes/topbar.html" %}
@@ -41,12 +41,13 @@ whatever.
   {% endblock header %}
   {# to change layouts, override content-area in your template #}
   {# for custom content, just override the content block #}
+  
   {% block content-area %}
     <div class="wrapper">
       <div class="row">
 	<div class="span-three-fifths">
 	  {% block content %}
-	  Put yo content here
+	
 	  {% endblock content %}
 	</div>
 	{# Sidebar #}
@@ -65,6 +66,7 @@ whatever.
       </div>
     </div>
   {% endblock content-area %}
+  
 </div></section>
 {% endblock subpage %}
 {% endblock page %}

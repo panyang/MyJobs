@@ -11,22 +11,30 @@ By default, has the following context:
     <http://docs.djangoproject.com/en/dev/topics/forms/>`_ for
     information on how to display this in a template.
 {% endcomment %}
+
 {% block header-content %}
-  <h1>{% trans "Create your my.jobs account" %}</h1><small>{% trans "and get started finding your new career today..." %}
+<h1>{% trans "Create your my.jobs account" %}</h1><small>{% trans "and get started finding your new career today..." %}
 {% endblock header-content %}
-{% block content %}
-  <h3>{% trans "Login with your favorite site" %}</h3>
-  {% include "includes/widget-connectify.html" %}
-  <h3>{% trans "Create a Username and Password" %}</h3>
-  <form action="" method="post">
-  {% include "includes/form-error-highlight.html" %}
-  {% csrf_token %}
-    <div class="actions">
-      <button type="submit" class="btn primary" value="submit">{% trans "Create Account" %}</button>
-      &nbsp;<button type="reset"class="btn">{% trans "Cancel" %}</button>
-      <span class="help-block">
-	Already have an account? <a href="{% url auth_login %}">{% trans "Login Here" %}</a>.<br><br>
-	<span class="help-block">{% trans "How we protect" %} <a href="/privacy">{% trans "your privacy" %}</a>
-      </span>
+
+{% block content-area %}
+<div class="wrapper">
+    <div class="row">
+    <div class="span16">
+        <h3>{% trans "Create a Username and Password" %}</h3>
+        <form action="" method="post">
+        {% include "includes/form-error-highlight.html" %}
+        {% csrf_token %}
+        <div class="actions">
+          <button type="submit" class="btn primary" value="submit">{% trans "Create Account" %}</button>
+          &nbsp;<button type="reset"class="btn">{% trans "Cancel" %}</button>
+          <span class="help-block">
+        <h3>{% trans "Login with your favorite site" %}</h3>
+        {% include "includes/widget-connectify.html" %}
+        Already have an account? <a href="{% url auth_login %}">{% trans "Login Here" %}</a>.<br><br>
+        <span class="help-block">{% trans "How we protect" %} <a href="/privacy">{% trans "your privacy" %}</a>
+          </span>
+        </div>
     </div>
-{% endblock content %}
+    </div>
+</div>
+{% endblock content-area %}
