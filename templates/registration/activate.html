@@ -10,7 +10,7 @@ With the default setup, has the following context:
     Whether or not the activation has been succesfull and perhaps also some
     information about the actual account.
 {% endcomment %}
-{% block registration %}
+{% block content %}
 {% if account %}
     <h1>{% trans "Activation successful" %}</h1>
     {% url auth_login as login_url %}
