@@ -4,40 +4,7 @@ widget-connectify.html -- Implements social connect buttons.
 
 Widget produces social buttons for each unassociated social network.
 {% endcomment %}
-<style>
-#socialLogin a{
-    background: transparent center left no-repeat;
-    color: #333;
-    border-radius: 4px;
-    height: 20px;
-    width: 100%;
-    padding: 10px;
-    display: block;
-    font-size: 2em;
-    text-indent: 40px;
-    padding-top: 10px;
-    font-weight: bold;
-}
-#socialLogin a:hover{
-    background-color: #FFF;
-    text-decoration: none;
-}
-#socialLogin a#Twitter{
-    background-image: url({{ STATIC_URL }}social-icons/Twitter.png); 
-}
-#socialLogin a#Facebook{
-    background-image: url({{ STATIC_URL }}social-icons/Facebook.png); 
-}
-#socialLogin a#Linkedin{
-    background-image: url({{ STATIC_URL }}social-icons/Linkedin.png); 
-}
-#socialLogin a#Google-Oauth2{
-    background-image: url({{ STATIC_URL }}social-icons/Google-Oauth2.png); 
-}
-#socialLogin a#Yahoo{
-    background-image: url({{ STATIC_URL }}social-icons/Yahoo.png); 
-}
-</style>
+
 <span>
   <p id="socialLogin">
     {% for name in social_auth.not_associated.oauth %}

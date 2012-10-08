@@ -80,7 +80,7 @@ section .leaderBoard{
     color: #fff;
     text-shadow: 1px 1px 1px #000;
     }
-
+/*Login Styles*/
 #loginBox{
     border-width: 8px;
     border-color: #847b6e;
@@ -179,6 +179,38 @@ section .leaderBoard{
 #loginBox form{
     margin-bottom: 0px;
     }
+    #socialLogin a{
+    background: transparent center left no-repeat;
+    color: #333;
+    border-radius: 4px;
+    height: 20px;
+    padding: 10px;
+    display: block;
+    font-size: 2em;
+    text-indent: 40px;
+    padding-top: 10px;
+    font-weight: bold;
+}
+/*Social Login Styles*/
+#socialLogin a:hover{
+    background-color: #FFF;
+    text-decoration: none;
+}
+#socialLogin a#Twitter{
+    background-image: url(/files/static/social-icons/Twitter.png); 
+}
+#socialLogin a#Facebook{
+    background-image: url(/files/static/social-icons/Facebook.png); 
+}
+#socialLogin a#Linkedin{
+    background-image: url(/files/static/social-icons/Linkedin.png); 
+}
+#socialLogin a#Google-Oauth2{
+    background-image: url(/files/static/social-icons/Google-Oauth2.png); 
+}
+#socialLogin a#Yahoo{
+    background-image: url(/files/static/social-icons/Yahoo.png); 
+}
 .btn.primary{
     background-color: #c44e34;
     background-image: -moz-linear-gradient(#e16b51,#c44e34);
@@ -230,7 +262,7 @@ code should be preserved for a redesign.
     padding-bottom: 5px;
     background-position: bottom left;
     background-repeat: no-repeat;
-    background-image: url(images/bottomTabsH3.png);
+    background-image: url(/files/static/images/bottomTabsH3.png);
     background-color: transparent;
     }
 #bottomTabs h3#save{
@@ -288,7 +320,7 @@ body#myjobsShareWindow{
     height: 100%;
     padding: 10px;
     padding-top: 110px;
-    background: url("http://my.jobs:8000/files/static/images/mydotjobs.png") no-repeat scroll center 20px transparent;
+    background: url("files/static/images/mydotjobs.png") no-repeat scroll center 20px transparent;
     }      
 #myjobsShareWindow #focusBox.twitter{
     background-color: #00A0D1;
