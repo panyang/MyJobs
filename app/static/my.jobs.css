@@ -1,8 +1,13 @@
 @import url(http://css.nlx.org/framework/css/def.ui.css);
 /*For inclusion in def.ui.css*/
 html,body{
-    height: 100%;
     padding-top: 0;
+    }
+html{
+    background: transparent;
+    }
+body{
+    height: auto;
     }
 .span-one-fifth{
     width: 172px;
