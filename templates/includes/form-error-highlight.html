@@ -6,7 +6,21 @@ Usese the following default django template tags:
 hidden -- built in for all hidden form fields.
 form -- the rest of the form.
 {% endcomment %}
-
+<style>
+.input{
+}
+.form-label{
+    text-align: right;
+    margin-right: 20px;
+    width: 180px;
+}
+.form-label label{
+    font-weight: bold;
+}
+.clear{
+    clear: both;
+}
+</style>
 <fieldset>
   {# Include but don't display hidden fields #}
   {% for hidden in form.hidden_fields %}
@@ -19,12 +33,17 @@ form -- the rest of the form.
        <div class="alert-message block-message error">
        {{ field.errors }}
      {% else %}
-       <div class="clearfix">
+       <div class="clear">
      {% endif %} 
-         {{ field.label_tag }}
-         <div class="input">{{ field }}<br>
-	   {% if field.help_text %}<span class="help-block">{{ field.help_text }}</span>{% endif %}
-	 </div>
+         <div class="form-label pull-left">
+            {{ field.label_tag }}
+         </div>
+         <div class="input pull-right">
+            {{ field }}
+            {% if field.help_text %}
+                <span class="help-block">{{ field.help_text }}</span>
+            {% endif %}
+        </div>        
       </div>
   {% endfor %}
 </fieldset>

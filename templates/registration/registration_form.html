@@ -11,22 +11,49 @@ By default, has the following context:
     <http://docs.djangoproject.com/en/dev/topics/forms/>`_ for
     information on how to display this in a template.
 {% endcomment %}
+
 {% block header-content %}
-  <h1>{% trans "Create your my.jobs account" %}</h1><small>{% trans "and get started finding your new career today..." %}
-{% endblock header-content %}
-{% block content %}
-  <h3>{% trans "Login with your favorite site" %}</h3>
-  {% include "includes/widget-connectify.html" %}
-  <h3>{% trans "Create a Username and Password" %}</h3>
-  <form action="" method="post">
-  {% include "includes/form-error-highlight.html" %}
-  {% csrf_token %}
-    <div class="actions">
-      <button type="submit" class="btn primary" value="submit">{% trans "Create Account" %}</button>
-      &nbsp;<button type="reset"class="btn">{% trans "Cancel" %}</button>
-      <span class="help-block">
-	Already have an account? <a href="{% url auth_login %}">{% trans "Login Here" %}</a>.<br><br>
-	<span class="help-block">{% trans "How we protect" %} <a href="/privacy">{% trans "your privacy" %}</a>
-      </span>
+<div class="wrapper">
+    <div class="row">
+        <div class="span10">
+            <h1>{% trans "Create your my.jobs account" %}</h1>
+        </div>
+        <div class="span6">
+            <span class="pull-right"><span class="label label-warning">Already have an account?</span> <a href="{% url auth_login %}">{% trans "Login Here" %}</a></span>
+        </div>
     </div>
-{% endblock content %}
+</div>
+{% endblock header-content %}
+
+{% block content-area %}
+<section><div class="section subpage">
+<div class="wrapper">    
+    <div class="row">
+        <div class="span8">
+            <h3>{% trans "Start with the Basics" %}</h3>
+            <div id="focusBox">                
+                <form action="" method="post">
+                    {% include "includes/form-error-highlight.html" %}
+                    {% csrf_token %}
+                    <div class="actions pull-right">
+                        <button type="submit" class="btn primary" value="submit">{% trans "Create Account" %}</button>
+                        <!--<button type="reset"class="btn">{% trans "Cancel" %}</button>-->
+                        <span class="help-block"></span>
+                    </div>
+                </form>            
+                <div class="clear"></div>
+            </div>
+        </div>
+        <div class="span8">    
+            <h3>{% trans "Or use a social profile create your account" %}</h3>
+            <div id="focusBox">
+                {% include "includes/widget-connectify.html" %}
+            <div>
+        </div>
+        
+              
+    </div>
+    </div>
+</div>
+</div></section>
+{% endblock content-area %}
