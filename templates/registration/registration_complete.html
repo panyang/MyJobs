@@ -22,6 +22,8 @@ Used after successful completion of the registration process.
   <li>{% trans 'Allow up to 15 minutes for your email provider to deliver the email we have sent.' %}</li>
   <li>{% trans 'If you are using a free email service like Gmail, Yahoo or Hotmail, please allow 30 minutes.' %}
 </ul>
+<h2>Connect your {% if account_info %}other{% endif %} accounts:</h2>
+{% include "includes/widget-connectify.html" %}
 {% endblock content %}
 
 {% block focusbox-content %}

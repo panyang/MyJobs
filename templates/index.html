@@ -36,20 +36,10 @@ index.html -- implements non-authenticated home/landing page for my.jobs.
                 </div>
                 <div class="span-two-fifths">
                     <div id="loginBox">
+                        {% include "includes/widget-login-username.html" %}
+                        <h3>OR</h3>
                         {% trans 'Sign in with your favorite social account' %}
-                        {% include "includes/widget-connectify.html" %}
-                        <p>
-                            {% trans 'Or you can sign in with your my.jobs account' %}
-                        </p>
-                        <form action="/accounts/login/" method="link">
-                          <div class="actions">
-                            <button type="submit" class="btn primary" value="submit">{% trans "Login" %}</a></button>
-                            <span class="help-block">
-                              <a href="{% url auth_password_reset %}">{% trans "lost password" %}</a><br>
-                              <a href="{% url registration_register %}">{% trans "join my.jobs" %}</a>
-                            </span>
-                          </div>  
-                        </form>
+                        {% include "includes/widget-connectify.html" %}                        
                     </div>				
                 </div>
             </div>

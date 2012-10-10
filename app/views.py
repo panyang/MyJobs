@@ -1,5 +1,9 @@
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponse
+#
+from django.contrib.auth import REDIRECT_FIELD_NAME, login as auth_login
+from django.contrib.auth.forms import AuthenticationForm
+#
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.tokens import default_token_generator
@@ -57,17 +61,26 @@ def privacy(request):
     """Privacy page."""
     return render_to_response('privacy.html', RequestContext(request))
 
-def home(request):
+def home(request,redirect_field_name=REDIRECT_FIELD_NAME,
+         authentication_form=AuthenticationForm):
     """implements landing page/home page view.
     
     Sends already authenticated users the home page for authenticated users
     """
     request.session['origin'] = 'main'
-    if request.user.is_authenticated():
-        return HttpResponseRedirect('/profile/')
-    else:
+    redirect_to = request.REQUEST.get(redirect_field_name, '')
+    form=authentication_form(request)
+    #if request.user.is_authenticated():
+    #    return HttpResponseRedirect('/profile/')
+    #else:
         #TODO: Fix home page template.
-        return TemplateResponse(request, 'index.html', {})
+    context = {
+        'form': form,
+        redirect_field_name: redirect_to,
+        #'site': current_site,
+        #'site_name': current_site.name,
+    }
+    return TemplateResponse(request, 'index.html', context)
         #return render_to_response('registration/login.html', {'version': version},
         #                         RequestContext(request))
 

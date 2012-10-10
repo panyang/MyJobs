@@ -3,7 +3,7 @@
 login-username.html -- Username/password login form
 {% endcomment %}
 
-<form action="" method="post">
+<form action="/accounts/login/" method="post">
   {% include "includes/form-error-highlight.html" %}
   {% csrf_token %}
   <div class="actions">
