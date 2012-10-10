@@ -18,6 +18,9 @@ body{
 .span-three-fifths{
     width: 556px;
     }
+.span-two-fifths input{
+    width: 300px;
+    }
 .topbar h3 a{
     padding: 0px 20px;
     }    
@@ -28,7 +31,12 @@ body{
 .clear{
     clear: both;
     }
-    
+.btn.pull-right{
+    margin-right: 10px;
+}
+.btn.pull-left{
+    margin-left: 10px;
+}
 /*Main Styles*/
 body{
     background-color: #574e44;
@@ -41,6 +49,9 @@ header{
     height: 26px;
     padding: 1px 0;
     background-color: #333;
+    }
+#titleRow{
+    margin-bottom: 20px;
     }
 #title h1{
     text-indent: -9000px;
@@ -107,6 +118,7 @@ section .leaderBoard{
     color: #c34d33;
     font-size:1.1em;    
     font-weight: bold;
+    height: 36px;
     }
 #loginBox p#socialLogin span{
     display: block;
@@ -171,11 +183,11 @@ section .leaderBoard{
     margin: 0px;
     }
 #loginBox .help-block{
-    float: left;
     display: block;    
     width: 132px;
-    padding: 0px 30px 0 0;
     font-size: 1em;
+    padding-right: 10px;
+    text-align: right;
     }
 #loginBox .help-block a{
     color: #FFF;    
@@ -184,17 +196,25 @@ section .leaderBoard{
 #loginBox form{
     margin-bottom: 0px;
     }
-    #socialLogin a{
+#loginBox h4{
+    color: #fff;
+    margin: 10px 0;
+    }    
+#socialLogin a{
     background: transparent center left no-repeat;
     color: #333;
     border-radius: 4px;
     height: 20px;
-    padding: 10px;
     display: block;
     font-size: 2em;
-    text-indent: 40px;
+    text-indent: -9000px;
     padding-top: 10px;
     font-weight: bold;
+    float: left;
+    width: 20px;
+    height: 16px;
+    padding: 10px;
+    margin: 0 18px 0 0;
 }
 /*Social Login Styles*/
 #socialLogin a:hover{
@@ -202,7 +222,8 @@ section .leaderBoard{
     text-decoration: none;
 }
 #socialLogin a#Twitter{
-    background-image: url(/files/static/social-icons/Twitter.png); 
+    background-image: url(/files/static/social-icons/Twitter.png);
+    margin-left: 20px;
 }
 #socialLogin a#Facebook{
     background-image: url(/files/static/social-icons/Facebook.png); 

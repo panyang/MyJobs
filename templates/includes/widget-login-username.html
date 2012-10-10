@@ -7,10 +7,12 @@ login-username.html -- Username/password login form
   {% include "includes/form-error-highlight.html" %}
   {% csrf_token %}
   <div class="actions">
-    <button type="submit" class="btn primary" value="submit">{% trans "Login" %}</button>
-    <span class="help-block">
+        <button type="submit" class="btn primary pull-right" value="submit">{% trans "Login" %}</button>
+        <a href="{% url registration_register %}" class="btn secondary pull-left">{% trans "Join My.jobs" %}</a>
+    <div class=a"clear"></div>
+    <span class="help-block pull-right">
       <a href="{% url auth_password_reset %}">{% trans "lost password" %}</a><br>
-      <a href="{% url registration_register %}">{% trans "join my.jobs" %}</a>
+      
     </span>
   </div>  
 </form>

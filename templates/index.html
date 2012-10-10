@@ -9,7 +9,7 @@ index.html -- implements non-authenticated home/landing page for my.jobs.
     <section><div class="leaderBoard">
         <header><div class="header">
             <div class="wrapper">
-                <div class="row">
+                <div class="row" id="titleRow">
                     <div class="span8" id="title">
                         <h1>{% trans 'My.jobs' %}</h1>
                     </div>
@@ -37,9 +37,10 @@ index.html -- implements non-authenticated home/landing page for my.jobs.
                 <div class="span-two-fifths">
                     <div id="loginBox">
                         {% include "includes/widget-login-username.html" %}
-                        <h3>OR</h3>
-                        {% trans 'Sign in with your favorite social account' %}
-                        {% include "includes/widget-connectify.html" %}                        
+                        <div class="clear"></div>
+                        <h4>{% trans 'Or sign in with your favorite social account' %}:</h4>                        
+                        {% include "includes/widget-connectify.html" %}
+                                               
                     </div>				
                 </div>
             </div>
