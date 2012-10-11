@@ -34,10 +34,13 @@ By default, has the following context:
             <div id="focusBox">                
                 {% include "includes/widget-user-registration.html" %}
                 <div class="clear"></div>
+                <h3>{% trans "Or use a social profile create your account" %}</h3>
+                {% include "includes/widget-connectify.html" %}
+                <div class="clear"></div>
             </div>
         </div>
         <div class="span8">    
-            <h3>{% trans "Or use a social profile create your account" %}</h3>
+            <h3>{% trans "Or use a social profile to create your account" %}</h3>
             <div id="focusBox">
                 {% include "includes/widget-connectify.html" %}
             <div>
