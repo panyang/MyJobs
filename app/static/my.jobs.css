@@ -1,7 +1,7 @@
 @import url(http://css.nlx.org/framework/css/def.ui.css);
 /*For inclusion in def.ui.css*/
 html,body{
-    padding-top: 0;
+    /*padding-top: 0;*/
     }
 html{
     background: transparent;
@@ -42,13 +42,46 @@ body{
     background-color: #574e44;
     font-family: Arial, Helvetica, sans-serif;
     }
+.form-label{
+    text-align: right;
+    margin-right: 20px;
+    width: 180px;
+    }
+.form-label label{
+    font-weight: bold;
+    }
+.clear{
+    clear: both;
+    }
 header{
     background: none;
     }
 .topbar-inner{
-    height: 26px;
+    height: 30px;
     padding: 1px 0;
     background-color: #333;
+    }
+.topbar .inline-inputs{
+    float: right;
+    padding-top: 3px;
+}
+.topbar #topbar-logo{
+    height: 30px;
+    width: 90px;
+    background: transparent url(images/mydotjobs_small.png) center left no-repeat;
+    text-indent: -9000px;
+}
+.topbar label{
+    color: #fff;
+    padding: 5px 10px 0 0px;
+    }
+.topbar input{
+    width: 100px;
+    margin-right: 10px;
+    }
+.topbar label,
+.topbar input{
+    float: left;
     }
 #titleRow{
     margin-bottom: 20px;
@@ -86,7 +119,6 @@ section .leaderBoard{
     padding-bottom: 28px;
     }    
 .subpage{
-    margin-top: 28px;
     background-color: #FFF;
     padding: 20px 0;
     }

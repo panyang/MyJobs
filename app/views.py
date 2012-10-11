@@ -20,7 +20,8 @@ from tweepy.error import *
 from facebook import GraphAPIError
 import logging
 logger = logging.getLogger('__name__')
-
+from registration import views as RegistrationViews
+from registration.backends.default import DefaultBackend
 
 # Semi-static stuff
 def about(request):
@@ -61,6 +62,17 @@ def privacy(request):
     """Privacy page."""
     return render_to_response('privacy.html', RequestContext(request))
 
+def home2(request):
+    return RegistrationViews.register(request,
+                                      backend=DefaultBackend,
+                                      success_url=None, 
+                                      form_class=None,
+                                      disallowed_url='registration_disallowed',
+                                      template_name='index.html',
+                                      extra_context=None
+                                      )
+    
+    
 def home(request,redirect_field_name=REDIRECT_FIELD_NAME,
          authentication_form=AuthenticationForm):
     """implements landing page/home page view.
@@ -80,7 +92,7 @@ def home(request,redirect_field_name=REDIRECT_FIELD_NAME,
         #'site': current_site,
         #'site_name': current_site.name,
     }
-    return TemplateResponse(request, 'index.html', context)
+    return TemplateResponse(request, 'index.html')#, context)
         #return render_to_response('registration/login.html', {'version': version},
         #                         RequestContext(request))
 

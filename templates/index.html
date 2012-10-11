@@ -5,7 +5,7 @@ index.html -- implements non-authenticated home/landing page for my.jobs.
 {% endcomment %}
 {% block title-content %}{% trans "My.Jobs - Manage your job search." %}{% endblock title-content %}
 {% block body_extra %}{% endblock body_extra %}
-{% block page %}
+{% block subpage %}
     <section><div class="leaderBoard">
         <header><div class="header">
             <div class="wrapper">
@@ -24,6 +24,54 @@ index.html -- implements non-authenticated home/landing page for my.jobs.
         </div></header>
             <div class="wrapper" id="leaderBoardContent">
             <div class="row">
+                <div class="span-two-fifths">
+                    <div id="loginBox">
+                        <form action="/accounts/register/" method="post">  
+                            <fieldset>
+                                <div class="clear">                              
+                                    <div class="form-label pull-left">
+                                        <label for="id_username">Username</label>
+                                    </div>
+                                    <div class="input pull-right">
+                                        <input id="id_username" type="text" class="required" name="username" maxlength="30">                                    
+                                    </div>        
+                                </div>
+                                <div class="clear">                              
+                                    <div class="form-label pull-left">
+                                        <label for="id_email">E-mail</label>
+                                    </div>
+                                    <div class="input pull-right">
+                                        <input id="id_email" type="text" class="required" name="email" maxlength="75">                                    
+                                    </div>        
+                                </div>
+                                <div class="clear">                              
+                                    <div class="form-label pull-left">
+                                        <label for="id_password1">Password</label>
+                                    </div>
+                                    <div class="input pull-right">
+                                        <input id="id_password1" type="password" class="required" name="password1">                                    
+                                    </div>        
+                                </div>
+                                <div class="clear">                              
+                                    <div class="form-label pull-left">
+                                        <label for="id_password2">Password (again)</label>
+                                    </div>
+                                    <div class="input pull-right">
+                                        <input id="id_password2" type="password" class="required" name="password2">
+                                    </div>        
+                                </div>                          
+                            </fieldset>
+                            {% csrf_token %}
+                            <div class="actions pull-right">
+                                <button type="submit" class="btn primary pull-right" value="submit">Create Account</button>                                
+                            </div>
+                        </form>
+                        <div class="clear"></div>
+                        <h4>{% trans 'Or sign up with your favorite social account' %}:</h4>                        
+                        {% include "includes/widget-connectify.html" %}
+                                               
+                    </div>				
+                </div>
                 <div class="span-three-fifths">
                     <div id="introText">
                     <p>
@@ -34,20 +82,11 @@ index.html -- implements non-authenticated home/landing page for my.jobs.
                     </p>
                     </div>
                 </div>
-                <div class="span-two-fifths">
-                    <div id="loginBox">
-                        {% include "includes/widget-login-username.html" %}
-                        <div class="clear"></div>
-                        <h4>{% trans 'Or sign in with your favorite social account' %}:</h4>                        
-                        {% include "includes/widget-connectify.html" %}
-                                               
-                    </div>				
-                </div>
             </div>
 <div class="clear"></div>
 </div>
 </div></section>    
-{% endblock page %}
+{% endblock subpage %}
 
 </body>
 </html>
