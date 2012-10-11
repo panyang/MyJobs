@@ -191,7 +191,7 @@ LOGGING = {
         'logfile': {
             'level':'DEBUG',
             'class':'logging.handlers.RotatingFileHandler',
-            'filename': "/home/ani/myjobslogs/logfile",
+            'filename': "/home/web/myjobslogs/logfile",
             'maxBytes': 50000,
             'backupCount': 2,
             'formatter': 'standard',
