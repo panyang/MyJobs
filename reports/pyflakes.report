@@ -1,0 +1,136 @@
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/auth/urls.py:5: [E] PYFLAKES:'from django.conf.urls.defaults import *' used; unable to detect undefined names
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/auth/context_processors.py:1: [E] PYFLAKES:'memoize' imported but unused
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/auth/backends.py:1: [E] PYFLAKES:'connection' imported but unused
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/auth/admin.py:112: [E] PYFLAKES:local variable 'new_user' is assigned to but never used
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/auth/__init__.py:1: [E] PYFLAKES:'datetime' imported but unused
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/auth/decorators.py:5: [E] PYFLAKES:redefinition of unused 'wraps' from line 3
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/auth/tests/views.py:119: [E] PYFLAKES:local variable 'response' is assigned to but never used
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/auth/tests/views.py:159: [E] PYFLAKES:local variable 'response' is assigned to but never used
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/auth/tests/forms.py:215: [E] PYFLAKES:local variable 'form' is assigned to but never used
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/auth/tests/basic.py:31: [E] PYFLAKES:local variable 'u2' is assigned to but never used
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/auth/tests/tokens.py:4: [E] PYFLAKES:'AnonymousUser' imported but unused
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/auth/tests/__init__.py:1: [E] PYFLAKES:'NoAnonymousUserBackendTest' imported but unused
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/auth/tests/__init__.py:1: [E] PYFLAKES:'NoBackendsTest' imported but unused
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/auth/tests/__init__.py:1: [E] PYFLAKES:'AnonymousUserBackendTest' imported but unused
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/auth/tests/__init__.py:1: [E] PYFLAKES:'BackendTest' imported but unused
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/auth/tests/__init__.py:1: [E] PYFLAKES:'NoInActiveUserBackendTest' imported but unused
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/auth/tests/__init__.py:1: [E] PYFLAKES:'InActiveUserBackendTest' imported but unused
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/auth/tests/__init__.py:1: [E] PYFLAKES:'RowlevelBackendTest' imported but unused
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/auth/tests/__init__.py:4: [E] PYFLAKES:'BasicTestCase' imported but unused
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/auth/tests/__init__.py:5: [E] PYFLAKES:'LoginRequiredTestCase' imported but unused
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/auth/tests/__init__.py:6: [E] PYFLAKES:'PasswordResetFormTest' imported but unused
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/auth/tests/__init__.py:6: [E] PYFLAKES:'AuthenticationFormTest' imported but unused
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/auth/tests/__init__.py:6: [E] PYFLAKES:'UserChangeFormTest' imported but unused
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/auth/tests/__init__.py:6: [E] PYFLAKES:'PasswordChangeFormTest' imported but unused
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/auth/tests/__init__.py:6: [E] PYFLAKES:'UserCreationFormTest' imported but unused
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/auth/tests/__init__.py:6: [E] PYFLAKES:'SetPasswordFormTest' imported but unused
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/auth/tests/__init__.py:9: [E] PYFLAKES:'RemoteUserNoCreateTest' imported but unused
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/auth/tests/__init__.py:9: [E] PYFLAKES:'RemoteUserTest' imported but unused
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/auth/tests/__init__.py:9: [E] PYFLAKES:'RemoteUserCustomTest' imported but unused
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/auth/tests/__init__.py:11: [E] PYFLAKES:'ProfileTestCase' imported but unused
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/auth/tests/__init__.py:12: [E] PYFLAKES:'SignalTestCase' imported but unused
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/auth/tests/__init__.py:13: [E] PYFLAKES:'TokenGeneratorTest' imported but unused
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/auth/tests/__init__.py:14: [E] PYFLAKES:'PasswordResetTest' imported but unused
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/auth/tests/__init__.py:14: [E] PYFLAKES:'ChangePasswordTest' imported but unused
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/auth/tests/__init__.py:14: [E] PYFLAKES:'LoginTest' imported but unused
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/auth/tests/__init__.py:14: [E] PYFLAKES:'LogoutTest' imported but unused
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/auth/tests/__init__.py:14: [E] PYFLAKES:'LoginURLSettings' imported but unused
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/auth/tests/__init__.py:16: [E] PYFLAKES:'TestAuthPermissions' imported but unused
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/auth/tests/auth_backends.py:201: [E] PYFLAKES:local variable 'content_type' is assigned to but never used
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/auth/tests/permissions.py:4: [E] PYFLAKES:redefinition of unused 'StringIO' from line 2
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/contenttypes/generic.py:55: [E] PYFLAKES:redefinition of unused 'ContentType' from line 17
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/contenttypes/generic.py:174: [E] PYFLAKES:redefinition of unused 'ContentType' from line 17
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/contenttypes/tests.py:6: [E] PYFLAKES:'ObjectDoesNotExist' imported but unused
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/sessions/models.py:1: [E] PYFLAKES:'base64' imported but unused
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/sessions/models.py:2: [E] PYFLAKES:'pickle' imported but unused
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/sessions/backends/db.py:2: [E] PYFLAKES:'settings' imported but unused
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/sessions/backends/base.py:4: [E] PYFLAKES:'sys' imported but unused
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/sessions/backends/base.py:10: [E] PYFLAKES:redefinition of unused 'pickle' from line 8
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/messages/__init__.py:1: [E] PYFLAKES:'from api import *' used; unable to detect undefined names
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/messages/__init__.py:2: [E] PYFLAKES:'from constants import *' used; unable to detect undefined names
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/messages/tests/urls.py:1: [E] PYFLAKES:'from django.conf.urls.defaults import *' used; unable to detect undefined names
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/messages/tests/urls.py:5: [E] PYFLAKES:'redirect' imported but unused
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/messages/tests/urls.py:5: [E] PYFLAKES:'render_to_response' imported but unused
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/messages/tests/__init__.py:1: [E] PYFLAKES:'CookieTest' imported but unused
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/messages/tests/__init__.py:2: [E] PYFLAKES:'FallbackTest' imported but unused
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/messages/tests/__init__.py:3: [E] PYFLAKES:'MiddlewareTest' imported but unused
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/messages/tests/__init__.py:4: [E] PYFLAKES:'SessionTest' imported but unused
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/messages/tests/__init__.py:5: [E] PYFLAKES:'LegacyFallbackTest' imported but unused
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/messages/tests/__init__.py:5: [E] PYFLAKES:'UserMessagesTest' imported but unused
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/messages/tests/base.py:237: [E] PYFLAKES:local variable 'user' is assigned to but never used
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/messages/tests/base.py:289: [E] PYFLAKES:local variable 'show_url' is assigned to but never used
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/messages/storage/cookie.py:2: [E] PYFLAKES:'constants' imported but unused
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/admin/validation.py:60: [E] PYFLAKES:local variable 'e' is assigned to but never used
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/admin/__init__.py:3: [E] PYFLAKES:'ACTION_CHECKBOX_NAME' imported but unused
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/admin/__init__.py:4: [E] PYFLAKES:'VERTICAL' imported but unused
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/admin/__init__.py:4: [E] PYFLAKES:'HORIZONTAL' imported but unused
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/admin/__init__.py:4: [E] PYFLAKES:'ModelAdmin' imported but unused
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/admin/__init__.py:5: [E] PYFLAKES:'TabularInline' imported but unused
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/admin/__init__.py:5: [E] PYFLAKES:'StackedInline' imported but unused
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/admin/__init__.py:6: [E] PYFLAKES:'AdminSite' imported but unused
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/admin/sites.py:1: [E] PYFLAKES:'re' imported but unused
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/admin/sites.py:75: [E] PYFLAKES:redefinition of unused 'validate' from line 73
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/admin/sites.py:293: [E] PYFLAKES:redefinition of unused 'javascript_catalog' from line 291
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/admin/views/decorators.py:4: [E] PYFLAKES:redefinition of unused 'wraps' from line 2
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/admin/templatetags/admin_list.py:84: [E] PYFLAKES:local variable 'lookup_opts' is assigned to but never used
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/flatpages/urls.py:1: [E] PYFLAKES:'from django.conf.urls.defaults import *' used; unable to detect undefined names
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/flatpages/tests/urls.py:1: [E] PYFLAKES:'from django.conf.urls.defaults import *' used; unable to detect undefined names
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/flatpages/tests/__init__.py:1: [E] PYFLAKES:'from django.contrib.flatpages.tests.csrf import *' used; unable to detect undefined names
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/flatpages/tests/__init__.py:2: [E] PYFLAKES:'from django.contrib.flatpages.tests.forms import *' used; unable to detect undefined names
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/flatpages/tests/__init__.py:3: [E] PYFLAKES:'from django.contrib.flatpages.tests.middleware import *' used; unable to detect undefined names
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/flatpages/tests/__init__.py:4: [E] PYFLAKES:'from django.contrib.flatpages.tests.templatetags import *' used; unable to detect undefined names
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django/contrib/flatpages/tests/__init__.py:5: [E] PYFLAKES:'from django.contrib.flatpages.tests.views import *' used; unable to detect undefined names
+../.virtualenvs/myjobs/lib/python2.7/site-packages/django_jenkins/management/commands/lettuce.py:2: [E] PYFLAKES:'make_option' imported but unused
+../.virtualenvs/myjobs/lib/python2.7/site-packages/social_auth/utils.py:29: [E] PYFLAKES:redefinition of unused 'random_string' from line 26
+../.virtualenvs/myjobs/lib/python2.7/site-packages/social_auth/utils.py:57: [E] PYFLAKES:redefinition of unused 'django_utc' from line 41
+../.virtualenvs/myjobs/lib/python2.7/site-packages/social_auth/utils.py:63: [E] PYFLAKES:redefinition of unused 'ct_compare' from line 61
+../.virtualenvs/myjobs/lib/python2.7/site-packages/social_auth/utils.py:75: [E] PYFLAKES:redefinition of unused 'empty' from line 73
+../.virtualenvs/myjobs/lib/python2.7/site-packages/registration/urls.py:15: [E] PYFLAKES:'from registration.backends.default.urls import *' used; unable to detect undefined names
+../.virtualenvs/myjobs/lib/python2.7/site-packages/registration/auth_urls.py:26: [E] PYFLAKES:'from django.conf.urls.defaults import *' used; unable to detect undefined names
+../.virtualenvs/myjobs/lib/python2.7/site-packages/registration/models.py:16: [E] PYFLAKES:redefinition of unused 'datetime_now' from line 14
+../.virtualenvs/myjobs/lib/python2.7/site-packages/registration/tests/urls.py:13: [E] PYFLAKES:'from django.conf.urls.defaults import *' used; unable to detect undefined names
+../.virtualenvs/myjobs/lib/python2.7/site-packages/registration/tests/backends.py:387: [E] PYFLAKES:local variable 'alice' is assigned to but never used
+../.virtualenvs/myjobs/lib/python2.7/site-packages/registration/tests/__init__.py:5: [E] PYFLAKES:'from registration.tests.backends import *' used; unable to detect undefined names
+../.virtualenvs/myjobs/lib/python2.7/site-packages/registration/tests/__init__.py:6: [E] PYFLAKES:'from registration.tests.forms import *' used; unable to detect undefined names
+../.virtualenvs/myjobs/lib/python2.7/site-packages/registration/tests/__init__.py:7: [E] PYFLAKES:'from registration.tests.models import *' used; unable to detect undefined names
+../.virtualenvs/myjobs/lib/python2.7/site-packages/registration/tests/__init__.py:8: [E] PYFLAKES:'from registration.tests.views import *' used; unable to detect undefined names
+../.virtualenvs/myjobs/lib/python2.7/site-packages/registration/tests/models.py:77: [E] PYFLAKES:local variable 'new_user' is assigned to but never used
+../.virtualenvs/myjobs/lib/python2.7/site-packages/registration/tests/models.py:87: [E] PYFLAKES:local variable 'new_user' is assigned to but never used
+../.virtualenvs/myjobs/lib/python2.7/site-packages/registration/tests/models.py:195: [E] PYFLAKES:local variable 'new_user' is assigned to but never used
+../.virtualenvs/myjobs/lib/python2.7/site-packages/registration/tests/models.py:214: [E] PYFLAKES:local variable 'new_user' is assigned to but never used
+../.virtualenvs/myjobs/lib/python2.7/site-packages/registration/backends/__init__.py:9: [E] PYFLAKES:redefinition of unused 'import_module' from line 7
+../.virtualenvs/myjobs/lib/python2.7/site-packages/registration/backends/default/urls.py:21: [E] PYFLAKES:'from django.conf.urls.defaults import *' used; unable to detect undefined names
+../.virtualenvs/myjobs/lib/python2.7/site-packages/registration/backends/simple/urls.py:21: [E] PYFLAKES:'from django.conf.urls.defaults import *' used; unable to detect undefined names
+../.virtualenvs/myjobs/lib/python2.7/site-packages/registration/backends/simple/urls.py:24: [E] PYFLAKES:'activate' imported but unused
+app/views.py:2: [E] PYFLAKES:'HttpResponse' imported but unused
+app/views.py:8: [E] PYFLAKES:'SimpleTemplateResponse' imported but unused
+app/views.py:14: [E] PYFLAKES:'from app.share import *' used; unable to detect undefined names
+app/views.py:15: [E] PYFLAKES:'from tweepy.error import *' used; unable to detect undefined names
+app/views.py:84: [E] PYFLAKES:local variable 'u' is assigned to but never used
+app/views.py:117: [E] PYFLAKES:redefinition of unused 'messages' from line 9
+app/urls.py:1: [E] PYFLAKES:'include' imported but unused
+app/urls.py:3: [E] PYFLAKES:'HttpResponsePermanentRedirect' imported but unused
+app/urls.py:4: [E] PYFLAKES:'about' imported but unused
+app/urls.py:4: [E] PYFLAKES:'logout' imported but unused
+app/urls.py:4: [E] PYFLAKES:'privacy' imported but unused
+app/urls.py:4: [E] PYFLAKES:'password_connection' imported but unused
+app/urls.py:4: [E] PYFLAKES:'done' imported but unused
+app/urls.py:4: [E] PYFLAKES:'error' imported but unused
+app/urls.py:4: [E] PYFLAKES:'home' imported but unused
+app/context_processors.py:1: [E] PYFLAKES:'settings' imported but unused
+app/forms.py:9: [E] PYFLAKES:'UserProfile' imported but unused
+app/forms.py:62: [E] PYFLAKES:undefined name 'DoesNotExist'
+app/forms.py:63: [E] PYFLAKES:undefined name 'HttpResponse'
+app/auth.py:1: [E] PYFLAKES:'urlopen' imported but unused
+app/auth.py:1: [E] PYFLAKES:'Request' imported but unused
+app/auth.py:2: [E] PYFLAKES:'from secrets import *' used; unable to detect undefined names
+app/auth.py:3: [E] PYFLAKES:'from app.models import *' used; unable to detect undefined names
+app/auth.py:4: [E] PYFLAKES:'base64' imported but unused
+app/share.py:3: [E] PYFLAKES:'from secrets import *' used; unable to detect undefined names
+app/share.py:4: [E] PYFLAKES:'from default_settings import *' used; unable to detect undefined names
+app/share.py:7: [E] PYFLAKES:'from xml.etree import *' used; unable to detect undefined names
+app/share.py:8: [E] PYFLAKES:'Document' imported but unused
+app/fixtures.py:8: [E] PYFLAKES:undefined name 'true'
+app/fixtures.py:9: [E] PYFLAKES:undefined name 'false'
+app/fixtures.py:10: [E] PYFLAKES:undefined name 'false'
+app/sendgrid.py:3: [E] PYFLAKES:'textwrap' imported but unused

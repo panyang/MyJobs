@@ -83,7 +83,8 @@ INSTALLED_APPS = (
     'django.contrib.admin',
     'django.contrib.flatpages',
     'django.contrib.redirects',
-    'django.contrib.staticfiles', 
+    'django.contrib.staticfiles',
+    'django_jenkins',
     'social_auth',
     'registration',
  #   'myurls',
@@ -113,6 +114,14 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 )
 
 INTERNAL_IPS = ('127.0.0.1', '216.136.63.6',)
+
+JENKINS_TASKS = (
+    'django_jenkins.tasks.with_coverage',
+    'django_jenkins.tasks.django_tests',   # select one django or
+    #'django_jenkins.tasks.dir_tests'      # directory tests discovery
+    'django_jenkins.tasks.run_pep8',
+    'django_jenkins.tasks.run_pyflakes',
+)
 
 # App Specific Settings
 
