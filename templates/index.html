@@ -26,6 +26,18 @@ index.html -- implements non-authenticated home/landing page for my.jobs.
             <div class="row">
                 <div class="span-two-fifths">
                     <div id="loginBox">
+                    {% if user.is_authenticated %}
+                        <h3> Welcome 
+                        {% if user.first_name %}
+                            {{user.first_name}}
+                        {% else %}
+                            {{user.username}}
+                        {% endif %}
+                        </h3>
+                        <p>
+                            <a href="/profile/">View your profile</a>                            
+                        </p>                        
+                    {% else %}
                         <h3>Signup</h3>
                         <form action="/accounts/register/" method="post">  
                             <fieldset>
@@ -69,8 +81,8 @@ index.html -- implements non-authenticated home/landing page for my.jobs.
                         </form>
                         <div class="clear"></div>
                         <h4>{% trans 'Or sign up with your favorite social account' %}:</h4>                        
-                        {% include "includes/widget-connectify.html" %}
-                                               
+                        {% include "includes/widget-connectify.html" %}                        
+                    {% endif %}                           
                     </div>				
                 </div>
                 <div class="span-three-fifths">

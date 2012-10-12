@@ -55,7 +55,7 @@ def user_view_profile(request):
                              account.provider.capitalize()+'.png'})
     ctx = {'version': version,
            'last_login': request.session.get('social_auth_last_login_backend'),
-           'account_info': account_info}
+           'account_info': account_info}    
     return render_to_response('done.html', ctx, RequestContext(request))
 
 # TODO: Convert to multilingual-flatpages at some point.
@@ -86,7 +86,13 @@ def home(request,redirect_field_name=REDIRECT_FIELD_NAME,
     #    'form': form,
     #    redirect_field_name: redirect_to,
     #}
-    context = {}
+    linked_accounts = request.user.social_auth.all()
+    account_info = []
+    for account in linked_accounts:
+        account_info.append({'name': account.provider,
+                             'image': STATIC_URL+'social-icons/'+
+                             account.provider.capitalize()+'.png'})
+    context = {'account_info': account_info}
     return TemplateResponse(request, 'index.html', context)
         
 

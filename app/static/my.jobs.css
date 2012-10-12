@@ -139,9 +139,9 @@ section .leaderBoard{
     }
 #loginBox h3{
     color: #EFEADE;
-    padding: 0 0 10px 10px;;
+    padding: 0 0 10px 0px;;
     }    
-#loginBox p#socialLogin{
+#loginBox p{
     background-color: #efeade;
     padding: 8px;
     border-radius: 4px;
@@ -150,12 +150,15 @@ section .leaderBoard{
     color: #c34d33;
     font-size:1.1em;    
     font-weight: bold;
-    height: 36px;
+    min-height: 36px;
     }
 #loginBox p#socialLogin span{
     display: block;
     margin: 0 auto;
     padding-top: 10px;
+    }
+#loginBox p a{
+    color: #333;
     }
 #loginBox p#socialLogin span a{
     background-image: url(images/socialIcons.png);
@@ -196,7 +199,7 @@ section .leaderBoard{
     }
 #loginBox p{
     padding: 10px;
-    color: #fff;
+    /*color: #fff;*/
     margin-bottom: 0px;
     font-weight: bold;
     }
