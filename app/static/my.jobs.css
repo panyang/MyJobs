@@ -137,7 +137,10 @@ section .leaderBoard{
     border-radius: 8px;
     padding: 10px;
     }
-    
+#loginBox h3{
+    color: #EFEADE;
+    padding: 0 0 10px 10px;;
+    }    
 #loginBox p#socialLogin{
     background-color: #efeade;
     padding: 8px;
