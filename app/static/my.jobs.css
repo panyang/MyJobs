@@ -1,8 +1,5 @@
 @import url(http://css.nlx.org/framework/css/def.ui.css);
 /*For inclusion in def.ui.css*/
-html,body{
-    /*padding-top: 0;*/
-    }
 html{
     background: transparent;
     }
