@@ -3,14 +3,16 @@
 
 
 {% block header-content %}
-  <h1>{% trans "Login" %} <small>{% trans "to" %} {{ site_name }}</small></h1>
+  
 {% endblock header-content %}
 {% block content-area %}
 <section><div class="section subpage">
 <div class="wrapper">    
     <div class="row">
-        <div class="span-two-fifths">
-            <div id="loginBox">                
+        <div class="span4">&nbsp;</div>
+        <div class="span8">
+            <h1>{% trans "Login" %} <small>{% trans "to your My.jobs" %}</small></h1>
+            <div id="focusBox">                
                 {% include "includes/widget-login-username.html" %}
                 <div class="clear"></div>
                 <h3>{% trans "Or use a social profile to login to your account" %}</h3>
@@ -18,8 +20,8 @@
                 <div class="clear"></div>
             </div>
         </div>
-        <div class="span-three-fifths">
-            {% trans "Finding the right job can change your life. My.Jobs is a toolkit for helping you find that job." %}
+        <div class="span4">
+            {# trans "Finding the right job can change your life. My.Jobs is a toolkit for helping you find that job." #}
         </div>
         
               

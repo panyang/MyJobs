@@ -13,7 +13,7 @@ By default, has the following context:
 {% endcomment %}
 
 {% block header-content %}
-<div class="wrapper">
+<!--<div class="wrapper">
     <div class="row">
         <div class="span10">
             <h1>{% trans "Create your my.jobs account" %}</h1>
@@ -22,15 +22,16 @@ By default, has the following context:
             <span class="pull-right"><span class="label label-warning">Already have an account?</span> <a href="{% url auth_login %}">{% trans "Login Here" %}</a></span>
         </div>
     </div>
-</div>
+</div>-->
 {% endblock header-content %}
 
 {% block content-area %}
 <section><div class="section subpage">
 <div class="wrapper">    
     <div class="row">
+        <div class="span4">&nbsp;</div>
         <div class="span8">
-            <h3>{% trans "Start with the Basics" %}</h3>
+            <h1>{% trans "Create" %} <small>{% trans "your My.jobs" %}</small></h1>
             <div id="focusBox">                
                 {% include "includes/widget-user-registration.html" %}
                 <div class="clear"></div>
@@ -38,12 +39,32 @@ By default, has the following context:
                 {% include "includes/widget-connectify.html" %}
                 <div class="clear"></div>
             </div>
-        </div>
-        <div class="span8">    
-            <h3>{% trans "Or use a social profile to create your account" %}</h3>
+            
             <div id="focusBox">
-                {% include "includes/widget-connectify.html" %}
-            <div>
+                <h3>Already have an account? Login here:</h3>                
+                <form action="/accounts/login/" method="post">
+                    <fieldset>
+                        <div class="form-label pull-left">
+                            <label for="id_username">Username</label>
+                        </div>
+                        <div class="input pull-right">
+                            <input id="id_username" type="text" name="username" maxlength="30" placeholder="Username">
+                        </div>
+                        <div class="clear"></div>
+                        <div class="form-label pull-left">
+                            <label for="id_password">Password</label>
+                        </div>
+                        <div class="input pull-right">
+                            <input type="password" name="password" id="id_password" placeholder="Password">
+                        </div>
+                        <div class="clear"></div>
+                        {% csrf_token %}
+                        <div class="actions pull-right">
+                            <button type="submit" class="btn primary" value="submit">Login</button>
+                        </div>
+                    </fieldset>
+                </form>
+            </div>
         </div>
         
               

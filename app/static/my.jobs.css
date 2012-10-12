@@ -29,15 +29,24 @@ body{
     clear: both;
     }
 .btn.pull-right{
-    margin-right: 10px;
+    /*margin-right: 10px;*/
 }
 .btn.pull-left{
     margin-left: 10px;
+}
+#focusBox{
+    margin-bottom: 10px;
 }
 /*Main Styles*/
 body{
     background-color: #574e44;
     font-family: Arial, Helvetica, sans-serif;
+    }
+a{
+    color: #c44e34;
+    }
+a:hover{
+    color: #a42e14;
     }
 .form-label{
     text-align: right;
@@ -157,9 +166,6 @@ section .leaderBoard{
     margin: 0 auto;
     padding-top: 10px;
     }
-#loginBox p a{
-    color: #333;
-    }
 #loginBox p#socialLogin span a{
     background-image: url(images/socialIcons.png);
     height: 46px;
@@ -237,7 +243,6 @@ section .leaderBoard{
     }    
 #socialLogin a{
     background: transparent center left no-repeat;
-    color: #333;
     border-radius: 4px;
     height: 20px;
     display: block;
@@ -355,13 +360,19 @@ code should be preserved for a redesign.
 #bottomLinks .subpageLinks a{
     margin-left: 30px;
     }
-
 .alert-message.block-message.error{
     margin: 5px 0;
     background-color: #e16b51;
+    text-shadow: none;
+    }
+#focusBox .alert-message.block-message.error,
+#loginBox .alert-message.block-message.error{
+    padding-left: 0px;
+    margin-left: -10px;
+    margin-right: -10px;
     }
 .alert-message.block-message.error label{
-    text-shadow: 1px 1px 1px #000;
+    /*text-shadow: 1px 1px 1px #000;*/
     }
 .topbar h3 a {
     background-image: none;
