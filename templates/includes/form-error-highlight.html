@@ -22,28 +22,32 @@ form -- the rest of the form.
 }
 </style>
 <fieldset>
-  {# Include but don't display hidden fields #}
-  {% for hidden in form.hidden_fields %}
-    {{ hidden }}
-  {% endfor %}
-  {# Include the visible fields #}
-  {% for field in form.visible_fields %}
-     {# if it's an error put it in a red box #}
-     {% if field.errors %}
-       <div class="alert-message block-message error">
-       {{ field.errors }}
-     {% else %}
-       <div class="clear">
-     {% endif %} 
-         <div class="form-label pull-left">
-            {{ field.label_tag }}
-         </div>
-         <div class="input pull-right">
-            {{ field }}
-            {% if field.help_text %}
-                <span class="help-block">{{ field.help_text }}</span>
-            {% endif %}
-        </div>        
-      </div>
-  {% endfor %}
+    {# Include but don't display hidden fields #}
+    {% for hidden in form.hidden_fields %}
+        {{ hidden }}
+    {% endfor %}
+    {# Include the visible fields #}
+    {% for field in form.visible_fields %}
+        {# if it's an error put it in a red box #}
+        {% if field.errors %}
+        <div class="alert-message block-message error">
+        {{ field.errors }}
+        {% endif %} 
+            <div class="form-label pull-left">
+                {{ field.label_tag }}
+            </div>
+            <div class="input pull-right">
+                {{ field }}
+                {% if field.help_text %}
+                    <span class="help-block">{{ field.help_text }}</span>
+                {% endif %}
+            </div>        
+            {% if field.errors %}
+            <div class="clear"></div>
+        {% endif %}
+        {% if field.errors %}
+        </div>
+        <div class="clear"></div>
+        {% endif %}
+    {% endfor %}
 </fieldset>

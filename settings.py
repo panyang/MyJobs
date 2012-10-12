@@ -2,6 +2,11 @@
 settings.py -- Default Django Settings for My.Jobs
 """
 from default_settings import *
+try: #pull in local settings, if it exists. Primarily only for development.
+    from local_settings import *
+except:
+    pass
+
 from secrets import PROD_DB_PASSWD
 
 DEBUG = True

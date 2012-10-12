@@ -1,0 +1,15 @@
+{% load i18n %}
+{% comment %}
+Username/password login form for topbar
+{% endcomment %}
+
+<form action="/accounts/login/" method="post">
+    <fieldset>
+        <!--<label for="id_username">Username</label>         -->
+        <input id="id_username" type="text" name="username" maxlength="30" placeholder="Username">
+        <!--<label for="id_password">Password</label>         -->
+        <input type="password" name="password" id="id_password" placeholder="Password">  
+        {% csrf_token %}
+        <button type="submit" class="btn primary pull-right" value="submit">Login</button>  
+    </fieldset>
+</form>

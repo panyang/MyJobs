@@ -1,8 +1,5 @@
 @import url(http://css.nlx.org/framework/css/def.ui.css);
 /*For inclusion in def.ui.css*/
-html,body{
-    padding-top: 0;
-    }
 html{
     background: transparent;
     }
@@ -18,6 +15,9 @@ body{
 .span-three-fifths{
     width: 556px;
     }
+.span-two-fifths input{
+    width: 300px;
+    }
 .topbar h3 a{
     padding: 0px 20px;
     }    
@@ -28,19 +28,60 @@ body{
 .clear{
     clear: both;
     }
-    
+.btn.pull-right{
+    margin-right: 10px;
+}
+.btn.pull-left{
+    margin-left: 10px;
+}
 /*Main Styles*/
 body{
     background-color: #574e44;
     font-family: Arial, Helvetica, sans-serif;
     }
+.form-label{
+    text-align: right;
+    margin-right: 20px;
+    width: 180px;
+    }
+.form-label label{
+    font-weight: bold;
+    }
+.clear{
+    clear: both;
+    }
 header{
     background: none;
     }
 .topbar-inner{
-    height: 26px;
+    height: 30px;
     padding: 1px 0;
     background-color: #333;
+    }
+.topbar .inline-inputs{
+    float: right;
+    padding-top: 3px;
+}
+.topbar #topbar-logo{
+    height: 30px;
+    width: 90px;
+    background: transparent url(images/mydotjobs_small.png) center left no-repeat;
+    text-indent: -9000px;
+}
+.topbar label{
+    color: #fff;
+    padding: 5px 10px 0 0px;
+    }
+.topbar input{
+    width: 100px;
+    margin-right: 10px;
+    }
+.topbar label,
+.topbar input{
+    float: left;
+    }
+#titleRow{
+    margin-bottom: 20px;
     }
 #title h1{
     text-indent: -9000px;
@@ -75,7 +116,6 @@ section .leaderBoard{
     padding-bottom: 28px;
     }    
 .subpage{
-    margin-top: 28px;
     background-color: #FFF;
     padding: 20px 0;
     }
@@ -97,8 +137,11 @@ section .leaderBoard{
     border-radius: 8px;
     padding: 10px;
     }
-    
-#loginBox p#socialLogin{
+#loginBox h3{
+    color: #EFEADE;
+    padding: 0 0 10px 0px;;
+    }    
+#loginBox p{
     background-color: #efeade;
     padding: 8px;
     border-radius: 4px;
@@ -107,11 +150,15 @@ section .leaderBoard{
     color: #c34d33;
     font-size:1.1em;    
     font-weight: bold;
+    min-height: 36px;
     }
 #loginBox p#socialLogin span{
     display: block;
     margin: 0 auto;
     padding-top: 10px;
+    }
+#loginBox p a{
+    color: #333;
     }
 #loginBox p#socialLogin span a{
     background-image: url(images/socialIcons.png);
@@ -152,7 +199,7 @@ section .leaderBoard{
     }
 #loginBox p{
     padding: 10px;
-    color: #fff;
+    /*color: #fff;*/
     margin-bottom: 0px;
     font-weight: bold;
     }
@@ -171,11 +218,11 @@ section .leaderBoard{
     margin: 0px;
     }
 #loginBox .help-block{
-    float: left;
     display: block;    
     width: 132px;
-    padding: 0px 30px 0 0;
     font-size: 1em;
+    padding-right: 10px;
+    text-align: right;
     }
 #loginBox .help-block a{
     color: #FFF;    
@@ -184,17 +231,25 @@ section .leaderBoard{
 #loginBox form{
     margin-bottom: 0px;
     }
-    #socialLogin a{
+#loginBox h4{
+    color: #fff;
+    margin: 10px 0;
+    }    
+#socialLogin a{
     background: transparent center left no-repeat;
     color: #333;
     border-radius: 4px;
     height: 20px;
-    padding: 10px;
     display: block;
     font-size: 2em;
-    text-indent: 40px;
+    text-indent: -9000px;
     padding-top: 10px;
     font-weight: bold;
+    float: left;
+    width: 20px;
+    height: 16px;
+    padding: 10px;
+    margin: 0 18px 0 0;
 }
 /*Social Login Styles*/
 #socialLogin a:hover{
@@ -202,7 +257,8 @@ section .leaderBoard{
     text-decoration: none;
 }
 #socialLogin a#Twitter{
-    background-image: url(/files/static/social-icons/Twitter.png); 
+    background-image: url(/files/static/social-icons/Twitter.png);
+    margin-left: 13px;
 }
 #socialLogin a#Facebook{
     background-image: url(/files/static/social-icons/Facebook.png); 

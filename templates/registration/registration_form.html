@@ -32,20 +32,15 @@ By default, has the following context:
         <div class="span8">
             <h3>{% trans "Start with the Basics" %}</h3>
             <div id="focusBox">                
-                <form action="" method="post">
-                    {% include "includes/form-error-highlight.html" %}
-                    {% csrf_token %}
-                    <div class="actions pull-right">
-                        <button type="submit" class="btn primary" value="submit">{% trans "Create Account" %}</button>
-                        <!--<button type="reset"class="btn">{% trans "Cancel" %}</button>-->
-                        <span class="help-block"></span>
-                    </div>
-                </form>            
+                {% include "includes/widget-user-registration.html" %}
+                <div class="clear"></div>
+                <h3>{% trans "Or use a social profile create your account" %}</h3>
+                {% include "includes/widget-connectify.html" %}
                 <div class="clear"></div>
             </div>
         </div>
         <div class="span8">    
-            <h3>{% trans "Or use a social profile create your account" %}</h3>
+            <h3>{% trans "Or use a social profile to create your account" %}</h3>
             <div id="focusBox">
                 {% include "includes/widget-connectify.html" %}
             <div>

@@ -1,5 +1,10 @@
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponse
+# imports for using the login form obect on the homepage. Probably not
+# needed, but preserved until we are sure. JPS 10-12-12
+from django.contrib.auth import REDIRECT_FIELD_NAME, login as auth_login
+from django.contrib.auth.forms import AuthenticationForm
+# end login form imports section
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.tokens import default_token_generator
@@ -16,7 +21,8 @@ from tweepy.error import *
 from facebook import GraphAPIError
 import logging
 logger = logging.getLogger('__name__')
-
+from registration import views as RegistrationViews
+from registration.backends.default import DefaultBackend
 
 # Semi-static stuff
 def about(request):
@@ -49,7 +55,7 @@ def user_view_profile(request):
                              account.provider.capitalize()+'.png'})
     ctx = {'version': version,
            'last_login': request.session.get('social_auth_last_login_backend'),
-           'account_info': account_info}
+           'account_info': account_info}    
     return render_to_response('done.html', ctx, RequestContext(request))
 
 # TODO: Convert to multilingual-flatpages at some point.
@@ -57,19 +63,32 @@ def privacy(request):
     """Privacy page."""
     return render_to_response('privacy.html', RequestContext(request))
 
-def home(request):
-    """implements landing page/home page view.
+def home(request,redirect_field_name=REDIRECT_FIELD_NAME,
+         authentication_form=AuthenticationForm):
+    """    
+    Handles the homepage display.
     
-    Sends already authenticated users the home page for authenticated users
+    I have left the functionality for sending the login form object via this
+    view in the comments, because I am not certain we don't need it.
+    [JPS 10-12-12]
+    
+    Inputs:
+    :request:               django request object
+    :redirect_field_name:   form field name that contains the next page
+    :authentication_form:   django.contrib.auth authentication form method
+    
     """
     request.session['origin'] = 'main'
-    if request.user.is_authenticated():
-        return HttpResponseRedirect('/profile/')
-    else:
-        #TODO: Fix home page template.
-        return TemplateResponse(request, 'index.html', {})
-        #return render_to_response('registration/login.html', {'version': version},
-        #                         RequestContext(request))
+    redirect_to = request.REQUEST.get(redirect_field_name, '')
+    form=authentication_form(request)
+    
+    #context = {
+    #    'form': form,
+    #    redirect_field_name: redirect_to,
+    #}
+    context = {}
+    return TemplateResponse(request, 'index.html', context)
+        
 
 def profile(request, username):
     """implements user profile view.
