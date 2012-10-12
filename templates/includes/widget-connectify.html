@@ -36,14 +36,6 @@ Widget produces social buttons for each unassociated social network.
         </a>
     {% endif %}
     {% endfor %} 
-    <span class="clear">
-    {% if account_info|length > 0 %}
-        Already linked with:<br/> 
-        {% for account in account_info %}
-        <img class="socialbutton" src="{{account.image}}">
-        {% endfor %}
-    {% endif %}
-    </span>
-    </p>
+  </p> 
 </span>
 {# end of connectify widget #}

@@ -86,13 +86,7 @@ def home(request,redirect_field_name=REDIRECT_FIELD_NAME,
     #    'form': form,
     #    redirect_field_name: redirect_to,
     #}
-    linked_accounts = request.user.social_auth.all()
-    account_info = []
-    for account in linked_accounts:
-        account_info.append({'name': account.provider,
-                             'image': STATIC_URL+'social-icons/'+
-                             account.provider.capitalize()+'.png'})
-    context = {'account_info': account_info}
+    context = {}
     return TemplateResponse(request, 'index.html', context)
         
 

@@ -258,7 +258,7 @@ section .leaderBoard{
 }
 #socialLogin a#Twitter{
     background-image: url(/files/static/social-icons/Twitter.png);
-    margin-left: 20px;
+    margin-left: 13px;
 }
 #socialLogin a#Facebook{
     background-image: url(/files/static/social-icons/Facebook.png); 
