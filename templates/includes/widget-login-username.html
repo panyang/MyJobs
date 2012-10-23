@@ -5,10 +5,9 @@ login-username.html -- Username/password login form
 
 <form action="/accounts/login/" method="post">
   {% include "includes/form-error-highlight.html" %}
-    <!--<input id="id_username" type="text" name="username" maxlength="30" placeholder="Username">
-    <input type="password" name="password" id="id_password" placeholder="Password">  
-    {% csrf_token %}-->
     {% csrf_token %}
+    <input id="id_username" type="text" name="username" maxlength="30" placeholder="Username">
+    <input type="password" name="password" id="id_password" placeholder="Password">
     <div class="actions">
         <button type="submit" class="btn primary pull-right" value="submit">{% trans "Login" %}</button>
         <div class="clear"></div>
