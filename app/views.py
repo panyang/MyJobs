@@ -21,13 +21,25 @@ from tweepy.error import *
 from facebook import GraphAPIError
 import logging
 logger = logging.getLogger('__name__')
-from registration import views as RegistrationViews
-from registration.backends.default import DefaultBackend
 
 # Semi-static stuff
 def about(request):
     """About page. Probably a better way to do this"""
     return render_to_response('about.html', RequestContext(request))
+
+  # TODO Write ajax_login_form
+def ajax_login_form(request):
+    """Implements login that can be ajaxed into other websites"""
+    pass
+
+def ajax_share_form(request):
+    """Implements 3rd party share widget"""
+    pass
+
+def ajax_user_status(request):
+    """Implements login status/settings widget for use on other websites"""   
+    ctx = {'avatar':gravatar_link(request.user.email)}
+    return render_to_response('user_status.html', ctx, RequestContext(request))
 
 @login_required
 def user_view_profile(request):

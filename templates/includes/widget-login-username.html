@@ -8,11 +8,12 @@ login-username.html -- Username/password login form
     <!--<input id="id_username" type="text" name="username" maxlength="30" placeholder="Username">
     <input type="password" name="password" id="id_password" placeholder="Password">  
     {% csrf_token %}-->
+    {% csrf_token %}
     <div class="actions">
         <button type="submit" class="btn primary pull-right" value="submit">{% trans "Login" %}</button>
         <div class="clear"></div>
         <span class="help-block pull-right">
-            <a href="{% url auth_password_reset %}">{% trans "lost password" %}</a>
+            <a href="{% url 'auth_password_reset' %}">{% trans "lost password" %}</a>
         </span>
     </div>  
 </form>
