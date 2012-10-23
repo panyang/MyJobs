@@ -1,10 +1,13 @@
 from django.conf.urls.defaults import *
 from registration.views import *
+from registration.forms import CustomAuthForm
 from django.contrib.auth import views as auth_views
 
 urlpatterns = patterns('',
                        url(r'^login/$',
-                           login_user,
+                           auth_views.login,
+                           {'template_name': 'registration/login.html',
+                            'authentication_form': CustomAuthForm },
                            name='auth_login'),
                        url(r'^logout/$',
                            auth_views.logout,

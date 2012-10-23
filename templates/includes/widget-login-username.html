@@ -3,16 +3,10 @@
 login-username.html -- Username/password login form
 {% endcomment %}
 
-<form action="/accounts/login/" method="post">
-  {% include "includes/form-error-highlight.html" %}
-    {% csrf_token %}
-    <input id="id_username" type="text" name="username" maxlength="30" placeholder="Username">
-    <input type="password" name="password" id="id_password" placeholder="Password">
-    <div class="actions">
-        <button type="submit" class="btn primary pull-right" value="submit">{% trans "Login" %}</button>
-        <div class="clear"></div>
-        <span class="help-block pull-right">
-            <a href="{% url 'auth_password_reset' %}">{% trans "lost password" %}</a>
-        </span>
-    </div>  
+<form action="{% url 'auth_login' %}" method="post">
+  {% csrf_token %}
+  {% include 'includes/form-error-highlight.html' %}
+  <input type="submit" value="login" />
+  <input type="hidden" name="next" value="/profile" />
+  <a href="{% url 'auth_password_reset' %}">{% trans "lost password" %}</a>
 </form>
