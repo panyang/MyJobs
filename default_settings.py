@@ -15,6 +15,7 @@ APP = abspath(dirname(__file__))
 PROJ_ROOT = abspath(dirname(__file__))
 sys.path.append(APP)
 
+SECRET_KEY = SECRET_KEY
 
 #TEMPLATE_DEBUG = DEBUG
 TEMPLATE_DEBUG = True
@@ -25,7 +26,6 @@ TEMPLATE_DEBUG = True
 ROOT_PATH = abspath(dirname(__file__))
 #PROJECT_NAME = "app"
 PROJECT_NAME = basename(ROOT_PATH)
-
 
 TIME_ZONE = 'America/New_York'
 LANGUAGE_CODE = 'en-us'
@@ -86,8 +86,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django_jenkins',
     'social_auth',
-    'registration',
- #   'myurls',
+#   'myurls',
 #    'myshare', 
     'app',
 )
