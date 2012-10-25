@@ -1,27 +1,59 @@
+import datetime
+
 from django.db import models
-from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.utils.translation import ugettext_lazy as _
 from social_auth.signals import pre_update
 from social_auth.backends.facebook import FacebookBackend
 from django.db.models.signals import post_save
 
+class CustomUserManager(BaseUserManager):
+    def create_inactive_user(self, **kwargs):
+        email = kwargs['email']
+        password = kwargs['password1']
+        if not email:
+            raise ValueError('Email address required.')
+        user = self.model(email=CustomUserManager.normalize_email(email))
+        user.set_password(password)
+        user.is_active = False
+        user.save(using=self._db)
+        return user
+        
+    def create_user(self, **kwargs):
+        email = kwargs['email']
+        password = kwargs['password1']
+        if not email:
+            raise ValueError('Email address required.')
+        user = self.model(email=CustomUserManager.normalize_email(email))
+        user.set_password(password)
+        user.save(using=self._db)
+        return user
+        
+    def create_superuser(self,email, password):
+        u = self.create_user(email, password)
+        u.is_staff = True
+        u.is_active = True
+        u.is_superuser = True
+        u.save(using=self._db)
+        return u
 
-class CustomUserManager(models.Manager):
-    def create_user(self, username, email):
-        """allows creation of users without email address"""
-        return self.model._default_manager.create(username=username)
 
 
-class CustomUser(models.Model):
-    """Implements social auth custom user data"""
-    username = models.CharField(max_length=128)
-    last_login = models.DateTimeField(blank=True, null=True)
+class User(AbstractBaseUser):
+    email = models.EmailField(verbose_name="email address",
+                              max_length=255, unique=True, db_index=True)
+    first_name = models.CharField(_('first name'), max_length=30, blank=True)
+    last_name = models.CharField(_('last name'), max_length=30, blank=True)
+    is_staff = models.BooleanField(_('staff status'), default=False, help_text=_("Designates whether the user can log into this admin site."))
+    is_active = models.BooleanField(_('active'), default=True, help_text=_("Designates whether this user should be treated as active. Unselect this instead of deleting accounts."))
+    is_superuser = models.BooleanField(_('superuser status'), default=False, help_text=_("Designates that this user has all permissions without explicitly assigning them."))
+    date_joined = models.DateTimeField(_('date joined'), default=datetime.datetime.now)
 
+    USERNAME_FIELD = 'email'
     objects = CustomUserManager()
 
-    def is_authenticated(self):
-        """Always returns true"""
-        return True
+    def __unicode__(self):
+        return self.email        
 
 
 class UserProfile(models.Model):

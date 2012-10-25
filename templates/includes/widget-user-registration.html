@@ -2,14 +2,27 @@
 {% comment %}
 user registration form
 {% endcomment %}
-
-<form action="" method="post">
-    {% include "includes/form-error-highlight.html" %}
-    {% csrf_token %}
-    <div class="actions pull-right">
-        <button type="submit" class="btn primary" value="submit">{% trans "Create Account" %}</button>
-        <!--<button type="reset"class="btn">{% trans "Cancel" %}</button>-->
-        <input type="hidden" value="next" value="/about/"/>
-        <span class="help-block"></span>
+<form action="/accounts/register/" method="post">  
+  <fieldset>
+    <div class="clear">                              
+      <div class="input pull-right">
+        <input id="id_email" type="text" class="required" name="email" maxlength="75" placeholder="Email">           
+      </div>        
     </div>
+    <div class="clear">                              
+      <div class="input pull-right">
+        <input id="id_password1" type="password" class="required" name="password1" placeholder="Password">                                    
+      </div>        
+    </div>
+    <div class="clear">                              
+      <div class="input pull-right">
+        <input id="id_password2" type="password" class="required" name="password2" placeholder="Password (Again)">
+      </div>        
+    </div>                          
+  </fieldset>
+  {% csrf_token %}
+  <div class="actions pull-right">
+    <button type="submit" class="btn primary pull-right" value="submit">Create Account</button>                          
+  </div>
 </form>
+

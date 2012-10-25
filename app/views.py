@@ -45,12 +45,12 @@ def ajax_user_status(request):
 def user_view_profile(request):
     """Login complete view, displays user profile on My.Jobs... unless"""
     request.session['origin'] = 'main'
-    linked_accounts = request.user.social_auth.all()
+#    linked_accounts = request.user.social_auth.all()
     account_info = []
-    for account in linked_accounts:
-        account_info.append({'name': account.provider,
-                             'image': STATIC_URL+'social-icons/'+
-                             account.provider.capitalize()+'.png'})
+    # for account in linked_accounts:
+    #     account_info.append({'name': account.provider,
+    #                          'image': STATIC_URL+'social-icons/'+
+    #                          account.provider.capitalize()+'.png'})
     ctx = {'version': version,
            'last_login': request.session.get('social_auth_last_login_backend'),
            'account_info': account_info}    
@@ -272,6 +272,6 @@ def login_redirect(request):
 
 def remove_association(request,provider):
     request.session['origin'] = 'main'
-    provider=request.user.social_auth.get(provider=provider)
+#    provider=request.user.social_auth.get(provider=provider)
     provider.delete()
     return HttpResponseRedirect('/profile')

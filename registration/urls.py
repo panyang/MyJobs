@@ -32,3 +32,7 @@ urlpatterns = patterns('',
                            auth_views.password_reset_done,
                            name='auth_password_reset_done'),
 )
+
+urlpatterns += patterns('',
+                        url(r'^register/$', register,
+                            name='register'))
