@@ -34,5 +34,9 @@ urlpatterns = patterns('',
 )
 
 urlpatterns += patterns('',
-                        url(r'^register/$', register,
-                            name='register'))
+                        url(r'^register/$', register, name='register'),
+                        url(r'^activate/(?P<activation_key>\w+)/$', activate,
+                            name='registration_activate'),
+                        url(r'^activate/complete/$', ActivationComplete.as_view()),
+                        url(r'^register/complete/$', RegistrationComplete.as_view())
+)

@@ -2,13 +2,15 @@ import datetime
 
 from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.core.mail import send_mail
 from django.utils.translation import ugettext_lazy as _
 from social_auth.signals import pre_update
 from social_auth.backends.facebook import FacebookBackend
 from django.db.models.signals import post_save
+from registration.models import *
 
 class CustomUserManager(BaseUserManager):
-    def create_inactive_user(self, **kwargs):
+    def create_inactive_user(self, send_email=True, **kwargs):
         email = kwargs['email']
         password = kwargs['password1']
         if not email:
@@ -17,6 +19,11 @@ class CustomUserManager(BaseUserManager):
         user.set_password(password)
         user.is_active = False
         user.save(using=self._db)
+
+        # Generate and send activation information
+        activation_profile = ActivationProfile.objects.generate_key(user)
+        if send_email:
+            activation_profile.send_activation_email()
         return user
         
     def create_user(self, **kwargs):
@@ -38,7 +45,6 @@ class CustomUserManager(BaseUserManager):
         return u
 
 
-
 class User(AbstractBaseUser):
     email = models.EmailField(verbose_name="email address",
                               max_length=255, unique=True, db_index=True)
@@ -53,7 +59,10 @@ class User(AbstractBaseUser):
     objects = CustomUserManager()
 
     def __unicode__(self):
-        return self.email        
+        return self.email
+
+    def email_user(self, subject, message, from_email):
+        send_mail(subject, message, from_email, [self.email])
 
 
 class UserProfile(models.Model):
@@ -83,17 +92,4 @@ class UserProfile(models.Model):
 def facebook_extra_values(sender, user, response, details, **kwargs):
     """Handles extra values from Facebook by ignoring them."""
     return False
-
 pre_update.connect(facebook_extra_values, sender=FacebookBackend)
-
-def create_user_profile(sender, instance, created, **kwargs):
-    """Signal Handler for new users. Creates a UserProfile object
-
-    See Django user profile documentation.
-    """
-
-    if created:
-        UserProfile.objects.create(user=instance)
-
-# Activate Signal Handlers
-post_save.connect(create_user_profile, sender=User)

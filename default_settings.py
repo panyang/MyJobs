@@ -89,6 +89,7 @@ INSTALLED_APPS = (
 #    'myurls',
 #    'myshare', 
     'app',
+    'registration'
 )
 
 # AUTHENTICATION_BACKENDS = (

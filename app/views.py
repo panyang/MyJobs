@@ -13,6 +13,7 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.template.response import TemplateResponse, SimpleTemplateResponse
 from django.contrib import messages
 from django.contrib.auth.models import User
+from django.views.generic import TemplateView
 from social_auth import __version__ as version
 from app.forms import CredentialResetForm
 from app.helpers import gravatar_link
@@ -22,24 +23,11 @@ from facebook import GraphAPIError
 import logging
 logger = logging.getLogger('__name__')
 
-# Semi-static stuff
-def about(request):
-    """About page. Probably a better way to do this"""
-    return render_to_response('about.html', RequestContext(request))
+class About(TemplateView):
+    template_name = "about.html"
 
-  # TODO Write ajax_login_form
-def ajax_login_form(request):
-    """Implements login that can be ajaxed into other websites"""
-    pass
-
-def ajax_share_form(request):
-    """Implements 3rd party share widget"""
-    pass
-
-def ajax_user_status(request):
-    """Implements login status/settings widget for use on other websites"""   
-    ctx = {'avatar':gravatar_link(request.user.email)}
-    return render_to_response('user_status.html', ctx, RequestContext(request))
+class Privacy(TemplateView):
+    template_name = "privacy.html"
 
 @login_required
 def user_view_profile(request):
@@ -56,10 +44,6 @@ def user_view_profile(request):
            'account_info': account_info}    
     return render_to_response('done.html', ctx, RequestContext(request))
 
-# TODO: Convert to multilingual-flatpages at some point.
-def privacy(request):
-    """Privacy page."""
-    return render_to_response('privacy.html', RequestContext(request))
 
 def home(request,redirect_field_name=REDIRECT_FIELD_NAME,
          authentication_form=AuthenticationForm):
