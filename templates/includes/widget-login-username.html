@@ -4,9 +4,9 @@ login-username.html -- Username/password login form
 {% endcomment %}
 
 <form action="{% url 'auth_login' %}" method="post">
-  {% csrf_token %}
   {% include 'includes/form-error-highlight.html' %}
-  <input type="submit" value="login" />
+  {% csrf_token %}
+  <input type="submit" name="login" value="login" />
   <input type="hidden" name="next" value="/profile" />
   <a href="{% url 'auth_password_reset' %}">{% trans "lost password" %}</a>
 </form>

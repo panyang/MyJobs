@@ -19,7 +19,10 @@ def register(request):
         if form.is_valid():
             new_user = User.objects.create_inactive_user(**form.cleaned_data)
             return HttpResponseRedirect('/accounts/register/complete/')
+    else:
+        form = RegistrationForm()
     return render_to_response('registration/registration_form.html',
+                              {'form':form},
                               context_instance=RequestContext(request))
 
 def activate(request, activation_key):

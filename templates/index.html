@@ -39,38 +39,7 @@ index.html -- implements non-authenticated home/landing page for my.jobs.
                         </p>                        
                     {% else %}
                         <h3>Signup</h3>
-                        <form action="/accounts/register/" method="post">  
-                            <fieldset>
-                                <div class="clear">                              
-                                    <!--<div class="form-label pull-left">
-                                        <label for="id_username">Username</label>
-                                    </div>-->
-                                    <div class="input pull-right">
-                                      <input id="id_email" type="text" class="required" name="email" maxlength="75" placeholder="Email">           
-                                    </div>        
-                                </div>
-                                <div class="clear">                              
-                                    <!--<div class="form-label pull-left">
-                                        <label for="id_password1">Password</label>
-                                    </div>-->
-                                    <div class="input pull-right">
-                                        <input id="id_password1" type="password" class="required" name="password1" placeholder="Password">                                    
-                                    </div>        
-                                </div>
-                                <div class="clear">                              
-                                    <!--<div class="form-label pull-left">
-                                        <label for="id_password2">Password (again)</label>
-                                    </div>-->
-                                    <div class="input pull-right">
-                                        <input id="id_password2" type="password" class="required" name="password2" placeholder="Password (Again)">
-                                    </div>        
-                                </div>                          
-                            </fieldset>
-                            {% csrf_token %}
-                            <div class="actions pull-right">
-                                <button type="submit" class="btn primary pull-right" value="submit">Create Account</button>                                
-                            </div>
-                        </form>
+                        {% include "includes/widget-user-registration.html" with form=registrationform%}
                         <div class="clear"></div>                        
                     {% endif %}                           
                     </div>				

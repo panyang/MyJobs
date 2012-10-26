@@ -18,6 +18,19 @@ class CustomAuthForm(AuthenticationForm):
         self.check_for_test_cookie()
         return self.cleaned_data
         
+    def check_for_test_cookie(self):
+        if self.request and not self.request.session.test_cookie_worked():
+            raise forms.ValidationError(self.error_messages['no_cookies'])
+
+    def get_user_id(self):
+        if self.user_cache:
+            return self.user_cache.id
+        return None
+
+    def get_user(self):
+        return self.user_cache
+
+        
 attrs_dict = {'class': 'required'}
 class RegistrationForm(forms.Form):
     email = forms.EmailField(widget=forms.TextInput(attrs=attrs_dict),
@@ -49,4 +62,5 @@ class RegistrationForm(forms.Form):
         if 'password1' in self.cleaned_data and 'password2' in self.cleaned_data:
             if self.cleaned_data['password1'] != self.cleaned_data['password2']:
                 raise forms.ValidationError(("The two password fields didn't match."))
-        return self.cleaned_data
+            else:
+                return self.cleaned_data

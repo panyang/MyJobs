@@ -15,7 +15,7 @@ topbar.html -- Implements basic my.jobs nav.
       {% if user.is_authenticated %}
           <a href="/profile">{% trans "Welcome" %} <b>{{user.email}}</b></a> <a class="btn primary" href="{% url 'auth_logout' %}">{% trans "logout" %}</a>
       {% else %}
-          {% include "includes/widget-top-bar-login.html" %}		
+          {% include "includes/widget-top-bar-login.html" with form=loginform %}		
       {% endif %}
 	</div> <!-- /inline-inputs -->         
       </div>

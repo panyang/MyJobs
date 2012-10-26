@@ -1,10 +1,6 @@
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponse
-# imports for using the login form obect on the homepage. Probably not
-# needed, but preserved until we are sure. JPS 10-12-12
-from django.contrib.auth import REDIRECT_FIELD_NAME, login as auth_login
-from django.contrib.auth.forms import AuthenticationForm
-# end login form imports section
+from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.tokens import default_token_generator
@@ -20,7 +16,9 @@ from app.helpers import gravatar_link
 from app.share import *
 from tweepy.error import *
 from facebook import GraphAPIError
+from registration.forms import *
 import logging
+
 logger = logging.getLogger('__name__')
 
 class About(TemplateView):
@@ -45,65 +43,26 @@ def user_view_profile(request):
     return render_to_response('done.html', ctx, RequestContext(request))
 
 
-def home(request,redirect_field_name=REDIRECT_FIELD_NAME,
-         authentication_form=AuthenticationForm):
-    """    
-    Handles the homepage display.
-    
-    I have left the functionality for sending the login form object via this
-    view in the comments, because I am not certain we don't need it.
-    [JPS 10-12-12]
-    
-    Inputs:
-    :request:               django request object
-    :redirect_field_name:   form field name that contains the next page
-    :authentication_form:   django.contrib.auth authentication form method
-    
-    """
+def home(request):
     request.session['origin'] = 'main'
-    redirect_to = request.REQUEST.get(redirect_field_name, '')
-    form=authentication_form(request)
-    
-    #context = {
-    #    'form': form,
-    #    redirect_field_name: redirect_to,
-    #}
-    context = {}
-    return TemplateResponse(request, 'index.html', context)
-        
-
-def profile(request, username):
-    """implements user profile view.
-    
-    Authenticated users go to their own profile get a profile edit view.
-    Non-Authenticated users going to a profile get the public profile view.
-    Authenticated users goint to someone else's profile get the public profile.
-    If no username is passed, 404.
-    """
-
-    # throw a 404 if the username does not exist.
-    u = get_object_or_404(User, username=username)
-    if request.user.is_authenticated():
-        # user is logged in
-        if request.user == username:
-            # is looking at own profile
-            render_to_response('myprofile.html', RequestContext(request))
-        else:
-            # not looking at own profile
-            HttpResponseRedirect(u'/public_profile/%s/' % username)
+    if request.method == "POST":
+        if 'register' in request.POST:
+            registrationform = RegistrationForm(request.POST)
+            if registrationform.is_valid():
+                new_user = User.objects.create_inactive_user(**form.cleaned_data)
+                return HttpResponseRedirect('/accounts/register/complete')
+        elif 'login' in request.POST:
+            loginform = CustomAuthForm(request.POST)
+            if loginform.is_valid():
+                login(request, loginform.get_user())
+                return HttpResponseRedirect('/profile')
     else:
-        # not logged in so show public profile for user
-        HttpResponseRedirect(u'/public_profile/%s/' % username)   
-    pass
+        registrationform =  RegistrationForm()
+        loginform = CustomAuthForm()
 
-   
-def public_profile(request, username):
-    """implements public user profile"""
-    render_to_response("/public_profile.html", RequestContext(request, {'username':username}))
-
-def coming_soon(request):
-    """Placeholder for future features"""
-    render_to_response("coming_soon.html")
+    ctx = {'registrationform':registrationform,
+           'loginform': loginform}
+    return render_to_response('index.html', ctx, RequestContext(request))
     
 @login_required
 def done(request):
