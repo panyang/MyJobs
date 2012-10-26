@@ -1,6 +1,12 @@
+from default_settings import *
+try: #pull in local settings, if it exists. Primarily only for development.
+    from local_settings import *
+except:
+    pass
+    
 from secrets import PROD_DB_PASSWD
  
- DEBUG = True
+DEBUG = True
  
 # DATABASES = {
 #     'default': {
@@ -14,8 +20,9 @@ from secrets import PROD_DB_PASSWD
 #     },
 # }
 
- DATABASES = {
+DATABASES = {
+    'default': {
         'ENGINE': 'django.db.backends.sqlite3',
         'NAME': 'myjobs'
-    }
+    },
 }
