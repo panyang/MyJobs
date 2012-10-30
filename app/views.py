@@ -11,7 +11,6 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.views.generic import TemplateView
 from social_auth import __version__ as version
-from app.forms import CredentialResetForm
 from app.helpers import gravatar_link
 from app.share import *
 from tweepy.error import *
@@ -77,51 +76,6 @@ def error(request):
     messages = get_messages(request)
     return render_to_response('error.html', {'version': version,
                               'messages': messages}, RequestContext(request))
-
-def logout(request):
-    """Logs out user"""
-    auth_logout(request)
-    return HttpResponseRedirect('/')
-
-
-def password_connection(request, is_admin_site=False,
-	                   template_name='registration/password_reset_form.html',
-	                   email_template_name='registration/multi_reset_email.html',
-	                   password_reset_form=CredentialResetForm,
-	                   token_generator=default_token_generator,
-	                   post_reset_redirect=None,
-	                   from_email=None,
-	                   current_app=None,
-	                   extra_context=None):
-    """Universal lost password username connection recovery
-    
-    Allows for users with multiple accounts using the same email address to
-    retreive their credntials.
-    """
-    
-    if post_reset_redirect is None:
-        post_reset_redirect = reverse('auth_password_reset_done')
-    if request.method == "POST":
-        form = CredentialResetForm(request.POST)
-        
-        if form.is_valid():
-            opts = {
-                'use_https': request.is_secure(),
-                'token_generator': token_generator,
-                'from_email': from_email,
-                'email_template_name': email_template_name,
-                'request': request,
-            }
-            if is_admin_site:
-                opts = dict(opts, domain_override=request.META['HTTP_HOST'])
-            form.save(**opts)
-            return HttpResponseRedirect(post_reset_redirect)
-    else:
-        form = password_reset_form()
-    context = { 'form': form,}
-    context.update(extra_context or {})
-    return render_to_response(template_name, context,
-                context_instance=RequestContext(request, current_app=current_app))
         
 @login_required
 def edit_profile (request, username):

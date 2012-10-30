@@ -3,6 +3,8 @@ from registration.views import *
 from registration.forms import CustomAuthForm
 from django.contrib.auth import views as auth_views
 
+
+# Authorization URLS
 urlpatterns = patterns('',
                        url(r'^login/$',
                            auth_views.login,
@@ -33,10 +35,13 @@ urlpatterns = patterns('',
                            name='auth_password_reset_done'),
 )
 
+#Registration URLS
 urlpatterns += patterns('',
                         url(r'^register/$', register, name='register'),
                         url(r'^activate/(?P<activation_key>\w+)/$', activate,
                             name='registration_activate'),
-                        url(r'^activate/complete/$', ActivationComplete.as_view()),
-                        url(r'^register/complete/$', RegistrationComplete.as_view())
+                        url(r'^activate/complete/$', ActivationComplete.as_view(),
+                            name='activate_complete'),
+                        url(r'^register/complete/$', RegistrationComplete.as_view(),
+                            name='register_complete')
 )

@@ -15,12 +15,20 @@ try:
 except ImportError:
     datetime_now = datetime.datetime.now
 
-
 SHA1_RE = re.compile('^[a-f0-9]{40}$')
 
 
 class RegistrationManager(models.Manager):
     def activate_user(self, activation_key):
+        """
+        Searches for activation key in the database. If the key is found and not
+        expired,
+
+        Outputs:
+        A boolean True and sets the key to 'ALREADY ACTIVATED'.
+        Otherwise, returns False to signify theactivation failed.
+        
+        """
         if SHA1_RE.search(activation_key):
             try:
                 profile = self.get(activation_key=activation_key)
@@ -36,6 +44,17 @@ class RegistrationManager(models.Manager):
         return False
             
     def generate_key(self, user):
+        """
+        Generates a random string that will be used as the activation key for a
+        registered user.
+
+        Inputs:
+        :user: User object instance
+
+        Outputs:
+        Creates an ActivationProfile with the user and generated key
+       
+        """
         salt = hashlib.sha1(str(random.random())).hexdigest()[:5]
         email = user.email
         if isinstance(email, unicode):
@@ -57,10 +76,10 @@ class RegistrationManager(models.Manager):
                 
 
 class ActivationProfile(models.Model):
-    ACTIVATED = "ALREADY ACTIVATED"
     user = models.ForeignKey('app.User', unique=True, verbose_name=('user'))
     activation_key = models.CharField(('activation_key'), max_length=40)
-
+    
+    ACTIVATED = "ALREADY ACTIVATED"
     objects = RegistrationManager()
 
     def __unicode__(self):
@@ -77,7 +96,6 @@ class ActivationProfile(models.Model):
                     'expiration_days': settings.ACCOUNT_ACTIVATION_DAYS}
         subject = render_to_string('registration/activation_email_subject.txt',
                                    ctx_dict)
-        # Email subject *must not* contain newlines
         subject = ''.join(subject.splitlines())
         
         message = render_to_string('registration/activation_email.txt',
