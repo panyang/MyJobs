@@ -8,13 +8,12 @@ Used after successful completion of the registration process.
 {% endcomment %}
 
 {% block header-content %}
-<h1>{% trans "Please Activate Your Account" %}</h1>
+<h1>{% trans "Thanks for registering!" %}</h1>
 {% endblock header-content %}
 
 {% block content %}
 <div class="alert-message info">
-<b>{% trans "Before You Can Use My.Jobs" %}</b>
-<p>{% trans "Please check your email for a special message containing an activation link. In order to use my.jobs, you must click the activation link to make your account live." %}</p>
+<p>{% trans "Please check your email for a special message containing an activation link in order to gain full access to your MyJobs account." %}</p>
 </div>
 <p>{% trans "If the activation message is not in your inbox:" %}</p>
 <ul>
@@ -22,6 +21,7 @@ Used after successful completion of the registration process.
   <li>{% trans 'Allow up to 15 minutes for your email provider to deliver the email we have sent.' %}</li>
   <li>{% trans 'If you are using a free email service like Gmail, Yahoo or Hotmail, please allow 30 minutes.' %}
 </ul>
+<a href="">Would you like to edit your profile information in the meantime?</a>
 {% endblock content %}
 {% block focusbox-content %}
 {% endblock focusbox-content %}

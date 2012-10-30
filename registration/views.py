@@ -17,7 +17,7 @@ class RegistrationComplete(TemplateView):
 def register(request):
     """
     Registration form. Creates inactive user (which in turn sends an activation
-    email) and redirects to registration complete page.
+    email) and redirect to registration complete page.
     
     """
     form = RegistrationForm()
@@ -25,6 +25,10 @@ def register(request):
         form = RegistrationForm(request.POST)
         if form.is_valid():
             new_user = User.objects.create_inactive_user(**form.cleaned_data)
+            username=form.cleaned_data['email']
+            password=form.cleaned_data['password1']
+            user = authenticate(username=username, password=password)
+            login(request, user)
             return HttpResponseRedirect('/accounts/register/complete/')
     return render_to_response('registration/registration_form.html',
                               {'form':form},
