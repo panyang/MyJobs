@@ -8,10 +8,10 @@ from django.template import RequestContext
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template.response import TemplateResponse, SimpleTemplateResponse
 from django.contrib import messages
-from django.contrib.auth.models import User
 from django.views.generic import TemplateView
 from social_auth import __version__ as version
-from app.helpers import gravatar_link
+
+from app.forms import *
 from app.share import *
 from tweepy.error import *
 from facebook import GraphAPIError
@@ -78,19 +78,22 @@ def error(request):
                               'messages': messages}, RequestContext(request))
         
 @login_required
-def edit_profile (request, username):
-    """implements edit myjobs profile.
-    
-    Only allows logged in user to edit their own profile right now. Should be 
-    pretty easy to make it so an admin can edit other people's profiles.
+def edit_profile(request):
+    import ipdb
+    ipdb.set_trace()
+    if request.method == "POST":
+        form = EditProfileForm(request.POST)
+        if form.is_valid():
+            form.save(request.user)
+            return HttpResponseRedirect('/profile')
+    else:
+        form = EditProfileForm()
 
-    parameters:
+    ctx = {'form': form}
+    return render_to_response('myprofile-edit.html', ctx, RequestContext(request))
     
-    username -- the username being edited.
-    """
-    if response.method == "POST":
-        pass
 
+    
 @login_required
 def share (request, provider):
     data_dict={'provider':provider,

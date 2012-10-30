@@ -14,18 +14,16 @@ form -- user edit form.
   <small>for {{user.username }} - {{ user.first_name }} {{ user.last_name }}</small>
 {% endblock page-header-text %}
 {% block content %}
-  <form action="" method="post">
-  {% include "includes/form-error-highlight.html" %}
-  {% csrf_token %}
-  <div class="actions">
-    <button type="submit" class="btn primary" value="submit">{% trans "Save" %}</button>
-    {% comment %}    
-    <span class="help-block">
-    </span>
-    {% endcomment %}
-  </div>  
-{% block focusbox-content %}
-  <div class="alert-message block-message info">
-    {% include "includes/help-edit-profile.html" %}
-  </div>
-{% endblock focusbox-content %}
+  <form action="" method="POST">
+    {% include "includes/form-error-highlight.html" %}
+    {% csrf_token %}
+    <div class="actions">
+      <button type="submit" class="btn primary" value="submit">{% trans "Save" %}</button>
+    </div>
+  </form>
+    {% block focusbox-content %}
+    <div class="alert-message block-message info">
+      {% include "includes/help-edit-profile.html" %}
+    </div>
+    {% endblock focusbox-content %}
+{% endblock content %}
