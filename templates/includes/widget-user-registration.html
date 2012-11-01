@@ -2,14 +2,11 @@
 {% comment %}
 user registration form
 {% endcomment %}
-
-<form action="" method="post">
-    {% include "includes/form-error-highlight.html" %}
-    {% csrf_token %}
-    <div class="actions pull-right">
-        <button type="submit" class="btn primary" value="submit">{% trans "Create Account" %}</button>
-        <!--<button type="reset"class="btn">{% trans "Cancel" %}</button>-->
-        <input type="hidden" value="next" value="/about/"/>
-        <span class="help-block"></span>
-    </div>
+<form action="/accounts/register/" method="post">  
+  {% include "includes/form-error-highlight.html" %}
+  {% csrf_token %}
+  <div class="actions pull-right">
+    <button type="submit" class="btn primary pull-right" name="register" value="submit">Create Account</button>                          
+  </div>
 </form>
+

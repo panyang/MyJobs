@@ -8,7 +8,7 @@ Widget produces social buttons for each unassociated social network.
 <span>
   <p id="socialLogin">
     {% for name in social_auth.not_associated.oauth %}
-        <a href="{% url socialauth_associate_begin name %}" id="{{ name.title }}">            
+        <a href="{% url 'socialauth_associate_begin' name %}" id="{{ name.title }}">            
             {% if name.title == "Google-Oauth2" %}
                 Google
             {%else%}
@@ -17,7 +17,7 @@ Widget produces social buttons for each unassociated social network.
         </a> 
     {% endfor %}
     {% for name in social_auth.not_associated.oauth2 %}
-        <a href="{% url socialauth_associate_begin name %}" id="{{ name.title }}">            
+        <a href="{% url 'socialauth_associate_begin' name %}" id="{{ name.title }}">            
             {% if name.title == "Google-Oauth2" %}
                 Google
             {%else%}
@@ -27,7 +27,7 @@ Widget produces social buttons for each unassociated social network.
     {% endfor %}
     {% for name in social_auth.not_associated.openid %}
     {% if name != "openid" %}
-        <a href="{% url socialauth_associate_begin name %}" id="{{ name.title }}">
+        <a href="{% url 'socialauth_associate_begin' name %}" id="{{ name.title }}">
             {% if name.title == "Google-Oauth2" %}
                 Google
             {%else%}

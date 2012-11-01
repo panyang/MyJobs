@@ -19,7 +19,7 @@ By default, has the following context:
             <h1>{% trans "Create your my.jobs account" %}</h1>
         </div>
         <div class="span6">
-            <span class="pull-right"><span class="label label-warning">Already have an account?</span> <a href="{% url auth_login %}">{% trans "Login Here" %}</a></span>
+            <span class="pull-right"><span class="label label-warning">Already have an account?</span> <a href="{% url 'auth_login' %}">{% trans "Login Here" %}</a></span>
         </div>
     </div>
 </div>-->
@@ -42,10 +42,10 @@ By default, has the following context:
                 <form action="/accounts/login/" method="post">
                     <fieldset>
                         <div class="form-label pull-left">
-                            <label for="id_username">Username</label>
+                            <label for="id_email">Email</label>
                         </div>
                         <div class="input pull-right">
-                            <input id="id_username" type="text" name="username" maxlength="30" placeholder="Username">
+                            <input id="id_email" type="text" name="email" maxlength="255" placeholder="Email">
                         </div>
                         <div class="clear"></div>
                         <div class="form-label pull-left">

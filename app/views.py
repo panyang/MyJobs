@@ -1,10 +1,6 @@
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponse
-# imports for using the login form obect on the homepage. Probably not
-# needed, but preserved until we are sure. JPS 10-12-12
-from django.contrib.auth import REDIRECT_FIELD_NAME, login as auth_login
-from django.contrib.auth.forms import AuthenticationForm
-# end login form imports section
+from django.contrib.auth import authenticate, login
 from django.contrib.auth import logout as auth_logout
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth.tokens import default_token_generator
@@ -13,115 +9,59 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.template.response import TemplateResponse, SimpleTemplateResponse
 from django.contrib import messages
 from django.contrib.auth.models import User
+from django.views.generic import TemplateView
 from social_auth import __version__ as version
-from app.forms import CredentialResetForm
 from app.helpers import gravatar_link
 from app.share import *
 from tweepy.error import *
 from facebook import GraphAPIError
+from registration.forms import *
 import logging
+
 logger = logging.getLogger('__name__')
-from registration import views as RegistrationViews
-from registration.backends.default import DefaultBackend
 
-# Semi-static stuff
-def about(request):
-    """About page. Probably a better way to do this"""
-    return render_to_response('about.html', RequestContext(request))
+class About(TemplateView):
+    template_name = "about.html"
 
-  # TODO Write ajax_login_form
-def ajax_login_form(request):
-    """Implements login that can be ajaxed into other websites"""
-    pass
-
-def ajax_share_form(request):
-    """Implements 3rd party share widget"""
-    pass
-
-def ajax_user_status(request):
-    """Implements login status/settings widget for use on other websites"""   
-    ctx = {'avatar':gravatar_link(request.user.email)}
-    return render_to_response('user_status.html', ctx, RequestContext(request))
+class Privacy(TemplateView):
+    template_name = "privacy.html"
 
 @login_required
 def user_view_profile(request):
     """Login complete view, displays user profile on My.Jobs... unless"""
     request.session['origin'] = 'main'
-    linked_accounts = request.user.social_auth.all()
+#    linked_accounts = request.user.social_auth.all()
     account_info = []
-    for account in linked_accounts:
-        account_info.append({'name': account.provider,
-                             'image': STATIC_URL+'social-icons/'+
-                             account.provider.capitalize()+'.png'})
+    # for account in linked_accounts:
+    #     account_info.append({'name': account.provider,
+    #                          'image': STATIC_URL+'social-icons/'+
+    #                          account.provider.capitalize()+'.png'})
     ctx = {'version': version,
            'last_login': request.session.get('social_auth_last_login_backend'),
            'account_info': account_info}    
     return render_to_response('done.html', ctx, RequestContext(request))
 
-# TODO: Convert to multilingual-flatpages at some point.
-def privacy(request):
-    """Privacy page."""
-    return render_to_response('privacy.html', RequestContext(request))
 
-def home(request,redirect_field_name=REDIRECT_FIELD_NAME,
-         authentication_form=AuthenticationForm):
-    """    
-    Handles the homepage display.
-    
-    I have left the functionality for sending the login form object via this
-    view in the comments, because I am not certain we don't need it.
-    [JPS 10-12-12]
-    
-    Inputs:
-    :request:               django request object
-    :redirect_field_name:   form field name that contains the next page
-    :authentication_form:   django.contrib.auth authentication form method
-    
-    """
+def home(request):
     request.session['origin'] = 'main'
-    redirect_to = request.REQUEST.get(redirect_field_name, '')
-    form=authentication_form(request)
-    
-    #context = {
-    #    'form': form,
-    #    redirect_field_name: redirect_to,
-    #}
-    context = {}
-    return TemplateResponse(request, 'index.html', context)
-        
-
-def profile(request, username):
-    """implements user profile view.
-    
-    Authenticated users go to their own profile get a profile edit view.
-    Non-Authenticated users going to a profile get the public profile view.
-    Authenticated users goint to someone else's profile get the public profile.
-    If no username is passed, 404.
-    """
-
-    # throw a 404 if the username does not exist.
-    u = get_object_or_404(User, username=username)
-    if request.user.is_authenticated():
-        # user is logged in
-        if request.user == username:
-            # is looking at own profile
-            render_to_response('myprofile.html', RequestContext(request))
-        else:
-            # not looking at own profile
-            HttpResponseRedirect(u'/public_profile/%s/' % username)
+    if request.method == "POST":
+        if 'register' in request.POST:
+            registrationform = RegistrationForm(request.POST)
+            if registrationform.is_valid():
+                new_user = User.objects.create_inactive_user(**form.cleaned_data)
+                return HttpResponseRedirect('/accounts/register/complete')
+        elif 'login' in request.POST:
+            loginform = CustomAuthForm(request.POST)
+            if loginform.is_valid():
+                login(request, loginform.get_user())
+                return HttpResponseRedirect('/profile')
     else:
-        # not logged in so show public profile for user
-        HttpResponseRedirect(u'/public_profile/%s/' % username)   
-    pass
+        registrationform =  RegistrationForm()
+        loginform = CustomAuthForm()
 
-   
-def public_profile(request, username):
-    """implements public user profile"""
-    render_to_response("/public_profile.html", RequestContext(request, {'username':username}))
-
-def coming_soon(request):
-    """Placeholder for future features"""
-    render_to_response("coming_soon.html")
+    ctx = {'registrationform':registrationform,
+           'loginform': loginform}
+    return render_to_response('index.html', ctx, RequestContext(request))
     
 @login_required
 def done(request):
@@ -136,51 +76,6 @@ def error(request):
     messages = get_messages(request)
     return render_to_response('error.html', {'version': version,
                               'messages': messages}, RequestContext(request))
-
-def logout(request):
-    """Logs out user"""
-    auth_logout(request)
-    return HttpResponseRedirect('/')
-
-
-def password_connection(request, is_admin_site=False,
-	                   template_name='registration/password_reset_form.html',
-	                   email_template_name='registration/multi_reset_email.html',
-	                   password_reset_form=CredentialResetForm,
-	                   token_generator=default_token_generator,
-	                   post_reset_redirect=None,
-	                   from_email=None,
-	                   current_app=None,
-	                   extra_context=None):
-    """Universal lost password username connection recovery
-    
-    Allows for users with multiple accounts using the same email address to
-    retreive their credntials.
-    """
-    
-    if post_reset_redirect is None:
-        post_reset_redirect = reverse('auth_password_reset_done')
-    if request.method == "POST":
-        form = CredentialResetForm(request.POST)
-        
-        if form.is_valid():
-            opts = {
-                'use_https': request.is_secure(),
-                'token_generator': token_generator,
-                'from_email': from_email,
-                'email_template_name': email_template_name,
-                'request': request,
-            }
-            if is_admin_site:
-                opts = dict(opts, domain_override=request.META['HTTP_HOST'])
-            form.save(**opts)
-            return HttpResponseRedirect(post_reset_redirect)
-    else:
-        form = password_reset_form()
-    context = { 'form': form,}
-    context.update(extra_context or {})
-    return render_to_response(template_name, context,
-                context_instance=RequestContext(request, current_app=current_app))
         
 @login_required
 def edit_profile (request, username):
@@ -274,6 +169,6 @@ def login_redirect(request):
 
 def remove_association(request,provider):
     request.session['origin'] = 'main'
-    provider=request.user.social_auth.get(provider=provider)
+#    provider=request.user.social_auth.get(provider=provider)
     provider.delete()
     return HttpResponseRedirect('/profile')
