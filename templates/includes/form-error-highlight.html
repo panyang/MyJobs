@@ -26,6 +26,13 @@ form -- the rest of the form.
     {% for hidden in form.hidden_fields %}
         {{ hidden }}
     {% endfor %}
+    
+    {% if form.errors %}
+    {% for error in form.non_field_errors %}
+    <p>{{error}}</p>
+    {% endfor %}
+    {% endif %}
+    
     {# Include the visible fields #}
     {% for field in form.visible_fields %}
         {# if it's an error put it in a red box #}

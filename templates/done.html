@@ -30,6 +30,13 @@ done.html -- presents user_view_profile.
       </tr>
      </tbody>
   </table>
+  <a href="{% url 'edit_profile' %}">Edit Profile</a><br>
+  <a href="{% url 'change_password' %}">Change Password</a>
+  {% if not user.is_active %}
+  <div class="alert-message info">
+    <p>{% trans "Your account doesn't have full access to MyJobs features! Please activate it using the activation link sent to your email. "%}</p>
+  </div>
+  {% endif %}
 </div>
 
 <div id="share_history">

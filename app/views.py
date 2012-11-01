@@ -90,9 +90,24 @@ def edit_profile(request):
 
     ctx = {'form': form,
            'user': request.user}
-    return render_to_response('myprofile-edit.html', ctx, RequestContext(request))
-    
+    return render_to_response('myprofile-edit.html', ctx,
+                              RequestContext(request))
 
+@login_required
+def change_password(request):
+    if request.method == "POST":
+        form = ChangePasswordForm(user=request.user, data=request.POST)
+        import ipdb
+        ipdb.set_trace()
+        if form.is_valid():
+            form.save(request.user)
+            return HttpResponseRedirect('/profile')
+    else:
+        form = ChangePasswordForm()
+    ctx = {'form':form}
+    return render_to_response('registration/password_change_form.html', ctx,
+                              RequestContext(request))
+            
     
 @login_required
 def share (request, provider):

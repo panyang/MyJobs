@@ -36,4 +36,34 @@ class EditProfileForm(forms.Form):
         u.public_summary = self.cleaned_data["summary"]
         # Now that it is set, save and done
         u.save()
+
+class ChangePasswordForm(forms.Form):
+    password1 = forms.CharField(widget=forms.PasswordInput, label=_("Password"))
+    password2 = forms.CharField(widget=forms.PasswordInput, label=_("Password (again)"))
+    new_password = forms.CharField(widget=forms.PasswordInput, label=_("New Password"))
+    
+    def __init__(self, user=None, *args, **kwargs):
+        self.user = user
+        super(ChangePasswordForm, self).__init__(*args, **kwargs)
+
+    def clean_password1(self):
+        password = self.cleaned_data['password1']
+        if not self.user.check_password(password):
+            raise forms.ValidationError(("Wrong password."))
+        else:
+            return self.cleaned_data['password1']
+        
+    def clean(self):
+        
+        cleaned_data = super(ChangePasswordForm, self).clean()
+        if 'password1' in self.cleaned_data and 'password2' in self.cleaned_data:
+            if self.cleaned_data['password1'] != self.cleaned_data['password2']:
+                raise forms.ValidationError(("The two password fields didn't match."))
+            else:
+                return self.cleaned_data
+
+    def save(self, u):
+        u.set_password(self.cleaned_data["new_password"])
+        u.save()
+        
         
