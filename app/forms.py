@@ -15,14 +15,6 @@ class EditProfileForm(forms.Form):
                                 max_length=40, required=False)
     opt_in_myjobs = forms.BooleanField(label=_("Receive messages from my.jobs"),
                                        required=False)
-    opt_in_dotjobs = forms.BooleanField(label=_('Receive messages from dotjobs site owners'), 
-                                        required=False)
-    activate_public_profile = forms.BooleanField(label=_("Activate Public Profile"),
-                                                 required=False)
-    headline = forms.CharField(max_length=255, required=False)
-    summary = forms.CharField(widget=forms.widgets.Textarea(), label=_("Summary"),
-                              required=False, max_length=4095)
-    
     def save(self,u):
         """saves user profile to UserProfile and auth.User models"""
         # first save all the auth.User stuff
@@ -30,10 +22,6 @@ class EditProfileForm(forms.Form):
         u.last_name = self.cleaned_data["last_name"]
         # Now the profile stuff
         u.opt_in_myjobs = self.cleaned_data["opt_in_myjobs"]
-        u.opt_in_dotjobs = self.cleaned_data["opt_in_dotjobs"]        
-        u.activate_public_profile = self.cleaned_data["activate_public_profile"]
-        u.public_headline = self.cleaned_data["headline"]
-        u.public_summary = self.cleaned_data["summary"]
         # Now that it is set, save and done
         u.save()
 

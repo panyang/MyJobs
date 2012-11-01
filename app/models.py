@@ -86,19 +86,6 @@ class User(AbstractBaseUser):
         default=True,
         help_text=_('Checking this enables my.jobs\
                      to send email updates to you.'))
-    opt_in_dotjobs = models.BooleanField(
-        _('Receive messages from dotjobs site owners'), default=True,
-        help_text=_('Checking this allows employers who own\
-                    .jobs Career Microsites to communicate with you.'))
-    enable_public_profile = models.BooleanField(
-        _("Activate Public Profile"), default=True,
-        help_text=_("Check if you want your public profile to be visible."))    
-    # Public Profile Fields
-    public_headline = models.CharField(_("Headline"), max_length=255, null=True,
-        blank=True, 
-        help_text=_("You in on sentence. Shown on your public profile."))
-    public_summary = models.TextField(_("Summary"), null=True, blank=True,
-        help_text=_("A brief summary. Shown on your public profile."))
     
     USERNAME_FIELD = 'email'
     objects = CustomUserManager()

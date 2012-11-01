@@ -1,0 +1,29 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content-area %}
+<section><div class="section subpage">
+    <div class="wrapper"> 
+      <div class="row">
+        <div class="span4">&nbsp;</div>
+        <div class="span8">
+          <h1>{% trans "Edit Account Information" %}</h1>
+          <div id="focusBox">
+            <form action="" method="POST">
+              {% include "includes/form-error-highlight.html" %}
+              {% csrf_token %}
+              <div class="actions">
+                <button type="submit" class="btn primary pull-right" value="submit">{% trans "Save" %}</button>
+                <div class="clear"></div>
+                <span class="help-block pull-right">
+                  <a href="{% url 'change_password' %}">{% trans "Change Password" %}</a>
+                </span>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+{% endblock %}

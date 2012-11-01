@@ -27,15 +27,16 @@ index.html -- implements non-authenticated home/landing page for my.jobs.
                 <div class="span-two-fifths">
                     <div id="loginBox">
                     {% if user.is_authenticated %}
-                        <h3> Welcome 
+                        <h3> Welcome,
                         {% if user.first_name %}
                             {{user.first_name}}
                         {% else %}
                             {{user.email}}
-                        {% endif %}
+                        {% endif %}!
                         </h3>
                         <p>
-                            <a href="/profile/">View your profile</a>                            
+                            <a href="/profile/">View your profile</a> <br>                           
+                            <a href="/edit/">Change Account Information</a>                            
                         </p>                        
                     {% else %}
                         <h3>Signup</h3>
