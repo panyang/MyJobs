@@ -30,7 +30,7 @@ class Privacy(TemplateView):
 def user_view_profile(request):
     """Login complete view, displays user profile on My.Jobs... unless"""
     request.session['origin'] = 'main'
-#    linked_accounts = request.user.social_auth.all()
+    #linked_accounts = request.user.social_auth.all()
     account_info = []
     # for account in linked_accounts:
     #     account_info.append({'name': account.provider,
@@ -79,17 +79,17 @@ def error(request):
         
 @login_required
 def edit_profile(request):
-    import ipdb
-    ipdb.set_trace()
+    user_instance = User.objects.filter(id=request.user.id).values()[0]
     if request.method == "POST":
         form = EditProfileForm(request.POST)
         if form.is_valid():
             form.save(request.user)
             return HttpResponseRedirect('/profile')
     else:
-        form = EditProfileForm()
+        form = EditProfileForm(user_instance)
 
-    ctx = {'form': form}
+    ctx = {'form': form,
+           'user': request.user}
     return render_to_response('myprofile-edit.html', ctx, RequestContext(request))
     
 

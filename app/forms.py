@@ -15,17 +15,13 @@ class EditProfileForm(forms.Form):
                                 max_length=40, required=False)
     opt_in_myjobs = forms.BooleanField(label=_("Receive messages from my.jobs"),
                                        required=False)
-    opt_in_dotjobs = forms.BooleanField(
-        label=_('Receive messages from dotjobs site owners'), 
-        required=False)
-    activate_public_profile = forms.BooleanField(
-        label=_("Activate Public Profile"),
-        required=False)
-    headline = forms.CharField(max_length=255, required=False,
-                               help_text=_("You in one senetence."))
-    summary = forms.CharField(label=_("Summary"),         
-                              required=False, max_length=4095,
-                              help_text=_("Short summary of you."))
+    opt_in_dotjobs = forms.BooleanField(label=_('Receive messages from dotjobs site owners'), 
+                                        required=False)
+    activate_public_profile = forms.BooleanField(label=_("Activate Public Profile"),
+                                                 required=False)
+    headline = forms.CharField(max_length=255, required=False)
+    summary = forms.CharField(widget=forms.widgets.Textarea(), label=_("Summary"),
+                              required=False, max_length=4095)
     
     def save(self,u):
         """saves user profile to UserProfile and auth.User models"""

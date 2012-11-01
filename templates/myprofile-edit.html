@@ -3,17 +3,10 @@
 {% comment %}
 myprofile-edit.html -- implements edit my profile view 
 
-Accepts context:
-
-user -- user being edited.
-form -- user edit form.
-
 {% endcomment %}
-{% block page-header-text %}
-  <h2>{% trans "Edit Profile" %}</h2>
-  <small>for {{user.username }} - {{ user.first_name }} {{ user.last_name }}</small>
-{% endblock page-header-text %}
+
 {% block content %}
+  <h2>{% trans "Edit Profile" %}</h2>
   <form action="" method="POST">
     {% include "includes/form-error-highlight.html" %}
     {% csrf_token %}
@@ -21,9 +14,7 @@ form -- user edit form.
       <button type="submit" class="btn primary" value="submit">{% trans "Save" %}</button>
     </div>
   </form>
-    {% block focusbox-content %}
-    <div class="alert-message block-message info">
-      {% include "includes/help-edit-profile.html" %}
-    </div>
-    {% endblock focusbox-content %}
 {% endblock content %}
+{% block focusbox-content %}
+  {% include "includes/help-edit-profile.html" %}
+{% endblock focusbox-content %}
