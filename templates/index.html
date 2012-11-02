@@ -35,8 +35,7 @@ index.html -- implements non-authenticated home/landing page for my.jobs.
                         {% endif %}!
                         </h3>
                         <p>
-                            <a href="/profile/">View your profile</a> <br>                           
-                            <a href="/edit/">Change Account Information</a>                            
+                            <a href="{% url 'view_account' %}">View Your Account</a>
                         </p>                        
                     {% else %}
                         <h3>Signup</h3>

@@ -7,7 +7,7 @@ login-username.html -- Username/password login form
   {% include 'includes/form-error-highlight.html' %}
   {% csrf_token %}
   <div class="actions">
-    <button type="submitt" class="btn primary pull-right" value="submit">{% trans "Login" %}</button>
+    <button type="submit" class="btn primary pull-right" value="submit">{% trans "Login" %}</button>
     <div class="clear"></div>
     <span class="help-block pull-right">
       <a href="{% url 'auth_password_reset' %}">{% trans "lost password" %}</a>

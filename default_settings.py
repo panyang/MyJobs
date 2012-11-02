@@ -135,7 +135,7 @@ ACCOUNT_ACTIVATION_DAYS = 14
 # SOCIAL_AUTH_ENABLED_BACKENDS = ('facebook', 'twitter', 'linkedin', 
 #                                 'google-oauth2', 'yahoo')
 
-LOGIN_REDIRECT_URL = '/profile'
+LOGIN_REDIRECT_URL = '/account'
 LOGOUT_REDIRECT_URL = '/home'
 
 AUTH_USER_MODEL = 'app.User'

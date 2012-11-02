@@ -27,7 +27,7 @@ class Privacy(TemplateView):
     template_name = "privacy.html"
 
 @login_required
-def user_view_profile(request):
+def view_account(request):
     """Login complete view, displays user profile on My.Jobs... unless"""
     request.session['origin'] = 'main'
     #linked_accounts = request.user.social_auth.all()
@@ -54,7 +54,7 @@ def home(request):
             loginform = CustomAuthForm(request.POST)
             if loginform.is_valid():
                 login(request, loginform.get_user())
-                return HttpResponseRedirect('/profile')
+                return HttpResponseRedirect('/account')
     else:
         registrationform =  RegistrationForm()
         loginform = CustomAuthForm()
@@ -62,14 +62,6 @@ def home(request):
     ctx = {'registrationform':registrationform,
            'loginform': loginform}
     return render_to_response('index.html', ctx, RequestContext(request))
-    
-@login_required
-def done(request):
-    """Login complete view, displays user data"""
-    request.session['origin'] = 'main'
-    ctx = {'version': version,
-           'last_login': request.session.get('social_auth_last_login_backend')}
-    return render_to_response('done.html', ctx, RequestContext(request))
 
 def error(request):
     """Error view"""
@@ -78,19 +70,19 @@ def error(request):
                               'messages': messages}, RequestContext(request))
         
 @login_required
-def edit_profile(request):
+def edit_account(request):
     user_instance = User.objects.filter(id=request.user.id).values()[0]
     if request.method == "POST":
         form = EditProfileForm(request.POST)
         if form.is_valid():
             form.save(request.user)
-            return HttpResponseRedirect('/profile')
+            return HttpResponseRedirect('/account')
     else:
         form = EditProfileForm(user_instance)
 
     ctx = {'form': form,
            'user': request.user}
-    return render_to_response('myprofile-edit.html', ctx,
+    return render_to_response('edit-account.html', ctx,
                               RequestContext(request))
 
 @login_required
@@ -101,7 +93,7 @@ def change_password(request):
         ipdb.set_trace()
         if form.is_valid():
             form.save(request.user)
-            return HttpResponseRedirect('/profile')
+            return HttpResponseRedirect('/account')
     else:
         form = ChangePasswordForm()
     ctx = {'form':form}

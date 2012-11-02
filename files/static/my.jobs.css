@@ -287,3 +287,6 @@ footer{
 	text-indent: 0;
 	width: auto;
 	}
+.table-field {
+    width: 150px;
+}
