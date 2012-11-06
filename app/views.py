@@ -89,8 +89,6 @@ def edit_account(request):
 def change_password(request):
     if request.method == "POST":
         form = ChangePasswordForm(user=request.user, data=request.POST)
-        import ipdb
-        ipdb.set_trace()
         if form.is_valid():
             form.save(request.user)
             return HttpResponseRedirect('/account')

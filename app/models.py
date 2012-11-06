@@ -53,11 +53,16 @@ class CustomUserManager(BaseUserManager):
         user.save(using=self._db)
         return user
         
-    def create_superuser(self,email, password):
-        u = self.create_user(email, password)
+    def create_superuser(self, **kwargs):
+        email = kwargs['email']
+        password = kwargs['password1']
+        if not email:
+            raise ValueError('Email address required.')
+        u = self.model(email=CustomUserManager.normalize_email(email))
         u.is_staff = True
         u.is_active = True
         u.is_superuser = True
+        u.set_password(password)
         u.save(using=self._db)
         return u
 
@@ -83,9 +88,9 @@ class User(AbstractBaseUser):
 
     # Policy Settings
     opt_in_myjobs = models.BooleanField(_('Receive messages from my.jobs'),
-        default=True,
-        help_text=_('Checking this enables my.jobs\
-                     to send email updates to you.'))
+                                        default=True,
+                                        help_text=_('Checking this enables my.jobs\
+                                                    to send email updates to you.'))
     
     USERNAME_FIELD = 'email'
     objects = CustomUserManager()

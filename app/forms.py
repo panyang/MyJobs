@@ -8,7 +8,6 @@ from django import forms
 from app.models import User
 
 class EditProfileForm(forms.Form):
-    """Form that lets user quickly edit their personal settings"""    
     first_name = forms.CharField(label=_("First Name"), 
                                  max_length=40, required=False)
     last_name = forms.CharField(label=_("Last Name"),
@@ -16,13 +15,9 @@ class EditProfileForm(forms.Form):
     opt_in_myjobs = forms.BooleanField(label=_("Receive messages from my.jobs"),
                                        required=False)
     def save(self,u):
-        """saves user profile to UserProfile and auth.User models"""
-        # first save all the auth.User stuff
         u.first_name = self.cleaned_data["first_name"]
         u.last_name = self.cleaned_data["last_name"]
-        # Now the profile stuff
         u.opt_in_myjobs = self.cleaned_data["opt_in_myjobs"]
-        # Now that it is set, save and done
         u.save()
 
 class ChangePasswordForm(forms.Form):
