@@ -531,6 +531,7 @@ a.direct_dotjobsFooterLink{
 	float:left;
 	margin-right:10px;
 	position:relative;
+    text-align: right;
 }
 #nav a{
     width: 155px;
