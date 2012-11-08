@@ -53,11 +53,16 @@ class CustomUserManager(BaseUserManager):
         user.save(using=self._db)
         return user
         
-    def create_superuser(self,email, password):
-        u = self.create_user(email, password)
+    def create_superuser(self, **kwargs):
+        email = kwargs['email']
+        password = kwargs['password1']
+        if not email:
+            raise ValueError('Email address required.')
+        u = self.model(email=CustomUserManager.normalize_email(email))
         u.is_staff = True
         u.is_active = True
         u.is_superuser = True
+        u.set_password(password)
         u.save(using=self._db)
         return u
 
@@ -83,22 +88,9 @@ class User(AbstractBaseUser):
 
     # Policy Settings
     opt_in_myjobs = models.BooleanField(_('Receive messages from my.jobs'),
-        default=True,
-        help_text=_('Checking this enables my.jobs\
-                     to send email updates to you.'))
-    opt_in_dotjobs = models.BooleanField(
-        _('Receive messages from dotjobs site owners'), default=True,
-        help_text=_('Checking this allows employers who own\
-                    .jobs Career Microsites to communicate with you.'))
-    enable_public_profile = models.BooleanField(
-        _("Activate Public Profile"), default=True,
-        help_text=_("Check if you want your public profile to be visible."))    
-    # Public Profile Fields
-    public_headline = models.CharField(_("Headline"), max_length=255, null=True,
-        blank=True, 
-        help_text=_("You in on sentence. Shown on your public profile."))
-    public_summary = models.TextField(_("Summary"), null=True, blank=True,
-        help_text=_("A brief summary. Shown on your public profile."))
+                                        default=True,
+                                        help_text=_('Checking this enables my.jobs\
+                                                    to send email updates to you.'))
     
     USERNAME_FIELD = 'email'
     objects = CustomUserManager()

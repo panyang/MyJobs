@@ -8,10 +8,10 @@ from django.template import RequestContext
 from django.shortcuts import render_to_response, get_object_or_404
 from django.template.response import TemplateResponse, SimpleTemplateResponse
 from django.contrib import messages
-from django.contrib.auth.models import User
 from django.views.generic import TemplateView
 from social_auth import __version__ as version
-from app.helpers import gravatar_link
+
+from app.forms import *
 from app.share import *
 from tweepy.error import *
 from facebook import GraphAPIError
@@ -27,10 +27,10 @@ class Privacy(TemplateView):
     template_name = "privacy.html"
 
 @login_required
-def user_view_profile(request):
+def view_account(request):
     """Login complete view, displays user profile on My.Jobs... unless"""
     request.session['origin'] = 'main'
-#    linked_accounts = request.user.social_auth.all()
+    #linked_accounts = request.user.social_auth.all()
     account_info = []
     # for account in linked_accounts:
     #     account_info.append({'name': account.provider,
@@ -54,7 +54,7 @@ def home(request):
             loginform = CustomAuthForm(request.POST)
             if loginform.is_valid():
                 login(request, loginform.get_user())
-                return HttpResponseRedirect('/profile')
+                return HttpResponseRedirect('/account')
     else:
         registrationform =  RegistrationForm()
         loginform = CustomAuthForm()
@@ -62,14 +62,6 @@ def home(request):
     ctx = {'registrationform':registrationform,
            'loginform': loginform}
     return render_to_response('index.html', ctx, RequestContext(request))
-    
-@login_required
-def done(request):
-    """Login complete view, displays user data"""
-    request.session['origin'] = 'main'
-    ctx = {'version': version,
-           'last_login': request.session.get('social_auth_last_login_backend')}
-    return render_to_response('done.html', ctx, RequestContext(request))
 
 def error(request):
     """Error view"""
@@ -78,19 +70,35 @@ def error(request):
                               'messages': messages}, RequestContext(request))
         
 @login_required
-def edit_profile (request, username):
-    """implements edit myjobs profile.
-    
-    Only allows logged in user to edit their own profile right now. Should be 
-    pretty easy to make it so an admin can edit other people's profiles.
+def edit_account(request):
+    user_instance = User.objects.filter(id=request.user.id).values()[0]
+    if request.method == "POST":
+        form = EditProfileForm(request.POST)
+        if form.is_valid():
+            form.save(request.user)
+            return HttpResponseRedirect('/account')
+    else:
+        form = EditProfileForm(user_instance)
 
-    parameters:
-    
-    username -- the username being edited.
-    """
-    if response.method == "POST":
-        pass
+    ctx = {'form': form,
+           'user': request.user}
+    return render_to_response('edit-account.html', ctx,
+                              RequestContext(request))
 
+@login_required
+def change_password(request):
+    if request.method == "POST":
+        form = ChangePasswordForm(user=request.user, data=request.POST)
+        if form.is_valid():
+            form.save(request.user)
+            return HttpResponseRedirect('/account')
+    else:
+        form = ChangePasswordForm()
+    ctx = {'form':form}
+    return render_to_response('registration/password_change_form.html', ctx,
+                              RequestContext(request))
+            
+    
 @login_required
 def share (request, provider):
     data_dict={'provider':provider,

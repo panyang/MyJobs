@@ -4,32 +4,36 @@
 done.html -- presents user_view_profile.
 {% endcomment %}
 {% block header-content %}
-<h2>{% trans "Profile" %} <small>{% if user.first_name %}{{ user.first_name }} {{ user.last_name }}{% else %}{{ user.username}}{% endif %}</small></h2>
+<h2>{% trans "Your Account" %} </h2>
+<br>
 {% endblock header-content %}
 
 {% block content %}
 <div id="userprofile">
   <table class="zebra-striped">
-      <thead>
-	    <tr><th>{% trans "Name" %}</th><th>{% trans "Value" %}</th></tr>
-      </thead>
       <tbody>
-        {% if user.is_staff %}
-        <tr><td>Id:</td><td>{{ user.id }}</td></tr>
-        {% endif %}
-      <tr><td>{% trans "Email" %}</td> <td>{{ user.email|default:"Not provided" }}</td></tr>
-      <tr><td>{% trans "First name" %}</td> <td>{{ user.first_name|default:"Not provided" }}</td></tr>
-      <tr><td>{% trans "Last name" %}</td> <td>{{ user.last_name|default:"Not provided" }}</td></tr>
-      <tr><td>{% trans "Last logged in" %}</td> <td>{{ last_login }}</td></tr>
-      <tr><td>{% trans "Headline" %}</td><td>{{ user.get_profile.public_headline }}</td></tr>
-      <tr><td>{% trans "Summary" %}</td><td>{{user.get_profile.public_summary }}</td></tr>
-      <tr><td>{% trans "Privacy" %}</td>
-	  <td>{% if user.get_profile.opt_in_myjobs %}{% trans "Receive communications from My.Jobs." %}{% else %}{% trans "Do not receive communications from My.Jobs." %}{% endif %}<br>
-	      {% if user.get_profile.opt_in_myjobs %}{% trans "Receive communications from .jobs employers" %}{% else %}{% trans "Do not recieve communication from .jobs employers." %}{% endif %}
-	  </td>
-      </tr>
-     </tbody>
+        <tr><td class="table-field"><b>{% trans "Email" %}</b></td>
+          <td>{{ user.email|default:"Not provided" }}</td></tr>
+        <tr><td class="table-field"><b>{% trans "Name" %}</b></td>
+          <td>
+            {% if user.first_name %} {{ user.first_name }} {% endif %}
+            {% if user.last_name %} {{ user.last_name }} {% endif %}
+            {% if not user.first_name and not user.last_name %} Not Provided {% endif%}
+        </td></tr>
+        <tr><td class="table-field"><b>{% trans "Last Logged In" %}</b></td>
+          <td>{{ last_login }}</td></tr>
+        <tr><td class="table-field"><b>{% trans "Email Notifications" %}</b></td>
+          <td>{% if user.opt_in_myjobs %}You've opted to receive communications from MyJobs{% else %}
+            You've declined to receive communications from MyJobs {% endif %}
+        </td></tr>
+      </tbody>
   </table>
+  <br>
+  {% if not user.is_active %}
+  <div class="alert-message info">
+    <p>{% trans "Your account doesn't have full access to MyJobs features! Please activate it using the activation link sent to your email. "%}</p>
+  </div>
+  {% endif %}
 </div>
 
 <div id="share_history">
