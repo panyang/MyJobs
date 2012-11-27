@@ -1,20 +1,11 @@
 {% extends "base.html" %}
 {% load i18n %}
-{% comment %}
-registration_complete.html -- thank you for registering!
-
-Used after successful completion of the registration process. 
-
-{% endcomment %}
 
 {% block header-content %}
-<h1>{% trans "Thanks for registering!" %}</h1>
+<h1>{% trans "Activation Resent" %}</h1>
 {% endblock header-content %}
 
 {% block content %}
-<div class="alert-message info">
-<p>{% trans "Please check your email for a special message containing an activation link in order to gain full access to your MyJobs account." %}</p>
-</div>
 <p>{% trans "If the activation message is not in your inbox:" %}</p>
 <ul>
   <li>{% trans 'Check your spam or junk mail folder. The subject of the email is "Account Activation for my.jobs".' %}</li>
@@ -23,6 +14,3 @@ Used after successful completion of the registration process.
 </ul>
 <a href="{% url 'edit_account' %}">Would you like to edit your profile information in the meantime?</a>
 {% endblock content %}
-
-{% block focusbox-content %}
-{% endblock focusbox-content %}

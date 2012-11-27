@@ -34,6 +34,13 @@ def register(request):
                               {'form':form},
                               context_instance=RequestContext(request))
 
+def resend_activation(request):
+    user = request.user
+    activation = ActivationProfile.objects.get(user=user)
+    activation.send_activation_email()
+    return render_to_response('registration/resend_activation.html',
+                              context_instance=RequestContext(request))
+
 def activate(request, activation_key):
     """
     Activates user and returns a boolean to activated. Activated is passed
