@@ -8,7 +8,7 @@ from django.db import models
 from django.db import transaction
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
-from app.models import *
+from myjobs.models import *
 
 try:
     from django.utils.timezone import now as datetime_now
@@ -76,7 +76,7 @@ class RegistrationManager(models.Manager):
                 
 
 class ActivationProfile(models.Model):
-    user = models.ForeignKey('app.User', unique=True, verbose_name=('user'))
+    user = models.ForeignKey('myjobs.User', unique=True, verbose_name=('user'))
     activation_key = models.CharField(('activation_key'), max_length=40)
     
     ACTIVATED = "ALREADY ACTIVATED"

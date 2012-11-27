@@ -1,7 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate
-from app.models import *
+from myjobs.models import *
 
 class CustomAuthForm(AuthenticationForm):
     """

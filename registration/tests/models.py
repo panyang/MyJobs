@@ -2,7 +2,7 @@ import datetime
 import re
 
 from django.conf import settings
-from app.models import User
+from myjobs.models import User
 from django.contrib.sites.models import Site
 from django.core import mail
 from django.core import management

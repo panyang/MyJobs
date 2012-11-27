@@ -1,5 +1,5 @@
-from app.models import User
-from app import forms
+from myjobs.models import User
+from myjobs import forms
 from django.test import TestCase
 
 class ChangePasswordForm(TestCase):
