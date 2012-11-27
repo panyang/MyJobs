@@ -8,24 +8,66 @@ from django.test import TestCase
 
 from registration import forms
 from registration.models import ActivationProfile
+from django.conf import settings
+from django.contrib.auth import login
+from django.http import HttpRequest
+from django.test.client import Client
+from importlib import import_module
 
+class TestClient(Client):
+    """
+    Custom test client that decouples testing from the authentication bits
+    """
+    
+    def login_user(self, user):
+        if not 'django.contrib.sessions' in settings.INSTALLED_APPS:
+            raise AssertionError("Unable to login without django.contrib.sessions in INSTALLED_APPS")
+        user.backend = "%s.%s" % ("django.contrib.auth.backends",
+                                  "ModelBackend")
+        engine = import_module(settings.SESSION_ENGINE)
 
+        # Create a fake request to store login details.
+        request = HttpRequest()
+        if self.session:
+            request.session = self.session
+        else:
+            request.session = engine.SessionStore()
+        login(request, user)
+
+        # Set the cookie to represent the session.
+        session_cookie = settings.SESSION_COOKIE_NAME
+        self.cookies[session_cookie] = request.session.session_key
+        cookie_data = {
+            'max-age': None,
+            'path': '/',
+            'domain': settings.SESSION_COOKIE_DOMAIN,
+            'secure': settings.SESSION_COOKIE_SECURE or None,
+            'expires': None,
+        }
+        self.cookies[session_cookie].update(cookie_data)
+
+        # Save the session values.
+        request.session.save()
+        
 class RegistrationViewTests(TestCase):
     """
     Test the registration views.
 
     """
-
+ 
     def setUp(self):
         """
         These tests use the default backend, since we know it's
         available; that needs to have ``ACCOUNT_ACTIVATION_DAYS`` set.
 
         """
+        super(RegistrationViewTests, self).setUp()
+        self.client = TestClient()
         self.old_activation = getattr(settings, 'ACCOUNT_ACTIVATION_DAYS', None)
         if self.old_activation is None:
             settings.ACCOUNT_ACTIVATION_DAYS = 7 # pragma: no cover
 
+            
     def test_registration_view_initial(self):
         response = self.client.get('/accounts/register/')
         self.assertEqual(response.status_code, 200)
@@ -89,4 +131,13 @@ class RegistrationViewTests(TestCase):
                          expired_profile.activation_key_expired())
         self.failIf(User.objects.get(email='bob@example.com').is_active)
         
+    def test_resend_activation(self):
+        x=User.objects.create_inactive_user(**{'email':'alice@example.com',
+                                           'password1':'secret'})
+        self.client.login_user(x)
+        self.assertEqual(len(mail.outbox), 1)
+        resp = self.client.get('/accounts/register/resend/')
+        self.assertEqual(resp.status_code, 200)
+        # one email sent for creating an inactive user, another one for resend
+        self.assertEqual(len(mail.outbox), 2)
 
