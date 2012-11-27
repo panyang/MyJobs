@@ -1,7 +1,7 @@
 import datetime
 
 from django.conf import settings
-from forms.models import User
+from myjobs.models import User
 from django.core import mail
 from django.core.urlresolvers import reverse
 from django.test import TestCase
