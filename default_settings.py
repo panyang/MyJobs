@@ -136,7 +136,7 @@ LOGGING = {
         'logfile': {
             'level':'DEBUG',
             'class':'logging.handlers.RotatingFileHandler',
-            'filename': "/var/log/myjobs/logfile",
+            'filename': "/home/web/myjobslog/logfile",
             'maxBytes': 50000,
             'backupCount': 2,
             'formatter': 'standard',
