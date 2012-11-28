@@ -11,8 +11,8 @@ from django.contrib import messages
 from django.views.generic import TemplateView
 from social_auth import __version__ as version
 
-from app.forms import *
-from app.share import *
+from myjobs.forms import *
+from myjobs.share import *
 from tweepy.error import *
 from facebook import GraphAPIError
 from registration.forms import *

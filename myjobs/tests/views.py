@@ -3,8 +3,8 @@ from django.test import TestCase
 from django.core.urlresolvers import reverse
 from registration.models import ActivationProfile
 from registration.forms import *
-from app.forms import *
-from app.models import User
+from myjobs.forms import *
+from myjobs.models import User
 
 class AppViewTests(TestCase):
     def test_edit_account_success(self):

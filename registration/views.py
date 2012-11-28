@@ -4,7 +4,7 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.template import RequestContext
 from django.views.generic import TemplateView
 from registration.forms import RegistrationForm
-from app.models import *
+from myjobs.models import *
 
 # New in Django 1.5. Class based template views for static pages
 class ActivationComplete(TemplateView):

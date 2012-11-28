@@ -1,9 +1,9 @@
 from django.conf.urls.defaults import patterns, url, include
 from django.contrib import admin
 from django.http import HttpResponsePermanentRedirect
-from app.views import *
+from myjobs.views import *
 
-urlpatterns = patterns('MyJobs.app.views',
+urlpatterns = patterns('MyJobs.myjobs.views',
     #url(r'^$', lambda request: HttpResponsePermanentRedirect('http://jobs.jobs')),
     url(r'^$', 'home', name='home'),
     url(r'^about/$', About.as_view()),

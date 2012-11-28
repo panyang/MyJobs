@@ -5,7 +5,7 @@ from django.contrib.auth.tokens import default_token_generator
 from django.contrib.sites.models import get_current_site
 from django.core.validators import validate_email, ValidationError
 from django import forms
-from app.models import User
+from myjobs.models import User
 
 class EditProfileForm(forms.Form):
     first_name = forms.CharField(label=_("First Name"), 
