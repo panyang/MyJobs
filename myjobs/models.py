@@ -44,7 +44,7 @@ class CustomUserManager(BaseUserManager):
 
         """
         email = kwargs['email']
-        password = kwargs['password']
+        password = kwargs['password1']
         if not email:
             raise ValueError('Email address required.')
         user = self.model(email=CustomUserManager.normalize_email(email))
@@ -55,7 +55,7 @@ class CustomUserManager(BaseUserManager):
         
     def create_superuser(self, **kwargs):
         email = kwargs['email']
-        password = kwargs['password1']
+        password = kwargs['password']
         if not email:
             raise ValueError('Email address required.')
         u = self.model(email=CustomUserManager.normalize_email(email))
