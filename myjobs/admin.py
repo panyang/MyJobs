@@ -1,19 +1,9 @@
 from django.contrib import admin
-from django.contrib.auth.models import User
-from myjobs.models import UserProfile
+from django.contrib.auth.models import Group
 
+from myjobs.models import User
+from registration.models import ActivationProfile
 
-class UserProfileInline(admin.TabularInline):
-    model = UserProfile
-    fk_name = 'user'
-    max_num = 1
-
-
-class UserOption(admin.ModelAdmin):
-    """User profiles"""
-    inlines = [UserProfileInline]
-    list_display = ('id', 'username', 'first_name', 'last_name')
-
-admin.site.unregister(User)
-admin.site.register (User, UserOption)
-    
+admin.site.register(User)
+admin.site.register(ActivationProfile)
+admin.site.unregister(Group)

@@ -1,7 +1,7 @@
 import datetime
 
 from django.db import models
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, Group, Permission
 from django.core.mail import send_mail
 from django.utils.translation import ugettext_lazy as _
 from social_auth.signals import pre_update
@@ -44,7 +44,7 @@ class CustomUserManager(BaseUserManager):
 
         """
         email = kwargs['email']
-        password = kwargs['password1']
+        password = kwargs['password']
         if not email:
             raise ValueError('Email address required.')
         user = self.model(email=CustomUserManager.normalize_email(email))
@@ -100,6 +100,56 @@ class User(AbstractBaseUser):
 
     def email_user(self, subject, message, from_email):
         send_mail(subject, message, from_email, [self.email])
+
+    def get_full_name(self):
+        """
+        Returns the first_name plus the last_name, with a space in between.
+        """
+        full_name = '%s %s' % (self.first_name, self.last_name)
+        return full_name.strip()
+
+    def get_short_name(self):
+        "Returns the short name for the user."
+        return self.first_name.strip()
+
+    def has_perm(self, perm, obj=None):
+        """
+        Returns True if the user has the specified permission. This method
+        queries all available auth backends, but returns immediately if any
+        backend returns True. Thus, a user who has permission from a single
+        auth backend is assumed to have permission in general. If an object is
+        provided, permissions for this specific object are checked.
+        """
+
+        # Active superusers have all permissions.
+        if self.is_active and self.is_superuser:
+            return True
+
+        # Otherwise we need to check the backends.
+        return _user_has_perm(self, perm, obj)
+
+    def has_perms(self, perm_list, obj=None):
+        """
+        Returns True if the user has each of the specified permissions. If
+        object is passed, it checks if the user has all required perms for this
+        object.
+        """
+        for perm in perm_list:
+            if not self.has_perm(perm, obj):
+                return False
+        return True
+
+    def has_module_perms(self, app_label):
+        """
+        Returns True if the user has any permissions in the given app label.
+        Uses pretty much the same logic as has_perm, above.
+        """
+        # Active superusers have all permissions.
+        if self.is_active and self.is_superuser:
+            return True
+
+        return _user_has_module_perms(self, app_label)
+
 
 # Signal Handlers
 def facebook_extra_values(sender, user, response, details, **kwargs):
