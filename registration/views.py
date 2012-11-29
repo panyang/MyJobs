@@ -1,10 +1,11 @@
 from django.contrib.auth import authenticate, login
-from django.shortcuts import render_to_response
 from django.http import HttpResponseRedirect, HttpResponse
+from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.views.generic import TemplateView
-from registration.forms import RegistrationForm
+
 from myjobs.models import *
+from registration.forms import RegistrationForm
 
 # New in Django 1.5. Class based template views for static pages
 class ActivationComplete(TemplateView):

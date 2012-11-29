@@ -1,6 +1,6 @@
-from myjobs.models import User
 from django.test import TestCase
 
+from myjobs.models import User
 from registration import forms
 
 

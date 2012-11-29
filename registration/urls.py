@@ -1,8 +1,8 @@
 from django.conf.urls.defaults import *
-from registration.views import *
-from registration.forms import CustomAuthForm
 from django.contrib.auth import views as auth_views
 
+from registration.forms import CustomAuthForm
+from registration.views import *
 
 # Authorization URLS
 urlpatterns = patterns('',

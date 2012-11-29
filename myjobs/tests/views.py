@@ -1,10 +1,11 @@
 from django.contrib.auth import login
-from django.test import TestCase
 from django.core.urlresolvers import reverse
-from registration.models import ActivationProfile
-from registration.forms import *
+from django.test import TestCase
+
 from myjobs.forms import *
 from myjobs.models import User
+from registration.forms import *
+from registration.models import ActivationProfile
 
 class AppViewTests(TestCase):
     def test_edit_account_success(self):

@@ -1,12 +1,11 @@
 import datetime
 
-from django.db import models
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.core.mail import send_mail
-from django.utils.translation import ugettext_lazy as _
-from social_auth.signals import pre_update
-from social_auth.backends.facebook import FacebookBackend
+from django.db import models
 from django.db.models.signals import post_save
+from django.utils.translation import ugettext_lazy as _
+
 from registration.models import *
 
 class CustomUserManager(BaseUserManager):
@@ -37,7 +36,7 @@ class CustomUserManager(BaseUserManager):
         if send_email:
             activation_profile.send_activation_email()
         return user
-        
+
     def create_user(self, **kwargs):
         """
         Creates an already activated user.
@@ -66,6 +65,7 @@ class CustomUserManager(BaseUserManager):
         u.save(using=self._db)
         return u
 
+        
 # New in Django 1.5. This is now the default auth user table. 
 class User(AbstractBaseUser):
     email = models.EmailField(verbose_name="email address",
@@ -149,10 +149,3 @@ class User(AbstractBaseUser):
             return True
 
         return _user_has_module_perms(self, app_label)
-
-
-# Signal Handlers
-def facebook_extra_values(sender, user, response, details, **kwargs):
-    """Handles extra values from Facebook by ignoring them."""
-    return False
-pre_update.connect(facebook_extra_values, sender=FacebookBackend)

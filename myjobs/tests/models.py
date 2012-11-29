@@ -1,6 +1,8 @@
-from django.test import TestCase
 from django.core import mail
+from django.test import TestCase
+
 from myjobs.models import *
+
 
 class UserManagerTests(TestCase):
     user_info = {'password1': 'complicated_password',
