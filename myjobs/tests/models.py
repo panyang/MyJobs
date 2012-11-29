@@ -24,7 +24,8 @@ class UserManagerTests(TestCase):
         self.failUnless(new_user.check_password('complicated_password'))
 
     def test_superuser_creation(self):
-        new_user = User.objects.create_superuser(**self.user_info)
+        new_user = User.objects.create_superuser(**{'password': 'complicated_password',
+                                                    'email': 'alice@example.com'})
         self.assertEqual(User.objects.count(), 1)
         self.assertEqual(new_user.is_superuser, True)
         self.assertEqual(new_user.is_staff, True)
