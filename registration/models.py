@@ -8,6 +8,7 @@ from django.db import models
 from django.db import transaction
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
+
 from myjobs.models import *
 
 try:

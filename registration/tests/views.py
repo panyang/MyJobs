@@ -1,18 +1,19 @@
 import datetime
 
-from django.conf import settings
-from myjobs.models import User
-from django.core import mail
-from django.core.urlresolvers import reverse
-from django.test import TestCase
+from importlib import import_module
 
-from registration import forms
-from registration.models import ActivationProfile
 from django.conf import settings
 from django.contrib.auth import login
+from django.core import mail
+from django.core.urlresolvers import reverse
 from django.http import HttpRequest
+from django.test import TestCase
 from django.test.client import Client
-from importlib import import_module
+
+from myjobs.models import User
+from registration import forms
+from registration.models import ActivationProfile
+
 
 class TestClient(Client):
     """

@@ -1,10 +1,11 @@
-from django.template import loader, Context
-from django.utils.translation import ugettext_lazy as _
-from django.utils.http import int_to_base36
+from django import forms
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.sites.models import get_current_site
 from django.core.validators import validate_email, ValidationError
-from django import forms
+from django.template import loader, Context
+from django.utils.http import int_to_base36
+from django.utils.translation import ugettext_lazy as _
+
 from myjobs.models import User
 
 class EditProfileForm(forms.Form):
@@ -20,6 +21,7 @@ class EditProfileForm(forms.Form):
         u.opt_in_myjobs = self.cleaned_data["opt_in_myjobs"]
         u.save()
 
+        
 class ChangePasswordForm(forms.Form):
     password1 = forms.CharField(widget=forms.PasswordInput, label=_("Password"))
     password2 = forms.CharField(widget=forms.PasswordInput, label=_("Password (again)"))

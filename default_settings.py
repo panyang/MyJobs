@@ -43,11 +43,7 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
 
-# URL prefix for admin static files -- CSS, JavaScript and images.
-# Make sure to use a trailing slash.
-# Examples: "http://foo.com/static/admin/", "/static/admin/".
 ADMIN_MEDIA_PREFIX = 'http://src.nlx.org/myjobs/admin/'
-
 
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
@@ -62,7 +58,6 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
     'django.contrib.redirects.middleware.RedirectFallbackMiddleware',
-#    'myurls.middleware.MyUrlsFallbackMiddleware',
 )
 
 ROOT_URLCONF = 'MyJobs.urls'

@@ -6,5 +6,4 @@ urlpatterns = patterns('',
     url('', include('MyJobs.myjobs.urls')),
     url(r'^accounts/', include('MyJobs.registration.urls')),
     url(r'^admin/', include(admin.site.urls)),
-#    url(r'', include('social_auth.urls')),
 )
