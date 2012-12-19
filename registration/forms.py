@@ -10,6 +10,13 @@ class CustomAuthForm(AuthenticationForm):
     view for users that haven't activated yet.
     
     """
+    username = forms.CharField(max_length=255,
+                               widget=forms.TextInput(attrs={'class':'required',
+                                'placeholder': 'Email', 'id':'id_email'}))
+    password = forms.CharField(widget=forms.PasswordInput(attrs={'class':'required',
+                                'placeholder':'Password', 'id':'id_password1'},
+                                render_value=False))
+
     def __init__(self, request=None, *args, **kwargs):
         super(CustomAuthForm, self).__init__(request, *args, **kwargs)
 

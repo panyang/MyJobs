@@ -53,26 +53,21 @@
       </div>
     </div>
     <div class="panel">
-      <div class="span-one-fifth module">
-        <h2>{% trans "Welcome!" %}</h1><br><p>{% trans "Please check your email for a verficiation link. While you wait, why don't you set up your profile?" %}</p></div>
-      <div class="span-one-fifth module color-bg">
-        <h3>Personal Details</h3>
+      <h1>{% trans "Thanks for registering!" %}</h1>
+      
+      <div class="alert-message info">
+        <p>{% trans "Please check your email for a special message containing an activation link in order to gain full access to your MyJobs account." %}</p>
       </div>
-      <div class="span-one-fifth module color-bg">
-       <h3>Primary Contact Info</h3>
-      </div>
-      <div class="span-one-fifth module">
-        More modules
-      </div>
-      <div class="span-one-fifth module color-bg">
-        <h3>Most Recent Education</h3>
-      </div>
-      <div class="span-one-fifth module color-bg">
-        <h3>Most Recent Job</h3>
-      </div>
+      <p>{% trans "If the activation message is not in your inbox:" %}</p>
+      <ul>
+        <li>{% trans 'Check your spam or junk mail folder. The subject of the email is "Account Activation for my.jobs".' %}</li>
+        <li>{% trans 'Allow up to 15 minutes for your email provider to deliver the email we have sent.' %}</li>
+        <li>{% trans 'If you are using a free email service like Gmail, Yahoo or Hotmail, please allow 30 minutes.' %}
+      </ul>
+      <a href="{% url 'edit_account' %}">Would you like to edit your profile information in the meantime?</a>
+
       <div class="options">
         <button class="btn pull-right" id="profile">Skip: Take me to my profile</button>
-        <button class="btn primary pull-right" id="next">Next: Save a Job</button>
       </div>
 {% endif %}                           
 

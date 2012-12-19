@@ -51,6 +51,7 @@ def home(request):
            'loginform': loginform}
     return render_to_response('index.html', ctx, RequestContext(request))
 
+    
 @login_required
 def view_account(request):
     """Login complete view, displays user profile on My.Jobs... unless"""
