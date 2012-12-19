@@ -70,8 +70,10 @@ class CustomUserManager(BaseUserManager):
 class User(AbstractBaseUser):
     email = models.EmailField(verbose_name="email address",
                               max_length=255, unique=True, db_index=True)
-    first_name = models.CharField(_('first name'), max_length=30, blank=True)
-    last_name = models.CharField(_('last name'), max_length=30, blank=True)
+    date_joined = models.DateTimeField(_('date joined'),
+                                       default=datetime.datetime.now)
+
+    # Permission Levels
     is_staff = models.BooleanField(_('staff status'), default=False,
                                    help_text=_("Designates whether the user can " +\
                                                "log into this admin site."))
@@ -83,10 +85,8 @@ class User(AbstractBaseUser):
                                        help_text=_("Designates that this user " +\
                                                    "has all permissions without " +\
                                                    "explicitly assigning them."))
-    date_joined = models.DateTimeField(_('date joined'),
-                                       default=datetime.datetime.now)
 
-    # Policy Settings
+    # Communication Settings
     opt_in_myjobs = models.BooleanField(_('Receive messages from my.jobs'),
                                         default=True,
                                         help_text=_('Checking this enables my.jobs\
