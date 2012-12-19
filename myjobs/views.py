@@ -26,6 +26,14 @@ class Privacy(TemplateView):
 
 
 def home(request):
+    """
+    The home page takes AJAX requests from the front end for account creation.
+    If an account is successfully created, this view returns a simple 'valid'
+    HTTP Response, which the front end jQuery recognizes as a signal to continue
+    with the account creation process. If an error occurs in the form, this view
+    returns an updated registration form showing the errors.
+
+    """
     registrationform =  RegistrationForm(auto_id=False)
     loginform = CustomAuthForm(auto_id=False)
     if request.method == "POST":

@@ -1,4 +1,5 @@
 $(document).ready(function() {
+    // collect the csrf token on the page to pass into views with ajax
     var csrf_token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
     $( "#carousel" ).rcarousel({width: 960, height: 600,
                                 visible:1, step:1} );
@@ -6,6 +7,10 @@ $(document).ready(function() {
 });
 
 function register(csrf_token) {    
+    /* When register button is clicked, this triggers an AJAX POST that sends the
+       csrf token, the collected email and password fields, and a custom field, 'action'
+       that allows the view to differentiate between different AJAX requests.
+    */
     $('button#register').click(function(e) {
         e.preventDefault();
         var self = $(this).parents("div#loginBox");
@@ -20,6 +25,8 @@ function register(csrf_token) {
                     password2: self.find("#id_password2").val()},
             success: function(data) {
                 if (data != 'valid') {
+                    // If there are errors, the view returns an updated form with errors
+                    // to replace the current one with and we reinitialize the functions
                     form.replaceWith(data);
                     register(csrf_token);
                     buttons();
@@ -34,11 +41,13 @@ function register(csrf_token) {
 }
 
 function buttons() {
+    // go to next carousel div on click
     $('button#next').click(function(e) {
         e.preventDefault();
         $("#carousel").rcarousel("next");
     });
 
+    // skip to profile page on click
     $('button#profile').click(function(e) {
         e.preventDefault();
         window.location = '/account';
@@ -46,6 +55,7 @@ function buttons() {
 };
 
 function clearForm(form) {
+    // clear the inputted form of existing data
     $(':input', form).each(function() {
         var type = this.type;
         var tag = this.tagName.toLowerCase(); // normalize case
