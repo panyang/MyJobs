@@ -1,0 +1,51 @@
+{% load i18n %}
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {% block meta %}
+    {% include "includes/meta.html" %}
+    {% endblock %}
+    
+    {% block meta-extra %}{% endblock %}
+  </head>
+  
+  <body>
+    <div id="page-wrapper">
+      {% block page %}
+      
+        {% block topbar %}
+        {% include "includes/topbar.html" %}
+        {% endblock %}
+
+      <div id="main">
+        {% block main %}
+
+        <div id="header">
+          {% block header %}
+          {% endblock%}
+        </div>
+        
+        <div id="content">
+          {% block content %}
+          {% endblock %}
+        </div>
+        {% endblock %}
+      </div>
+    </div>
+      
+      {% endblock %}
+</div>
+
+      
+
+    <div id="footer">
+      {% block footer %}
+      <div class="container">
+        <div class="footer pull-right">
+        <a href="">About</a> <a href="">Contact</a>  <a href="">Privacy</a> <a href="">Terms</a> <a href="">by DirectEmployers</a>
+        </div>
+      </div>
+      {% endblock %}
+    </div>
+  </body>
+</html>

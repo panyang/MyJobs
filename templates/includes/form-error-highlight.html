@@ -39,10 +39,12 @@ form -- the rest of the form.
         {% if field.errors %}
         <div class="alert-message block-message error">
         {{ field.errors }}
-        {% endif %} 
+        {% endif %}
+        {% if form.auto_id %}
             <div class="form-label pull-left">
                 {{ field.label_tag }}
             </div>
+            {% endif %}
             <div class="input pull-left">
                 {{ field }}
                 {% if field.help_text %}

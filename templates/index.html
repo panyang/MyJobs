@@ -1,64 +1,74 @@
-{% extends "base.html" %}
+{% extends "myjobs_base.html" %}
 {% load i18n %}
-{% comment %}
-index.html -- implements non-authenticated home/landing page for my.jobs.
-{% endcomment %}
-{% block title-content %}{% trans "My.Jobs - Manage your job search." %}{% endblock title-content %}
-{% block body_extra %}{% endblock body_extra %}
-{% block subpage %}
-    <section><div class="leaderBoard">
-        <header><div class="header">
-            <div class="wrapper">
-                <div class="row" id="titleRow">
-                    <div class="span8" id="title">
-                        <h1>{% trans 'My.jobs' %}</h1>
-                    </div>
-                    <div class="span8" id="subtitle">
-                        {% trans 'Save. Share. Socialize.' %}<br/>
-                        {% trans 'Forge your path.' %}
-                    </div>
-                </div>
-                <div class="clear"></div>
-            </div>
-            <div class="clear"></div>
-        </div></header>
-            <div class="wrapper" id="leaderBoardContent">
-            <div class="row">
-                <div class="span-two-fifths">
-                    <div id="loginBox">
-                    {% if user.is_authenticated %}
-                        <h3> Welcome,
-                        {% if user.first_name %}
-                            {{user.first_name}}
-                        {% else %}
-                            {{user.email}}
-                        {% endif %}!
-                        </h3>
-                        <p>
-                            <a href="{% url 'view_account' %}">View Your Account</a>
-                        </p>                        
-                    {% else %}
-                        <h3>Signup</h3>
-                        {% include "includes/widget-user-registration.html" with form=registrationform%}
-                        <div class="clear"></div>                        
-                    {% endif %}                           
-                    </div>				
-                </div>
-                <div class="span-three-fifths">
-                    <div id="introText">
-                    <p>
-                        <b>{% trans 'Everyone is unique' %} &mdash; </b>{% trans 'you have your own vision and goals for your career. My.jobs is a reliable and secure personal job assistant which empowers you to build relationships and your future. Take responsibility for your career, forge your path. My.jobs is personalized just for you.' %}
-                            </p>
-                    <p>
-                        <b>{% trans 'Job sharing is just the beginning' %}.</b> {% trans "Create a profile to track jobs you've saved for yourself or shared with friends, family and the world. My.jobs will continue to provide tools to automate tasks and assist you along your career path, making it easier and faster, with you always in control." %}
-                    </p>
-                    </div>
-                </div>
-            </div>
-<div class="clear"></div>
-</div>
-</div></section>    
-{% endblock subpage %}
 
-</body>
-</html>
+{% block meta-extra %}
+<script type="text/javascript" src="{{STATIC_URL}}/widget/lib/jquery.ui.widget.min.js"></script>
+<script type="text/javascript" src="{{STATIC_URL}}/widget/lib/jquery.ui.rcarousel.min.js"></script>
+<script type="text/javascript" src="{{STATIC_URL}}/account-creation.js"></script>
+
+<link type="text/css" rel="stylesheet" href="{{STATIC_URL}}/widget/css/rcarousel.css" />
+{% endblock %}
+
+{% block title-content %}{% trans "My.Jobs - Manage your job search." %}{% endblock title-content %}
+
+{% block content %}
+<div class="wrapper">
+  <div id="carousel">
+    <div class="panel">
+      <div class="row" id="titleRow">
+        <div class="span8" id="title">
+          <h1>{% trans 'My.jobs' %}</h1>
+        </div>
+        <div class="span8" id="subtitle">
+          {% trans 'Save. Share. Socialize.' %}<br/>
+          {% trans 'Forge your path.' %}
+        </div>
+      </div>
+      <div class="clear">
+      </div>
+      <div class="row">
+        <div class="pull-right">
+          <div id="loginBox">
+            {% if user.is_authenticated %}
+            <h3> Welcome,
+              {% if user.first_name %}
+              {{user.first_name}}
+              {% else %}
+              {{user.email}}
+              {% endif %}!
+            </h3>
+            <p>
+              <a href="{% url 'view_account' %}">View Your Account</a>
+            </p>                        
+            {% else %}
+            <h3>Sign Up</h3>
+            {% include "includes/widget-user-registration.html" with form=registrationform%}
+            <div class="clear"></div>                        
+            <h3>Log In</h3>
+            {% include "includes/widget-login-username.html" with form=loginform %}
+          </div>				
+        </div>
+      </div>
+    </div>
+    <div class="panel">
+      <h1>{% trans "Thanks for registering!" %}</h1>
+      
+      <div class="alert-message info">
+        <p>{% trans "Please check your email for a special message containing an activation link in order to gain full access to your MyJobs account." %}</p>
+      </div>
+      <p>{% trans "If the activation message is not in your inbox:" %}</p>
+      <ul>
+        <li>{% trans 'Check your spam or junk mail folder. The subject of the email is "Account Activation for my.jobs".' %}</li>
+        <li>{% trans 'Allow up to 15 minutes for your email provider to deliver the email we have sent.' %}</li>
+        <li>{% trans 'If you are using a free email service like Gmail, Yahoo or Hotmail, please allow 30 minutes.' %}
+      </ul>
+      <a href="{% url 'edit_account' %}">Would you like to edit your profile information in the meantime?</a>
+
+      <div class="options">
+        <button class="btn pull-right" id="profile">Skip: Take me to my profile</button>
+      </div>
+{% endif %}                           
+
+  </div>
+</div>
+{% endblock %} 

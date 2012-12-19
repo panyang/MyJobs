@@ -2,11 +2,10 @@
 {% comment %}
 user registration form
 {% endcomment %}
-<form action="/accounts/register/" method="post">  
+<form action="" method="post" id="registration-form">  
   {% include "includes/form-error-highlight.html" %}
   {% csrf_token %}
   <div class="actions pull-right">
-    <button type="submit" class="btn primary pull-right" name="register" value="submit">Create Account</button>                          
+    <button class="btn primary pull-right" name="register" id="register">Create Account</button>                          
   </div>
 </form>
-
