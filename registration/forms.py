@@ -39,13 +39,15 @@ class CustomAuthForm(AuthenticationForm):
 
         
 class RegistrationForm(forms.Form):
-    attrs_dict = {'class': 'required'}
-    email = forms.EmailField(widget=forms.TextInput(attrs=attrs_dict),
-                             max_length=255,label=("Email"))
-    password1 = forms.CharField(widget=forms.PasswordInput(attrs=attrs_dict,
-                                render_value=False), label=("Password"))
-    password2 = forms.CharField(widget=forms.PasswordInput(attrs=attrs_dict,
-                                render_value=False), label=("Password (again)"))
+    email = forms.EmailField(widget=forms.TextInput(attrs={'class':'required',
+                            'placeholder': 'Email', 'id':'id_email'}),
+                             max_length=255)
+    password1 = forms.CharField(widget=forms.PasswordInput(attrs={'class':'required',
+                                'placeholder':'Password', 'id':'id_password1'},
+                                render_value=False))
+    password2 = forms.CharField(widget=forms.PasswordInput(attrs={'class':'required',
+                                'placeholder': 'Password (again)', 'id': 'id_password2'}, 
+                                render_value=False))
 
     def clean_email(self):
         """
