@@ -96,8 +96,7 @@ a:hover{
     text-indent: 4px;
     }
 #loginBox .help-block{
-    display: block;    
-    width: 132px;
+    display: block;   
     font-size: 1em;
     padding-right: 10px;
     text-align: right;
@@ -106,6 +105,10 @@ a:hover{
     margin-bottom: 0px;
     }
 
+.btn{
+    color: #FFF;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.75) !important;
+    }
 .btn.primary{
     background-color: #c44e34;
     background-image: -moz-linear-gradient(#e16b51,#c44e34);
@@ -119,18 +122,30 @@ a:hover{
     padding-right: 25px;
     font-weight:bold;
     font-size: 1.1em;
-    color: #FFF;
-    text-shadow: 0 1px -11px rgba(0, 0, 0, 0.75);
     }
 
 .alert-message.block-message.error{
-    margin: 5px 0;
+    margin: 5px 10px;
     background-color: #e16b51;
     text-shadow: none;
+    pading: 10px;
     }
+.alert-message ul{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    padding-top: 5px;
+    }
+.alert-message ul li{
+    margin: 0px 0px 5px 0px;
+    padding: 5px;
+    background: #E09787;
+    border-radius: 3px;
+    border: 1px solid #fff;
+}
 #focusBox .alert-message.block-message.error,
 #loginBox .alert-message.block-message.error{
-    padding-left: 0px;
+    padding: 5px 10px;
     margin-left: -10px;
     margin-right: -10px;
     }

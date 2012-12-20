@@ -45,12 +45,10 @@ form -- the rest of the form.
                 {{ field.label_tag }}
             </div>
             {% endif %}
-            <div class="">
                 {{ field }}
                 {% if field.help_text %}
                     <span class="help-block">{{ field.help_text }}</span>
                 {% endif %}
-            </div>        
             {% if field.errors %}
             <div class="clear"></div>
         {% endif %}

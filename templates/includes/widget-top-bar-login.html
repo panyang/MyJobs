@@ -1,6 +1,6 @@
 {% load i18n %}<form action="/accounts/login/" method="post">
                     <fieldset>                        
-                        <input class="text" id="id_username" type="text" name="username" maxlength="255" placeholder="Username">
+                        <input class="text" id="id_username" type="text" name="username" maxlength="255" placeholder="Email">
                         <input class="text" type="password" name="password" id="id_password" placeholder="Password">
                         {% csrf_token %}
                         <button type="submit" class="btn primary pull-right" name="login" value="submit">Login</button>                        
