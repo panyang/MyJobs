@@ -50,11 +50,14 @@ a:hover{
     padding-bottom: 2px;
     }
 #titleRow{
-    margin-bottom: 20px;
+    margin-top: 25px;
+    }
+#title{
+    padding-top: 60px;
     }
 #title h1{
     text-indent: -9000px;
-    background: url(images/mydotjobs.png) center right no-repeat;
+    background: url(images/mydotjobs.png) center left no-repeat;
     display: block;
     height: 81px;
     }    
@@ -68,27 +71,17 @@ a:hover{
 
 /*Login Styles*/
 #loginBox{
-    background-color: #574e44;
-    width: 365px;
+    background-color: #fff;
+    padding: 10px;
     padding-bottom: 30px;
-    padding-top: 10px;
-    border: 20px solid #574E44;
-    border-radius: 10px;
+    border: 2px solid #574E44;
+    border-radius: 5px;
     }
-#loginBox h3{
-    color: #FFF;
-    font-size: 28px;
-    padding: 0 0 10px 0px;
-    }    
+    
+#loginBox h3 span{
+    font
+    }
 #loginBox p{
-    background-color: #efeade;
-    padding: 8px;
-    border-radius: 4px;
-    border-width: 0px;
-    line-height: 1em;
-    color: #c34d33;
-    font-size:1.1em;    
-    font-weight: bold;
     min-height: 36px;
     }
 #loginBox p{
@@ -96,13 +89,12 @@ a:hover{
     margin-bottom: 0px;
     font-weight: bold;
     }
-#loginBox .input{
+#loginBox input{
     display: block;
-    margin: 0px;
+    width: 100%;
+    padding: 4px 0px;
+    text-indent: 4px;
     }
-#loginBox input {
-    width: 351px;
-}
 #loginBox .help-block{
     display: block;    
     width: 132px;
@@ -127,6 +119,8 @@ a:hover{
     padding-right: 25px;
     font-weight:bold;
     font-size: 1.1em;
+    color: #FFF;
+    text-shadow: 0 1px -11px rgba(0, 0, 0, 0.75);
     }
 
 .alert-message.block-message.error{

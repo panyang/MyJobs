@@ -14,28 +14,24 @@
 {% block content %}
     <div id="carousel">
         <div class="panel">
-            <div class="row" id="titleRow">
-                <div class="span6" id="title">
+            <div class="row" id="titleRow">                
+                <div class="span6 offset1"  id="title">
                     <h1>{% trans 'My.jobs' %}</h1>
+                    <div id="subtitle">
+                        {% trans 'Save. Share. Socialize.' %}<br/>
+                        {% trans 'Forge your path.' %}
+                    </div>
                 </div>
-                <div class="span6" id="subtitle">
-                    {% trans 'Save. Share. Socialize.' %}<br/>
-                    {% trans 'Forge your path.' %}
-                </div>
-            </div>
-            <div class="clear">
-            </div>
-            <div class="row">
-                <div class="pull-right">
+                <div class="span4">
                     <div id="loginBox">
                         {% if user.is_authenticated %}
-                            <h3> Welcome,
-                                {% if user.first_name %}
+                            <p>Welcome 
+                                <b>{% if user.first_name %}
                                     {{user.first_name}}
                                 {% else %}
                                     {{user.email|truncatechars:23}}
-                                {% endif %}!
-                            </h3>
+                                {% endif %}!</b>
+                            
                             <p>
                                 <a href="{% url 'view_account' %}">View Your Account</a>
                             </p>                                                
@@ -50,6 +46,7 @@
                 </div>
             </div>
         </div>
+        {% if not user.is_authenticated %}
         <div class="panel">
             <h1>{% trans "Thanks for registering!" %}</h1>
             
@@ -68,5 +65,6 @@
                 <button class="btn pull-right" id="profile">Skip: Take me to my profile</button>
             </div>
         </div>
+         {% endif %}
     </div>
 {% endblock %} 
