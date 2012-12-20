@@ -32,7 +32,7 @@ class CustomUserManager(BaseUserManager):
         user.save(using=self._db)
 
         # Generate and send activation information
-        activation_profile = ActivationProfile.objects.generate_key(user)
+        activation_profile = ActivationProfile.objects.generate_key(user, user.email)
         if send_email:
             activation_profile.send_activation_email()
         return user

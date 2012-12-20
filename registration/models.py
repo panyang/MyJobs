@@ -6,6 +6,7 @@ import re
 from django.conf import settings
 from django.db import models
 from django.db import transaction
+from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 
@@ -44,7 +45,7 @@ class RegistrationManager(models.Manager):
                 return user
         return False
             
-    def generate_key(self, user):
+    def generate_key(self, user, email):
         """
         Generates a random string that will be used as the activation key for a
         registered user.
@@ -57,11 +58,10 @@ class RegistrationManager(models.Manager):
        
         """
         salt = hashlib.sha1(str(random.random())).hexdigest()[:5]
-        email = user.email
         if isinstance(email, unicode):
             email = email.encode('utf-8')
         activation_key = hashlib.sha1(salt+email).hexdigest()
-        return self.create(user=user,
+        return self.create(user=user,email=email,
                            activation_key=activation_key)
         
     def delete_expired_users(self):
@@ -74,17 +74,18 @@ class RegistrationManager(models.Manager):
                         profile.delete()
             except User.DoesNotExist:
                 profile.delete()
-                
+
 
 class ActivationProfile(models.Model):
-    user = models.ForeignKey('myjobs.User', unique=True, verbose_name=('user'))
+    user = models.ForeignKey('myjobs.User', verbose_name=('user'))
+    email = models.EmailField(max_length=255)
     activation_key = models.CharField(('activation_key'), max_length=40)
     
     ACTIVATED = "ALREADY ACTIVATED"
     objects = RegistrationManager()
 
     def __unicode__(self):
-        return "Registration for %s" % self.user
+        return "Activation for %s" % self.user
 
     def activation_key_expired(self):
         expiration_date = datetime.timedelta(days=settings.ACCOUNT_ACTIVATION_DAYS)
@@ -101,5 +102,4 @@ class ActivationProfile(models.Model):
         
         message = render_to_string('registration/activation_email.txt',
                                    ctx_dict)
-        
-        self.user.email_user(subject, message, settings.DEFAULT_FROM_EMAIL)
+        send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [self.email])

@@ -3,6 +3,7 @@ import datetime
 from django.db import models
 
 from myjobs.models import *
+from registration.models import *
 
 """
 The terms used in this model abide by the following definitions:
@@ -29,8 +30,19 @@ set to the meta class.
 
 """
 
+class ProfileSet(models.Model):
+    name = models.CharField(max_length=30)
+    user = models.ForeignKey(User)
+    name_profiles = models.ManyToManyField('NameProfile', through='NameProfileMeta')
+    email_profiles = models.ManyToManyField('EmailProfile', through='EmailProfileMeta')
+
+    def __unicode__(self):
+        return self.name
+
+        
+# Abstract Base Classes
 class BaseProfileMeta(models.Model):
-    display_order = models.IntegerField()
+    display_order = models.IntegerField(blank=True)
     display_flag = models.BooleanField(default=True)
     
     def meta(self):
@@ -38,21 +50,17 @@ class BaseProfileMeta(models.Model):
 
 
 class BaseProfile(models.Model):
-    type_name = models.CharField()
     date_created = models.DateTimeField(default=datetime.datetime.now)
     date_updated = models.DateTimeField(default=datetime.datetime.now)
 
     def meta(self):
         abstract = True
+        ordering = ['-date_updated']
 
 
-class ProfileSet(models.Model):
-    name = models.CharField()
-    name_profiles = models.ManyToManyField(NameProfile, through='NameProfileMeta')
-    email_profiles = models.ManyToManyField(EmailProfile, through='EmailProfileMeta')
-
-    
+# Profiles
 class NameProfile(BaseProfile):
+    user = models.ForeignKey(User)
     first_name = models.CharField(max_length=30, blank=True)
     last_name = models.CharField(max_length=30, blank=True)
     primary = models.BooleanField(default=False)
@@ -69,16 +77,27 @@ class NameProfile(BaseProfile):
 
         
 class EmailProfile(BaseProfile):
-    # TO DO: Need to extend registration activation system to also
-    # verify secondary emails
+    user = models.ForeignKey(User)
     email = models.EmailField(max_length=255, blank=True)
+    label = models.CharField(max_length=30, blank=True)
     verified = models.BooleanField(default=False)
-    verified_date = models.DateTimeField()
+    verified_date = models.DateTimeField(blank=True)
 
     def __unicode__(self):
         return self.email
-        
 
+    def send_verification(self):
+        """
+        Generate a registration key and send a notification to the appropriate
+        email. On clicking the link in the activation email, the view sets the
+        verified field to true and updates the verified date.
+        
+        """
+        activation = ActivationProfile.objects.generate_key(self.user, self.email)
+        activation.send_activation_email()
+
+
+# Through Tables
 class NameProfileMeta(BaseProfileMeta):
     name = models.ForeignKey(NameProfile)
     profile_set = models.ForeignKey(ProfileSet)
