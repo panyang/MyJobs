@@ -12,63 +12,61 @@
 {% block title-content %}{% trans "My.Jobs - Manage your job search." %}{% endblock title-content %}
 
 {% block content %}
-<div class="wrapper">
-  <div id="carousel">
-    <div class="panel">
-      <div class="row" id="titleRow">
-        <div class="span8" id="title">
-          <h1>{% trans 'My.jobs' %}</h1>
+    <div id="carousel">
+        <div class="panel">
+            <div class="row" id="titleRow">
+                <div class="span6" id="title">
+                    <h1>{% trans 'My.jobs' %}</h1>
+                </div>
+                <div class="span6" id="subtitle">
+                    {% trans 'Save. Share. Socialize.' %}<br/>
+                    {% trans 'Forge your path.' %}
+                </div>
+            </div>
+            <div class="clear">
+            </div>
+            <div class="row">
+                <div class="pull-right">
+                    <div id="loginBox">
+                        {% if user.is_authenticated %}
+                            <h3> Welcome,
+                                {% if user.first_name %}
+                                    {{user.first_name}}
+                                {% else %}
+                                    {{user.email|truncatechars:23}}
+                                {% endif %}!
+                            </h3>
+                            <p>
+                                <a href="{% url 'view_account' %}">View Your Account</a>
+                            </p>                                                
+                        {% else %}
+                            <h3>Sign Up</h3>
+                            {% include "includes/widget-user-registration.html" with form=registrationform%}
+                            <div class="clear"></div>                                                
+                            <h3>Log In</h3>
+                            {% include "includes/widget-login-username.html" with form=loginform %}
+                        {% endif %}
+                    </div>				
+                </div>
+            </div>
         </div>
-        <div class="span8" id="subtitle">
-          {% trans 'Save. Share. Socialize.' %}<br/>
-          {% trans 'Forge your path.' %}
+        <div class="panel">
+            <h1>{% trans "Thanks for registering!" %}</h1>
+            
+            <div class="alert-message info">
+                <p>{% trans "Please check your email for a special message containing an activation link in order to gain full access to your MyJobs account." %}</p>
+            </div>
+            <p>{% trans "If the activation message is not in your inbox:" %}</p>
+            <ul>
+                <li>{% trans 'Check your spam or junk mail folder. The subject of the email is "Account Activation for my.jobs".' %}</li>
+                <li>{% trans 'Allow up to 15 minutes for your email provider to deliver the email we have sent.' %}</li>
+                <li>{% trans 'If you are using a free email service like Gmail, Yahoo or Hotmail, please allow 30 minutes.' %}
+            </ul>
+            <a href="{% url 'edit_account' %}">Would you like to edit your profile information in the meantime?</a>
+
+            <div class="options">
+                <button class="btn pull-right" id="profile">Skip: Take me to my profile</button>
+            </div>
         </div>
-      </div>
-      <div class="clear">
-      </div>
-      <div class="row">
-        <div class="pull-right">
-          <div id="loginBox">
-            {% if user.is_authenticated %}
-            <h3> Welcome,
-              {% if user.first_name %}
-              {{user.first_name}}
-              {% else %}
-              {{user.email}}
-              {% endif %}!
-            </h3>
-            <p>
-              <a href="{% url 'view_account' %}">View Your Account</a>
-            </p>                        
-            {% else %}
-            <h3>Sign Up</h3>
-            {% include "includes/widget-user-registration.html" with form=registrationform%}
-            <div class="clear"></div>                        
-            <h3>Log In</h3>
-            {% include "includes/widget-login-username.html" with form=loginform %}
-          </div>				
-        </div>
-      </div>
     </div>
-    <div class="panel">
-      <h1>{% trans "Thanks for registering!" %}</h1>
-      
-      <div class="alert-message info">
-        <p>{% trans "Please check your email for a special message containing an activation link in order to gain full access to your MyJobs account." %}</p>
-      </div>
-      <p>{% trans "If the activation message is not in your inbox:" %}</p>
-      <ul>
-        <li>{% trans 'Check your spam or junk mail folder. The subject of the email is "Account Activation for my.jobs".' %}</li>
-        <li>{% trans 'Allow up to 15 minutes for your email provider to deliver the email we have sent.' %}</li>
-        <li>{% trans 'If you are using a free email service like Gmail, Yahoo or Hotmail, please allow 30 minutes.' %}
-      </ul>
-      <a href="{% url 'edit_account' %}">Would you like to edit your profile information in the meantime?</a>
-
-      <div class="options">
-        <button class="btn pull-right" id="profile">Skip: Take me to my profile</button>
-      </div>
-{% endif %}                           
-
-  </div>
-</div>
 {% endblock %} 

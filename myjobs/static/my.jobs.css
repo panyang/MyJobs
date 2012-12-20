@@ -1,41 +1,4 @@
-@import url(http://css.nlx.org/framework/css/def.ui.css);
-
-html{
-    background: transparent;
-    }
-body{
-    height: auto;
-    }
-
-.span-one-fifth{
-    width: 172px;
-}
-.span-two-fifths{
-    width: 364px;
-    }
-.span-three-fifths{
-    width: 556px;
-    }
-.span-two-fifths input{
-    width: 300px;
-    }
-.clear{
-    clear: both;
-    }
-
-.btn{
-    padding-top: 6px;
-    padding-bottom: 7px;
-    }
-.btn.pull-right{
-    /*margin-right: 10px;*/
-}
-.btn.pull-left{
-    margin-left: 10px;
-}
-#focusBox{
-    margin-bottom: 10px;
-}
+@import url(http://css.nlx.org/framework/v2/css/def.ui.css);
 
 /*Main Styles*/
 body{
@@ -69,48 +32,23 @@ a:hover{
     }
 
 /*Topbar Styles*/
-.topbar h3 a{
-    padding: 0px 20px;
-    }    
-.topbar-inner{
-    height: 30px;
-    padding: 1px 0;
-    background-color: #333;
-    }
-.topbar .inline-inputs{
-    float: right;
-    padding-top: 3px;
-}
 .topbar #topbar-logo{
     height: 30px;
     width: 90px;
     background: transparent url(images/mydotjobs_small.png) center left no-repeat;
     text-indent: -9000px;
 }
-.topbar label{
-    color: #fff;
-    padding: 5px 10px 0 0px;
-    }
 .topbar input{
     width: 100px;
-    margin-right: 10px;
+    margin-right: 10px;  
     }
-.topbar label,
-.topbar input{
-    float: left;
+.topbar input.text{
+    height: 16px;
+    width: 200px;
     }
-.topbar h3 a {
-    background-image: none;
-    text-indent: 0;
-    width: auto;
-    }
-.topbar .btn {
-    margin-top: 2px;
-    padding-top: 2px;    
+.topbar .btn {        
     padding-bottom: 2px;
     }
-
-
 #titleRow{
     margin-bottom: 20px;
     }
@@ -207,33 +145,45 @@ a:hover{
     }
     
 /* Topbar Dropdown Styles*/
-#nav ul{
+.topbar ul{
+    list-style: none;
+    text-align: left;
+    }
+#nav > li{
+    padding: 6px 2px 8px 2px;
+    }
+#nav > li a,#nav > li a:hover{
+    color: #fff;
+    text-decoration: none;
+}
+#nav ul#pop-menu{
 	background:#333;
-    width: 175px;
-    float: right;
     padding: 0;
-    margin: 0;
-    margin-left: 165px;
-	list-style:none;
+    margin: 3px 0 0 0;
 	position:absolute;
-	left:-9999px;
+	display: none;
+	corner-bottom-left-radius: 4px;
+	corner-bottom-right-radius: 4px;
 }
-#nav ul li{
-	float:none;
-    width: 175px;
+#pop-menu li{
+    margin: 0px;
+    padding: 0px;
 }
-#nav ul a{
-	white-space:nowrap; 
+#pop-menu a{
+	display: block;
+	padding: 4px;
+	background: #666;
+	color: #000;
+	border-top: 1px solid #333;
 }
-#nav li:hover ul{ 
-	left:0; 
+#nav li:hover ul#pop-menu{ 
+	display: block;
+	text-align: left;
 }
-#nav li:hover a{ /* These create persistent hover states, meaning the top-most link stays 'hovered' even when your cursor has moved down the list. */
+#nav li:hover ul#pop-menu li a:hover{ 
 	background:#333;
+	color: #fff;
 	text-decoration:none;
-}
-#nav li:hover ul li a:hover{ 
-	background:#666;
 }
 
 /* Account Creation Slider styles */
