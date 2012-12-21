@@ -3,34 +3,47 @@
 topbar.html -- Implements basic my.jobs nav.
 {% endcomment %}
 <div class="topbar" data-dropdown="dropdown">
-  <div class="topbar-inner">
-    <div class="container">
-        <a href="/">
-            <h3 id="topbar-logo" class="pull-left">my.jobs</h3>
-        </a>
-      <ul class="menu">
-      </ul> 
-      <div class="pull-right">
-	<div class="inline-inputs">
-      {% if user.is_authenticated %}
-      <div class="menu-bar">
-        <ul id="nav">
-          <li><a href="" class="main-nav">{% trans "Logged in as " %} <b>{{user.email}} </b>
-          <span class="arrow-down"></span></a>
-          <ul>
-            <li><a href="{% url 'view_account' %}">View Account</a></li>
-            <li><a href="{% url 'edit_account' %}">Edit Account</a></li>
-            <li><a href="{% url 'auth_logout' %}">Log Out</a></li>
-          </ul>
-          </li>
-        </ul>
-      </div>
-      </a>
-      {% else %}
-          {% include "includes/widget-top-bar-login.html" with form=loginform %}		
-      {% endif %}
-	</div> <!-- /inline-inputs -->         
-      </div>
-    </div>
-  </div><!-- /topbar-inner -->
+    <div class="topbar-inner">
+        <div class="wrapper">
+        <div class="row">
+            <div class="span2">
+            <a href="/">
+               <h3 id="topbar-logo" class="pull-left">my.jobs</h3>
+            </a>
+            </div>
+            <div class="pull-right">
+            <div class="inline-inputs">
+                {% if user.is_authenticated %}
+                <div class="span6">&nbsp;</div>
+                <div class="menu-bar span4 pagination-right pull-right">
+                    <ul id="nav">
+                        <li><a href="" class="main-nav">
+                                {% trans "Logged in as " %} 
+                                <b>
+                                {% if user.first_name %}
+                                    {{user.first_name}}
+                                {% else %}
+                                    {{user.email|truncatechars:25}}
+                                {% endif %} 
+                                </b>
+                                <span class="arrow-down"></span>
+                            </a>
+                            <ul class="span4" id="pop-menu">
+                                <li><a href="{% url 'view_account' %}">View Account</a></li>
+                                <li><a href="{% url 'edit_account' %}">Edit Account</a></li>
+                                <li><a href="{% url 'auth_logout' %}">Log Out</a></li>
+                            </ul></a>
+                        </li>
+                    </ul>
+                </div>
+                {% else %}
+                <div class="span10 pull-right pagination-right" id="topbar-login">
+                {% include "includes/widget-top-bar-login.html" with form=loginform %}	
+                </div>
+                {% endif %}
+            </div> <!-- /inline-inputs -->         
+        </div>
+        </div>
+        </div>
+    </div><!-- /topbar-inner -->
 </div>

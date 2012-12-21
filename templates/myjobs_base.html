@@ -7,6 +7,20 @@
     {% endblock %}
     
     {% block meta-extra %}{% endblock %}
+    <script type="text/javascript">
+    loc = document.location+""; 
+    if(loc.indexOf(".jobs:")<0){ //only run this on live sites
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-19801062-4']);
+        _gaq.push(['_trackPageview']);
+        
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    }
+    </script>
 </head>
 
 <body>
@@ -20,7 +34,7 @@
                 <div id="header">
                     <div class="wrapper">
                         <div class="row">
-                            <div class="span16">
+                            <div class="span12">
                                 {% block header %}
                                     {{ site_title }}
                                 {% endblock header %}
@@ -40,12 +54,20 @@
     </div></section>
     <footer><div id="footer">
         {% block footer %}
-            <div class="container">
-                <div class="footer pull-right">
+            <div class="wrapper footer">
+                <div class="span1 offset5">
                     <a href="http://about.jobs" target="_blank">About</a>
+                </div>
+                <div class="span1">
                     <a href="http://about.jobs/contact/" target="_blank">Contact</a>
+                </div>
+                <div class="span1">
                     <a href="http://about.jobs/privacy-policy/" target="_blank">Privacy</a>
+                </div>
+                <div class="span1">
                     <a href="http://about.jobs/terms-of-use/" target="_blank">Terms</a>
+                </div>
+                <div class="span3">
                     <a href="http://directemployers.org" target="_blank">by DirectEmployers</a>
                 </div>
             </div>

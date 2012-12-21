@@ -1,51 +1,10 @@
-@import url(http://css.nlx.org/framework/css/def.ui.css);
-
-html{
-    background: transparent;
-    }
-body{
-    height: auto;
-    }
-
-.span-one-fifth{
-    width: 172px;
-}
-.span-two-fifths{
-    width: 364px;
-    }
-.span-three-fifths{
-    width: 556px;
-    }
-.span-two-fifths input{
-    width: 300px;
-    }
-.clear{
-    clear: both;
-    }
-
-.btn{
-    padding-top: 6px;
-    padding-bottom: 7px;
-    }
-.btn.pull-right{
-    /*margin-right: 10px;*/
-}
-.btn.pull-left{
-    margin-left: 10px;
-}
-#focusBox{
-    margin-bottom: 10px;
-}
+@import url(http://css.nlx.org/framework/v2/css/def.ui.css);
 
 /*Main Styles*/
 body{
     background-color: #574e44;
     font-family: Arial, Helvetica, sans-serif;
     }
-
-#page-wrapper {
-    background-image: url(http://png.nlx.org/def-static/images/bgpattern.jpg);
-}
 
 #main {
     padding: 50px;
@@ -69,54 +28,32 @@ a:hover{
     }
 
 /*Topbar Styles*/
-.topbar h3 a{
-    padding: 0px 20px;
-    }    
-.topbar-inner{
-    height: 30px;
-    padding: 1px 0;
-    background-color: #333;
-    }
-.topbar .inline-inputs{
-    float: right;
-    padding-top: 3px;
-}
 .topbar #topbar-logo{
     height: 30px;
     width: 90px;
     background: transparent url(images/mydotjobs_small.png) center left no-repeat;
     text-indent: -9000px;
 }
-.topbar label{
-    color: #fff;
-    padding: 5px 10px 0 0px;
-    }
 .topbar input{
     width: 100px;
-    margin-right: 10px;
+    margin-right: 10px;  
     }
-.topbar label,
-.topbar input{
-    float: left;
+.topbar input.text{
+    height: 16px;
+    width: 200px;
     }
-.topbar h3 a {
-    background-image: none;
-    text-indent: 0;
-    width: auto;
-    }
-.topbar .btn {
-    margin-top: 2px;
-    padding-top: 2px;    
+.topbar .btn {        
     padding-bottom: 2px;
     }
-
-
 #titleRow{
-    margin-bottom: 20px;
+    margin-top: 25px;
+    }
+#title{
+    padding-top: 60px;
     }
 #title h1{
     text-indent: -9000px;
-    background: url(images/mydotjobs.png) center right no-repeat;
+    background: url(images/mydotjobs.png) center left no-repeat;
     display: block;
     height: 81px;
     }    
@@ -130,27 +67,17 @@ a:hover{
 
 /*Login Styles*/
 #loginBox{
-    background-color: #574e44;
-    width: 365px;
+    background-color: #fff;
+    padding: 10px;
     padding-bottom: 30px;
-    padding-top: 10px;
-    border: 20px solid #574E44;
-    border-radius: 10px;
+    border: 2px solid #574E44;
+    border-radius: 5px;
     }
-#loginBox h3{
-    color: #FFF;
-    font-size: 28px;
-    padding: 0 0 10px 0px;
-    }    
+    
+#loginBox h3 span{
+    font
+    }
 #loginBox p{
-    background-color: #efeade;
-    padding: 8px;
-    border-radius: 4px;
-    border-width: 0px;
-    line-height: 1em;
-    color: #c34d33;
-    font-size:1.1em;    
-    font-weight: bold;
     min-height: 36px;
     }
 #loginBox p{
@@ -158,16 +85,14 @@ a:hover{
     margin-bottom: 0px;
     font-weight: bold;
     }
-#loginBox .input{
+#loginBox input{
     display: block;
-    margin: 0px;
+    width: 100%;
+    padding: 4px 0px;
+    text-indent: 4px;
     }
-#loginBox input {
-    width: 351px;
-}
 #loginBox .help-block{
-    display: block;    
-    width: 132px;
+    display: block;   
     font-size: 1em;
     padding-right: 10px;
     text-align: right;
@@ -176,6 +101,10 @@ a:hover{
     margin-bottom: 0px;
     }
 
+.btn{
+    color: #000;
+    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.75) !important;
+    }
 .btn.primary{
     background-color: #c44e34;
     background-image: -moz-linear-gradient(#e16b51,#c44e34);
@@ -189,16 +118,31 @@ a:hover{
     padding-right: 25px;
     font-weight:bold;
     font-size: 1.1em;
+    color: #fff
     }
 
 .alert-message.block-message.error{
-    margin: 5px 0;
+    margin: 5px 10px;
     background-color: #e16b51;
     text-shadow: none;
+    pading: 10px;
     }
+.alert-message ul{
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    padding-top: 5px;
+    }
+.alert-message ul li{
+    margin: 0px 0px 5px 0px;
+    padding: 5px;
+    background: #E09787;
+    border-radius: 3px;
+    border: 1px solid #fff;
+}
 #focusBox .alert-message.block-message.error,
 #loginBox .alert-message.block-message.error{
-    padding-left: 0px;
+    padding: 5px 10px;
     margin-left: -10px;
     margin-right: -10px;
     }
@@ -207,33 +151,45 @@ a:hover{
     }
     
 /* Topbar Dropdown Styles*/
-#nav ul{
+.topbar ul{
+    list-style: none;
+    text-align: left;
+    }
+#nav > li{
+    padding: 6px 2px 8px 2px;
+    }
+#nav > li a,#nav > li a:hover{
+    color: #fff;
+    text-decoration: none;
+}
+#nav ul#pop-menu{
 	background:#333;
-    width: 175px;
-    float: right;
     padding: 0;
-    margin: 0;
-    margin-left: 165px;
-	list-style:none;
+    margin: 3px 0 0 0;
 	position:absolute;
-	left:-9999px;
+	display: none;
+	corner-bottom-left-radius: 4px;
+	corner-bottom-right-radius: 4px;
 }
-#nav ul li{
-	float:none;
-    width: 175px;
+#pop-menu li{
+    margin: 0px;
+    padding: 0px;
 }
-#nav ul a{
-	white-space:nowrap; 
+#pop-menu a{
+	display: block;
+	padding: 4px;
+	background: #666;
+	color: #000;
+	border-top: 1px solid #333;
 }
-#nav li:hover ul{ 
-	left:0; 
+#nav li:hover ul#pop-menu{ 
+	display: block;
+	text-align: left;
 }
-#nav li:hover a{ /* These create persistent hover states, meaning the top-most link stays 'hovered' even when your cursor has moved down the list. */
+#nav li:hover ul#pop-menu li a:hover{ 
 	background:#333;
+	color: #fff;
 	text-decoration:none;
-}
-#nav li:hover ul li a:hover{ 
-	background:#666;
 }
 
 /* Account Creation Slider styles */
