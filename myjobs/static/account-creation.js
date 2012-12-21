@@ -1,6 +1,10 @@
 $(document).ready(function() {
     // collect the csrf token on the page to pass into views with ajax
-    var csrf_token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+    csrf_token_tag = document.getElementsByName('csrfmiddlewaretoken')[0];
+    var csrf_token = "";
+    if(typeof(csrf_token_tag)!='undefined'){
+        csrf_token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+    }
     register(csrf_token);
 });
 
