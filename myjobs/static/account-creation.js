@@ -1,8 +1,6 @@
 $(document).ready(function() {
     // collect the csrf token on the page to pass into views with ajax
     var csrf_token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
-    /*$( "#carousel" ).rcarousel({width: 960, height: 600,
-                                visible:1, step:1} );*/
     register(csrf_token);
 });
 
@@ -31,9 +29,12 @@ function register(csrf_token) {
                     register(csrf_token);
                     buttons();
                 } else {
-                    //$("#carousel").rcarousel("next");
-                    $("#titleRow").fadeOut();
-                    $("#account-page-2").fadeIn();
+                    // perform the visual transition to page 2
+                    $("#titleRow").hide( 'slide',{direction: 'left'},250 );
+                    $("#topbar-login").fadeOut(250);
+                    setTimeout(function(){                            
+                        $("#account-page-2").show('slide',{direction: 'right'},250);
+                    }, 250);
                     buttons();
                     clearForm("form#registration-form");
                 }

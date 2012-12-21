@@ -2,11 +2,9 @@
 {% load i18n %}
 
 {% block meta-extra %}
-<!--<script type="text/javascript" src="{{STATIC_URL}}/widget/lib/jquery.ui.widget.min.js"></script>
-<script type="text/javascript" src="{{STATIC_URL}}/widget/lib/jquery.ui.rcarousel.min.js"></script>-->
+
 <script type="text/javascript" src="{{STATIC_URL}}/account-creation.js"></script>
 
-<link type="text/css" rel="stylesheet" href="{{STATIC_URL}}/widget/css/rcarousel.css" />
 {% endblock %}
 
 {% block title-content %}{% trans "My.Jobs - Manage your job search." %}{% endblock title-content %}
@@ -45,7 +43,7 @@
     </div>
     {% if not user.is_authenticated %}
     <div class="row" id="account-page-2" style="display: none">
-        <div class="span10 offset1">
+        <div class="span10 offset1" id="account-page-2">
             <h1>{% trans "Thanks for registering!" %}</h1>
             
             <div class="alert-message info">
