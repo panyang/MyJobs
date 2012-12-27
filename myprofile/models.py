@@ -86,16 +86,6 @@ class EmailProfile(BaseProfile):
     def __unicode__(self):
         return self.email
 
-    def send_verification(self):
-        """
-        Generate a registration key and send a notification to the appropriate
-        email. On clicking the link in the activation email, the view sets the
-        verified field to true and updates the verified date.
-        
-        """
-        activation = ActivationProfile.objects.generate_key(self.user, self.email)
-        activation.send_activation_email()
-
 
 # Through Tables
 class NameProfileMeta(BaseProfileMeta):
