@@ -45,7 +45,7 @@ class BaseProfileMeta(models.Model):
     display_order = models.IntegerField(blank=True)
     display_flag = models.BooleanField(default=True)
     
-    def meta(self):
+    class Meta:
         abstract = True
 
 
@@ -53,7 +53,7 @@ class BaseProfile(models.Model):
     date_created = models.DateTimeField(default=datetime.datetime.now)
     date_updated = models.DateTimeField(default=datetime.datetime.now)
 
-    def meta(self):
+    class Meta:
         abstract = True
         ordering = ['-date_updated']
 
