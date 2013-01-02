@@ -20,14 +20,14 @@ DATABASES = {
     },
 }
 
-DATABASES = {
-    'default': {
-        'NAME': 'myjobs1',
-        'ENGINE': 'django.db.backends.mysql',
-        'ENGINE': 'django.db.backends.mysql',
-        'USER': 'root',
-        'PASSWORD': '',
-        'HOST': '',
-        'PORT': ''
-    },
-}
+# DATABASES = {
+#     'default': {
+#         'NAME': 'myjobs1',
+#         'ENGINE': 'django.db.backends.mysql',
+#         'ENGINE': 'django.db.backends.mysql',
+#         'USER': 'root',
+#         'PASSWORD': '',
+#         'HOST': '',
+#         'PORT': ''
+#     },
+# }
