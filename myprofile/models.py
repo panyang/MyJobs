@@ -1,72 +1,41 @@
 import datetime
 
+from django.contrib.contenttypes.models import ContentType
 from django.db import models
 
 from myjobs.models import *
 from registration.models import *
 
-"""
-The terms used in this model abide by the following definitions:
 
-Profile - A module, such as an education profile or an employment history profile,
-that contains user data on that particular topic. A user can have multiple instances
-of a profile (e.g. a user can have multiple different jobs in their job history).
-All Profiles subclass from the BaseProfile abstract class.
-
-ProfileSet - A collection of profiles, such as a resume or a public profile. There
-is a many to many relationship between ProfileSets and Profiles. 
-
-ProfileMeta - Through table that defines the relationship meta data between Profiles
-and ProfileSets. All ProfileMeta classes subclass from the BaseProfileMeta class.
-
-
-ATTENTION!
-Adding a new profile requires the following things:
-1.) The profile class in the format of _type_Profile
-2.) A corresponding _type_ProfileMeta class that contains a foreign key to the
-    profile and a foreign key to ProfileSet
-3.) A many to many field in ProfileSet that links to the profile and has through
-set to the meta class.
-
-"""
-
-class ProfileSet(models.Model):
-    name = models.CharField(max_length=30)
-    user = models.ForeignKey(User)
-    name_profiles = models.ManyToManyField('NameProfile', through='NameProfileMeta')
-    email_profiles = models.ManyToManyField('EmailProfile', through='EmailProfileMeta')
-
-    def __unicode__(self):
-        return self.name
-
-        
-# Abstract Base Classes
-class BaseProfileMeta(models.Model):
-    display_order = models.IntegerField(blank=True)
-    display_flag = models.BooleanField(default=True)
+class ProfileUnits(models.Model):
+    """
+    This is the parent class for all user information. Creating any new
+    profile unit instances (Education, Name, Email etc) end up in the
+    ProfileUnits queryset as well.
     
-    class Meta:
-        abstract = True
-
-
-class BaseProfile(models.Model):
+    """
     date_created = models.DateTimeField(default=datetime.datetime.now)
     date_updated = models.DateTimeField(default=datetime.datetime.now)
-
-    class Meta:
-        abstract = True
-        ordering = ['-date_updated']
-
-
-# Profiles
-class NameProfile(BaseProfile):
+    content_type = models.ForeignKey(ContentType, editable=False,null=True)
     user = models.ForeignKey(User)
+
+    def save(self, *args, **kwargs):
+        """
+        Custom save method to set the content type of the instance.
+        
+        """
+        if(not self.content_type):
+            self.content_type = ContentType.objects.get_for_model(self.__class__)
+            super(ProfileUnits, self).save(*args, **kwargs)
+
+    def __unicode__(self):
+        return self.content_type.name
+        
+
+class Name(ProfileUnits):
     first_name = models.CharField(max_length=30, blank=True)
     last_name = models.CharField(max_length=30, blank=True)
     primary = models.BooleanField(default=False)
-
-    def __unicode__(self):
-        return get_full_name()
         
     def get_full_name(self):
         """
@@ -75,24 +44,31 @@ class NameProfile(BaseProfile):
         full_name = '%s %s' % (self.first_name, self.last_name)
         return full_name.strip()
 
+    def __unicode__(self):
+        return self.get_full_name()
+
         
-class EmailProfile(BaseProfile):
-    user = models.ForeignKey(User)
+class SecondaryEmail(ProfileUnits):
     email = models.EmailField(max_length=255, blank=True)
     label = models.CharField(max_length=30, blank=True)
     verified = models.BooleanField(default=False)
-    verified_date = models.DateTimeField(blank=True)
+    verified_date = models.DateTimeField(blank=True, null=True)
 
     def __unicode__(self):
         return self.email
 
 
-# Through Tables
-class NameProfileMeta(BaseProfileMeta):
-    name = models.ForeignKey(NameProfile)
-    profile_set = models.ForeignKey(ProfileSet)
+class Profile(models.Model):
+    name = models.CharField(max_length=30)
+    user = models.ForeignKey(User)
+    profile_unit = models.ManyToManyField(ProfileUnits)
+    display_order = models.CommaSeparatedIntegerField(max_length=20,blank=True,
+                                                      null=True)
+
+    class Meta:
+        unique_together = (("name", "user"),)
+    
+    def __unicode__(self):
+        return self.name
 
 
-class EmailProfileMeta(BaseProfileMeta):
-    email = models.ForeignKey(EmailProfile)
-    profile_set = models.ForeignKey(ProfileSet)
