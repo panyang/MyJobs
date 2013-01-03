@@ -1,24 +1,22 @@
-{% extends "base.html" %}
+{% extends "myjobs_base.html" %}
 {% load i18n %}
 
 
 {% block header-content %}
   
 {% endblock header-content %}
-{% block content-area %}
+{% block content %}
 <section><div class="section subpage">
 <div class="wrapper">    
     <div class="row">
-        <div class="span4">&nbsp;</div>
-        <div class="span8">
+        <div class="span5 offset1">
             <h1>{% trans "Login" %} <small>{% trans "to your My.jobs" %}</small></h1>
-            <div id="focusBox">                
+        </div>
+        <div class="span5">
+            <div id="loginBox">                
                 {% include "includes/widget-login-username.html" %}
                 <div class="clear"></div>
             </div>
-        </div>
-        <div class="span4">
-            {# trans "Finding the right job can change your life. My.Jobs is a toolkit for helping you find that job." #}
         </div>
         
               
@@ -26,4 +24,4 @@
     </div>
 </div>
 </div></section>
-{% endblock content-area %}
+{% endblock content %}
