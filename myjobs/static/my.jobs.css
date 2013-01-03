@@ -1,5 +1,4 @@
 @import url(http://css.nlx.org/framework/v2/css/def.ui.css);
-
 /*Main Styles*/
 body{
     background-color: #574e44;
@@ -72,47 +71,57 @@ a:hover{
     }
 
 /*Login Styles*/
-#loginBox{
+.loginBox{
     background-color: #fff;
     padding: 10px;
     padding-bottom: 30px;
     border: 2px solid #574E44;
     border-radius: 5px;
     }
-    
-#loginBox h3 span{
+.loginBox + .loginBox{
+    background-color: #fff;
+    margin-top: 20px;
+    border-color: #C44E34;
+    }    
+.loginBox h3 span{
     font
     }
-#loginBox p{
+.loginBox p{
     min-height: 36px;
     }
-#loginBox p{
+.loginBox p{
     padding: 10px;
     margin-bottom: 0px;
     font-weight: bold;
     }
-#loginBox input{
+.loginBox input{
     display: block;
     padding: 4px 0px;
     text-indent: 4px;
     width: 100%;
     }
-#loginBox label{
+.loginBox label{
     display: none;
 }
-#loginBox .help-block{
+.loginBox .help-block{
     display: block;   
     font-size: 1em;
     padding-right: 10px;
     text-align: right;
     }
-#loginBox form{
+.loginBox form{
     margin-bottom: 0px;
     }
 
 .btn{
     color: #000;
     text-shadow: 0 1px 1px rgba(0, 0, 0, 0.75) !important;
+    }
+.btn + .btn{
+    margin-left: 10px;
+    }
+.btn.pull-right + .btn{
+    margin-right: 10px;
     }
 .btn.primary{
     background-color: #c44e34;
