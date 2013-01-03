@@ -87,10 +87,13 @@ a:hover{
     }
 #loginBox input{
     display: block;
-    width: 100%;
     padding: 4px 0px;
     text-indent: 4px;
+    width: 100%;
     }
+#loginBox label{
+    display: none;
+}
 #loginBox .help-block{
     display: block;   
     font-size: 1em;

@@ -12,7 +12,6 @@ DATABASES = {
     'default': {
         'NAME': 'myjobs1',
         'ENGINE': 'django.db.backends.mysql',
-        'ENGINE': 'django.db.backends.mysql',
         'USER': 'db_mjuser',
         'PASSWORD': PROD_DB_PASSWD,
         'HOST': 'myjobs.c9shuxvtcmer.us-east-1.rds.amazonaws.com',
