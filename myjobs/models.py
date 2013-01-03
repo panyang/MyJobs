@@ -72,6 +72,9 @@ class User(AbstractBaseUser):
                               max_length=255, unique=True, db_index=True)
     date_joined = models.DateTimeField(_('date joined'),
                                        default=datetime.datetime.now)
+    # Will be deprecated in favor of using the Name model in myprofile
+    first_name = models.CharField(max_length=30, blank=True)
+    last_name = models.CharField(max_length=30, blank=True)
 
     # Permission Levels
     is_staff = models.BooleanField(_('staff status'), default=False,
