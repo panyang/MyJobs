@@ -26,3 +26,4 @@ DATABASES = {
 #        'NAME': 'myjobs'
 #    },
 #}
+

@@ -6,6 +6,7 @@ import re
 from django.conf import settings
 from django.db import models
 from django.db import transaction
+from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 
@@ -43,8 +44,8 @@ class RegistrationManager(models.Manager):
                 profile.save()
                 return user
         return False
-            
-    def generate_key(self, user):
+
+    def generate_key(self,user):        
         """
         Generates a random string that will be used as the activation key for a
         registered user.
@@ -74,7 +75,7 @@ class RegistrationManager(models.Manager):
                         profile.delete()
             except User.DoesNotExist:
                 profile.delete()
-                
+
 
 class ActivationProfile(models.Model):
     user = models.ForeignKey('myjobs.User', unique=True, verbose_name=('user'))
@@ -101,5 +102,4 @@ class ActivationProfile(models.Model):
         
         message = render_to_string('registration/activation_email.txt',
                                    ctx_dict)
-        
         self.user.email_user(subject, message, settings.DEFAULT_FROM_EMAIL)

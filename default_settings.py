@@ -78,6 +78,7 @@ INSTALLED_APPS = (
     'django.contrib.staticfiles',
     'django_jenkins',
     'myjobs',
+    'myprofile',
     'registration',
     'south'
 )
