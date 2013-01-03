@@ -33,8 +33,9 @@ class ProfileUnits(models.Model):
         
 
 class Name(ProfileUnits):
-    first_name = models.CharField(max_length=30, blank=True)
-    last_name = models.CharField(max_length=30, blank=True)
+    given_name = models.CharField(max_length=30, blank=True)
+    family_name = models.CharField(max_length=30, blank=True)
+    display_name = models.CharField(max_length=60, blank=True)
     primary = models.BooleanField(default=False)
         
     def get_full_name(self):
@@ -62,8 +63,8 @@ class SecondaryEmail(ProfileUnits):
 class Profile(models.Model):
     name = models.CharField(max_length=30)
     user = models.ForeignKey(User)
-    profile_unit = models.ManyToManyField(ProfileUnits)
-    display_order = models.CommaSeparatedIntegerField(max_length=20,blank=True,
+    profile_units = models.ManyToManyField(ProfileUnits)
+    display_order = models.CommaSeparatedIntegerField(max_length=255,blank=True,
                                                       null=True)
 
     class Meta:

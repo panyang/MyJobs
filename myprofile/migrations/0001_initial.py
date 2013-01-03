@@ -21,8 +21,9 @@ class Migration(SchemaMigration):
         # Adding model 'Name'
         db.create_table(u'myprofile_name', (
             (u'profileunits_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['myprofile.ProfileUnits'], unique=True, primary_key=True)),
-            ('first_name', self.gf('django.db.models.fields.CharField')(max_length=30, blank=True)),
-            ('last_name', self.gf('django.db.models.fields.CharField')(max_length=30, blank=True)),
+            ('given_name', self.gf('django.db.models.fields.CharField')(max_length=30, blank=True)),
+            ('family_name', self.gf('django.db.models.fields.CharField')(max_length=30, blank=True)),
+            ('display_name', self.gf('django.db.models.fields.CharField')(max_length=60, blank=True)),
             ('primary', self.gf('django.db.models.fields.BooleanField')(default=False)),
         ))
         db.send_create_signal(u'myprofile', ['Name'])
@@ -42,20 +43,20 @@ class Migration(SchemaMigration):
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('name', self.gf('django.db.models.fields.CharField')(max_length=30)),
             ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['myjobs.User'])),
-            ('display_order', self.gf('django.db.models.fields.CommaSeparatedIntegerField')(max_length=20, null=True, blank=True)),
+            ('display_order', self.gf('django.db.models.fields.CommaSeparatedIntegerField')(max_length=255, null=True, blank=True)),
         ))
         db.send_create_signal(u'myprofile', ['Profile'])
 
         # Adding unique constraint on 'Profile', fields ['name', 'user']
         db.create_unique(u'myprofile_profile', ['name', 'user_id'])
 
-        # Adding M2M table for field profile_unit on 'Profile'
-        db.create_table(u'myprofile_profile_profile_unit', (
+        # Adding M2M table for field profile_units on 'Profile'
+        db.create_table(u'myprofile_profile_profile_units', (
             ('id', models.AutoField(verbose_name='ID', primary_key=True, auto_created=True)),
             ('profile', models.ForeignKey(orm[u'myprofile.profile'], null=False)),
             ('profileunits', models.ForeignKey(orm[u'myprofile.profileunits'], null=False))
         ))
-        db.create_unique(u'myprofile_profile_profile_unit', ['profile_id', 'profileunits_id'])
+        db.create_unique(u'myprofile_profile_profile_units', ['profile_id', 'profileunits_id'])
 
 
     def backwards(self, orm):
@@ -75,8 +76,8 @@ class Migration(SchemaMigration):
         # Deleting model 'Profile'
         db.delete_table(u'myprofile_profile')
 
-        # Removing M2M table for field profile_unit on 'Profile'
-        db.delete_table('myprofile_profile_profile_unit')
+        # Removing M2M table for field profile_units on 'Profile'
+        db.delete_table('myprofile_profile_profile_units')
 
 
     models = {
@@ -91,27 +92,30 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'User'},
             'date_joined': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime.now'}),
             'email': ('django.db.models.fields.EmailField', [], {'unique': 'True', 'max_length': '255', 'db_index': 'True'}),
+            'first_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'is_active': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'is_staff': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'is_superuser': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'last_login': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 1, 2, 17, 3, 20, 54395)'}),
+            'last_login': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 1, 3, 10, 10, 53, 491207)'}),
+            'last_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
             'opt_in_myjobs': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'password': ('django.db.models.fields.CharField', [], {'max_length': '128'})
         },
         u'myprofile.name': {
             'Meta': {'object_name': 'Name', '_ormbases': [u'myprofile.ProfileUnits']},
-            'first_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
-            'last_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
+            'display_name': ('django.db.models.fields.CharField', [], {'max_length': '60', 'blank': 'True'}),
+            'family_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
+            'given_name': ('django.db.models.fields.CharField', [], {'max_length': '30', 'blank': 'True'}),
             'primary': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             u'profileunits_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['myprofile.ProfileUnits']", 'unique': 'True', 'primary_key': 'True'})
         },
         u'myprofile.profile': {
             'Meta': {'unique_together': "(('name', 'user'),)", 'object_name': 'Profile'},
-            'display_order': ('django.db.models.fields.CommaSeparatedIntegerField', [], {'max_length': '20', 'null': 'True', 'blank': 'True'}),
+            'display_order': ('django.db.models.fields.CommaSeparatedIntegerField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'name': ('django.db.models.fields.CharField', [], {'max_length': '30'}),
-            'profile_unit': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['myprofile.ProfileUnits']", 'symmetrical': 'False'}),
+            'profile_units': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['myprofile.ProfileUnits']", 'symmetrical': 'False'}),
             'user': ('django.db.models.fields.related.ForeignKey', [], {'to': u"orm['myjobs.User']"})
         },
         u'myprofile.profileunits': {
