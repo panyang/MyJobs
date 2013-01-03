@@ -45,6 +45,12 @@ a:hover{
 .topbar .btn {        
     padding-bottom: 2px;
     }
+.topbar #alpha-flag{
+    display: block;
+    float-left;
+    color: #fff;
+    font-size: .8em;
+}
 #titleRow{
     margin-top: 25px;
     }
