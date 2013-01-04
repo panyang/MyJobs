@@ -137,10 +137,11 @@ a:hover{
     }
 
 .alert-message.block-message.error{
-    margin: 5px 10px;
+    margin: 5px 0px;
     background-color: #e16b51;
     text-shadow: none;
-    pading: 10px;
+    padding: 10px;
+    border-radius: 5px;
     }
 .alert-message ul{
     list-style: none;
