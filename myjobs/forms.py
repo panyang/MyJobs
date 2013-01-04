@@ -23,9 +23,15 @@ class EditProfileForm(forms.Form):
 
         
 class ChangePasswordForm(forms.Form):
-    password1 = forms.CharField(widget=forms.PasswordInput, label=_("Password"))
-    password2 = forms.CharField(widget=forms.PasswordInput, label=_("Password (again)"))
-    new_password = forms.CharField(widget=forms.PasswordInput, label=_("New Password"))
+    password1 = forms.CharField(label="Password",
+                                widget=forms.PasswordInput(attrs={'placeholder':
+                                                           'Password'}))
+    password2 = forms.CharField(label="Password (again)",
+                                widget=forms.PasswordInput(attrs={'placeholder':
+                                                           'Password (again)'}))
+    new_password = forms.CharField(label="New Password",
+                                   widget=forms.PasswordInput(attrs={'placeholder':
+                                                           'New Password'}))
     
     def __init__(self, user=None, *args, **kwargs):
         self.user = user
