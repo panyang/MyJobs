@@ -70,8 +70,8 @@ a:hover{
     font-weight: bold;
     }
 
-/*Login Styles*/
-.loginBox{
+/*Content Box Styles*/
+.loginBox, .formBox{
     background-color: #fff;
     padding: 10px;
     padding-bottom: 30px;
@@ -79,17 +79,14 @@ a:hover{
     border-radius: 5px;
     }
 .loginBox + .loginBox{
-    background-color: #fff;
     margin-top: 20px;
     border-color: #C44E34;
     }    
-.loginBox h3 span{
-    font
-    }
 .loginBox p{
     min-height: 36px;
     }
-.loginBox p{
+.loginBox p,
+.formBox p{
     padding: 10px;
     margin-bottom: 0px;
     font-weight: bold;
