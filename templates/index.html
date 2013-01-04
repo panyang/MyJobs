@@ -19,7 +19,7 @@
             </div>
         </div>
         <div class="span4">
-            <div id="loginBox">
+            <div class="loginBox">
                 {% if user.is_authenticated %}
                     <p>Welcome 
                         <b>{% if user.first_name %}
@@ -30,6 +30,8 @@
                     
                     <p>
                         <a href="{% url 'view_account' %}">View Your Account</a>
+                    </p><p>
+                        <a class="btn primary" href="{% url 'auth_logout' %}">Log Out</a>
                     </p>                                                
                 {% else %}
                     <h3>Sign Up</h3>

@@ -6,24 +6,8 @@ Usese the following default django template tags:
 hidden -- built in for all hidden form fields.
 form -- the rest of the form.
 {% endcomment %}
-
 {% load widget_tweaks %}
 
-<style>
-.input{
-}
-.form-label{
-    text-align: right;
-    margin-right: 20px;
-    width: 180px;
-}
-.form-label label{
-    font-weight: bold;
-}
-.clear{
-    clear: both;
-}
-</style>
 <fieldset>
     {# Include but don't display hidden fields #}
     {% for hidden in form.hidden_fields %}

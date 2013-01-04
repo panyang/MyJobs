@@ -1,5 +1,4 @@
 @import url(http://css.nlx.org/framework/v2/css/def.ui.css);
-
 /*Main Styles*/
 body{
     background-color: #574e44;
@@ -45,6 +44,12 @@ a:hover{
 .topbar .btn {        
     padding-bottom: 2px;
     }
+.topbar #alpha-flag{
+    display: block;
+    float-left;
+    color: #fff;
+    font-size: .8em;
+}
 #titleRow{
     margin-top: 25px;
     }
@@ -65,48 +70,55 @@ a:hover{
     font-weight: bold;
     }
 
-/*Login Styles*/
-#loginBox{
+/*Content Box Styles*/
+.loginBox, .formBox{
     background-color: #fff;
     padding: 10px;
     padding-bottom: 30px;
     border: 2px solid #574E44;
     border-radius: 5px;
     }
-    
-#loginBox h3 span{
-    font
-    }
-#loginBox p{
+.loginBox + .loginBox{
+    margin-top: 20px;
+    border-color: #C44E34;
+    }    
+.loginBox p{
     min-height: 36px;
     }
-#loginBox p{
+.loginBox p,
+.formBox p{
     padding: 10px;
     margin-bottom: 0px;
     font-weight: bold;
     }
-#loginBox input{
+.loginBox input{
     display: block;
     padding: 4px 0px;
     text-indent: 4px;
     width: 100%;
     }
-#loginBox label{
+.loginBox label{
     display: none;
 }
-#loginBox .help-block{
+.loginBox .help-block{
     display: block;   
     font-size: 1em;
     padding-right: 10px;
     text-align: right;
     }
-#loginBox form{
+.loginBox form{
     margin-bottom: 0px;
     }
 
 .btn{
     color: #000;
     text-shadow: 0 1px 1px rgba(0, 0, 0, 0.75) !important;
+    }
+.btn + .btn{
+    margin-left: 10px;
+    }
+.btn.pull-right + .btn{
+    margin-right: 10px;
     }
 .btn.primary{
     background-color: #c44e34;
@@ -125,10 +137,11 @@ a:hover{
     }
 
 .alert-message.block-message.error{
-    margin: 5px 10px;
+    margin: 5px 0px;
     background-color: #e16b51;
     text-shadow: none;
-    pading: 10px;
+    padding: 10px;
+    border-radius: 5px;
     }
 .alert-message ul{
     list-style: none;
@@ -173,7 +186,25 @@ a:hover{
 	display: none;
 	corner-bottom-left-radius: 4px;
 	corner-bottom-right-radius: 4px;
+	width: 280px;
 }
+.topbar #nav .arrow{
+    float: right;
+    display: block;
+    width: 0px;
+    border: 4px solid transparent;
+    border-right: 6px solid #999;
+    border-left: 0px;
+    margin-top: 6px;
+    }
+.topbar #nav:hover .arrow{
+    border: 4px solid transparent;
+    border-top: 6px solid #eee;
+    border-bottom: 0px;
+    position: relative;
+    left: 2px;
+    top: 2px;
+    }
 #pop-menu li{
     margin: 0px;
     padding: 0px;

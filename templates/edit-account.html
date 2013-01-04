@@ -1,23 +1,21 @@
-{% extends "base.html" %}
+{% extends "myjobs_base.html" %}
 {% load i18n %}
 
-{% block content-area %}
+{% block content %}
 <section><div class="section subpage">
     <div class="wrapper"> 
       <div class="row">
-        <div class="span4">&nbsp;</div>
         <div class="span8">
-          <h1>{% trans "Edit Account Information" %}</h1>
-          <div id="focusBox">
+          <h1>{% trans "Edit" %} <small>{% trans "Account Information" %}</small></h1>
+          <div class="formBox">
             <form action="" method="POST">
               {% include "includes/form-error-highlight.html" %}
               {% csrf_token %}
               <div class="actions">
+                <a href="{% url 'view_account' %}" class="btn pull-right">{% trans 'Cancel' %}</a>
                 <button type="submit" class="btn primary pull-right" value="submit">{% trans "Save" %}</button>
+                <a href="{% url 'change_password' %}" class="pull-right">{% trans "Change Password" %}</a>
                 <div class="clear"></div>
-                <span class="help-block pull-right">
-                  <a href="{% url 'change_password' %}">{% trans "Change Password" %}</a>
-                </span>
               </div>
             </form>
           </div>

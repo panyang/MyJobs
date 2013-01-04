@@ -9,7 +9,7 @@ topbar.html -- Implements basic my.jobs nav.
             <div class="span2">
             <a href="/">
                <h3 id="topbar-logo" class="pull-left">my.jobs</h3>
-            </a>
+            </a><span id="alpha-flag">alpha</alpha>
             </div>
             <div class="pull-right">
             <div class="inline-inputs">
@@ -26,11 +26,12 @@ topbar.html -- Implements basic my.jobs nav.
                                     {{user.email|truncatechars:25}}
                                 {% endif %} 
                                 </b>
-                                <span class="arrow-down"></span>
+                                <span class="arrow"></span>
                             </a>
                             <ul class="span4" id="pop-menu">
-                                <li><a href="{% url 'view_account' %}">View Account</a></li>
-                                <li><a href="{% url 'edit_account' %}">Edit Account</a></li>
+                                <li><a href="{% url 'view_account' %}">{% trans "View Account" %}</a></li>
+                                <li><a href="{% url 'edit_account' %}">{% trans "Edit Account" %}</a></li>
+                                <li><a href="{% url 'change_password' %}">{% trans "Change Password" %}</a></li?
                                 <li><a href="{% url 'auth_logout' %}">Log Out</a></li>
                             </ul></a>
                         </li>

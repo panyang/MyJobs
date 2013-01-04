@@ -12,61 +12,45 @@ By default, has the following context:
     information on how to display this in a template.
 {% endcomment %}
 
-{% block header-content %}
-<!--<div class="wrapper">
-    <div class="row">
-        <div class="span10">
-            <h1>{% trans "Create your my.jobs account" %}</h1>
-        </div>
-        <div class="span6">
-            <span class="pull-right"><span class="label label-warning">Already have an account?</span> <a href="{% url 'auth_login' %}">{% trans "Login Here" %}</a></span>
-        </div>
-    </div>
-</div>-->
-{% endblock header-content %}
 
-{% block content-area %}
+{% block content %}
+
+
+
+
+
+
 <section><div class="section subpage">
 <div class="wrapper">    
     <div class="row">
-        <div class="span4">&nbsp;</div>
-        <div class="span8">
-            <h1>{% trans "Create" %} <small>{% trans "your My.jobs" %}</small></h1>
-            <div id="focusBox">                
-                {% include "includes/widget-user-registration.html" %}
-                <div class="clear"></div>
-            </div>
-            
-            <div id="focusBox">
-                <h3>Already have an account? Login here:</h3>                
-                <form action="/accounts/login/" method="post">
-                    <fieldset>
-                        <div class="form-label pull-left">
-                            <label for="id_email">Email</label>
-                        </div>
-                        <div class="input pull-right">
-                            <input id="id_email" type="text" name="email" maxlength="255" placeholder="Email">
-                        </div>
-                        <div class="clear"></div>
-                        <div class="form-label pull-left">
-                            <label for="id_password">Password</label>
-                        </div>
-                        <div class="input pull-right">
-                            <input type="password" name="password" id="id_password" placeholder="Password">
-                        </div>
-                        <div class="clear"></div>
-                        {% csrf_token %}
-                        <div class="actions pull-right">
-                            <button type="submit" class="btn primary" value="submit">Login</button>
-                        </div>
-                    </fieldset>
-                </form>
-            </div>
+        <div class="span6 offset1" >
+            <h1>{% trans "Create" %} <small>{% trans "your My.jobs account" %}</small></h1>
         </div>
-        
-              
-    </div>
+        <div class="span4">
+            <div class="loginBox">
+                {% if user.is_authenticated %}
+                    <p>Welcome 
+                        <b>{% if user.first_name %}
+                            {{user.first_name}}
+                        {% else %}
+                            {{user.email|truncatechars:23}}
+                        {% endif %}!</b>
+                    
+                    <p>
+                        <a href="{% url 'view_account' %}">View Your Account</a>
+                    </p>                                                
+                {% else %}
+                    <h3>Sign Up</h3>
+                    {% include "includes/widget-user-registration.html" %}
+                    <div class="clear"></div>
+            </div>
+            <div class="loginBox">
+                    {% trans "Already have an account? Login here:" %}
+                    {% include "includes/widget-top-bar-login.html" with form=loginform %}
+                {% endif %}
+            </div>				
+        </div>
     </div>
 </div>
 </div></section>
-{% endblock content-area %}
+{% endblock content %}
