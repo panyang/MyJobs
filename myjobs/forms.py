@@ -9,6 +9,9 @@ from django.utils.translation import ugettext_lazy as _
 from myjobs.models import User
 
 class EditProfileForm(forms.Form):
+    """
+    This will get deprecated anyway, no need to change it to new format
+    """
     first_name = forms.CharField(label=_("First Name"), 
                                  max_length=40, required=False)
     last_name = forms.CharField(label=_("Last Name"),
@@ -33,8 +36,8 @@ class ChangePasswordForm(forms.Form):
                                    widget=forms.PasswordInput(attrs={'placeholder':
                                                            'New Password'}))
     
-    def __init__(self, user=None, *args, **kwargs):
-        self.user = user
+    def __init__(self,*args, **kwargs):
+        self.user = kwargs.pop('user',None)
         super(ChangePasswordForm, self).__init__(*args, **kwargs)
 
     def clean_password1(self):
@@ -53,8 +56,8 @@ class ChangePasswordForm(forms.Form):
             else:
                 return self.cleaned_data
 
-    def save(self, u):
-        u.set_password(self.cleaned_data["new_password"])
-        u.save()
+    def save(self):
+        self.user.set_password(self.cleaned_data["new_password"])
+        self.user.save()
         
         

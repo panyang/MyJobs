@@ -38,4 +38,4 @@ class SecondaryEmailForm(BaseProfileForm):
         widgets = {
             'email': forms.TextInput(attrs={'placeholder': 'Email'}),
             'label': forms.TextInput(attrs={'placeholder': 'labeel'})
-        }        
+        }
