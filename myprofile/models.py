@@ -43,7 +43,7 @@ class Name(ProfileUnits):
         Returns the first_name plus the last_name, with a space in between.
         
         """
-        full_name = '%s %s' % (self.first_name, self.last_name)
+        full_name = '%s %s' % (self.given_name, self.family_name)
         return full_name.strip()
 
     def __unicode__(self):
