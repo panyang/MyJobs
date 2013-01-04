@@ -186,7 +186,25 @@ a:hover{
 	display: none;
 	corner-bottom-left-radius: 4px;
 	corner-bottom-right-radius: 4px;
+	width: 280px;
 }
+.topbar #nav .arrow{
+    float: right;
+    display: block;
+    width: 0px;
+    border: 4px solid transparent;
+    border-right: 6px solid #999;
+    border-left: 0px;
+    margin-top: 6px;
+    }
+.topbar #nav:hover .arrow{
+    border: 4px solid transparent;
+    border-top: 6px solid #eee;
+    border-bottom: 0px;
+    position: relative;
+    left: 2px;
+    top: 2px;
+    }
 #pop-menu li{
     margin: 0px;
     padding: 0px;
