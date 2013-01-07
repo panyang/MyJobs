@@ -48,12 +48,31 @@ class Education(ProfileUnits):
     country_sub_division_code = models.CharField(max_length=5, blank=True) 
     country_code = models.CharField(max_length=3, blank=True) # ISO 3166-1
     # ISCED-2011 Can be [0-8]
-    education_level_code = models.IntegerField(choices=EDUCATION_LEVEL_CHOICES) # ISCED-2011 Can be [0-8]
+    education_level_code = models.IntegerField(choices=EDUCATION_LEVEL_CHOICES)
     start_date = models.DateField(blank=True)
     end_date = models.DateField(blank=True)
     education_score = models.CharField(max_length=255, blank=True)
     degree_name = models.CharField(max_length=255, blank=True)
     degree_minor = models.CharField(max_length=255, blank=True)
+
+
+class EmploymentHistory(ProfileUnits):
+    position_title = models.CharField(max_length=255)
+    organization_name = models.CharField(max_length=255)
+    start_date = models.DateField()
+    current_indicator = models.BooleanField(default=False)
+
+    # Optional fields
+    end_date = models.DateField(blank=True)
+    city_name = models.CharField(max_length=255, blank=True)
+    country_sub_division_code = models.CharField(max_length=5, blank=True) 
+    country_code = models.CharField(max_length=3, blank=True)
+    description = models.TextField(blank=True)
+
+    # Hidden fields
+    industry_code = models.CharField(max_length=255, blank=True)
+    job_category_code = models.CharField(max_length=255, blank=True)
+    onet_code = models.CharField(max_length=255, blank=True)
         
 
 class Name(ProfileUnits):
