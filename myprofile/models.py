@@ -33,13 +33,22 @@ class ProfileUnits(models.Model):
 
 
 class Education(ProfileUnits):
+    EDUCATION_LEVEL_CHOICES = ( 
+        (3, 'High School'),
+        (5, 'Associate'),
+        (6, 'Bachelor'),
+        (7, 'Master'),
+        (8, 'Doctoral'),
+    )
     organization_name = models.CharField()
     degree_date = models.DateField()
     degree_major = models.CharField()
     city_name = models.CharField(blank=True)
-    country_sub_division_code = models.CharField(max_length=5, blank=True) # ISO 3166-2:2007
+    # ISO 3166-2:2007
+    country_sub_division_code = models.CharField(max_length=5, blank=True) 
     country_code = models.CharField(max_length=3, blank=True) # ISO 3166-1
-    education_level_code = models.IntegerField() # ISCED-2011 Can be [0-8]
+    # ISCED-2011 Can be [0-8]
+    education_level_code = models.IntegerField(choices=EDUCATION_LEVEL_CHOICES) # ISCED-2011 Can be [0-8]
     start_date = models.DateField(blank=True)
     end_date = models.DateField(blank=True)
     education_score = models.CharField(blank=True)
