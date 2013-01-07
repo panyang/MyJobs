@@ -16,6 +16,14 @@ $('#linkedin').live('click',function() {
     share_url = '/auth/linkedin/?&url='+encodeURIComponent(q);
     openShareWindow(share_url,"LinkedIn");
 });
+$(document).ready(function(){
+    console.log("ready");
+    $("#nav .main-nav").click(function(){
+        console.log("g");
+        $(this).parent().toggleClass("active");
+        return false;
+    });
+});
 function openShareWindow(url,name){
     /*
     Opens a new window using OAuth to share content.

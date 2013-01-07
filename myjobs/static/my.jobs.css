@@ -216,10 +216,12 @@ a:hover{
 	color: #000;
 	border-top: 1px solid #333;
 }
+#nav li.active ul#pop-menu,
 #nav li:hover ul#pop-menu{ 
 	display: block;
 	text-align: left;
 }
+#nav li.active ul#pop-menu li a:hover,
 #nav li:hover ul#pop-menu li a:hover{ 
 	background:#333;
 	color: #fff;
@@ -244,4 +246,52 @@ a:hover{
 .footer a {
     color: #FFF;
     padding: 10px;
+}
+@media screen and (max-width: 1024px){
+    .topbar #nav .arrow{
+        display: none;
+    }
+    .topbar .main-nav{
+        background: red;
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        width: 45px;
+        height: 45px;
+        padding: 0px;
+        text-indent: -9000px;
+        z-index: 101;
+    }
+    .topbar #nav ul#pop-menu{
+        position: absolute;
+        left: 0px;
+        width: 100%;
+        top: 25px;
+        z-index: 100;       
+    }
+    .topbar #nav ul#pop-menu li{
+        display: block;
+        margin: 0px;
+        width: 100%;
+    }
+    .topbar #nav ul#pop-menu li a{
+        border-radius: 0;
+        border-left: 0px;
+        border-right: 0px;
+        font-size: 2em;
+        height: 25px;
+        padding: 10px;        
+    }
+}
+@media screen and (max-width: 500px){
+    #titleRow{
+        margin-top: 0px;
+    }
+    #titleRow #title{
+        display: none;
+    }
+    .loginBox a{
+        margin: 10px 0 0 0;
+    }
+    
 }
