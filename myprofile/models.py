@@ -30,6 +30,21 @@ class ProfileUnits(models.Model):
 
     def __unicode__(self):
         return self.content_type.name
+
+
+class Education(ProfileUnits):
+    organization_name = models.CharField()
+    degree_date = models.DateField()
+    degree_major = models.CharField()
+    city_name = models.CharField()
+    country_sub_division_code = models.CharField(max_length=5) # ISO 3166-2:2007
+    country_code = models.CharField(max_length=3) # ISO 3166-1
+    education_level_code = models.IntegerField() # ISCED-2011
+    start_date = models.DateField()
+    end_date = models.DateField()
+    education_score = models.CharField()
+    degree_name = models.CharField()
+    degree_minor = models.CharField()
         
 
 class Name(ProfileUnits):
