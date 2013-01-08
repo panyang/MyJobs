@@ -252,7 +252,7 @@ a:hover{
         display: none;
     }
     .topbar .main-nav{
-        background: red;
+        background: #C44E34 url(/files/static/images/superbutton.png) no-repeat;
         position: absolute;
         right: 10px;
         top: 10px;
