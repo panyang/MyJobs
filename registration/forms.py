@@ -10,12 +10,15 @@ class CustomAuthForm(AuthenticationForm):
     view for users that haven't activated yet.
     
     """
-    username = forms.CharField(max_length=255,
-                               widget=forms.TextInput(attrs={'class':'required',
-                                'placeholder': 'Email', 'id':'id_email'}))
-    password = forms.CharField(widget=forms.PasswordInput(attrs={'class':'required',
-                                'placeholder':'Password', 'id':'id_password1'},
-                                render_value=False))
+    username = forms.CharField(label="Email", required=True,
+                               widget=forms.TextInput(
+                                   attrs={'placeholder': 'Email',
+                                          'id':'id_email'}))
+    password = forms.CharField(label="Password", required=True,
+                               widget=forms.PasswordInput(
+                                   attrs={'placeholder':'Password',
+                                          'id':'id_password1'},
+                                   render_value=False))
 
     def __init__(self, request=None, *args, **kwargs):
         super(CustomAuthForm, self).__init__(request, *args, **kwargs)
@@ -46,14 +49,19 @@ class CustomAuthForm(AuthenticationForm):
 
         
 class RegistrationForm(forms.Form):
-    email = forms.EmailField(widget=forms.TextInput(attrs={'class':'required',
-                            'placeholder': 'Email', 'id':'id_email'}),
+    email = forms.EmailField(label="Email", required=True,
+                             widget=forms.TextInput(attrs={
+                                 'placeholder': 'Email', 'id':'id_email'}),
                              max_length=255)
-    password1 = forms.CharField(widget=forms.PasswordInput(attrs={'class':'required',
-                                'placeholder':'Password', 'id':'id_password1'},
-                                render_value=False))
-    password2 = forms.CharField(widget=forms.PasswordInput(attrs={'class':'required',
-                                'placeholder': 'Password (again)', 'id': 'id_password2'}, 
+    password1 = forms.CharField(label="Password", required=True,
+                                widget=forms.PasswordInput(attrs={
+                                    'placeholder':'Password',
+                                    'id':'id_password1'},
+                                    render_value=False))
+    password2 = forms.CharField(label="Password (again)", required=True,
+                                widget=forms.PasswordInput(attrs={
+                                    'placeholder': 'Password (again)',
+                                    'id': 'id_password2'}, 
                                 render_value=False))
 
     def clean_email(self):

@@ -6,6 +6,8 @@ Usese the following default django template tags:
 hidden -- built in for all hidden form fields.
 form -- the rest of the form.
 {% endcomment %}
+{% load widget_tweaks %}
+
 <fieldset>
     {# Include but don't display hidden fields #}
     {% for hidden in form.hidden_fields %}
@@ -29,11 +31,13 @@ form -- the rest of the form.
             <div class="form-label pull-left">
                 {{ field.label_tag }}
             </div>
-            {% endif %}
+            {{ field|attr:"placeholder:" }}
+            {% else %}
                 {{ field }}
-                {% if field.help_text %}
-                    <span class="help-block">{{ field.help_text }}</span>
-                {% endif %}
+            {% endif %}
+            {% if field.help_text %}
+            <span class="help-block">{{ field.help_text }}</span>
+            {% endif %}
             {% if field.errors %}
             <div class="clear"></div>
         {% endif %}

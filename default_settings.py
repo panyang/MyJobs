@@ -77,6 +77,7 @@ INSTALLED_APPS = (
     'django.contrib.redirects',
     'django.contrib.staticfiles',
     'django_jenkins',
+    'widget_tweaks',
     'myjobs',
     'myprofile',
     'registration',

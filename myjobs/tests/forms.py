@@ -27,5 +27,5 @@ class ChangePasswordForm(TestCase):
                                             'new_password': 'anothersecret'})
         
         self.failUnless(form.is_valid())
-        form.save(user)
+        form.save()
         self.failUnless(user.check_password('anothersecret'))

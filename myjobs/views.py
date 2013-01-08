@@ -86,10 +86,10 @@ def change_password(request):
     if request.method == "POST":
         form = ChangePasswordForm(user=request.user, data=request.POST)
         if form.is_valid():
-            form.save(request.user)
+            form.save()
             return HttpResponseRedirect('/account')
     else:
-        form = ChangePasswordForm()
+        form = ChangePasswordForm(user=request.user)
     ctx = {'form':form}
     return render_to_response('registration/password_change_form.html', ctx,
                               RequestContext(request))
