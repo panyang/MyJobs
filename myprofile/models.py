@@ -30,6 +30,30 @@ class ProfileUnits(models.Model):
 
     def __unicode__(self):
         return self.content_type.name
+
+
+class Education(ProfileUnits):
+    EDUCATION_LEVEL_CHOICES = ( 
+        (3, 'High School'),
+        (5, 'Associate'),
+        (6, 'Bachelor'),
+        (7, 'Master'),
+        (8, 'Doctoral'),
+    )
+    organization_name = models.CharField(max_length=255)
+    degree_date = models.DateField()
+    degree_major = models.CharField(max_length=255)
+    city_name = models.CharField(max_length=255, blank=True)
+    # ISO 3166-2:2007
+    country_sub_division_code = models.CharField(max_length=5, blank=True) 
+    country_code = models.CharField(max_length=3, blank=True) # ISO 3166-1
+    # ISCED-2011 Can be [0-8]
+    education_level_code = models.IntegerField(choices=EDUCATION_LEVEL_CHOICES) # ISCED-2011 Can be [0-8]
+    start_date = models.DateField(blank=True)
+    end_date = models.DateField(blank=True)
+    education_score = models.CharField(max_length=255, blank=True)
+    degree_name = models.CharField(max_length=255, blank=True)
+    degree_minor = models.CharField(max_length=255, blank=True)
         
 
 class Name(ProfileUnits):
@@ -43,7 +67,7 @@ class Name(ProfileUnits):
         Returns the first_name plus the last_name, with a space in between.
         
         """
-        full_name = '%s %s' % (self.first_name, self.last_name)
+        full_name = '%s %s' % (self.given_name, self.family_name)
         return full_name.strip()
 
     def __unicode__(self):
