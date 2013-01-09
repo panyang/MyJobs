@@ -18,9 +18,8 @@ $('#linkedin').live('click',function() {
 });
 $(document).ready(function(){
     console.log("ready");
-    $("#nav .main-nav").click(function(){
-        console.log("g");
-        $(this).parent().toggleClass("active");
+    $(".topbar .main-nav").click(function(){
+        $("#nav").toggleClass("active");
         return false;
     });
 });
