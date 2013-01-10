@@ -113,8 +113,6 @@ LOGOUT_REDIRECT_URL = '/home'
 
 AUTH_USER_MODEL = 'myjobs.User'
 
-MANAGERS = ADMINS
-
 # Logging Settings
 LOGGING = {
     'version': 1,

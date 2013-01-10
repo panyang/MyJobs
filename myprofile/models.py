@@ -54,6 +54,12 @@ class Education(ProfileUnits):
     education_score = models.CharField(max_length=255, blank=True)
     degree_name = models.CharField(max_length=255, blank=True)
     degree_minor = models.CharField(max_length=255, blank=True)
+    
+class Address(ProfileUnits):
+    AddressLine = models.CharField(max_length=255, blank=True)
+    CityName = models.CharField(max_length=255, blank=True)
+    CountrySubdivisionCode = models.CharField(max_length=2, blank=True)
+    PostalCode = models.CharField(max_length=5, blank=True)   
         
 
 class Name(ProfileUnits):
