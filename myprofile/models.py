@@ -42,18 +42,45 @@ class Education(ProfileUnits):
     )
     organization_name = models.CharField(max_length=255)
     degree_date = models.DateField()
-    degree_major = models.CharField(max_length=255)
     city_name = models.CharField(max_length=255, blank=True)
     # ISO 3166-2:2007
-    country_sub_division_code = models.CharField(max_length=5, blank=True) 
-    country_code = models.CharField(max_length=3, blank=True) # ISO 3166-1
+    country_sub_division_code = models.CharField(max_length=5, blank=True,
+                                                 verbose_name="State/Region") 
+    country_code = models.CharField(max_length=3, blank=True,
+                                    verbose_name="country") # ISO 3166-1
     # ISCED-2011 Can be [0-8]
-    education_level_code = models.IntegerField(choices=EDUCATION_LEVEL_CHOICES) # ISCED-2011 Can be [0-8]
+    education_level_code = models.IntegerField(choices=EDUCATION_LEVEL_CHOICES,
+                                               verbose_name="education level")
     start_date = models.DateField(blank=True)
     end_date = models.DateField(blank=True)
-    education_score = models.CharField(max_length=255, blank=True)
+    education_score = models.CharField(max_length=255, blank=True,
+                                       verbose_name="GPA")
     degree_name = models.CharField(max_length=255, blank=True)
+    degree_major = models.CharField(max_length=255, blank=True)
     degree_minor = models.CharField(max_length=255, blank=True)
+
+
+class EmploymentHistory(ProfileUnits):
+    position_title = models.CharField(max_length=255)
+    organization_name = models.CharField(max_length=255)
+    start_date = models.DateField()
+    current_indicator = models.BooleanField(default=False)
+
+    # Optional fields
+    end_date = models.DateField(blank=True)
+    city_name = models.CharField(max_length=255, blank=True)
+    country_sub_division_code = models.CharField(max_length=5, blank=True,
+                                                 verbose_name="State/Region") 
+    country_code = models.CharField(max_length=3, blank=True,
+                                    verbose_name="country")
+    description = models.TextField(blank=True)
+
+    # Hidden fields
+    industry_code = models.CharField(max_length=255, blank=True,
+                                     verbose_name="industry")
+    job_category_code = models.CharField(max_length=255, blank=True,
+                                         verbose_name="job category")
+    onet_code = models.CharField(max_length=255, blank=True)
         
 
 class Name(ProfileUnits):
