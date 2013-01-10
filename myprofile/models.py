@@ -47,14 +47,14 @@ class Education(ProfileUnits):
     country_sub_division_code = models.CharField(max_length=5, blank=True,
                         verbose_name="state") 
     country_code = models.CharField(max_length=3, blank=True,
-                        verbose_name="country") # ISO 3166-1
+                                    verbose_name="country") # ISO 3166-1
     # ISCED-2011 Can be [0-8]
     education_level_code = models.IntegerField(choices=EDUCATION_LEVEL_CHOICES,
-                        verbose_name="education level")
+                                               verbose_name="education level")
     start_date = models.DateField(blank=True)
     end_date = models.DateField(blank=True)
     education_score = models.CharField(max_length=255, blank=True,
-                        verbose_name="GPA")
+                                       verbose_name="GPA")
     degree_name = models.CharField(max_length=255, blank=True)
     degree_major = models.CharField(max_length=255, blank=True)
     degree_minor = models.CharField(max_length=255, blank=True)
@@ -70,16 +70,16 @@ class EmploymentHistory(ProfileUnits):
     end_date = models.DateField(blank=True)
     city_name = models.CharField(max_length=255, blank=True)
     country_sub_division_code = models.CharField(max_length=5, blank=True,
-                        verbose_name="state") 
+                                                 verbose_name="state") 
     country_code = models.CharField(max_length=3, blank=True,
-                        verbose_name="country")
+                                    verbose_name="country")
     description = models.TextField(blank=True)
 
     # Hidden fields
     industry_code = models.CharField(max_length=255, blank=True,
-                        verbose_name="industry")
+                                     verbose_name="industry")
     job_category_code = models.CharField(max_length=255, blank=True,
-                        verbose_name="job category")
+                                         verbose_name="job category")
     onet_code = models.CharField(max_length=255, blank=True)
         
 
