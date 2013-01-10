@@ -264,6 +264,9 @@ a:hover{
     #topbar-login form{
         display: none;
     }
+    .section #nav{
+        display: none;
+    }
     #topbar-login #nav.active + form,
     #topbar-login #nav:hover + form{
         background:#333;
