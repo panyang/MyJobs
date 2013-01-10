@@ -45,7 +45,7 @@ class Education(ProfileUnits):
     city_name = models.CharField(max_length=255, blank=True)
     # ISO 3166-2:2007
     country_sub_division_code = models.CharField(max_length=5, blank=True,
-                                                 verbose_name="state") 
+                                                 verbose_name="State/Region") 
     country_code = models.CharField(max_length=3, blank=True,
                                     verbose_name="country") # ISO 3166-1
     # ISCED-2011 Can be [0-8]
@@ -70,7 +70,7 @@ class EmploymentHistory(ProfileUnits):
     end_date = models.DateField(blank=True)
     city_name = models.CharField(max_length=255, blank=True)
     country_sub_division_code = models.CharField(max_length=5, blank=True,
-                                                 verbose_name="state") 
+                                                 verbose_name="State/Region") 
     country_code = models.CharField(max_length=3, blank=True,
                                     verbose_name="country")
     description = models.TextField(blank=True)
