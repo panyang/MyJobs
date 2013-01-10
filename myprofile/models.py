@@ -42,17 +42,19 @@ class Education(ProfileUnits):
     )
     organization_name = models.CharField(max_length=255)
     degree_date = models.DateField()
-    degree_major = models.CharField(max_length=255)
     city_name = models.CharField(max_length=255, blank=True)
     # ISO 3166-2:2007
-    country_sub_division_code = models.CharField(max_length=5, blank=True) 
-    country_code = models.CharField(max_length=3, blank=True) # ISO 3166-1
+    country_sub_division_code = models.CharField(max_length=5, blank=True,
+                                                 verbose_name="state") 
+    country_code = models.CharField(max_length=3, blank=True,
+                                    verbose_name="country") # ISO 3166-1
     # ISCED-2011 Can be [0-8]
     education_level_code = models.IntegerField(choices=EDUCATION_LEVEL_CHOICES)
     start_date = models.DateField(blank=True)
     end_date = models.DateField(blank=True)
     education_score = models.CharField(max_length=255, blank=True)
     degree_name = models.CharField(max_length=255, blank=True)
+    degree_major = models.CharField(max_length=255, blank=True)
     degree_minor = models.CharField(max_length=255, blank=True)
 
 
