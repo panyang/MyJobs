@@ -61,10 +61,10 @@ class Education(ProfileUnits):
 
     
 class Address(ProfileUnits):
-    AddressLine = models.CharField(max_length=255, blank=True)    
-    CityName = models.CharField(max_length=255, blank=True)
-    CountrySubdivisionCode = models.CharField(max_length=2, blank=True)
-    PostalCode = models.CharField(max_length=12, blank=True)   
+    address_line = models.CharField(max_length=255, blank=True)    
+    city_name = models.CharField(max_length=255, blank=True)
+    country_sub_division_code = models.CharField(max_length=5, blank=True, verbose_name="State/Region")
+    postal_code = models.CharField(max_length=12, blank=True)   
 
 
 class EmploymentHistory(ProfileUnits):
