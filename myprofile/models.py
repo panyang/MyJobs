@@ -64,7 +64,7 @@ class Address(ProfileUnits):
     label = models.CharField(max_length=60, blank=True)	
     address_line_one = models.CharField(max_length=255, blank=True)
     address_line_two = models.CharField(max_length=255, blank=True)    
-    unit = models.CharField(max_length=25, blank=True)
+    unit = models.CharField(max_length=25, blank=True, verbose_name="Apartment/Unit Number")
     city_name = models.CharField(max_length=255, blank=True)
     country_sub_division_code = models.CharField(max_length=5, blank=True, verbose_name="State/Region")
     country_code = models.CharField(max_length=3, blank=True, verbose_name="Country")
