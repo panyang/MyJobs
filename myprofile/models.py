@@ -67,6 +67,7 @@ class Address(ProfileUnits):
     unit = models.CharField(max_length=25, blank=True)
     city_name = models.CharField(max_length=255, blank=True)
     country_sub_division_code = models.CharField(max_length=5, blank=True, verbose_name="State/Region")
+    country_code = models.CharField(max_length=3, blank=True, verbose_name="Country")
     postal_code = models.CharField(max_length=12, blank=True)   
     post_office_box = models.CharField(max_length=60, blank=True, verbose_name="PO Box Number")
 
