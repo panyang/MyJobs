@@ -61,11 +61,14 @@ class Education(ProfileUnits):
 
     
 class Address(ProfileUnits):
-    address_line = models.CharField(max_length=255, blank=True)    
+    label = models.CharField(max_length=60, blank=True)	
+    address_line_one = models.CharField(max_length=255, blank=True)
+    address_line_two = models.CharField(max_length=255, blank=True)    
+    unit = models.CharField(max_length=25, blank=True)
     city_name = models.CharField(max_length=255, blank=True)
     country_sub_division_code = models.CharField(max_length=5, blank=True, verbose_name="State/Region")
     postal_code = models.CharField(max_length=12, blank=True)   
-
+    post_office_box = models.CharField(max_length=60, blank=True, verbose_name="PO Box Number")
 
 class EmploymentHistory(ProfileUnits):
     position_title = models.CharField(max_length=255)
