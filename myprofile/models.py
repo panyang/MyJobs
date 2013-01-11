@@ -56,10 +56,10 @@ class Education(ProfileUnits):
     degree_minor = models.CharField(max_length=255, blank=True)
     
 class Address(ProfileUnits):
-    AddressLine = models.CharField(max_length=255, blank=True)
+    AddressLine = models.CharField(max_length=255, blank=True)    
     CityName = models.CharField(max_length=255, blank=True)
     CountrySubdivisionCode = models.CharField(max_length=2, blank=True)
-    PostalCode = models.CharField(max_length=5, blank=True)   
+    PostalCode = models.CharField(max_length=12, blank=True)   
         
 
 class Name(ProfileUnits):
