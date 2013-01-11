@@ -72,9 +72,6 @@ class User(AbstractBaseUser):
                               max_length=255, unique=True, db_index=True)
     date_joined = models.DateTimeField(_('date joined'),
                                        default=datetime.datetime.now)
-    # Will be deprecated in favor of using the Name model in myprofile
-    first_name = models.CharField(max_length=30, blank=True)
-    last_name = models.CharField(max_length=30, blank=True)
 
     # Permission Levels
     is_staff = models.BooleanField(_('staff status'), default=False,
@@ -103,17 +100,6 @@ class User(AbstractBaseUser):
 
     def email_user(self, subject, message, from_email):
         send_mail(subject, message, from_email, [self.email])
-
-    def get_full_name(self):
-        """
-        Returns the first_name plus the last_name, with a space in between.
-        """
-        full_name = '%s %s' % (self.first_name, self.last_name)
-        return full_name.strip()
-
-    def get_short_name(self):
-        "Returns the short name for the user."
-        return self.first_name.strip()
 
     def has_perm(self, perm, obj=None):
         """

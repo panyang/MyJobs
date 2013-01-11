@@ -84,8 +84,10 @@ class EmploymentHistory(ProfileUnits):
         
 
 class Name(ProfileUnits):
-    given_name = models.CharField(max_length=30, blank=True)
-    family_name = models.CharField(max_length=30, blank=True)
+    given_name = models.CharField(max_length=30, blank=True,
+                                  verbose_name="first name")
+    family_name = models.CharField(max_length=30, blank=True,
+                                   verbose_name="last name")
     display_name = models.CharField(max_length=60, blank=True)
     primary = models.BooleanField(default=False)
         
