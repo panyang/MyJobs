@@ -50,11 +50,9 @@ a:hover{
     color: #fff;
     font-size: .8em;
 }
-#titleRow{
-    margin-top: 25px;
-    }
 #title{
     padding-top: 60px;
+    padding-bottom: 60px;
     }
 #title h1{
     text-indent: -9000px;
@@ -216,10 +214,12 @@ a:hover{
 	color: #000;
 	border-top: 1px solid #333;
 }
+#nav.active li ul#pop-menu,
 #nav li:hover ul#pop-menu{ 
 	display: block;
 	text-align: left;
 }
+#nav.active ul#pop-menu li a:hover,
 #nav li:hover ul#pop-menu li a:hover{ 
 	background:#333;
 	color: #fff;
@@ -244,4 +244,96 @@ a:hover{
 .footer a {
     color: #FFF;
     padding: 10px;
+}
+@media screen and (max-width: 1024px){
+    .topbar #nav .arrow{
+        display: none;
+    }
+    .topbar .main-nav{
+        background: #C44E34 url(/files/static/images/superbutton.png) no-repeat;
+        position: absolute;
+        right: 10px;
+        top: 10px;
+        width: 45px;
+        height: 45px;
+        padding: 0px;
+        text-indent: -9000px;
+        z-index: 101;
+        border-width: 2px;
+    }
+    #topbar-login form{
+        display: none;
+    }
+    .section #nav{
+        display: none;
+    }
+    #topbar-login #nav.active + form,
+    #topbar-login #nav:hover + form{
+        background:#333;
+        padding: 0;
+        margin: 3px 0 0 0;
+        position:absolute;
+        top: 0px;
+        left: 0px;
+        padding-top: 10px;
+        padding-bottom: 10px;
+        display: block;
+        corner-bottom-left-radius: 4px;
+        corner-bottom-right-radius: 4px;
+        width: 100%;
+    }    
+    .topbar #topbar-login input{
+        height: 30px;
+     }
+    .topbar #topbar-login button{
+        margin-right: 70px;
+        padding: 10px 25px 9px 25px;
+    }
+    .topbar #nav ul#pop-menu{
+        position: absolute;
+        left: 0px;
+        width: 100%;
+        top: 25px;
+        z-index: 100;       
+    }
+    .topbar #nav ul#pop-menu li{
+        display: block;
+        margin: 0px;
+        width: 100%;
+    }
+    .topbar #nav ul#pop-menu li a{
+        -webkit-border-radius: 0;
+        -moz-border-radius: 0;
+        border-radius: 0;
+        border-left: 0px;
+        border-right: 0px;
+        font-size: 2em;
+        height: 25px;
+        padding: 10px;        
+    }
+    .loginBox a{
+        margin: 10px 0 0 0;
+    }
+}
+@media screen and (max-width: 500px){
+    #titleRow{
+        margin-top: 0px;
+    }
+    #titleRow #title{
+        display: none;
+    }
+    
+    .topbar #topbar-login input{
+        padding-left: 0px;
+        padding-right: 0px;
+        text-indent: 5px;
+    }
+    .topbar #topbar-login input,
+    .topbar #topbar-login button{
+        width: 80%;
+        margin: 0 0 10px 10px;
+        float: none;
+        clear: both;
+        display: block;
+    }
 }

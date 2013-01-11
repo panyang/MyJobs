@@ -36,6 +36,13 @@ def home(request):
     """
     registrationform =  RegistrationForm(auto_id=False)
     loginform = CustomAuthForm(auto_id=False)
+    if request.user.is_authenticated():
+        try:
+            given_name = Name.objects.get(user=request.user,primary=True).given_name
+        except Name.DoesNotExist:
+            given_name = None
+    else:
+        given_name = None
     if request.method == "POST":
         if request.POST['action'] == "register":
             registrationform = RegistrationForm(request.POST, auto_id=False)
@@ -56,14 +63,21 @@ def home(request):
                 login(request, loginform.get_user())
                 return HttpResponseRedirect('/account')
     ctx = {'registrationform':registrationform,
-           'loginform': loginform}
+           'loginform': loginform,
+           'given_name': given_name}
     return render_to_response('index.html', ctx, RequestContext(request))
 
     
 @login_required
 def view_account(request):
-    """Login complete view, displays user profile on My.Jobs... unless"""
-    return render_to_response('done.html', RequestContext(request))
+    """Login complete view, displays user profile on My.Jobs"""
+    try:
+        name_obj = Name.objects.get(user=request.user,primary=True)
+    except Name.DoesNotExist:
+        name_obj = None
+
+    ctx = {'name_obj':name_obj}
+    return render_to_response('done.html', ctx, RequestContext(request))
 
 @login_required
 def edit_account(request):

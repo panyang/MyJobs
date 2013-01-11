@@ -4,6 +4,7 @@ from django.test import TestCase
 
 from myjobs.forms import *
 from myjobs.models import User
+from myprofile.models import Name
 from registration.forms import *
 from registration.models import ActivationProfile
 
@@ -17,9 +18,10 @@ class AppViewTests(TestCase):
                                     data={'first_name': 'Alice',
                                           'last_name': 'Smith',
                                           'opt_in_myjobs': True}, follow=True)
+        name = Name.objects.get(user=resp.context['user'],primary=True)
         self.assertRedirects(resp, 'http://testserver%s' % '/account/')
-        self.assertEqual(resp.context['user'].first_name, 'Alice')
-        self.assertEqual(resp.context['user'].last_name, 'Smith')
+        self.assertEqual(name.given_name, 'Alice')
+        self.assertEqual(name.family_name, 'Smith')
         self.assertEqual(resp.context['user'].opt_in_myjobs, True)\
 
     def test_change_password_success(self):

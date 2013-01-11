@@ -17,9 +17,9 @@ done.html -- presents user_view_profile.
                   <td>{{ user.email|default:"Not provided" }}</td></tr>
                 <tr><td class="table-field"><b>{% trans "Name" %}</b></td>
                   <td>
-                    {% if user.first_name %} {{ user.first_name }} {% endif %}
-                    {% if user.last_name %} {{ user.last_name }} {% endif %}
-                    {% if not user.first_name and not user.last_name %} Not Provided {% endif%}
+                    {% if name_obj.given_name %} {{ name_obj.given_name }} {% endif %}
+                    {% if name_obj.family_name %} {{ name_obj.family_name }} {% endif %}
+                    {% if not name_obj.given_name and not name_obj.family_name %} Not Provided {% endif%}
                 </td></tr>
                 <tr><td class="table-field"><b>{% trans "Last Logged In" %}</b></td>
                   <td>{{ last_login }}</td></tr>

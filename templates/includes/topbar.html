@@ -39,7 +39,9 @@ topbar.html -- Implements basic my.jobs nav.
                 </div>
                 {% else %}
                 <div class="span10 pull-right pagination-right" id="topbar-login">
-                {% include "includes/widget-top-bar-login.html" with form=loginform %}	
+                {% block topbarlogin %}
+                {% include "includes/widget-top-bar-login.html" with form=loginform %}
+                {% endblock %}
                 </div>
                 {% endif %}
             </div> <!-- /inline-inputs -->         

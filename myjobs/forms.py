@@ -7,6 +7,7 @@ from django.utils.http import int_to_base36
 from django.utils.translation import ugettext_lazy as _
 
 from myjobs.models import User
+from myprofile.models import Name
 
 class EditProfileForm(forms.Form):
     """
@@ -19,8 +20,17 @@ class EditProfileForm(forms.Form):
     opt_in_myjobs = forms.BooleanField(label=_("Receive messages from my.jobs"),
                                        required=False)
     def save(self,u):
-        u.first_name = self.cleaned_data["first_name"]
-        u.last_name = self.cleaned_data["last_name"]
+        first = self.cleaned_data['first_name']
+        last = self.cleaned_data['last_name']
+        try:
+            obj = Name.objects.get(user=u, primary=True)
+            obj.given_name = first
+            obj.family_name = last
+            obj.save()
+        except Name.DoesNotExist:
+            obj = Name(user=u, primary=True, given_name=first,family_name=last)
+            obj.save()
+            
         u.opt_in_myjobs = self.cleaned_data["opt_in_myjobs"]
         u.save()
 

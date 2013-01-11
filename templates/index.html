@@ -1,6 +1,6 @@
 {% extends "myjobs_base.html" %}
 {% load i18n %}
-
+{% block topbarlogin %}{% endblock topbarlogin %}
 {% block meta-extra %}
 
 <script type="text/javascript" src="{{STATIC_URL}}/account-creation.js"></script>
@@ -22,8 +22,8 @@
             <div class="loginBox">
                 {% if user.is_authenticated %}
                     <p>Welcome 
-                        <b>{% if user.first_name %}
-                            {{user.first_name}}
+                        <b>{% if given_name %}
+                            {{given_name}}
                         {% else %}
                             {{user.email|truncatechars:23}}
                         {% endif %}!</b>
