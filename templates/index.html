@@ -22,8 +22,8 @@
             <div class="loginBox">
                 {% if user.is_authenticated %}
                     <p>Welcome 
-                        <b>{% if user.first_name %}
-                            {{user.first_name}}
+                        <b>{% if given_name %}
+                            {{given_name}}
                         {% else %}
                             {{user.email|truncatechars:23}}
                         {% endif %}!</b>
