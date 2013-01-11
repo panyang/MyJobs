@@ -71,6 +71,23 @@ class Address(ProfileUnits):
     postal_code = models.CharField(max_length=12, verbose_name="Zip Code")   
     post_office_box = models.CharField(max_length=60, blank=True, verbose_name="PO Box Number")
 
+
+class Telephone(ProfileUnits):
+    USE_CODE_CHOICES = ( 
+        ('Home', 'Home'),
+        ('Work', 'Work'),
+        ('Mobile', 'Mobile'),
+        ('Pager', 'Pager'),
+        ('Fax', 'Fax'),
+        ('Other', 'Other'),
+    )	
+    channel_code = models.CharField(max_length=30)
+    use_code = models.CharField(choices=USE_CODE_CHOICES, verbose_name="Phone Number Type")	
+    country_dialing = models.IntegerField(max_length=1, default=1, verbose_name="Country Code")
+    area_dialing = models.IntegerField(max_length=3, verbose_name="Area Code")    
+    number = models.CharField(max_length=8, verbose_name="DialNumber")
+    extension = models.IntegerField(max_length=5, blank=True)
+
 class EmploymentHistory(ProfileUnits):
     position_title = models.CharField(max_length=255)
     organization_name = models.CharField(max_length=255)
