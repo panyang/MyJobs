@@ -81,12 +81,23 @@ class Telephone(ProfileUnits):
         ('Fax', 'Fax'),
         ('Other', 'Other'),
     )	
-    channel_code = models.CharField(max_length=30)
     use_code = models.CharField(choices=USE_CODE_CHOICES, verbose_name="Phone Number Type")	
     country_dialing = models.IntegerField(max_length=1, default=1, verbose_name="Country Code")
     area_dialing = models.IntegerField(max_length=3, verbose_name="Area Code")    
     number = models.CharField(max_length=8, verbose_name="DialNumber")
     extension = models.IntegerField(max_length=5, blank=True)
+    
+    def get_channel_code(self):
+    	    if self.use_code = "Home" or self.use_code = "Work" or self.use_code = "Other"
+    	    	return "Telephone"
+    	    if self.use_code = "Mobile"
+    	    	return "MobileTelephone"
+    	    if self.use_code = "Pager"
+    	    	return "Pager"
+    	    if self.use_code = "Fax"
+    	    	return "Fax"
+     channel_code = property(get_channel_code)     
+    
 
 
 class EmploymentHistory(ProfileUnits):
