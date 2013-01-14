@@ -90,14 +90,12 @@ class Telephone(ProfileUnits):
     def get_channel_code(self):
     	    if self.use_code = "Home" or self.use_code = "Work" or self.use_code = "Other"
     	    	return "Telephone"
-    	    elif self.use_code = "Mobile"
+    	    if self.use_code = "Mobile"
     	    	return "MobileTelephone"
-    	    elif self.use_code = "Pager"
+    	    if self.use_code = "Pager"
     	    	return "Pager"
-    	    elif self.use_code = "Fax"
+    	    if self.use_code = "Fax"
     	    	return "Fax"
-    	    else:
-    	    	return "None"    	    
      channel_code = property(get_channel_code)   
 
 
