@@ -96,7 +96,7 @@ class Telephone(ProfileUnits):
     	     return "Pager"
     	if self.use_code = "Fax"
     	     return "Fax"
-     channel_code = property(get_channel_code)   
+    channel_code = property(get_channel_code)   
 
 
 class EmploymentHistory(ProfileUnits):
