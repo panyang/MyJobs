@@ -87,7 +87,6 @@ class Telephone(ProfileUnits):
     number = models.CharField(max_length=8, verbose_name="DialNumber")
     extension = models.IntegerField(max_length=5, blank=True)
     
-    #Checks use_code and returns channel_code     
     def get_channel_code(self):    	       	    
 	    if self.use_code = "Home" or self.use_code = "Work" or self.use_code = "Other"
     	    	return "Telephone"
