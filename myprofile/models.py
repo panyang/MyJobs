@@ -96,7 +96,7 @@ class Telephone(ProfileUnits):
     	    	return "Pager"
     	    elif self.use_code = "Fax"
     	    	return "Fax"
-    	    else
+    	    else:
     	    	return "None"    	    
      channel_code = property(get_channel_code)   
 
