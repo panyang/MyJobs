@@ -80,23 +80,26 @@ class Telephone(ProfileUnits):
         ('Pager', 'Pager'),
         ('Fax', 'Fax'),
         ('Other', 'Other'),
-    )	
-    use_code = models.CharField(choices=USE_CODE_CHOICES, verbose_name="Phone Number Type")	
-    country_dialing = models.IntegerField(max_length=1, default=1, verbose_name="Country Code")
+    )
+    channel_code = models.CharField(max_length=30)
+    use_code = models.CharField(max_length=30, choices=USE_CODE_CHOICES, 
+    	     			verbose_name="Phone Number Type")	
+    country_dialing = models.IntegerField(max_length=1, default=1, 
+    	    				  verbose_name="Country Code")
     area_dialing = models.IntegerField(max_length=3, verbose_name="Area Code")    
     number = models.CharField(max_length=8, verbose_name="DialNumber")
     extension = models.IntegerField(max_length=5, blank=True)
     
-    def get_channel_code(self):
-    	if self.use_code = "Home" or self.use_code = "Work" or self.use_code = "Other"
-    	     return "Telephone"
-    	if self.use_code = "Mobile"
-    	     return "MobileTelephone"
-    	if self.use_code = "Pager"
-    	     return "Pager"
-    	if self.use_code = "Fax"
-    	     return "Fax"
-    channel_code = property(get_channel_code)   
+    def save(self, *args, **kwargs):
+    	if self.use_code == "Home" or self.use_code == "Work" or self.use_code == "Other":
+    	     self.channel_code = "Telephone"
+    	if self.use_code == "Mobile":
+    	     self.channel_code = "MobileTelephone"
+    	if self.use_code == "Pager":
+    	     self.channel_code = "Pager"
+    	if self.use_code == "Fax":
+    	     self.channel_code = "Fax"
+    	super(Telephone, self).save(*args, **kwargs);
 
 
 class EmploymentHistory(ProfileUnits):
