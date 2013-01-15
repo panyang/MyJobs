@@ -65,7 +65,7 @@ def home(request):
     ctx = {'registrationform':registrationform,
            'loginform': loginform,
            'given_name': given_name,
-            'name_obj': get_name_obj(request)}
+           'name_obj': get_name_obj(request)}
     return render_to_response('index.html', ctx, RequestContext(request))
 
     
