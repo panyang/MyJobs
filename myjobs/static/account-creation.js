@@ -15,7 +15,7 @@ function register(csrf_token) {
     */
     $('button#register').click(function(e) {
         e.preventDefault();
-        var self = $(this).parents("div#loginBox");
+        var self = $(this).parents("div.loginBox");
         var form = $('form#registration-form')
         $.ajax({
             type: "POST",
