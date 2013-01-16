@@ -2,7 +2,7 @@
 Document Level Actions
 *******/
 $(document).ready(function(){
-    $("select").combobox();
+    $("select").makeCombobox();
 });
 /******
 My.jobs Share window functions. Assigns click events and builds share window. 
@@ -45,131 +45,89 @@ function openShareWindow(url,name){
     atts = 'toolbar=no,width=568,height=360';
     share_window = window.open(url, title,atts);
 }
-/*Autocomplete Combobox widget from jqueryui.com*/
-(function( $ ) {
-    $.widget( "ui.combobox", {
-      _create: function() {
-        var input,
-          that = this,
-          select = this.element.hide(),
-          selected = select.children( ":selected" ),
-          value = selected.val() ? selected.text() : "",
-          wrapper = this.wrapper = $( "<span>" )
-            .addClass( "ui-combobox" )
-            .insertAfter( select );
-    
-        function removeIfInvalid(element) {
-          var value = $( element ).val(),
-            matcher = new RegExp( "^" + $.ui.autocomplete.escapeRegex( value ) + "$", "i" ),
-            valid = false;
-          select.children( "option" ).each(function() {
-            if ( $( this ).text().match( matcher ) ) {
-              this.selected = valid = true;
-              return false;
+function repopulateSelectField(field_id, new_data, use_combobox){
+    option_string = "";
+    if(typeof(use_combobox=="undefined")){use_combobox=true;}
+    for(i=0;i<new_data.length;i++){
+        option_string+="<option value='"+new_data[i].key+"'>";
+        option_string+=new_data[i].value+"</option>";
+    }
+    $("#"+field_id).html(option_string);
+    //$("#"+field_id+" + .ui-combobox").remove();
+    $("#"+field_id).combobox();
+    console.log(use_combobox)
+}
+
+/*Combobox Widget. Based loosely on the jQuery UI example*/
+(function($){
+    $.widget( "ui.makeCombobox",{
+        _create: function(){
+            parent = this.element;
+            selected = parent.children( ":selected" )
+            parent_id = parent.attr("id");
+            parent_id_orig = parent_id+"_orig";
+            parent.attr("id",parent_id_orig)
+            dict = [];
+            source = parent.children("option");
+            for(i=0;i<source.length;i++){
+                if(source[i].value != ""){
+                    dict[i]={"key":source[i].value,"value":source[i].innerHTML};
+                }
             }
-          });
-          if ( !valid ) {
-            // remove invalid value, as it didn't match anything
-            $( element )
-              .val( "" )
-              .attr( "title", value + " didn't match any item" )
-              .tooltip( "open" );
-            select.val( "" );
-            setTimeout(function() {
-              input.tooltip( "close" ).attr( "title", "" );
-            }, 2500 );
-            input.data( "autocomplete" ).term = "";
-            return false;
-          }
+            parent.hide();
+            new_ac = $("<input>")
+                .attr("id",parent_id)
+                .attr("type","text")
+                .insertBefore(parent)
+                .autocomplete({
+                    source: dict,
+                    minLength: 0,
+                    change: function(){
+                        /*****
+                        Link the original select box to the dynamic AC field
+                        *****/
+                        orig_options = $("#"+this.id+"_orig").children("option")
+                        ac_field = this;
+                        val_to_select = "";
+                        for(opt=0; opt < orig_options.length; opt++){
+                            if (ac_field.value==$(orig_options[opt]).html()){
+                                val_to_select = $(orig_options[opt]).val()
+                            }
+                        }
+                        $("#"+this.id+"_orig").val(val_to_select);
+                    }
+                });
+            console.log(parent.val())
+            $("<a>")
+                .attr( "title", "Show All Items")
+                .attr( "data-for",parent_id)
+                .insertAfter(new_ac)
+                .button({
+                    icons: {
+                        primary: "ui-icon-triangle-1-s"
+                    },
+                    text: false
+                })
+                .addClass( "ui-corner-right ui-combobox-toggle" )
+                .click(function() {
+                    // close if already visible
+                    if ( new_ac.autocomplete( "widget" ).is( ":visible" ) ) {
+                        new_ac.autocomplete( "close" );
+                        return;
+                    }
+    
+                    // work around a bug (likely same cause as #5265)
+                    $( this ).blur();
+    
+                    // pass empty string as value to search for, displaying all results
+                    target = $(this).attr("data-for");
+                    $("#"+target).autocomplete( "search", "" );
+                    $("#"+target).focus();
+                });
+        },
+        destroy: function() {
+            this.element.show();
+            $.Widget.prototype.destroy.call( this );
         }
-    
-        input = $( "<input>" )
-          .appendTo( wrapper )
-          .val( value )
-          .attr( "title", "" )
-          .addClass( "ui-state-default ui-combobox-input" )
-          .autocomplete({
-            delay: 0,
-            minLength: 0,
-            source: function( request, response ) {
-              var matcher = new RegExp( $.ui.autocomplete.escapeRegex(request.term), "i" );
-              response( select.children( "option" ).map(function() {
-                var text = $( this ).text();
-                if ( this.value && ( !request.term || matcher.test(text) ) )
-                  return {
-                    label: text.replace(
-                      new RegExp(
-                        "(?![^&;]+;)(?!<[^<>]*)(" +
-                        $.ui.autocomplete.escapeRegex(request.term) +
-                        ")(?![^<>]*>)(?![^&;]+;)", "gi"
-                      ), "<strong>$1</strong>" ),
-                    value: text,
-                    option: this
-                  };
-              }) );
-            },
-            select: function( event, ui ) {
-              ui.item.option.selected = true;
-              that._trigger( "selected", event, {
-                item: ui.item.option
-              });
-            },
-            change: function( event, ui ) {
-              if ( !ui.item )
-                return removeIfInvalid( this );
-            }
-          })
-          .addClass( "ui-widget ui-widget-content ui-corner-left" );
-    
-        input.data( "autocomplete" )._renderItem = function( ul, item ) {
-          return $( "<li>" )
-            .data( "item.autocomplete", item )
-            .append( "<a>" + item.label + "</a>" )
-            .appendTo( ul );
-        };
-    
-        $( "<a>" )
-          .attr( "tabIndex", -1 )
-          .attr( "title", "Show All Items" )
-          //.tooltip()
-          .appendTo( wrapper )
-          .button({
-            icons: {
-              primary: "ui-icon-triangle-1-s"
-            },
-            text: false
-          })
-          .removeClass( "ui-corner-all" )
-          .addClass( "ui-corner-right ui-combobox-toggle" )
-          .click(function() {
-            // close if already visible
-            if ( input.autocomplete( "widget" ).is( ":visible" ) ) {
-              input.autocomplete( "close" );
-              removeIfInvalid( input );
-              return;
-            }
-    
-            // work around a bug (likely same cause as #5265)
-            $( this ).blur();
-    
-            // pass empty string as value to search for, displaying all results
-            input.autocomplete( "search", "" );
-            input.focus();
-          });
-    
-          /*input
-            .tooltip({
-              position: {
-                of: this.button
-              },
-              tooltipClass: "ui-state-highlight"
-            });*/
-      },
-    
-      destroy: function() {
-        this.wrapper.remove();
-        this.element.show();
-        $.Widget.prototype.destroy.call( this );
-      }
-    });
-    })( jQuery );
+    })
+})( jQuery )
