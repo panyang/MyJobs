@@ -25,7 +25,20 @@ a:hover{
 .form-label label{
     font-weight: bold;
     }
-
+.ui-combobox {
+    position: relative;
+    display: inline-block;
+    }
+.ui-combobox-toggle {
+    padding: 9px 0px 8px 0px;
+    position: relative;
+    top: 12px;
+    left: -1px;
+    }
+.ui-combobox-input {
+    margin: 0;
+    padding: 0.3em;
+    }
 /*Topbar Styles*/
 .topbar #topbar-logo{
     height: 30px;

@@ -1,5 +1,6 @@
 {% extends "myjobs_base.html" %}
 {% load i18n %}
+{% load selection_boxes %}
 
 {% block content %}
 <section><div class="section subpage">
@@ -11,6 +12,7 @@
             <form action="" method="POST">
               {% include "includes/form-error-highlight.html" %}
               {% csrf_token %}
+              {% country_region_select "usa" "country_selection"%}
               <div class="actions">
                 <a href="{% url 'view_account' %}" class="btn pull-right">{% trans 'Cancel' %}</a>
                 <button type="submit" class="btn primary pull-right" value="submit">{% trans "Save" %}</button>
