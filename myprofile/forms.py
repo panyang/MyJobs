@@ -40,10 +40,13 @@ class NameForm(BaseProfileForm):
     # as described above
     given_name = forms.CharField(label="First Name", max_length=30,
                                  widget=forms.TextInput(attrs={
-                                     'placeholder': 'First Name'}))
+                                     'placeholder': 'First Name',
+                                     'id':'id_given_name'
+                                 }))
     family_name = forms.CharField(label="Last Name", max_length=30,
                                  widget=forms.TextInput(attrs={
-                                     'placeholder': 'Last Name'}))
+                                     'placeholder': 'Last Name',
+                                 'id':'id_family_name'}))
     primary = forms.BooleanField(label="Is this your primary name?",
                                  required=False)
 

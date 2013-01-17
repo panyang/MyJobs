@@ -26,7 +26,7 @@ class ProfileUnits(models.Model):
         """
         if(not self.content_type):
             self.content_type = ContentType.objects.get_for_model(self.__class__)
-            super(ProfileUnits, self).save(*args, **kwargs)
+        super(ProfileUnits, self).save(*args, **kwargs)
 
     def __unicode__(self):
         return self.content_type.name
@@ -131,7 +131,7 @@ class Name(ProfileUnits):
     family_name = models.CharField(max_length=30, blank=True,
                                    verbose_name="last name")
     display_name = models.CharField(max_length=60, blank=True)
-    primary = models.BooleanField(default=False)
+    primary = models.BooleanField(default=False, help_text="Is this your primary name?")
         
     def get_full_name(self):
         """
@@ -148,8 +148,8 @@ class Name(ProfileUnits):
 class SecondaryEmail(ProfileUnits):
     email = models.EmailField(max_length=255, blank=True)
     label = models.CharField(max_length=30, blank=True)
-    verified = models.BooleanField(default=False)
-    verified_date = models.DateTimeField(blank=True, null=True)
+    verified = models.BooleanField(default=False,editable=False)
+    verified_date = models.DateTimeField(blank=True, null=True,editable=False)
 
     def __unicode__(self):
         return self.email

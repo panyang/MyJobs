@@ -10,6 +10,7 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.views.generic import TemplateView
 
 from myjobs.forms import *
+from myprofile.forms import *
 from registration.forms import *
 
 
@@ -31,11 +32,17 @@ def home(request):
     If an account is successfully created, this view returns a simple 'valid'
     HTTP Response, which the front end jQuery recognizes as a signal to continue
     with the account creation process. If an error occurs in the form, this view
-    returns an updated registration form showing the errors.
+    returns an updated registratiocn form showing the errors.
 
     """
-    registrationform =  RegistrationForm(auto_id=False)
+    registrationform = RegistrationForm(auto_id=False)
     loginform = CustomAuthForm(auto_id=False)
+    nameform = NameForm(auto_id=False)
+    emailform = SecondaryEmailForm(auto_id=False)
+
+    import ipdb
+    ipdb.set_trace()
+    
     if request.user.is_authenticated():
         try:
             given_name = Name.objects.get(user=request.user,primary=True).given_name
@@ -43,6 +50,7 @@ def home(request):
             given_name = None
     else:
         given_name = None
+        
     if request.method == "POST":
         if request.POST['action'] == "register":
             registrationform = RegistrationForm(request.POST, auto_id=False)
@@ -56,15 +64,29 @@ def home(request):
                 return render_to_response('includes/widget-user-registration.html',
                                           {'form': registrationform},
                                           context_instance=RequestContext(request))
-                                          
         elif request.POST['action'] == "login":
             loginform = CustomAuthForm(request.POST)
             if loginform.is_valid():
                 login(request, loginform.get_user())
                 return HttpResponseRedirect('/account')
+        elif request.POST['action'] == "save_profile":
+            nameform = NameForm(request.POST, user=request.user, auto_id=False)
+            emailform = SecondaryEmailForm(request.POST, user=request.user,
+                                           auto_id=False)
+            
+            if nameform.is_valid() and emailform.is_valid():
+                nameform.save()
+                emailform.save()
+                return HttpResponse('Valid')
+            else:
+                return render_to_response('includes/widget-user-registration.html',
+                                          {'form': registrationform},
+                                          context_instance=RequestContext(request))
     ctx = {'registrationform':registrationform,
            'loginform': loginform,
-           'given_name': given_name}
+           'given_name': given_name,
+           'nameform': nameform,'emailform': emailform}
+            
     return render_to_response('index.html', ctx, RequestContext(request))
 
     

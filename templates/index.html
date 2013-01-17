@@ -46,22 +46,19 @@
     {% if not user.is_authenticated %}
     <div class="row" id="account-page-2" style="display: none">
         <div class="span10 offset1" id="account-page-2">
-            <h1>{% trans "Thanks for registering!" %}</h1>
-            
-            <div class="alert-message info">
-                <p>{% trans "Please check your email for a special message containing an activation link in order to gain full access to your MyJobs account." %}</p>
+          <form action="" method="post" id="profile-form">
+            {% include 'includes/form-error-highlight.html' with form=nameform%}
+            {% include 'includes/form-error-highlight.html' with form=emailform%}
+            {% csrf_token %}
+            <div class="actions">
+              <button type="submit" class="btn primary pull-right" value="save" id="save">{% trans "Save" %}</button>
+              <div class="clear"></div>
             </div>
-            <p>{% trans "If the activation message is not in your inbox:" %}</p>
-            <ul>
-                <li>{% trans 'Check your spam or junk mail folder. The subject of the email is "Account Activation for my.jobs".' %}</li>
-                <li>{% trans 'Allow up to 15 minutes for your email provider to deliver the email we have sent.' %}</li>
-                <li>{% trans 'If you are using a free email service like Gmail, Yahoo or Hotmail, please allow 30 minutes.' %}
-            </ul>
-            <a href="{% url 'edit_account' %}">Would you like to edit your profile information in the meantime?</a>
-    
-            <div class="options">
-                <button class="btn pull-right" id="profile">Skip: Take me to my profile</button>
-            </div>
+          </form>
+          
+          <div class="options">
+            <button class="btn pull-right" id="profile">Skip: Take me to my profile</button>
+          </div>
         </div>
     </div>
     {% endif %}    
