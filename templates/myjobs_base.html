@@ -43,10 +43,10 @@
                                 <li><a href="" class="main-nav">
                                         {% trans "Logged in as " %} 
                                         <b>
-                                        {% if user.first_name %}
-                                            {{user.first_name}}
+                                        {% if name_obj %}
+                                            {{name_obj}}
                                         {% else %}
-                                            {{user.email|truncatechars:25}}
+                                            {{user.email|truncatechars:20}}
                                         {% endif %} 
                                         </b>
                                         <span class="arrow"></span>

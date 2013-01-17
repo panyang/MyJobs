@@ -37,19 +37,9 @@ def home(request):
     """
     registrationform = RegistrationForm(auto_id=False)
     loginform = CustomAuthForm(auto_id=False)
+
     nameform = NameForm(auto_id=False)
     emailform = SecondaryEmailForm(auto_id=False)
-
-    import ipdb
-    ipdb.set_trace()
-    
-    if request.user.is_authenticated():
-        try:
-            given_name = Name.objects.get(user=request.user,primary=True).given_name
-        except Name.DoesNotExist:
-            given_name = None
-    else:
-        given_name = None
         
     if request.method == "POST":
         if request.POST['action'] == "register":
@@ -85,20 +75,16 @@ def home(request):
     ctx = {'registrationform':registrationform,
            'loginform': loginform,
            'given_name': given_name,
-           'nameform': nameform,'emailform': emailform}
-            
+           'nameform': nameform,
+           'emailform': emailform,            
+           'name_obj': get_name_obj(request)}
     return render_to_response('index.html', ctx, RequestContext(request))
 
     
 @login_required
 def view_account(request):
     """Login complete view, displays user profile on My.Jobs"""
-    try:
-        name_obj = Name.objects.get(user=request.user,primary=True)
-    except Name.DoesNotExist:
-        name_obj = None
-
-    ctx = {'name_obj':name_obj}
+    ctx = {'name_obj': get_name_obj(request)}
     return render_to_response('done.html', ctx, RequestContext(request))
 
 @login_required
@@ -110,10 +96,12 @@ def edit_account(request):
             form.save(request.user)
             return HttpResponseRedirect('/account')
     else:
-        form = EditProfileForm(user_instance)
-
+        form = EditProfileForm(user_instance)    
+        
     ctx = {'form': form,
-           'user': request.user}
+           'user': request.user,
+           'name_obj': get_name_obj(request)
+            }
     return render_to_response('edit-account.html', ctx,
                               RequestContext(request))
 
@@ -126,13 +114,38 @@ def change_password(request):
             return HttpResponseRedirect('/account')
     else:
         form = ChangePasswordForm(user=request.user)
-    ctx = {'form':form}
+    
+    ctx = {
+        'form':form,
+        'name_obj': get_name_obj(request)
+        }
     return render_to_response('registration/password_change_form.html', ctx,
                               RequestContext(request))
 
 def error(request):
     """Error view"""
     messages = get_messages(request)
-    return render_to_response('error.html', {'version': version,
-                              'messages': messages}, RequestContext(request))
-        
+    ctx = {
+        'name_obj': get_name_object(request),
+        'version': version,
+        'messages': messages
+        }
+    return render_to_response('error.html', ctx, RequestContext(request))
+
+def get_name_obj(request):
+    """
+    A utility function that returns the user name object for inclusion in the
+    view context.
+    
+    Inputs:
+    :request:   request object
+    
+    Returns:
+    :name_obj:  User's display name (str)|None
+    
+    """
+    try:
+        name_obj = Name.objects.get(user=request.user,primary=True)
+    except (Name.DoesNotExist,TypeError):
+        name_obj = None
+    return name_obj
