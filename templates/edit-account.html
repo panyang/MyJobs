@@ -12,7 +12,9 @@
             <form action="" method="POST">
               {% include "includes/form-error-highlight.html" %}
               {% csrf_token %}
+              <fieldset>
               {% country_region_select "usa" "country_selection"%}
+              </fieldset>
               <div class="actions">
                 <a href="{% url 'view_account' %}" class="btn pull-right">{% trans 'Cancel' %}</a>
                 <button type="submit" class="btn primary pull-right" value="submit">{% trans "Save" %}</button>

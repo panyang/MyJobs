@@ -78,6 +78,7 @@ function repopulateSelectField(field_id, new_data, use_combobox){
             new_ac = $("<input>")
                 .attr("id",parent_id)
                 .attr("type","text")
+                .addClass("comboboxWidget")
                 .insertBefore(parent)
                 .autocomplete({
                     source: dict,

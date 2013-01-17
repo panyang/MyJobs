@@ -30,14 +30,16 @@ a:hover{
     display: inline-block;
     }
 .ui-combobox-toggle {
-    padding: 9px 0px 8px 0px;
+    padding: 8px 0px 8px 0px;
     position: relative;
-    top: 12px;
-    left: -1px;
+    left: -2px;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
     }
-.ui-combobox-input {
-    margin: 0;
-    padding: 0.3em;
+input.comboboxWidget {
+    float: left;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
     }
 /*Topbar Styles*/
 .topbar #topbar-logo{
@@ -327,6 +329,15 @@ a:hover{
     .loginBox a{
         margin: 10px 0 0 0;
     }
+    .section a.ui-combobox-toggle {
+        padding: 8px 0px 8px 0px;
+        border-top-left-radius: 0px;
+        border-bottom-left-radius: 0px;
+    }
+    input[type=checkbox]{
+        width: 35px;
+        height: 35px;
+    }
 }
 @media screen and (max-width: 500px){
     #titleRow{
@@ -348,5 +359,26 @@ a:hover{
         float: none;
         clear: both;
         display: block;
+    }
+    form .pull-left{
+        float: none;
+    }
+    form .pull-left label{
+        text-align: left;
+    }
+    .form-label{
+        width: 95%;
+    }    
+    input[type=checkbox]{
+        float: right;
+        margin-top: -20px;
+    }
+    input[type=text]{
+        width: 96%;
+    }
+    input.comboboxWidget{
+        width: 60%;
+        float: none;
+        margin-top: -12px;
     }
 }
