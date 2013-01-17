@@ -46,11 +46,7 @@
                                         {% if name_obj %}
                                             {{name_obj}}
                                         {% else %}
-                                            {% if given_name %}
-                                                {{given_name}}
-                                            {% else %}
-                                                {{user.email|truncatechars:20}}
-                                            {% endif %}
+                                            {{user.email|truncatechars:20}}
                                         {% endif %} 
                                         </b>
                                         <span class="arrow"></span>
