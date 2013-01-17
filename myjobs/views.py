@@ -36,13 +36,6 @@ def home(request):
     """
     registrationform =  RegistrationForm(auto_id=False)
     loginform = CustomAuthForm(auto_id=False)
-    if request.user.is_authenticated():
-        try:
-            given_name = Name.objects.get(user=request.user,primary=True).given_name
-        except Name.DoesNotExist:
-            given_name = None
-    else:
-        given_name = None
     if request.method == "POST":
         if request.POST['action'] == "register":
             registrationform = RegistrationForm(request.POST, auto_id=False)
