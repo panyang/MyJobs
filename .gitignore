@@ -7,7 +7,7 @@
 # Misc
 static-files/100x50
 static-files/content_profile
-dev_settings_*
+dev_*
 # Editor aritfacts
 *~
 *-
