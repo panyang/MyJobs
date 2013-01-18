@@ -1,6 +1,5 @@
 {% extends "myjobs_base.html" %}
 {% load i18n %}
-{% load form_tags %}
 {% block topbarlogin %}{% endblock topbarlogin %}
 {% block meta-extra %}
 
@@ -45,21 +44,11 @@
         </div>
     </div>
     {% if not user.is_authenticated %}
-    <div class="row" id="account-page-2" style="display: none">
-        <div class="span10 offset1" id="account-page-2">
-          <form action="" method="post" id="profile-form">
-            {% include 'includes/form-error-highlight.html' with form=nameform%}
-            {% include 'includes/form-error-highlight.html' with form=emailform%}
-            {% csrf_token %}
-            <div class="actions">
-              <button type="submit" class="btn primary pull-right" value="save" id="save">{% trans "Save" %}</button>
-              <div class="clear"></div>
-            </div>
-          </form>
-          
-          <div class="options">
-            <button class="btn pull-right" id="profile">Skip: Take me to my profile</button>
-          </div>
+    <div id="account-page-2" style="display: none">
+      <h1>Profile</h1>
+      {% include "includes/initial-profile-form.html" with profile_form=profile_form%}
+        <div class="options">
+          <button class="btn pull-right" id="profile">Skip: Take me to my profile</button>
         </div>
     </div>
     {% endif %}    

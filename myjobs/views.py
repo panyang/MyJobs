@@ -38,8 +38,7 @@ def home(request):
     registrationform = RegistrationForm(auto_id=False)
     loginform = CustomAuthForm(auto_id=False)
 
-    nameform = NameForm(auto_id=False)
-    emailform = SecondaryEmailForm(auto_id=False)
+    profile_forms =  [NameForm(auto_id=False),SecondaryEmailForm(auto_id=False)]
         
     if request.method == "POST":
         if request.POST['action'] == "register":
@@ -74,8 +73,7 @@ def home(request):
                                           context_instance=RequestContext(request))
     ctx = {'registrationform':registrationform,
            'loginform': loginform,
-           'nameform': nameform,
-           'emailform': emailform,            
+           'profile_forms': profile_forms,
            'name_obj': get_name_obj(request)}
     return render_to_response('index.html', ctx, RequestContext(request))
 

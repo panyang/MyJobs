@@ -51,6 +51,7 @@ class NameForm(BaseProfileForm):
                                  required=False)
 
     class Meta:
+        form_name = "Personal Information"
         model = Name
         # Exclude any fields from ProfileUnits or Name that doesn't require user
         # input
@@ -60,6 +61,7 @@ class NameForm(BaseProfileForm):
 
 class SecondaryEmailForm(BaseProfileForm):
     class Meta:
+        form_name = "Secondary Email"
         model = SecondaryEmail
         exclude = ('user', 'date_created', 'date_updated', 'content_type',
                    'verified_date')
