@@ -36,7 +36,7 @@ def country_select(selected="usa", html_id="", input_name="country"):
     HTML <select> block
     
     """
-    data_url = 'http://js.nlx.org/myjobsdata/countries.json'
+    data_url = 'http://js.nlx.org/myjobsdata/countries_full.json'
     country_list = _load_json_data(data_url)
     return _build_select_list(country_list,selected,input_name,html_id)
 
@@ -105,7 +105,6 @@ def _build_select_list(select_dict,selected,input_name,html_id):
     HTML <select> block
     
     """
-    print select_dict
         
     html_str = "<select name='%s' id='%s'>" % (input_name,html_id)    
     for k,v in select_dict.iteritems():
@@ -114,7 +113,9 @@ def _build_select_list(select_dict,selected,input_name,html_id):
         select_flag = ""
         if k.lower() == selected.lower():
             select_flag = " SELECTED"
-        option_attr = "value='%s'%s" % (k, select_flag)
-        html_str = "%s<option %s>%s</option>" % (html_str,option_attr,v)    
+        if k != "":
+            option_attr = "value='%s'%s" % (k, select_flag)
+            html_str = "%s<option %s>%s</option>" % (html_str,option_attr,v)
+            
     html_str = "%s</select>" % html_str    
     return html_str
