@@ -7,6 +7,7 @@ hidden -- built in for all hidden form fields.
 form -- the rest of the form.
 {% endcomment %}
 {% load widget_tweaks %}
+{% load form_tags %}
 
 <fieldset>
     {# Include but don't display hidden fields #}
@@ -27,7 +28,9 @@ form -- the rest of the form.
         <div class="alert-message block-message error">
         {{ field.errors }}
         {% endif %}
-        {% if form.auto_id %}
+     
+        {% is_boolean_field field as is_boolean %}
+        {% if is_boolean or form.auto_id %}
             <div class="form-label pull-left">
                 {{ field.label_tag }}
             </div>

@@ -74,7 +74,6 @@ def home(request):
                                           context_instance=RequestContext(request))
     ctx = {'registrationform':registrationform,
            'loginform': loginform,
-           'given_name': given_name,
            'nameform': nameform,
            'emailform': emailform,            
            'name_obj': get_name_obj(request)}

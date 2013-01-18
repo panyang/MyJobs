@@ -131,7 +131,8 @@ class Name(ProfileUnits):
     family_name = models.CharField(max_length=30, blank=True,
                                    verbose_name="last name")
     display_name = models.CharField(max_length=60, blank=True)
-    primary = models.BooleanField(default=False, help_text="Is this your primary name?")
+    primary = models.BooleanField(default=False,
+                                  help_text="Is this your primary name?")
         
     def get_full_name(self):
         """
