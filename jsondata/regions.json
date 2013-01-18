@@ -1,0 +1,11 @@
+{
+    "usa":{
+        "in":"Indiana",
+        "oh":"Ohio",
+        "ca":"California"
+        },
+    "can":{
+        "on":"ontario",
+        "bc":"british columbia"
+        }
+}
