@@ -38,7 +38,9 @@ def home(request):
     registrationform = RegistrationForm(auto_id=False)
     loginform = CustomAuthForm(auto_id=False)
 
-    profile_forms =  [NameForm(auto_id=False),SecondaryEmailForm(auto_id=False)]
+    profile_forms =  [NameForm(auto_id=False), EducationForm(auto_id=False),
+                      EmploymentForm(auto_id=False), PhoneForm(auto_id=False),
+                      AddressForm(auto_id=False)]
         
     if request.method == "POST":
         if request.POST['action'] == "register":
@@ -59,21 +61,23 @@ def home(request):
                 login(request, loginform.get_user())
                 return HttpResponseRedirect('/account')
         elif request.POST['action'] == "save_profile":
-            nameform = NameForm(request.POST, user=request.user, auto_id=False)
-            emailform = SecondaryEmailForm(request.POST, user=request.user,
-                                           auto_id=False)
+            profile_forms = [NameForm(request.POST, user=request.user, auto_id=False),
+                             EducationForm(request.POST, user=request.user, auto_id=False),
+                             EmploymentForm(request.POST, user=request.user, auto_id=False)]
             
             if nameform.is_valid() and emailform.is_valid():
-                nameform.save()
-                emailform.save()
+                for form in profile_forms:
+                    form.save()
                 return HttpResponse('Valid')
             else:
                 return render_to_response('includes/widget-user-registration.html',
-                                          {'form': registrationform},
+                                          {'form': registrationform,
+                                           'profile_forms':profile_forms},
                                           context_instance=RequestContext(request))
     ctx = {'registrationform':registrationform,
            'loginform': loginform,
            'profile_forms': profile_forms,
+           'only_show_required': True,
            'name_obj': get_name_obj(request)}
     return render_to_response('index.html', ctx, RequestContext(request))
 

@@ -11,6 +11,11 @@
 
 {% block content %}
     <div class="row" id="titleRow">                
+      <h1>Profile</h1>
+      {% include "includes/initial-profile-form.html" with profile_form=profile_form%}
+        <div class="options">
+          <button class="btn pull-right" id="profile">Skip: Take me to my profile</button>
+        </div>
         <div class="span6 offset1"  id="title">
             <h1>{% trans 'My.jobs' %}</h1>
             <div id="subtitle">
@@ -45,11 +50,6 @@
     </div>
     {% if not user.is_authenticated %}
     <div id="account-page-2" style="display: none">
-      <h1>Profile</h1>
-      {% include "includes/initial-profile-form.html" with profile_form=profile_form%}
-        <div class="options">
-          <button class="btn pull-right" id="profile">Skip: Take me to my profile</button>
-        </div>
     </div>
     {% endif %}    
 {% endblock %} 

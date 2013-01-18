@@ -1,9 +1,12 @@
   <form action="" method="post" id="profile-form">
     {% for profile_form in profile_forms %}
-    <div class="profile-row">
-      <h4>{{ profile_form.Meta.form_name }}</h4>
-      {% include 'includes/form-error-highlight.html' with form=profile_form %}
-    </div>
+    {% if profile_form.Meta.form_name == "Phone Number" %}
+    <div class="profile-unit">
+      <h4>Contact From</h4>
+      {% elif profile_form.Meta.form_name != "Address" %}
+      <h4>{{profile_form.Meta.form_name}}</h4>      
+    {% endif %}
+      {% include 'includes/form-error-highlight.html' with form=profile_form %}</div>
     {% endfor %}
     {% csrf_token %}
     <div class="actions">
