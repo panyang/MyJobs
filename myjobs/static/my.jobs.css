@@ -41,6 +41,10 @@ input.comboboxWidget {
     border-top-right-radius: 0px;
     border-bottom-right-radius: 0px;
     }
+ul.ui-autocomplete{
+    height: 12em;
+    overflow-y: scroll;
+    }
 /*Topbar Styles*/
 .topbar #topbar-logo{
     height: 30px;
@@ -380,5 +384,8 @@ input.comboboxWidget {
         width: 60%;
         float: none;
         margin-top: -12px;
+    }
+    ul.ui-autocomplete{
+        display: none !important;
     }
 }

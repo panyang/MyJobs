@@ -67,22 +67,47 @@ function repopulateSelectField(field_id, new_data, use_combobox){
             parent_id = parent.attr("id");
             parent_id_orig = parent_id+"_orig";
             parent.attr("id",parent_id_orig)
-            dict = [];
+            /*dict = [];
             source = parent.children("option");
             for(i=0;i<source.length;i++){
                 if(source[i].value != ""){
                     dict[i]={"key":source[i].value,"value":source[i].innerHTML};
                 }
-            }
+            }*/
             parent.hide();
             new_ac = $("<input>")
                 .attr("id",parent_id)
                 .attr("type","text")
+                .attr("value",selected.html())
                 .addClass("comboboxWidget")
+                .addClass(parent.attr("class"))
                 .insertBefore(parent)
                 .autocomplete({
-                    source: dict,
+                    source: function(req,resp){
+                        dict = [];
+                        source = $("#"+this.element.attr("id")+"_orig").children("option");
+                        for(i=0;i<source.length;i++){
+                            if(source[i].value != ""){
+                                dict[i]={"key":source[i].value,"value":source[i].innerHTML};
+                            }
+                        }
+                        resp(dict);
+                    },
                     minLength: 0,
+                    select: function(event,ui){
+                        my_parent = $("#"+this.id+"_orig");
+                        if(my_parent.hasClass("hasRegions")){
+                            orig_options = my_parent.children("option")
+                            val_to_get = "";
+                            for(opt=0; opt < orig_options.length; opt++){
+                                if (ui.item.value==$(orig_options[opt]).html()){
+                                    val_to_get = $(orig_options[opt]).val()
+                                }
+                            }
+                            $("#region_selection_orig").html("<option value='tes'>test</option>");
+                            $("#region_selection").val($("#region_selection_orig").children(":selected").html());                            
+                        }
+                    },
                     change: function(){
                         /*****
                         Link the original select box to the dynamic AC field
@@ -95,10 +120,10 @@ function repopulateSelectField(field_id, new_data, use_combobox){
                                 val_to_select = $(orig_options[opt]).val()
                             }
                         }
-                        $("#"+this.id+"_orig").val(val_to_select);
+                        my_parent = $("#"+this.id+"_orig");
+                        my_parent.val(val_to_select);                        
                     }
                 });
-            console.log(parent.val())
             $("<a>")
                 .attr( "title", "Show All Items")
                 .attr( "data-for",parent_id)
