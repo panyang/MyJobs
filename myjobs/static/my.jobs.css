@@ -351,6 +351,10 @@ a:hover{
     width: 250px;
 }
 
+.profile-unit select {
+    width: 260px;
+}
+
 .profile-unit .form-label {
     margin-right: 20px;
     width: auto;

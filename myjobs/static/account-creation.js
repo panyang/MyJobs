@@ -7,6 +7,10 @@ $(document).ready(function() {
     }
     register(csrf_token);
     save(csrf_token);
+
+    $(function() {
+        $( "input[id$='date']" ).datepicker();
+    });
 });
 
 function register(csrf_token) {    
