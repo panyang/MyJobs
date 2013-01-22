@@ -94,7 +94,7 @@ class EmploymentForm(BaseProfileForm):
             'position_title': TextInput(attrs={'placeholder': 'Job Title'}),
             'organization_name': TextInput(attrs={'placeholder': 'Company'}),
             'end_date': TextInput(attrs={'placeholder': 'End Date'}),
-            'start_date': TextInput(attrs={'placeholder': 'Start Date'}),
+            'start_date': TextInput(attrs={'placeholder': 'Start Date', 'id': 'start_date'}),
             'city_name': TextInput(attrs={'placeholder': 'City'}),
             'country_sub_division_code': TextInput(attrs={'placeholder':
                                                         'State/Region'}), 
@@ -108,10 +108,9 @@ class PhoneForm(BaseProfileForm):
         form_name = "Phone Number"
         model = Telephone
         widgets = {
-            'country_dialing': TextInput(attrs={'placeholder': 'Country Code'}),
-            'area_dialing': TextInput(attrs={'placeholder': 'Area Code'}),
-            'number': TextInput(attrs={'placeholder': 'Dial Number'}),
-            'city_name': TextInput(attrs={'placeholder': 'City'}),
+            'country_dialing': TextInput(attrs={'placeholder': 'Country Code', 'size': '3'}),
+            'area_dialing': TextInput(attrs={'placeholder': 'Area Code','size': '4'}),
+            'number': TextInput(attrs={'placeholder': 'Dial Number', 'size': '11'}),
             'extension': TextInput(attrs={'placeholder': 'Extension'})
          }
 

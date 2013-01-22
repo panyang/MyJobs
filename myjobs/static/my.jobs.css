@@ -337,3 +337,21 @@ a:hover{
         display: block;
     }
 }
+
+.profile-unit {
+    width: 260px;
+    height: 300px;
+    float: left;
+    padding: 20px;
+    margin: 10px;
+    background-color: #EFEADE;
+}
+
+.profile-unit input[type="text"] {
+    width: 250px;
+}
+
+.profile-unit .form-label {
+    margin-right: 20px;
+    width: auto;
+}

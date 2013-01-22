@@ -4,7 +4,14 @@
 {% block meta-extra %}
 
 <script type="text/javascript" src="{{STATIC_URL}}/account-creation.js"></script>
-
+<link rel="stylesheet" href="http://code.jquery.com/ui/1.10.0/themes/base/jquery-ui.css" />
+<script src="http://code.jquery.com/jquery-1.8.3.js"></script>
+<script src="http://code.jquery.com/ui/1.10.0/jquery-ui.js"></script>
+ <script>
+  $(function() {
+    $( "#start_date" ).datepicker();
+  });
+  </script>f
 {% endblock %}
 
 {% block title-content %}{% trans "My.Jobs - Manage your job search." %}{% endblock title-content %}
@@ -12,6 +19,9 @@
 {% block content %}
     <div class="row" id="titleRow">                
       <h1>Profile</h1>
+      <div class="profile-unit">
+	Thanks for registering! Check your email for an activation link.
+      </div>
       {% include "includes/initial-profile-form.html" with profile_form=profile_form%}
         <div class="options">
           <button class="btn pull-right" id="profile">Skip: Take me to my profile</button>
