@@ -38,10 +38,11 @@ def home(request):
     registrationform = RegistrationForm(auto_id=False)
     loginform = CustomAuthForm(auto_id=False)
 
-    profile_forms =  [NameForm(auto_id=False), EducationForm(auto_id=False),
-                      EmploymentForm(auto_id=False), PhoneForm(auto_id=False),
-                      AddressForm(auto_id=False)]
-        
+    kwargs = {'auto_id':False, 'empty_permitted':True}
+    profile_forms =  [NameForm(**kwargs),EducationForm(**kwargs),
+                      EmploymentForm(**kwargs), PhoneForm(**kwargs),
+                      AddressForm(**kwargs)]
+
     if request.method == "POST":
         if request.POST['action'] == "register":
             registrationform = RegistrationForm(request.POST, auto_id=False)
@@ -61,19 +62,17 @@ def home(request):
                 login(request, loginform.get_user())
                 return HttpResponseRedirect('/account')
         elif request.POST['action'] == "save_profile":
-            profile_forms = [NameForm(request.POST, user=request.user, auto_id=False),
-                             EducationForm(request.POST, user=request.user, auto_id=False),
-                             EmploymentForm(request.POST, user=request.user, auto_id=False)]
-            
-            if nameform.is_valid() and emailform.is_valid():
-                for form in profile_forms:
-                    form.save()
-                return HttpResponse('Valid')
-            else:
-                return render_to_response('includes/widget-user-registration.html',
-                                          {'form': registrationform,
-                                           'profile_forms':profile_forms},
-                                          context_instance=RequestContext(request))
+            kwargs = {'auto_id':False, 'empty_permitted':True, 'user':request.user}
+            profile_forms =  [NameForm(request.POST,**kwargs),
+                              EducationForm(request.POST,**kwargs),
+                              EmploymentForm(request.POST,**kwargs),
+                              PhoneForm(request.POST,**kwargs),
+                              AddressForm(request.POST,**kwargs)]
+            for form in profile_forms:
+                if form.is_valid():
+                    if form.cleaned_data:
+                        form.save()
+            return HttpResponse('Valid')
     ctx = {'registrationform':registrationform,
            'loginform': loginform,
            'profile_forms': profile_forms,
