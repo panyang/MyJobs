@@ -84,28 +84,61 @@ function repopulateSelectField(field_id, new_data, use_combobox){
                 .insertBefore(parent)
                 .autocomplete({
                     source: function(req,resp){
+                        /****
+                        Dynamically build the AC list from parent select list.
+                        Doing it this way allows for the AC to pick up changes
+                        in the option list made by ajax.
+                        ****/
                         dict = [];
                         source = $("#"+this.element.attr("id")+"_orig").children("option");
                         for(i=0;i<source.length;i++){
+                            label = source[i].innerHTML;
+                            value = source[i].value;
                             if(source[i].value != ""){
-                                dict[i]={"key":source[i].value,"value":source[i].innerHTML};
+                            // if the search phrase is in the label
+                            // TODO: case insensitive
+                                if(label.indexOf(req.term)!=-1){
+                                    dict.push({"label":label,"value":label});
+                                }
                             }
                         }
                         resp(dict);
                     },
                     minLength: 0,
                     select: function(event,ui){
+                        /****
+                        On select, get the value of the field, and check if
+                        the field has a dependent region list. If so, get that
+                        listing from jsonp and populate the select list with the
+                        the new data.                        
+                        ****/
                         my_parent = $("#"+this.id+"_orig");
                         if(my_parent.hasClass("hasRegions")){
                             orig_options = my_parent.children("option")
                             val_to_get = "";
                             for(opt=0; opt < orig_options.length; opt++){
-                                if (ui.item.value==$(orig_options[opt]).html()){
+                                if (ui.item.label==$(orig_options[opt]).html()){
                                     val_to_get = $(orig_options[opt]).val()
                                 }
                             }
-                            $("#region_selection_orig").html("<option value='tes'>test</option>");
-                            $("#region_selection").val($("#region_selection_orig").children(":selected").html());                            
+                            $.getJSON(
+                                // this needs to be swapped for jasnp data
+                                // TODO: val_to_get needs to lower()
+                                "http://js.nlx.org/myjobsdata/"+val_to_get+"_regions.jsonp?callback=1",
+                                function(data){
+                                    var opt = ""
+                                    for(var key in data){
+                                        value = data[key];
+                                        opts+="<option value="+key+">";
+                                        opts+=value+"</option>";
+                                    }
+                                    $("#region_selection_orig").html(opts);
+                                    $("#region_selection").val(
+                                        $("#region_selection_orig")
+                                        .children(":selected").html()
+                                        );        
+                                });
+                                                        
                         }
                     },
                     change: function(){
@@ -121,7 +154,8 @@ function repopulateSelectField(field_id, new_data, use_combobox){
                             }
                         }
                         my_parent = $("#"+this.id+"_orig");
-                        my_parent.val(val_to_select);                        
+                        my_parent.val(val_to_select);
+                        //TODO make sure this is getting set right after changes to select
                     }
                 });
             $("<a>")
