@@ -67,13 +67,6 @@ function repopulateSelectField(field_id, new_data, use_combobox){
             parent_id = parent.attr("id");
             parent_id_orig = parent_id+"_orig";
             parent.attr("id",parent_id_orig)
-            /*dict = [];
-            source = parent.children("option");
-            for(i=0;i<source.length;i++){
-                if(source[i].value != ""){
-                    dict[i]={"key":source[i].value,"value":source[i].innerHTML};
-                }
-            }*/
             parent.hide();
             new_ac = $("<input>")
                 .attr("id",parent_id)
@@ -96,8 +89,7 @@ function repopulateSelectField(field_id, new_data, use_combobox){
                             value = source[i].value;
                             if(source[i].value != ""){
                             // if the search phrase is in the label
-                            // TODO: case insensitive
-                                if(label.indexOf(req.term)!=-1){
+                                if(label.toLowerCase().indexOf(req.term.toLowerCase())!=-1){
                                     dict.push({"label":label,"value":label});
                                 }
                             }
@@ -114,31 +106,64 @@ function repopulateSelectField(field_id, new_data, use_combobox){
                         ****/
                         my_parent = $("#"+this.id+"_orig");
                         if(my_parent.hasClass("hasRegions")){
+                            /****
+                            This is logic specific to the region select list
+                            when the combo box is being applied to a country
+                            select list that also has a region list assigned
+                            to it. The majority of the time, this will be due
+                            to the use of the {% country_region_select %}
+                            template tag.
+                            ****/
                             orig_options = my_parent.children("option")
                             val_to_get = "";
                             for(opt=0; opt < orig_options.length; opt++){
                                 if (ui.item.label==$(orig_options[opt]).html()){
                                     val_to_get = $(orig_options[opt]).val()
                                 }
-                            }
-                            $.getJSON(
-                                // this needs to be swapped for jasnp data
-                                // TODO: val_to_get needs to lower()
-                                "http://js.nlx.org/myjobsdata/"+val_to_get+"_regions.jsonp?callback=1",
-                                function(data){
-                                    var opt = ""
+                            }       
+                            // build the url for the jsonp ajax call
+                            region_url = "http://js.nlx.org/myjobsdata/";
+                            region_url+= val_to_get.toLowerCase();
+                            region_url+= "_regions.jsonp";
+                            //temp hide the region select in case of 404
+                            $("#region_selection + a").hide()
+                            $("#region_selection").hide()
+                            //make the ajax call for region data
+                             $.ajax({
+                                url: region_url,
+                                dataType: "jsonp",
+                                data: {},
+                                // the jsonp files are static, so the callback
+                                // must be set manually, not by jQuery
+                                jsonpCallback: "returnRegionData",
+                                success: function(data){
+                                    // replace the <option>s for the parent.
+                                    // the widget will take note and update
+                                    // itself
+                                    var opts = ""
                                     for(var key in data){
                                         value = data[key];
                                         opts+="<option value="+key+">";
                                         opts+=value+"</option>";
+                                    }                                    
+                                    if(opts!=""){
+                                        $("#region_selection_orig").html(opts);
+                                        // turn on the region widget
+                                        $("#region_selection + a").show()
+                                        $("#region_selection").show()
+                                        //set widget default value
+                                        $("#region_selection").val(
+                                            $("#region_selection_orig")
+                                            .children(":selected").html()
+                                            );
                                     }
-                                    $("#region_selection_orig").html(opts);
-                                    $("#region_selection").val(
-                                        $("#region_selection_orig")
-                                        .children(":selected").html()
-                                        );        
-                                });
-                                                        
+                                },
+                                error:function(x,str,err){
+                                    console.log("error");
+                                    $("#region_selection + a").hide()
+                                    $("#region_selection").hide()
+                                }
+                            });                         
                         }
                     },
                     change: function(){
