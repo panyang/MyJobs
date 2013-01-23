@@ -183,7 +183,6 @@ function repopulateSelectField(field_id, new_data, use_combobox){
                     }
                     my_parent = $("#"+this.id+"_orig");
                     my_parent.val(val_to_select);
-                    //TODO make sure this is getting set right after changes to select
                 }
             });
         $("<a>")
