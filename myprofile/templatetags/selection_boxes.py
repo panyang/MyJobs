@@ -6,6 +6,44 @@ from django.utils import simplejson as json
 register = template.Library()
 
 @register.simple_tag
+def degree_select(selected="ba", html_id="", input_name="degree",
+                   child_regions=False,inc_struc=True):
+    """
+    Builds an html select list of countries. The select list is built using
+    data stored on a CDN.
+    
+    Inputs:
+    :selected:      default key to select
+    :html_id:       html id to use for the element
+    :input_name:    the form element name
+    :child_regions: whether this field has a dependent regions field
+    :inc_struc:     whether or not to include the html label and structure
+    
+    Returns:        
+    :html_str:      HTML <select> block
+    
+    """
+    data_url = 'http://js.nlx.org/myjobsdata/degree_list.json'
+    data_list = _load_json_data(data_url)
+    degree_list = data_list["degrees"];
+    print degree_list
+    try:
+        label = data_list["friendly_label"]
+    except KeyError:
+        label = "Degree"
+    
+    sel_tag = _build_select_list(degree_list,selected,input_name,html_id)
+    
+    if inc_struc:
+        html_str="<div class='form-label pull-left'>"
+        html_str="%s<label for='%s'>%s</label></div>" % (html_str,html_id,label)
+        html_str="%s%s<div class='clear'></div>" % (html_str,sel_tag)
+    else:
+        html_str = sel_tag
+        
+    return html_str   
+    
+@register.simple_tag
 def country_region_select(selected="can", html_id="", input_name="country"):
     """
     Build a Country/Region Section for a form.
@@ -69,7 +107,7 @@ def country_select(selected="usa", html_id="", input_name="country",
     else:
         html_str = sel_tag
         
-    return html_str
+    return html_str   
 
 @register.simple_tag
 def region_select(country="usa",selected="az",html_id="",input_name="region",
@@ -151,7 +189,6 @@ def _build_select_list(select_dict,selected,input_name,html_id,class_name=""):
     html_str = "<select name='%s' id='%s'%s>" % (input_name,html_id,class_name)
     html_str = "%s<option value=''></option>" % html_str
     
-    print selected
     for item in select_dict:
         if item["code"] == "error":
             return item["error"]
