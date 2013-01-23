@@ -1,0 +1,10 @@
+{"degrees":[
+       {
+        "code":"hs",
+        "name":"High School Diploma"
+    },
+    {
+        "code":"ba",
+        "name":"B.A."
+    }
+],"friendly_label":"Degree Type","default_option":"ba"}
