@@ -66,7 +66,7 @@ function repopulateSelectField(field_id, new_data, use_combobox){
         parent.attr("id",parent_id_orig)
         parent.hide();
         new_ac = $("<input>")
-            .attr("id",parent_id)
+            .attr("id",parent_id)                                           
             .attr("type","text")
             .attr("value",selected.html())
             .addClass("comboboxWidget")
@@ -117,7 +117,7 @@ function repopulateSelectField(field_id, new_data, use_combobox){
                             }
                         }       
                         // build the url for the jsonp ajax call
-                        region_url = "http://js.nlx.org/myjobsdata/";
+                        region_url = "http://js.nlx.org/myjobs/data/";
                         region_url+= val_to_get.toLowerCase();
                         region_url+= "_regions.jsonp";
                         //temp hide the region select in case of 404

@@ -23,7 +23,7 @@ def degree_select(selected="ba", html_id="", input_name="degree",
     :html_str:      HTML <select> block
     
     """
-    data_url = 'http://js.nlx.org/myjobsdata/degree_list.json'
+    data_url = 'http://js.nlx.org/myjobs/data/degree_list.json'
     data_list = _load_json_data(data_url)
     degree_list = data_list["degrees"];
     print degree_list
@@ -87,7 +87,7 @@ def country_select(selected="usa", html_id="", input_name="country",
     :html_str:      HTML <select> block
     
     """
-    data_url = 'http://js.nlx.org/myjobsdata/countries_full.json'
+    data_url = 'http://js.nlx.org/myjobs/data/countries_full.json'
     data_list = _load_json_data(data_url)
     country_list = data_list["countries"];
     try:
@@ -127,7 +127,7 @@ def region_select(country="usa",selected="az",html_id="",input_name="region",
     """
     
     #there is a single file per country, else it returns null.
-    data_url = 'http://js.nlx.org/myjobsdata/%s_regions.json' % country
+    data_url = 'http://js.nlx.org/myjobs/data/%s_regions.json' % country
     data_list = _load_json_data(data_url)
     region_list = data_list["regions"]
     try:
