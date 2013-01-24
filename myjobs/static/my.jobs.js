@@ -17,10 +17,14 @@ $('#linkedin').live('click',function() {
     openShareWindow(share_url,"LinkedIn");
 });
 $(document).ready(function(){
-    console.log("ready");
-    $(".topbar .main-nav").click(function(){
+    /*Explicit control of main menu, primarily for mobile but also provides
+    non hover and cover option if that becomes an issue.*/
+    $("#nav .main-nav").click(function(){
         $("#nav").toggleClass("active");
         return false;
+    });
+    $("#pop-menu").mouseleave(function(){
+        $("#nav").removeClass("active");
     });
 });
 function openShareWindow(url,name){
