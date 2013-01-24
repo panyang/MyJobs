@@ -6,17 +6,15 @@ from django.utils import simplejson as json
 register = template.Library()
 
 @register.simple_tag
-def degree_select(selected="ba", html_id="", input_name="degree",
-                   child_regions=False,inc_struc=True):
+def degree_select(selected="ba", html_id="",input_name="degree",inc_struc=True):
     """
-    Builds an html select list of countries. The select list is built using
+    Builds an html select list of degree names. The select list is built using
     data stored on a CDN.
     
     Inputs:
     :selected:      default key to select
     :html_id:       html id to use for the element
     :input_name:    the form element name
-    :child_regions: whether this field has a dependent regions field
     :inc_struc:     whether or not to include the html label and structure
     
     Returns:        
