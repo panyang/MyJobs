@@ -11,7 +11,7 @@
           <div class="formBox">
             <form action="" method="POST">
               {% include "includes/form-error-highlight.html" %}
-              {% csrf_token %}     
+              {% csrf_token %}
               <fieldset>{% degree_select "bs" "degree_select" %}</fieldset>
               <div class="actions">
                 <a href="{% url 'view_account' %}" class="btn pull-right">{% trans 'Cancel' %}</a>
