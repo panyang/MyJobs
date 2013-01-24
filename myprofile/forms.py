@@ -25,6 +25,8 @@ def generate_custom_widgets(model):
             attrs['placeholder'] = field.verbose_name.title()
             if field.choices:
                 widgets[field.attname] = Select()
+            elif internal_type == 'BooleanField':
+                widgets[field.attname] = CheckboxInput(attrs=attrs)
             else:
                 widgets[field.attname] = TextInput(attrs=attrs)
 
@@ -59,8 +61,6 @@ class BaseProfileForm(ModelForm):
 class NameForm(BaseProfileForm):
     # Boolean fields must be initialized. All other field attributes generated
     # with generate_custom_widgets method
-    primary = BooleanField(label="Is this your primary name?")
-
     class Meta:
         form_name = "Personal Information"
         model = Name
@@ -71,6 +71,7 @@ class SecondaryEmailForm(BaseProfileForm):
     class Meta:
         form_name = "Secondary Email"
         model = SecondaryEmail
+
         widgets = generate_custom_widgets(model)
 
 

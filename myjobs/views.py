@@ -69,10 +69,12 @@ def home(request):
                               PhoneForm(request.POST,**kwargs),
                               AddressForm(request.POST,**kwargs)]
             for form in profile_forms:
+                import ipdb
+                ipdb.set_trace()
                 if form.is_valid():
                     if form.cleaned_data:
                         form.save()
-            return HttpResponse('Valid')
+            return HttpResponse('valid')
     ctx = {'registrationform':registrationform,
            'loginform': loginform,
            'profile_forms': profile_forms,

@@ -23,19 +23,23 @@ form -- the rest of the form.
     
     {# Include the visible fields #}
     {% for field in form.visible_fields %}
-    {% if only_show_required and field.field.required %}
+    {% is_boolean_field field as is_boolean %}
+    {% if only_show_required and field.field.required or is_boolean %}
         {# if it's an error put it in a red box #}
         {% if field.errors %}
         <div class="alert-message block-message error">
         {{ field.errors }}
         {% endif %}
      
-        {% is_boolean_field field as is_boolean %}
-        {% if is_boolean or form.auto_id %}
+        {% if form.auto_id %}
             <div class="form-label pull-left">
                 {{ field.label_tag }}
             </div>
             {{ field|attr:"placeholder:" }}
+            {% elif is_boolean %}
+            <div class="form-label pull-left">
+                {{ field.label_tag }}
+            </div>{{field}}
             {% else %}
                 {{ field }}
             {% endif %}

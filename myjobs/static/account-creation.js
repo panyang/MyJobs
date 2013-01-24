@@ -57,14 +57,11 @@ function save(csrf_token) {
     $('button#save').click(function(e) {
         e.preventDefault();
         var self = $(this).parents("div#account-page-2");
-        var form = $('form#profile-form');
+        var json_data = $('form#profile-form').serialize().replace('=on','=True').replace('=off','=False')+'&action=save_profile';        
         $.ajax({
             type: "POST",
             url: "",
-            data: { csrfmiddlewaretoken: csrf_token,
-                    action: "save_profile",
-                    given_name: self.find("#id_given_name").val(),
-                    family_name: self.find("#id_family_name").val()},
+            data: json_data,
             success: function(data) {
                 if (data != 'valid') {
                     // If there are errors, the view returns an updated form with errors
