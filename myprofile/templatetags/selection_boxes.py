@@ -26,7 +26,6 @@ def degree_select(selected="ba", html_id="", input_name="degree",
     data_url = 'http://js.nlx.org/myjobs/data/degree_list.json'
     data_list = _load_json_data(data_url)
     degree_list = data_list["degrees"];
-    print degree_list
     try:
         label = data_list["friendly_label"]
     except KeyError:
@@ -87,7 +86,7 @@ def country_select(selected="usa", html_id="", input_name="country",
     :html_str:      HTML <select> block
     
     """
-    data_url = 'http://js.nlx.org/myjobs/data/countries_full.json'
+    data_url = 'http://js.nlx.org/myjobs/data/countries.json'
     data_list = _load_json_data(data_url)
     country_list = data_list["countries"];
     try:

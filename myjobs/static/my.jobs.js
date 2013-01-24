@@ -44,18 +44,6 @@ function openShareWindow(url,name){
     atts = 'toolbar=no,width=568,height=360';
     share_window = window.open(url, title,atts);
 }
-function repopulateSelectField(field_id, new_data, use_combobox){
-    option_string = "";
-    if(typeof(use_combobox=="undefined")){use_combobox=true;}
-    for(i=0;i<new_data.length;i++){
-        option_string+="<option value='"+new_data[i].key+"'>";
-        option_string+=new_data[i].value+"</option>";
-    }
-    $("#"+field_id).html(option_string);
-    //$("#"+field_id+" + .ui-combobox").remove();
-    $("#"+field_id).combobox();
-}
-
 /*Combobox Widget. Based loosely on the jQuery UI example*/
 (function($){$.widget( "ui.makeCombobox",{
     _create: function(){
