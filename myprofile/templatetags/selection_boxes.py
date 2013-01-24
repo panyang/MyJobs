@@ -41,7 +41,8 @@ def degree_select(selected="ba", html_id="",input_name="degree",inc_struc=True):
     return html_str   
     
 @register.simple_tag
-def country_region_select(selected="can", html_id="", input_name="country"):
+def country_region_select(selected="can", html_id="", input_name="country",
+                          region_html_id="region_selection"):
     """
     Build a Country/Region Section for a form.
     :selected:      default key to select
@@ -50,7 +51,7 @@ def country_region_select(selected="can", html_id="", input_name="country"):
                     in order to provide javascript functionality.
     
     """
-    country_tag = country_select(selected,html_id,input_name,True)
+    country_tag = country_select(selected,html_id,input_name,True,region_html_id)
     if country_tag[0] != "<":
         region_tag = ""
     else:
@@ -61,14 +62,14 @@ def country_region_select(selected="can", html_id="", input_name="country"):
         else:
             default_region=""
         
-        region_tag= region_select(selected,default_region,"region_selection","region")
+        region_tag= region_select(selected,default_region,region_html_id,"region")
 
     html = country_tag+region_tag
     return html
     
 @register.simple_tag
 def country_select(selected="usa", html_id="", input_name="country",
-                   child_regions=False,inc_struc=True):
+                   inc_struc=True,region_html_id=""):
     """
     Builds an html select list of countries. The select list is built using
     data stored on a CDN.
@@ -79,6 +80,7 @@ def country_select(selected="usa", html_id="", input_name="country",
     :input_name:    the form element name
     :child_regions: whether this field has a dependent regions field
     :inc_struc:     whether or not to include the html label and structure
+    :region_html_id: the id of a child select block that change with this one.
     
     Returns:        
     :html_str:      HTML <select> block
@@ -92,9 +94,9 @@ def country_select(selected="usa", html_id="", input_name="country",
     except KeyError:
         label = "Country"        
     
-    if child_regions:
+    if region_html_id:
         sel_tag = _build_select_list(country_list,selected,input_name,html_id,
-                                     "hasRegions")
+                                     "hasRegions",region_html_id)
     else:
         sel_tag = _build_select_list(country_list,selected,input_name,html_id)
     if inc_struc:
@@ -126,7 +128,11 @@ def region_select(country="usa",selected="az",html_id="",input_name="region",
     #there is a single file per country, else it returns null.
     data_url = 'http://js.nlx.org/myjobs/data/%s_regions.json' % country
     data_list = _load_json_data(data_url)
-    region_list = data_list["regions"]
+    try:
+        region_list = data_list["regions"]
+    except KeyError:
+        return ""
+        
     try:
         label = data_list["friendly_label"]
     except KeyError:
@@ -165,7 +171,8 @@ def _load_json_data(json_url):
         return {"code":"error","error":"There was an error loading the file."}   
     return json_data
     
-def _build_select_list(select_dict,selected,input_name,html_id,class_name=""):
+def _build_select_list(select_dict,selected,input_name,html_id,class_name="",
+                       child_list_id=""):
     """
     Generic function that builds an html select list for the specified type.
     
@@ -175,15 +182,19 @@ def _build_select_list(select_dict,selected,input_name,html_id,class_name=""):
     :html_id:       html id to use for the element
     :input_name:    the form element name
     :class_name:    option class name to append to element
+    :child_list_id: the id of a child list that changes with this list
     
     Returns:        
     HTML <select> block
     
     """
-    
-    if class_name:
-        class_name = " class='%s'" % class_name
-    html_str = "<select name='%s' id='%s'%s>" % (input_name,html_id,class_name)
+    attr_str = ""
+    if class_name: # assign the class name
+        attr_str = " class='%s'" % class_name
+    if child_list_id: # store the child id. Used by JavaScript for UI effects
+        attr_str = "%s data-childlistid='%s'" % (attr_str, child_list_id)
+        
+    html_str = "<select name='%s' id='%s'%s>" % (input_name,html_id,attr_str)
     html_str = "%s<option value=''></option>" % html_str
     
     for item in select_dict:

@@ -2,7 +2,7 @@
 Document Level Actions
 *******/
 $(document).ready(function(){
-    $("select").makeCombobox();
+    
 });
 /******
 My.jobs Share window functions. Assigns click events and builds share window. 
@@ -97,6 +97,7 @@ function openShareWindow(url,name){
                         to the use of the {% country_region_select %}
                         template tag.
                         ****/
+                        target_id = my_parent.attr("data-childlistid");
                         orig_options = my_parent.children("option")
                         val_to_get = "";
                         for(opt=0; opt < orig_options.length; opt++){
@@ -109,10 +110,11 @@ function openShareWindow(url,name){
                         region_url+= val_to_get.toLowerCase();
                         region_url+= "_regions.jsonp";
                         //temp hide the region select in case of 404
-                        $("label[for=region_selection]").hide()
-                        $("#region_selection + a").hide()
-                        $("#region_selection").hide()
-                        $("#region_selection_orig").val("none")
+                        console.log(target_id);
+                        $("label[for="+target_id+"]").hide()
+                        $("#"+target_id+" + a").hide()
+                        $("#"+target_id+"").hide()
+                        $("#"+target_id+"_orig").val("none")
                         //make the ajax call for region data
                          $.ajax({
                             url: region_url,
@@ -141,15 +143,15 @@ function openShareWindow(url,name){
                                     label = "Region";
                                 }
                                 if(opts!=""){
-                                    $("#region_selection_orig").html(opts);
+                                    $("#"+target_id+"_orig").html(opts);
                                     // turn on the region widget
-                                    $("label[for=region_selection]").html(label)
-                                    $("label[for=region_selection]").show()
-                                    $("#region_selection + a").show()
-                                    $("#region_selection").show()
+                                    $("label[for="+target_id+"]").html(label)
+                                    $("label[for="+target_id+"]").show()
+                                    $("#"+target_id+" + a").show()
+                                    $("#"+target_id+"").show()
                                     //set widget default value
-                                    $("#region_selection").val(
-                                        $("#region_selection_orig")
+                                    $("#"+target_id+"").val(
+                                        $("#"+target_id+"_orig")
                                         .children(":selected").html()
                                         );
                                 }
