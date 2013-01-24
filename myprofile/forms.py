@@ -21,7 +21,7 @@ def generate_custom_widgets(model):
         # exclude profile unit base fields
         if field.model == model:
             attrs = {}
-            attrs['id'] = 'id_' + field.attname
+            attrs['id'] = 'id_' + model.__name__.lower() + '-' + field.attname
             attrs['placeholder'] = field.verbose_name.title()
             if field.choices:
                 widgets[field.attname] = Select()
@@ -59,8 +59,7 @@ class BaseProfileForm(ModelForm):
 
         
 class NameForm(BaseProfileForm):
-    # Boolean fields must be initialized. All other field attributes generated
-    # with generate_custom_widgets method
+    
     class Meta:
         form_name = "Personal Information"
         model = Name
@@ -68,6 +67,7 @@ class NameForm(BaseProfileForm):
         
 
 class SecondaryEmailForm(BaseProfileForm):
+
     class Meta:
         form_name = "Secondary Email"
         model = SecondaryEmail
@@ -76,6 +76,7 @@ class SecondaryEmailForm(BaseProfileForm):
 
 
 class EducationForm(BaseProfileForm):
+    
     class Meta:
         form_name = "Education"
         model = Education
@@ -83,6 +84,7 @@ class EducationForm(BaseProfileForm):
         
 
 class EmploymentForm(BaseProfileForm):
+
     class Meta:
         form_name = "Employment History"
         model = EmploymentHistory
@@ -90,6 +92,7 @@ class EmploymentForm(BaseProfileForm):
 
         
 class PhoneForm(BaseProfileForm):
+    
     class Meta:
         form_name = "Phone Number"
         model = Telephone
@@ -97,6 +100,7 @@ class PhoneForm(BaseProfileForm):
 
 
 class AddressForm(BaseProfileForm):
+
     class Meta:
         form_name = "Address"
         model = Address

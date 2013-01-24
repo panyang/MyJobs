@@ -25,6 +25,12 @@ class About(TemplateView):
 class Privacy(TemplateView):
     template_name = "privacy.html"
 
+def instantiate_profile_forms(form_classes, settings,post=False):
+    profile_instances = []
+    for form_class in form_classes:
+        settings['prefix'] = form_class.Meta.model.__name__.lower()
+        profile_instances.append(form_class(**settings))
+    return profile_instances
 
 def home(request):
     """
@@ -38,11 +44,10 @@ def home(request):
     registrationform = RegistrationForm(auto_id=False)
     loginform = CustomAuthForm(auto_id=False)
 
-    kwargs = {'auto_id':False, 'empty_permitted':True}
-    profile_forms =  [NameForm(**kwargs),EducationForm(**kwargs),
-                      EmploymentForm(**kwargs), PhoneForm(**kwargs),
-                      AddressForm(**kwargs)]
-
+    form_classes = [NameForm,EducationForm,EmploymentForm,PhoneForm,AddressForm]
+    settings = {'auto_id':False, 'empty_permitted':True, 'user': request.user}
+    profile_forms = instantiate_profile_forms(form_classes,settings)
+ 
     if request.method == "POST":
         if request.POST['action'] == "register":
             registrationform = RegistrationForm(request.POST, auto_id=False)
@@ -62,15 +67,9 @@ def home(request):
                 login(request, loginform.get_user())
                 return HttpResponseRedirect('/account')
         elif request.POST['action'] == "save_profile":
-            kwargs = {'auto_id':False, 'empty_permitted':True, 'user':request.user}
-            profile_forms =  [NameForm(request.POST,**kwargs),
-                              EducationForm(request.POST,**kwargs),
-                              EmploymentForm(request.POST,**kwargs),
-                              PhoneForm(request.POST,**kwargs),
-                              AddressForm(request.POST,**kwargs)]
+            profile_forms =  instantiate_profile_forms(form_classes,settings,
+                                                       post=True)
             for form in profile_forms:
-                import ipdb
-                ipdb.set_trace()
                 if form.is_valid():
                     if form.cleaned_data:
                         form.save()
@@ -151,3 +150,5 @@ def get_name_obj(request):
     except (Name.DoesNotExist,TypeError):
         name_obj = None
     return name_obj
+
+                        

@@ -8,6 +8,7 @@ form -- the rest of the form.
 {% endcomment %}
 {% load widget_tweaks %}
 {% load form_tags %}
+{% load selection_boxes %}
 
 <fieldset>
     {# Include but don't display hidden fields #}
@@ -40,8 +41,10 @@ form -- the rest of the form.
             <div class="form-label pull-left">
                 {{ field.label_tag }}
             </div>{{field}}
+            {% elif field.name == 'country_code' %}
+            {% country_region_select selected="usa" html_id=field.id_for_label %}
             {% else %}
-                {{ field }}
+                {{ field  }}
             {% endif %}
             {% if field.help_text %}
             <span class="help-block">{{ field.help_text }}</span>

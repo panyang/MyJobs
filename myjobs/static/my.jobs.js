@@ -2,7 +2,8 @@
 Document Level Actions
 *******/
 $(document).ready(function(){
-    $("select").makeCombobox();
+    $("#id_country_code").makeCombobox();
+    $("#region_selection").makeCombobox();
 });
 /******
 My.jobs Share window functions. Assigns click events and builds share window. 

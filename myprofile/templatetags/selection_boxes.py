@@ -50,7 +50,7 @@ def country_region_select(selected="can", html_id="", input_name="country"):
                     in order to provide javascript functionality.
     
     """
-    country_tag = country_select(selected,html_id,input_name,True)
+    country_tag = country_select(selected,html_id,input_name,False)
     if country_tag[0] != "<":
         region_tag = ""
     else:
@@ -68,7 +68,7 @@ def country_region_select(selected="can", html_id="", input_name="country"):
     
 @register.simple_tag
 def country_select(selected="usa", html_id="", input_name="country",
-                   child_regions=False,inc_struc=True):
+                   child_regions=False,inc_struc=False):
     """
     Builds an html select list of countries. The select list is built using
     data stored on a CDN.
@@ -108,7 +108,7 @@ def country_select(selected="usa", html_id="", input_name="country",
 
 @register.simple_tag
 def region_select(country="usa",selected="az",html_id="",input_name="region",
-                  inc_struc=True):
+                  inc_struc=False):
     """
     Builds an html select list of regions.
     Inputs:
