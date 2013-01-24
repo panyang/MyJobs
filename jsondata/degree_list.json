@@ -1,0 +1,287 @@
+{"degrees":[
+    {
+        "code":"AA",
+        "alternate_codes":"AA or A.A.",
+        "name":"AA - AA - Associate of Arts"
+    },{
+        "code":"BA",
+        "alternate_codes":"BA, B.A., AB, A.B. or B.Arts",
+        "name":"BA - Bachelor of Arts"
+    },{
+        "code":"BN",
+        "alternate_codes":"BN or B.N.",
+        "name":"BN - Bachelor of Nursing"
+    },{
+        "code":"BS",
+        "alternate_codes":"(US) BS or B.S.",
+        "name":"BS - Bachelor of Science (US)"
+    },{
+        "code":"MS",
+        "alternate_codes":"(US) MS or M.S.",
+        "name":"MS - Master of Science (US)"
+    },{
+        "code":"PhD",
+        "alternate_codes":"PhD, Ph.D., DPhil, D.Phil., DPh or D.Ph.",
+        "name":"PhD - Doctor of Philosophy"
+    },{
+        "code":"BEP",
+        "alternate_codes":"BEP",
+        "name":"BEP - Brevet d'études professionnelles (France)"
+    },{
+        "code":"CAP",
+        "alternate_codes":"CAP",
+        "name":"CAP - Certificat d'aptitude professionnelle (France)"
+    },{
+        "code":"Dip.Arts",
+        "alternate_codes":"Dip.Arts",
+        "name":"Dip.Arts - Diploma of Arts"
+    },{
+        "code":"Dip.Lang.Stud.",
+        "alternate_codes":"Dip.Lang.Stud.",
+        "name":"Dip.Lang.Stud. - Diploma of Language Studies"
+    },{
+        "code":"Dip.Lang",
+        "alternate_codes":"Dip.Lang",
+        "name":"Dip.Lang - Diploma of Languages"
+    },{
+        "code":"Dip.Soc.Sc.",
+        "alternate_codes":"Dip.Soc.Sc.",
+        "name":"Dip.Soc.Sc. - Diploma of Social Sciences"
+    },{
+        "code":"Dip.Ed",
+        "alternate_codes":"Dip.Ed",
+        "name":"Dip.Ed - Diploma of Education"
+    },{
+        "code":"Dip.Mus.",
+        "alternate_codes":"Dip.Mus.",
+        "name":"Dip.Mus. - Diploma of Music"
+    },{
+        "code":"BAcy",
+        "alternate_codes":"BAcy or B.Acy.",
+        "name":"BAcy - Bachelor of Accountancy"
+    },{
+        "code":"BAcc",
+        "alternate_codes":"BAcc or B.Acc.",
+        "name":"BAcc - Bachelor of Accounting"
+    },{
+        "code":"B.An.Vet.Bio.Sc.",
+        "alternate_codes":"B.An.Vet.Bio.Sc.",
+        "name":"B.An.Vet.Bio.Sc. - Bachelor of Animal and Veterinary Bioscience"
+    },{
+        "code":"B.App.Sc.",
+        "alternate_codes":"B.App.Sc.",
+        "name":"B.App.Sc. - Bachelor of Applied Science"
+    },{
+        "code":"BArch",
+        "alternate_codes":"BArch or B.Arch.",
+        "name":"BArch - Bachelor of Architecture"
+    },{
+        "code":"BBA",
+        "alternate_codes":"BBA or B.B.A.",
+        "name":"BBA - Bachelor of Business Administration"
+    },{
+        "code":"BCE",
+        "alternate_codes":"BCE or B.C.E.",
+        "name":"BCE - Bachelor of Civil Engineering"
+    },{
+        "code":"BComm",
+        "alternate_codes":"BComm or B.Comm., or BCom or B.Com.",
+        "name":"BComm - Bachelor of Commerce"
+    },{
+        "code":"B.Comm.",
+        "alternate_codes":"B.Comm.",
+        "name":"B.Comm. - Bachelor of Communications"
+    },{
+        "code":"BDM",
+        "alternate_codes":"BDM or B.D.M.",
+        "name":"BDM - Bachelor of Dental Medicine"
+    },{
+        "code":"BDSc",
+        "alternate_codes":"BDSc or B.D.Sc.",
+        "name":"BDSc - Bachelor of Dental Science"
+    },{
+        "code":"BDS or B.D.S.;",
+        "alternate_codes":"BDS or B.D.S.; or BChD or B.Ch.D.",
+        "name":"BDS or B.D.S.; - Bachelor of Dental Surgery"
+    },{
+        "code":"BDent",
+        "alternate_codes":"BDent or B.Dent.",
+        "name":"BDent - Bachelor of Dentistry"
+    },{
+        "code":"BDes",
+        "alternate_codes":"BDes or B.Des.",
+        "name":"BDes - Bachelor of Design"
+    },{
+        "code":"B.Des.Comp.",
+        "alternate_codes":"B.Des.Comp.",
+        "name":"B.Des.Comp. - Bachelor of Design Computing"
+    },{
+        "code":"B.Des.Arch.",
+        "alternate_codes":"B.Des.Arch.",
+        "name":"B.Des.Arch. - Bachelor of Design in Architecture"
+    },{
+        "code":"BEd",
+        "alternate_codes":"BEd or B.Ed.",
+        "name":"BEd - Bachelor of Education"
+    },{
+        "code":"BEng",
+        "alternate_codes":"BEng or B.Eng., or BE or B.E",
+        "name":"BEng - Bachelor of Engineering"
+    },{
+        "code":"BEE",
+        "alternate_codes":"BEE or B.E.E.",
+        "name":"BEE - Bachelor of Electrical Engineering"
+    },{
+        "code":"BFA",
+        "alternate_codes":"BFA or B.F.A.",
+        "name":"BFA - Bachelor of Fine Arts"
+    },{
+        "code":"B.Hlth.Sci",
+        "alternate_codes":"B.Hlth.Sci",
+        "name":"B.Hlth.Sci - Bachelor of Health Sciences"
+    },{
+        "code":"BIT",
+        "alternate_codes":"BIT or B.I.T",
+        "name":"BIT - Bachelor of Information Technology"
+    },{
+        "code":"BIGS",
+        "alternate_codes":"BIGS or B.I.G.S.",
+        "name":"BIGS - Bachelor of International and Global Studies"
+    },{
+        "code":"LLB",
+        "alternate_codes":"LLB or LL.B.",
+        "name":"LLB - Bachelor of Law"
+    },{
+        "code":"BLAS",
+        "alternate_codes":"BLAS or B.L.A.S.",
+        "name":"BLAS - Bachelor of Liberal Arts and Sciences"
+    },{
+        "code":"BLib",
+        "alternate_codes":"BLib or B.Lib., or BLS or B.L.S.",
+        "name":"BLib - Bachelor of Library Science"
+    },{
+        "code":"BLit",
+        "alternate_codes":"BLit or B.Lit.",
+        "name":"BLit - Bachelor of Literature"
+    },{
+        "code":"BMath",
+        "alternate_codes":"BMath or B.Math",
+        "name":"BMath - Bachelor of Mathematics"
+    },{
+        "code":"BME",
+        "alternate_codes":"BME or B.M.E.",
+        "name":"BME - Bachelor of Mechanical Engineering"
+    },{
+        "code":"B.Med.Sc.",
+        "alternate_codes":"B.Med.Sc.",
+        "name":"B.Med.Sc. - Bachelor of Medical Science"
+    },{
+        "code":"MB",
+        "alternate_codes":"MB or M.B.",
+        "name":"MB - Bachelor of Medicine"
+    },{
+        "code":"B.Mus.Studies",
+        "alternate_codes":"B.Mus.Studies",
+        "name":"B.Mus.Studies - Bachelor of Music Studies"
+    },{
+        "code":"B.Pharm.",
+        "alternate_codes":"B.Pharm.",
+        "name":"B.Pharm. - Bachelor of Pharmacy"
+    },{
+        "code":"B.P.E.S.S.",
+        "alternate_codes":"B.P.E.S.S.",
+        "name":"B.P.E.S.S. - Bachelor of Political, Economic and Social Sciences"
+    },{
+        "code":"B.Res.Ec.",
+        "alternate_codes":"B.Res.Ec.",
+        "name":"B.Res.Ec. - Bachelor of Resource Economics"
+    },{
+        "code":"BSc",
+        "alternate_codes":"(UK) BSc or B.Sc.",
+        "name":"BSc - Bachelor of Science (UK)"
+    },{
+        "code":"BSN",
+        "alternate_codes":"BSN",
+        "name":"BSN - Bachelor of Science in Nursing"
+    },{
+        "code":"BSLS",
+        "alternate_codes":"BSLS or B.S.L.S.",
+        "name":"BSLS - Bachelor of Socio-Legal Studies"
+    },{
+        "code":"BS",
+        "alternate_codes":"BS or B.S.",
+        "name":"BS - Bachelor of Surgery"
+    },{
+        "code":"B.V.Sc.",
+        "alternate_codes":"B.V.Sc.",
+        "name":"B.V.Sc. - Bachelor of Veterinary Science"
+    },{
+        "code":"BVA",
+        "alternate_codes":"BVA or B.V.A.",
+        "name":"BVA - Bachelor of Visual Arts"
+    },{
+        "code":"MA",
+        "alternate_codes":"MA, M.A. or A.M.",
+        "name":"MA - Master of Arts"
+    },{
+        "code":"MBA",
+        "alternate_codes":"MBA or M.B.A.",
+        "name":"MBA - Master of Business Administration"
+    },{
+        "code":"MDiv",
+        "alternate_codes":"MDiv or M.Div.",
+        "name":"MDiv - Master of Divinity"
+    },{
+        "code":"MIS",
+        "alternate_codes":"MIS or M.I.S.",
+        "name":"MIS - Master of International Studies"
+    },{
+        "code":"LLM",
+        "alternate_codes":"LLM or LL.M.",
+        "name":"LLM - Master of Laws"
+    },{
+        "code":"MSc",
+        "alternate_codes":"(UK) MSc or M.Sc.",
+        "name":"MSc - Master of Science (UK)"
+    },{
+        "code":"MSW",
+        "alternate_codes":"MSW or M.S.W.",
+        "name":"MSW - Master of Social Work"
+    },{
+        "code":"CD",
+        "alternate_codes":"CD or C.D.",
+        "name":"CD - Doctor of Dentistry"
+    },{
+        "code":"DDS",
+        "alternate_codes":"DDS or D.D.S.",
+        "name":"DDS - Doctor of Dental Surgery"
+    },{
+        "code":"DMD",
+        "alternate_codes":"DMD or D.M.D.",
+        "name":"DMD - Doctor of Dental Medicine"
+    },{
+        "code":"DD",
+        "alternate_codes":"DD or D.D.",
+        "name":"DD - Doctor of Divinity"
+    },{
+        "code":"EdD",
+        "alternate_codes":"EdD or Ed.D.",
+        "name":"EdD - Doctor of Education"
+    },{
+        "code":"MD",
+        "alternate_codes":"MD or M.D.",
+        "name":"MD - Doctor of Medicine"
+    },{
+        "code":"PsyD",
+        "alternate_codes":"PsyD or Psy.D.",
+        "name":"PsyD - Doctor of Psychology"
+    },{
+        "code":"DSc",
+        "alternate_codes":"DSc or D.Sc.",
+        "name":"DSc - Doctor of Science"
+    },{
+        "code":"JD",
+        "alternate_codes":"JD or J.D.",
+        "name":"JD - Juris Doctor"
+    }
+],"friendly_label":"Degree Name","default_option":"BS"}

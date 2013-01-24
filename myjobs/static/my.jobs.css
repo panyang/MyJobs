@@ -25,7 +25,26 @@ a:hover{
 .form-label label{
     font-weight: bold;
     }
-
+.ui-combobox {
+    position: relative;
+    display: inline-block;
+    }
+.ui-combobox-toggle {
+    padding: 8px 0px 8px 0px;
+    position: relative;
+    left: -2px;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+    }
+input.comboboxWidget {
+    float: left;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+    }
+ul.ui-autocomplete{
+    height: 12em;
+    overflow-y: scroll;
+    }
 /*Topbar Styles*/
 .topbar #topbar-logo{
     height: 30px;
@@ -314,6 +333,15 @@ a:hover{
     .loginBox a{
         margin: 10px 0 0 0;
     }
+    .section a.ui-combobox-toggle {
+        padding: 8px 0px 8px 0px;
+        border-top-left-radius: 0px;
+        border-bottom-left-radius: 0px;
+    }
+    input[type=checkbox]{
+        width: 35px;
+        height: 35px;
+    }
 }
 @media screen and (max-width: 500px){
     #titleRow{
@@ -335,6 +363,30 @@ a:hover{
         float: none;
         clear: both;
         display: block;
+    }
+    form .pull-left{
+        float: none;
+    }
+    form .pull-left label{
+        text-align: left;
+    }
+    .form-label{
+        width: 95%;
+    }    
+    input[type=checkbox]{
+        float: right;
+        margin-top: -20px;
+    }
+    input[type=text]{
+        width: 96%;
+    }
+    input.comboboxWidget{
+        width: 60%;
+        float: none;
+        margin-top: -12px;
+    }
+    ul.ui-autocomplete{
+        display: none !important;
     }
 }
 
