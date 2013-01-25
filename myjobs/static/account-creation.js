@@ -57,15 +57,15 @@ function save(csrf_token) {
     $('button#save').click(function(e) {
         e.preventDefault();
         var self = $(this).parents("div#account-page-2");
-        var json_data = $('form#profile-form').serialize().replace('=on','=True').replace('=off','=False')+'&action=save_profile';        
+        var form = $('form#profile-form');
+        // replace on and off with True and False to allow Django to validate boolean fields
+        var json_data = form.serialize().replace('=on','=True').replace('=off','=False')+'&action=save_profile';        
         $.ajax({
             type: "POST",
             url: "",
             data: json_data,
             success: function(data) {
                 if (data != 'valid') {
-                    // If there are errors, the view returns an updated form with errors
-                    // to replace the current one with and we reinitialize the functions
                     form.replaceWith(data);
                     save(csrf_token);
                     buttons();

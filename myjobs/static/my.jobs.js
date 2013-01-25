@@ -2,49 +2,10 @@
 Document Level Actions
 *******/
 $(document).ready(function(){
-    $("#id_country_code").makeCombobox();
-    $("#region_selection").makeCombobox();
+    $("#id_address-country_code").makeCombobox();
+    $("#id_address-country_sub_division_code").makeCombobox();
 });
-/******
-My.jobs Share window functions. Assigns click events and builds share window. 
-*******/
-$('#twitter').live('click',function() {        
-    q=location.href;
-    share_url = '/auth/twitter/?&url='+encodeURIComponent(q);
-    openShareWindow(share_url,"Twitter");
-});
-$('#facebook').live('click',function() {
-    q=location.href;
-    share_url = '/auth/facebook/?&url='+encodeURIComponent(q);
-    openShareWindow(share_url,"Twitter");
-});
-$('#linkedin').live('click',function() {
-    q=location.href;
-    share_url = '/auth/linkedin/?&url='+encodeURIComponent(q);
-    openShareWindow(share_url,"LinkedIn");
-});
-$(document).ready(function(){
-    $(".topbar .main-nav").click(function(){
-        $("#nav").toggleClass("active");
-        return false;
-    });
-});
-function openShareWindow(url,name){
-    /*
-    Opens a new window using OAuth to share content.
-    
-    Inputs:
-        :url:   The share url to use
-        :name:  The name of the social network
-    
-    Returns:
-        None - opens a new window.
-    
-    */
-    title = 'Share this on '+name;
-    atts = 'toolbar=no,width=568,height=360';
-    share_window = window.open(url, title,atts);
-}
+
 /*Combobox Widget. Based loosely on the jQuery UI example*/
 (function($){$.widget( "ui.makeCombobox",{
     _create: function(){
@@ -98,6 +59,7 @@ function openShareWindow(url,name){
                         to the use of the {% country_region_select %}
                         template tag.
                         ****/
+                        target_id = my_parent.attr("data-childlistid");
                         orig_options = my_parent.children("option")
                         val_to_get = "";
                         for(opt=0; opt < orig_options.length; opt++){
@@ -110,10 +72,11 @@ function openShareWindow(url,name){
                         region_url+= val_to_get.toLowerCase();
                         region_url+= "_regions.jsonp";
                         //temp hide the region select in case of 404
-                        $("label[for=region_selection]").hide()
-                        $("#region_selection + a").hide()
-                        $("#region_selection").hide()
-                        $("#region_selection_orig").val("none")
+                        console.log(target_id);
+                        $("label[for="+target_id+"]").hide()
+                        $("#"+target_id+" + a").hide()
+                        $("#"+target_id+"").hide()
+                        $("#"+target_id+"_orig").val("none")
                         //make the ajax call for region data
                          $.ajax({
                             url: region_url,
@@ -142,15 +105,15 @@ function openShareWindow(url,name){
                                     label = "Region";
                                 }
                                 if(opts!=""){
-                                    $("#region_selection_orig").html(opts);
+                                    $("#"+target_id+"_orig").html(opts);
                                     // turn on the region widget
-                                    $("label[for=region_selection]").html(label)
-                                    $("label[for=region_selection]").show()
-                                    $("#region_selection + a").show()
-                                    $("#region_selection").show()
+                                    $("label[for="+target_id+"]").html(label)
+                                    $("label[for="+target_id+"]").show()
+                                    $("#"+target_id+" + a").show()
+                                    $("#"+target_id+"").show()
                                     //set widget default value
-                                    $("#region_selection").val(
-                                        $("#region_selection_orig")
+                                    $("#"+target_id+"").val(
+                                        $("#"+target_id+"_orig")
                                         .children(":selected").html()
                                         );
                                 }
