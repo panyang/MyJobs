@@ -10,6 +10,7 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.views.generic import TemplateView
 
 from myjobs.forms import *
+from myprofile.forms import *
 from registration.forms import *
 
 
@@ -24,6 +25,12 @@ class About(TemplateView):
 class Privacy(TemplateView):
     template_name = "privacy.html"
 
+def instantiate_profile_forms(form_classes, settings,post=False):
+    profile_instances = []
+    for form_class in form_classes:
+        settings['prefix'] = form_class.Meta.model.__name__.lower()
+        profile_instances.append(form_class(**settings))
+    return profile_instances
 
 def home(request):
     """
@@ -31,11 +38,16 @@ def home(request):
     If an account is successfully created, this view returns a simple 'valid'
     HTTP Response, which the front end jQuery recognizes as a signal to continue
     with the account creation process. If an error occurs in the form, this view
-    returns an updated registration form showing the errors.
+    returns an updated registratiocn form showing the errors.
 
     """
-    registrationform =  RegistrationForm(auto_id=False)
+    registrationform = RegistrationForm(auto_id=False)
     loginform = CustomAuthForm(auto_id=False)
+
+    form_classes = [NameForm,EducationForm,EmploymentForm,PhoneForm,AddressForm]
+    settings = {'auto_id':False, 'empty_permitted':True, 'user': request.user}
+    profile_forms = instantiate_profile_forms(form_classes,settings)
+ 
     if request.method == "POST":
         if request.POST['action'] == "register":
             registrationform = RegistrationForm(request.POST, auto_id=False)
@@ -49,14 +61,23 @@ def home(request):
                 return render_to_response('includes/widget-user-registration.html',
                                           {'form': registrationform},
                                           context_instance=RequestContext(request))
-                                          
         elif request.POST['action'] == "login":
             loginform = CustomAuthForm(request.POST)
             if loginform.is_valid():
                 login(request, loginform.get_user())
                 return HttpResponseRedirect('/account')
+        elif request.POST['action'] == "save_profile":
+            profile_forms =  instantiate_profile_forms(form_classes,settings,
+                                                       post=True)
+            for form in profile_forms:
+                if form.is_valid():
+                    if form.cleaned_data:
+                        form.save()
+            return HttpResponse('valid')
     ctx = {'registrationform':registrationform,
            'loginform': loginform,
+           'profile_forms': profile_forms,
+           'only_show_required': True,
            'name_obj': get_name_obj(request)}
     return render_to_response('index.html', ctx, RequestContext(request))
 
@@ -129,3 +150,5 @@ def get_name_obj(request):
     except (Name.DoesNotExist,TypeError):
         name_obj = None
     return name_obj
+
+                        

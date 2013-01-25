@@ -1,8 +1,39 @@
-from django import forms
+from django.forms import *
 from myprofile.models import *
 
 
-class BaseProfileForm(forms.ModelForm):
+def generate_custom_widgets(model):
+    """
+    Generates custom widgets and sets placeholder values and class names based
+    on field type
+
+    :Input:
+    model - a model instance
+
+    :Output:
+    widgets - dictionary of widgets as defined in the Django doc
+    """
+    fields = model._meta.fields
+    widgets = {}
+    
+    for field in fields:
+        internal_type = field.get_internal_type()
+        # exclude profile unit base fields
+        if field.model == model:
+            attrs = {}
+            attrs['id'] = 'id_' + model.__name__.lower() + '-' + field.attname
+            attrs['placeholder'] = field.verbose_name.title()
+            if field.choices:
+                widgets[field.attname] = Select()
+            elif internal_type == 'BooleanField':
+                widgets[field.attname] = CheckboxInput(attrs=attrs)
+            else:
+                widgets[field.attname] = TextInput(attrs=attrs)
+
+    return widgets
+
+
+class BaseProfileForm(ModelForm):
     """
     All ProfileUnit forms inherit from this model. It takes a user
     object as an initial input from the views and saves the form instance
@@ -28,41 +59,49 @@ class BaseProfileForm(forms.ModelForm):
 
         
 class NameForm(BaseProfileForm):
-    # For most fields, we can set the model in the Meta class to automatically
-    # create the form fields. Since we want to alter the field name from the
-    # default created by Django from the db field names, we have to define
-    # these manually
-
-    # We will always define the placeholder text for our formfields because
-    # there are different instances where we'll use the label or we'll use
-    # just the placeholder. The distinction is dealt with in the
-    # form-error-highlight.html template and by passing in the auto_id value
-    # as described above
-    given_name = forms.CharField(label="First Name", max_length=30,
-                                 widget=forms.TextInput(attrs={
-                                     'placeholder': 'First Name'}))
-    family_name = forms.CharField(label="Last Name", max_length=30,
-                                 widget=forms.TextInput(attrs={
-                                     'placeholder': 'Last Name'}))
-    primary = forms.BooleanField(label="Is this your primary name?",
-                                 required=False)
-
+    
     class Meta:
+        form_name = "Personal Information"
         model = Name
-        # Exclude any fields from ProfileUnits or Name that doesn't require user
-        # input
-        exclude = ('user', 'date_created', 'date_updated', 'content_type',
-        'display_name')
-
+        widgets = generate_custom_widgets(model)
+        
 
 class SecondaryEmailForm(BaseProfileForm):
+
     class Meta:
+        form_name = "Secondary Email"
         model = SecondaryEmail
-        exclude = ('user', 'date_created', 'date_updated', 'content_type',
-                   'verified_date')
-        # Here, we don't need to change the label but want to just change the
-        # widget. We can alter just the widget by passing this dictionary
-        widgets = {
-            'email': forms.TextInput(attrs={'placeholder': 'Email'}),
-            'label': forms.TextInput(attrs={'placeholder': 'Label'})
-        }
+
+        widgets = generate_custom_widgets(model)
+
+
+class EducationForm(BaseProfileForm):
+    
+    class Meta:
+        form_name = "Education"
+        model = Education
+        widgets = generate_custom_widgets(model)
+        
+
+class EmploymentForm(BaseProfileForm):
+
+    class Meta:
+        form_name = "Employment History"
+        model = EmploymentHistory
+        widgets = generate_custom_widgets(model)
+
+        
+class PhoneForm(BaseProfileForm):
+    
+    class Meta:
+        form_name = "Phone Number"
+        model = Telephone
+        widgets = generate_custom_widgets(model)        
+
+
+class AddressForm(BaseProfileForm):
+
+    class Meta:
+        form_name = "Address"
+        model = Address
+        widgets = generate_custom_widgets(model)
