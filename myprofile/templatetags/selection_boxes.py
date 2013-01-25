@@ -77,7 +77,6 @@ def country_select(selected="usa", html_id="", input_name="country",
     :selected:      default key to select
     :html_id:       html id to use for the element
     :input_name:    the form element name
-    :child_regions: whether this field has a dependent regions field
     :inc_struc:     whether or not to include the html label and structure
     
     Returns:        
