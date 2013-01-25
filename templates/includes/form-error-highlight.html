@@ -25,7 +25,7 @@ form -- the rest of the form.
     {# Include the visible fields #}
     {% for field in form.visible_fields %}
     {% is_boolean_field field as is_boolean %}
-    {% if only_show_required and field.field.required or is_boolean %}
+    {% if is_boolean or not form.only_show_required or form.only_show_required and field.field.required %}
         {# if it's an error put it in a red box #}
         {% if field.errors %}
         <div class="alert-message block-message error">
@@ -41,10 +41,12 @@ form -- the rest of the form.
             <div class="form-label pull-left">
                 {{ field.label_tag }}
             </div>{{field}}
-            {% elif field.name == 'address-country_code' %}
-            {% country_select html_id="id_address-country_code" region_html_id="id_address-country_sub_division_code" %}
-            {% elif field.name == 'address-country_sub_division_code' %}
-            {% region_select html_id="id_address-country_sub_division_code" %}
+            {% elif 'country_code' in field.html_name %}
+            {% with "id_"|add:form.prefix|add:"_country_sub_division_code" as region_id %}
+            {% country_select selected="" html_id=field.id_for_label  region_html_id=region_id input_name=field.html_name %}
+            {% endwith %}
+            {% elif 'country_sub_division_code' in field.html_name %}
+            {% region_select selected="" html_id=field.id_for_label input_name=field.html_name %}
             {% else %}
                 {{ field  }}
             {% endif %}

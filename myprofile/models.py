@@ -100,7 +100,7 @@ class Telephone(ProfileUnits):
     	    				  verbose_name="Country Code")
     area_dialing = models.IntegerField(max_length=3, verbose_name="Area Code")    
     number = models.CharField(max_length=8, verbose_name="DialNumber")
-    extension = models.IntegerField(max_length=5, blank=True, null=True)
+    extension = models.CharField(max_length=5, blank=True, null=True)
     
     def save(self, *args, **kwargs):
     	if self.use_code == "Home" or self.use_code == "Work" or self.use_code == "Other":
@@ -115,9 +115,9 @@ class Telephone(ProfileUnits):
 
 
 class EmploymentHistory(ProfileUnits):
-    position_title = models.CharField(max_length=255)
-    organization_name = models.CharField(max_length=255)
-    start_date = models.DateField()
+    position_title = models.CharField(max_length=255,verbose_name="Position Title")
+    organization_name = models.CharField(max_length=255,verbose_name="Company")
+    start_date = models.DateField(verbose_name="Start Date")
     current_indicator = models.BooleanField(default=False,
                                             verbose_name="I still work here")
 
@@ -155,6 +155,13 @@ class Name(ProfileUnits):
         """
         full_name = '%s %s' % (self.given_name, self.family_name)
         return full_name.strip()
+
+    def save(self, *args, **kwargs):
+        current_primary = Name.objects.filter(primary=True)[0]
+        if self.primary and current_primary:
+            current_primary.primary = False
+            current_primary.save()
+        super(Name, self).save(*args, **kwargs);
 
     def __unicode__(self):
         return self.get_full_name()

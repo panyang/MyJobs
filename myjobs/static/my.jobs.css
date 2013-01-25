@@ -382,15 +382,20 @@ ul.ui-autocomplete{
 
 .profile-unit {
     width: 260px;
-    min-height: 300px;
+    min-height: 320px;
     float: left;
     padding: 20px;
     margin: 10px;
     background-color: #EFEADE;
 }
 
+
 .profile-unit input[type="text"] {
     width: 250px;
+}
+
+.profile-unit input.comboboxWidget{
+    width: 212px;
 }
 
 .profile-unit select {
@@ -401,3 +406,4 @@ ul.ui-autocomplete{
     margin-right: 20px;
     width: auto;
 }
+

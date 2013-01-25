@@ -7,11 +7,11 @@ def generate_custom_widgets(model):
     Generates custom widgets and sets placeholder values and class names based
     on field type
 
-    :Input:
-    model - a model instance
-
-    :Output:
-    widgets - dictionary of widgets as defined in the Django doc
+    Inputs:
+    :model:       model class from form Meta
+    
+    Outputs:
+    :widgets:     dictionary of widgets with custom attributes defined
     """
     fields = model._meta.fields
     widgets = {}
@@ -39,16 +39,23 @@ class BaseProfileForm(ModelForm):
     object as an initial input from the views and saves the form instance
     to that specified user.
 
-    :Inputs:
-    user - we will always pass a user object in because all ProfileUnits
-    are linked to a user
-    auto_id - this is a boolean that determines whether a label is displayed or
-    not and is by default set to True. If we want the placeholder text to be
-    displayed instead, pass in the value as False
-    
+    Inputs (these are the common inputs we will use for rendering forms):
+    :user:       a user object. We will always pass a user object in  because all
+                 ProfileUnits are linked to a user.
+    :auto_id:    this is a boolean that determines whether a label is displayed or
+                 not and is by default set to True. Setting this to false uses the
+                 placeholder text instead, except for boolean and select fields.
+    :empty_permitted: allow form to be submitted as empty even if the fields are
+                 required. This is particularly useful when we combine multiple
+                 Django forms on the front end and submit it as one request instead
+                 of several separate requests.
+    :only_show_required: Template uses this flag to determine if it should only render
+                 required forms. Default is False.
     """
+    
     def __init__(self, *args, **kwargs):
         self.user = kwargs.pop('user',None)
+        self.only_show_required = kwargs.pop('only_show_required',False)
         super (BaseProfileForm, self).__init__(*args, **kwargs)
 
     def save(self, commit=True):
@@ -59,15 +66,14 @@ class BaseProfileForm(ModelForm):
 
         
 class NameForm(BaseProfileForm):
-    
     class Meta:
+        # form_name is used in the templates to render the form header
         form_name = "Personal Information"
         model = Name
         widgets = generate_custom_widgets(model)
         
 
 class SecondaryEmailForm(BaseProfileForm):
-
     class Meta:
         form_name = "Secondary Email"
         model = SecondaryEmail
@@ -76,7 +82,6 @@ class SecondaryEmailForm(BaseProfileForm):
 
 
 class EducationForm(BaseProfileForm):
-    
     class Meta:
         form_name = "Education"
         model = Education
@@ -84,7 +89,6 @@ class EducationForm(BaseProfileForm):
         
 
 class EmploymentForm(BaseProfileForm):
-
     class Meta:
         form_name = "Employment History"
         model = EmploymentHistory
@@ -92,7 +96,6 @@ class EmploymentForm(BaseProfileForm):
 
         
 class PhoneForm(BaseProfileForm):
-    
     class Meta:
         form_name = "Phone Number"
         model = Telephone
@@ -100,7 +103,6 @@ class PhoneForm(BaseProfileForm):
 
 
 class AddressForm(BaseProfileForm):
-
     class Meta:
         form_name = "Address"
         model = Address

@@ -9,7 +9,7 @@ $(document).ready(function() {
     save(csrf_token);
 
     $(function() {
-        $( "input[id$='date']" ).datepicker();
+        $( "input[id$='date']" ).datepicker({dateFormat: "yy-mm-dd"});
     });
 });
 
@@ -68,6 +68,8 @@ function save(csrf_token) {
                 if (data != 'valid') {
                     form.replaceWith(data);
                     save(csrf_token);
+                    $("#id_address-country_code").makeCombobox();
+                    $("#id_address-country_sub_division_code").makeCombobox();
                     buttons();
                 } else {
                     window.location = '/account';

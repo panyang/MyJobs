@@ -35,7 +35,7 @@ def home(request):
     'valid', as an HTTP Response, which the front end recognizes as a signal to
     continue with the account creation process. If an error occurs, this triggers
     the jQuery to update the page. The form instances with errors must be passed
-    back to the template.
+    back to the form template it was originally from.
 
     """
 
@@ -43,56 +43,57 @@ def home(request):
     # instead of the label
     registrationform = RegistrationForm(auto_id=False)
     loginform = CustomAuthForm(auto_id=False)
-    
+
     form_classes = [NameForm,EducationForm,EmploymentForm,PhoneForm,AddressForm]
-    # empty_permitted validates a completely empty model form even if the fields
-    # are required.
-    settings = {'auto_id':False, 'empty_permitted':True, 'user': request.user}
+    settings = {'auto_id':False, 'empty_permitted':True, 
+                'user': request.user}
     profile_forms = instantiate_profile_forms(request, form_classes,settings)
 
+    # Only show the required form fields for initial profile creation
     data_dict = {'registrationform':registrationform,
                  'loginform': loginform,
                  'profile_forms': profile_forms,
-                 'only_show_required': True,
                  'name_obj': get_name_obj(request)}
 
     if request.method == "POST":
         if request.POST['action'] == "register":
             registrationform = RegistrationForm(request.POST, auto_id=False)
             if registrationform.is_valid():
-                new_user = User.objects.create_inactive_user(**registrationform.cleaned_data)
-                user_cache = authenticate(username = registrationform.cleaned_data['email'],
-                                          password = registrationform.cleaned_data['password1'])
+                new_user = User.objects.create_inactive_user(**registrationform.
+                                                             cleaned_data)
+                user_cache = authenticate(username = registrationform.
+                                          cleaned_data['email'],
+                                          password = registrationform.
+                                          cleaned_data['password1'])
                 login(request, user_cache)
                 return HttpResponse('valid')
             else:
                 return render_to_response('includes/widget-user-registration.html',
                                           {'form': registrationform},
                                           context_instance=RequestContext(request))
+                
         elif request.POST['action'] == "login":
             loginform = CustomAuthForm(request.POST)
             if loginform.is_valid():
                 login(request, loginform.get_user())
                 return HttpResponseRedirect('/account')
+                
         elif request.POST['action'] == "save_profile":
-            profile_forms =  instantiate_profile_forms(request,form_classes,settings,
-                                                       post=True)
-            import ipdb
-            ipdb.set_trace()
+            profile_forms =  instantiate_profile_forms(request,form_classes,
+                                                       settings,post=True)
             all_valid = True
             for form in profile_forms:
-                if form.is_valid():
-                    if form.cleaned_data:
-                        form.save()
-                else:
+                if not form.is_valid():
                     all_valid = False
 
             if all_valid:
+                for form in profile_forms:
+                    if form.cleaned_data:
+                        form.save()
                 return HttpResponse('valid')
             else:
                 return render_to_response('includes/initial-profile-form.html',
-                                          {'profile_forms': profile_forms,
-                                           'only_show_required':True},
+                                          {'profile_forms': profile_forms},
                                           context_instance=RequestContext(request))
             
     return render_to_response('index.html', data_dict, RequestContext(request))

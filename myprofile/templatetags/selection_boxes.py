@@ -100,7 +100,7 @@ def country_select(selected="usa", html_id="", input_name="country",
     else:
         sel_tag = _build_select_list(country_list,selected,input_name,html_id)
     if inc_struc:
-        html_str="<div class='form-label pull-left'>"
+        html_str="<div>"
         html_str="%s<label for='%s'>%s</label></div>" % (html_str,html_id,label)
         html_str="%s%s<div class='clear'></div>" % (html_str,sel_tag)
     else:
@@ -143,7 +143,7 @@ def region_select(country="usa",selected="az",html_id="",input_name="region",
         html_str = "%sNo regions available for the selected country" % html_str
     elif inc_struc:
         sel_tag = _build_select_list(region_list,selected,input_name,html_id)
-        html_str="<div class='form-label pull-left'>"
+        html_str="<div>"
         html_str="%s<label for='%s'>%s</label></div>" %(html_str,html_id,label)
         html_str="%s%s<div class='clear'></div>" % (html_str,sel_tag)
     else:
