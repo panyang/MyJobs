@@ -10,13 +10,13 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.views.generic import TemplateView
 
 from myjobs.forms import *
+from myjobs.helpers import *
 from myprofile.forms import *
 from registration.forms import *
 
 
 
 logger = logging.getLogger('__name__')
-
 
 class About(TemplateView):
     template_name = "about.html"
@@ -25,29 +25,37 @@ class About(TemplateView):
 class Privacy(TemplateView):
     template_name = "privacy.html"
 
-def instantiate_profile_forms(form_classes, settings,post=False):
-    profile_instances = []
-    for form_class in form_classes:
-        settings['prefix'] = form_class.Meta.model.__name__.lower()
-        profile_instances.append(form_class(**settings))
-    return profile_instances
 
 def home(request):
     """
-    The home page takes AJAX requests from the front end for account creation.
-    If an account is successfully created, this view returns a simple 'valid'
-    HTTP Response, which the front end jQuery recognizes as a signal to continue
-    with the account creation process. If an error occurs in the form, this view
-    returns an updated registratiocn form showing the errors.
+    Overview:
+    The home page view receives 2 separate Ajax requests, one for the registration
+    form and another for the initial profile information form. If everything
+    checks out alright and the form saves with no errors, it returns a simple string,
+    'valid', as an HTTP Response, which the front end recognizes as a signal to
+    continue with the account creation process. If an error occurs, this triggers
+    the jQuery to update the page. The form instances with errors must be passed
+    back to the template.
 
     """
+
+    # Forms that are passed the auto_id=False parameter uses the placeholder text
+    # instead of the label
     registrationform = RegistrationForm(auto_id=False)
     loginform = CustomAuthForm(auto_id=False)
-
+    
     form_classes = [NameForm,EducationForm,EmploymentForm,PhoneForm,AddressForm]
+    # empty_permitted validates a completely empty model form even if the fields
+    # are required.
     settings = {'auto_id':False, 'empty_permitted':True, 'user': request.user}
-    profile_forms = instantiate_profile_forms(form_classes,settings)
- 
+    profile_forms = instantiate_profile_forms(request, form_classes,settings)
+
+    data_dict = {'registrationform':registrationform,
+                 'loginform': loginform,
+                 'profile_forms': profile_forms,
+                 'only_show_required': True,
+                 'name_obj': get_name_obj(request)}
+
     if request.method == "POST":
         if request.POST['action'] == "register":
             registrationform = RegistrationForm(request.POST, auto_id=False)
@@ -67,19 +75,27 @@ def home(request):
                 login(request, loginform.get_user())
                 return HttpResponseRedirect('/account')
         elif request.POST['action'] == "save_profile":
-            profile_forms =  instantiate_profile_forms(form_classes,settings,
+            profile_forms =  instantiate_profile_forms(request,form_classes,settings,
                                                        post=True)
+            import ipdb
+            ipdb.set_trace()
+            all_valid = True
             for form in profile_forms:
                 if form.is_valid():
                     if form.cleaned_data:
                         form.save()
-            return HttpResponse('valid')
-    ctx = {'registrationform':registrationform,
-           'loginform': loginform,
-           'profile_forms': profile_forms,
-           'only_show_required': True,
-           'name_obj': get_name_obj(request)}
-    return render_to_response('index.html', ctx, RequestContext(request))
+                else:
+                    all_valid = False
+
+            if all_valid:
+                return HttpResponse('valid')
+            else:
+                return render_to_response('includes/initial-profile-form.html',
+                                          {'profile_forms': profile_forms,
+                                           'only_show_required':True},
+                                          context_instance=RequestContext(request))
+            
+    return render_to_response('index.html', data_dict, RequestContext(request))
 
     
 @login_required
@@ -133,22 +149,5 @@ def error(request):
         }
     return render_to_response('error.html', ctx, RequestContext(request))
 
-def get_name_obj(request):
-    """
-    A utility function that returns the user name object for inclusion in the
-    view context.
-    
-    Inputs:
-    :request:   request object
-    
-    Returns:
-    :name_obj:  User's display name (str)|None
-    
-    """
-    try:
-        name_obj = Name.objects.get(user=request.user,primary=True)
-    except (Name.DoesNotExist,TypeError):
-        name_obj = None
-    return name_obj
 
                         

@@ -63,7 +63,7 @@ def country_region_select(selected="can", html_id="", input_name="country",
             default_region=""
         
         region_tag= region_select(selected,default_region,region_html_id,"region")
-        
+
     html = country_tag+region_tag
     return html
     
@@ -148,7 +148,7 @@ def region_select(country="usa",selected="az",html_id="",input_name="region",
         html_str="%s%s<div class='clear'></div>" % (html_str,sel_tag)
     else:
         html_str = _build_select_list(region_list,selected,input_name,html_id)
-       
+        
     return html_str 
 
 # utility function below here

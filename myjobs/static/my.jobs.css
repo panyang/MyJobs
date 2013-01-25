@@ -153,26 +153,16 @@ ul.ui-autocomplete{
     color: #fff
     }
 
-.alert-message.block-message.error{
-    margin: 5px 0px;
-    background-color: #e16b51;
-    text-shadow: none;
-    padding: 10px;
-    border-radius: 5px;
-    }
 .alert-message ul{
     list-style: none;
     padding: 0;
     margin: 0;
     padding-top: 5px;
     }
-.alert-message ul li{
-    margin: 0px 0px 5px 0px;
-    padding: 5px;
-    background: #E09787;
-    border-radius: 3px;
-    border: 1px solid #fff;
+.alert-message li{
+    color: red;
 }
+
 #focusBox .alert-message.block-message.error,
 #loginBox .alert-message.block-message.error{
     padding: 5px 10px;
@@ -392,7 +382,7 @@ ul.ui-autocomplete{
 
 .profile-unit {
     width: 260px;
-    height: 300px;
+    min-height: 300px;
     float: left;
     padding: 20px;
     margin: 10px;

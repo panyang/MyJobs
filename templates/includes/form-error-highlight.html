@@ -41,8 +41,10 @@ form -- the rest of the form.
             <div class="form-label pull-left">
                 {{ field.label_tag }}
             </div>{{field}}
-            {% elif field.name == 'country_code' %}
-            {% country_region_select selected="usa" html_id=field.id_for_label %}
+            {% elif field.name == 'address-country_code' %}
+            {% country_select html_id="id_address-country_code" region_html_id="id_address-country_sub_division_code" %}
+            {% elif field.name == 'address-country_sub_division_code' %}
+            {% region_select html_id="id_address-country_sub_division_code" %}
             {% else %}
                 {{ field  }}
             {% endif %}
