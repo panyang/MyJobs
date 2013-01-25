@@ -77,7 +77,7 @@ function openShareWindow(url,name){
                            label.toLowerCase().indexOf(req.term.toLowerCase())!=-1){
                                 dict.push({"label":label,"value":label});                            
                         }
-                    }
+                    }                    
                     resp(dict);
                 },
                 minLength: 0,
@@ -98,6 +98,7 @@ function openShareWindow(url,name){
                         to the use of the {% country_region_select %}
                         template tag.
                         ****/
+                        target_id = my_parent.attr("data-childlistid");
                         orig_options = my_parent.children("option")
                         val_to_get = "";
                         for(opt=0; opt < orig_options.length; opt++){
@@ -109,11 +110,11 @@ function openShareWindow(url,name){
                         region_url = "http://js.nlx.org/myjobs/data/";
                         region_url+= val_to_get.toLowerCase();
                         region_url+= "_regions.jsonp";
-                        //temp hide the region select in case of 404
-                        $("label[for=region_selection]").hide()
-                        $("#region_selection + a").hide()
-                        $("#region_selection").hide()
-                        $("#region_selection_orig").val("none")
+                        //temp hide the region select in case of 404 on the json
+                        $("label[for="+target_id+"]").hide()
+                        $("#"+target_id+" + a").hide()
+                        $("#"+target_id+"").hide()
+                        $("#"+target_id+"_orig").val("none")
                         //make the ajax call for region data
                          $.ajax({
                             url: region_url,
@@ -142,15 +143,15 @@ function openShareWindow(url,name){
                                     label = "Region";
                                 }
                                 if(opts!=""){
-                                    $("#region_selection_orig").html(opts);
+                                    $("#"+target_id+"_orig").html(opts);
                                     // turn on the region widget
-                                    $("label[for=region_selection]").html(label)
-                                    $("label[for=region_selection]").show()
-                                    $("#region_selection + a").show()
-                                    $("#region_selection").show()
+                                    $("label[for="+target_id+"]").html(label)
+                                    $("label[for="+target_id+"]").show()
+                                    $("#"+target_id+" + a").show()
+                                    $("#"+target_id+"").show()
                                     //set widget default value
-                                    $("#region_selection").val(
-                                        $("#region_selection_orig")
+                                    $("#"+target_id+"").val(
+                                        $("#"+target_id+"_orig")
                                         .children(":selected").html()
                                         );
                                 }
@@ -200,6 +201,14 @@ function openShareWindow(url,name){
                 $("#"+target).autocomplete( "search", "" );
                 $("#"+target).focus();
             });
+        itemCount = $("#"+parent_id_orig).children("option")
+        //If there are no options for this element, hide it.
+        if(typeof(itemCount[1])=="undefined" || itemCount[1].value == ""){
+            $("label[for="+parent_id+"]").hide();
+            $("#"+parent_id+" + a").hide();
+            $("#"+parent_id+"").hide();
+            $("#"+parent_id+"_orig").val("none");
+        }
     },
     destroy: function() {
         this.element.show();
