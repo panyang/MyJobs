@@ -70,7 +70,6 @@ def country_region_select(selected="can", html_id="", input_name="country",
 @register.simple_tag
 def country_select(selected="usa", html_id="", input_name="country",
                    inc_struc=True,region_html_id=""):
-
     """
     Builds an html select list of countries. The select list is built using
     data stored on a CDN.
@@ -111,7 +110,7 @@ def country_select(selected="usa", html_id="", input_name="country",
 
 @register.simple_tag
 def region_select(country="usa",selected="az",html_id="",input_name="region",
-                  inc_struc=False):
+                  inc_struc=True):
     """
     Builds an html select list of regions.
     Inputs:
@@ -132,7 +131,7 @@ def region_select(country="usa",selected="az",html_id="",input_name="region",
     try:
         region_list = data_list["regions"]
     except KeyError:
-        return ""
+        region_list = {}
         
     try:
         label = data_list["friendly_label"]
