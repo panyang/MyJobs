@@ -71,8 +71,7 @@ $(document).ready(function(){
                         region_url = "http://js.nlx.org/myjobs/data/";
                         region_url+= val_to_get.toLowerCase();
                         region_url+= "_regions.jsonp";
-                        //temp hide the region select in case of 404
-                        console.log(target_id);
+                        //temp hide the region select in case of 404 on the json
                         $("label[for="+target_id+"]").hide()
                         $("#"+target_id+" + a").hide()
                         $("#"+target_id+"").hide()
@@ -163,6 +162,14 @@ $(document).ready(function(){
                 $("#"+target).autocomplete( "search", "" );
                 $("#"+target).focus();
             });
+        itemCount = $("#"+parent_id_orig).children("option")
+        //If there are no options for this element, hide it.
+        if(typeof(itemCount[1])=="undefined" || itemCount[1].value == ""){
+            $("label[for="+parent_id+"]").hide();
+            $("#"+parent_id+" + a").hide();
+            $("#"+parent_id+"").hide();
+            $("#"+parent_id+"_orig").val("none");
+        }
     },
     destroy: function() {
         this.element.show();
