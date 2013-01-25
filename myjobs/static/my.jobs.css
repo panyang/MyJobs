@@ -260,6 +260,13 @@ a:hover{
     padding: 10px;
 }
 @media screen and (max-width: 1024px){
+    .topbar-inner {
+        height: 50px;        
+        border-bottom: 20px solid #c44e34;
+    }
+    #alpha-flag{
+        margin-top: 10px;
+    }
     .topbar #nav .arrow{
         display: none;
     }
@@ -304,11 +311,13 @@ a:hover{
         padding: 10px 25px 9px 25px;
     }
     .topbar #nav ul#pop-menu{
+        border-top: 20px solid #c44e34;
         position: absolute;
         left: 0px;
         width: 100%;
-        top: 25px;
-        z-index: 100;       
+        top: 0px;
+        z-index: 100;
+        margin: 0 -10px 0 0px;
     }
     .topbar #nav ul#pop-menu li{
         display: block;
@@ -349,5 +358,10 @@ a:hover{
         float: none;
         clear: both;
         display: block;
+    }
+    table td,
+    table th{
+        width: 100%;
+        overflow: hidden;
     }
 }
