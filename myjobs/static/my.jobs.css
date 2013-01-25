@@ -120,6 +120,7 @@ a:hover{
     }
 .btn.primary{
     background-color: #c44e34;
+    background-image: none;
     background-image: -moz-linear-gradient(#e16b51,#c44e34);
     background-image: -webkit-gradient(linear, left top, left bottom, #e16b51, #c44e34); 
     background-image: -webkit-linear-gradient(#e16b51,#c44e34);  
