@@ -8,11 +8,11 @@ from django.test import TestCase
 
 from myjobs.forms import *
 from myjobs.models import User
-from myprofile.models import Name
+from myjobs.tests.factories import *
+
+from myprofile.models import *
 from registration.forms import *
 from registration.models import ActivationProfile
-from myjobs.tests import *
-
 
 
 class TestClient(Client):
@@ -51,12 +51,9 @@ class TestClient(Client):
         request.session.save()
 
 class MyJobsViewsTests(TestCase):
-    user_info = {'password1': 'secret',
-                 'email': 'alice@example.com'}
-    
     def setUp(self):
         super(MyJobsViewsTests, self).setUp()
-        self.user = User.objects.create_inactive_user(**self.user_info)
+        self.user = UserFactory()
         self.client = TestClient()
         self.client.login_user(self.user)
         
@@ -88,33 +85,72 @@ class MyJobsViewsTests(TestCase):
         self.assertFormError(resp, 'form', field=None,
                              errors=u"The two password fields didn't match.")
 
-    def test_complete_successful_profile_form(self):
-        # Form with all sections filled out should save successfully
-        self.assertEqual(2,2)
-
     def test_partial_successful_profile_form(self):
+        resp = self.client.post(reverse('home'),
+                                data={'name-given_name': 'Alice',
+                                      'name-family_name': 'Smith',
+                                      'name-primary':False,
+                                      'action':'save_profile'}, follow=True)
+        self.assertEquals(resp.content, 'valid')
+        
+    def test_complete_successful_profile_form(self):
         # Form with only some sections completely filled out should
-        # save successfully
-        self.assertEqual(2,2)
+        # save successfully 
+        resp = self.client.post(reverse('home'),
+                                data={'name-given_name': 'Alice',
+                                      'name-family_name': 'Smith',
+                                      'name-primary':False,
+                                      'education-organization_name': 'Stanford University',
+                                      'education-degree_date': '2012-01-01',
+                                      'education-education_level_code': 6,
+                                      'education-degree_major': 'Basket Weaving',
+                                      'employmenthistory-position_title': 'Rocket Scientist',
+                                      'employmenthistory-organization_name': 'Blamco Inc.',
+                                      'employmenthistory-start_date': '2013-01-01',
+                                      'telephone-use_code':'Home',
+                                      'telephone-country_dialing': 1,
+                                      'telephone-area_dialing': 999,
+                                      'telephone-number': 9999,
+                                      'address-label': 'Home',
+                                      'address-address_line_one': '123 Easy St.',
+                                      'address-city_name': 'Pleasantville',
+                                      'address-country_sub_division_code': 'IN',
+                                      'address-country_code': 'USA',
+                                      'address-postal_code': 99999,
+                                      'action':'save_profile'}, follow=True)
+        self.assertEquals(resp.content, 'valid')
 
     def test_incomplete_profile_form(self):
         # Form with incomplete sections should return a page with "This field is
         # required" errors
-        self.assertEqual(2,2)
-
-    def test_invalid_date_format(self):
-        # Form with date in wrong format should return an error
-        self.assertEqual(2,2)
-
-    def test_invalid_state(self):
-        # Form with an invalid state name should return an error
-        self.assertEqual(2,2)
-
-    def test_invalid_country(self):
-        # Form with an invalid country name should return an error
-        self.assertEqual(2,2)
-
+        resp = self.client.post(reverse('home'),
+                                data={'name-given_name': 'Alice',
+                                      'name-family_name': 'Smith',
+                                      'name-primary':False,
+                                      'education-degree_major': 'Basket Weaving',
+                                      'action':'save_profile'}, follow=True)
+        self.failIf(resp.context['profile_forms'][1].is_valid())
+        self.assertContains(resp, 'This field is required.')
+        
     def test_no_profile_duplicates(self):
         # Form with errors shouldn't save valid sections until entire form
         # is completely valid
-        self.assertEqual(2,2)
+        resp = self.client.post(reverse('home'),
+                                data={'name-given_name': 'Alice',
+                                      'name-family_name': 'Smith',
+                                      'name-primary':False,
+                                      'education-degree_major': 'Basket Weaving',
+                                      'action':'save_profile'}, follow=True)
+        self.assertEqual(Name.objects.count(), 0)
+        self.assertEqual(Education.objects.count(), 0)
+        resp = self.client.post(reverse('home'),
+                                data={'name-given_name': 'Alice',
+                                      'name-family_name': 'Smith',
+                                      'name-primary':False,
+                                      'education-organization_name': 'Stanford University',
+                                      'education-degree_date': '2012-01-01',
+                                      'education-education_level_code': 6,
+                                      'education-degree_major': 'Basket Weaving',
+                                      'action':'save_profile'}, follow=True)
+        self.assertEqual(Name.objects.count(), 1)
+        self.assertEqual(Education.objects.count(), 1)
