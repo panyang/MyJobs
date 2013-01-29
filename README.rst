@@ -13,8 +13,7 @@ needs. You may choose from:
 - The GNU GPL v3.0
 - The MIT License
 
-You can read the license text at:
-http://directemployersfoundation.org/tri-license
+You can read the licenses in the licenses directory.
 
 
 More information
