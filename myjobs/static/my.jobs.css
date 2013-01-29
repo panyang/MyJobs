@@ -139,6 +139,7 @@ ul.ui-autocomplete{
     }
 .btn.primary{
     background-color: #c44e34;
+    background-image: none;
     background-image: -moz-linear-gradient(#e16b51,#c44e34);
     background-image: -webkit-gradient(linear, left top, left bottom, #e16b51, #c44e34); 
     background-image: -webkit-linear-gradient(#e16b51,#c44e34);  
@@ -178,22 +179,31 @@ ul.ui-autocomplete{
     list-style: none;
     text-align: left;
     }
-#nav > li{
-    padding: 6px 2px 8px 2px;
+#nav:hover{
+    background: #222;
+	color: #000;
     }
-#nav > li a,#nav > li a:hover{
+#nav > li{
+    padding: 6px 2px 4px 2px;    
+    }
+#nav a{
+    color: #fff;
+    }
+#nav .main-nav{
     color: #fff;
     text-decoration: none;
+    display: block;
+    padding-right: 4px;
 }
 #nav ul#pop-menu{
 	background:#333;
     padding: 0;
-    margin: 3px 0 0 0;
+    margin: 3px 0 0 -2px;
 	position:absolute;
 	display: none;
 	corner-bottom-left-radius: 4px;
 	corner-bottom-right-radius: 4px;
-	width: 280px;
+	width: 275px;
 }
 .topbar #nav .arrow{
     float: right;
@@ -220,13 +230,17 @@ ul.ui-autocomplete{
 	display: block;
 	padding: 4px;
 	background: #666;
-	color: #000;
 	border-top: 1px solid #333;
 }
-#nav.active li ul#pop-menu,
-#nav li:hover ul#pop-menu{ 
+#nav.active li ul#pop-menu{ 
 	display: block;
 	text-align: left;
+}
+@media screen and (min-width: 1025px){
+    #nav li:hover ul#pop-menu{ 
+        display: block;
+        text-align: left;
+    }
 }
 #nav.active ul#pop-menu li a:hover,
 #nav li:hover ul#pop-menu li a:hover{ 
@@ -255,10 +269,17 @@ ul.ui-autocomplete{
     padding: 10px;
 }
 @media screen and (max-width: 1024px){
+    .topbar-inner {
+        height: 50px;        
+        border-bottom: 20px solid #c44e34;
+    }
+    #logo-block{
+        margin-top: 10px;
+    }
     .topbar #nav .arrow{
         display: none;
     }
-    .topbar .main-nav{
+    #nav .main-nav{
         background: #C44E34 url(/files/static/images/superbutton.png) no-repeat;
         position: absolute;
         right: 10px;
@@ -299,11 +320,13 @@ ul.ui-autocomplete{
         padding: 10px 25px 9px 25px;
     }
     .topbar #nav ul#pop-menu{
+        border-top: 20px solid #c44e34;
         position: absolute;
         left: 0px;
         width: 100%;
-        top: 25px;
-        z-index: 100;       
+        top: 0px;
+        z-index: 100;
+        margin: 0 -10px 0 0px;
     }
     .topbar #nav ul#pop-menu li{
         display: block;
@@ -354,6 +377,7 @@ ul.ui-autocomplete{
         clear: both;
         display: block;
     }
+
     form .pull-left{
         float: none;
     }
@@ -393,6 +417,12 @@ ul.ui-autocomplete{
 .profile-unit input[type="text"] {
     width: 250px;
 }
+
+table td, table th{
+    width: 100%;
+    overflow: hidden;
+}
+
 
 .profile-unit input.comboboxWidget{
     width: 212px;
