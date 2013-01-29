@@ -39,7 +39,7 @@ class BaseProfileForm(ModelForm):
     object as an initial input from the views and saves the form instance
     to that specified user.
 
-    Inputs (these are the common inputs we will use for rendering forms):
+   xInputs (these are the common inputs we will use for rendering forms):
     :user:       a user object. We will always pass a user object in  because all
                  ProfileUnits are linked to a user.
     :auto_id:    this is a boolean that determines whether a label is displayed or

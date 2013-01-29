@@ -157,11 +157,15 @@ class Name(ProfileUnits):
         return full_name.strip()
 
     def save(self, *args, **kwargs):
-        current_primary = Name.objects.filter(primary=True)[0]
-        if self.primary and current_primary:
-            current_primary.primary = False
-            current_primary.save()
-        super(Name, self).save(*args, **kwargs);
+        if self.primary:
+            try:
+                temp = Name.objects.get(primary=True)
+                if self != temp:
+                    temp.primary = False
+                    temp.save()
+            except Name.DoesNotExist:
+                pass
+        super(Name, self).save(*args, **kwargs)
 
     def __unicode__(self):
         return self.get_full_name()

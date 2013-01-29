@@ -1,55 +1,18 @@
 import datetime
 
-from importlib import import_module
-
 from django.conf import settings
 from django.contrib.auth import login
 from django.core import mail
 from django.core.urlresolvers import reverse
 from django.http import HttpRequest
 from django.test import TestCase
-from django.test.client import Client
 
 from myjobs.models import User
+from myjobs.tests.views import TestClient
 from registration import forms
 from registration.models import ActivationProfile
 
 
-class TestClient(Client):
-    """
-    Custom test client that decouples testing from the authentication bits
-    """
-    
-    def login_user(self, user):
-        if not 'django.contrib.sessions' in settings.INSTALLED_APPS:
-            raise AssertionError("Unable to login without django.contrib.sessions in INSTALLED_APPS")
-        user.backend = "%s.%s" % ("django.contrib.auth.backends",
-                                  "ModelBackend")
-        engine = import_module(settings.SESSION_ENGINE)
-
-        # Create a fake request to store login details.
-        request = HttpRequest()
-        if self.session:
-            request.session = self.session
-        else:
-            request.session = engine.SessionStore()
-        login(request, user)
-
-        # Set the cookie to represent the session.
-        session_cookie = settings.SESSION_COOKIE_NAME
-        self.cookies[session_cookie] = request.session.session_key
-        cookie_data = {
-            'max-age': None,
-            'path': '/',
-            'domain': settings.SESSION_COOKIE_DOMAIN,
-            'secure': settings.SESSION_COOKIE_SECURE or None,
-            'expires': None,
-        }
-        self.cookies[session_cookie].update(cookie_data)
-
-        # Save the session values.
-        request.session.save()
-        
 class RegistrationViewTests(TestCase):
     """
     Test the registration views.

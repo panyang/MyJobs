@@ -45,7 +45,7 @@ def home(request):
     loginform = CustomAuthForm(auto_id=False)
 
     form_classes = [NameForm,EducationForm,EmploymentForm,PhoneForm,AddressForm]
-    settings = {'auto_id':False, 'empty_permitted':True, 
+    settings = {'auto_id':False, 'empty_permitted':True, 'only_show_required':True,
                 'user': request.user}
     profile_forms = instantiate_profile_forms(request, form_classes,settings)
 
