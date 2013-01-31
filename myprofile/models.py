@@ -14,10 +14,12 @@ class ProfileUnits(models.Model):
     ProfileUnits queryset as well.
     
     """
-    date_created = models.DateTimeField(default=datetime.datetime.now)
-    date_updated = models.DateTimeField(default=datetime.datetime.now)
+    date_created = models.DateTimeField(default=datetime.datetime.now,
+                                        editable=False)
+    date_updated = models.DateTimeField(default=datetime.datetime.now,
+                                        editable=False)
     content_type = models.ForeignKey(ContentType, editable=False,null=True)
-    user = models.ForeignKey(User)
+    user = models.ForeignKey(User, editable=False)
 
     def save(self, *args, **kwargs):
         """
@@ -26,7 +28,7 @@ class ProfileUnits(models.Model):
         """
         if(not self.content_type):
             self.content_type = ContentType.objects.get_for_model(self.__class__)
-            super(ProfileUnits, self).save(*args, **kwargs)
+        super(ProfileUnits, self).save(*args, **kwargs)
 
     def __unicode__(self):
         return self.content_type.name
@@ -40,36 +42,46 @@ class Education(ProfileUnits):
         (7, 'Master'),
         (8, 'Doctoral'),
     )
-    organization_name = models.CharField(max_length=255)
-    degree_date = models.DateField()
-    city_name = models.CharField(max_length=255, blank=True)
+    organization_name = models.CharField(max_length=255,
+                                         verbose_name='institution')
+    degree_date = models.DateField(verbose_name='completion date')
+    city_name = models.CharField(max_length=255, blank=True, null=True,
+                                 verbose_name='city')
     # ISO 3166-2:2007
     country_sub_division_code = models.CharField(max_length=5, blank=True,
+                                                 null=True,
                                                  verbose_name="State/Region") 
     country_code = models.CharField(max_length=3, blank=True,
                                     verbose_name="country") # ISO 3166-1
     # ISCED-2011 Can be [0-8]
     education_level_code = models.IntegerField(choices=EDUCATION_LEVEL_CHOICES,
                                                verbose_name="education level")
-    start_date = models.DateField(blank=True)
-    end_date = models.DateField(blank=True)
-    education_score = models.CharField(max_length=255, blank=True,
+    start_date = models.DateField(blank=True, null=True)
+    end_date = models.DateField(blank=True, null=True)
+    education_score = models.CharField(max_length=255, blank=True,null=True,
                                        verbose_name="GPA")
-    degree_name = models.CharField(max_length=255, blank=True)
-    degree_major = models.CharField(max_length=255, blank=True)
-    degree_minor = models.CharField(max_length=255, blank=True)
+    degree_name = models.CharField(max_length=255, blank=True,null=True,
+                                   verbose_name='degree type')
+    degree_major = models.CharField(max_length=255, verbose_name='major')
+    degree_minor = models.CharField(max_length=255, blank=True, null=True,
+                                    verbose_name='minor')
 
     
 class Address(ProfileUnits):
     label = models.CharField(max_length=60)	
-    address_line_one = models.CharField(max_length=255, blank=True)
-    address_line_two = models.CharField(max_length=255, blank=True)    
-    unit = models.CharField(max_length=25, blank=True, verbose_name="Apartment/Unit Number")
+    address_line_one = models.CharField(max_length=255,
+                                        verbose_name='Street Address 1')
+    address_line_two = models.CharField(max_length=255, blank=True,null=True,
+                                        verbose_name='Street Address 2')
+    unit = models.CharField(max_length=25, blank=True, null=True,
+                            verbose_name="Apartment/Unit Number")
     city_name = models.CharField(max_length=255, verbose_name="City")
-    country_sub_division_code = models.CharField(max_length=5, verbose_name="State/Region")
+    country_sub_division_code = models.CharField(max_length=5,
+                                                 verbose_name="State/Region")
     country_code = models.CharField(max_length=3, verbose_name="Country")
     postal_code = models.CharField(max_length=12, verbose_name="Zip Code")   
-    post_office_box = models.CharField(max_length=60, blank=True, verbose_name="PO Box Number")
+    post_office_box = models.CharField(max_length=60, blank=True, null=True,
+                                       verbose_name="PO Box Number")
 
 
 class Telephone(ProfileUnits):
@@ -81,14 +93,14 @@ class Telephone(ProfileUnits):
         ('Fax', 'Fax'),
         ('Other', 'Other'),
     )
-    channel_code = models.CharField(max_length=30)
+    channel_code = models.CharField(max_length=30, editable=False)
     use_code = models.CharField(max_length=30, choices=USE_CODE_CHOICES, 
     	     			verbose_name="Phone Number Type")	
-    country_dialing = models.IntegerField(max_length=1, default=1, 
+    country_dialing = models.IntegerField(max_length=3,
     	    				  verbose_name="Country Code")
     area_dialing = models.IntegerField(max_length=3, verbose_name="Area Code")    
     number = models.CharField(max_length=8, verbose_name="DialNumber")
-    extension = models.IntegerField(max_length=5, blank=True)
+    extension = models.CharField(max_length=5, blank=True, null=True)
     
     def save(self, *args, **kwargs):
     	if self.use_code == "Home" or self.use_code == "Work" or self.use_code == "Other":
@@ -103,35 +115,38 @@ class Telephone(ProfileUnits):
 
 
 class EmploymentHistory(ProfileUnits):
-    position_title = models.CharField(max_length=255)
-    organization_name = models.CharField(max_length=255)
-    start_date = models.DateField()
-    current_indicator = models.BooleanField(default=False)
+    position_title = models.CharField(max_length=255,verbose_name="Position Title")
+    organization_name = models.CharField(max_length=255,verbose_name="Company")
+    start_date = models.DateField(verbose_name="Start Date")
+    current_indicator = models.BooleanField(default=False,
+                                            verbose_name="I still work here")
 
     # Optional fields
-    end_date = models.DateField(blank=True)
-    city_name = models.CharField(max_length=255, blank=True)
+    end_date = models.DateField(blank=True, null=True)
+    city_name = models.CharField(max_length=255, blank=True,null=True)
     country_sub_division_code = models.CharField(max_length=5, blank=True,
                                                  verbose_name="State/Region") 
-    country_code = models.CharField(max_length=3, blank=True,
+    country_code = models.CharField(max_length=3, blank=True,null=True,
                                     verbose_name="country")
-    description = models.TextField(blank=True)
+    description = models.TextField(blank=True,null=True)
 
     # Hidden fields
-    industry_code = models.CharField(max_length=255, blank=True,
-                                     verbose_name="industry")
-    job_category_code = models.CharField(max_length=255, blank=True,
-                                         verbose_name="job category")
-    onet_code = models.CharField(max_length=255, blank=True)
+    industry_code = models.CharField(max_length=255, blank=True,null=True,
+                                     verbose_name="industry", editable=False)
+    job_category_code = models.CharField(max_length=255, blank=True,null=True,
+                                         verbose_name="job category", editable=False)
+    onet_code = models.CharField(max_length=255, blank=True, null=True,editable=False)
         
 
 class Name(ProfileUnits):
-    given_name = models.CharField(max_length=30, blank=True,
+    given_name = models.CharField(max_length=30,
                                   verbose_name="first name")
-    family_name = models.CharField(max_length=30, blank=True,
+    family_name = models.CharField(max_length=30, 
                                    verbose_name="last name")
-    display_name = models.CharField(max_length=60, blank=True)
-    primary = models.BooleanField(default=False)
+    display_name = models.CharField(max_length=60, blank=True, null=True,
+                                    editable=False)
+    primary = models.BooleanField(default=False,
+                                  verbose_name="Is this your primary name?")
         
     def get_full_name(self):
         """
@@ -141,15 +156,26 @@ class Name(ProfileUnits):
         full_name = '%s %s' % (self.given_name, self.family_name)
         return full_name.strip()
 
+    def save(self, *args, **kwargs):
+        if self.primary:
+            try:
+                temp = Name.objects.get(primary=True)
+                if self != temp:
+                    temp.primary = False
+                    temp.save()
+            except Name.DoesNotExist:
+                pass
+        super(Name, self).save(*args, **kwargs)
+
     def __unicode__(self):
         return self.get_full_name()
 
         
 class SecondaryEmail(ProfileUnits):
-    email = models.EmailField(max_length=255, blank=True)
-    label = models.CharField(max_length=30, blank=True)
-    verified = models.BooleanField(default=False)
-    verified_date = models.DateTimeField(blank=True, null=True)
+    email = models.EmailField(max_length=255, blank=True,null=True)
+    label = models.CharField(max_length=30, blank=True,null=True)
+    verified = models.BooleanField(default=False,editable=False)
+    verified_date = models.DateTimeField(blank=True, null=True,editable=False)
 
     def __unicode__(self):
         return self.email

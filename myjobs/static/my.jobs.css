@@ -25,7 +25,26 @@ a:hover{
 .form-label label{
     font-weight: bold;
     }
-
+.ui-combobox {
+    position: relative;
+    display: inline-block;
+    }
+.ui-combobox-toggle {
+    padding: 8px 0px 8px 0px;
+    position: relative;
+    left: -2px;
+    border-top-left-radius: 0px;
+    border-bottom-left-radius: 0px;
+    }
+input.comboboxWidget {
+    float: left;
+    border-top-right-radius: 0px;
+    border-bottom-right-radius: 0px;
+    }
+ul.ui-autocomplete{
+    height: 12em;
+    overflow-y: scroll;
+    }
 /*Topbar Styles*/
 .topbar #topbar-logo{
     height: 30px;
@@ -135,26 +154,16 @@ a:hover{
     color: #fff
     }
 
-.alert-message.block-message.error{
-    margin: 5px 0px;
-    background-color: #e16b51;
-    text-shadow: none;
-    padding: 10px;
-    border-radius: 5px;
-    }
 .alert-message ul{
     list-style: none;
     padding: 0;
     margin: 0;
     padding-top: 5px;
     }
-.alert-message ul li{
-    margin: 0px 0px 5px 0px;
-    padding: 5px;
-    background: #E09787;
-    border-radius: 3px;
-    border: 1px solid #fff;
+.alert-message li{
+    color: red;
 }
+
 #focusBox .alert-message.block-message.error,
 #loginBox .alert-message.block-message.error{
     padding: 5px 10px;
@@ -337,6 +346,15 @@ a:hover{
     .loginBox a{
         margin: 10px 0 0 0;
     }
+    .section a.ui-combobox-toggle {
+        padding: 8px 0px 8px 0px;
+        border-top-left-radius: 0px;
+        border-bottom-left-radius: 0px;
+    }
+    input[type=checkbox]{
+        width: 35px;
+        height: 35px;
+    }
 }
 @media screen and (max-width: 500px){
     #titleRow{
@@ -359,9 +377,63 @@ a:hover{
         clear: both;
         display: block;
     }
-    table td,
-    table th{
-        width: 100%;
-        overflow: hidden;
+
+    form .pull-left{
+        float: none;
+    }
+    form .pull-left label{
+        text-align: left;
+    }
+    .form-label{
+        width: 95%;
+    }    
+    input[type=checkbox]{
+        float: right;
+        margin-top: -20px;
+    }
+    input[type=text]{
+        width: 96%;
+    }
+    input.comboboxWidget{
+        width: 60%;
+        float: none;
+        margin-top: -12px;
+    }
+    ul.ui-autocomplete{
+        display: none !important;
     }
 }
+
+.profile-unit {
+    width: 260px;
+    min-height: 320px;
+    float: left;
+    padding: 20px;
+    margin: 10px;
+    background-color: #EFEADE;
+}
+
+
+.profile-unit input[type="text"] {
+    width: 250px;
+}
+
+table td, table th{
+    width: 100%;
+    overflow: hidden;
+}
+
+
+.profile-unit input.comboboxWidget{
+    width: 212px;
+}
+
+.profile-unit select {
+    width: 260px;
+}
+
+.profile-unit .form-label {
+    margin-right: 20px;
+    width: auto;
+}
+

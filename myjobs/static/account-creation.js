@@ -6,6 +6,15 @@ $(document).ready(function() {
         csrf_token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
     }
     register(csrf_token);
+    save(csrf_token);
+
+    $(function() {
+        $( "input[id$='date']" ).datepicker({dateFormat: "yy-mm-dd"});
+    });
+
+    $("#id_address-country_code").makeCombobox();
+    $("#id_address-country_sub_division_code").makeCombobox();
+
 });
 
 function register(csrf_token) {    
@@ -16,7 +25,7 @@ function register(csrf_token) {
     $('button#register').click(function(e) {
         e.preventDefault();
         var self = $(this).parents("div.loginBox");
-        var form = $('form#registration-form')
+        var form = $('form#registration-form');
         $.ajax({
             type: "POST",
             url: "",
@@ -41,6 +50,33 @@ function register(csrf_token) {
                     }, 250);
                     buttons();
                     clearForm("form#registration-form");
+                }
+            }
+        });
+    });
+}
+
+
+function save(csrf_token) {
+    $('button#save').click(function(e) {
+        e.preventDefault();
+        var self = $(this).parents("div#account-page-2");
+        var form = $('form#profile-form');
+        // replace on and off with True and False to allow Django to validate boolean fields
+        var json_data = form.serialize().replace('=on','=True').replace('=off','=False')+'&action=save_profile';        
+        $.ajax({
+            type: "POST",
+            url: "",
+            data: json_data,
+            success: function(data) {
+                if (data != 'valid') {
+                    form.replaceWith(data);
+                    save(csrf_token);
+                    $("#id_address-country_code").makeCombobox();
+                    $("#id_address-country_sub_division_code").makeCombobox();
+                    buttons();
+                } else {
+                    window.location = '/account';
                 }
             }
         });

@@ -2,15 +2,14 @@
 {% load i18n %}
 {% block topbarlogin %}{% endblock topbarlogin %}
 {% block meta-extra %}
-
 <script type="text/javascript" src="{{STATIC_URL}}/account-creation.js"></script>
-
 {% endblock %}
 
 {% block title-content %}{% trans "My.Jobs - Manage your job search." %}{% endblock title-content %}
 
 {% block content %}
     <div class="row" id="titleRow">                
+
         <div class="span6 offset1"  id="title">
             <h1>{% trans 'My.jobs' %}</h1>
             <div id="subtitle">
@@ -43,26 +42,11 @@
             </div>				
         </div>
     </div>
-    {% if not user.is_authenticated %}
-    <div class="row" id="account-page-2" style="display: none">
-        <div class="span10 offset1" id="account-page-2">
-            <h1>{% trans "Thanks for registering!" %}</h1>
-            
-            <div class="alert-message info">
-                <p>{% trans "Please check your email for a special message containing an activation link in order to gain full access to your MyJobs account." %}</p>
-            </div>
-            <p>{% trans "If the activation message is not in your inbox:" %}</p>
-            <ul>
-                <li>{% trans 'Check your spam or junk mail folder. The subject of the email is "Account Activation for my.jobs".' %}</li>
-                <li>{% trans 'Allow up to 15 minutes for your email provider to deliver the email we have sent.' %}</li>
-                <li>{% trans 'If you are using a free email service like Gmail, Yahoo or Hotmail, please allow 30 minutes.' %}
-            </ul>
-            <a href="{% url 'edit_account' %}">Would you like to edit your profile information in the meantime?</a>
-    
-            <div class="options">
-                <button class="btn pull-right" id="profile">Skip: Take me to my profile</button>
-            </div>
-        </div>
+    <div id="account-page-2" style="display:none;">
+      <h1>Profile</h1>
+      <div class="profile-unit">
+	    Thanks for registering! Check your email for an activation link.
+      </div>
+      {% include "includes/initial-profile-form.html" with profile_form=profile_form%}
     </div>
-    {% endif %}    
 {% endblock %} 
