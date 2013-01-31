@@ -31,10 +31,9 @@ class CustomUserManager(BaseUserManager):
         user.is_active = False
         user.save(using=self._db)
 
-        # Generate and send activation information
-        activation_profile = ActivationProfile.objects.generate_key(user)
+        activation_obj = ActivationProfile.objects.create(user=user,email=email)
         if send_email:
-            activation_profile.send_activation_email()
+            activation_obj.send_activation_email()
         return user
 
     def create_user(self, **kwargs):

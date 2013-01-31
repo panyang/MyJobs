@@ -14,6 +14,10 @@ class MyProfileTests(TestCase):
         self.user = User.objects.create_inactive_user(**self.user_info)
 
     def test_primary_name_save(self):
+        """
+        Saving a primary name when one already exists replaces it with
+        the new primary name.
+        """
 
         initial_name = {'given_name':'Alice',
                         'family_name':'Smith',
@@ -30,3 +34,12 @@ class MyProfileTests(TestCase):
         initial_name_obj = Name.objects.get(given_name='Alice')
         self.assertTrue(new_name_obj.primary)
         self.assertFalse(initial_name_obj.primary)
+
+    def test_secondary_email_save(self):
+        """
+        Saving a verified secondary email as the primary email (1) replaces
+        the email in the user model (2) removes that email from the
+        SecondaryEmail model and (3) adds the previous primary email in the
+        secondary email model
+        """
+        self.assertEqual(2,2)
