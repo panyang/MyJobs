@@ -28,7 +28,6 @@ class Privacy(TemplateView):
 
 def home(request):
     """
-    Overview:
     The home page view receives 2 separate Ajax requests, one for the registration
     form and another for the initial profile information form. If everything
     checks out alright and the form saves with no errors, it returns a simple string,
@@ -39,17 +38,16 @@ def home(request):
 
     """
 
-    # Forms that are passed the auto_id=False parameter uses the placeholder text
-    # instead of the label
     registrationform = RegistrationForm(auto_id=False)
     loginform = CustomAuthForm(auto_id=False)
 
     form_classes = [NameForm,EducationForm,EmploymentForm,PhoneForm,AddressForm]
+    # Parameters passed into the form class. See forms.py in myprofile
+    # for more detailed docs
     settings = {'auto_id':False, 'empty_permitted':True, 'only_show_required':True,
                 'user': request.user}
     profile_forms = instantiate_profile_forms(request, form_classes,settings)
 
-    # Only show the required form fields for initial profile creation
     data_dict = {'registrationform':registrationform,
                  'loginform': loginform,
                  'profile_forms': profile_forms,
