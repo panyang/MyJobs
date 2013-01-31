@@ -2,8 +2,6 @@
 Document Level Actions
 *******/
 $(document).ready(function(){
-    $("#id_address-country_code").makeCombobox();
-    $("#id_address-country_sub_division_code").makeCombobox();
 
     /*Explicit control of main menu, primarily for mobile but also provides
     non hover and cover option if that becomes an issue.*/

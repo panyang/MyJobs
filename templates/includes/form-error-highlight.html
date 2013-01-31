@@ -42,7 +42,7 @@ form -- the rest of the form.
                 {{ field.label_tag }}
             </div>{{field}}
             {% elif 'country_code' in field.html_name %}
-            {% with "id_"|add:form.prefix|add:"_country_sub_division_code" as region_id %}
+            {% with "id_"|add:form.prefix|add:"-country_sub_division_code" as region_id %}
             {% country_select selected="" html_id=field.id_for_label  region_html_id=region_id input_name=field.html_name %}
             {% endwith %}
             {% elif 'country_sub_division_code' in field.html_name %}

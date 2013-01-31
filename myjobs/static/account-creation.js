@@ -11,6 +11,10 @@ $(document).ready(function() {
     $(function() {
         $( "input[id$='date']" ).datepicker({dateFormat: "yy-mm-dd"});
     });
+
+    $("#id_address-country_code").makeCombobox();
+    $("#id_address-country_sub_division_code").makeCombobox();
+
 });
 
 function register(csrf_token) {    
