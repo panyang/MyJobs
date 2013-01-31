@@ -42,13 +42,11 @@
             </div>				
         </div>
     </div>
-    {% if user.is_authenticated %}
-    <div id="account-page-2" style="">
-      <h1>Profile</h1>.
+    <div id="account-page-2" style="display:none;">
+      <h1>Profile</h1>
       <div class="profile-unit">
 	    Thanks for registering! Check your email for an activation link.
       </div>
       {% include "includes/initial-profile-form.html" with profile_form=profile_form%}
     </div>
-    {% endif %}    
 {% endblock %} 
