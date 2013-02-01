@@ -114,14 +114,23 @@ ul.ui-autocomplete{
     text-indent: 4px;
     width: 100%;
     }
+.loginBox input[type=checkbox]{
+    float: left;
+    width: auto;
+    }
 .loginBox input.comboboxWidget{
     width: 80%;
     }
 .loginBox label{
     display: none;
     }
-.loginBox .checkbox label{
+.loginBox .checkbox-label label{
     display: inline;
+    text-align: left;    
+    }
+.loginBox .checkbox-label{
+    text-align: left;
+    padding-left: 10px;
     }
 .loginBox .help-block{
     display: block;   
