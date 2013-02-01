@@ -1,18 +1,31 @@
-  <form action="" method="post" id="profile-form">
-    {% for profile_form in profile_forms %}
-    <div class="profile-unit">
-      <h4>{{profile_form.Meta.form_name}}</h4>      
-      {% include 'includes/form-error-highlight.html' with form=profile_form %}</div>
-    {% endfor %}
-    {% csrf_token %}
-    <div class="actions">
-      <button type="submit" class="btn primary pull-right" value="save" id="save">
-        Save
-      </button>
-      <button class="btn pull-right" id="profile">Skip: Take me to my profile</button>
-        
-      <div class="clear"></div>
+<form action="" method="post" id="profile-form">
+    
+    <div class="span4">
+        <div class="profile-unit">
+            <h4>{{name_form.Meta.form_name}}</h4>
+            {% include 'includes/form-error-highlight.html' with form=name_form %}
+            <h4>{{phone_form.Meta.form_name}}</h4>
+            {% include 'includes/form-error-highlight.html' with form=phone_form %}
+            <h4>{{address_form.Meta.form_name}}</h4>
+            {% include 'includes/form-error-highlight.html' with form=address_form %}
+        </div>
     </div>
-  </form>
-          
-
+    <div class="span4">
+        <div class="profile-unit">
+            <h4>{{work_form.Meta.form_name}}</h4>
+            {% include 'includes/form-error-highlight.html' with form=work_form %}
+            <h4>{{education_form.Meta.form_name}}</h4>
+            {% include 'includes/form-error-highlight.html' with form=education_form %}
+        </div>
+    </div>
+    
+    {% csrf_token %}
+    <div class="actions span8">
+        <button type="submit" class="btn primary pull-right" value="save" id="save">
+          Save
+        </button>
+        <button class="btn pull-right" id="profile">Skip: Take me to my profile</button>
+        <div class="clear"></div>
+    </div>
+</form>
+</div>

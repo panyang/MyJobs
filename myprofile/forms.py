@@ -26,6 +26,7 @@ def generate_custom_widgets(model):
             if field.choices:
                 widgets[field.attname] = Select()
             elif internal_type == 'BooleanField':
+                attrs['label_class'] = 'checkbox'
                 widgets[field.attname] = CheckboxInput(attrs=attrs)
             else:
                 widgets[field.attname] = TextInput(attrs=attrs)
@@ -64,7 +65,17 @@ class BaseProfileForm(ModelForm):
             instance.user = self.user
         return instance.save()
 
-        
+class InitialNameForm(BaseProfileForm):
+    primary = BooleanField(
+        widget=HiddenInput(), 
+        required=False, 
+        initial="on")
+    class Meta:
+        # form_name is used in the templates to render the form header
+        form_name = "Personal Information"
+        model = Name
+        widgets = generate_custom_widgets(model)
+    
 class NameForm(BaseProfileForm):
     class Meta:
         # form_name is used in the templates to render the form header
@@ -83,14 +94,14 @@ class SecondaryEmailForm(BaseProfileForm):
 
 class EducationForm(BaseProfileForm):
     class Meta:
-        form_name = "Education"
+        form_name = "Most Recent Education"
         model = Education
-        widgets = generate_custom_widgets(model)
+        widgets = generate_custom_widgets(model)        
         
 
 class EmploymentForm(BaseProfileForm):
     class Meta:
-        form_name = "Employment History"
+        form_name = "Most Recent Work History"
         model = EmploymentHistory
         widgets = generate_custom_widgets(model)
 

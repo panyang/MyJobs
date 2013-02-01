@@ -41,16 +41,26 @@ def home(request):
     registrationform = RegistrationForm(auto_id=False)
     loginform = CustomAuthForm(auto_id=False)
 
-    form_classes = [NameForm,EducationForm,EmploymentForm,PhoneForm,AddressForm]
+    form_classes = [InitialNameForm,EducationForm,PhoneForm,EmploymentForm,AddressForm]
     # Parameters passed into the form class. See forms.py in myprofile
     # for more detailed docs
     settings = {'auto_id':False, 'empty_permitted':True, 'only_show_required':True,
                 'user': request.user}
     profile_forms = instantiate_profile_forms(request, form_classes,settings)
+    name_form = instantiate_profile_forms(request, [InitialNameForm],settings)[0]
+    education_form = instantiate_profile_forms(request,[EducationForm],settings)[0]
+    phone_form = instantiate_profile_forms(request, [PhoneForm],settings)[0]
+    work_form = instantiate_profile_forms(request, [EmploymentForm],settings)[0]
+    address_form = instantiate_profile_forms(request, [AddressForm],settings)[0]
 
     data_dict = {'registrationform':registrationform,
                  'loginform': loginform,
                  'profile_forms': profile_forms,
+                 'name_form': name_form,
+                 'phone_form': phone_form,
+                 'address_form': address_form,
+                 'work_form': work_form,
+                 'education_form': education_form,
                  'name_obj': get_name_obj(request)}
 
     if request.method == "POST":

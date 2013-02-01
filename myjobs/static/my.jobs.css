@@ -114,9 +114,15 @@ ul.ui-autocomplete{
     text-indent: 4px;
     width: 100%;
     }
+.loginBox input.comboboxWidget{
+    width: 80%;
+    }
 .loginBox label{
     display: none;
-}
+    }
+.loginBox .checkbox label{
+    display: inline;
+    }
 .loginBox .help-block{
     display: block;   
     font-size: 1em;
@@ -404,18 +410,22 @@ ul.ui-autocomplete{
     }
 }
 
+.initial_profile{
+    background: #fff;
+    border: 1px solid #000;
+    
+}
 .profile-unit {
-    width: 260px;
-    min-height: 320px;
-    float: left;
-    padding: 20px;
+    /*width: 100%;*/
+    /*min-height: 320px;*/
+    padding: 10px;
     margin: 10px;
-    background-color: #EFEADE;
+    /*background-color: #EFEADE;*/
 }
 
 
 .profile-unit input[type="text"] {
-    width: 250px;
+    /*width: 250px;*/
 }
 
 table td, table th{
@@ -423,7 +433,7 @@ table td, table th{
     overflow: hidden;
 }
 
-
+/*
 .profile-unit input.comboboxWidget{
     width: 212px;
 }
@@ -435,5 +445,5 @@ table td, table th{
 .profile-unit .form-label {
     margin-right: 20px;
     width: auto;
-}
+}*/
 

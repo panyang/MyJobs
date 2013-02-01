@@ -13,7 +13,7 @@ form -- the rest of the form.
 <fieldset>
     {# Include but don't display hidden fields #}
     {% for hidden in form.hidden_fields %}
-        {{ hidden }}
+        {{ hidden}}
     {% endfor %}
     
     {% if form.errors %}
@@ -33,12 +33,12 @@ form -- the rest of the form.
         {% endif %}
      
         {% if form.auto_id %}
-            <div class="form-label pull-left">
+            <div class='form-label pull-left'>
                 {{ field.label_tag }}
             </div>
             {{ field|attr:"placeholder:" }}
             {% elif is_boolean %}
-            <div class="form-label pull-left">
+            <div class="form-label pull-left checkbox">
                 {{ field.label_tag }}
             </div>{{field}}
             {% elif 'country_code' in field.html_name %}
