@@ -51,17 +51,21 @@ class CustomAuthForm(AuthenticationForm):
 class RegistrationForm(forms.Form):
     email = forms.EmailField(label="Email", required=True,
                              widget=forms.TextInput(attrs={
-                                 'placeholder': 'Email', 'id':'id_email'}),
+                                 'placeholder': 'Email', 
+                                 'id':'id_email',
+                                 'autocomplete':'off'}),
                              max_length=255)
     password1 = forms.CharField(label="Password", required=True,
                                 widget=forms.PasswordInput(attrs={
                                     'placeholder':'Password',
-                                    'id':'id_password1'},
+                                    'id':'id_password1',
+                                    'autocomplete':'off'},
                                     render_value=False))
     password2 = forms.CharField(label="Password (again)", required=True,
                                 widget=forms.PasswordInput(attrs={
                                     'placeholder': 'Password (again)',
-                                    'id': 'id_password2'}, 
+                                    'id': 'id_password2',
+                                    'autocomplete':'off'}, 
                                 render_value=False))
 
     def clean_email(self):
