@@ -95,7 +95,7 @@ class Telephone(ProfileUnits):
     )
     channel_code = models.CharField(max_length=30, editable=False)
     use_code = models.CharField(max_length=30, choices=USE_CODE_CHOICES, 
-    	     			verbose_name="Phone Number Type")	
+    	     			verbose_name="Type")	
     country_dialing = models.IntegerField(max_length=3,
     	    				  verbose_name="Country Code")
     area_dialing = models.IntegerField(max_length=3, verbose_name="Area Code")    

@@ -110,7 +110,10 @@ class PhoneForm(BaseProfileForm):
     class Meta:
         form_name = "Phone Number"
         model = Telephone
-        widgets = generate_custom_widgets(model)        
+        widgets = generate_custom_widgets(model)
+        #widgets['country_dialing'].attrs['class'] = "input-mini"
+        #widgets['area_dialing'].attrs['class'] = "input-mini"
+        #widgets['number'].attrs['class'] = "input-small"
 
 
 class AddressForm(BaseProfileForm):

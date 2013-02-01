@@ -39,10 +39,12 @@ form -- the rest of the form.
             </div>
             {{ field|attr:"placeholder:" }}
             {% elif is_select %}
-            <div class="form-label pull-left select-label">
+            <div class="input-prepend">
+            <span class="add-on">
                 {{ field.label_tag }}
-            </div>
+            </span>
             {{field}}
+            </div>
             {% elif is_boolean %}
             {{field}}
             <div class="form-label pull-left checkbox-label">
