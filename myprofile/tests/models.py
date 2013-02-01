@@ -1,7 +1,8 @@
 from django.core import mail
 from django.test import TestCase
+from django.core.urlresolvers import reverse
 
-from myjobs.models import *
+from myjobs.models import User
 from myjobs.tests.factories import UserFactory
 from myjobs.tests import TestClient
 from myprofile.models import *
@@ -22,10 +23,10 @@ class MyProfileTests(TestCase):
         the new primary name.
         """
 
-        initial_name = PrimaryNameFactory()
+        initial_name = PrimaryNameFactory(user=self.user)
         
         self.assertTrue(initial_name.primary)
-        new_primary_name = NewPrimaryNameFactory()
+        new_name = NewPrimaryNameFactory(user=self.user)
         initial_name = Name.objects.get(given_name='Alice')
         self.assertTrue(new_name.primary)
         self.assertFalse(initial_name.primary)
@@ -35,6 +36,33 @@ class MyProfileTests(TestCase):
         Creating a new secondary email creates a corresponding unactivated
         ActivationProfile.
         """
-        secondary_email = SecondaryEmailFactory()
+        
+        secondary_email = SecondaryEmailFactory(user=self.user)
         activation = ActivationProfile.objects.get(email=secondary_email.email)
         self.assertEqual(secondary_email.email, activation.email)
+
+    def test_send_activation(self):
+        """
+        The send_activation method in SecondaryEmail should send an
+        activation link to the email address
+        """
+
+        secondary_email = SecondaryEmailFactory(user=self.user)
+        secondary_email.send_activation()
+        self.assertEqual(len(mail.outbox), 1)
+        self.assertEqual(mail.outbox[0].to, [secondary_email.email])
+
+    def test_verify_email(self):
+        """
+        Clicking the activation link sets the ActivationProfile object to
+        activated and sets the SecondaryEmail object to verified.
+        """
+
+        secondary_email = SecondaryEmailFactory(user=self.user)
+        activation = ActivationProfile.objects.get(user=self.user,
+                                                   email=secondary_email.email)
+        response = self.client.get(reverse('registration_activate',
+                                           kwargs={'activation_key':
+                                                   activation.activation_key}))
+        self.assertEqual(response.status_code, 200)
+        self.failUnless(secondary_email.verified)

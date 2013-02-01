@@ -10,8 +10,7 @@ from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 
-from myjobs.models import *
-
+from myprofile.models import SecondaryEmail
 try:
     from django.utils.timezone import now as datetime_now
 except ImportError:
@@ -38,8 +37,13 @@ class RegistrationManager(models.Manager):
                 return False
             if not profile.activation_key_expired():
                 user = profile.user
-                user.is_active = True
-                user.save()
+                if user.email == profile.email:
+                    user.is_active = True
+                    user.save()
+                else:
+                    email = SecondaryEmail.object.get(user=user,
+                                                      email=profile.email)
+                    email.save()
                 profile.activation_key = self.model.ACTIVATED
                 profile.save()
                 return user

@@ -3,8 +3,8 @@ import datetime
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 
-from myjobs.models import *
-from registration.models import *
+from myjobs.models import User
+from registration.models import ActivationProfile
 
 
 class ProfileUnits(models.Model):
@@ -183,10 +183,15 @@ class SecondaryEmail(ProfileUnits):
 
     def save(self, *args, **kwargs):
         if not self.pk:
-            Activation.objects.create(email=self.email, user=self.user)
+            ActivationProfile.objects.create(email=self.email, user=self.user)
         super(SecondaryEmail,self).save(*args,**kwargs)
             
+    def send_activation(self):
+        activation = ActivationProfile.objects.get(user=self.user,
+                                                   email=self.email)
+        activation.send_activation_email()
 
+        
 class Profile(models.Model):
     name = models.CharField(max_length=30)
     user = models.ForeignKey(User)

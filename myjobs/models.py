@@ -6,7 +6,7 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.utils.translation import ugettext_lazy as _
 
-from registration.models import *
+from registration.models import ActivationProfile
 
 class CustomUserManager(BaseUserManager):
     def create_inactive_user(self, send_email=True, **kwargs):
