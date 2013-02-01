@@ -25,23 +25,29 @@ form -- the rest of the form.
     {# Include the visible fields #}
     {% for field in form.visible_fields %}
     {% is_boolean_field field as is_boolean %}
+    {% is_select_field field as is_select %}
     {% if is_boolean or not form.only_show_required or form.only_show_required and field.field.required %}
         {# if it's an error put it in a red box #}
         {% if field.errors %}
         <div class="alert-message block-message error">
         {{ field.errors }}
         {% endif %}
-     
+        
         {% if form.auto_id %}
             <div class='form-label pull-left'>
                 {{ field.label_tag }}
             </div>
             {{ field|attr:"placeholder:" }}
+            {% elif is_select %}
+            <div class="form-label pull-left select-label">
+                {{ field.label_tag }}
+            </div>
+            {{field}}
             {% elif is_boolean %}
             {{field}}
             <div class="form-label pull-left checkbox-label">
                 {{ field.label_tag }}
-            </div>
+            </div>            
             {% elif 'country_code' in field.html_name %}
             {% with "id_"|add:form.prefix|add:"-country_sub_division_code" as region_id %}
             {% country_select selected="" html_id=field.id_for_label  region_html_id=region_id input_name=field.html_name %}

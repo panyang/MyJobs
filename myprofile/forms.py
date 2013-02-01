@@ -24,7 +24,7 @@ def generate_custom_widgets(model):
             attrs['id'] = 'id_' + model.__name__.lower() + '-' + field.attname
             attrs['placeholder'] = field.verbose_name.title()
             if field.choices:
-                widgets[field.attname] = Select()
+                widgets[field.attname] = Select(attrs=attrs)
             elif internal_type == 'BooleanField':
                 attrs['label_class'] = 'checkbox'
                 widgets[field.attname] = CheckboxInput(attrs=attrs)

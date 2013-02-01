@@ -124,13 +124,18 @@ ul.ui-autocomplete{
 .loginBox label{
     display: none;
     }
-.loginBox .checkbox-label label{
+.loginBox .checkbox-label label,
+.loginBox .select-label label{
     display: inline;
     text-align: left;    
     }
 .loginBox .checkbox-label{
-    text-align: left;
     padding-left: 10px;
+    }
+.loginBox .select-label,
+.loginBox .checkbox-label{
+    text-align: left;
+    width: auto;
     }
 .loginBox .help-block{
     display: block;   
@@ -419,18 +424,6 @@ ul.ui-autocomplete{
     }
 }
 
-.initial_profile{
-    background: #fff;
-    border: 1px solid #000;
-    
-}
-.profile-unit {
-    /*width: 100%;*/
-    /*min-height: 320px;*/
-    padding: 10px;
-    margin: 10px;
-    /*background-color: #EFEADE;*/
-}
 
 
 .profile-unit input[type="text"] {
