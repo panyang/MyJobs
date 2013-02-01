@@ -170,7 +170,7 @@ class Name(ProfileUnits):
     def __unicode__(self):
         return self.get_full_name()
 
-        
+
 class SecondaryEmail(ProfileUnits):
     email = models.EmailField(max_length=255)
     label = models.CharField(max_length=30, blank=True, null=True)
@@ -181,6 +181,11 @@ class SecondaryEmail(ProfileUnits):
     def __unicode__(self):
         return self.email
 
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            Activation.objects.create(email=self.email, user=self.user)
+        super(SecondaryEmail,self).save(*args,**kwargs)
+            
 
 class Profile(models.Model):
     name = models.CharField(max_length=30)

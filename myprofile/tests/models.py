@@ -2,8 +2,11 @@ from django.core import mail
 from django.test import TestCase
 
 from myjobs.models import *
-from myprofile.models import *
+from myjobs.tests.factories import UserFactory
 from myjobs.tests import TestClient
+from myprofile.models import *
+from myprofile.tests.factories import *
+
 
 class MyProfileTests(TestCase):
     user_info = {'password1': 'complicated_password',
@@ -11,7 +14,7 @@ class MyProfileTests(TestCase):
 
     def setUp(self):
         super(MyProfileTests, self).setUp()
-        self.user = User.objects.create_inactive_user(**self.user_info)
+        self.user = UserFactory()
 
     def test_primary_name_save(self):
         """
@@ -19,27 +22,19 @@ class MyProfileTests(TestCase):
         the new primary name.
         """
 
-        initial_name = {'given_name':'Alice',
-                        'family_name':'Smith',
-                        'primary':True,
-                        'user':self.user}
-        new_primary_name = {'given_name':'Alicia',
-                            'family_name':'Smith',
-                            'primary':True,
-                            'user':self.user}
+        initial_name = PrimaryNameFactory()
+        
+        self.assertTrue(initial_name.primary)
+        new_primary_name = NewPrimaryNameFactory()
+        initial_name = Name.objects.get(given_name='Alice')
+        self.assertTrue(new_name.primary)
+        self.assertFalse(initial_name.primary)
 
-        initial_name_obj = Name.objects.create(**initial_name)
-        self.assertTrue(initial_name_obj.primary)
-        new_name_obj = Name.objects.create(**new_primary_name)
-        initial_name_obj = Name.objects.get(given_name='Alice')
-        self.assertTrue(new_name_obj.primary)
-        self.assertFalse(initial_name_obj.primary)
-
-    def test_secondary_email_save(self):
+    def test_email_activation_creation(self):
         """
-        Saving a verified secondary email as the primary email (1) replaces
-        the email in the user model (2) removes that email from the
-        SecondaryEmail model and (3) adds the previous primary email in the
-        secondary email model
+        Creating a new secondary email creates a corresponding unactivated
+        ActivationProfile.
         """
-        self.assertEqual(2,2)
+        secondary_email = SecondaryEmailFactory()
+        activation = ActivationProfile.objects.get(email=secondary_email.email)
+        self.assertEqual(secondary_email.email, activation.email)

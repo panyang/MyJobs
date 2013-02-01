@@ -58,7 +58,7 @@ class RegistrationManager(models.Manager):
 
 
 class ActivationProfile(models.Model):
-    user = models.ForeignKey('myjobs.User', unique=True, verbose_name="user")
+    user = models.ForeignKey('myjobs.User', verbose_name="user")
     activation_key = models.CharField(('activation_key'), max_length=40)
     email = models.EmailField(max_length=255)
     
