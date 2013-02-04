@@ -14,7 +14,34 @@ $(document).ready(function() {
 
     $("#id_address-country_code").makeCombobox();
     $("#id_address-country_sub_division_code").makeCombobox();
-
+    user_email = "";
+    //var phoneRegEx = /([\+0-9]*)[/
+    $(".friendlyPhoneField").blur(function(){
+        var num = $(this).val()
+            .replace(/-/g,"")
+            .replace(/ /g,"")
+            .replace(/\+/g,"")
+            .replace(/\(/g,"")
+            .replace(/\)/g,"");
+        main = num.slice(-7);
+        area = num.slice(-10,-7)
+        country = num.slice(0,-10)
+        $("#id_telephone-country_dialing").val(country);
+        $("#id_telephone-area_dialing").val(area);
+        $("#id_telephone-number").val(main);
+    });
+    $("#usaPhoneField").show();
+    $("#internationPhoneForm").addClass("friendlyPhoneForm");
+    
+    $("#phoneRegion").change(function(){
+        if($(this).val()=="int"){
+            $("#internationPhoneForm").removeClass("friendlyPhoneForm");
+            $("#usaPhoneField").hide();
+        }else{
+            $("#internationPhoneForm").addClass("friendlyPhoneForm");
+            $("#usaPhoneField").show();
+        }
+    });
 });
 
 function register(csrf_token) {    
@@ -26,6 +53,7 @@ function register(csrf_token) {
         e.preventDefault();
         var self = $(this).parents("div.loginBox");
         var form = $('form#registration-form');
+        user_email = $("#id_email").val();
         $.ajax({
             type: "POST",
             url: "",
@@ -50,6 +78,7 @@ function register(csrf_token) {
                     }, 250);
                     buttons();
                     clearForm("form#registration-form");
+                    $(".newUserEmail").html(user_email);                    
                 }
             }
         });

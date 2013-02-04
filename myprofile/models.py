@@ -68,9 +68,9 @@ class Education(ProfileUnits):
 
     
 class Address(ProfileUnits):
-    label = models.CharField(max_length=60)	
+    label = models.CharField(max_length=60, verbose_name='Address Label')	
     address_line_one = models.CharField(max_length=255,
-                                        verbose_name='Street Address 1')
+                                        verbose_name='Street Address')
     address_line_two = models.CharField(max_length=255, blank=True,null=True,
                                         verbose_name='Street Address 2')
     unit = models.CharField(max_length=25, blank=True, null=True,
@@ -94,13 +94,13 @@ class Telephone(ProfileUnits):
         ('Other', 'Other'),
     )
     channel_code = models.CharField(max_length=30, editable=False)
-    use_code = models.CharField(max_length=30, choices=USE_CODE_CHOICES, 
-    	     			verbose_name="Type")	
     country_dialing = models.IntegerField(max_length=3,
     	    				  verbose_name="Country Code")
     area_dialing = models.IntegerField(max_length=3, verbose_name="Area Code")    
-    number = models.CharField(max_length=8, verbose_name="DialNumber")
+    number = models.CharField(max_length=8, verbose_name="Local Number")
     extension = models.CharField(max_length=5, blank=True, null=True)
+    use_code = models.CharField(max_length=30, choices=USE_CODE_CHOICES, 
+    	     			verbose_name="Type")	
     
     def save(self, *args, **kwargs):
     	if self.use_code == "Home" or self.use_code == "Work" or self.use_code == "Other":

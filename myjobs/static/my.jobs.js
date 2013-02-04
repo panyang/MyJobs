@@ -20,6 +20,7 @@ $(document).ready(function(){
         parent = this.element;
         selected = parent.children( ":selected" )
         parent_id = parent.attr("id");
+        parent_label = $("label[for="+parent_id+"]")
         parent_id_orig = parent_id+"_orig";
         parent.attr("id",parent_id_orig)
         parent.hide();
@@ -27,8 +28,9 @@ $(document).ready(function(){
             .attr("id",parent_id)                                           
             .attr("type","text")
             .attr("value",selected.html())
+            .attr("placeholder",parent_label.html())
             .addClass("comboboxWidget")
-            .addClass(parent.attr("class"))
+            .addClass(parent.attr("class"))            
             .insertBefore(parent)
             .autocomplete({
                 source: function(req,resp){
@@ -79,7 +81,12 @@ $(document).ready(function(){
                         region_url = "http://js.nlx.org/myjobs/data/";
                         region_url+= val_to_get.toLowerCase();
                         region_url+= "_regions.jsonp";
-                        //temp hide the region select in case of 404 on the json
+                        //store label visibility state
+                        label_visibility = false;
+                        if($("label[for="+target_id+"]").is(":visible")){
+                            label_visibility = true;
+                        }
+                        //temp hide the region select in case of 404 on the json                        
                         $("label[for="+target_id+"]").hide()
                         $("#"+target_id+" + a").hide()
                         $("#"+target_id+"").hide()
@@ -115,7 +122,9 @@ $(document).ready(function(){
                                     $("#"+target_id+"_orig").html(opts);
                                     // turn on the region widget
                                     $("label[for="+target_id+"]").html(label)
-                                    $("label[for="+target_id+"]").show()
+                                    if(label_visibility){
+                                        $("label[for="+target_id+"]").show()
+                                    }
                                     $("#"+target_id+" + a").show()
                                     $("#"+target_id+"").show()
                                     //set widget default value

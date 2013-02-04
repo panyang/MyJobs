@@ -36,6 +36,4 @@ def is_select_field(field):
     if type(field.field) == TypedChoiceField:
         return True
     else:
-        return False
-
-    
+        return False    

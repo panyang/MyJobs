@@ -111,9 +111,12 @@ class PhoneForm(BaseProfileForm):
         form_name = "Phone Number"
         model = Telephone
         widgets = generate_custom_widgets(model)
-        #widgets['country_dialing'].attrs['class'] = "input-mini"
-        #widgets['area_dialing'].attrs['class'] = "input-mini"
-        #widgets['number'].attrs['class'] = "input-small"
+        widgets['country_dialing'].attrs['class'] = "phoneCountryCode useInputPrepend"
+        widgets['area_dialing'].attrs['class'] = "phoneAreaCode useInputPrepend"
+        widgets['number'].attrs['class'] = "phoneNumber useInputPrepend"
+        widgets['country_dialing'].attrs['placeholder'] = "+1"
+        widgets['area_dialing'].attrs['placeholder'] = "555"
+        widgets['number'].attrs['placeholder'] = "555-5555"
 
 
 class AddressForm(BaseProfileForm):

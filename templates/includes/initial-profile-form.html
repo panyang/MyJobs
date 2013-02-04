@@ -4,8 +4,12 @@
         <div class="profile-unit">
             <h4>{{name_form.Meta.form_name}}</h4>
             {% include 'includes/form-error-highlight.html' with form=name_form %}
+            
             <h4>{{phone_form.Meta.form_name}}</h4>
+            <input type="text" name="friendlyPhoneField" id="fiendlyPhoneField" placeholder="Phone Number (+1 555-555-1234)"/>
+            <div class="freindlyPhoneForm">
             {% include 'includes/form-error-highlight.html' with form=phone_form %}
+            </div>
             <h4>{{address_form.Meta.form_name}}</h4>
             {% include 'includes/form-error-highlight.html' with form=address_form %}
         </div>

@@ -9,7 +9,7 @@ form -- the rest of the form.
 {% load widget_tweaks %}
 {% load form_tags %}
 {% load selection_boxes %}
-
+{{form.name}}
 <fieldset>
     {# Include but don't display hidden fields #}
     {% for hidden in form.hidden_fields %}
@@ -39,7 +39,7 @@ form -- the rest of the form.
             </div>
             {{ field|attr:"placeholder:" }}
             {% elif is_select %}
-            <div class="input-prepend">
+            <div class="input-prepend" id="{{field.name}}_prependLabel">
             <span class="add-on">
                 {{ field.label_tag }}
             </span>
@@ -52,12 +52,21 @@ form -- the rest of the form.
             </div>            
             {% elif 'country_code' in field.html_name %}
             {% with "id_"|add:form.prefix|add:"-country_sub_division_code" as region_id %}
-            {% country_select selected="" html_id=field.id_for_label  region_html_id=region_id input_name=field.html_name %}
+            {% country_select selected="usa" html_id=field.id_for_label  region_html_id=region_id input_name=field.html_name %}
             {% endwith %}
             {% elif 'country_sub_division_code' in field.html_name %}
             {% region_select selected="" html_id=field.id_for_label input_name=field.html_name %}
             {% else %}
-                {{ field  }}
+                {% if '_dialing' in field.html_name or field.html_name == "telephone-number" %}
+                    <div class="input-prepend" data-for="{{field.id}}">
+                    <span class="add-on">
+                        {{ field.label_tag }}
+                    </span>
+                    {{field}}
+                    </div>
+                {% else %}
+                    {{ field  }}
+                {% endif %}
             {% endif %}
             {% if field.help_text %}
             <span class="help-block">{{ field.help_text }}</span>
