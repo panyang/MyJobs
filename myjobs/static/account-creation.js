@@ -33,8 +33,10 @@ $(document).ready(function() {
     $("#usaPhoneField").show();
     $("#internationPhoneForm").addClass("friendlyPhoneForm");
     
-    $("#phoneRegion").change(function(){
-        if($(this).val()=="int"){
+    $("#id_address-country_code").blur(function(){            
+        country_code = $("#id_address-country_code").val();
+        console.log(country_code.toLowerCase());
+        if(country_code.toLowerCase()!="united states of america"){
             $("#internationPhoneForm").removeClass("friendlyPhoneForm");
             $("#usaPhoneField").hide();
         }else{
