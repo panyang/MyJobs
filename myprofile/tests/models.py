@@ -90,3 +90,21 @@ class MyProfileTests(TestCase):
         old_email = SecondaryEmail.objects.get(email=old_primary)
         self.assertTrue(old_email.verified)
         user = User.objects.get(email=secondary_email.email)
+
+    def test_maintain_verification_state(self):
+        """
+        For security reasons, the state of verification of the user email should
+        be the same as it is when it is transferred into SecondaryEmail
+        """
+        
+        old_primary = self.user.email
+        self.user.is_active=False
+        secondary_email = SecondaryEmailFactory(user=self.user)
+        activation = ActivationProfile.objects.get(user=self.user,
+                                                   email=secondary_email.email)
+        ActivationProfile.objects.activate_user(activation.activation_key)
+        secondary_email.set_as_primary()
+
+        old_email = SecondaryEmail.objects.get(email=old_primary)
+        self.assertFalse(old_email.verified)
+        user = User.objects.get(email=secondary_email.email)

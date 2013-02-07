@@ -3,7 +3,7 @@ import datetime
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 
-from registration import signals as custom_signals
+from registration import signals as reg_signals
 from myjobs.models import User
 
 class ProfileUnits(models.Model):
@@ -182,19 +182,31 @@ class SecondaryEmail(ProfileUnits):
     def save(self, *args, **kwargs):
         primary = kwargs.pop('old_primary', None)
         if not self.pk and primary==None:
-            custom_signals.email_created.send(sender=self,user=self.user,
+            reg_signals.email_created.send(sender=self,user=self.user,
                                               email=self.email)
         super(SecondaryEmail,self).save(*args,**kwargs)
             
     def send_activation(self):
-        custom_signals.send_activation.send(sender=self,user=self.user,
+        reg_signals.send_activation.send(sender=self,user=self.user,
                                             email=self.email)
 
     def set_as_primary(self):
+        """
+        Replaces the User email with this email object, saves the old primary
+        as a new address while maintaining the state of verification. The
+        new primary address is then deleted from the SecondaryEmail table.
+        """
+        
         old_primary = self.user.email
         new_primary = self.email
 
-        email=SecondaryEmail(email=old_primary,verified=True, user=self.user)
+        if self.user.is_active:
+            verified=True
+        else:
+            verified=False
+        
+        email=SecondaryEmail(email=old_primary,verified=verified,
+                             user=self.user)
         email.save(**{'old_primary':True})
         SecondaryEmail.objects.get(email=new_primary,user=self.user).delete()
         self.user.email = new_primary

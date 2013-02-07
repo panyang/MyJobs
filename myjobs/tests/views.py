@@ -7,7 +7,6 @@ from django.http import HttpRequest
 from django.test.client import Client
 from django.test import TestCase
 
-
 from myjobs.forms import *
 from myjobs.models import User
 from myjobs.tests.factories import *
