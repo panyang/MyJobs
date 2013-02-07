@@ -90,4 +90,3 @@ class MyProfileTests(TestCase):
         old_email = SecondaryEmail.objects.get(email=old_primary)
         self.assertTrue(old_email.verified)
         user = User.objects.get(email=secondary_email.email)
-        

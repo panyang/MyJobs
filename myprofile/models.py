@@ -173,7 +173,6 @@ class Name(ProfileUnits):
 class SecondaryEmail(ProfileUnits):
     email = models.EmailField(max_length=255)
     label = models.CharField(max_length=30, blank=True, null=True)
-    primary = models.BooleanField(default=False)
     verified = models.BooleanField(default=False, editable=False)
     verified_date = models.DateTimeField(blank=True, null=True, editable=False)
 
@@ -212,7 +211,5 @@ class Profile(models.Model):
     class Meta:
         unique_together = (("name", "user"),)
     
-    def __unicode__(self):c
+    def __unicode__(self):
         return self.name
-
-

@@ -31,12 +31,11 @@ class CustomUserManager(BaseUserManager):
         user.is_active = False
         user.save(using=self._db)
 
-        email_created.send(sender=self,
-                                          user=self.user, email=self.email)
+        custom_signals.email_created.send(sender=self,user=user,
+                                          email=email)
         if send_email:
-            send_activation.send(sender=self,
-                                                user=self.user, email=self.email)
-
+            custom_signals.send_activation.send(sender=self,user=user,
+                                                email=email)
         return user
 
     def create_user(self, **kwargs):

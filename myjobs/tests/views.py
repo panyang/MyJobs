@@ -1,10 +1,12 @@
 from importlib import import_module
 
+from django.conf import settings
 from django.contrib.auth import login
 from django.core.urlresolvers import reverse
 from django.http import HttpRequest
 from django.test.client import Client
 from django.test import TestCase
+
 
 from myjobs.forms import *
 from myjobs.models import User
