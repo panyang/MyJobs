@@ -3,9 +3,8 @@ import datetime
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 
+from registration import signals as custom_signals
 from myjobs.models import User
-from registration.models import ActivationProfile
-
 
 class ProfileUnits(models.Model):
     """
@@ -182,14 +181,25 @@ class SecondaryEmail(ProfileUnits):
         return self.email
 
     def save(self, *args, **kwargs):
-        if not self.pk:
-            ActivationProfile.objects.create(email=self.email, user=self.user)
+        primary = kwargs.pop('old_primary', None)
+        if not self.pk and primary==None:
+            custom_signals.email_created.send(sender=self,user=self.user,
+                                              email=self.email)
         super(SecondaryEmail,self).save(*args,**kwargs)
             
     def send_activation(self):
-        activation = ActivationProfile.objects.get(user=self.user,
-                                                   email=self.email)
-        activation.send_activation_email()
+        custom_signals.send_activation.send(sender=self,user=self.user,
+                                            email=self.email)
+
+    def set_as_primary(self):
+        old_primary = self.user.email
+        new_primary = self.email
+
+        email=SecondaryEmail(email=old_primary,verified=True, user=self.user)
+        email.save(**{'old_primary':True})
+        SecondaryEmail.objects.get(email=new_primary,user=self.user).delete()
+        self.user.email = new_primary
+        self.user.save()
 
         
 class Profile(models.Model):
@@ -202,7 +212,7 @@ class Profile(models.Model):
     class Meta:
         unique_together = (("name", "user"),)
     
-    def __unicode__(self):
+    def __unicode__(self):c
         return self.name
 
 

@@ -7,7 +7,7 @@ from myjobs.tests.factories import UserFactory
 from myjobs.tests import TestClient
 from myprofile.models import *
 from myprofile.tests.factories import *
-
+from registration.models import ActivationProfile
 
 class MyProfileTests(TestCase):
     user_info = {'password1': 'complicated_password',
@@ -64,5 +64,30 @@ class MyProfileTests(TestCase):
         response = self.client.get(reverse('registration_activate',
                                            kwargs={'activation_key':
                                                    activation.activation_key}))
+        secondary_email = SecondaryEmail.objects.get(user=self.user,
+                                                     email=secondary_email.email)
+        activation = ActivationProfile.objects.get(user=self.user,
+                                                   email=secondary_email.email)
         self.assertEqual(response.status_code, 200)
-        self.failUnless(secondary_email.verified)
+        self.assertTrue(secondary_email.verified)
+
+    def test_set_primary(self):
+        """
+        Calling the set_as_primary method in the SecondaryEmail removes it from
+        SecondaryEmail, replaces the current address on the User model, and
+        adds the replaced address to the SecondaryEmail table.
+
+        """
+        old_primary = self.user.email
+        secondary_email = SecondaryEmailFactory(user=self.user)
+        activation = ActivationProfile.objects.get(user=self.user,
+                                                   email=secondary_email.email)
+        ActivationProfile.objects.activate_user(activation.activation_key)
+        secondary_email.set_as_primary()
+
+        with self.assertRaises(SecondaryEmail.DoesNotExist):
+            SecondaryEmail.objects.get(email=secondary_email.email)
+        old_email = SecondaryEmail.objects.get(email=old_primary)
+        self.assertTrue(old_email.verified)
+        user = User.objects.get(email=secondary_email.email)
+        
