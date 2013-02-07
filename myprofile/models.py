@@ -213,6 +213,7 @@ class SecondaryEmail(ProfileUnits):
             email.save(**{'old_primary':True})
             SecondaryEmail.objects.get(email=new_primary,user=self.user).delete()
             self.user.email = new_primary
+            self.user.is_active = self.verified
             self.user.save()
             return True
         else:
