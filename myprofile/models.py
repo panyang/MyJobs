@@ -194,24 +194,29 @@ class SecondaryEmail(ProfileUnits):
         """
         Replaces the User email with this email object, saves the old primary
         as a new address while maintaining the state of verification. The
-        new primary address is then deleted from the SecondaryEmail table.
+        new primary address is then deleted from the SecondaryEmail table. This
+        is only allowed if the email has been verified.
+        Returns boolean if successful.
         """
         
-        old_primary = self.user.email
-        new_primary = self.email
+        if self.verified:
+            old_primary = self.user.email
+            new_primary = self.email
 
-        if self.user.is_active:
-            verified=True
+            if self.user.is_active:
+                verified=True
+            else:
+                verified=False
+
+            email=SecondaryEmail(email=old_primary,verified=verified,
+                                 user=self.user)
+            email.save(**{'old_primary':True})
+            SecondaryEmail.objects.get(email=new_primary,user=self.user).delete()
+            self.user.email = new_primary
+            self.user.save()
+            return True
         else:
-            verified=False
-        
-        email=SecondaryEmail(email=old_primary,verified=verified,
-                             user=self.user)
-        email.save(**{'old_primary':True})
-        SecondaryEmail.objects.get(email=new_primary,user=self.user).delete()
-        self.user.email = new_primary
-        self.user.save()
-
+            return False
         
 class Profile(models.Model):
     name = models.CharField(max_length=30)

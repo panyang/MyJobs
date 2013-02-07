@@ -83,6 +83,8 @@ class MyProfileTests(TestCase):
         activation = ActivationProfile.objects.get(user=self.user,
                                                    email=secondary_email.email)
         ActivationProfile.objects.activate_user(activation.activation_key)
+        secondary_email = SecondaryEmail.objects.get(user=self.user,
+                                                     email=secondary_email.email)
         secondary_email.set_as_primary()
 
         with self.assertRaises(SecondaryEmail.DoesNotExist):
@@ -90,6 +92,21 @@ class MyProfileTests(TestCase):
         old_email = SecondaryEmail.objects.get(email=old_primary)
         self.assertTrue(old_email.verified)
         user = User.objects.get(email=secondary_email.email)
+
+    def test_unverified_primary_email(self):
+        """
+        Only verified emails can be set as the primary email
+        """
+
+        old_primary = self.user.email
+        secondary_email = SecondaryEmailFactory(user=self.user)
+        primary = secondary_email.set_as_primary()
+
+        with self.assertRaises(SecondaryEmail.DoesNotExist):
+            SecondaryEmail.objects.get(email=old_primary)
+        self.assertFalse(primary)
+        user = User.objects.get(email=old_primary)
+        self.assertEqual(user.email,old_primary)
 
     def test_maintain_verification_state(self):
         """
@@ -99,10 +116,13 @@ class MyProfileTests(TestCase):
         
         old_primary = self.user.email
         self.user.is_active=False
+        self.user.save()
         secondary_email = SecondaryEmailFactory(user=self.user)
         activation = ActivationProfile.objects.get(user=self.user,
                                                    email=secondary_email.email)
         ActivationProfile.objects.activate_user(activation.activation_key)
+        secondary_email = SecondaryEmail.objects.get(user=self.user,
+                                                     email=secondary_email.email)
         secondary_email.set_as_primary()
 
         old_email = SecondaryEmail.objects.get(email=old_primary)
