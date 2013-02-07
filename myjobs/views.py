@@ -87,8 +87,19 @@ def home(request):
                 return HttpResponseRedirect('/account')
                 
         elif request.POST['action'] == "save_profile":
+            # rebuild the form object with the post parameter = True
             profile_forms =  instantiate_profile_forms(request,form_classes,
                                                        settings,post=True)
+            name_form = instantiate_profile_forms(request, [InitialNameForm],
+                                                  settings,post=True)[0]
+            education_form = instantiate_profile_forms(request,[EducationForm],
+                                                       settings,post=True)[0]
+            phone_form = instantiate_profile_forms(request, [PhoneForm],
+                                                   settings,post=True)[0]
+            work_form = instantiate_profile_forms(request, [EmploymentForm],
+                                                  settings,post=True)[0]
+            address_form = instantiate_profile_forms(request, [AddressForm],
+                                                     settings,post=True)[0]
             all_valid = True
             for form in profile_forms:
                 if not form.is_valid():
@@ -101,7 +112,12 @@ def home(request):
                 return HttpResponse('valid')
             else:
                 return render_to_response('includes/initial-profile-form.html',
-                                          {'profile_forms': profile_forms},
+                                          {'profile_forms': profile_forms,
+                                          'name_form': name_form,
+                                         'phone_form': phone_form,
+                                         'address_form': address_form,
+                                         'work_form': work_form,
+                                         'education_form': education_form},
                                           context_instance=RequestContext(request))
             
     return render_to_response('index.html', data_dict, RequestContext(request))

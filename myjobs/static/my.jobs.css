@@ -115,7 +115,9 @@ ul.ui-autocomplete{
     /*display: block;*/
     padding: 4px 0px;
     text-indent: 4px;
-    /*width: 100%;*/
+    }
+#titleRow input{
+    width: 100%;
     }
 .loginBox input[type=checkbox]{
     float: left;

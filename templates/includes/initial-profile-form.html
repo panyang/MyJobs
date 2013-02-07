@@ -1,35 +1,40 @@
+{% load i18n %}
 <form action="" method="post" id="profile-form">
-    
-    <div class="span4">
-        <div class="profile-unit">
-            <h4>{{name_form.Meta.form_name}}</h4>
-            {% include 'includes/form-error-highlight.html' with form=name_form %}
-            
-            <h4>{{phone_form.Meta.form_name}}</h4>
-            <input type="text" name="friendlyPhoneField" id="fiendlyPhoneField" placeholder="Phone Number (+1 555-555-1234)"/>
-            <div class="freindlyPhoneForm">
-            {% include 'includes/form-error-highlight.html' with form=phone_form %}
+<div class="span8" id="newAccountData">
+    <div class="row">                                            
+        <div class="span4">
+            <div class="profile-unit">
+                <h4>{{name_form.Meta.form_name}}</h4>
+                {% include 'includes/form-error-highlight.html' with form=name_form %}
             </div>
-            <h4>{{address_form.Meta.form_name}}</h4>
-            {% include 'includes/form-error-highlight.html' with form=address_form %}
+            <div class="profile-unit">
+                <h4>{% trans "Primary Contact Info"%}</h4>
+                {% include 'includes/form-error-highlight.html' with form=address_form %}                            
+                <input type="text" id="usaPhoneField" name="friendlyPhoneField" class="friendlyPhoneField" placeholder="Phone Number (+1 555-555-1234)"/>
+                <div class="" id="internationPhoneForm">
+                    {% include 'includes/form-error-highlight.html' with form=phone_form %}
+                </div>
+                <br/>
+            </div>
         </div>
-    </div>
-    <div class="span4">
-        <div class="profile-unit">
-            <h4>{{work_form.Meta.form_name}}</h4>
-            {% include 'includes/form-error-highlight.html' with form=work_form %}
-            <h4>{{education_form.Meta.form_name}}</h4>
-            {% include 'includes/form-error-highlight.html' with form=education_form %}
-        </div>
-    </div>
-    
-    {% csrf_token %}
-    <div class="actions span8">
-        <button type="submit" class="btn primary pull-right" value="save" id="save">
-          Save
-        </button>
-        <button class="btn pull-right" id="profile">Skip: Take me to my profile</button>
-        <div class="clear"></div>
-    </div>
-</form>
+        <div class="span4">
+            <div class="profile-unit">
+                <h4>{% trans "Most Recent Job" %}</h4>
+                {% include 'includes/form-error-highlight.html' with form=work_form %}
+            </div>
+            <div class="profile-unit">
+                <h4>{% trans "Most Recent Education" %}</h4>
+                {% include 'includes/form-error-highlight.html' with form=education_form %}
+            </div>
+        </div>            
+        {% csrf_token %}
+    </div> 
 </div>
+<div class="actions span8 offset4">
+    <button type="submit" class="btn primary pull-right" value="save" id="save">
+      Save
+    </button>
+    <button class="btn pull-right" id="profile">Skip: Take me to my profile</button>
+    <div class="clear"></div>
+</div>
+</form>
