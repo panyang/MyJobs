@@ -6,7 +6,7 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.utils.translation import ugettext_lazy as _
 
-from registration.models import *
+from registration import signals as custom_signals
 
 class CustomUserManager(BaseUserManager):
     def create_inactive_user(self, send_email=True, **kwargs):
@@ -31,10 +31,11 @@ class CustomUserManager(BaseUserManager):
         user.is_active = False
         user.save(using=self._db)
 
-        # Generate and send activation information
-        activation_profile = ActivationProfile.objects.generate_key(user)
+        custom_signals.email_created.send(sender=self,user=user,
+                                          email=email)
         if send_email:
-            activation_profile.send_activation_email()
+            custom_signals.send_activation.send(sender=self,user=user,
+                                                email=email)
         return user
 
     def create_user(self, **kwargs):
@@ -138,3 +139,9 @@ class User(AbstractBaseUser):
             return True
 
         return _user_has_module_perms(self, app_label)
+
+    def get_username(self):
+        return self.email
+
+    def get_short_name(self):
+        return self.email

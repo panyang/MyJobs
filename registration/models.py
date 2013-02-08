@@ -10,8 +10,6 @@ from django.core.mail import send_mail
 from django.template.loader import render_to_string
 from django.utils.translation import ugettext_lazy as _
 
-from myjobs.models import *
-
 try:
     from django.utils.timezone import now as datetime_now
 except ImportError:
@@ -38,33 +36,14 @@ class RegistrationManager(models.Manager):
                 return False
             if not profile.activation_key_expired():
                 user = profile.user
-                user.is_active = True
-                user.save()
+                from myprofile import signals
+                signals.activated.send(sender=self,user=user,
+                                       email=profile.email)
                 profile.activation_key = self.model.ACTIVATED
                 profile.save()
                 return user
         return False
 
-    def generate_key(self,user):        
-        """
-        Generates a random string that will be used as the activation key for a
-        registered user.
-
-        Inputs:
-        :user: User object instance
-
-        Outputs:
-        Creates an ActivationProfile with the user and generated key
-       
-        """
-        salt = hashlib.sha1(str(random.random())).hexdigest()[:5]
-        email = user.email
-        if isinstance(email, unicode):
-            email = email.encode('utf-8')
-        activation_key = hashlib.sha1(salt+email).hexdigest()
-        return self.create(user=user,
-                           activation_key=activation_key)
-        
     def delete_expired_users(self):
         for profile in self.all():
             try:
@@ -78,8 +57,10 @@ class RegistrationManager(models.Manager):
 
 
 class ActivationProfile(models.Model):
-    user = models.ForeignKey('myjobs.User', unique=True, verbose_name=('user'))
+    user = models.ForeignKey('myjobs.User', verbose_name="user")
     activation_key = models.CharField(('activation_key'), max_length=40)
+    email = models.EmailField(max_length=255)
+    
     
     ACTIVATED = "ALREADY ACTIVATED"
     objects = RegistrationManager()
@@ -93,6 +74,19 @@ class ActivationProfile(models.Model):
                (self.user.date_joined + expiration_date <= datetime_now())
     activation_key_expired.boolean = True
 
+    def generate_key(self):        
+        """
+        Generates a random string that will be used as the activation key for a
+        registered user.       
+        """
+        
+        salt = hashlib.sha1(str(random.random())).hexdigest()[:5]
+        email = self.email
+        if isinstance(email, unicode):
+            email = email.encode('utf-8')
+        activation_key = hashlib.sha1(salt+email).hexdigest()
+        return activation_key
+
     def send_activation_email(self):
         ctx_dict = {'activation_key': self.activation_key,
                     'expiration_days': settings.ACCOUNT_ACTIVATION_DAYS}
@@ -102,4 +96,10 @@ class ActivationProfile(models.Model):
         
         message = render_to_string('registration/activation_email.txt',
                                    ctx_dict)
-        self.user.email_user(subject, message, settings.DEFAULT_FROM_EMAIL)
+        send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [self.email])
+
+    def save(self, *args, **kwargs):
+        if not self.pk:
+            self.activation_key = self.generate_key()
+        super(ActivationProfile,self).save(*args,**kwargs)
+

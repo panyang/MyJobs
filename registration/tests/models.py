@@ -80,8 +80,8 @@ class RegistrationModelTests(TestCase):
         
         """
         new_user = User.objects.create_inactive_user(site=Site.objects.get_current(),
-                                                                    send_email=False,
-                                                                    **self.user_info)
+                                                     send_email=False,
+                                                     **self.user_info)
         self.assertEqual(len(mail.outbox), 0)
 
     def test_unexpired_account(self):

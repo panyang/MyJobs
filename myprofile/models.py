@@ -3,9 +3,8 @@ import datetime
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 
-from myjobs.models import *
-from registration.models import *
-
+from registration import signals as reg_signals
+from myjobs.models import User
 
 class ProfileUnits(models.Model):
     """
@@ -170,17 +169,56 @@ class Name(ProfileUnits):
     def __unicode__(self):
         return self.get_full_name()
 
-        
+
 class SecondaryEmail(ProfileUnits):
-    email = models.EmailField(max_length=255, blank=True,null=True)
-    label = models.CharField(max_length=30, blank=True,null=True)
-    verified = models.BooleanField(default=False,editable=False)
-    verified_date = models.DateTimeField(blank=True, null=True,editable=False)
+    email = models.EmailField(max_length=255)
+    label = models.CharField(max_length=30, blank=True, null=True)
+    verified = models.BooleanField(default=False, editable=False)
+    verified_date = models.DateTimeField(blank=True, null=True, editable=False)
 
     def __unicode__(self):
         return self.email
 
+    def save(self, *args, **kwargs):
+        primary = kwargs.pop('old_primary', None)
+        if not self.pk and primary==None:
+            reg_signals.email_created.send(sender=self,user=self.user,
+                                              email=self.email)
+        super(SecondaryEmail,self).save(*args,**kwargs)
+            
+    def send_activation(self):
+        reg_signals.send_activation.send(sender=self,user=self.user,
+                                            email=self.email)
 
+    def set_as_primary(self):
+        """
+        Replaces the User email with this email object, saves the old primary
+        as a new address while maintaining the state of verification. The
+        new primary address is then deleted from the SecondaryEmail table. This
+        is only allowed if the email has been verified.
+        Returns boolean if successful.
+        """
+        
+        if self.verified:
+            old_primary = self.user.email
+            new_primary = self.email
+
+            if self.user.is_active:
+                verified=True
+            else:
+                verified=False
+
+            email=SecondaryEmail(email=old_primary,verified=verified,
+                                 user=self.user)
+            email.save(**{'old_primary':True})
+            SecondaryEmail.objects.get(email=new_primary,user=self.user).delete()
+            self.user.email = new_primary
+            self.user.is_active = self.verified
+            self.user.save()
+            return True
+        else:
+            return False
+        
 class Profile(models.Model):
     name = models.CharField(max_length=30)
     user = models.ForeignKey(User)
@@ -193,5 +231,3 @@ class Profile(models.Model):
     
     def __unicode__(self):
         return self.name
-
-
