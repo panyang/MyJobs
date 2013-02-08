@@ -14,9 +14,7 @@ $(document).ready(function() {
 
     $("#id_address-country_code").makeCombobox();
     $("#id_address-country_sub_division_code").makeCombobox();
-    user_email = "";
-    
-    useFriendlyPhoneField();
+    user_email = "";    
 });
 
 function register(csrf_token) {    
@@ -80,7 +78,6 @@ function save(csrf_token) {
                     save(csrf_token);
                     $("#id_address-country_code").makeCombobox();
                     $("#id_address-country_sub_division_code").makeCombobox();
-                    useFriendlyPhoneField();
                     buttons();
                 } else {
                     window.location = '/account';
@@ -117,32 +114,3 @@ function clearForm(form) {
             this.selectedIndex = -1;
     });
 };
-function useFriendlyPhoneField(){
-    $(".friendlyPhoneField").blur(function(){
-        var num = $(this).val()
-            .replace(/-/g,"")
-            .replace(/ /g,"")
-            .replace(/\+/g,"")
-            .replace(/\(/g,"")
-            .replace(/\)/g,"");
-        main = num.slice(-7);
-        area = num.slice(-10,-7)
-        country = num.slice(0,-10)
-        $("#id_telephone-country_dialing").val(country);
-        $("#id_telephone-area_dialing").val(area);
-        $("#id_telephone-number").val(main);
-    });
-    $("#usaPhoneField").show();
-    $("#internationPhoneForm").addClass("friendlyPhoneForm");
-    
-    $("#id_address-country_code").blur(function(){            
-        country_code = $("#id_address-country_code").val();
-        if(country_code.toLowerCase()!="united states of america"){
-            $("#internationPhoneForm").removeClass("friendlyPhoneForm");
-            $("#usaPhoneField").hide();
-        }else{
-            $("#internationPhoneForm").addClass("friendlyPhoneForm");
-            $("#usaPhoneField").show();
-        }
-    });
-}

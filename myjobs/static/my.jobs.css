@@ -212,6 +212,14 @@ ul.ui-autocomplete{
 .alert-message li{
     color: red;
 }
+.input-prepend .add-on{
+    width: 35%;
+    text-align: right;
+}
+.input-prepend input,
+.input-prepend select{
+    width: 61.5%;
+}
 #account-page-2 .loginBox input[type="text"].phoneCountryCode,
 .loginBox .phoneCountryCode,
 .phoneCountryCode{
@@ -224,10 +232,14 @@ ul.ui-autocomplete{
 }
 #account-page-2 .loginBox input[type="text"].phoneNumber,
 .loginBox .phoneNumber,
-.phoneNumber{
+.phoneNumber,
+#account-page-2 .loginBox input[type="text"].phoneExtension,
+.loginBox .phoneExtension,
+.phoneExtension{
     width: 150px;
 }
 #usaPhoneField{
+    margin-top: 10px;
     display: none;
 }
 .friendlyPhoneForm input[type=text],

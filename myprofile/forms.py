@@ -105,18 +105,20 @@ class EmploymentForm(BaseProfileForm):
         model = EmploymentHistory
         widgets = generate_custom_widgets(model)
 
-        
+       
 class PhoneForm(BaseProfileForm):
     class Meta:
         form_name = "Phone Number"
         model = Telephone
         widgets = generate_custom_widgets(model)
-        widgets['country_dialing'].attrs['class'] = "phoneCountryCode useInputPrepend"
-        widgets['area_dialing'].attrs['class'] = "phoneAreaCode useInputPrepend"
-        widgets['number'].attrs['class'] = "phoneNumber useInputPrepend"
+        widgets['country_dialing'].attrs['class'] = "phoneCountryCode"
+        widgets['area_dialing'].attrs['class'] = "phoneAreaCode"
+        widgets['number'].attrs['class'] = "phoneNumber"
+        widgets['extension'].attrs['class'] = "phoneExtension"
         widgets['country_dialing'].attrs['placeholder'] = "+1"
         widgets['area_dialing'].attrs['placeholder'] = "555"
         widgets['number'].attrs['placeholder'] = "555-5555"
+        widgets['extension'].attrs['placeholder'] = "x1234"
 
 
 class AddressForm(BaseProfileForm):
