@@ -41,14 +41,13 @@ def home(request):
     registrationform = RegistrationForm(auto_id=False)
     loginform = CustomAuthForm(auto_id=False)
 
-    form_classes = [InitialNameForm,EducationForm,PhoneForm,EmploymentForm,AddressForm]
+    
     # Parameters passed into the form class. See forms.py in myprofile
     # for more detailed docs
     settings = {'auto_id':False, 'empty_permitted':True, 'only_show_required':True,
                 'user': request.user}
     settings_show_all = {'auto_id':False, 'empty_permitted':True,
                          'only_show_required':False,'user': request.user}
-    profile_forms = instantiate_profile_forms(request, form_classes,settings)
     name_form = instantiate_profile_forms(request, [InitialNameForm],settings)[0]
     education_form = instantiate_profile_forms(request,[EducationForm],settings)[0]
     phone_form = instantiate_profile_forms(request, [PhoneForm],settings_show_all)[0]
@@ -90,8 +89,6 @@ def home(request):
                 
         elif request.POST['action'] == "save_profile":
             # rebuild the form object with the post parameter = True
-            profile_forms =  instantiate_profile_forms(request,form_classes,
-                                                       settings,post=True)
             name_form = instantiate_profile_forms(request, [InitialNameForm],
                                                   settings,post=True)[0]
             education_form = instantiate_profile_forms(request,[EducationForm],
