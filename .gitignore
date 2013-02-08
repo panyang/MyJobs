@@ -16,6 +16,7 @@ dev_*
 .pydevproject
 .tmp*
 content_226
+.coverage
 
 # Secret Stuff
 secrets*
