@@ -80,6 +80,7 @@ INSTALLED_APPS = (
     'widget_tweaks',
     'myjobs',
     'myprofile',
+    'mysearches',
     'registration',
     'south',
     'django_nose'
