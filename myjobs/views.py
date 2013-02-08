@@ -115,11 +115,11 @@ def home(request):
             else:
                 return render_to_response('includes/initial-profile-form.html',
                                           {'profile_forms': profile_forms,
-                                          'name_form': name_form,
-                                         'phone_form': phone_form,
-                                         'address_form': address_form,
-                                         'work_form': work_form,
-                                         'education_form': education_form},
+                                           'name_form': name_form,
+                                           'phone_form': phone_form,
+                                           'address_form': address_form,
+                                           'work_form': work_form,
+                                           'education_form': education_form},
                                           context_instance=RequestContext(request))
             
     return render_to_response('index.html', data_dict, RequestContext(request))

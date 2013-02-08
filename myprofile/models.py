@@ -93,13 +93,13 @@ class Telephone(ProfileUnits):
         ('Other', 'Other'),
     )
     channel_code = models.CharField(max_length=30, editable=False)
-    country_dialing = models.IntegerField(max_length=3,
-    	    				  verbose_name="Country Code", blank=True,)
+    country_dialing = models.IntegerField(max_length=3, 
+                                          verbose_name="Country Code",blank=True)
     area_dialing = models.IntegerField(max_length=3, verbose_name="Area Code")    
     number = models.CharField(max_length=8, verbose_name="Local Number")
     extension = models.CharField(max_length=5, blank=True, null=True)
     use_code = models.CharField(max_length=30, choices=USE_CODE_CHOICES, 
-    	     			verbose_name="Phone Type")	
+    	     			        verbose_name="Phone Type")	
     
     def save(self, *args, **kwargs):
     	if self.use_code == "Home" or self.use_code == "Work" or self.use_code == "Other":

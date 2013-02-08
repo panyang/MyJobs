@@ -66,10 +66,7 @@ class BaseProfileForm(ModelForm):
         return instance.save()
 
 class InitialNameForm(BaseProfileForm):
-    primary = BooleanField(
-        widget=HiddenInput(), 
-        required=False, 
-        initial="on")
+    primary = BooleanField(widget=HiddenInput(), required=False, initial="on")
     class Meta:
         # form_name is used in the templates to render the form header
         form_name = "Personal Information"
@@ -94,7 +91,7 @@ class SecondaryEmailForm(BaseProfileForm):
 
 class EducationForm(BaseProfileForm):
     class Meta:
-        form_name = "Most Recent Education"
+        form_name = "Education"
         model = Education
         widgets = generate_custom_widgets(model)        
         
