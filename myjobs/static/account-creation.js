@@ -62,7 +62,6 @@ function register(csrf_token) {
 function save(csrf_token) {
     $('button#save').click(function(e) {
         e.preventDefault();
-        //var self = $(this).parents("div#account-page-2");
         var form = $('form#profile-form');
         // replace on and off with True and False to allow Django to validate 
         // boolean fields
