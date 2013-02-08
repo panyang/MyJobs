@@ -5,6 +5,7 @@ from django.template import RequestContext
 from django.views.generic import TemplateView
 
 from myjobs.models import *
+from registration.models import ActivationProfile
 from registration.forms import RegistrationForm
 
 # New in Django 1.5. Class based template views for static pages
