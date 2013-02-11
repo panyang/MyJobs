@@ -10,6 +10,6 @@ urlpatterns = patterns('MyJobs.myjobs.views',
     url(r'^privacy/$', Privacy.as_view()),
     url(r'^account/$', 'view_account', name='view_account'),
     url(r'^edit/$', 'edit_account', name='edit_account'),
-    url(r'^change_password/$', 'change_password', name='change_password'),
+    url(r'^change-password/$', 'change_password', name='change_password'),
     url(r'^error/$', 'error', name='error'),
 )
