@@ -56,7 +56,7 @@ form -- the rest of the form.
             {% elif 'country_sub_division_code' in field.html_name %}
             {% region_select selected="" html_id=field.id_for_label input_name=field.html_name %}
             {% else %}
-                {% if '_dialing' in field.html_name or field.html_name == "telephone-number" or field.html_name == "telephone-extension" %}
+                {% if '_dialing' in field.html_name or field.html_name == "number" or field.html_name == "extension" %}
                     <div class="input-prepend" data-for="{{field.id}}">
                     <span class="add-on">
                         {{ field.label_tag }}

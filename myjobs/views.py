@@ -47,16 +47,15 @@ def home(request):
     settings = {'auto_id':False, 'empty_permitted':True, 'only_show_required':True,
                 'user': request.user}
     settings_show_all = {'auto_id':False, 'empty_permitted':True,
-                         'only_show_required':False,'user': request.user}
-    name_form = instantiate_profile_forms(request, [InitialNameForm],settings)[0]
-    education_form = instantiate_profile_forms(request,[EducationForm],settings)[0]
-    phone_form = instantiate_profile_forms(request, [PhoneForm],settings_show_all)[0]
-    work_form = instantiate_profile_forms(request, [EmploymentForm],settings)[0]
-    address_form = instantiate_profile_forms(request, [AddressForm],settings)[0]
+                         'only_show_required':False, 'user': request.user}
+    name_form = InitialNameForm(**settings)
+    education_form = EducationForm(**settings)
+    phone_form = PhoneForm(**settings_show_all)
+    work_form = EmploymentForm(**settings)
+    address_form = AddressForm(**settings)
 
     data_dict = {'registrationform':registrationform,
                  'loginform': loginform,
-                 'profile_forms': profile_forms,
                  'name_form': name_form,
                  'phone_form': phone_form,
                  'address_form': address_form,
@@ -88,31 +87,28 @@ def home(request):
                 return HttpResponseRedirect('/account')
                 
         elif request.POST['action'] == "save_profile":
-            # rebuild the form object with the post parameter = True
-            name_form = instantiate_profile_forms(request, [InitialNameForm],
-                                                  settings,post=True)[0]
-            education_form = instantiate_profile_forms(request,[EducationForm],
-                                                       settings,post=True)[0]
-            phone_form = instantiate_profile_forms(request, [PhoneForm],
-                                                   settings_show_all,post=True)[0]
-            work_form = instantiate_profile_forms(request, [EmploymentForm],
-                                                  settings,post=True)[0]
-            address_form = instantiate_profile_forms(request, [AddressForm],
-                                                     settings,post=True)[0]
+            # rebuild the form object with the post parameter = True            
+            name_form = InitialNameForm(request.POST,**settings)
+            education_form = EducationForm(request.POST,**settings)
+            phone_form = PhoneForm(request.POST,**settings_show_all)
+            work_form = EmploymentForm(request.POST,**settings)
+            address_form = AddressForm(request.POST,**settings)
+            #required_forms = [name_form,phone_form]
+            form_list = [name_form, phone_form, education_form, work_form,
+                         address_form]
             all_valid = True
-            for form in profile_forms:
+            for form in form_list:
                 if not form.is_valid():
                     all_valid = False
 
             if all_valid:
-                for form in profile_forms:
+                for form in form_list:
                     if form.cleaned_data:
                         form.save()
                 return HttpResponse('valid')
             else:
                 return render_to_response('includes/initial-profile-form.html',
-                                          {'profile_forms': profile_forms,
-                                           'name_form': name_form,
+                                          {'name_form': name_form,
                                            'phone_form': phone_form,
                                            'address_form': address_form,
                                            'work_form': work_form,
