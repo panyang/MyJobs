@@ -21,5 +21,19 @@ def is_boolean_field(field):
     else:
         return False
 
+@register.assignment_tag
+def is_select_field(field):
+    """
+    Takes a form field and determines whether it's a select field.
 
-    
+    Inputs:
+    :field:       a form field instance
+
+    Outputs:
+    True if it's a boolean field and False if it is not
+    """
+
+    if type(field.field) == TypedChoiceField:
+        return True
+    else:
+        return False    

@@ -14,7 +14,7 @@ $(document).ready(function() {
 
     $("#id_address-country_code").makeCombobox();
     $("#id_address-country_sub_division_code").makeCombobox();
-
+    user_email = "";    
 });
 
 function register(csrf_token) {    
@@ -26,6 +26,7 @@ function register(csrf_token) {
         e.preventDefault();
         var self = $(this).parents("div.loginBox");
         var form = $('form#registration-form');
+        user_email = $("#id_email").val();
         $.ajax({
             type: "POST",
             url: "",
@@ -50,6 +51,7 @@ function register(csrf_token) {
                     }, 250);
                     buttons();
                     clearForm("form#registration-form");
+                    $(".newUserEmail").html(user_email);                    
                 }
             }
         });
@@ -60,10 +62,11 @@ function register(csrf_token) {
 function save(csrf_token) {
     $('button#save').click(function(e) {
         e.preventDefault();
-        var self = $(this).parents("div#account-page-2");
         var form = $('form#profile-form');
-        // replace on and off with True and False to allow Django to validate boolean fields
-        var json_data = form.serialize().replace('=on','=True').replace('=off','=False')+'&action=save_profile';        
+        // replace on and off with True and False to allow Django to validate 
+        // boolean fields
+        var json_data = form.serialize().replace('=on','=True')
+            .replace('=off','=False')+'&action=save_profile';        
         $.ajax({
             type: "POST",
             url: "",
