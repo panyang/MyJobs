@@ -75,7 +75,7 @@ class NameForm(BaseProfileForm):
         
 
 class InitialNameForm(NameForm):
-    primary = BooleanField(widget=HiddenInput(), required=False, initial="on")
+    primary = BooleanField(widget=HiddenInput(), required=False, initial="off")
 
 
 class SecondaryEmailForm(BaseProfileForm):
