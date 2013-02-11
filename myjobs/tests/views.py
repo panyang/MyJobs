@@ -130,7 +130,7 @@ class MyJobsViewsTests(TestCase):
                                       'name-primary':False,
                                       'education-degree_major': 'Basket Weaving',
                                       'action':'save_profile'}, follow=True)
-        self.failIf(resp.context['profile_forms'][1].is_valid())
+        self.failIf(resp.context['name_form'][1].is_valid())
         self.assertContains(resp, 'This field is required.')
         
     def test_no_profile_duplicates(self):
