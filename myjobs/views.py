@@ -48,11 +48,17 @@ def home(request):
                 'user': request.user}
     settings_show_all = {'auto_id':False, 'empty_permitted':True,
                          'only_show_required':False, 'user': request.user}
-    name_form = InitialNameForm(**settings)
+    """name_form = InitialNameForm(**settings)
     education_form = EducationForm(**settings)
-    phone_form = PhoneForm(**settings_show_all)
+    phone_form = PhoneForm(**settings)
     work_form = EmploymentForm(**settings)
-    address_form = AddressForm(**settings)
+    address_form = AddressForm(**settings)"""
+    name_form = instantiate_profile_forms(request,[NameForm],settings)[0]
+    education_form = instantiate_profile_forms(request,[EducationForm],
+                                               settings)[0]
+    phone_form = instantiate_profile_forms(request,[PhoneForm],settings)[0]
+    work_form = instantiate_profile_forms(request,[EmploymentForm],settings)[0]
+    address_form = instantiate_profile_forms(request,[AddressForm],settings)[0]
 
     data_dict = {'registrationform':registrationform,
                  'loginform': loginform,
@@ -88,14 +94,27 @@ def home(request):
                 
         elif request.POST['action'] == "save_profile":
             # rebuild the form object with the post parameter = True            
-            name_form = InitialNameForm(request.POST,**settings)
-            education_form = EducationForm(request.POST,**settings)
-            phone_form = PhoneForm(request.POST,**settings_show_all)
+            name_form = instantiate_profile_forms(request,[NameForm],
+                                                  settings,post=True)[0]
+            education_form = instantiate_profile_forms(request,[EducationForm],
+                                                  settings,post=True)[0]
+            phone_form = instantiate_profile_forms(request,[PhoneForm],
+                                                  settings,post=True)[0]
+            work_form = instantiate_profile_forms(request,[EmploymentForm],
+                                                  settings,post=True)[0]
+            address_form = instantiate_profile_forms(request,[AddressForm],
+                                                  settings_show_all,post=True)[0]
+            """education_form = EducationForm(request.POST,**settings)
+            phone_form = PhoneForm(request.POST,**settings)
             work_form = EmploymentForm(request.POST,**settings)
-            address_form = AddressForm(request.POST,**settings)
+            address_form = AddressForm(request.POST,**settings)"""
             #required_forms = [name_form,phone_form]
-            form_list = [name_form, phone_form, education_form, work_form,
-                         address_form]
+            form_list = []
+            form_list.append(name_form)
+            form_list.append(education_form)
+            form_list.append(phone_form)
+            form_list.append(work_form)
+            form_list.append(address_form)
             all_valid = True
             for form in form_list:
                 if not form.is_valid():

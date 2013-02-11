@@ -9,10 +9,8 @@
             </div>
             <div class="profile-unit">
                 <h4>{% trans "Primary Contact Info"%}</h4>
-                {% include 'includes/form-error-highlight.html' with form=address_form %}                            
-                <div class="" id="internationPhoneForm">
-                    {% include 'includes/form-error-highlight.html' with form=phone_form %}
-                </div>
+                {% include 'includes/form-error-highlight.html' with form=address_form %}  
+                {% include 'includes/form-error-highlight.html' with form=phone_form %}
                 <input type="text" id="usaPhoneField" name="friendlyPhoneField" 
                     class="friendlyPhoneField" placeholder="Phone Number"/>
                 <br/>
