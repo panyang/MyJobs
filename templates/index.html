@@ -42,11 +42,22 @@
             </div>				
         </div>
     </div>
-    <div id="account-page-2" style="display:none;">
-      <h1>Profile</h1>
-      <div class="profile-unit">
-	    Thanks for registering! Check your email for an activation link.
-      </div>
-      {% include "includes/initial-profile-form.html" with profile_form=profile_form%}
+    <div  id="account-page-2" style="display:none;">
+        <div class="row loginBox">
+            <div class="span4" id="newAccountInfo">
+                <div>
+                    <h2>{% trans "Profile" %}</small></h2>
+                    <p>
+                    <b class="newUserEmail"></b><br/>
+                    account status: <b class="pendingText">Pending activation</b>
+                    </p><p>
+                    Thanks for registering! We have sent an email to <span class="newUserEmail"></span> with
+                    an activation link for your account. While you wait, go
+                    ahead and add some data modules to your profile.
+                    </p>
+                </div>
+            </div>
+            {% include "includes/initial-profile-form.html" %}
+        </div>
     </div>
 {% endblock %} 

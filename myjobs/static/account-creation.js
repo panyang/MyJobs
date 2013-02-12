@@ -11,10 +11,12 @@ $(document).ready(function() {
     $(function() {
         $( "input[id$='date']" ).datepicker({dateFormat: "yy-mm-dd"});
     });
-
+    // perform display modifications for fields
+    $("#id_name-primary").hide()
+    $("label[for=id_name-primary]").hide()
     $("#id_address-country_code").makeCombobox();
     $("#id_address-country_sub_division_code").makeCombobox();
-
+    user_email = "";    
 });
 
 function register(csrf_token) {    
@@ -26,6 +28,7 @@ function register(csrf_token) {
         e.preventDefault();
         var self = $(this).parents("div.loginBox");
         var form = $('form#registration-form');
+        user_email = $("#id_email").val();
         $.ajax({
             type: "POST",
             url: "",
@@ -43,6 +46,8 @@ function register(csrf_token) {
                     buttons();
                 } else {
                     // perform the visual transition to page 2
+                    $("#id_name-primary").hide()
+                    $("label[for=id_name-primary]").hide()
                     $("#titleRow").hide( 'slide',{direction: 'left'},250 );
                     $("#topbar-login").fadeOut(250);
                     setTimeout(function(){                            
@@ -50,6 +55,7 @@ function register(csrf_token) {
                     }, 250);
                     buttons();
                     clearForm("form#registration-form");
+                    $(".newUserEmail").html(user_email);                    
                 }
             }
         });
@@ -57,13 +63,30 @@ function register(csrf_token) {
 }
 
 
+function setPrimaryName(){
+    /**
+    Detects if a value hasbeen entered in either name form and sets the hidden
+    checkmark field for priamry to true (since this is the users only name
+    at this point. This prevents false validation errors when the form is empty.    
+    **/    
+    first_name = $("#id_name-given_name").val();
+    last_name = $("#id_name-family_name").val();
+    if(first_name!=""||last_name!=""){
+        $("#id_name-primary").attr("checked","checked");
+    }else{
+        $("#id_name-primary").attr("checked",false);
+    }
+}
+
 function save(csrf_token) {
-    $('button#save').click(function(e) {
+    $('button#save').click(function(e) {            
         e.preventDefault();
-        var self = $(this).parents("div#account-page-2");
+        setPrimaryName();
         var form = $('form#profile-form');
-        // replace on and off with True and False to allow Django to validate boolean fields
-        var json_data = form.serialize().replace('=on','=True').replace('=off','=False')+'&action=save_profile';        
+        // replace on and off with True and False to allow Django to validate 
+        // boolean fields
+        var json_data = form.serialize().replace('=on','=True')
+            .replace('=off','=False')+'&action=save_profile';        
         $.ajax({
             type: "POST",
             url: "",
@@ -72,8 +95,10 @@ function save(csrf_token) {
                 if (data != 'valid') {
                     form.replaceWith(data);
                     save(csrf_token);
+                    $("#id_name-primary").hide()
+                    $("label[for=id_name-primary]").hide()
                     $("#id_address-country_code").makeCombobox();
-                    $("#id_address-country_sub_division_code").makeCombobox();
+                    $("#id_address-country_sub_division_code").makeCombobox();        
                     buttons();
                 } else {
                     window.location = '/account';

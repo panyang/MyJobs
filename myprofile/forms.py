@@ -24,8 +24,9 @@ def generate_custom_widgets(model):
             attrs['id'] = 'id_' + model.__name__.lower() + '-' + field.attname
             attrs['placeholder'] = field.verbose_name.title()
             if field.choices:
-                widgets[field.attname] = Select()
+                widgets[field.attname] = Select(attrs=attrs)
             elif internal_type == 'BooleanField':
+                attrs['label_class'] = 'checkbox'
                 widgets[field.attname] = CheckboxInput(attrs=attrs)
             else:
                 widgets[field.attname] = TextInput(attrs=attrs)
@@ -64,7 +65,7 @@ class BaseProfileForm(ModelForm):
             instance.user = self.user
         return instance.save()
 
-        
+
 class NameForm(BaseProfileForm):
     class Meta:
         # form_name is used in the templates to render the form header
@@ -73,11 +74,14 @@ class NameForm(BaseProfileForm):
         widgets = generate_custom_widgets(model)
         
 
+class InitialNameForm(NameForm):
+    primary = BooleanField(widget=HiddenInput(), required=False, initial="off")
+
+
 class SecondaryEmailForm(BaseProfileForm):
     class Meta:
         form_name = "Secondary Email"
         model = SecondaryEmail
-
         widgets = generate_custom_widgets(model)
 
 
@@ -85,21 +89,29 @@ class EducationForm(BaseProfileForm):
     class Meta:
         form_name = "Education"
         model = Education
-        widgets = generate_custom_widgets(model)
+        widgets = generate_custom_widgets(model)        
         
 
 class EmploymentForm(BaseProfileForm):
     class Meta:
-        form_name = "Employment History"
+        form_name = "Most Recent Work History"
         model = EmploymentHistory
         widgets = generate_custom_widgets(model)
 
-        
+       
 class PhoneForm(BaseProfileForm):
     class Meta:
         form_name = "Phone Number"
         model = Telephone
-        widgets = generate_custom_widgets(model)        
+        widgets = generate_custom_widgets(model)
+        widgets['country_dialing'].attrs['class'] = "phoneCountryCode"
+        widgets['area_dialing'].attrs['class'] = "phoneAreaCode"
+        widgets['number'].attrs['class'] = "phoneNumber"
+        widgets['extension'].attrs['class'] = "phoneExtension"
+        widgets['country_dialing'].attrs['placeholder'] = "+1"
+        widgets['area_dialing'].attrs['placeholder'] = "555"
+        widgets['number'].attrs['placeholder'] = "555-5555"
+        widgets['extension'].attrs['placeholder'] = "x1234"
 
 
 class AddressForm(BaseProfileForm):

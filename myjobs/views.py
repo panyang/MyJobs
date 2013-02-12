@@ -41,16 +41,27 @@ def home(request):
     registrationform = RegistrationForm(auto_id=False)
     loginform = CustomAuthForm(auto_id=False)
 
-    form_classes = [NameForm,EducationForm,EmploymentForm,PhoneForm,AddressForm]
+    
     # Parameters passed into the form class. See forms.py in myprofile
     # for more detailed docs
     settings = {'auto_id':False, 'empty_permitted':True, 'only_show_required':True,
                 'user': request.user}
-    profile_forms = instantiate_profile_forms(request, form_classes,settings)
+    settings_show_all = {'auto_id':False, 'empty_permitted':True,
+                         'only_show_required':False, 'user': request.user}
+    name_form = instantiate_profile_forms(request,[NameForm],settings)[0]
+    education_form = instantiate_profile_forms(request,[EducationForm],
+                                               settings)[0]
+    phone_form = instantiate_profile_forms(request,[PhoneForm],settings)[0]
+    work_form = instantiate_profile_forms(request,[EmploymentForm],settings)[0]
+    address_form = instantiate_profile_forms(request,[AddressForm],settings)[0]
 
     data_dict = {'registrationform':registrationform,
                  'loginform': loginform,
-                 'profile_forms': profile_forms,
+                 'name_form': name_form,
+                 'phone_form': phone_form,
+                 'address_form': address_form,
+                 'work_form': work_form,
+                 'education_form': education_form,
                  'name_obj': get_name_obj(request)}
 
     if request.method == "POST":
@@ -77,21 +88,41 @@ def home(request):
                 return HttpResponseRedirect('/account')
                 
         elif request.POST['action'] == "save_profile":
-            profile_forms =  instantiate_profile_forms(request,form_classes,
-                                                       settings,post=True)
+            # rebuild the form object with the post parameter = True            
+            name_form = instantiate_profile_forms(request,[NameForm],
+                                                  settings,post=True)[0]
+            education_form = instantiate_profile_forms(request,[EducationForm],
+                                                  settings,post=True)[0]
+            phone_form = instantiate_profile_forms(request,[PhoneForm],
+                                                  settings,post=True)[0]
+            work_form = instantiate_profile_forms(request,[EmploymentForm],
+                                                  settings,post=True)[0]
+            address_form = instantiate_profile_forms(request,[AddressForm],
+                                                  settings_show_all,post=True)[0]
+            #required_forms = [name_form,phone_form]
+            form_list = []
+            form_list.append(name_form)
+            form_list.append(education_form)
+            form_list.append(phone_form)
+            form_list.append(work_form)
+            form_list.append(address_form)
             all_valid = True
-            for form in profile_forms:
+            for form in form_list:
                 if not form.is_valid():
                     all_valid = False
 
             if all_valid:
-                for form in profile_forms:
+                for form in form_list:
                     if form.cleaned_data:
                         form.save()
                 return HttpResponse('valid')
             else:
                 return render_to_response('includes/initial-profile-form.html',
-                                          {'profile_forms': profile_forms},
+                                          {'name_form': name_form,
+                                           'phone_form': phone_form,
+                                           'address_form': address_form,
+                                           'work_form': work_form,
+                                           'education_form': education_form},
                                           context_instance=RequestContext(request))
             
     return render_to_response('index.html', data_dict, RequestContext(request))
