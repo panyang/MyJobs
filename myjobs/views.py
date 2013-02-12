@@ -48,11 +48,6 @@ def home(request):
                 'user': request.user}
     settings_show_all = {'auto_id':False, 'empty_permitted':True,
                          'only_show_required':False, 'user': request.user}
-    """name_form = InitialNameForm(**settings)
-    education_form = EducationForm(**settings)
-    phone_form = PhoneForm(**settings)
-    work_form = EmploymentForm(**settings)
-    address_form = AddressForm(**settings)"""
     name_form = instantiate_profile_forms(request,[NameForm],settings)[0]
     education_form = instantiate_profile_forms(request,[EducationForm],
                                                settings)[0]
@@ -104,10 +99,6 @@ def home(request):
                                                   settings,post=True)[0]
             address_form = instantiate_profile_forms(request,[AddressForm],
                                                   settings_show_all,post=True)[0]
-            """education_form = EducationForm(request.POST,**settings)
-            phone_form = PhoneForm(request.POST,**settings)
-            work_form = EmploymentForm(request.POST,**settings)
-            address_form = AddressForm(request.POST,**settings)"""
             #required_forms = [name_form,phone_form]
             form_list = []
             form_list.append(name_form)
