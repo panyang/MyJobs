@@ -11,7 +11,9 @@ $(document).ready(function() {
     $(function() {
         $( "input[id$='date']" ).datepicker({dateFormat: "yy-mm-dd"});
     });
-
+    // perform display modifications for fields
+    $("#id_name-primary").hide()
+    $("label[for=id_name-primary]").hide()
     $("#id_address-country_code").makeCombobox();
     $("#id_address-country_sub_division_code").makeCombobox();
     user_email = "";    
@@ -62,6 +64,11 @@ function register(csrf_token) {
 
 
 function setPrimaryName(){
+    /**
+    Detects if a value hasbeen entered in either name form and sets the hidden
+    checkmark field for priamry to true (since this is the users only name
+    at this point. This prevents false validation errors when the form is empty.    
+    **/    
     first_name = $("#id_name-given_name").val();
     last_name = $("#id_name-family_name").val();
     if(first_name!=""||last_name!=""){
