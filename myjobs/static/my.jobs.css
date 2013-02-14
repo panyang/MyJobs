@@ -500,11 +500,13 @@ em.pendingText{
     }
 }
 
-
-
-
 table td, table th{
     overflow: hidden;
+}
+
+#validated {
+    display: inline;
+    padding: 7px;
 }
 
 /*

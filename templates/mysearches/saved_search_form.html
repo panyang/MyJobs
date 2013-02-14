@@ -8,22 +8,21 @@
 
 <section><div class="section subpage">
 <div class="wrapper"> 
-    <div class="row">
-        <div class="span8">
-          <h1>{% trans "Save a Search" %}</h1>
-          <div class="formBox">      
-                <form action="" method="post" id="saved-search-form">
-
-                  {% include "includes/form-error-highlight.html" %}
-                  {% csrf_token %}
-                  <div class="actions">
-                    <a href="{% url 'view_account' %}" class="btn pull-right">{% trans 'Cancel' %}</a>
-                    <button type="submit" class="btn primary pull-right" value="submit">Save</button>
-                  </div>
-              </form>
+  <div class="row">
+    <div class="span8">
+      <h1>{% trans "Save a Search" %}</h1>
+      <div class="formBox">
+        <form action="" method="post" id="saved-search-form">
+          {% include "includes/form-error-highlight.html" %}
+          {% csrf_token %}
+          <div class="actions">
+            <a href="{% url 'saved_search_main' %}" class="btn pull-right">{% trans 'Cancel' %}</a>
+            <button type="submit" class="btn primary pull-right" value="submit">Save</button>
           </div>
-        </div>
+        </form>
+      </div>
     </div>
+  </div>
 </div>
 </div>
 </section>

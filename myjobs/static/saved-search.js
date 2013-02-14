@@ -41,26 +41,32 @@ function validate_url() {
             success: function(data) {
                 var json = jQuery.parseJSON(data);
                 if (json.url_status == 'valid') {
-                    form.find("#id_url").after(' Validated!');
+                    if ($("#validated").length) {
+                        $("#validated").text('Validated!');
+                    } else {
+                        form.find("#id_url").after(' <div id="validated">Validated!</div>');
+                    }
                     $('label[for="id_label"]').fadeIn();
                     $('label[for="id_is_active"]').fadeIn();
                     $('label[for="id_email"]').fadeIn();
                     $('label[for="id_frequency"]').fadeIn();
                     $('label[for="id_notes"]').fadeIn();
                     $('label[for="id_day_of_week"]').fadeIn();
-                    $('label[for="id_day_of_month"]').fadeIn();
                     $('#id_label').fadeIn();
                     $('#id_is_active').fadeIn();
                     $('#id_email').fadeIn();
                     $('#id_frequency').fadeIn();
                     $('#id_notes').fadeIn();
                     $('#id_day_of_week').fadeIn();
-                    $('#id_day_of_month').fadeIn();
                     form.find("#id_label").val(json.feed_title);
                     form.find("#id_feed").val(json.rss_url);
                 }
                 else {
-                    form.find("#id_url").after(' Not valid');
+                    if ($("#validated").length) {
+                        $("#validated").text('Not Valid!');
+                    } else {
+                        form.find("#id_url").after('<div id="validated">Not Valid</div>');
+                    }
                 }
             }
         });

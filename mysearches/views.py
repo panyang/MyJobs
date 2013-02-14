@@ -38,8 +38,7 @@ def saved_search_form(request):
 
 @login_required
 def saved_search_main(request):
-    import ipdb
-    ipdb.set_trace()
+
     saved_searches = SavedSearch.objects.filter(user=request.user)
     return render_to_response('mysearches/saved_search_main.html',
                               {'saved_searches': saved_searches},
