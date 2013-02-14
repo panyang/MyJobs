@@ -16,5 +16,17 @@ class SavedSearchForm(ModelForm):
             instance.user = self.user
         return instance.save()
 
+    def clean_day_of_week(self):
+        if self.cleaned_data['frequency'] == 'W':
+            if not self.cleaned_data['day_of_week']:
+                raise ValidationError("This field is required.")
+        return self.cleaned_data['day_of_week']
+
+    def clean_day_of_month(self):
+        if self.cleaned_data['frequency'] == 'M':
+            if not self.cleaned_data['day_of_month']:
+                raise ValidationError("This field is required.")
+        return self.cleaned_data['day_of_month']
+        
     class Meta:
         model = SavedSearch

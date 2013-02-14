@@ -1,0 +1,35 @@
+{% extends "myjobs_base.html" %}
+{% load i18n %}
+{% comment %}
+done.html -- presents user_view_profile.
+{% endcomment %}
+
+{% block content %}
+<div class="row">
+    <div class="span12">
+      <h2>{% trans "Your Saved Searches" %}</h2>
+      <div id="userprofile">
+        <table class="table table-striped table-bordered">
+          <thead>
+            <th>{% trans "Label" %}</th>
+            <th>{% trans "Status" %}</th>
+            <th>{% trans "Send Results to" %}</th>
+            <th>{% trans "Email Frequency" %}</th>
+            <th>{% trans "Notes" %}</th>              
+          </thead>
+          <tbody>
+            {% for search in saved_searches %}
+            <tr>
+              <td>{{ search.label }}</td>
+              <td> {{search.is_active}}</td>
+              <td>{{ search.email }}</td>
+              <td>{{search.frequency}}</td>
+              <td>{{search.notes}}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+</div>
+{% endblock content %}

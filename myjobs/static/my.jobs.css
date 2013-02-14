@@ -504,7 +504,6 @@ em.pendingText{
 
 
 table td, table th{
-    width: 100%;
     overflow: hidden;
 }
 

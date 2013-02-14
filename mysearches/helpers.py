@@ -7,8 +7,11 @@ def validate_search_url(search_url):
         search_url = "http://" + search_url
         
     netloc = 'http://' + urlparse(search_url).netloc
-    html = urllib2.urlopen(search_url).read()
-    html_soup = BeautifulSoup(html)
+    try:
+        html = urllib2.urlopen(search_url).read()
+        html_soup = BeautifulSoup(html)
+    except:
+        return None
 
     try:
         rss_url = html_soup.find("link",rel="alternate",type="application/rss+xml").attrs['href']
