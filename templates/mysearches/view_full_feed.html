@@ -1,0 +1,19 @@
+{% extends "myjobs_base.html" %}
+{% load i18n %}
+{% comment %}
+done.html -- presents user_view_profile.
+{% endcomment %}
+
+{% block content %}
+<div class="row">
+    <div class="span10">
+        <h3>{{ frequency }} digest of {{ label }}</h3>
+      {% for item in items %}
+      <h4><a href="{{item.link}}">{{item.title}}</a><br></h4>
+      {{ item.pubdate }}<br>
+      {{ item.description|truncatechars:200 }}<br><br>
+      {% endfor %}
+    </div>
+</div>
+{% endblock content %}
+

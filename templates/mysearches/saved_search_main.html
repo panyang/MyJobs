@@ -20,16 +20,16 @@ done.html -- presents user_view_profile.
           <tbody>
             {% for search in saved_searches %}
             <tr>
-              <td>{{ search.label }}</td>
+              <td><a href="/saved-search/{{search.id}}">{{ search.label }}</a></td>
               <td> {{search.is_active}}</td>
               <td>{{ search.email }}</td>
-              <td>{{search.frequency}}</td>
-              <td>{{search.notes}}</td>
+              <td>{{ search.frequency }}</td>
+              <td>{{ search.notes }}</td>
             </tr>
             {% endfor %}
           </tbody>
         </table>
-        <a href="{% url 'saved_search_form' %}" class="btn pull-right">{% trans 'Add a New Search' %}</a>
+        <a href="{% url 'saved_search_form' %}" class="btn pull-right">{% trans 'Save a New Search' %}</a>
       </div>
     </div>
 </div>

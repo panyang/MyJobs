@@ -32,3 +32,8 @@ class SavedSearch(models.Model):
                                    default='Mo', blank=True, null=True,
                                    verbose_name="On what day of the week?")
     notes = models.TextField(blank=True,null=True)
+
+    def get_verbose_frequency(self):
+        for choice  in self.FREQUENCY_CHOICES:
+            if choice[0] == self.frequency:
+                return choice[1]
