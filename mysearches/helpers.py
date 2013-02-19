@@ -53,15 +53,16 @@ def get_rss_soup(rss_url):
     rss_feed = urllib2.urlopen(rss_url).read()
     return BeautifulSoup(rss_feed)
 
-def parse_rss_chunk(rss_soup, start=0):
-    items = rss_soup.find_all("item")[start:start+20]
+def parse_rss(feed_url, frequency, num_items=20, offset=0):
+    rss_soup = get_rss_soup(feed_url+'?num_items='+str(num_items)+'&offset='+str(offset))
     item_list = []
+    items = rss_soup.find_all("item")
     for item in items:
         item_dict = {}
         item_dict['title'] = item.findChild('title').text
         item_dict['link'] = item.findChild('link').text
         item_dict['pubdate'] = dateparser.parse(item.findChild('pubdate').text)
         item_dict['description'] = item.findChild('description').text
-        if datetime.today().date() == item_dict['pubdate'].date():
-            item_list.append(item_dict)
+        item_list.append(item_dict)
+
     return item_list

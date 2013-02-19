@@ -1,5 +1,8 @@
+from django.conf import settings
 from django.db import models
-
+from django.core.mail import send_mail,EmailMultiAlternatives,EmailMessage
+from django.template.loader import render_to_string
+from mysearches.helpers import parse_rss
 
 class SavedSearch(models.Model):
     FREQUENCY_CHOICES = (
@@ -37,3 +40,16 @@ class SavedSearch(models.Model):
         for choice  in self.FREQUENCY_CHOICES:
             if choice[0] == self.frequency:
                 return choice[1]
+
+    def send_email(self):
+        items = parse_rss(self.feed, self.frequency, num_items=5)
+        context_dict = {'label': self.label,
+                        'frequency': self.get_verbose_frequency(),
+                        'search_id': self.id,
+                        'items': items}
+        subject = 'Your ' + self.get_verbose_frequency() + ' Digest for ' + self.label.strip()
+        message = render_to_string('mysearches/email_digest.html',
+                                   context_dict)
+        msg = EmailMessage(subject, message, settings.DEFAULT_FROM_EMAIL, [self.email])
+        msg.content_subtype='html'
+        msg.send()

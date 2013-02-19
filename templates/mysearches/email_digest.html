@@ -1,0 +1,8 @@
+{{ frequency }} digest of {{ label }}
+
+{% for item in items %}
+<h4><a href="{{item.link}}">{{item.title}}</a><br></h4>
+{{ item.pubdate }}<br>
+{{ item.description|truncatechars:200 }}<br><br>
+{% endfor %}
+<b><a href="http://my.jobs/saved-search/{{ search_id }}">View all new jobs on my.jobs....</a></b><br>

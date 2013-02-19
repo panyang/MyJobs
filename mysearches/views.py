@@ -47,8 +47,7 @@ def saved_search_main(request):
 def view_full_feed(request, search_id):
     saved_search = SavedSearch.objects.get(id=search_id)
     if request.user == saved_search.user:
-        rss_soup = get_rss_soup(saved_search.feed)
-        items = parse_rss_chunk(rss_soup)
+        items = parse_rss(saved_search.feed, saved_search.frequency)
         frequency = saved_search.get_verbose_frequency()
         date = datetime.today().date()
         label = saved_search.label
