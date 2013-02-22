@@ -12,7 +12,7 @@ from mysearches.forms import SavedSearchForm
 from mysearches.helpers import *
 
 @login_required
-def saved_search_form(request):
+def add_saved_search(request):
     if request.method == "POST":
         form = SavedSearchForm(user=request.user, data=request.POST)
         if request.POST.get('action', None) == 'validate' :
@@ -36,6 +36,40 @@ def saved_search_form(request):
     return render_to_response('mysearches/saved_search_form.html',
                               {'form':form}, RequestContext(request))
 
+@login_required
+def edit_saved_search(request, search_id):
+    saved_search = SavedSearch.objects.get(id=search_id)
+    if request.user == saved_search.user:
+        if request.method == "POST":
+            form = SavedSearchForm(user=request.user, data=request.POST,
+                                   instance=saved_search)
+            if request.POST.get('action', None) == 'validate' :
+                rss_url = validate_dotjobs_url(request.POST['url'])
+                if rss_url:
+                    feed_title = get_feed_title(rss_url)
+                    data = {'rss_url': rss_url,
+                            'feed_title': feed_title,
+                            'url_status': 'valid'
+                        }
+                else:
+                    data = {'url_status': 'not valid'}
+                return HttpResponse(json.dumps(data))
+            else:
+                if form.is_valid():
+                    form.save()
+                    return HttpResponseRedirect('/saved-search')
+        else:
+            form = SavedSearchForm(user=request.user, instance=saved_search)
+            return render_to_response('mysearches/saved_search_edit.html',
+                                      {'form':form, 'search_id':search_id},
+                                      RequestContext(request))
+@login_required
+def delete_saved_search(request,search_id):
+    saved_search = SavedSearch.objects.get(id=search_id)
+    if request.user == saved_search.user:
+        saved_search.delete()
+    return  HttpResponseRedirect('/saved-search')
+        
 @login_required
 def saved_search_main(request):
     saved_searches = SavedSearch.objects.filter(user=request.user)

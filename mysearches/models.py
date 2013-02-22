@@ -41,6 +41,11 @@ class SavedSearch(models.Model):
             if choice[0] == self.frequency:
                 return choice[1]
 
+    def get_verbose_dow(self):
+        for choice in self.DOW_CHOICES:
+            if choice[0] == self.day_of_week:
+                return choice[1]
+
     def send_email(self):
         items = parse_rss(self.feed, self.frequency, num_items=5)
         context_dict = {'label': self.label,
