@@ -1,10 +1,14 @@
+import djcelery
 import logging
 import os
 import sys
 
+from celery.schedules import crontab
 from os.path import abspath, dirname, basename, join
 
 from secrets import *
+
+djcelery.setup_loader()
 
 _PATH = os.path.abspath(os.path.dirname(__file__))
 
@@ -76,6 +80,7 @@ INSTALLED_APPS = (
     'django.contrib.flatpages',
     'django.contrib.redirects',
     'django.contrib.staticfiles',
+    'djcelery',
     'django_jenkins',
     'widget_tweaks',
     'myjobs',
@@ -86,6 +91,14 @@ INSTALLED_APPS = (
     'django_nose'
 )
 
+CELERY_IMPORTS = ('MyJobs.tasks',)
+CELERY_TIMEZONE='EST'
+CELERYBEAT_SCHEDULE = {
+    'daily-search-digest': {
+        'task': 'tasks.send_search_digests',
+        'schedule': crontab(minute=0,hour=16),
+    },
+}
 
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.auth.context_processors.auth',

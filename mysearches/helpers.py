@@ -46,7 +46,8 @@ def validate_dotjobs_url(search_url):
     else:
         return None
 
-def get_feed_title(rss_soup):
+def get_feed_title(feed_url):
+    rss_soup = get_rss_soup(feed_url+'?num_items=20')
     return rss_soup.find("title").get_text()
 
 def get_rss_soup(rss_url):
