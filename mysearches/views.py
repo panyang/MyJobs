@@ -60,9 +60,9 @@ def edit_saved_search(request, search_id):
                     return HttpResponseRedirect('/saved-search')
         else:
             form = SavedSearchForm(user=request.user, instance=saved_search)
-            return render_to_response('mysearches/saved_search_edit.html',
-                                      {'form':form, 'search_id':search_id},
-                                      RequestContext(request))
+        return render_to_response('mysearches/saved_search_edit.html',
+                                  {'form':form, 'search_id':search_id},
+                                  RequestContext(request))
 @login_required
 def delete_saved_search(request,search_id):
     saved_search = SavedSearch.objects.get(id=search_id)

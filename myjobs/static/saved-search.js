@@ -1,19 +1,13 @@
-$(document).ready(function() { 
+$(document).ready(function() {
+    if ($("#id_url").val().length == 0 ) {
+        $('#id_label').attr("disabled", "disabled");
+        $('#id_is_active').attr("disabled", "disabled");
+        $('#id_email').attr("disabled", "disabled");
+        $('#id_frequency').attr("disabled", "disabled");
+        $('#id_notes').attr("disabled", "disabled");
+        $('#id_day_of_week').attr("disabled", "disabled");
+    }
     date_select();
-    $('label[for="id_label"]').hide();
-    $('label[for="id_is_active"]').hide();
-    $('label[for="id_email"]').hide();
-    $('label[for="id_frequency"]').hide();
-    $('label[for="id_notes"]').hide();
-    $('label[for="id_day_of_week"]').hide();
-    $('label[for="id_day_of_month"]').hide();
-    $('#id_label').hide();
-    $('#id_is_active').hide();
-    $('#id_email').hide();
-    $('#id_frequency').hide();
-    $('#id_notes').hide();
-    $('#id_day_of_week').hide();
-    $('#id_day_of_month').hide();
     validate_url();
 });
 
@@ -31,7 +25,8 @@ function validate_url() {
     function validate () {
         var csrf_token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
         var form = $('form');
-        var url = form.find("#id_url").val();
+        var url = form.find("#id_url").val(); 
+        validation_status('Validating...')
         $.ajax({
             type: "POST",
             url: "",
@@ -41,37 +36,32 @@ function validate_url() {
             success: function(data) {
                 var json = jQuery.parseJSON(data);
                 if (json.url_status == 'valid') {
-                    if ($("#validated").length) {
-                        $("#validated").text('Validated!');
-                    } else {
-                        form.find("#id_url").after(' <div id="validated">Validated!</div>');
-                    }
-                    $('label[for="id_label"]').fadeIn();
-                    $('label[for="id_is_active"]').fadeIn();
-                    $('label[for="id_email"]').fadeIn();
-                    $('label[for="id_frequency"]').fadeIn();
-                    $('label[for="id_notes"]').fadeIn();
-                    $('label[for="id_day_of_week"]').fadeIn();
-                    $('#id_label').fadeIn();
-                    $('#id_is_active').fadeIn();
-                    $('#id_email').fadeIn();
-                    $('#id_frequency').fadeIn();
-                    $('#id_notes').fadeIn();
-                    $('#id_day_of_week').fadeIn();
+                    validation_status('Validated!');
+                    $('#id_label').removeAttr("disabled");
+                    $('#id_is_active').removeAttr("disabled");
+                    $('#id_email').removeAttr("disabled");
+                    $('#id_frequency').removeAttr("disabled");
+                    $('#id_notes').removeAttr("disabled");
+                    $('#id_day_of_week').removeAttr("disabled");
                     form.find("#id_label").val(json.feed_title);
                     form.find("#id_feed").val(json.rss_url);
                 }
                 else {
-                    if ($("#validated").length) {
-                        $("#validated").text('Not Valid!');
-                    } else {
-                        form.find("#id_url").after('<div id="validated">Not Valid</div>');
-                    }
+                    validation_status('Not Valid');
                 }
             }
         });
+
+        function validation_status(status) {
+            if ($("#validated").length) {
+                $("#validated").text(status);
+            } else {
+                form.find("#id_url").after(' <div id="validated">'+status+'</div>');
+            }
+        };
     }
 };
+
 function date_select() {
     if ($('#id_frequency').attr('value') == 'D') {
         $('label[for="id_day_of_month"]').hide();
