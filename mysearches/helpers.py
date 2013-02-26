@@ -37,17 +37,16 @@ def validate_dotjobs_url(search_url):
     rss_url = 'http://' + parsed.netloc + parsed.path + 'feed/rss?' + parsed.query
     
     try:
-        rss_soup = get_rss_soup(rss_url)
+        rss_soup = get_rss_soup(rss_url+'&num_items=1')
     except:
-        return None
+        return None, None
 
     if rss_soup.find("item"):
-        return rss_url
+        return rss_url, rss_soup
     else:
-        return None
+        return None, None
 
-def get_feed_title(feed_url):
-    rss_soup = get_rss_soup(feed_url+'?num_items=20')
+def get_feed_title(rss_soup):
     return rss_soup.find("title").get_text()
 
 def get_rss_soup(rss_url):

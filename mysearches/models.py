@@ -35,6 +35,7 @@ class SavedSearch(models.Model):
                                    blank=True, null=True,
                                    verbose_name="On what day of the week?")
     notes = models.TextField(blank=True,null=True)
+    last_sent = models.DateTimeField(blank=True, null=True,editable=False)
 
     def get_verbose_frequency(self):
         for choice  in self.FREQUENCY_CHOICES:
@@ -52,9 +53,22 @@ class SavedSearch(models.Model):
                         'frequency': self.get_verbose_frequency(),
                         'search_id': self.id,
                         'items': items}
-        subject = 'Your ' + self.get_verbose_frequency() + ' Digest for ' + self.label.strip()
+        subject = '' + self.label.strip()
         message = render_to_string('mysearches/email_digest.html',
                                    context_dict)
         msg = EmailMessage(subject, message, settings.DEFAULT_FROM_EMAIL, [self.email])
         msg.content_subtype='html'
         msg.send()
+
+    def save(self, *args,**kwargs):
+        if not SavedSearchDigest.objects.filter(user=self.user):
+            SavedSearchDigest.objects.create(user=self.user, email=self.email)
+        super(SavedSearch,self).save(*args,**kwargs)
+
+
+class SavedSearchDigest(models.Model):
+    is_active = models.BooleanField(default=False,
+                                    verbose_name="Would you like to send all your"
+                                    "saved searches as one email?")
+    user = models.OneToOneField('myjobs.User')
+    email = models.EmailField(max_length=255, verbose_name="Send results to")

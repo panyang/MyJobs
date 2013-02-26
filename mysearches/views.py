@@ -15,10 +15,11 @@ from mysearches.helpers import *
 def add_saved_search(request):
     if request.method == "POST":
         form = SavedSearchForm(user=request.user, data=request.POST)
+
         if request.POST.get('action', None) == 'validate' :
-            rss_url = validate_dotjobs_url(request.POST['url'])
+            rss_url, rss_soup = validate_dotjobs_url(request.POST['url'])
             if rss_url:
-               feed_title = get_feed_title(rss_url)
+               feed_title = get_feed_title(rss_soup)
                data = {'rss_url': rss_url,
                        'feed_title': feed_title,
                        'url_status': 'valid'
@@ -43,10 +44,11 @@ def edit_saved_search(request, search_id):
         if request.method == "POST":
             form = SavedSearchForm(user=request.user, data=request.POST,
                                    instance=saved_search)
+            
             if request.POST.get('action', None) == 'validate' :
-                rss_url = validate_dotjobs_url(request.POST['url'])
+                rss_url,rss_soup = validate_dotjobs_url(request.POST['url'])
                 if rss_url:
-                    feed_title = get_feed_title(rss_url)
+                    feed_title = get_feed_title(rss_soup)
                     data = {'rss_url': rss_url,
                             'feed_title': feed_title,
                             'url_status': 'valid'
@@ -63,6 +65,7 @@ def edit_saved_search(request, search_id):
         return render_to_response('mysearches/saved_search_edit.html',
                                   {'form':form, 'search_id':search_id},
                                   RequestContext(request))
+
 @login_required
 def delete_saved_search(request,search_id):
     saved_search = SavedSearch.objects.get(id=search_id)
