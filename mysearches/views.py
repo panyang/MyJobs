@@ -97,13 +97,20 @@ def view_full_feed(request, search_id):
     saved_search = SavedSearch.objects.get(id=search_id)
     if request.user == saved_search.user:
         items = parse_rss(saved_search.feed, saved_search.frequency)
-        frequency = saved_search.get_verbose_frequency()
-        date = datetime.today().date()
+        date = datetime.date.today()
         label = saved_search.label
         return render_to_response('mysearches/view_full_feed.html',
                                   {'label': label,
-                                   'frequency': frequency,
+                                   'feed': saved_search.feed,
+                                   'frequency': saved_search.frequency,
                                    'items': items},
                                   RequestContext(request))
     else:
         return HttpResponseRedirect('/saved-search')
+
+def more_feed_results(request):
+    if request.is_ajax():
+        items = parse_rss(request.GET['feed'], request.GET['frequency'],
+                          offset=request.GET['offset'])
+        return render_to_response('mysearches/feed_page.html',
+                                  {'items':items}, RequestContext(request))

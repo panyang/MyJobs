@@ -2,7 +2,7 @@ import urllib2
 from bs4 import BeautifulSoup
 from urlparse import urlparse
 from dateutil import parser as dateparser
-from datetime import datetime
+import datetime
 
 def validate_search_url(search_url):
     if search_url.find('://') == -1:
@@ -53,16 +53,37 @@ def get_rss_soup(rss_url):
     rss_feed = urllib2.urlopen(rss_url).read()
     return BeautifulSoup(rss_feed)
 
-def parse_rss(feed_url, frequency, num_items=20, offset=0):
+def parse_rss(feed_url, frequency='W', num_items=20, offset=0):
     rss_soup = get_rss_soup(feed_url+'?num_items='+str(num_items)+'&offset='+str(offset))
     item_list = []
     items = rss_soup.find_all("item")
+
+    if frequency == 'M':
+        interval = -30
+    elif frequency == 'W':
+        interval = -7
+    else:
+        interval = -1
+
+    end = datetime.date.today()
+    start = end + datetime.timedelta(interval)
+    
     for item in items:
         item_dict = {}
         item_dict['title'] = item.findChild('title').text
         item_dict['link'] = item.findChild('link').text
         item_dict['pubdate'] = dateparser.parse(item.findChild('pubdate').text)
         item_dict['description'] = item.findChild('description').text
-        item_list.append(item_dict)
+
+        if date_in_range(start,end,item_dict['pubdate'].date()):
+            item_list.append(item_dict)
+        else:
+            break
 
     return item_list
+
+def date_in_range(start, end, x):
+    if start <= end:
+        return start <= x <= end
+    else:
+        return start <= x or x <= end

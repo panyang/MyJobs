@@ -6,7 +6,12 @@ done.html -- presents user_view_profile.
 
 {% block content %}
 <div class="row">
-    <div class="span10">
+  {% csrf_token %}
+  <div class="span10 feed-page">
+    <script type="text/javascript">
+      var frequency = "{{ frequency }}"
+      var feed = "{{ feed }}"
+    </script>
         <h3>{{ label }}</h3>
         {% if items %}
         {% for item in items %}

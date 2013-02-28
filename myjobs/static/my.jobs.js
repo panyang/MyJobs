@@ -2,7 +2,8 @@
 Document Level Actions
 *******/
 $(document).ready(function(){
-
+    var offset = 0;
+    
     /*Explicit control of main menu, primarily for mobile but also provides
     non hover and cover option if that becomes an issue.*/
     $("#nav .main-nav").click(function(){
@@ -13,8 +14,24 @@ $(document).ready(function(){
         $("#nav").removeClass("active");
     });
 
-    if ($("#digest_error .errorlist li").text().length == 0
-        and $('#id_digest_active').prop('checked') == false) {
+    $(window).scroll(function(){
+        if ($(window).scrollTop() == $(document).height() - $(window).height())
+        {
+            offset += 20;
+            $.ajax({
+                url: "/saved-search/more-results",
+                data: { 'offset': offset,
+                        'frequency': frequency,
+                        'feed': feed
+                      },
+                success: function(data) {
+                    $('.feed-page').append(data);
+                }
+            });
+        }
+    });
+
+    if ($("#digest_error .errorlist li").text().length == 0 && $('#id_digest_active').prop('checked') == false) {
         $("#id_digest_email").hide();
         $("label[for=id_digest_email]").hide();
         $("#digest_submit").hide();
@@ -29,8 +46,8 @@ $(document).ready(function(){
             $("#id_digest_email").hide();
             $("label[for=id_digest_email]").hide();
             $("#digest_submit").hide();
-    }
-}); 
+        }
+    }); 
 });
 
 /*Combobox Widget. Based loosely on the jQuery UI example*/

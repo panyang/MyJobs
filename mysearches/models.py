@@ -85,6 +85,3 @@ class SavedSearchDigest(models.Model):
         msg = EmailMessage(subject, message, settings.DEFAULT_FROM_EMAIL, [self.email])
         msg.content_subtype='html'
         msg.send()
-
-
-        
