@@ -1,18 +1,18 @@
 {% extends "myjobs_base.html" %}
 {% load i18n %}
-{% comment %}
-done.html -- presents user_view_profile.
-{% endcomment %}
+{% block meta-extra %}
+<script src="{{ STATIC_URL }}pager.js"></script>
+{% endblock %}
 
 {% block content %}
 <div class="row">
-  {% csrf_token %}
   <div class="span10 feed-page">
     <script type="text/javascript">
       var frequency = "{{ frequency }}"
       var feed = "{{ feed }}"
     </script>
-        <h3>{{ label }}</h3>
+        <h3>{{ verbose_frequency }} Results for {{ label }}</h3>
+        <a href="{{ link }}" target="_blank">View on original site</a>
         {% if items %}
         {% for item in items %}
         <h4><a href="{{item.link}}">{{item.title}}</a><br></h4>

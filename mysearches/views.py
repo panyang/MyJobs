@@ -1,5 +1,7 @@
 import json
 from datetime import datetime
+from itertools import chain
+
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
@@ -13,6 +15,7 @@ from mysearches.helpers import *
 
 @login_required
 def add_saved_search(request):
+    emails = get_json_emails(request.user)
     if request.method == "POST":
         form = SavedSearchForm(user=request.user, data=request.POST)
 
@@ -35,7 +38,8 @@ def add_saved_search(request):
         form = SavedSearchForm(user=request.user)
         
     return render_to_response('mysearches/saved_search_form.html',
-                              {'form':form}, RequestContext(request))
+                              {'form':form, 'emails':emails},
+                              RequestContext(request))
 
 @login_required
 def edit_saved_search(request, search_id):
@@ -103,6 +107,8 @@ def view_full_feed(request, search_id):
                                   {'label': label,
                                    'feed': saved_search.feed,
                                    'frequency': saved_search.frequency,
+                                   'verbose_frequency': saved_search.get_verbose_frequency(),
+                                   'link': saved_search.url,
                                    'items': items},
                                   RequestContext(request))
     else:

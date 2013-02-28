@@ -4,6 +4,8 @@ from urlparse import urlparse
 from dateutil import parser as dateparser
 import datetime
 
+from django.utils import simplejson
+
 def validate_search_url(search_url):
     if search_url.find('://') == -1:
         search_url = "http://" + search_url
@@ -87,3 +89,10 @@ def date_in_range(start, end, x):
         return start <= x <= end
     else:
         return start <= x or x <= end
+
+def get_json_emails(user):
+    email_list = []
+    email_list.append(user.email)
+    for obj in user.secondaryemail_set.all():
+        email_list.append(obj.email)
+    return simplejson.dumps(email_list)
