@@ -1,8 +1,9 @@
-{{ frequency }} digest of {{ label }}
-
-{% for item in items %}
+{% for saved_search in saved_searches %}
+<h2>{{ saved_search.label }}</h2>
+{% for item in saved_search.get_feed_items %}
 <h4><a href="{{item.link}}">{{item.title}}</a><br></h4>
 {{ item.pubdate }}<br>
 {{ item.description|truncatechars:200 }}<br><br>
 {% endfor %}
-<b><a href="http://my.jobs/saved-search/{{ search_id }}">View all new jobs on my.jobs....</a></b><br>
+<b><a href="http://my.jobs/saved-search/{{ saved_search.id }}">View all new jobs on my.jobs....</a></b><br>
+{% endfor %}

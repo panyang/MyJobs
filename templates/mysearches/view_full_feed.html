@@ -7,7 +7,7 @@ done.html -- presents user_view_profile.
 {% block content %}
 <div class="row">
     <div class="span10">
-        <h3>{{ frequency }} digest of {{ label }}</h3>
+        <h3>{{ label }}</h3>
         {% if items %}
         {% for item in items %}
         <h4><a href="{{item.link}}">{{item.title}}</a><br></h4>

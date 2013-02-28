@@ -1,6 +1,6 @@
 from django.forms import *
 from mysearches.helpers import *
-from mysearches.models import SavedSearch
+from mysearches.models import SavedSearch, SavedSearchDigest
 
 
 class SavedSearchForm(ModelForm):
@@ -40,3 +40,25 @@ class SavedSearchForm(ModelForm):
         
     class Meta:
         model = SavedSearch
+
+class DigestForm(ModelForm):
+    is_active = BooleanField(label= 'Would you like to receive all your saved '
+                             'searches as one email?',
+                             widget=CheckboxInput(
+                                 attrs={'id':'id_digest_active'}))
+    email = CharField(label= 'Send results to',widget=TextInput(attrs=
+                                       {'id':'id_digest_email'}))
+    
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user',None)
+        self.only_show_required = kwargs.pop('only_show_required',False)
+        super (DigestForm, self).__init__(*args, **kwargs)
+
+    def save(self, commit=True):
+        instance = super(DigestForm, self).save(commit=False)
+        if self.user:
+            instance.user = self.user
+        return instance.save()
+
+    class Meta:
+        model = SavedSearchDigest

@@ -23,5 +23,3 @@ def send_search_digests():
         saved_search_objs = chain(daily, weekly, monthly)
         for search_obj in saved_search_objs:
             search_obj.send_email()
-            search_obj.last_sent = datetime.now()
-            search_obj.save()

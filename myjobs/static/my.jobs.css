@@ -523,3 +523,12 @@ table td, table th{
     width: auto;
 }*/
 
+label[for=id_digest_active], label[for=id_digest_email] {
+    display: inline-block;
+    margin-top: 10px;
+    margin-right: 10px;
+}
+
+#id_digest_active, #id_digest_email {
+    margin: 0;
+}

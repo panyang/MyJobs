@@ -7,8 +7,8 @@ from django.http import HttpResponseRedirect, HttpResponse
 from django.template import RequestContext
 from django.shortcuts import render_to_response, get_object_or_404
 
-from mysearches.models import SavedSearch
-from mysearches.forms import SavedSearchForm
+from mysearches.models import SavedSearch, SavedSearchDigest
+from mysearches.forms import SavedSearchForm, DigestForm
 from mysearches.helpers import *
 
 @login_required
@@ -75,9 +75,21 @@ def delete_saved_search(request,search_id):
         
 @login_required
 def saved_search_main(request):
+    try:
+        digest_obj = SavedSearchDigest.objects.get(user=request.user)
+    except:
+        digest_obj = None
     saved_searches = SavedSearch.objects.filter(user=request.user)
+    if request.method == "POST":
+        form = DigestForm(user=request.user, data=request.POST,
+                          instance=digest_obj)
+        if form.is_valid():
+            form.save()
+    else:
+        form = DigestForm(user=request.user, instance=digest_obj)
     return render_to_response('mysearches/saved_search_main.html',
-                              {'saved_searches': saved_searches},
+                              {'saved_searches': saved_searches,
+                               'form':form},
                               RequestContext(request))
 
 @login_required

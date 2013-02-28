@@ -41,6 +41,15 @@
         {% else %}
         No Saved Searches!
         {% endif %}
+        <form action="" method="post" id="digest-option">
+          {% csrf_token %}
+          {% for field in form.visible_fields %}
+          <div class="alert-message block-message error" id="digest_error">{% if field.errors %}{{ field.errors }}{% endif %}</div>
+          {{ field.label_tag }}{{ field }}
+          <div class="clear"></div>
+          {% endfor %}
+          <button type="submit" value="submit" id="digest_submit">Save</button>
+        </form>
         <a href="{% url 'add_saved_search' %}" class="btn pull-right">{% trans 'Add a New Search' %}</a>
       </div>
     </div>
