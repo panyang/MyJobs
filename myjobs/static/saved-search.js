@@ -1,4 +1,5 @@
 $(document).ready(function() {
+    // Disable fields until valid URL is entered
     if ($("#id_url").val().length == 0 ) {
         $('#id_label').attr("disabled", "disabled");
         $('#id_is_active').attr("disabled", "disabled");
@@ -12,6 +13,9 @@ $(document).ready(function() {
 });
 
 function validate_url() {
+    // When user stops typing, an ajax request is sent to Django where it checks for
+    // the validity of the URL. If it's valid, it informs the user and unblocks the
+    // remaining fields.
     var timer;
     var pause_interval = 1000;
 
@@ -63,6 +67,7 @@ function validate_url() {
 };
 
 function date_select() {
+    // Only show the day of week/day of month field when appropriate
     if ($('#id_frequency').attr('value') == 'D') {
         $('label[for="id_day_of_month"]').hide();
         $('label[for="id_day_of_week"]').hide();

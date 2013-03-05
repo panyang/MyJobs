@@ -17,11 +17,12 @@ from mysearches.helpers import *
 def add_saved_search(request):
     if request.method == "POST":
         form = SavedSearchForm(user=request.user, data=request.POST)
-
         if request.POST.get('action', None) == 'validate' :
             rss_url, rss_soup = validate_dotjobs_url(request.POST['url'])
             if rss_url:
                feed_title = get_feed_title(rss_soup)
+               # returns the RSS url via AJAX to show if field is validated
+               # id valid, the label field is auto populated with the feed_title
                data = {'rss_url': rss_url,
                        'feed_title': feed_title,
                        'url_status': 'valid'
@@ -78,6 +79,7 @@ def delete_saved_search(request,search_id):
         
 @login_required
 def saved_search_main(request):
+    # instantiate the form if the digest object exists
     try:
         digest_obj = SavedSearchDigest.objects.get(user=request.user)
     except:
@@ -114,6 +116,8 @@ def view_full_feed(request, search_id):
         return HttpResponseRedirect('/saved-search')
 
 def more_feed_results(request):
+    # Ajax request comes from the view_full_feed view when user scrolls to bottom
+    # of the page
     if request.is_ajax():
         items = parse_rss(request.GET['feed'], request.GET['frequency'],
                           offset=request.GET['offset'])
