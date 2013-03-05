@@ -32,7 +32,7 @@ class SavedSearchForm(ModelForm):
         return self.cleaned_data['day_of_month']
 
     def clean_url(self):
-        rss_url = validate_dotjobs_url(self.cleaned_data['url'])
+        rss_url = validate_dotjobs_url(self.cleaned_data['url'])[0]
         if not rss_url:
             raise ValidationError('This URL is not valid.')
         return self.cleaned_data['url']

@@ -40,7 +40,7 @@ class SavedSearch(models.Model):
     last_sent = models.DateTimeField(blank=True, null=True,editable=False)
 
     def get_verbose_frequency(self):
-        for choice  in self.FREQUENCY_CHOICES:
+        for choice in self.FREQUENCY_CHOICES:
             if choice[0] == self.frequency:
                 return choice[1]
 
@@ -64,6 +64,7 @@ class SavedSearch(models.Model):
         self.save()
 
     def save(self, *args,**kwargs):
+        # Create a new saved search digest if one doesn't exist yet
         if not SavedSearchDigest.objects.filter(user=self.user):
             SavedSearchDigest.objects.create(user=self.user, email=self.email)
         super(SavedSearch,self).save(*args,**kwargs)

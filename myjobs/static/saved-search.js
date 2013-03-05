@@ -9,9 +9,6 @@ $(document).ready(function() {
     }
     date_select();
     validate_url();
-
-    $('#id_email').autocomplete(emails);
-
 });
 
 function validate_url() {

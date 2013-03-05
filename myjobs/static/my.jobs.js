@@ -13,8 +13,6 @@ $(document).ready(function(){
     $("#pop-menu").mouseleave(function(){
         $("#nav").removeClass("active");
     });
-
-
 });
 
 /*Combobox Widget. Based loosely on the jQuery UI example*/

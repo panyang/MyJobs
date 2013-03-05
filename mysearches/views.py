@@ -15,7 +15,6 @@ from mysearches.helpers import *
 
 @login_required
 def add_saved_search(request):
-    emails = get_json_emails(request.user)
     if request.method == "POST":
         form = SavedSearchForm(user=request.user, data=request.POST)
 
@@ -38,7 +37,7 @@ def add_saved_search(request):
         form = SavedSearchForm(user=request.user)
         
     return render_to_response('mysearches/saved_search_form.html',
-                              {'form':form, 'emails':emails},
+                              {'form':form},
                               RequestContext(request))
 
 @login_required
