@@ -70,15 +70,15 @@ class EditProfileForm(forms.Form):
 
         
 class ChangePasswordForm(forms.Form):
-    password1 = forms.CharField(label="Password",
+    password1 = forms.CharField(label=_("Password"),
                                 widget=forms.PasswordInput(attrs={'placeholder':
-                                                           'Password'}))
-    password2 = forms.CharField(label="Password (again)",
+                                                           _('Password')}))
+    password2 = forms.CharField(label=_("Password (again)"),
                                 widget=forms.PasswordInput(attrs={'placeholder':
-                                                           'Password (again)'}))
-    new_password = forms.CharField(label="New Password",
+                                                           _('Password (again)')}))
+    new_password = forms.CharField(label=_("New Password"),
                                    widget=forms.PasswordInput(attrs={'placeholder':
-                                                           'New Password'}))
+                                                           _('New Password')}))
     
     def __init__(self,*args, **kwargs):
         self.user = kwargs.pop('user',None)
@@ -96,7 +96,7 @@ class ChangePasswordForm(forms.Form):
         cleaned_data = super(ChangePasswordForm, self).clean()
         if 'password1' in self.cleaned_data and 'password2' in self.cleaned_data:
             if self.cleaned_data['password1'] != self.cleaned_data['password2']:
-                raise forms.ValidationError(("The two password fields didn't match."))
+                raise forms.ValidationError(_("The two password fields didn't match."))
             else:
                 return self.cleaned_data
 

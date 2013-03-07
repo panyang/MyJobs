@@ -69,7 +69,7 @@ class CustomUserManager(BaseUserManager):
         
 # New in Django 1.5. This is now the default auth user table. 
 class User(AbstractBaseUser):
-    email = models.EmailField(verbose_name="email address",
+    email = models.EmailField(verbose_name=_("email address"),
                               max_length=255, unique=True, db_index=True)
     date_joined = models.DateTimeField(_('date joined'),
                                        default=datetime.datetime.now)

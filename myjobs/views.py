@@ -179,6 +179,3 @@ def error(request):
         'messages': messages
         }
     return render_to_response('error.html', ctx, RequestContext(request))
-
-
-                        
