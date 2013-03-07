@@ -1,4 +1,5 @@
 from django.forms import *
+from myjobs.forms import BaseUserForm
 from myprofile.models import *
 
 
@@ -34,39 +35,7 @@ def generate_custom_widgets(model):
     return widgets
 
 
-class BaseProfileForm(ModelForm):
-    """
-    All ProfileUnit forms inherit from this model. It takes a user
-    object as an initial input from the views and saves the form instance
-    to that specified user.
-
-    Inputs (these are the common inputs we will use for rendering forms):
-    :user:       a user object. We will always pass a user object in  because all
-                 ProfileUnits are linked to a user.
-    :auto_id:    this is a boolean that determines whether a label is displayed or
-                 not and is by default set to True. Setting this to false uses the
-                 placeholder text instead, except for boolean and select fields.
-    :empty_permitted: allow form to be submitted as empty even if the fields are
-                 required. This is particularly useful when we combine multiple
-                 Django forms on the front end and submit it as one request instead
-                 of several separate requests.
-    :only_show_required: Template uses this flag to determine if it should only render
-                 required forms. Default is False.
-    """
-    
-    def __init__(self, *args, **kwargs):
-        self.user = kwargs.pop('user',None)
-        self.only_show_required = kwargs.pop('only_show_required',False)
-        super (BaseProfileForm, self).__init__(*args, **kwargs)
-
-    def save(self, commit=True):
-        instance = super(BaseProfileForm, self).save(commit=False)
-        if self.user:
-            instance.user = self.user
-        return instance.save()
-
-
-class NameForm(BaseProfileForm):
+class NameForm(BaseUserForm):
     class Meta:
         # form_name is used in the templates to render the form header
         form_name = "Personal Information"
@@ -78,28 +47,28 @@ class InitialNameForm(NameForm):
     primary = BooleanField(widget=HiddenInput(), required=False, initial="off")
 
 
-class SecondaryEmailForm(BaseProfileForm):
+class SecondaryEmailForm(BaseUserForm):
     class Meta:
         form_name = "Secondary Email"
         model = SecondaryEmail
         widgets = generate_custom_widgets(model)
 
 
-class EducationForm(BaseProfileForm):
+class EducationForm(BaseUserForm):
     class Meta:
         form_name = "Education"
         model = Education
         widgets = generate_custom_widgets(model)        
         
 
-class EmploymentForm(BaseProfileForm):
+class EmploymentForm(BaseUserForm):
     class Meta:
         form_name = "Most Recent Work History"
         model = EmploymentHistory
         widgets = generate_custom_widgets(model)
 
        
-class PhoneForm(BaseProfileForm):
+class PhoneForm(BaseUserForm):
     class Meta:
         form_name = "Phone Number"
         model = Telephone
@@ -114,7 +83,7 @@ class PhoneForm(BaseProfileForm):
         widgets['extension'].attrs['placeholder'] = "x1234"
 
 
-class AddressForm(BaseProfileForm):
+class AddressForm(BaseUserForm):
     class Meta:
         form_name = "Address"
         model = Address

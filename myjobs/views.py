@@ -48,6 +48,7 @@ def home(request):
                 'user': request.user}
     settings_show_all = {'auto_id':False, 'empty_permitted':True,
                          'only_show_required':False, 'user': request.user}
+    
     name_form = instantiate_profile_forms(request,[NameForm],settings)[0]
     education_form = instantiate_profile_forms(request,[EducationForm],
                                                settings)[0]

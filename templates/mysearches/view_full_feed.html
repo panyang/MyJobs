@@ -1,0 +1,29 @@
+{% extends "myjobs_base.html" %}
+{% load i18n %}
+{% load humanize %}
+{% block meta-extra %}
+<script src="{{ STATIC_URL }}pager.js"></script>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+  <div class="span10 feed-page">
+    <script type="text/javascript">
+      var frequency = "{{ frequency }}"
+      var feed = "{{ feed }}"
+    </script>
+        <h3>{{ verbose_frequency }} Results for {{ label }}</h3>
+        <a href="{{ link }}" target="_blank">View on original site</a>
+        {% if items %}
+        {% for item in items %}
+        <h4><a href="{{item.link}}">{{item.title}}</a><br></h4>
+        {{ item.pubdate|naturaltime }}<br>
+        {{ item.description|truncatechars:200 }}<br><br>
+        {% endfor %}
+        {% else %}
+        Sorry, no new jobs for today!
+        {% endif %}
+    </div>
+</div>
+{% endblock content %}
+
