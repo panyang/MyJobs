@@ -84,10 +84,6 @@ INSTALLED_APPS = (
     'djcelery',
     'django_jenkins',
     'widget_tweaks',
-    'myjobs',
-    'myprofile',
-    'mysearches',
-    'registration',
     'south',
     'django_nose'
 )
@@ -113,13 +109,16 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 
 INTERNAL_IPS = ('127.0.0.1', '216.136.63.6',)
 
+PROJECT_APPS = ('myjobs','myprofile','mysearches','registration')
+
+INSTALLED_APPS += PROJECT_APPS
+
 JENKINS_TASKS = (
     'django_jenkins.tasks.with_coverage',
-    'django_jenkins.tasks.dir_tests',
     'django_jenkins.tasks.run_pep8',
+    'django_jenkins.tasks.django_tests',
     'django_jenkins.tasks.run_pyflakes',
 )
-
 
 # Registration
 ACCOUNT_ACTIVATION_DAYS = 14  
