@@ -1,22 +1,16 @@
 from django.forms import *
+from myjobs.forms import BaseUserForm
 from mysearches.helpers import *
 from mysearches.models import SavedSearch, SavedSearchDigest
 
 
-class SavedSearchForm(ModelForm):
+class SavedSearchForm(BaseUserForm):
     feed = URLField(widget=HiddenInput())
-    
-    def __init__(self, *args, **kwargs):
-        self.user = kwargs.pop('user',None)
-        self.only_show_required = kwargs.pop('only_show_required',False)
-        super (SavedSearchForm, self).__init__(*args, **kwargs)
 
-    def save(self, commit=True):
-        instance = super(SavedSearchForm, self).save(commit=False)
-        if self.user:
-            instance.user = self.user
-        return instance.save()
-
+    # day_of_week and day_of_month are not required in the database.
+    # These clean functions ensure that it is required only when
+    # the correct frequency is selected and clears any remaining
+    # day_of_week/day_of_month data that shouldn't be there
     def clean_day_of_week(self):
         if self.cleaned_data['frequency'] == 'W':
             if not self.cleaned_data['day_of_week']:
@@ -36,12 +30,12 @@ class SavedSearchForm(ModelForm):
         if not rss_url:
             raise ValidationError('This URL is not valid.')
         return self.cleaned_data['url']
-
         
     class Meta:
         model = SavedSearch
 
-class DigestForm(ModelForm):
+
+class DigestForm(BaseUserForm):
     is_active = BooleanField(label= 'Would you like to receive all your saved '
                              'searches as one email?',
                              widget=CheckboxInput(
@@ -49,16 +43,5 @@ class DigestForm(ModelForm):
     email = CharField(label= 'Send results to',widget=TextInput(attrs=
                                        {'id':'id_digest_email'}))
     
-    def __init__(self, *args, **kwargs):
-        self.user = kwargs.pop('user',None)
-        self.only_show_required = kwargs.pop('only_show_required',False)
-        super (DigestForm, self).__init__(*args, **kwargs)
-
-    def save(self, commit=True):
-        instance = super(DigestForm, self).save(commit=False)
-        if self.user:
-            instance.user = self.user
-        return instance.save()
-
     class Meta:
         model = SavedSearchDigest

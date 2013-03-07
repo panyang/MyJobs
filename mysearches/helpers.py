@@ -23,16 +23,18 @@ def validate_dotjobs_url(search_url):
                    found but None is returned if either the search url is invalid
                    or there were no jobs in the soup.
     """
-    if search_url.find('.jobs') == -1:
-        return None, None
 
     if search_url.find('://') == -1:
         search_url = "http://" + search_url
     parsed = urlparse(search_url)
 
     rss_url = 'http://' + parsed.netloc + parsed.path + 'feed/rss?' + parsed.query
-    rss_soup = get_rss_soup(rss_url+'&num_items=1')    
     
+    try:
+        rss_soup = get_rss_soup(rss_url+'&num_items=1')    
+    except:
+        return None, None
+
     if rss_soup.find("item"):
         return rss_url, rss_soup
     else:
@@ -83,7 +85,7 @@ def parse_rss(feed_url, frequency='W', num_items=20, offset=0):
                     publish date.
     """
 
-    rss_soup = get_rss_soup(feed_url+'num_items='+str(num_items)+'&offset='+str(offset))
+    rss_soup = get_rss_soup(feed_url+'?num_items='+str(num_items)+'&offset='+str(offset))
     item_list = []
     items = rss_soup.find_all("item")
 
@@ -114,17 +116,4 @@ def parse_rss(feed_url, frequency='W', num_items=20, offset=0):
     return item_list
 
 def date_in_range(start, end, x):
-    """
-    Checks if a date object is in a given range of dates.
-
-    Inputs:
-    :start:         datetime.date object for the start of the interval
-    :end:           datetime.date object for the end of the interval
-    :x:             datetime.date object to be checked
-
-    Outputs:
-                    Boolean representing if it's in the range
-    """
-
-    if start <= end:
-        return start <= x <= end
+    return start <= x <= end

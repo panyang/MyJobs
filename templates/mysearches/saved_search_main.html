@@ -1,6 +1,6 @@
 {% extends "myjobs_base.html" %}
 {% load i18n %}
-{% load form_tags %}
+{% load humanize %}
 
 {% block content %}
 <div class="row">
@@ -33,7 +33,7 @@
                 {% if search.frequency == "W" %}
                 Every {{ search.get_verbose_dow }}
                 {% elif  search.frequency == "M" %}
-                Every {{ search.day_of_month|make_ordinal_month }} of the month
+                Every {{ search.day_of_month|ordinal }} of the month
                 {% else %}
                 Daily
                 {% endif %}

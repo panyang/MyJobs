@@ -80,6 +80,7 @@ INSTALLED_APPS = (
     'django.contrib.flatpages',
     'django.contrib.redirects',
     'django.contrib.staticfiles',
+    'django.contrib.humanize',
     'djcelery',
     'django_jenkins',
     'widget_tweaks',
