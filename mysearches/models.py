@@ -8,36 +8,36 @@ from mysearches.helpers import parse_rss
 
 class SavedSearch(models.Model):
     FREQUENCY_CHOICES = (
-        ('D', 'Daily'),
-        ('W', 'Weekly'),
-        ('M', 'Monthly'))
+        ('D', _('Daily')),
+        ('W', _('Weekly')),
+        ('M', _('Monthly'))
 
     DOM_CHOICES = [(i,i) for i in range(1,31)]
-    DOW_CHOICES = (('1', 'Monday'),
-                   ('2', 'Tuesday'),
-                   ('3', 'Wednesday'),
-                   ('4', 'Thursday'),
-                   ('5', 'Friday'),
-                   ('6', 'Saturday'),
-                   ('7', 'Sunday'))
+    DOW_CHOICES = (('1', _('Monday')),
+                   ('2', _('Tuesday')),
+                   ('3', _('Wednesday')),
+                   ('4', _('Thursday')),
+                   ('5', _('Friday')),
+                   ('6', _('Saturday')),
+                   ('7', _('Sunday')))
 
     user = models.ForeignKey('myjobs.User',editable=False)
-    url = models.URLField(max_length=300, verbose_name="URL of Search Results")
-    label = models.CharField(max_length=60, verbose_name="Label")
+    url = models.URLField(max_length=300, verbose_name=_("URL of Search Results"))
+    label = models.CharField(max_length=60, verbose_name=_("Label"))
     feed = models.URLField(max_length=300)
-    is_active = models.BooleanField(default=True, verbose_name="Is this agent active?")
-    email = models.EmailField(max_length=255, verbose_name="Send results to")
+    is_active = models.BooleanField(default=True, verbose_name=_("Is this agent active?"))
+    email = models.EmailField(max_length=255, verbose_name=_("Send results to"))
     frequency = models.CharField(max_length=2, choices=FREQUENCY_CHOICES,
                                  default='W',
-                                 verbose_name="How often do you want an email?")
+                                 verbose_name=_("How often do you want an email?"))
     day_of_month = models.IntegerField(choices=DOM_CHOICES,
                                        blank=True, null=True,
-                                       verbose_name="On what day of the month?")
+                                       verbose_name=_("On what day of the month?"))
     day_of_week = models.CharField(max_length=2, choices=DOW_CHOICES,
                                    blank=True, null=True,
-                                   verbose_name="On what day of the week?")
-    notes = models.TextField(blank=True,null=True)
-    last_sent = models.DateTimeField(blank=True, null=True,editable=False)
+                                   verbose_name=_("On what day of the week?"))
+    notes = models.TextField(blank=True, null=True)
+    last_sent = models.DateTimeField(blank=True, null=True, editable=False)
 
     def get_verbose_frequency(self):
         for choice in self.FREQUENCY_CHOICES:
@@ -72,14 +72,14 @@ class SavedSearch(models.Model):
 
 class SavedSearchDigest(models.Model):
     is_active = models.BooleanField(default=False,
-                                    verbose_name="Would you like to receive all your"
-                                    " saved searches as one email?")
+                                    verbose_name=_("Would you like to receive all your"
+                                    " saved searches as one email?"))
     user = models.OneToOneField('myjobs.User', editable=False)
-    email = models.EmailField(max_length=255, verbose_name="Send results to")
+    email = models.EmailField(max_length=255, verbose_name=_("Send results to"))
     
     def send_email(self):
         saved_searches = self.user.savedsearch_set.all()
-        subject = 'Your Daily Saved Search Digest'
+        subject = _('Your Daily Saved Search Digest')
         context_dict = {'saved_searches': saved_searches}
         message = render_to_string('mysearches/email_digest.html',
                                    context_dict)

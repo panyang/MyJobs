@@ -1,6 +1,8 @@
 from django import forms
 from django.contrib.auth.forms import AuthenticationForm
 from django.contrib.auth import authenticate
+from django.utils.translation import ugettext_lazy as _
+
 from myjobs.models import *
 
 class CustomAuthForm(AuthenticationForm):
@@ -10,13 +12,13 @@ class CustomAuthForm(AuthenticationForm):
     view for users that haven't activated yet.
     
     """
-    username = forms.CharField(label="Email", required=True,
+    username = forms.CharField(label=_("Email"), required=True,
                                widget=forms.TextInput(
-                                   attrs={'placeholder': 'Email',
+                                   attrs={'placeholder': _('Email'),
                                           'id':'id_email'}))
-    password = forms.CharField(label="Password", required=True,
+    password = forms.CharField(label=_("Password"), required=True,
                                widget=forms.PasswordInput(
-                                   attrs={'placeholder':'Password',
+                                   attrs={'placeholder':_('Password'),
                                           'id':'id_password1'},
                                    render_value=False))
 
@@ -30,7 +32,7 @@ class CustomAuthForm(AuthenticationForm):
         if username and password:
             self.user_cache = authenticate(username=username, password=password)
             if self.user_cache is None:
-                raise forms.ValidationError(("Please enter a correct username and " + \
+                raise forms.ValidationError(_("Please enter a correct username and " + \
                         "password. Note that both fields are case-sensitive."))
         self.check_for_test_cookie()
         return self.cleaned_data
@@ -49,21 +51,21 @@ class CustomAuthForm(AuthenticationForm):
 
         
 class RegistrationForm(forms.Form):
-    email = forms.EmailField(label="Email", required=True,
+    email = forms.EmailField(label=_("Email"), required=True,
                              widget=forms.TextInput(attrs={
-                                 'placeholder': 'Email', 
+                                 'placeholder': _('Email'), 
                                  'id':'id_email',
                                  'autocomplete':'off'}),
                              max_length=255)
-    password1 = forms.CharField(label="Password", required=True,
+    password1 = forms.CharField(label=_("Password"), required=True,
                                 widget=forms.PasswordInput(attrs={
-                                    'placeholder':'Password',
+                                    'placeholder':_('Password'),
                                     'id':'id_password1',
                                     'autocomplete':'off'},
                                     render_value=False))
-    password2 = forms.CharField(label="Password (again)", required=True,
+    password2 = forms.CharField(label=_("Password (again)"), required=True,
                                 widget=forms.PasswordInput(attrs={
-                                    'placeholder': 'Password (again)',
+                                    'placeholder': _('Password (again)'),
                                     'id': 'id_password2',
                                     'autocomplete':'off'}, 
                                 render_value=False))
@@ -76,7 +78,7 @@ class RegistrationForm(forms.Form):
         """
         existing = User.objects.filter(email__iexact=self.cleaned_data['email'])
         if existing.exists():
-            raise forms.ValidationError(("A user with that email already exists."))
+            raise forms.ValidationError(_("A user with that email already exists."))
         else:
             return self.cleaned_data['email']
 
@@ -88,6 +90,6 @@ class RegistrationForm(forms.Form):
         """
         if 'password1' in self.cleaned_data and 'password2' in self.cleaned_data:
             if self.cleaned_data['password1'] != self.cleaned_data['password2']:
-                raise forms.ValidationError(("The two password fields didn't match."))
+                raise forms.ValidationError(_("The two password fields didn't match."))
             else:
                 return self.cleaned_data

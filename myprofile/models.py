@@ -2,6 +2,7 @@ import datetime
 
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
+from django.utils.translation import ugettext_lazy as _
 
 from registration import signals as reg_signals
 from myjobs.models import User
@@ -35,71 +36,71 @@ class ProfileUnits(models.Model):
 
 class Education(ProfileUnits):
     EDUCATION_LEVEL_CHOICES = ( 
-        (3, 'High School'),
-        (5, 'Associate'),
-        (6, 'Bachelor'),
-        (7, 'Master'),
-        (8, 'Doctoral'),
+        (3, _('High School')),
+        (5, _('Associate')),
+        (6, _('Bachelor')),
+        (7, _('Master')),
+        (8, _('Doctoral')),
     )
     organization_name = models.CharField(max_length=255,
-                                         verbose_name='institution')
-    degree_date = models.DateField(verbose_name='completion date')
+                                         verbose_name=_('institution'))
+    degree_date = models.DateField(verbose_name=_('completion date'))
     city_name = models.CharField(max_length=255, blank=True, null=True,
-                                 verbose_name='city')
+                                 verbose_name=_('city'))
     # ISO 3166-2:2007
     country_sub_division_code = models.CharField(max_length=5, blank=True,
                                                  null=True,
-                                                 verbose_name="State/Region") 
+                                                 verbose_name=_("State/Region")) 
     country_code = models.CharField(max_length=3, blank=True,
-                                    verbose_name="country") # ISO 3166-1
+                                    verbose_name=_("country")) # ISO 3166-1
     # ISCED-2011 Can be [0-8]
     education_level_code = models.IntegerField(choices=EDUCATION_LEVEL_CHOICES,
-                                               verbose_name="education level")
+                                               verbose_name=_("education level"))
     start_date = models.DateField(blank=True, null=True)
     end_date = models.DateField(blank=True, null=True)
     education_score = models.CharField(max_length=255, blank=True,null=True,
-                                       verbose_name="GPA")
+                                       verbose_name=_("GPA"))
     degree_name = models.CharField(max_length=255, blank=True,null=True,
-                                   verbose_name='degree type')
-    degree_major = models.CharField(max_length=255, verbose_name='major')
+                                   verbose_name=_('degree type'))
+    degree_major = models.CharField(max_length=255, verbose_name=_('major'))
     degree_minor = models.CharField(max_length=255, blank=True, null=True,
-                                    verbose_name='minor')
+                                    verbose_name=_('minor'))
 
     
 class Address(ProfileUnits):
-    label = models.CharField(max_length=60, verbose_name='Address Label')	
+    label = models.CharField(max_length=60, verbose_name=_('Address Label'))	
     address_line_one = models.CharField(max_length=255,
-                                        verbose_name='Street Address')
+                                        verbose_name=_('Street Address'))
     address_line_two = models.CharField(max_length=255, blank=True,null=True,
-                                        verbose_name='Street Address 2')
+                                        verbose_name=_('Street Address 2'))
     unit = models.CharField(max_length=25, blank=True, null=True,
-                            verbose_name="Apartment/Unit Number")
-    city_name = models.CharField(max_length=255, verbose_name="City")
+                            verbose_name=_("Apartment/Unit Number"))
+    city_name = models.CharField(max_length=255, verbose_name=_("City"))
     country_sub_division_code = models.CharField(max_length=5,
-                                                 verbose_name="State/Region")
-    country_code = models.CharField(max_length=3, verbose_name="Country")
-    postal_code = models.CharField(max_length=12, verbose_name="Zip Code")   
+                                                 verbose_name=_("State/Region"))
+    country_code = models.CharField(max_length=3, verbose_name=_("Country"))
+    postal_code = models.CharField(max_length=12, verbose_name=_("Zip Code"))
     post_office_box = models.CharField(max_length=60, blank=True, null=True,
-                                       verbose_name="PO Box Number")
+                                       verbose_name=_("PO Box Number"))
 
 
 class Telephone(ProfileUnits):
     USE_CODE_CHOICES = ( 
-        ('Home', 'Home'),
-        ('Work', 'Work'),
-        ('Mobile', 'Mobile'),
-        ('Pager', 'Pager'),
-        ('Fax', 'Fax'),
-        ('Other', 'Other'),
+        ('Home', _('Home')),
+        ('Work', _('Work')),
+        ('Mobile', _('Mobile')),
+        ('Pager', _('Pager')),
+        ('Fax', _('Fax')),
+        ('Other', _('Other')),
     )
     channel_code = models.CharField(max_length=30, editable=False)
     country_dialing = models.IntegerField(max_length=3, 
-                                          verbose_name="Country Code",blank=True)
-    area_dialing = models.IntegerField(max_length=3, verbose_name="Area Code")    
-    number = models.CharField(max_length=8, verbose_name="Local Number")
+                                          verbose_name=_("Country Code"),blank=True)
+    area_dialing = models.IntegerField(max_length=3, verbose_name=_("Area Code")) 
+    number = models.CharField(max_length=8, verbose_name=_("Local Number"))
     extension = models.CharField(max_length=5, blank=True, null=True)
     use_code = models.CharField(max_length=30, choices=USE_CODE_CHOICES, 
-    	     			        verbose_name="Phone Type")	
+    	     			        verbose_name=_("Phone Type"))
     
     def save(self, *args, **kwargs):
     	if self.use_code == "Home" or self.use_code == "Work" or self.use_code == "Other":
@@ -114,38 +115,38 @@ class Telephone(ProfileUnits):
 
 
 class EmploymentHistory(ProfileUnits):
-    position_title = models.CharField(max_length=255,verbose_name="Position Title")
-    organization_name = models.CharField(max_length=255,verbose_name="Company")
-    start_date = models.DateField(verbose_name="Start Date")
+    position_title = models.CharField(max_length=255,verbose_name=_("Position Title"))
+    organization_name = models.CharField(max_length=255,verbose_name=_("Company"))
+    start_date = models.DateField(verbose_name=_("Start Date"))
     current_indicator = models.BooleanField(default=False,
-                                            verbose_name="I still work here")
+                                            verbose_name=_("I still work here"))
 
     # Optional fields
     end_date = models.DateField(blank=True, null=True)
     city_name = models.CharField(max_length=255, blank=True,null=True)
     country_sub_division_code = models.CharField(max_length=5, blank=True,
-                                                 verbose_name="State/Region") 
+                                                 verbose_name=_("State/Region")) 
     country_code = models.CharField(max_length=3, blank=True,null=True,
-                                    verbose_name="country")
+                                    verbose_name=_("country"))
     description = models.TextField(blank=True,null=True)
 
     # Hidden fields
     industry_code = models.CharField(max_length=255, blank=True,null=True,
-                                     verbose_name="industry", editable=False)
+                                     verbose_name=_("industry"), editable=False)
     job_category_code = models.CharField(max_length=255, blank=True,null=True,
-                                         verbose_name="job category", editable=False)
+                                         verbose_name=_("job category"), editable=False)
     onet_code = models.CharField(max_length=255, blank=True, null=True,editable=False)
         
 
 class Name(ProfileUnits):
     given_name = models.CharField(max_length=30,
-                                  verbose_name="first name")
+                                  verbose_name=_("first name"))
     family_name = models.CharField(max_length=30, 
-                                   verbose_name="last name")
+                                   verbose_name=_("last name"))
     display_name = models.CharField(max_length=60, blank=True, null=True,
                                     editable=False)
     primary = models.BooleanField(default=False,
-                                  verbose_name="Is this your primary name?")
+                                  verbose_name=_("Is this your primary name?"))
         
     def get_full_name(self):
         """

@@ -38,7 +38,7 @@ def generate_custom_widgets(model):
 class NameForm(BaseUserForm):
     class Meta:
         # form_name is used in the templates to render the form header
-        form_name = "Personal Information"
+        form_name = _("Personal Information")
         model = Name
         widgets = generate_custom_widgets(model)
         
@@ -49,28 +49,28 @@ class InitialNameForm(NameForm):
 
 class SecondaryEmailForm(BaseUserForm):
     class Meta:
-        form_name = "Secondary Email"
+        form_name = _("Secondary Email")
         model = SecondaryEmail
         widgets = generate_custom_widgets(model)
 
 
 class EducationForm(BaseUserForm):
     class Meta:
-        form_name = "Education"
+        form_name = _("Education")
         model = Education
         widgets = generate_custom_widgets(model)        
         
 
 class EmploymentForm(BaseUserForm):
     class Meta:
-        form_name = "Most Recent Work History"
+        form_name = _("Most Recent Work History")
         model = EmploymentHistory
         widgets = generate_custom_widgets(model)
 
        
 class PhoneForm(BaseUserForm):
     class Meta:
-        form_name = "Phone Number"
+        form_name = _("Phone Number")
         model = Telephone
         widgets = generate_custom_widgets(model)
         widgets['country_dialing'].attrs['class'] = "phoneCountryCode"
@@ -85,6 +85,6 @@ class PhoneForm(BaseUserForm):
 
 class AddressForm(BaseUserForm):
     class Meta:
-        form_name = "Address"
+        form_name = _("Address")
         model = Address
         widgets = generate_custom_widgets(model)
