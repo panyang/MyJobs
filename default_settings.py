@@ -70,23 +70,6 @@ TEMPLATE_DIRS = (
     join(ROOT_PATH, 'templates')
 )
 
-INSTALLED_APPS = (
-    'django.contrib.auth',
-    'django.contrib.contenttypes',
-    'django.contrib.sessions',
-    'django.contrib.sites',
-    'django.contrib.messages',
-    'django.contrib.admin',
-    'django.contrib.flatpages',
-    'django.contrib.redirects',
-    'django.contrib.staticfiles',
-    'django.contrib.humanize',
-    'djcelery',
-    'django_jenkins',
-    'widget_tweaks',
-    'south',
-    'django_nose'
-)
 
 CELERY_IMPORTS = ('MyJobs.tasks',)
 CELERY_TIMEZONE='EST'
@@ -109,6 +92,26 @@ TEMPLATE_CONTEXT_PROCESSORS = (
 
 INTERNAL_IPS = ('127.0.0.1', '216.136.63.6',)
 
+INSTALLED_APPS = (
+    'django.contrib.auth',
+    'django.contrib.contenttypes',
+    'django.contrib.sessions',
+    'django.contrib.sites',
+    'django.contrib.messages',
+    'django.contrib.admin',
+    'django.contrib.flatpages',
+    'django.contrib.redirects',
+    'django.contrib.staticfiles',
+    'django.contrib.humanize',
+    'djcelery',
+    'django_jenkins',
+    'widget_tweaks',
+    'south',
+    'django_nose'
+)
+
+# Add all MyJobs apps here. This separation ensures that automated Jenkins tests
+# only run on these apps
 PROJECT_APPS = ('myjobs','myprofile','mysearches','registration')
 
 INSTALLED_APPS += PROJECT_APPS
