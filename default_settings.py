@@ -115,7 +115,7 @@ INTERNAL_IPS = ('127.0.0.1', '216.136.63.6',)
 
 JENKINS_TASKS = (
     'django_jenkins.tasks.with_coverage',
-    'django_jenkins.tasks.django_tests',
+    'django_jenkins.tasks.dir_tests',
     'django_jenkins.tasks.run_pep8',
     'django_jenkins.tasks.run_pyflakes',
 )
