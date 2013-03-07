@@ -3,6 +3,7 @@ from datetime import datetime
 from django.conf import settings
 from django.db import models
 from django.core.mail import send_mail,EmailMultiAlternatives,EmailMessage
+from django.utils.translation import ugettext_lazy as _
 from django.template.loader import render_to_string
 from mysearches.helpers import parse_rss
 
@@ -10,7 +11,7 @@ class SavedSearch(models.Model):
     FREQUENCY_CHOICES = (
         ('D', _('Daily')),
         ('W', _('Weekly')),
-        ('M', _('Monthly'))
+        ('M', _('Monthly')))
 
     DOM_CHOICES = [(i,i) for i in range(1,31)]
     DOW_CHOICES = (('1', _('Monday')),

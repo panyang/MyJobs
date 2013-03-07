@@ -1,4 +1,5 @@
 from django.forms import *
+from django.utils.translation import ugettext_lazy as _
 from myjobs.forms import BaseUserForm
 from myprofile.models import *
 
