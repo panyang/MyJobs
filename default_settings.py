@@ -189,3 +189,6 @@ NOSE_ARGS = [
     '--with-coverage',
     '--cover-package=myjobs,myprofile,registration,mysearches', 
 ]
+
+GRAVATAR_URL_PREFIX = "http://www.gravatar.com/avatar/"
+GRAVATAR_URL_DEFAULT = 'mm'

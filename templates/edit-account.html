@@ -8,8 +8,47 @@
         <div class="span8">
           <h1>{% trans "Edit" %} <small>{% trans "Account Information" %}</small></h1>
           <div class="formBox">
-            <form action="" method="POST">
-              {% include "includes/form-error-highlight.html" %}
+            <form action="" method="POST"
+                  <fieldset>
+                  {% for hidden in form.hidden_fields %}
+                  {{ hidden}}
+                  {% endfor %}
+    
+                  {% if form.errors %}
+                  {% for error in form.non_field_errors %}
+                  <p>{{error}}</p>
+                  {% endfor %}
+                  {% endif %}
+    
+                  {# Include the visible fields #}
+                  {% for field in form.visible_fields %}
+                  {% if field.errors %}
+                  <div class="alert-message block-message error">
+                    {{ field.errors }}
+                    {% endif %}
+                    <div class='form-label pull-left'>
+                      {{ field.label_tag }}
+                    </div>
+                    {{field}}
+                    {% if field.help_text %}
+                    <span class="help-block">{{ field.help_text }}</span>
+                    {% endif %}
+                    {% if field.errors %}
+                    <div class="clear"></div>
+                    {% endif %}
+                    {% if field.errors %}
+                  </div>
+                  {% endif %}
+                  <div class="clear"></div>
+                  {% if field.html_name == "gravatar" %}
+                  <div class="form-label pull-left">
+                  <img src="{{ gravatar_100 }}">
+                  </div>
+                  <a href="http://www.gravatar.com" target="_blank">Change your profile image on gravatar.com</a>
+                  <div class="clear"></div>
+                  {% endif %}
+                  {% endfor %}
+                  </fieldset>
               {% csrf_token %}
               <div class="actions">
                 <a href="{% url 'view_account' %}" class="btn pull-right">{% trans 'Cancel' %}</a>

@@ -1,7 +1,9 @@
+import urllib
 from django.core import mail
 from django.test import TestCase
 
 from myjobs.models import *
+from myjobs.tests.factories import *
 
 
 class UserManagerTests(TestCase):
@@ -33,3 +35,12 @@ class UserManagerTests(TestCase):
         self.assertEqual(new_user.is_staff, True)
         self.assertEqual(new_user.email, 'alice@example.com')
         self.failUnless(new_user.check_password('complicated_password'))
+
+    def test_gravatar_url(self):
+        user = UserFactory()
+        static_gravatar_url = "http://www.gravatar.com/avatar/c160f8cc69a4f0b" \
+                              "f2b0362752353d060?s=20&d=mm"
+        generated_gravatar_url = user.get_gravatar_url()
+        self.assertEqual(static_gravatar_url, generated_gravatar_url)
+        status_code = urllib.urlopen(static_gravatar_url).getcode()
+        self.assertEqual(status_code, 200)

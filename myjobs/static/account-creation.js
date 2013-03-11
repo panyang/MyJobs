@@ -38,13 +38,8 @@ function register(csrf_token) {
                     password1: self.find("#id_password1").val(),
                     password2: self.find("#id_password2").val()},
             success: function(data) {
-                if (data != 'valid') {
-                    // If there are errors, the view returns an updated form with errors
-                    // to replace the current one with and we reinitialize the functions
-                    form.replaceWith(data);
-                    register(csrf_token);
-                    buttons();
-                } else {
+                var gravatar_url = jQuery.parseJSON(data).gravatar_url;
+                if (gravatar_url.length>0) {
                     // perform the visual transition to page 2
                     $("#id_name-primary").hide()
                     $("label[for=id_name-primary]").hide()
@@ -53,9 +48,16 @@ function register(csrf_token) {
                     setTimeout(function(){                            
                         $("#account-page-2").show('slide',{direction: 'right'},250);
                     }, 250);
+                    $("#gravatar").attr("src",gravatar_url);
                     buttons();
                     clearForm("form#registration-form");
                     $(".newUserEmail").html(user_email);                    
+                } else {
+                    // If there are errors, the view returns an updated form with errors
+                    // to replace the current one with and we reinitialize the functions
+                    form.replaceWith(data);
+                    register(csrf_token);
+                    buttons();
                 }
             }
         });

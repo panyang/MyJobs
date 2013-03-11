@@ -47,15 +47,16 @@ class EditProfileForm(forms.Form):
     """
     This will get deprecated anyway, no need to change it to new format
     """
-    first_name = forms.CharField(label=_("First Name"), 
-                                 max_length=40, required=False)
-    last_name = forms.CharField(label=_("Last Name"),
-                                max_length=40, required=False)
+    given_name = forms.CharField(label=_("First Name"), 
+                                 max_length=40)
+    family_name = forms.CharField(label=_("Last Name"),
+                                max_length=40)
+    gravatar = forms.EmailField(label=_("Gravatar Email"))
     opt_in_myjobs = forms.BooleanField(label=_("Receive messages from my.jobs"),
                                        required=False)
     def save(self,u):
-        first = self.cleaned_data['first_name']
-        last = self.cleaned_data['last_name']
+        first = self.cleaned_data['given_name']
+        last = self.cleaned_data['family_name']
         try:
             obj = Name.objects.get(user=u, primary=True)
             obj.given_name = first
@@ -66,6 +67,7 @@ class EditProfileForm(forms.Form):
             obj.save()
             
         u.opt_in_myjobs = self.cleaned_data["opt_in_myjobs"]
+        u.gravatar = self.cleaned_data["gravatar"]
         u.save()
 
         
