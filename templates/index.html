@@ -46,17 +46,15 @@
         <div class="row loginBox">
           <div class="span4" id="newAccountInfo">
             <div>
-              <h2>{% trans "Profile" %}</small></h2>
-<center><img id="gravatar"><br><a href="http://www.gravatar.com" target="_blank">Change your profile image on gravatar.com</a>
-  <p>
-    <b class="newUserEmail"></b><br/>
-    account status: <b class="pendingText">Pending activation</b>
-</p></center>
-<p>
-                    Thanks for registering! We have sent an email to <span class="newUserEmail"></span> with
-                    an activation link for your account. While you wait, go
-                    ahead and add some data modules to your profile.
-                    </p>
+              	<h2>{% trans "Profile" %}</small></h2>
+		<center><img id="gravatar"><br>
+		<a href="http://www.gravatar.com" target="_blank">Change your profile image on gravatar.com</a>
+  		<p><b class="newUserEmail"></b><br/>account status: <b class="pendingText">Pending activation</b>
+		</p></center>
+		<p>Thanks for registering! We have sent an email to <span class="newUserEmail"></span> with
+                   an activation link for your account. While you wait, go
+                   ahead and add some data modules to your profile.
+                </p>
                 </div>
             </div>
             {% include "includes/initial-profile-form.html" %}
