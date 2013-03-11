@@ -137,7 +137,7 @@ def home(request):
     
 @login_required
 def view_account(request):
-     ctx = {'name_obj': get_name_obj(request)}
+    ctx = {'name_obj': get_name_obj(request)}
     return render_to_response('done.html', ctx, RequestContext(request))
 
 @login_required
