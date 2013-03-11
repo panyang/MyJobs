@@ -37,6 +37,9 @@ class UserManagerTests(TestCase):
         self.failUnless(new_user.check_password('complicated_password'))
 
     def test_gravatar_url(self):
+        """
+        Test that email is hashed correctly and returns a 200 response
+        """
         user = UserFactory()
         static_gravatar_url = "http://www.gravatar.com/avatar/c160f8cc69a4f0b" \
                               "f2b0362752353d060?s=20&d=mm"
