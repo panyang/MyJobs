@@ -79,9 +79,9 @@ def home(request):
                                           password = registrationform.
                                           cleaned_data['password1'])
                 login(request, user_cache)
-                data={'gravatar_url':new_user.get_gravatar_url(size=100)}
-                import ipdb
-                ipdb.set_trace()
+                # pass in gravatar url once user is logged in. Image generated
+                # in AJAX success
+                data={'gravatar_url': new_user.get_gravatar_url(size=100)}
                 return HttpResponse(json.dumps(data))
             else:
                 return render_to_response('includes/widget-user-registration.html',
@@ -137,8 +137,7 @@ def home(request):
     
 @login_required
 def view_account(request):
-    ctx = {'name_obj': get_name_obj(request),
-           'gravatar_url': request.user.get_gravatar_url(size=100)}
+     ctx = {'name_obj': get_name_obj(request)}
     return render_to_response('done.html', ctx, RequestContext(request))
 
 @login_required
