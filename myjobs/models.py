@@ -71,8 +71,7 @@ class CustomUserManager(BaseUserManager):
 class User(AbstractBaseUser):
     email = models.EmailField(verbose_name=_("email address"),
                               max_length=255, unique=True, db_index=True)
-    date_joined = models.DateTimeField(_('date joined'),
-                                       default=datetime.datetime.now)
+    date_joined = models.DateTimeField(_('date joined'), auto_now_add=True)
 
     # Permission Levels
     is_staff = models.BooleanField(_('staff status'), default=False,
