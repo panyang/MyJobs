@@ -17,6 +17,7 @@ dev_*
 .tmp*
 content_226
 .coverage
+*.swp
 
 # Secret Stuff
 secrets*
