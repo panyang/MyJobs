@@ -76,11 +76,10 @@ class CustomUserManager(BaseUserManager):
 class User(AbstractBaseUser):
     email = models.EmailField(verbose_name=_("email address"),
                               max_length=255, unique=True, db_index=True)
+    date_joined = models.DateTimeField(_('date joined'), auto_now_add=True)
     gravatar = models.EmailField(verbose_name=_("gravatar email"),
                                  max_length=255, db_index=True, blank=True,
                                  null=True)
-    date_joined = models.DateTimeField(_('date joined'),
-                                       default=datetime.datetime.now)
 
     # Permission Levels
     is_staff = models.BooleanField(_('staff status'), default=False,

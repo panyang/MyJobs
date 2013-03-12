@@ -1,5 +1,6 @@
 {% extends "myjobs_base.html" %}
 {% load i18n %}
+{% load humanize %}
 {% load gravatar %}
 {% comment %}
 done.html -- presents user_view_profile.
@@ -22,8 +23,8 @@ done.html -- presents user_view_profile.
                     {% if name_obj.family_name %} {{ name_obj.family_name }} {% endif %}
                     {% if not name_obj.given_name and not name_obj.family_name %} Not Provided {% endif%}
                 </td></tr>
-                <tr><td class="table-field"><b>{% trans "Last Logged In" %}</b></td>
-                  <td>{{ last_login }}</td></tr>
+                <tr><td class="table-field"><b>{% trans "Date Joined" %}</b></td>
+                  <td>{{ user.date_joined|naturaltime }}</td></tr>
                 <tr><td class="table-field"><b>{% trans "Email Notifications" %}</b></td>
                   <td>{% if user.opt_in_myjobs %}You've opted to receive communications from MyJobs{% else %}
                     You've declined to receive communications from MyJobs {% endif %}
