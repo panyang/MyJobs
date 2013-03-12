@@ -156,3 +156,10 @@ class MyJobsViewsTests(TestCase):
                                       'action':'save_profile'}, follow=True)
         self.assertEqual(Name.objects.count(), 1)
         self.assertEqual(Education.objects.count(), 1)
+
+    def test_about_template(self):
+        # About page should return a status code of 200
+        response = self.client.get(reverse('about'))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'about.html')
