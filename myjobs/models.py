@@ -1,4 +1,5 @@
 import datetime
+import urllib, hashlib
 
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
 from django.core.mail import send_mail
@@ -6,6 +7,7 @@ from django.db import models
 from django.db.models.signals import post_save
 from django.utils.translation import ugettext_lazy as _
 
+from default_settings import GRAVATAR_URL_PREFIX, GRAVATAR_URL_DEFAULT
 from registration import signals as custom_signals
 
 class CustomUserManager(BaseUserManager):
@@ -29,6 +31,7 @@ class CustomUserManager(BaseUserManager):
         user = self.model(email=CustomUserManager.normalize_email(email))
         user.set_password(password)
         user.is_active = False
+        user.gravatar = user.email
         user.save(using=self._db)
 
         custom_signals.email_created.send(sender=self,user=user,
@@ -49,6 +52,7 @@ class CustomUserManager(BaseUserManager):
             raise ValueError('Email address required.')
         user = self.model(email=CustomUserManager.normalize_email(email))
         user.is_active = True
+        user.gravatar = user.email
         user.set_password(password)
         user.save(using=self._db)
         return user
@@ -62,6 +66,7 @@ class CustomUserManager(BaseUserManager):
         u.is_staff = True
         u.is_active = True
         u.is_superuser = True
+        u.gravatar = u.email
         u.set_password(password)
         u.save(using=self._db)
         return u
@@ -72,6 +77,9 @@ class User(AbstractBaseUser):
     email = models.EmailField(verbose_name=_("email address"),
                               max_length=255, unique=True, db_index=True)
     date_joined = models.DateTimeField(_('date joined'), auto_now_add=True)
+    gravatar = models.EmailField(verbose_name=_("gravatar email"),
+                                 max_length=255, db_index=True, blank=True,
+                                 null=True)
 
     # Permission Levels
     is_staff = models.BooleanField(_('staff status'), default=False,
@@ -144,3 +152,11 @@ class User(AbstractBaseUser):
 
     def get_short_name(self):
         return self.email
+
+    def get_gravatar_url(self, size=20):
+        gravatar_url = GRAVATAR_URL_PREFIX + hashlib.md5(self.gravatar.lower()).hexdigest() + "?"
+        gravatar_url += urllib.urlencode({'d':GRAVATAR_URL_DEFAULT,
+                                          's':str(size)})
+        return gravatar_url
+
+        

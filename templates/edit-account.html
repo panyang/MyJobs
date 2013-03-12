@@ -8,9 +8,9 @@
         <div class="span8">
           <h1>{% trans "Edit" %} <small>{% trans "Account Information" %}</small></h1>
           <div class="formBox">
-            <form action="" method="POST">
-              {% include "includes/form-error-highlight.html" %}
-              {% csrf_token %}
+            <form action="" method="POST"
+                  {% include "includes/form-error-highlight.html"%}
+                  {% csrf_token %}
               <div class="actions">
                 <a href="{% url 'view_account' %}" class="btn pull-right">{% trans 'Cancel' %}</a>
                 <button type="submit" class="btn primary pull-right" value="submit">{% trans "Save" %}</button>

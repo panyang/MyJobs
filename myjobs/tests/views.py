@@ -60,14 +60,15 @@ class MyJobsViewsTests(TestCase):
         
     def test_edit_account_success(self):
         resp = self.client.post(reverse('edit_account'),
-                                    data={'first_name': 'Alice',
-                                          'last_name': 'Smith',
+                                    data={'given_name': 'Alice',
+                                          'family_name': 'Smith',
+                                          'gravatar': 'alice@example.com',
                                           'opt_in_myjobs': True}, follow=True)
         name = Name.objects.get(user=resp.context['user'],primary=True)
         self.assertRedirects(resp, 'http://testserver%s' % '/account/')
         self.assertEqual(name.given_name, 'Alice')
         self.assertEqual(name.family_name, 'Smith')
-        self.assertEqual(resp.context['user'].opt_in_myjobs, True)\
+        self.assertEqual(resp.context['user'].opt_in_myjobs, True)
 
     def test_change_password_success(self):
         resp = self.client.post(reverse('change_password'),
