@@ -5,19 +5,28 @@
 <section><div class="section subpage">
     <div class="wrapper"> 
       <div class="row">
-        <div class="span8">
-          <h1>{% trans "Edit" %} <small>{% trans "Account Information" %}</small></h1>
+        <div class="span12">
           <div class="formBox">
+            <h2>{% trans "Account Settings" %}</h2>
+            <div class="span4 pull-left settings-nav">
+              <ul>
+                <li><h4>Basic Information</h4></li> 
+                <li><h4>Notifications</h4></li>
+                <li><h4>Password</h4></li>
+                <li><h4>Emails</h4></li>
+                <li><h4>Delete/Deactivate</h4></li>
+            </div>
+            <div class="span7 pull-right account-settings">
             <form action="" method="POST"
                   {% include "includes/form-error-highlight.html"%}
                   {% csrf_token %}
               <div class="actions">
                 <a href="{% url 'view_account' %}" class="btn pull-right">{% trans 'Cancel' %}</a>
                 <button type="submit" class="btn primary pull-right" value="submit">{% trans "Save" %}</button>
-                <a href="{% url 'change_password' %}" class="pull-right">{% trans "Change Password" %}</a>
                 <div class="clear"></div>
               </div>
             </form>
+</div>
           </div>
         </div>
       </div>

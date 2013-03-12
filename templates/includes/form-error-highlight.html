@@ -74,14 +74,6 @@ form -- the rest of the form.
         		{% endif %}
 		{% endif %}
 
-        {% if field.html_name == "gravatar" %}
-        	<div class="form-label pull-left">
-            	<img src="{{ gravatar_100 }}">
-            </div>
-            <a href="http://www.gravatar.com" target="_blank">Change your profile image on gravatar.com</a>
-            <div class="clear"></div>
-        {% endif %}
-
         {% if field.help_text %}
         	<span class="help-block">{{ field.help_text }}</span>
 			<div class="clear"></div>
@@ -90,6 +82,15 @@ form -- the rest of the form.
         {% if field.errors %}
         	<div class="clear"></div>
         {% endif %}
+        	<div class="clear"></div>
+        {% endif %}
+
+        {% if field.html_name == "gravatar" %}
+        	<div class="form-label pull-left">
+            	<img src="{{ gravatar_100 }}">
+            </div>
+            <a href="http://www.gravatar.com" target="_blank">Change your profile image on gravatar.com</a>
+            <div class="clear"></div>
         {% endif %}
 	{% endfor %}
 </fieldset>
