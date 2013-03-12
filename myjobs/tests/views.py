@@ -162,3 +162,4 @@ class MyJobsViewsTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'myjobs_base.html')
+        self.assertTemplateUsed(response, 'about.html')
