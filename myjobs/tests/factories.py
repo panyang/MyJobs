@@ -4,6 +4,7 @@ from myjobs.models import *
 class UserFactory(factory.Factory):
     FACTORY_FOR = User
     email = 'alice@example.com'
+    gravatar = 'alice@example.com'
     password = 'secret'
 
     @classmethod

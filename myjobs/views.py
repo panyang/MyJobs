@@ -1,9 +1,11 @@
+import json
 import logging
 
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
+from django.forms.models import model_to_dict
 from django.http import HttpResponseRedirect, HttpResponse
 from django.template import RequestContext
 from django.shortcuts import render_to_response, get_object_or_404
@@ -56,6 +58,7 @@ def home(request):
     work_form = instantiate_profile_forms(request,[EmploymentForm],settings)[0]
     address_form = instantiate_profile_forms(request,[AddressForm],settings)[0]
 
+        
     data_dict = {'registrationform':registrationform,
                  'loginform': loginform,
                  'name_form': name_form,
@@ -76,7 +79,10 @@ def home(request):
                                           password = registrationform.
                                           cleaned_data['password1'])
                 login(request, user_cache)
-                return HttpResponse('valid')
+                # pass in gravatar url once user is logged in. Image generated
+                # in AJAX success
+                data={'gravatar_url': new_user.get_gravatar_url(size=100)}
+                return HttpResponse(json.dumps(data))
             else:
                 return render_to_response('includes/widget-user-registration.html',
                                           {'form': registrationform},
@@ -131,25 +137,29 @@ def home(request):
     
 @login_required
 def view_account(request):
-    """Login complete view, displays user profile on My.Jobs"""
     ctx = {'name_obj': get_name_obj(request)}
     return render_to_response('done.html', ctx, RequestContext(request))
 
 @login_required
 def edit_account(request):
-    user_instance = User.objects.filter(id=request.user.id).values()[0]
+    initial_dict = model_to_dict(request.user)
+    name_obj = get_name_obj(request)
+    if name_obj:
+        initial_dict.update(model_to_dict(name_obj))
+    
     if request.method == "POST":
         form = EditProfileForm(request.POST)
         if form.is_valid():
             form.save(request.user)
             return HttpResponseRedirect('/account')
     else:
-        form = EditProfileForm(user_instance)    
+        form = EditProfileForm(initial=initial_dict)
         
     ctx = {'form': form,
            'user': request.user,
-           'name_obj': get_name_obj(request)
-            }
+           'gravatar_100': request.user.get_gravatar_url(size=100),
+           'name_obj': name_obj}
+    
     return render_to_response('edit-account.html', ctx,
                               RequestContext(request))
 
