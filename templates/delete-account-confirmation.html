@@ -4,7 +4,6 @@
 {% block content %}
 <h1>{% trans 'Account Deletion Successful' %}</h1>
 
-<p>{% trans "Your account, {{ email }} has been successfully delete." %}</p>
+<p>{% trans "Your account, " %} {{ email }} {% trans ", has been successfully deleted." %}</p>
 
-{% endif %}
 {% endblock content %}

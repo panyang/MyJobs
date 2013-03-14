@@ -185,6 +185,7 @@ def edit_delete(request):
     ctx = {}
     return render_to_response('edit-delete.html', ctx,
                               RequestContext(request))
+
 @login_required
 def delete_account(request):
     email = request.user.email

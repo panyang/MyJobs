@@ -59,7 +59,7 @@ class MyJobsViewsTests(TestCase):
         self.client.login_user(self.user)
         
     def test_edit_account_success(self):
-        resp = self.client.post(reverse('edit_account'),
+        resp = self.client.post(reverse('edit_basic'),
                                     data={'given_name': 'Alice',
                                           'family_name': 'Smith',
                                           'gravatar': 'alice@example.com',
@@ -71,7 +71,7 @@ class MyJobsViewsTests(TestCase):
         self.assertEqual(resp.context['user'].opt_in_myjobs, True)
 
     def test_change_password_success(self):
-        resp = self.client.post(reverse('change_password'),
+        resp = self.client.post(reverse('edit_password'),
                                     data={'password1': 'secret',
                                           'password2': 'secret',
                                           'new_password': 'new'}, follow=True)
@@ -79,7 +79,7 @@ class MyJobsViewsTests(TestCase):
         self.assertTrue(resp.context['user'].check_password('new'))
 
     def test_change_password_failure(self):
-        resp = self.client.post(reverse('change_password'),
+        resp = self.client.post(reverse('edit_password'),
                                     data={'password1': 'secret',
                                           'password2': 'secretzzzz',
                                           'new_password': 'new'}, follow=True)
@@ -156,3 +156,8 @@ class MyJobsViewsTests(TestCase):
                                       'action':'save_profile'}, follow=True)
         self.assertEqual(Name.objects.count(), 1)
         self.assertEqual(Education.objects.count(), 1)
+
+    def test_delete_account(self):
+        self.assertTrue(User.objects.all().exists())
+        resp = self.client.get(reverse('delete_account'), follow=True)
+        self.assertFalse(User.objects.all().exists())

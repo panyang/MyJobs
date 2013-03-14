@@ -86,7 +86,7 @@ class ActivationProfile(models.Model):
             email = email.encode('utf-8')
         activation_key = hashlib.sha1(salt+email).hexdigest()
         return activation_key
-
+        
     def send_activation_email(self):
         ctx_dict = {'activation_key': self.activation_key,
                     'expiration_days': settings.ACCOUNT_ACTIVATION_DAYS}

@@ -19,6 +19,13 @@ $(document).ready(function(){
             window.location = '/account/delete';
         }
     });
+
+    $('#disable-account').click(function(){
+        var answer = confirm('Are you sure you want to disable your account?');
+        if (answer == true) {
+            window.location = '/account/disable';
+        }
+    });
 });
 
 
