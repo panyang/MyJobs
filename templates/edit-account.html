@@ -10,24 +10,24 @@
             <h2>{% trans "Account Settings" %}</h2>
             <div class="span4 pull-left settings-nav">
               <ul>
-                <li><h4>Basic Information</h4></li> 
-                <li><h4>Notifications</h4></li>
-                <li><h4>Password</h4></li>
-                <li><h4>Emails</h4></li>
-                <li><h4>Delete/Deactivate</h4></li>
+                <a href="{% url 'edit_basic' %}"><li><h4>{% trans "Basic Information" %}</h4></li></a>
+                <a href="{% url 'edit_password' %}"><li><h4>{% trans "Change Password" %}</h4></li></a>
+                <a href="{% url 'edit_delete' %}"><li><h4>{% trans "Delete/Deactivate Account" %}</h4></li></a>
             </div>
             <div class="span7 pull-right account-settings">
-            <form action="" method="POST"
-                  {% include "includes/form-error-highlight.html"%}
-                  {% csrf_token %}
-              <div class="actions">
-                <a href="{% url 'view_account' %}" class="btn pull-right">{% trans 'Cancel' %}</a>
-                <button type="submit" class="btn primary pull-right" value="submit">{% trans "Save" %}</button>
-                <div class="clear"></div>
-              </div>
-            </form>
+              {% block edit-main %}
+              <form action="" method="POST"
+                    {% include "includes/form-error-highlight.html"%}
+                    {% csrf_token %}
+                    <div class="actions">
+                      <a href="{% url 'view_account' %}" class="btn pull-right">{% trans 'Cancel' %}</a>
+                      <button type="submit" class="btn primary pull-right" value="submit">{% trans "Save" %}</button>
+                      <div class="clear"></div>
+                    </div>
+</form>
 </div>
-          </div>
+              {% endblock%}
+            </div>
         </div>
       </div>
     </div>

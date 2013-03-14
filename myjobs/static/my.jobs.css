@@ -560,6 +560,7 @@ label[for=id_digest_active], label[for=id_digest_email] {
 
 .settings-nav ul {
     list-style-type: none;
+    height: 354px;
     padding: 0;
     margin: 0;
 }
@@ -572,4 +573,12 @@ label[for=id_digest_active], label[for=id_digest_email] {
 .settings-nav li:hover {
     background: #c54c2d;
     color: #FFF;
+}
+
+.settings-nav a:hover {
+    text-decoration: none;
+}
+
+.account-settings input[type="text"], input[type="password"] {
+    width: 250px;
 }

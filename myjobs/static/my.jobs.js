@@ -13,7 +13,15 @@ $(document).ready(function(){
     $("#pop-menu").mouseleave(function(){
         $("#nav").removeClass("active");
     });
+    $('#delete-account').click(function(){
+        var answer = confirm('Are you sure you want to delete your account?');
+        if (answer == true) {
+            window.location = '/account/delete';
+        }
+    });
 });
+
+
 
 function validate_url() {
     // When user stops typing, an ajax request is sent to Django where it checks for

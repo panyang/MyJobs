@@ -1,0 +1,10 @@
+{% extends "myjobs_base.html" %}
+{% load i18n %}
+
+{% block content %}
+<h1>{% trans 'Account Deletion Successful' %}</h1>
+
+<p>{% trans "Your account, {{ email }} has been successfully delete." %}</p>
+
+{% endif %}
+{% endblock content %}
