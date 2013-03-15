@@ -1,0 +1,32 @@
+{% extends "myjobs_base.html" %}
+{% load i18n %}
+{% block meta-extra %}
+{% endblock %}
+
+{% block content %}
+
+<section><div class="section subpage">
+<div class="wrapper"> 
+  <div class="row">
+    <div class="span8">
+      <h1>{% trans "Edit Profile" %}</h1>
+      <div class="formBox">
+        <form action="" method="post" id="">
+          {% for form in forms %}
+          <h4>{{ form.Meta.form_name }}</h4>
+          {% include "includes/form-error-highlight.html" %}
+          {% endfor %}
+          {% csrf_token %}
+          <div class="actions">
+            <a href="{% url 'saved_search_main' %}" class="btn pull-right">{% trans 'Cancel' %}</a>
+            <button type="submit" class="btn primary pull-right" value="submit">Save</button>
+          </div>
+        </form>
+      </div>
+    </div>
+  </div>
+</div>
+</div>
+</section>
+
+{% endblock %}
