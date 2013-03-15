@@ -93,6 +93,7 @@ class User(AbstractBaseUser):
                                        help_text=_("Designates that this user " +\
                                                    "has all permissions without " +\
                                                    "explicitly assigning them."))
+    is_disabled = models.BooleanField(_('disabled'), default=False)
 
     # Communication Settings
     opt_in_myjobs = models.BooleanField(_('Receive messages from my.jobs'),
@@ -146,7 +147,7 @@ class User(AbstractBaseUser):
             return True
 
         return _user_has_module_perms(self, app_label)
-
+        
     def get_username(self):
         return self.email
 

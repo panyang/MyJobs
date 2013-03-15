@@ -161,3 +161,10 @@ class MyJobsViewsTests(TestCase):
         self.assertTrue(User.objects.all().exists())
         resp = self.client.get(reverse('delete_account'), follow=True)
         self.assertFalse(User.objects.all().exists())
+
+    def test_disable_account(self):
+        resp = self.client.get(reverse('disable_account'), follow=True)
+        self.assertTrue(User.objects.all().exists())
+        user = User.objects.get(id=1)
+        self.assertFalse(user.is_active)
+        self.assertTrue(user.is_disabled)

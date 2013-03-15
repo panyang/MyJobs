@@ -20,7 +20,12 @@
         <div class="span4">
             <div class="loginBox">
                 {% if user.is_authenticated %}
-                    <p>Welcome 
+                {% if user.is_disabled %}
+                <center><h2>{% trans "Your account is disabled." %} </h2>
+                <p><a href="{% url 'resend_activation' %}">Send me an activation link to bring back my account!</a></p>
+                {% else %}
+                    <center>
+                      <p>Welcome 
                         <b>{% if name_obj %}
                             {{name_obj}}
                         {% else %}
@@ -28,10 +33,10 @@
                         {% endif %}!</b>
                     
                     <p>
-                        <a href="{% url 'view_account' %}">View Your Account</a>
-                    </p><p>
-                        <a class="btn primary" href="{% url 'auth_logout' %}">Log Out</a>
-                    </p>                                                
+                      <a href="{% url 'view_account' %}">View Your Account</a>
+                    </p>
+                    {% endif %}
+                     <a class="btn primary" href="{% url 'auth_logout' %}">Log Out</a></center>
                 {% else %}
                     <h3>Sign Up</h3>
                     {% include "includes/widget-user-registration.html" with form=registrationform%}

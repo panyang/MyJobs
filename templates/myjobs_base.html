@@ -53,9 +53,11 @@
                                         <span class="arrow"></span>
                                     </a>
                                     <ul class="span4" id="pop-menu">
+                                      {% if not user.is_disabled %}
                                         <li><a href="{% url 'view_account' %}">{% trans "View Account" %}</a></li> 
                                         <li><a href="{% url 'saved_search_main' %}">{% trans "Saved Searches" %}</a></li>
                                        <li><a href="{% url 'edit_basic' %}">{% trans "Account Settings" %}</a></li>
+                                       {% endif %}
                                         <li><a href="{% url 'auth_logout' %}">Log Out</a></li>
                                     </ul></a>
                                 </li>

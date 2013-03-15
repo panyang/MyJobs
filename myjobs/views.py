@@ -2,7 +2,7 @@ import json
 import logging
 
 from django.contrib import messages
-from django.contrib.auth import authenticate, login
+from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.forms.models import model_to_dict
@@ -39,6 +39,7 @@ def home(request):
     back to the form template it was originally from.
 
     """
+
 
     registrationform = RegistrationForm(auto_id=False)
     loginform = CustomAuthForm(auto_id=False)
@@ -192,6 +193,20 @@ def delete_account(request):
     request.user.delete()
     ctx = {'email': email}
     return render_to_response('delete-account-confirmation.html', ctx,
+                              RequestContext(request))
+
+@login_required
+def disable_account(request):
+    import ipdb
+    ipdb.set_trace()
+    user = request.user
+    email = user.email
+    user.is_active = False
+    user.is_disabled = True
+    user.save()
+    logout(request)
+    ctx = {'email': email}
+    return render_to_response('disable-account-confirmation.html', ctx,
                               RequestContext(request))
 
 def error(request):
