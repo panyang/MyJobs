@@ -7,7 +7,7 @@ Used to check if registration was successful.
 {% endcomment %}
 
 {% block content %}
-    {% if not activated %}
+    {% if activated %}
         <h1>{% trans "Activation successful" %}</h1>
         <p>You can now proceed to
         {% if user.is_authenticated %}

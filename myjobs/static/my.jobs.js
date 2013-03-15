@@ -13,6 +13,7 @@ $(document).ready(function(){
     $("#pop-menu").mouseleave(function(){
         $("#nav").removeClass("active");
     });
+
     $('#delete-account').click(function(){
         var answer = confirm('Are you sure you want to delete your account?');
         if (answer == true) {

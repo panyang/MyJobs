@@ -194,9 +194,10 @@ class RegistrationModelTests(TestCase):
 
     def test_reset_activation(self):
         """
-        ``RegistrationProfile.objects.delete_expired_users()`` only
-        deletes inactive users whose activation window has expired.
+        Calling the reset_activation method on the ActivationProfile model
+        generates a new activation key, even if it was already activated.
         """
+        
         new_user = User.objects.create_inactive_user(**self.user_info)
         profile = ActivationProfile.objects.get(user=new_user)
         ActivationProfile.objects.activate_user(profile.activation_key)

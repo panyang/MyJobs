@@ -147,7 +147,7 @@ class User(AbstractBaseUser):
             return True
 
         return _user_has_module_perms(self, app_label)
-        
+
     def get_username(self):
         return self.email
 
