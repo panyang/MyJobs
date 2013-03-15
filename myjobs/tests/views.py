@@ -186,3 +186,11 @@ class MyJobsViewsTests(TestCase):
         self.assertNotEqual(profile.activation_key, 'ALREADY ACTIVATED')
         self.assertFalse(user.is_active)
         self.assertTrue(user.is_disabled)
+
+    def test_about_template(self):
+        # About page should return a status code of 200
+        response = self.client.get(reverse('about'))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'about.html')
+
