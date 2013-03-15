@@ -2,35 +2,38 @@
 {% load i18n %}
 
 {% block content %}
-<section><div class="section subpage">
+<section>
+<div class="section subpage">
     <div class="wrapper"> 
-      <div class="row">
-        <div class="span12">
-          <div class="formBox">
-            <h2>{% trans "Account Settings" %}</h2>
-            <div class="span4 pull-left settings-nav">
-              <ul>
-                <a href="{% url 'edit_basic' %}"><li><h4>{% trans "Basic Information" %}</h4></li></a>
-                <a href="{% url 'edit_password' %}"><li><h4>{% trans "Change Password" %}</h4></li></a>
-                <a href="{% url 'edit_delete' %}"><li><h4>{% trans "Delete/Disable Account" %}</h4></li></a>
-            </div>
-            <div class="span7 pull-right account-settings">
-              {% block edit-main %}
-              <form action="" method="POST"
-                    {% include "includes/form-error-highlight.html"%}
-                    {% csrf_token %}
-                    <div class="actions">
-                      <a href="{% url 'view_account' %}" class="btn pull-right">{% trans 'Cancel' %}</a>
-                      <button type="submit" class="btn primary pull-right" value="submit">{% trans "Save" %}</button>
-                      <div class="clear"></div>
-                    </div>
-</form>
-</div>
-              {% endblock%}
+        <div class="row">
+            <div class="span12">
+                <div class="formBox">
+                    <h2>{% trans "Account Settings" %}</h2>
+                    <div class="span4 pull-left settings-nav">
+                        <ul>
+                        <a href="{% url 'edit_basic' %}"><li><h4>{% trans "Basic Information" %}</h4></li></a>
+                        <a href="{% url 'edit_password' %}"><li><h4>{% trans "Change Password" %}</h4></li></a>
+                        <a href="{% url 'edit_delete' %}"><li><h4>{% trans "Delete/Disable Account" %}</h4></li></a>
+                        </ul>
+                    </div>  
+                </div>
+
+                <div class="span7 pull-right account-settings">
+                    {% block edit-main %}
+                    <form action="" method="POST"
+                        {% include "includes/form-error-highlight.html"%}
+                        {% csrf_token %}
+                        <div class="actions">
+                            <a href="{% url 'view_account' %}" class="btn pull-right">{% trans 'Cancel' %}</a>
+                            <button type="submit" class="btn primary pull-right" value="submit">{% trans "Save" %}</button>
+                            <div class="clear"></div>
+                        </div>
+                    </form>
+                    {% endblock%}
+                </div>
             </div>
         </div>
-      </div>
     </div>
-  </div>
+</div>
 </section>
 {% endblock %}

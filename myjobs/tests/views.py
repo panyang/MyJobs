@@ -14,7 +14,7 @@ from myjobs.tests.factories import *
 from myprofile.models import *
 from registration.forms import *
 from registration.models import ActivationProfile
-
+from registration import signals as custom_signals
 
 class TestClient(Client):
     """
@@ -163,8 +163,17 @@ class MyJobsViewsTests(TestCase):
         self.assertFalse(User.objects.all().exists())
 
     def test_disable_account(self):
-        resp = self.client.get(reverse('disable_account'), follow=True)
-        self.assertTrue(User.objects.all().exists())
         user = User.objects.get(id=1)
+        custom_signals.create_activation_profile(sender=self, user=user,
+                                                 email=user.email)
+        profile = ActivationProfile.objects.get(user=user)
+        ActivationProfile.objects.activate_user(profile.activation_key)
+        profile = ActivationProfile.objects.get(user=user)
+        self.assertEqual(profile.activation_key, 'ALREADY ACTIVATED')
+
+        resp = self.client.get(reverse('disable_account'), follow=True)
+        user = User.objects.get(id=1)
+        profile = ActivationProfile.objects.get(user=user)
+        self.assertNotEqual(profile.activation_key, 'ALREADY ACTIVATED')
         self.assertFalse(user.is_active)
         self.assertTrue(user.is_disabled)

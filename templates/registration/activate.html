@@ -4,15 +4,19 @@
 **registration/activate.html**
 
 Used to check if registration was successful. 
-With the default setup, has the following context:
-
 {% endcomment %}
+
 {% block content %}
-{% if activated %}
-    <h1>{% trans "Activation successful" %}</h1>
-    <p>You can now proceed to <a href="{% url 'auth_login' %}">login.</a></p>
-{% else %}
-    <h1>{% trans "Activation failed" %}</h1>
-    <p>{% trans "Something went wrong while activating your account. This might mean that the activation code was wrong or that your account has already been activated." %}</p>
-{% endif %}
+    {% if not activated %}
+        <h1>{% trans "Activation successful" %}</h1>
+        <p>You can now proceed to
+        {% if user.is_authenticated %}
+            <a href="{% url 'view_account' %}">your account.</a></p>
+        {% else %}
+            <a href="{% url 'auth_login' %}">login.</a></p>
+        {% endif %}
+    {% else %}
+        <h1>{% trans "Activation failed" %}</h1>
+        <p>{% trans "Something went wrong while activating your account. This might mean that the activation code was wrong or that your account has already been activated." %}</p>
+    {% endif %}
 {% endblock %}

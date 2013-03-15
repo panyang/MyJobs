@@ -197,13 +197,9 @@ def delete_account(request):
 
 @login_required
 def disable_account(request):
-    import ipdb
-    ipdb.set_trace()
     user = request.user
     email = user.email
-    user.is_active = False
-    user.is_disabled = True
-    user.save()
+    user.disable()
     logout(request)
     ctx = {'email': email}
     return render_to_response('disable-account-confirmation.html', ctx,

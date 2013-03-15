@@ -160,4 +160,10 @@ class User(AbstractBaseUser):
                                           's':str(size)})
         return gravatar_url
 
+    def disable(self):
+        self.is_active = False
+        self.is_disabled = True
+        self.save()
         
+        custom_signals.user_disabled.send(sender=self, user=self,
+                                          email=self.email)
