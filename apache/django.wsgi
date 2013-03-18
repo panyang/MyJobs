@@ -1,7 +1,7 @@
 import os, sys
 
 import newrelic.agent
-newrelic.agent.initialize('/home/web/MyJobs/newrelic.ini')
+newrelic.agent.initialize('/home/web/MyJobs/MyJobs/newrelic.ini')
 
 PROJECT_DIR = os.path.join(os.path.dirname(os.path.abspath(__file__)),"../")
 PROJECT_DIR_PARENT = os.path.join(PROJECT_DIR, "../")
