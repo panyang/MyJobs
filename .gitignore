@@ -43,6 +43,7 @@ directseo
 # Secret stuff. Shhhhh.
 secret.py
 secrets.py
+newrelic.ini
 
 local_settings.py
 settings.py
