@@ -18,15 +18,21 @@ from registration.forms import *
 
 def edit_profile(request):
     settings = {'user': request.user}
-    if request.method == "POST":
-        forms = instantiate_profile_forms(request, [NameForm, EducationForm], settings,
-                                  post=True)
-        for form in forms:
-            if form.is_valid():
-                form.save()
-    else:
-        forms = instantiate_profile_forms(request, [NameForm, EducationForm], settings)
+    module_list = [('name', NameForm),
+                   ('education',EducationForm),
+                   ('employmenthistory', EmploymentForm),
+                   ('secondaryemail', SecondaryEmailForm)]
+    units = request.user.profileunits_set
+    profile_config = []
+    
+    for module,form in module_list:
+        x=[]
+        module_units = units.filter(content_type__name=module)
+        for unit in module_units:
+            x.append(getattr(unit, module))
 
-    data_dict = {'forms': forms}
+        profile_config.append((x, form))
+
+    data_dict = {'profile_config': profile_config}
     return render_to_response('myprofile/edit_profile.html', data_dict,
                               RequestContext(request))

@@ -9,13 +9,18 @@
 <div class="wrapper"> 
   <div class="row">
     <div class="span8">
-      <h1>{% trans "Edit Profile" %}</h1>
+      <h1>{% trans "Your Profile" %}</h1> 
+      {% for module in profile_config %}
       <div class="formBox">
-        <form action="" method="post" id="">
-          {% for form in forms %}
-          <h4>{{ form.Meta.form_name }}</h4>
-          {% include "includes/form-error-highlight.html" %}
-          {% endfor %}
+        <h4>{{ module.1.Meta.form_name }}</h4>
+      {% for item in module.0 %}
+      {% for label, value in item.get_fields %}
+      <b>{{ label }}: </b> {{ value }}<br>
+      {% endfor %}
+      {% endfor %}
+      <hr>
+      <form action="" method="post" id="">
+          {% include "includes/form-error-highlight.html" with form=module.1 %}
           {% csrf_token %}
           <div class="actions">
             <a href="{% url 'saved_search_main' %}" class="btn pull-right">{% trans 'Cancel' %}</a>
@@ -23,6 +28,20 @@
           </div>
         </form>
       </div>
+      {% endfor %}
+      <!-- {% for form in forms %} -->
+      <!-- <div class="formBox"> -->
+      <!--   <form action="" method="post" id=""> -->
+      <!--     <h4>{{ form.Meta.form_name }}</h4> -->
+      <!--     {% include "includes/form-error-highlight.html" %} -->
+      <!--     {% csrf_token %} -->
+      <!--     <div class="actions"> -->
+      <!--       <a href="{% url 'saved_search_main' %}" class="btn pull-right">{% trans 'Cancel' %}</a> -->
+      <!--       <button type="submit" class="btn primary pull-right" value="submit">Save</button> -->
+      <!--     </div> -->
+      <!--   </form> -->
+      <!-- </div> -->
+      <!-- {% endfor %} -->
     </div>
   </div>
 </div>
