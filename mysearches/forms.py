@@ -14,14 +14,14 @@ class SavedSearchForm(BaseUserForm):
     # the correct frequency is selected and clears any remaining
     # day_of_week/day_of_month data that shouldn't be there
     def clean_day_of_week(self):
-        if self.cleaned_data['frequency'] == 'W':
+        if self.cleaned_data.get('frequency', None) == 'W':
             if not self.cleaned_data['day_of_week']:
                 raise ValidationError(_("This field is required."))
             self.cleaned_data['day_of_month'] = None
         return self.cleaned_data['day_of_week']
 
     def clean_day_of_month(self):
-        if self.cleaned_data['frequency'] == 'M':
+        if self.cleaned_data.get('frequency', None) == 'M':
             if not self.cleaned_data['day_of_month']:
                 raise ValidationError(_("This field is required."))
             self.cleaned_data['day_of_week'] = None
