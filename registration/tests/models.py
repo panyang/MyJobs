@@ -191,3 +191,17 @@ class RegistrationModelTests(TestCase):
         ActivationProfile.objects.delete_expired_users()
         self.assertEqual(ActivationProfile.objects.count(), 1)
         self.assertRaises(User.DoesNotExist, User.objects.get, email='bob@example.com')
+
+    def test_reset_activation(self):
+        """
+        Calling the reset_activation method on the ActivationProfile model
+        generates a new activation key, even if it was already activated.
+        """
+        
+        new_user = User.objects.create_inactive_user(**self.user_info)
+        profile = ActivationProfile.objects.get(user=new_user)
+        ActivationProfile.objects.activate_user(profile.activation_key)
+        profile = ActivationProfile.objects.get(user=new_user)
+        self.assertEqual(profile.activation_key, 'ALREADY ACTIVATED')
+        profile.reset_activation()
+        self.assertNotEqual(profile.activation_key, 'ALREADY ACTIVATED')

@@ -93,6 +93,7 @@ class User(AbstractBaseUser):
                                        help_text=_("Designates that this user " +\
                                                    "has all permissions without " +\
                                                    "explicitly assigning them."))
+    is_disabled = models.BooleanField(_('disabled'), default=False)
 
     # Communication Settings
     opt_in_myjobs = models.BooleanField(_('Receive messages from my.jobs'),
@@ -159,4 +160,10 @@ class User(AbstractBaseUser):
                                           's':str(size)})
         return gravatar_url
 
+    def disable(self):
+        self.is_active = False
+        self.is_disabled = True
+        self.save()
         
+        custom_signals.user_disabled.send(sender=self, user=self,
+                                          email=self.email)

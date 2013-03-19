@@ -87,6 +87,13 @@ class ActivationProfile(models.Model):
         activation_key = hashlib.sha1(salt+email).hexdigest()
         return activation_key
 
+    def reset_activation(self):
+        """
+        Used to reset activation key when user is disabled.
+        """
+        self.activation_key = self.generate_key()
+        self.save()
+
     def send_activation_email(self):
         ctx_dict = {'activation_key': self.activation_key,
                     'expiration_days': settings.ACCOUNT_ACTIVATION_DAYS}

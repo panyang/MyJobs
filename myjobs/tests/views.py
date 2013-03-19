@@ -14,7 +14,7 @@ from myjobs.tests.factories import *
 from myprofile.models import *
 from registration.forms import *
 from registration.models import ActivationProfile
-
+from registration import signals as custom_signals
 
 class TestClient(Client):
     """
@@ -59,7 +59,7 @@ class MyJobsViewsTests(TestCase):
         self.client.login_user(self.user)
         
     def test_edit_account_success(self):
-        resp = self.client.post(reverse('edit_account'),
+        resp = self.client.post(reverse('edit_basic'),
                                     data={'given_name': 'Alice',
                                           'family_name': 'Smith',
                                           'gravatar': 'alice@example.com',
@@ -71,7 +71,7 @@ class MyJobsViewsTests(TestCase):
         self.assertEqual(resp.context['user'].opt_in_myjobs, True)
 
     def test_change_password_success(self):
-        resp = self.client.post(reverse('change_password'),
+        resp = self.client.post(reverse('edit_password'),
                                     data={'password1': 'secret',
                                           'password2': 'secret',
                                           'new_password': 'new'}, follow=True)
@@ -79,7 +79,7 @@ class MyJobsViewsTests(TestCase):
         self.assertTrue(resp.context['user'].check_password('new'))
 
     def test_change_password_failure(self):
-        resp = self.client.post(reverse('change_password'),
+        resp = self.client.post(reverse('edit_password'),
                                     data={'password1': 'secret',
                                           'password2': 'secretzzzz',
                                           'new_password': 'new'}, follow=True)
@@ -157,9 +157,40 @@ class MyJobsViewsTests(TestCase):
         self.assertEqual(Name.objects.count(), 1)
         self.assertEqual(Education.objects.count(), 1)
 
+    def test_delete_account(self):
+        """
+        Going to the delete_account view removes a user and their date completely
+        """
+        self.assertTrue(User.objects.all().exists())
+        resp = self.client.get(reverse('delete_account'), follow=True)
+        self.assertFalse(User.objects.all().exists())
+
+    def test_disable_account(self):
+        """
+        Going to the disabled account view disables the account, meaning that
+        (1) a new activation key is created, (2) User is set to not active and
+        (3) User is set to disabled.
+        """
+        
+        user = User.objects.get(id=1)
+        custom_signals.create_activation_profile(sender=self, user=user,
+                                                 email=user.email)
+        profile = ActivationProfile.objects.get(user=user)
+        ActivationProfile.objects.activate_user(profile.activation_key)
+        profile = ActivationProfile.objects.get(user=user)
+        self.assertEqual(profile.activation_key, 'ALREADY ACTIVATED')
+
+        resp = self.client.get(reverse('disable_account'), follow=True)
+        user = User.objects.get(id=1)
+        profile = ActivationProfile.objects.get(user=user)
+        self.assertNotEqual(profile.activation_key, 'ALREADY ACTIVATED')
+        self.assertFalse(user.is_active)
+        self.assertTrue(user.is_disabled)
+
     def test_about_template(self):
         # About page should return a status code of 200
         response = self.client.get(reverse('about'))
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'about.html')
+
