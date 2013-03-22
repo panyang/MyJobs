@@ -55,8 +55,8 @@ def home(request):
     name_form = instantiate_profile_forms(request,[NameForm],settings)[0]
     education_form = instantiate_profile_forms(request,[EducationForm],
                                                settings)[0]
-    phone_form = instantiate_profile_forms(request,[PhoneForm],settings)[0]
-    work_form = instantiate_profile_forms(request,[EmploymentForm],settings)[0]
+    phone_form = instantiate_profile_forms(request,[TelephoneForm],settings)[0]
+    work_form = instantiate_profile_forms(request,[WorkHistoryForm],settings)[0]
     address_form = instantiate_profile_forms(request,[AddressForm],settings)[0]
 
         
@@ -88,7 +88,7 @@ def home(request):
                 return render_to_response('includes/widget-user-registration.html',
                                           {'form': registrationform},
                                           context_instance=RequestContext(request))
-                
+
         elif request.POST['action'] == "login":
             loginform = CustomAuthForm(request.POST)
             if loginform.is_valid():
@@ -101,9 +101,9 @@ def home(request):
                                                   settings,post=True)[0]
             education_form = instantiate_profile_forms(request,[EducationForm],
                                                   settings,post=True)[0]
-            phone_form = instantiate_profile_forms(request,[PhoneForm],
+            phone_form = instantiate_profile_forms(request,[TelephoneForm],
                                                   settings,post=True)[0]
-            work_form = instantiate_profile_forms(request,[EmploymentForm],
+            work_form = instantiate_profile_forms(request,[WorkHistoryForm],
                                                   settings,post=True)[0]
             address_form = instantiate_profile_forms(request,[AddressForm],
                                                   settings_show_all,post=True)[0]

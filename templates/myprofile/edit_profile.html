@@ -1,6 +1,7 @@
 {% extends "myjobs_base.html" %}
 {% load i18n %}
 {% block meta-extra %}
+<script src="{{ STATIC_URL }}profile.js"></script>
 {% endblock %}
 
 {% block content %}
@@ -12,36 +13,20 @@
       <h1>{% trans "Your Profile" %}</h1> 
       {% for module in profile_config %}
       <div class="formBox">
-        <h4>{{ module.1.Meta.form_name }}</h4>
-      {% for item in module.0 %}
-      {% for label, value in item.get_fields %}
-      <b>{{ label }}: </b> {{ value }}<br>
-      {% endfor %}
-      {% endfor %}
-      <hr>
-      <form action="" method="post" id="">
-          {% include "includes/form-error-highlight.html" with form=module.1 %}
-          {% csrf_token %}
-          <div class="actions">
-            <a href="{% url 'saved_search_main' %}" class="btn pull-right">{% trans 'Cancel' %}</a>
-            <button type="submit" class="btn primary pull-right" value="submit">Save</button>
-          </div>
-        </form>
+        <h4>{{ module.verbose }}</h4>
+        {% for item in module.items %}
+        <div id="{{module.name}}-{{item.id}}-item"><div class="item-detail">
+          {% for label, value in item.get_fields %}
+          <b>{{ label }}: </b> {{ value }}<br>
+          {% endfor %}
+        </div>
+          <button class="btn" id="{{module.name}}-{{item.id}}-edit" id=>Edit</button>
+        </div>
+          <hr>
+        {% endfor %}
+        <div><button class="btn primary" id="{{module.name}}-new-add">Add Another</button></div>
       </div>
       {% endfor %}
-      <!-- {% for form in forms %} -->
-      <!-- <div class="formBox"> -->
-      <!--   <form action="" method="post" id=""> -->
-      <!--     <h4>{{ form.Meta.form_name }}</h4> -->
-      <!--     {% include "includes/form-error-highlight.html" %} -->
-      <!--     {% csrf_token %} -->
-      <!--     <div class="actions"> -->
-      <!--       <a href="{% url 'saved_search_main' %}" class="btn pull-right">{% trans 'Cancel' %}</a> -->
-      <!--       <button type="submit" class="btn primary pull-right" value="submit">Save</button> -->
-      <!--     </div> -->
-      <!--   </form> -->
-      <!-- </div> -->
-      <!-- {% endfor %} -->
     </div>
   </div>
 </div>
