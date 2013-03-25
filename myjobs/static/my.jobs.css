@@ -531,7 +531,6 @@ em.pendingText{
     #id_url {
         margin-top: -5px;
     }
-    /*input, textarea {*/
     #id_url, #id_label, #id_email, #id_notes {
         border-radius: 0px !important;
         border: 1px solid #bbb !important;
@@ -541,6 +540,15 @@ em.pendingText{
     }
     .mobile_hide {
         display: none;
+    }
+    .digestBox {
+        width: 92%;
+    }
+    .list_width {
+        width: 80%;
+    }
+    #id_digest_email, #id_digest_active, #id_send_if_none {
+        margin-bottom: 25px !important;
     }
 }
 
@@ -569,13 +577,13 @@ table td, table th{
 
 label[for=id_digest_active], label[for=id_digest_email], label[for=id_send_if_none] {
     display: inline-block;
-    margin-top: 10px;
+/*    margin-top: 10px;*/
     margin-right: 10px;
 }
 
-#id_digest_active, #id_digest_email {
-    margin: 0;
-}
+/*#id_digest_active, #id_digest_email {
+    margin: 0 ;
+}*/
 
 .account-box {
     padding: 0;
@@ -646,3 +654,7 @@ label[for=id_digest_active], label[for=id_digest_email], label[for=id_send_if_no
     color: #ccc;
 }
 
+.digest_error {
+    background-color: #f00;
+    display: inline-block;
+}

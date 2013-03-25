@@ -28,12 +28,20 @@ function check_digest_options() {
     });
 
     function form_valid() {
+        $('.digest_error').remove();
+        var error;
         if ($('#id_digest_active').prop('checked')) {
-            if ($('#id_digest_email').length) {
+            if ($('#id_digest_email').val().length) {
                 return true;
             }
         }
         return false;
+    }
+
+    function form_status(status) {
+        $('#saved').addClass('label label-info');
+        $('#saved').text(status);
+        $('#saved').fadeIn().fadeOut('slow');
     }
 
     function save_form() {
@@ -54,10 +62,5 @@ function check_digest_options() {
             }
         });
 
-        function form_status(status) {
-            $('#saved').addClass('label label-info');
-            $('#saved').text(status);
-            $('#saved').fadeIn().fadeOut('slow');
-        }
     }
 };

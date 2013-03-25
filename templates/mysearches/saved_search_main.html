@@ -9,7 +9,7 @@
 {% block content %}
 <div class="row">
   <script type="text/javascript">
-    var emails = {{emails}}
+    var emails = {% if emails %}{{emails}}{%else%}""{%endif%}
   </script>
               
     <div class="span12">
@@ -18,7 +18,7 @@
         {% if saved_searches %}
         <table class="table table-striped table-bordered">
           <thead>
-            <th>{% trans "Label" %}</th>
+            <th class="list_width">{% trans "Label" %}</th>
             <th>{% trans "Status" %}</th>
             <th class="mobile_hide">{% trans "Search URL" %}</th>
             <th class="mobile_hide">{% trans "Email Frequency" %}</th>
@@ -30,7 +30,7 @@
             {% for search in saved_searches %}
             <tr>
               <td>{{ search.label }}</td>
-              <td> {% if search.is_active %} Active {% else %} Inactive {% endif %}
+              <td><span class="label label-{% if search.is_active %}success{% else %}default{% endif %}">{% if search.is_active %}Active{%else%}Inactive{%endif%}</span>
               </td>
               <td class="mobile_hide {% if not search.is_active %}inactive_search{% endif %}">{{ search.url }}</td>
               <td class="mobile_hide {% if not search.is_active %}inactive_search{% endif %}">
@@ -59,17 +59,16 @@
         {% endif %}
         <a href="{% url 'add_saved_search' %}" class="btn">{% trans 'New Saved Search' %}</a>
         <div class="formBox digestBox">
+        <p>Each day, you will receive a digest email containing the results of your saved searches that would have otherwise sent you results.</p>
         <form action="" method="post" id="digest-option">
           {% csrf_token %}
-          {% for field in form.visible_fields %}
-          <div class="alert-message block-message error" id="digest_error">{% if field.errors %}{{ field.errors }}{% endif %}</div>
-          {{ field.label_tag }}{{ field }}
-          <div class="clear"></div>
-          {% endfor %}
-          <span class="pull-right">
+            {{ form.is_active}}{{form.is_active.label|attrs:"display:inline-block;"}}
+            {{form.email}}
+            {{ form.send_if_none }}{{form.send_if_none.label_tag}}
+          <div class="pull-right">
           <span id="saved"></span>
           <button type="submit" value="submit" id="digest_submit">Save</button>
-          </span>
+          </div>
         </form>
         </div>
       </div>
