@@ -90,6 +90,11 @@ def saved_search_main(request):
                           instance=digest_obj)
         if form.is_valid():
             form.save()
+            data = "success"
+        else:
+            data = "failure"
+        if request.POST.get('action') == 'save':
+            return HttpResponse(data)
     else:
         form = DigestForm(user=request.user, instance=digest_obj)
     return render_to_response('mysearches/saved_search_main.html',

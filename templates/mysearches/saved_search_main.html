@@ -2,6 +2,10 @@
 {% load i18n %}
 {% load humanize %}
 
+{% block meta-extra %}
+<script src="{{ STATIC_URL }}saved-search-main.js"></script>
+{% endblock %}
+
 {% block content %}
 <div class="row">
   <script type="text/javascript">
@@ -16,37 +20,45 @@
           <thead>
             <th>{% trans "Label" %}</th>
             <th>{% trans "Status" %}</th>
-            <th>{% trans "Send Results to" %}</th>
-            <th>{% trans "Email Frequency" %}</th>
-            <th>{% trans "Notes" %}</th>              
-            <th>{% trans "Last Sent" %}</th>              
+            <th class="mobile_hide">{% trans "Search URL" %}</th>
+            <th class="mobile_hide">{% trans "Email Frequency" %}</th>
+            <th class="mobile_hide">{% trans "Last Sent" %}</th>              
+            <th class="mobile_hide">{% trans "Send Results to" %}</th>
+            <th class="mobile_hide"></th>
           </thead>
           <tbody>
             {% for search in saved_searches %}
             <tr>
-              <td>{{ search.label }}<br>
-                <a href="/saved-search/{{search.id}}">View</a> | <a href="/saved-search/edit/{{search.id}}">Edit</a> </td>
+              <td>{{ search.label }}</td>
               <td> {% if search.is_active %} Active {% else %} Inactive {% endif %}
               </td>
-              <td>{{ search.email }}</td>
-              <td>
+              <td class="mobile_hide {% if not search.is_active %}inactive_search{% endif %}">{{ search.url }}</td>
+              <td class="mobile_hide {% if not search.is_active %}inactive_search{% endif %}">
                 {% if search.frequency == "W" %}
-                Every {{ search.get_verbose_dow }}
+                Weekly<br />
+                On {{ search.get_verbose_dow }}
                 {% elif  search.frequency == "M" %}
-                Every {{ search.day_of_month|ordinal }} of the month
+                Monthly<br />
+                On the {{ search.day_of_month|ordinal }}
                 {% else %}
                 Daily
                 {% endif %}
               </td>
-              <td>{{ search.notes }}</td>
-              <td>{{ search.last_sent }}</td>
+              <td class="mobile_hide {% if not search.is_active %}inactive_search{% endif %}">{{ search.last_sent }}</td>
+              <td class="mobile_hide {% if not search.is_active %}inactive_search{% endif %}">{{ search.email }}</td>
+              <td class="mobile_hide">
+                <a href="/saved-search/{{search.id}}" class="btn">View</a>
+                <a href="/saved-search/edit/{{search.id}}" class="btn">Edit</a>
+            </td>
             </tr>
             {% endfor %}
           </tbody>
         </table>
         {% else %}
-        No Saved Searches!
+        <p>No Saved Searches!</p>
         {% endif %}
+        <a href="{% url 'add_saved_search' %}" class="btn">{% trans 'New Saved Search' %}</a>
+        <div class="formBox digestBox">
         <form action="" method="post" id="digest-option">
           {% csrf_token %}
           {% for field in form.visible_fields %}
@@ -54,9 +66,12 @@
           {{ field.label_tag }}{{ field }}
           <div class="clear"></div>
           {% endfor %}
+          <span class="pull-right">
+          <span id="saved"></span>
           <button type="submit" value="submit" id="digest_submit">Save</button>
+          </span>
         </form>
-        <a href="{% url 'add_saved_search' %}" class="btn pull-right">{% trans 'Add a New Search' %}</a>
+        </div>
       </div>
     </div>
 </div>

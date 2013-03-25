@@ -10,6 +10,8 @@ $(document).ready(function() {
     }
     $('#id_url').after('<div class="form-label pull-left">&nbsp;</div><div id="validated">&nbsp;</div>');
     $('#id_url').after('<div class="clear"></div>');
+    $('#id_frequency').next('.clear').remove();
+    $('#id_day_of_month').next('.clear').remove();
     date_select();
     validate_url();
 });

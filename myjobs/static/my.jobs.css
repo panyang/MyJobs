@@ -95,6 +95,10 @@ ul.ui-autocomplete{
     border: 2px solid #574E44;
     border-radius: 5px;
     }
+.digestBox {
+    margin-top: 20px;
+    width: 60%;
+}
 #account-page-2 .loginBox{
     padding-left: 0px;
     padding-right: 0px;
@@ -535,6 +539,9 @@ em.pendingText{
     #id_notes {
         width: 96% !important;
     }
+    .mobile_hide {
+        display: none;
+    }
 }
 
 table td, table th{
@@ -560,7 +567,7 @@ table td, table th{
     width: auto;
 }*/
 
-label[for=id_digest_active], label[for=id_digest_email] {
+label[for=id_digest_active], label[for=id_digest_email], label[for=id_send_if_none] {
     display: inline-block;
     margin-top: 10px;
     margin-right: 10px;
@@ -626,5 +633,16 @@ label[for=id_digest_active], label[for=id_digest_email] {
 
 #id_day_of_month, #id_day_of_week {
     display: inline;
+}
+
+#saved-search-list table {
+    border-top-left-radius: 5px;
+    border-top-right-radius: 5px;
+    border-bottom-left-radius: 0px;
+    border-bottom-right-radius: 0px;
+}
+
+.inactive_search {
+    color: #ccc;
 }
 

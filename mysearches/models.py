@@ -77,6 +77,8 @@ class SavedSearchDigest(models.Model):
                                     " saved searches as one email?"))
     user = models.OneToOneField('myjobs.User', editable=False)
     email = models.EmailField(max_length=255, verbose_name=_("Send results to"))
+    send_if_none = models.BooleanField(default=False,
+                                       verbose_name=_("Send even if there are no results"))
     
     def send_email(self):
         saved_searches = self.user.savedsearch_set.all()
