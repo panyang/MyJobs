@@ -485,7 +485,7 @@ em.pendingText{
         width: 95%;
     }    
     input[type=checkbox]{
-        float: right;
+        float: left;
         margin-top: -20px;
     }
     input[type=text]{
@@ -498,6 +498,42 @@ em.pendingText{
     }
     ul.ui-autocomplete{
         display: none !important;
+    }
+    label[for=id_is_active] {
+        margin-left: 20px;
+    }
+    label[for=id_notes], label[for=id_label], label[for=id_day_of_month], label[for=id_day_of_week] {
+        display: none !important;
+    }
+    div.actions button {
+        float: none;
+        width: 100%;
+        margin-bottom: 10px;
+    }
+    div.actions a:first {
+        margin-right: 2% !important;
+    }
+    div.actions a {
+        width: 33%;
+        display: inline-block;
+        margin-left: 0px !important;
+    }
+    label[for=id_url] {
+        padding-left: 1%;
+        background-color: #ccc;
+        width: 103% !important;
+        border: 1px solid #bbb;
+    }
+    #id_url {
+        margin-top: -5px;
+    }
+    /*input, textarea {*/
+    #id_url, #id_label, #id_email, #id_notes {
+        border-radius: 0px !important;
+        border: 1px solid #bbb !important;
+    }
+    #id_notes {
+        width: 96% !important;
     }
 }
 
@@ -583,3 +619,12 @@ label[for=id_digest_active], label[for=id_digest_email] {
 .account-settings input[type="text"], input[type="password"] {
     width: 250px;
 }
+
+.id_day_of_month, .id_day_of_week {
+    display: none;
+}
+
+#id_day_of_month, #id_day_of_week {
+    display: inline;
+}
+

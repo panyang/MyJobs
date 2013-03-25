@@ -95,13 +95,13 @@ function date_select() {
     } else if ($('#id_frequency').attr('value') == 'M') { 
         $('label[for="id_day_of_week"]').hide();
         $('#id_day_of_week').hide();
-        $('label[for="id_day_of_month"]').show();
-        $('#id_day_of_month').show();
+        $('label[for="id_day_of_month"]').css('display', 'inline');
+        $('#id_day_of_month').css('display', 'inline');
     } else if ($('#id_frequency').attr('value') == 'W') {
         $('label[for="id_day_of_month"]').hide();
         $('#id_day_of_month').hide();
-        $('label[for="id_day_of_week"]').show();
-        $('#id_day_of_week').show();
+        $('label[for="id_day_of_week"]').css('display', 'inline');
+        $('#id_day_of_week').css('display', 'inline');
     }
 
     $('#id_frequency').change(function() {
@@ -113,13 +113,13 @@ function date_select() {
         } else if ($('#id_frequency').attr('value') == 'M') { 
             $('label[for="id_day_of_week"]').hide();
             $('#id_day_of_week').hide();
-            $('label[for="id_day_of_month"]').show();
-            $('#id_day_of_month').show();
+            $('label[for="id_day_of_month"]').css('display', 'inline');
+            $('#id_day_of_month').css('display', 'inline');
         } else if ($('#id_frequency').attr('value') == 'W') {
             $('label[for="id_day_of_month"]').hide();
             $('#id_day_of_month').hide();
-            $('label[for="id_day_of_week"]').show();
-            $('#id_day_of_week').show();
+            $('label[for="id_day_of_week"]').css('display', 'inline');
+            $('#id_day_of_week').css('display', 'inline');
         }
     });
 };
