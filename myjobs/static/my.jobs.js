@@ -76,19 +76,19 @@ function validate_url() {
         });
 
         function validation_status(status) {
-            var label-text;
+            var label_text;
 
             if (status == 'valid') {
-                label-text = 'label label-success';
+                label_text = 'label label-success';
             } else {
-                label-text = 'label label-important';
+                label_text = 'label label-important';
             }
             if ($("#validated").length) {
                 $('#validated').removeAttr('class');
-                $('#validated').addClass(label-text);
+                $('#validated').addClass(label_text);
                 $("#validated").text(status);
             } else {
-                form.find("#id_url").after(' <div id="validated" class="'+label-text+'">'+status+'</div>');
+                form.find("#id_url").after(' <div id="validated" class="'+label_text+'">'+status+'</div>');
             }
         };
     }
