@@ -8,6 +8,8 @@ $(document).ready(function() {
         $('#id_notes').attr("disabled", "disabled");
         $('#id_day_of_week').attr("disabled", "disabled");
     }
+    $('#id_url').after('<div class="form-label pull-left">&nbsp;</div><div id="validated">&nbsp;</div>');
+    $('#id_url').after('<div class="clear"></div>');
     date_select();
     validate_url();
 });

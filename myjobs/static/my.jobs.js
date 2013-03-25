@@ -59,7 +59,7 @@ function validate_url() {
             success: function(data) {
                 var json = jQuery.parseJSON(data);
                 if (json.url_status == 'valid') {
-                    validation_status('Validated!');
+                    validation_status(json.url_status);
                     $('#id_label').removeAttr("disabled");
                     $('#id_is_active').removeAttr("disabled");
                     $('#id_email').removeAttr("disabled");
@@ -70,16 +70,25 @@ function validate_url() {
                     form.find("#id_feed").val(json.rss_url);
                 }
                 else {
-                    validation_status('Not Valid');
+                    validation_status(json.url_status);
                 }
             }
         });
 
         function validation_status(status) {
+            var label-text;
+
+            if (status == 'valid') {
+                label-text = 'label label-success';
+            } else {
+                label-text = 'label label-important';
+            }
             if ($("#validated").length) {
+                $('#validated').removeAttr('class');
+                $('#validated').addClass(label-text);
                 $("#validated").text(status);
             } else {
-                form.find("#id_url").after(' <div id="validated">'+status+'</div>');
+                form.find("#id_url").after(' <div id="validated" class="'+label-text+'">'+status+'</div>');
             }
         };
     }
