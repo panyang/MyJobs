@@ -6,6 +6,10 @@ $(document).ready(function() {
             window.location = href;
         }
     });
+    $('#new_btn').click(function(e) {
+        e.preventDefault();
+        $('#new_modal').modal();
+    });
 });
 
 function check_digest_options() {

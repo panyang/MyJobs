@@ -23,7 +23,7 @@ $(document).ready(function() {
         $('label[for="id_frequency"]').hide();
         $('label[for="id_email"]').hide();
         $('label[for="id_is_active"]').hide();
-        $('label[for="id_label"]').hide();
+        $('label[for="id_label"]').replaceWith('&nbsp;');
         $('label[for="id_notes"]').hide();
     }
     validate_url();

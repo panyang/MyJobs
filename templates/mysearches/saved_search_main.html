@@ -4,6 +4,7 @@
 
 {% block meta-extra %}
 <script src="{{ STATIC_URL }}saved-search-main.js"></script>
+<script src="http://js.nlx.org/framework/js/code/bootstrap-modal.js"></script>
 {% endblock %}
 
 {% block content %}
@@ -57,7 +58,7 @@
         {% else %}
         <p>No Saved Searches!</p>
         {% endif %}
-        <a href="{% url 'add_saved_search' %}" class="btn">{% trans 'New Saved Search' %}</a>
+        <a href="{% url 'add_saved_search' %}" id="new_btn" data-toggle="modal" class="btn">{% trans 'New Saved Search' %}</a>
         <div class="formBox digestBox">
         <p>Each day, you will receive a digest email containing the results of your saved searches that would have otherwise sent you results.</p>
         <form action="" method="post" id="digest-option">
@@ -70,6 +71,12 @@
           <button type="submit" value="submit" id="digest_submit">Save</button>
           </div>
         </form>
+        <div id="new_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-body">
+                <iframe id="modal_iframe" src="{% url 'add_saved_search' %}">
+                </iframe>
+            </div>
+        </div>
         </div>
       </div>
     </div>

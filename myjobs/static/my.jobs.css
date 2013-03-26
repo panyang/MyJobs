@@ -672,3 +672,13 @@ label[for=id_digest_active], label[for=id_digest_email], label[for=id_send_if_no
     margin-right: 5px;
     margin-top: 3px !important;
 }
+
+#new_modal .modal-body {
+    height: 80%;
+    width: 80%;
+    margin: -20% 0 0 -40%;
+}
+#new_modal iframe {
+    height: 100%;
+    width: 100%;
+}
