@@ -46,9 +46,9 @@ function validate_url() {
     });
 
     function validate () {
-        var csrf_token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+        var csrf_token = document.getElementsByName('csrfmiddlewaretoken')[1].value;
         var form = $('form');
-        var url = form.find("#id_url").val(); 
+        var url = $("#id_url").val(); 
         validation_status('Validating...')
         $.ajax({
             type: "POST",
@@ -94,6 +94,8 @@ function validate_url() {
             $('label[for="id_email"]').show();
             $('label[for="id_is_active"]').show();
             $('label[for="id_notes"]').show();
+            $('#add_save').show();
+            $('#add_cancel').show();
         }
 
         function validation_status(status) {

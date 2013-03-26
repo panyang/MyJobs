@@ -5,6 +5,7 @@
 {% block meta-extra %}
 <script src="{{ STATIC_URL }}saved-search-main.js"></script>
 <script src="http://js.nlx.org/framework/js/code/bootstrap-modal.js"></script>
+<script src="{{ STATIC_URL }}saved-search.js"></script>
 {% endblock %}
 
 {% block content %}
@@ -58,7 +59,7 @@
         {% else %}
         <p>No Saved Searches!</p>
         {% endif %}
-        <a href="{% url 'add_saved_search' %}" id="new_btn" data-toggle="modal" class="btn">{% trans 'New Saved Search' %}</a>
+        <a href="" id="new_btn" data-toggle="modal" class="btn">{% trans 'New Saved Search' %}</a>
         <div class="formBox digestBox">
         <p>Each day, you will receive a digest email containing the results of your saved searches that would have otherwise sent you results.</p>
         <form action="" method="post" id="digest-option">
@@ -71,14 +72,29 @@
           <button type="submit" value="submit" id="digest_submit">Save</button>
           </div>
         </form>
-        <div id="new_modal" class="modal hide fade" tabindex="-1" role="dialog" aria-hidden="true">
-            <div class="modal-body">
-                <iframe id="modal_iframe" src="{% url 'add_saved_search' %}">
-                </iframe>
-            </div>
-        </div>
         </div>
       </div>
     </div>
+</div>
+
+<div id="new_modal" class="modal hide fade">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h1>{% trans "Save" %} <small>{% trans "a Search" %}</small></h1>
+    <form action="" method="post" id="saved-search-form">
+    </div>
+    <div class="modal-body">
+        <div class="formBox">
+            {% include "includes/form-error-highlight.html" with form=add_form %}
+            {% csrf_token %}
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="actions">
+          <a id="add_save" href="" class="btn pull-right">Save</a>
+          <a id="add_cancel" href="" class="btn pull-right">{% trans 'Cancel' %}</a>
+        </div>
+    </div>
+    </form>
 </div>
 {% endblock content %}

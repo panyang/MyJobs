@@ -25,6 +25,8 @@ $(document).ready(function() {
         $('label[for="id_is_active"]').hide();
         $('label[for="id_label"]').replaceWith('&nbsp;');
         $('label[for="id_notes"]').hide();
+        $('#add_save').hide();
+        $('#add_cancel').hide();
     }
     validate_url();
 });

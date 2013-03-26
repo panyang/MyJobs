@@ -85,7 +85,25 @@ def saved_search_main(request):
     except:
         digest_obj = None
     saved_searches = SavedSearch.objects.filter(user=request.user)
+    add_form = SavedSearchForm(user=request.user, data=request.POST)
     if request.method == "POST":
+        if request.POST.get('action') == 'validate':
+            rss_url, rss_soup = validate_dotjobs_url(request.POST['url'])
+            if rss_url:
+               feed_title = get_feed_title(rss_soup)
+               # returns the RSS url via AJAX to show if field is validated
+               # id valid, the label field is auto populated with the feed_title
+               data = {'rss_url': rss_url,
+                       'feed_title': feed_title,
+                       'url_status': 'valid'
+               }
+            else:
+                data = {'url_status': 'not valid'}
+            return HttpResponse(json.dumps(data))
+        else:
+            if add_form.is_valid():
+                add_form.save()
+                return HttpResponseRedirect('/saved-search')
         form = DigestForm(user=request.user, data=request.POST,
                           instance=digest_obj)
         if form.is_valid():
@@ -97,9 +115,10 @@ def saved_search_main(request):
             return HttpResponse(data)
     else:
         form = DigestForm(user=request.user, instance=digest_obj)
+        add_form = SavedSearchForm(user=request.user)
     return render_to_response('mysearches/saved_search_main.html',
                               {'saved_searches': saved_searches,
-                               'form':form},
+                               'form':form, 'add_form': add_form},
                               RequestContext(request))
 
 @login_required
