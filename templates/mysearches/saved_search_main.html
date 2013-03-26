@@ -62,7 +62,7 @@
         <p>Each day, you will receive a digest email containing the results of your saved searches that would have otherwise sent you results.</p>
         <form action="" method="post" id="digest-option">
           {% csrf_token %}
-            {{ form.is_active}}{{form.is_active.label|attrs:"display:inline-block;"}}
+            {{ form.is_active}}{{form.is_active.label}}
             {{form.email}}
             {{ form.send_if_none }}{{form.send_if_none.label_tag}}
           <div class="pull-right">

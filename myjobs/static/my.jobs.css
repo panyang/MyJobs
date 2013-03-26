@@ -550,6 +550,9 @@ em.pendingText{
     #id_digest_email, #id_digest_active, #id_send_if_none {
         margin-bottom: 25px !important;
     }
+    #validated_label {
+        display: none;
+    }
 }
 
 table td, table th{
@@ -657,4 +660,8 @@ label[for=id_digest_active], label[for=id_digest_email], label[for=id_send_if_no
 .digest_error {
     background-color: #f00;
     display: inline-block;
+}
+
+#id_label {
+    margin-top: 10px;
 }

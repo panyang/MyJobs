@@ -60,12 +60,7 @@ function validate_url() {
                 var json = jQuery.parseJSON(data);
                 if (json.url_status == 'valid') {
                     validation_status(json.url_status);
-                    $('#id_label').removeAttr("disabled");
-                    $('#id_is_active').removeAttr("disabled");
-                    $('#id_email').removeAttr("disabled");
-                    $('#id_frequency').removeAttr("disabled");
-                    $('#id_notes').removeAttr("disabled");
-                    $('#id_day_of_week').removeAttr("disabled");
+                    enable_fields();
                     form.find("#id_label").val(json.feed_title);
                     form.find("#id_feed").val(json.rss_url);
                 }
@@ -74,6 +69,28 @@ function validate_url() {
                 }
             }
         });
+
+        function enable_fields() {
+            $('#id_label').removeAttr("disabled", "disabled");
+            $('#id_label').show();
+            $('#id_is_active').removeAttr("disabled", "disabled");
+            $('#id_is_active').show();
+            $('#id_email').removeAttr("disabled", "disabled");
+            $('#id_email').show();
+            $('#id_frequency').removeAttr("disabled", "disabled");
+            $('#id_frequency').show();
+            $('#id_notes').removeAttr("disabled", "disabled");
+            $('#id_notes').show();
+            $('#id_day_of_week').removeAttr("disabled", "disabled");
+            $('#id_day_of_week').show();
+            $('#id_day_of_month').removeAttr("disabled", "disabled");
+            $('#id_day_of_month').show();
+            $('label[for="id_frequency"]').show();
+            $('label[for="id_email"]').show();
+            $('label[for="id_is_active"]').show();
+            $('label[for="id_label"]').hide();
+            $('label[for="id_notes"]').hide();
+        }
 
         function validation_status(status) {
             var label_text;

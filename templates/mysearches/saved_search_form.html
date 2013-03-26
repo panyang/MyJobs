@@ -11,13 +11,13 @@
   <div class="row">
     <div class="span8">
       <div class="formBox">
-        <h1>{% trans "Save a Search" %}</h1>
+        <h1>{% trans "Save" %} <small>{% trans "a Search" %}</h1>
         <form action="" method="post" id="saved-search-form">
           {% include "includes/form-error-highlight.html" %}
           {% csrf_token %}
           <div class="actions">
+            <button type="submit" class="btn pull-right" value="submit">Save</button>
             <a href="{% url 'saved_search_main' %}" class="btn pull-right">{% trans 'Cancel' %}</a>
-            <button type="submit" class="btn primary pull-right" value="submit">Save</button>
         </div>
         </form>
       </div>
