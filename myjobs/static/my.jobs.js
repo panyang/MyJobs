@@ -61,8 +61,13 @@ function validate_url() {
                 if (json.url_status == 'valid') {
                     validation_status(json.url_status);
                     enable_fields();
-                    form.find("#id_label").val(json.feed_title);
-                    form.find("#id_feed").val(json.rss_url);
+                    date_select();
+                    if ($('#id_label').prop('value').length <= 0) {
+                        form.find("#id_label").val(json.feed_title);
+                    }
+                    if ($('#id_feed').prop('value').length <= 0) {
+                        form.find("#id_feed").val(json.rss_url);
+                    }
                 }
                 else {
                     validation_status(json.url_status);
@@ -71,25 +76,24 @@ function validate_url() {
         });
 
         function enable_fields() {
-            $('#id_label').removeAttr("disabled", "disabled");
+            $('#id_label').removeAttr("disabled");
             $('#id_label').show();
-            $('#id_is_active').removeAttr("disabled", "disabled");
+            $('#id_is_active').removeAttr("disabled");
             $('#id_is_active').show();
-            $('#id_email').removeAttr("disabled", "disabled");
+            $('#id_email').removeAttr("disabled");
             $('#id_email').show();
-            $('#id_frequency').removeAttr("disabled", "disabled");
+            $('#id_frequency').removeAttr("disabled");
             $('#id_frequency').show();
-            $('#id_notes').removeAttr("disabled", "disabled");
+            $('#id_notes').removeAttr("disabled");
             $('#id_notes').show();
-            $('#id_day_of_week').removeAttr("disabled", "disabled");
+            $('#id_day_of_week').removeAttr("disabled");
             $('#id_day_of_week').show();
-            $('#id_day_of_month').removeAttr("disabled", "disabled");
+            $('#id_day_of_month').removeAttr("disabled");
             $('#id_day_of_month').show();
             $('label[for="id_frequency"]').show();
             $('label[for="id_email"]').show();
             $('label[for="id_is_active"]').show();
-            $('label[for="id_label"]').hide();
-            $('label[for="id_notes"]').hide();
+            $('label[for="id_notes"]').show();
         }
 
         function validation_status(status) {
@@ -105,7 +109,7 @@ function validate_url() {
                 $('#validated').addClass(label_text);
                 $("#validated").text(status);
             } else {
-                form.find("#id_url").after(' <div id="validated" class="'+label_text+'">'+status+'</div>');
+                form.find("#validated_label").after(' <div id="validated" class="'+label_text+'">'+status+'</div>');
             }
         };
     }

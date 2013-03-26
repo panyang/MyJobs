@@ -26,7 +26,5 @@ $(document).ready(function() {
         $('label[for="id_label"]').hide();
         $('label[for="id_notes"]').hide();
     }
-
-    //date_select();
     validate_url();
 });

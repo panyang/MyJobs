@@ -457,6 +457,11 @@ em.pendingText{
         height: 35px;
     }
 }
+@media screen and (min-width: 501px){
+    #id_label {
+        margin-top: 10px;
+    }
+}
 @media screen and (max-width: 500px){
     #titleRow{
         margin-top: 0px;
@@ -547,11 +552,15 @@ em.pendingText{
     .list_width {
         width: 80%;
     }
-    #id_digest_email, #id_digest_active, #id_send_if_none {
-        margin-bottom: 25px !important;
-    }
     #validated_label {
         display: none;
+    }
+    #validated {
+        display: inline;
+        padding: 7px;
+    }
+    #id_label {
+        margin-top: 10px !important;
     }
 }
 
@@ -580,13 +589,8 @@ table td, table th{
 
 label[for=id_digest_active], label[for=id_digest_email], label[for=id_send_if_none] {
     display: inline-block;
-/*    margin-top: 10px;*/
     margin-right: 10px;
 }
-
-/*#id_digest_active, #id_digest_email {
-    margin: 0 ;
-}*/
 
 .account-box {
     padding: 0;
@@ -662,6 +666,9 @@ label[for=id_digest_active], label[for=id_digest_email], label[for=id_send_if_no
     display: inline-block;
 }
 
-#id_label {
-    margin-top: 10px;
+#id_digest_email, #id_digest_active, #id_send_if_none {
+    margin-bottom: 5px !important;
+    display: inline-block;
+    margin-right: 5px;
+    margin-top: 3px !important;
 }

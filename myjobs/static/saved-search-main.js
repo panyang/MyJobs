@@ -1,5 +1,11 @@
 $(document).ready(function() {
     check_digest_options();
+    $('tr').click(function() {
+        var href = $(this).find('.edit').prop('href');
+        if ($(window).width() <= 500 && typeof(href) != 'undefined') {
+            window.location = href;
+        }
+    });
 });
 
 function check_digest_options() {

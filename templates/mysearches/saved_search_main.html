@@ -48,7 +48,7 @@
               <td class="mobile_hide {% if not search.is_active %}inactive_search{% endif %}">{{ search.email }}</td>
               <td class="mobile_hide">
                 <a href="/saved-search/{{search.id}}" class="btn">View</a>
-                <a href="/saved-search/edit/{{search.id}}" class="btn">Edit</a>
+                <a href="/saved-search/edit/{{search.id}}" class="btn edit">Edit</a>
             </td>
             </tr>
             {% endfor %}
@@ -62,9 +62,9 @@
         <p>Each day, you will receive a digest email containing the results of your saved searches that would have otherwise sent you results.</p>
         <form action="" method="post" id="digest-option">
           {% csrf_token %}
-            {{ form.is_active}}{{form.is_active.label}}
-            {{form.email}}
-            {{ form.send_if_none }}{{form.send_if_none.label_tag}}
+            <div>{{ form.is_active}}{{form.is_active.label_tag}}
+            {{form.email}}</div>
+            <div>{{ form.send_if_none }}{{form.send_if_none.label_tag}}</div>
           <div class="pull-right">
           <span id="saved"></span>
           <button type="submit" value="submit" id="digest_submit">Save</button>
