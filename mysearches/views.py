@@ -85,9 +85,6 @@ def saved_search_main(request):
     except:
         digest_obj = None
     saved_searches = SavedSearch.objects.filter(user=request.user)
-    print request.POST
-    print
-    print request.GET
     if request.method == "POST":
         add_form = SavedSearchForm(user=request.user, data=request.POST)
         form = DigestForm(user=request.user, data=request.POST,
