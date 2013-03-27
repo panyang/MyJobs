@@ -22,7 +22,6 @@ $(document).ready(function() {
         } else {
             dW = dH = 0.1;
         }
-        console.log(dW + ' ' + dH);
         var width = $(window).width();
         var margin_w = width * dW;
         var height = $(window).height();
@@ -100,9 +99,14 @@ function check_digest_options() {
     }
 
     function form_status(status) {
+        var delay = 5000;
+        var timer;
+        clearTimeout(timer);
         $('#saved').addClass('label label-info');
         $('#saved').text(status);
-        $('#saved').fadeIn().fadeOut('slow');
+        // Fade in 600ms, wait 5s, fade out 600ms
+        $('#saved').fadeIn('slow');
+        timer = setTimeout('$("#saved").fadeOut("slow")', delay);
     }
 
     function save_form() {
