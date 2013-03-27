@@ -95,10 +95,6 @@ ul.ui-autocomplete{
     border: 2px solid #574E44;
     border-radius: 5px;
     }
-.digestBox {
-    margin-top: 20px;
-    width: 60%;
-}
 #account-page-2 .loginBox{
     padding-left: 0px;
     padding-right: 0px;
@@ -502,9 +498,6 @@ em.pendingText{
         float: left;
         margin-top: -20px;
     }
-    input[type=text]{
-        width: 97%;
-    }
     input.comboboxWidget{
         width: 60%;
         float: none;
@@ -530,7 +523,6 @@ em.pendingText{
     label[for=id_url] {
         padding-left: 1%;
         background-color: #ccc;
-        width: 103% !important;
         border: 1px solid #bbb;
     }
     #id_url {
@@ -541,14 +533,8 @@ em.pendingText{
         border-radius: 0px !important;
         border: 1px solid #bbb !important;
     }
-    #id_notes {
-        width: 96% !important;
-    }
     .mobile_hide {
         display: none !important;
-    }
-    .digestBox {
-        width: 92%;
     }
     .list_width {
         width: 80%;
@@ -558,9 +544,6 @@ em.pendingText{
     }
     #id_label {
         margin-top: 0px !important;
-    }
-    html, body {
-        background: none !important;
     }
     .section.subpage {
         background-color: #fff;
@@ -688,4 +671,9 @@ label[for=id_digest_active], label[for=id_digest_email], label[for=id_send_if_no
 
 .modal-body {
     max-height: 80%;
+}
+
+.formBox.span7 {
+    margin-top: 20px;
+    float: none;
 }
