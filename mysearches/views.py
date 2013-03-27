@@ -85,10 +85,15 @@ def saved_search_main(request):
     except:
         digest_obj = None
     saved_searches = SavedSearch.objects.filter(user=request.user)
+    print request.POST
+    print
+    print request.GET
     if request.method == "POST":
         add_form = SavedSearchForm(user=request.user, data=request.POST)
         form = DigestForm(user=request.user, data=request.POST,
                           instance=digest_obj)
+
+        # Ensure that url is a valid job rss feed
         if request.POST.get('action') == 'validate':
             rss_url, rss_soup = validate_dotjobs_url(request.POST['url'])
             if rss_url:
@@ -102,6 +107,8 @@ def saved_search_main(request):
             else:
                 data = {'url_status': 'not valid'}
             return HttpResponse(json.dumps(data))
+
+        # Save digest form
         elif request.POST.get('action') == 'save':
             if form.is_valid():
                 form.save()
@@ -110,6 +117,7 @@ def saved_search_main(request):
                 data = "failure"
             return HttpResponse(data)
 
+        # Save new search form
         elif request.POST.get('action') == 'new_search':
             if add_form.is_valid():
                 add_form.save()
@@ -118,6 +126,10 @@ def saved_search_main(request):
                 data = "failure"
             return HttpResponse(data)
 
+        if form.is_valid():
+            form.save();
+        if add_form.is_valid():
+            add_form.save()
     else:
         form = DigestForm(user=request.user, instance=digest_obj)
         add_form = SavedSearchForm(user=request.user)

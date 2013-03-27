@@ -26,13 +26,13 @@
             <th class="mobile_hide">{% trans "Email Frequency" %}</th>
             <th class="mobile_hide">{% trans "Last Sent" %}</th>              
             <th class="mobile_hide">{% trans "Send Results to" %}</th>
-            <th class="mobile_hide"></th>
+            <th></th>
           </thead>
           <tbody>
             {% for search in saved_searches %}
             <tr>
-              <td>{{ search.label }}</td>
-              <td><span class="label label-{% if search.is_active %}success{% else %}default{% endif %}">{% if search.is_active %}Active{%else%}Inactive{%endif%}</span>
+              <td class="view_search">{{ search.label }}</td>
+              <td class="edit_search"><span class="label label-{% if search.is_active %}success{% else %}default{% endif %}">{% if search.is_active %}Active{%else%}Inactive{%endif%}</span>
               </td>
               <td class="mobile_hide {% if not search.is_active %}inactive_search{% endif %}">{{ search.url }}</td>
               <td class="mobile_hide {% if not search.is_active %}inactive_search{% endif %}">
@@ -48,8 +48,8 @@
               </td>
               <td class="mobile_hide {% if not search.is_active %}inactive_search{% endif %}">{{ search.last_sent }}</td>
               <td class="mobile_hide {% if not search.is_active %}inactive_search{% endif %}">{{ search.email }}</td>
-              <td class="mobile_hide">
-                <a href="/saved-search/{{search.id}}" class="btn">View</a>
+              <td>
+                <a href="/saved-search/{{search.id}}" class="btn view mobile_hide">View</a>
                 <a href="/saved-search/edit/{{search.id}}" class="btn edit">Edit</a>
             </td>
             </tr>
@@ -91,8 +91,8 @@
     </div>
     <div class="modal-footer">
         <div class="actions">
-          <a id="add_save" href="" class="btn pull-right">Save</a>
-          <a id="add_cancel" href="" class="btn pull-right">{% trans 'Cancel' %}</a>
+          <button id="add_save" action="#new_search" class="btn pull-right">Save</button>
+          <button id="add_cancel" data-dismiss="modal" aria-hidden="true" class="btn pull-right">{% trans 'Cancel' %}</button>
         </div>
     </div>
     </form>

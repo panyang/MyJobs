@@ -549,7 +549,7 @@ em.pendingText{
         width: 96% !important;
     }
     .mobile_hide {
-        display: none;
+        display: none !important;
     }
     .digestBox {
         width: 92%;

@@ -95,7 +95,6 @@ function validate_url() {
             $('label[for="id_is_active"]').show();
             $('label[for="id_notes"]').show();
             $('#add_save').show();
-            $('#add_cancel').show();
         }
 
         function validation_status(status) {
