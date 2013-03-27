@@ -1,5 +1,31 @@
 $(document).ready(function() {
     check_digest_options();
+    resize_modal();
+
+    $(window).resize(function() {
+        resize_modal();
+    });
+
+    function resize_modal() {
+        var max_height, margin_top, width, margin_left;
+        if ($(window).width() <= 500) {
+            max_height = $(window).height();
+            margin_top = -(max_height/2);
+            width = $(window).width();
+            margin_left = -(width/2);
+        } else {
+            max_height = ($(window).height() * 0.8);
+            margin_top = -(max_height / 2);
+            width = $(window).width() * 0.8;
+            margin_left = -(width/2);
+        }
+        $('#new_modal').css({
+            'max-height': max_height.toFixed(0) + 'px',
+            'margin-top': margin_top.toFixed(0) + 'px',
+            'width': width.toFixed(0) + 'px',
+            'margin-left': margin_left.toFixed(0) + 'px',
+        });
+    }
 
     $('td.view_search').click(function() {
         var href = $(this).parent().find('.view').prop('href');

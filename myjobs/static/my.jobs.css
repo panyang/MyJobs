@@ -503,7 +503,7 @@ em.pendingText{
         margin-top: -20px;
     }
     input[type=text]{
-        width: 100%;
+        width: 97%;
     }
     input.comboboxWidget{
         width: 60%;
@@ -523,13 +523,8 @@ em.pendingText{
         float: none;
         width: 100%;
         margin-bottom: 10px;
-    }
-    div.actions a:first {
-        margin-right: 2% !important;
-    }
-    div.actions a {
-        width: 33%;
-        display: inline-block;
+        display: block;
+        margin-right: 0px;
         margin-left: 0px !important;
     }
     label[for=id_url] {
@@ -540,6 +535,7 @@ em.pendingText{
     }
     #id_url {
         margin-top: -5px;
+        margin-bottom: 15px !important;
     }
     #id_url, #id_label, #id_email, #id_notes {
         border-radius: 0px !important;
@@ -560,9 +556,6 @@ em.pendingText{
     #validated_label {
         display: none;
     }
-    #id_url {
-        margin-bottom: 15px !important;
-    }
     #id_label {
         margin-top: 0px !important;
     }
@@ -573,9 +566,14 @@ em.pendingText{
         background-color: #fff;
     }
 
-    #new_modal .modal-body {
+/*    #new_modal .modal-body {
         height: 100%;
         width: 100%;
+    }*/
+    .modal {
+        position: fixed !important;
+        top: 100px;
+        bottom: 0px;
     }
 }
 
@@ -688,3 +686,6 @@ label[for=id_digest_active], label[for=id_digest_email], label[for=id_send_if_no
     margin-top: 3px !important;
 }
 
+.modal-body {
+    max-height: 80%;
+}
