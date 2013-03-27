@@ -85,8 +85,10 @@ def saved_search_main(request):
     except:
         digest_obj = None
     saved_searches = SavedSearch.objects.filter(user=request.user)
-    add_form = SavedSearchForm(user=request.user, data=request.POST)
     if request.method == "POST":
+        add_form = SavedSearchForm(user=request.user, data=request.POST)
+        form = DigestForm(user=request.user, data=request.POST,
+                          instance=digest_obj)
         if request.POST.get('action') == 'validate':
             rss_url, rss_soup = validate_dotjobs_url(request.POST['url'])
             if rss_url:
@@ -100,19 +102,22 @@ def saved_search_main(request):
             else:
                 data = {'url_status': 'not valid'}
             return HttpResponse(json.dumps(data))
-        else:
+        elif request.POST.get('action') == 'save':
+            if form.is_valid():
+                form.save()
+                data = "success"
+            else:
+                data = "failure"
+            return HttpResponse(data)
+
+        elif request.POST.get('action') == 'new_search':
             if add_form.is_valid():
                 add_form.save()
-                return HttpResponseRedirect('/saved-search')
-        form = DigestForm(user=request.user, data=request.POST,
-                          instance=digest_obj)
-        if form.is_valid():
-            form.save()
-            data = "success"
-        else:
-            data = "failure"
-        if request.POST.get('action') == 'save':
+                data = "success"
+            else:
+                data = "failure"
             return HttpResponse(data)
+
     else:
         form = DigestForm(user=request.user, instance=digest_obj)
         add_form = SavedSearchForm(user=request.user)

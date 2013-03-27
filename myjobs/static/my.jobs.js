@@ -62,11 +62,11 @@ function validate_url() {
                     validation_status(json.url_status);
                     enable_fields();
                     date_select();
-                    if ($('#id_label').prop('value').length <= 0) {
-                        form.find("#id_label").val(json.feed_title);
+                    if ($('#id_label').val().length == 0) {
+                        $("#id_label").val(json.feed_title);
                     }
-                    if ($('#id_feed').prop('value').length <= 0) {
-                        form.find("#id_feed").val(json.rss_url);
+                    if ($('#id_feed').val().length == 0) {
+                        $("#id_feed").val(json.rss_url);
                     }
                 }
                 else {

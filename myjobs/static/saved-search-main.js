@@ -1,15 +1,19 @@
 $(document).ready(function() {
     check_digest_options();
+    post_new_search();
+
     $('tr').click(function() {
         var href = $(this).find('.edit').prop('href');
         if ($(window).width() <= 500 && typeof(href) != 'undefined') {
             window.location = href;
         }
     });
+
     $('#new_btn').click(function(e) {
         e.preventDefault();
         $('#new_modal').modal();
     });
+
     $(window).resize(function() {
         var dW;
         var dH;
@@ -26,6 +30,38 @@ $(document).ready(function() {
         $('.modal-body').css('margin', margin_w+'px '+margin_h+'px;');
     });
 });
+
+function post_new_search() {
+    $('#add_save').click(function() {
+        submit();
+    });
+
+    function submit() {
+        var csrf_token = document.getElementsByName('csrfmiddlewaretoken')[1].value;
+        $.ajax({
+            data: { csrfmiddlewaretoken: csrf_token, action: 'new_search',
+                    feed: $('#id_feed').val(),
+                    url: $('#id_url').val(),
+                    label: $('#id_label').val(),
+                    is_active: $('#id_is_active').prop('checked')? 'True':'False',
+                    email: $('#id_email').val(),
+                    frequency: $('#id_frequency').val(),
+                    day_of_week: $('#id_day_of_week').val(),
+                    day_of_month: $('#id_day_of_month').val(),
+                    notes: $('#id_notes').val()
+            },
+            type: 'POST',
+            url: '',
+            complete: function(data) {
+                console.log(data);
+                if (data == 'success') {
+                } else {
+                }
+            }
+        });
+
+    }
+};
 
 function check_digest_options() {
     // When the user interacts with any fields in the Digest Options form,
@@ -86,6 +122,5 @@ function check_digest_options() {
                 }
             }
         });
-
     }
 };
