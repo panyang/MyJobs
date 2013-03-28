@@ -550,12 +550,7 @@ em.pendingText{
         background-color: #fff;
     }
 
-/*    #new_modal .modal-body {
-        height: 100%;
-        width: 100%;
-    }*/
     .modal {
-        position: fixed !important;
         bottom: 0px;
     }
 }
