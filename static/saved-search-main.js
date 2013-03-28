@@ -164,7 +164,7 @@ function check_digest_options() {
     var timer;
     var pause_interval = 1000;
 
-    $('#digest_save').click(function(e) {
+    $('#digest_submit').click(function(e) {
         e.preventDefault();
         if (form_valid()) {
             save_form();
