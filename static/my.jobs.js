@@ -45,8 +45,10 @@ function validate_url() {
         }
     });
 
+    $('[rel="tooltip"]').tooltip();
+
     function validate () {
-        var csrf_token = document.getElementsByName('csrfmiddlewaretoken')[1].value;
+        var csrf_token = $('#saved-search-form input[name=csrfmiddlewaretoken]').val();
         var form = $('form');
         var url = $("#id_url").val(); 
         validation_status('Validating...')

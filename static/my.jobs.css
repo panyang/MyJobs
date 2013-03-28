@@ -652,10 +652,6 @@ table td, table th{
     border-bottom-right-radius: 0px;
 }
 
-.inactive_search {
-    color: #ccc;
-}
-
 .digest_error {
     background-color: #f00;
     display: inline-block;

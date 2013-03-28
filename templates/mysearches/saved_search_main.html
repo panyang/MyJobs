@@ -5,6 +5,7 @@
 {% block meta-extra %}
 <script src="{{ STATIC_URL }}saved-search-main.js"></script>
 <script src="http://js.nlx.org/framework/js/code/bootstrap-modal.js"></script>
+<script src="http://js.nlx.org/framework/js/code/bootstrap-tooltips.js"></script>
 <script src="{{ STATIC_URL }}saved-search.js"></script>
 {% endblock %}
 
@@ -21,21 +22,16 @@
         <table class="table table-striped table-bordered">
           <thead>
             <th class="list_width">{% trans "Label" %}</th>
-            <th>{% trans "Status" %}</th>
             <th class="mobile_hide">{% trans "Search URL" %}</th>
-            <th class="mobile_hide">{% trans "Email Frequency" %}</th>
-            <th class="mobile_hide">{% trans "Last Sent" %}</th>              
-            <th class="mobile_hide">{% trans "Send Results to" %}</th>
+            <th class="mobile_hide">{% trans "Frequency" %}</th>
             <th></th>
           </thead>
           <tbody>
             {% for search in saved_searches %}
-            <tr>
-              <td class="view_search">{{ search.label }}</td>
-              <td class="edit_search"><span class="label label-{% if search.is_active %}success{% else %}default{% endif %}">{% if search.is_active %}Active{%else%}Inactive{%endif%}</span>
-              </td>
-              <td class="mobile_hide {% if not search.is_active %}inactive_search{% endif %}">{{ search.url }}</td>
-              <td class="mobile_hide {% if not search.is_active %}inactive_search{% endif %}">
+            <tr rel="tooltip" title="<h5>Saved Search Details</h5><div>Last sent: {% if search.last_sent %}{{ search.last_sent }}{% else %}Never{% endif %}</div><div>Sent to: {{ search.email }}</div>">
+              <td class="view_search"><div>{{ search.label }}</div><div class="label label-{% if search.is_active %}success{% else %}default{% endif %}">{% if search.is_active %}Active{%else%}Inactive{%endif%}</div></td>
+              <td class="mobile_hide {% if not search.is_active %}muted{% endif %}">{{ search.url }}</td>
+              <td class="mobile_hide {% if not search.is_active %}muted{% endif %}">
                 {% if search.frequency == "W" %}
                 Weekly<br />
                 On {{ search.get_verbose_dow }}
@@ -46,8 +42,6 @@
                 Daily
                 {% endif %}
               </td>
-              <td class="mobile_hide {% if not search.is_active %}inactive_search{% endif %}">{{ search.last_sent }}</td>
-              <td class="mobile_hide {% if not search.is_active %}inactive_search{% endif %}">{{ search.email }}</td>
               <td>
                 <a href="/saved-search/{{search.id}}" class="btn view mobile_hide">View</a>
                 <a href="/saved-search/edit/{{search.id}}" class="btn edit">Edit</a>
@@ -60,19 +54,22 @@
         <p>No Saved Searches!</p>
         {% endif %}
         <a href="{% url 'add_saved_search' %}" id="new_btn" data-toggle="modal" class="btn">{% trans 'New Saved Search' %}</a>
-        <div class="formBox span7">
-        <p>Each day, you will receive a digest email containing the results of your saved searches that would have otherwise sent you results.</p>
-        <form action="" method="post" id="digest-option">
-          {% csrf_token %}
-            <div>{{ form.is_active}}{{form.is_active.label_tag}}
-            {{form.email}}</div>
-            <div>{{ form.send_if_none }}{{form.send_if_none.label_tag}}</div>
-          <div class="pull-right">
-          <span id="saved"></span>
-          <button type="submit" value="submit" id="digest_submit">Save</button>
-          </div>
-        </form>
-        </div>
+        <div class="row">
+            <div class="formBox span7">
+            <h5>Digest Options</h5>
+            <p>Each day, you will receive a digest email containing the results of your saved searches that would have otherwise sent you results.</p>
+            <form action="" method="post" id="digest-option">
+              {% csrf_token %}
+                <div>{{ form.is_active}}{{form.is_active.label_tag}}
+                {{form.email}}</div>
+                <div>{{ form.send_if_none }}{{form.send_if_none.label_tag}}</div>
+              <div class="pull-right">
+              <span id="saved"></span>
+              <button type="submit" value="submit" id="digest_submit">Save</button>
+              </div>
+            </form>
+            </div>
+      </div>
       </div>
     </div>
 </div>
