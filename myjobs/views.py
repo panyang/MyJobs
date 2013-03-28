@@ -56,7 +56,7 @@ def home(request):
     education_form = instantiate_profile_forms(request,[EducationForm],
                                                settings)[0]
     phone_form = instantiate_profile_forms(request,[TelephoneForm],settings)[0]
-    work_form = instantiate_profile_forms(request,[WorkHistoryForm],settings)[0]
+    work_form = instantiate_profile_forms(request,[EmploymentHistoryForm],settings)[0]
     address_form = instantiate_profile_forms(request,[AddressForm],settings)[0]
 
         
@@ -103,7 +103,7 @@ def home(request):
                                                   settings,post=True)[0]
             phone_form = instantiate_profile_forms(request,[TelephoneForm],
                                                   settings,post=True)[0]
-            work_form = instantiate_profile_forms(request,[WorkHistoryForm],
+            work_form = instantiate_profile_forms(request,[EmploymentHistoryForm],
                                                   settings,post=True)[0]
             address_form = instantiate_profile_forms(request,[AddressForm],
                                                   settings_show_all,post=True)[0]

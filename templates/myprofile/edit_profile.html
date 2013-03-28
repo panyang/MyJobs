@@ -14,16 +14,18 @@
       {% for module in profile_config %}
       <div class="formBox">
         <h4>{{ module.verbose }}</h4>
-        {% for item in module.items %}
-        <div id="{{module.name}}-{{item.id}}-item"><div class="item-detail">
-          {% for label, value in item.get_fields %}
-          <b>{{ label }}: </b> {{ value }}<br>
-          {% endfor %}
-        </div>
-          <button class="btn" id="{{module.name}}-{{item.id}}-edit" id=>Edit</button>
-        </div>
+        <div class="item-list">
+          {% for item in module.items %}
+          <div id="{{module.name}}-{{item.id}}-item"><div class="item-detail">
+              {% for label, value in item.get_fields %}
+              <b>{{ label }}: </b> {{ value }}<br>
+              {% endfor %}
+            </div>
+            <button class="btn" id="{{module.name}}-{{item.id}}-edit" id=>Edit</button>
+          </div>
           <hr>
         {% endfor %}
+        </div>
         <div><button class="btn primary" id="{{module.name}}-new-add">Add Another</button></div>
       </div>
       {% endfor %}
