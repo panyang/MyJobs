@@ -58,50 +58,21 @@ def saved_search_main(request):
         digest_obj = None
     saved_searches = SavedSearch.objects.filter(user=request.user)
     if request.method == "POST":
+        action = request.POST.get('action')
 
-        # form and add_form each have is_valid as a data member
-        # Blindly creating the forms from POST could cause one or the
-        # other to get overwritten if the wrong action is present
-        if request.POST.get('action') != 'new_search':
+        if action != 'new_search':
             form = DigestForm(user=request.user, data=request.POST,
                               instance=digest_obj)
 
-        # Ensure that url is a valid job rss feed
-        if request.POST.get('action') == 'validate':
-            rss_url, rss_soup = validate_dotjobs_url(request.POST['url'])
-            if rss_url:
-               feed_title = get_feed_title(rss_soup)
-               # returns the RSS url via AJAX to show if field is validated
-               # id valid, the label field is auto populated with the feed_title
-               data = {'rss_url': rss_url,
-                       'feed_title': feed_title,
-                       'url_status': 'valid'
-               }
-            else:
-                data = {'url_status': 'not valid'}
-            return HttpResponse(json.dumps(data))
-
-        # Save digest form
-        elif request.POST.get('action') == 'save':
-            if form.is_valid():
-                form.save()
-                data = "success"
-            else:
-                data = "failure"
-            return HttpResponse(data)
-
-        # Save new search form
-        elif request.POST.get('action') == 'new_search':
-            add_form = SavedSearchForm(user=request.user, data=request.POST)
-            if add_form.is_valid():
-                add_form.save()
-                data = "success"
-                return HttpResponse(data)
-            else:
-                return render_to_response('includes/form-error-highlight.html',
-                                          {'form': add_form},
-                                          context_instance=
-                                              RequestContext(request))
+        if action == "validate":
+            # Ensure that url is a valid job rss feed
+            return validate_url(request, form)
+        elif action == "save":
+            # Save digest form
+            return save_digest_form(request, form)
+        elif action == "new_search":
+            # Save new search form
+            return save_new_search_form(request)
     else:
         form = DigestForm(user=request.user, instance=digest_obj)
         add_form = SavedSearchForm(user=request.user)
@@ -136,3 +107,36 @@ def more_feed_results(request):
                           offset=request.GET['offset'])
         return render_to_response('mysearches/feed_page.html',
                                   {'items':items}, RequestContext(request))
+
+def validate_url(request, form):
+    rss_url, rss_soup = validate_dotjobs_url(request.POST['url'])
+    if rss_url:
+       feed_title = get_feed_title(rss_soup)
+       # returns the RSS url via AJAX to show if field is validated
+       # id valid, the label field is auto populated with the feed_title
+       data = {'rss_url': rss_url,
+               'feed_title': feed_title,
+               'url_status': 'valid'
+       }
+    else:
+        data = {'url_status': 'not valid'}
+    return HttpResponse(json.dumps(data))
+
+def save_digest_form(request, form):
+    if form.is_valid():
+        form.save()
+        data = "success"
+    else:
+        data = "failure"
+    return HttpResponse(data)
+
+def save_new_search_form(request):
+    add_form = SavedSearchForm(user=request.user, data=request.POST)
+    if add_form.is_valid():
+        add_form.save()
+        data = "success"
+        return HttpResponse(data)
+    else:
+        return render_to_response('includes/form-error-highlight.html',
+                                  {'form': add_form},
+                                  context_instance=RequestContext(request))
