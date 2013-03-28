@@ -59,9 +59,8 @@
         {% else %}
         <p>No Saved Searches!</p>
         {% endif %}
-        <a href="" id="new_btn" data-toggle="modal" class="btn">{% trans 'New Saved Search' %}</a>
+        <a href="{% url 'add_saved_search' %}" id="new_btn" data-toggle="modal" class="btn">{% trans 'New Saved Search' %}</a>
         <div class="formBox span7">
-<!--        <span class="span7">-->
         <p>Each day, you will receive a digest email containing the results of your saved searches that would have otherwise sent you results.</p>
         <form action="" method="post" id="digest-option">
           {% csrf_token %}
@@ -73,7 +72,6 @@
           <button type="submit" value="submit" id="digest_submit">Save</button>
           </div>
         </form>
-<!--        </span>-->
         </div>
       </div>
     </div>

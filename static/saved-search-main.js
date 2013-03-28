@@ -8,17 +8,14 @@ $(document).ready(function() {
 
     function resize_modal() {
         var max_height, margin_top, width, margin_left;
-        if ($(window).width() <= 500) {
-            max_height = $(window).height();
-            margin_top = -(max_height/2);
-            width = $(window).width();
-            margin_left = -(width/2);
-        } else {
-            max_height = ($(window).height() * 0.8);
-            margin_top = -(max_height / 2);
-            width = $(window).width() * 0.8;
-            margin_left = -(width/2);
+        max_height = $(window).height();
+        width = $(window).width();
+        if ($(window).width() > 500) {
+            max_height = max_height * 0.8;
+            width = width * 0.8;
         }
+        margin_top = -(max_height/2);
+        margin_left = -(width/2);
         $('#new_modal').css({
             'max-height': max_height.toFixed(0) + 'px',
             'margin-top': margin_top.toFixed(0) + 'px',

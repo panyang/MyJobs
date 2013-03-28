@@ -454,14 +454,14 @@ em.pendingText{
     }
 }
 @media screen and (min-width: 501px){
-    #id_label {
+    #saved-search-form #id_label {
         margin-top: 10px;
     }
 
-    #new_modal .modal-body {
+/*/    #new_modal .modal-body {
         height: 95%;
         width: 95%;
-    }
+    }*/
 }
 @media screen and (max-width: 500px){
     #titleRow{
@@ -506,10 +506,13 @@ em.pendingText{
     ul.ui-autocomplete{
         display: none !important;
     }
-    label[for=id_is_active] {
+    #saved-search-form label[for=id_is_active] {
         margin-left: 20px;
     }
-    label[for=id_notes], label[for=id_label], label[for=id_day_of_month], label[for=id_day_of_week] {
+    #saved-search-form label[for=id_notes],
+    #saved-search-form label[for=id_label],
+    #saved-search-form label[for=id_day_of_month],
+    #saved-search-form label[for=id_day_of_week] {
         display: none !important;
     }
     div.actions button {
@@ -520,16 +523,19 @@ em.pendingText{
         margin-right: 0px;
         margin-left: 0px !important;
     }
-    label[for=id_url] {
+    #saved-search-form label[for=id_url] {
         padding-left: 1%;
         background-color: #ccc;
         border: 1px solid #bbb;
     }
-    #id_url {
+    #saved-search-form #id_url {
         margin-top: -5px;
         margin-bottom: 15px !important;
     }
-    #id_url, #id_label, #id_email, #id_notes {
+    #saved-search-form #id_url,
+    #saved-search-form #id_label,
+    #saved-search-form #id_email,
+    #saved-search-form #id_notes {
         border-radius: 0px !important;
         border: 1px solid #bbb !important;
     }
@@ -555,7 +561,6 @@ em.pendingText{
     }*/
     .modal {
         position: fixed !important;
-        top: 100px;
         bottom: 0px;
     }
 }
@@ -583,7 +588,9 @@ table td, table th{
     width: auto;
 }*/
 
-label[for=id_digest_active], label[for=id_digest_email], label[for=id_send_if_none] {
+#saved-search-form label[for=id_digest_active],
+#saved-search-form label[for=id_digest_email],
+#saved-search-form label[for=id_send_if_none] {
     display: inline-block;
     margin-right: 10px;
 }
@@ -638,11 +645,13 @@ label[for=id_digest_active], label[for=id_digest_email], label[for=id_send_if_no
     width: 250px;
 }
 
-.id_day_of_month, .id_day_of_week {
+#saved-search-form .id_day_of_month,
+#saved-search-form .id_day_of_week {
     display: none;
 }
 
-#id_day_of_month, #id_day_of_week {
+#saved-search-form #id_day_of_month,
+#saved-search-form #id_day_of_week {
     display: inline;
 }
 
@@ -662,14 +671,16 @@ label[for=id_digest_active], label[for=id_digest_email], label[for=id_send_if_no
     display: inline-block;
 }
 
-#id_digest_email, #id_digest_active, #id_send_if_none {
+#digest-option #id_digest_email,
+#digest-option #id_digest_active,
+#digest-option #id_send_if_none {
     margin-bottom: 5px !important;
     display: inline-block;
     margin-right: 5px;
     margin-top: 3px !important;
 }
 
-.modal-body {
+#new_modal .modal-body {
     max-height: 80%;
 }
 
