@@ -36,10 +36,8 @@ $(document).ready(function() {
     });
 
     $('#new_btn').click(function(e) {
-        if (!is_mobile()) {
-            e.preventDefault();
-            $('#new_modal').modal();
-        }
+        e.preventDefault();
+        $('#new_modal').modal();
     });
 
 });

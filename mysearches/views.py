@@ -14,34 +14,6 @@ from mysearches.forms import SavedSearchForm, DigestForm
 from mysearches.helpers import *
 
 @login_required
-def add_saved_search(request):
-    if request.method == "POST":
-        form = SavedSearchForm(user=request.user, data=request.POST)
-        if request.POST.get('action', None) == 'validate' :
-            rss_url, rss_soup = validate_dotjobs_url(request.POST['url'])
-            if rss_url:
-               feed_title = get_feed_title(rss_soup)
-               # returns the RSS url via AJAX to show if field is validated
-               # id valid, the label field is auto populated with the feed_title
-               data = {'rss_url': rss_url,
-                       'feed_title': feed_title,
-                       'url_status': 'valid'
-               }
-            else:
-                data = {'url_status': 'not valid'}
-            return HttpResponse(json.dumps(data))
-        else:
-            if form.is_valid():
-                form.save()
-                return HttpResponseRedirect('/saved-search')
-    else:
-        form = SavedSearchForm(user=request.user)
-        
-    return render_to_response('mysearches/saved_search_form.html',
-                              {'form':form},
-                              RequestContext(request))
-
-@login_required
 def edit_saved_search(request, search_id):
     saved_search = SavedSearch.objects.get(id=search_id)
     if request.user == saved_search.user:
