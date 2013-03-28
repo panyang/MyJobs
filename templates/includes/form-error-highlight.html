@@ -74,6 +74,10 @@ form -- the rest of the form.
         		{% endif %}
 		{% endif %}
 
+                {% if field.errors %}
+                    </div>
+                {% endif %}
+
         {% if field.help_text %}
         	<span class="help-block">{{ field.help_text }}</span>
 			<div class="clear"></div>

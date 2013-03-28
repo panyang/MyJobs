@@ -208,3 +208,17 @@ $(document).ready(function(){
         $.Widget.prototype.destroy.call( this );
     }
 })})( jQuery )
+
+function clearForm(form) {
+    // clear the inputted form of existing data
+    $(':input', form).each(function() {
+        var type = this.type;
+        var tag = this.tagName.toLowerCase(); // normalize case
+        if (type == 'text' || type == 'password' || tag == 'textarea')
+            this.value = "";
+        else if (type == 'checkbox' || type == 'radio')
+            this.checked = false;
+        else if (tag == 'select')
+            this.selectedIndex = -1;
+    });
+};

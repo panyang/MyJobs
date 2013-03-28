@@ -2,12 +2,10 @@ $(document).ready(function() {
     check_digest_options();
     save_new_form();
     resize_modal();
+    add_valid_label();
+    disable_fields();
 
-    $('#id_url').after('<div id="validated_label" class="form-label pull-left">&nbsp;</div><div id="validated">&nbsp;</div>');
-    $('#id_url').after('<div class="clear"></div>');
-    $('#id_frequency').next('.clear').remove();
-    $('#id_day_of_month').next('.clear').remove();
-
+function disable_fields() {
     // Disable/hide fields until valid URL is entered
     if ($("#id_url").val().length == 0 ) {
         $('#id_label').attr("disabled", "disabled");
@@ -31,10 +29,18 @@ $(document).ready(function() {
         $('label[for="id_notes"]').hide();
         $('#add_save').hide();
     }
+}
+
     validate_url();
 
     $(window).resize(function() {
         resize_modal();
+    });
+
+    $('#add_cancel').click(function() {
+        clearForm($('form#saved-search-form'));
+        disable_fields();
+        $('.alert-message.block-message.error').remove();
     });
 
     function resize_modal() {
@@ -43,7 +49,7 @@ $(document).ready(function() {
         width = $(window).width();
         if (!is_mobile()) {
             max_height = max_height * 0.8;
-            width = width * 0.8;
+            width = width * 0.6;
         }
         margin_top = -(max_height/2);
         margin_left = -(width/2);
@@ -221,6 +227,7 @@ function save_new_form() {
     function save_form() {
         var csrf_token = $('#saved-search-form input[name=csrfmiddlewaretoken]').val();
         var is_active = $('#id_is_active').prop('checked')? 'True':'False';
+        var form = $('form#saved-search-form fieldset');
         $.ajax({
             data: { action: "new_search",
                     csrfmiddlewaretoken: csrf_token,
@@ -236,8 +243,16 @@ function save_new_form() {
             },
             type: 'POST',
             url: '',
-            complete: function(data) {
-                console.log(data);
+            success: function(data) {
+                if (data == 'success') {
+                    clearForm(form);
+                    window.location.reload(true);
+                } else {
+                    form.replaceWith(data);
+                    add_valid_label();
+                    date_select();
+                    reposition_errors();
+                }
             }
         });
     }
@@ -282,3 +297,17 @@ function date_select() {
     });
 }
 
+function add_valid_label() {
+    $('#id_url').after('<div id="validated_label" class="form-label pull-left">&nbsp;</div><div id="validated">&nbsp;</div>');
+    $('#id_url').after('<div class="clear"></div>');
+    $('#id_frequency').next('.clear').remove();
+    $('#id_day_of_month').next('.clear').remove();
+}
+
+function reposition_errors() {
+    $('label[for="id_label"]').replaceWith('&nbsp;');
+    $('div.alert-message.block-message.error').each(function() {
+        $(this).prev().after($($(this).children('[class!=errorlist]')));
+        $(this).css('float', 'right');
+    });
+}

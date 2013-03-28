@@ -96,9 +96,12 @@ def saved_search_main(request):
             if add_form.is_valid():
                 add_form.save()
                 data = "success"
+                return HttpResponse(data)
             else:
-                data = "failure"
-            return HttpResponse(data)
+                return render_to_response('includes/form-error-highlight.html',
+                                          {'form': add_form},
+                                          context_instance=
+                                              RequestContext(request))
     else:
         form = DigestForm(user=request.user, instance=digest_obj)
         add_form = SavedSearchForm(user=request.user)
