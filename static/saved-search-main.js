@@ -37,10 +37,12 @@ function disable_fields() {
         resize_modal();
     });
 
-    $('#add_cancel').click(function() {
+    $('#new_modal').on('hidden', function() {
         clearForm($('form#saved-search-form'));
         disable_fields();
         $('.alert-message.block-message.error').remove();
+        $('#id_url').blur();
+        $('#validated').replaceWith('&nbsp;');
     });
 
     function resize_modal() {
@@ -86,7 +88,8 @@ function validate_url() {
     var timer;
     var pause_interval = 1000;
 
-    $('#id_url').keyup(function(){
+    // Known Firefox/Opera bug: this captures presses of the Esc key
+    $('#id_url').on('keypress cut paste input', function(){
         clearTimeout(timer);
         if ($('#id_url').val) {
             timer = setTimeout(validate, pause_interval);
