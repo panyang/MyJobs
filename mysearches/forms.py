@@ -38,10 +38,11 @@ class SavedSearchForm(BaseUserForm):
 
 
 class DigestForm(BaseUserForm):
-    is_active = BooleanField(label=_('Send my results in a single digest email to:'), widget=CheckboxInput(
-                                 attrs={'id':'id_digest_active'}))
+    is_active = BooleanField(label=_('Send my results in a single digest email'
+                             ' to:'), widget=CheckboxInput(
+                             attrs={'id':'id_digest_active'}))
     email = CharField(label=_('Send results to'), widget=TextInput(attrs=
-                                       {'id':'id_digest_email'}))
+                      {'id':'id_digest_email'}))
     
     class Meta:
         model = SavedSearchDigest
