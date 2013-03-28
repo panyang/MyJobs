@@ -68,7 +68,9 @@ function disable_fields() {
     }
 
     $('td.view_search').click(function() {
-        var href = $(this).parent().find('.view').prop('href');
+//title="<h5>Saved Search Details</h5><div>Last sent: {% if search.last_sent %}{{ search.last_sent }}{% else %}Never{% endif %}</div><div>Sent to: {{ search.email }}</div>"
+        var id = $(this).parent().attr('id');
+        $('#search_'+id).modal();
         if (is_mobile() && typeof(href) != 'undefined') {
             window.location = href;
         }
