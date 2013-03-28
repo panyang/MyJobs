@@ -457,11 +457,6 @@ em.pendingText{
     #saved-search-form #id_label {
         margin-top: 10px;
     }
-
-/*/    #new_modal .modal-body {
-        height: 95%;
-        width: 95%;
-    }*/
 }
 @media screen and (max-width: 500px){
     #titleRow{
@@ -588,9 +583,9 @@ table td, table th{
     width: auto;
 }*/
 
-#saved-search-form label[for=id_digest_active],
-#saved-search-form label[for=id_digest_email],
-#saved-search-form label[for=id_send_if_none] {
+#digest-option label[for=id_digest_active],
+#digest-option label[for=id_digest_email],
+#digest-option label[for=id_send_if_none] {
     display: inline-block;
     margin-right: 10px;
 }
