@@ -58,9 +58,13 @@ def saved_search_main(request):
         digest_obj = None
     saved_searches = SavedSearch.objects.filter(user=request.user)
     if request.method == "POST":
-        add_form = SavedSearchForm(user=request.user, data=request.POST)
-        form = DigestForm(user=request.user, data=request.POST,
-                          instance=digest_obj)
+
+        # form and add_form each have is_valid as a data member
+        # Blindly creating the forms from POST could cause one or the
+        # other to get overwritten if the wrong action is present
+        if request.POST.get('action') != 'new_search':
+            form = DigestForm(user=request.user, data=request.POST,
+                              instance=digest_obj)
 
         # Ensure that url is a valid job rss feed
         if request.POST.get('action') == 'validate':
@@ -88,17 +92,13 @@ def saved_search_main(request):
 
         # Save new search form
         elif request.POST.get('action') == 'new_search':
+            add_form = SavedSearchForm(user=request.user, data=request.POST)
             if add_form.is_valid():
                 add_form.save()
                 data = "success"
             else:
                 data = "failure"
             return HttpResponse(data)
-
-        if form.is_valid():
-            form.save();
-        if add_form.is_valid():
-            add_form.save()
     else:
         form = DigestForm(user=request.user, instance=digest_obj)
         add_form = SavedSearchForm(user=request.user)

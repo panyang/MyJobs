@@ -1,6 +1,37 @@
 $(document).ready(function() {
     check_digest_options();
+    save_new_form();
     resize_modal();
+
+    $('#id_url').after('<div id="validated_label" class="form-label pull-left">&nbsp;</div><div id="validated">&nbsp;</div>');
+    $('#id_url').after('<div class="clear"></div>');
+    $('#id_frequency').next('.clear').remove();
+    $('#id_day_of_month').next('.clear').remove();
+
+    // Disable/hide fields until valid URL is entered
+    if ($("#id_url").val().length == 0 ) {
+        $('#id_label').attr("disabled", "disabled");
+        $('#id_label').hide();
+        $('#id_is_active').attr("disabled", "disabled");
+        $('#id_is_active').hide();
+        $('#id_email').attr("disabled", "disabled");
+        $('#id_email').hide();
+        $('#id_frequency').attr("disabled", "disabled");
+        $('#id_frequency').hide();
+        $('#id_notes').attr("disabled", "disabled");
+        $('#id_notes').hide();
+        $('#id_day_of_week').attr("disabled", "disabled");
+        $('#id_day_of_week').hide();
+        $('#id_day_of_month').attr("disabled", "disabled");
+        $('#id_day_of_month').hide();
+        $('label[for="id_frequency"]').hide();
+        $('label[for="id_email"]').hide();
+        $('label[for="id_is_active"]').hide();
+        $('label[for="id_label"]').replaceWith('&nbsp;');
+        $('label[for="id_notes"]').hide();
+        $('#add_save').hide();
+    }
+    validate_url();
 
     $(window).resize(function() {
         resize_modal();
@@ -42,26 +73,99 @@ $(document).ready(function() {
 
 });
 
+function validate_url() {
+    // When user stops typing, an ajax request is sent to Django where it checks for
+    // the validity of the URL. If it's valid, it informs the user and unblocks the
+    // remaining fields.
+    var timer;
+    var pause_interval = 1000;
+
+    $('#id_url').keyup(function(){
+        clearTimeout(timer);
+        if ($('#id_url').val) {
+            timer = setTimeout(validate, pause_interval);
+        }
+    });
+
+    function validate () {
+        var csrf_token = $('#saved-search-form input[name=csrfmiddlewaretoken]').val();
+        var form = $('form');
+        var url = $("#id_url").val(); 
+        validation_status('Validating...')
+        $.ajax({
+            type: "POST",
+            url: "",
+            data: { csrfmiddlewaretoken: csrf_token,
+                    action: "validate",
+                    url: url},
+            success: function(data) {
+                var json = jQuery.parseJSON(data);
+                if (json.url_status == 'valid') {
+                    validation_status(json.url_status);
+                    enable_fields();
+                    date_select();
+                    if ($('#id_label').val().length == 0) {
+                        $("#id_label").val(json.feed_title);
+                    }
+                    if ($('#id_feed').val().length == 0) {
+                        $("#id_feed").val(json.rss_url);
+                    }
+                }
+                else {
+                    validation_status(json.url_status);
+                }
+            }
+        });
+
+        function enable_fields() {
+            $('#id_label').removeAttr("disabled");
+            $('#id_label').show();
+            $('#id_is_active').removeAttr("disabled");
+            $('#id_is_active').show();
+            $('#id_email').removeAttr("disabled");
+            $('#id_email').show();
+            $('#id_frequency').removeAttr("disabled");
+            $('#id_frequency').show();
+            $('#id_notes').removeAttr("disabled");
+            $('#id_notes').show();
+            $('#id_day_of_week').removeAttr("disabled");
+            $('#id_day_of_week').show();
+            $('#id_day_of_month').removeAttr("disabled");
+            $('#id_day_of_month').show();
+            $('label[for="id_frequency"]').show();
+            $('label[for="id_email"]').show();
+            $('label[for="id_is_active"]').show();
+            $('label[for="id_notes"]').show();
+            $('#add_save').show();
+        }
+
+        function validation_status(status) {
+            var label_text;
+
+            if (status == 'valid') {
+                label_text = 'label label-success';
+            } else {
+                label_text = 'label label-important';
+            }
+            if ($("#validated").length) {
+                $('#validated').removeAttr('class');
+                $('#validated').addClass(label_text);
+                $("#validated").text(status);
+            } else {
+                form.find("#validated_label").after(' <div id="validated" class="'+label_text+'">'+status+'</div>');
+            }
+        };
+    }
+};
+
 function check_digest_options() {
     // When the user interacts with any fields in the Digest Options form,
     // an ajax request checks that the form is valid and saves the changes
     var timer;
     var pause_interval = 1000;
 
-    $('#id_digest_email').keyup(function() {
-        clearTimeout(timer);
-        if (form_valid()) {
-            timer = setTimeout(save_form, pause_interval);
-        }
-    });
-
-    $('#id_digest_active').click(function() {
-        if (form_valid()) {
-            save_form();
-        }
-    });
-
-    $('#id_send_if_none').click(function() {
+    $('#digest_save').click(function(e) {
+        e.preventDefault();
         if (form_valid()) {
             save_form();
         }
@@ -108,3 +212,73 @@ function check_digest_options() {
         });
     }
 };
+
+function save_new_form() {
+    $('#add_save').click(function() {
+        save_form();
+    });
+
+    function save_form() {
+        var csrf_token = $('#saved-search-form input[name=csrfmiddlewaretoken]').val();
+        var is_active = $('#id_is_active').prop('checked')? 'True':'False';
+        $.ajax({
+            data: { action: "new_search",
+                    csrfmiddlewaretoken: csrf_token,
+                    feed: $('#id_feed').val(),
+                    url: $('#id_url').val(),
+                    label: $('#id_label').val(),
+                    is_active: is_active,
+                    email: $('#id_email').val(),
+                    notes: $('#id_notes').val(),
+                    frequency: $('#id_frequency').val(),
+                    day_of_week: $('#id_day_of_week').val(),
+                    day_of_month: $('#id_day_of_month').val()
+            },
+            type: 'POST',
+            url: '',
+            complete: function(data) {
+                console.log(data);
+            }
+        });
+    }
+}
+
+function date_select() {
+    // Only show the day of week/day of month field when appropriate
+    if ($('#id_frequency').attr('value') == 'D') {
+        $('label[for="id_day_of_month"]').hide();
+        $('label[for="id_day_of_week"]').hide();
+        $('#id_day_of_month').hide();
+        $('#id_day_of_week').hide();
+    } else if ($('#id_frequency').attr('value') == 'M') { 
+        $('label[for="id_day_of_week"]').hide();
+        $('#id_day_of_week').hide();
+        $('label[for="id_day_of_month"]').css('display', 'inline');
+        $('#id_day_of_month').css('display', 'inline');
+    } else if ($('#id_frequency').attr('value') == 'W') {
+        $('label[for="id_day_of_month"]').hide();
+        $('#id_day_of_month').hide();
+        $('label[for="id_day_of_week"]').css('display', 'inline');
+        $('#id_day_of_week').css('display', 'inline');
+    }
+
+    $('#id_frequency').change(function() {
+        if ($('#id_frequency').attr('value') == 'D') {
+            $('label[for="id_day_of_month"]').hide();
+            $('label[for="id_day_of_week"]').hide();
+            $('#id_day_of_month').hide();
+            $('#id_day_of_week').hide();
+        } else if ($('#id_frequency').attr('value') == 'M') { 
+            $('label[for="id_day_of_week"]').hide();
+            $('#id_day_of_week').hide();
+            $('label[for="id_day_of_month"]').css('display', 'inline');
+            $('#id_day_of_month').css('display', 'inline');
+        } else if ($('#id_frequency').attr('value') == 'W') {
+            $('label[for="id_day_of_month"]').hide();
+            $('#id_day_of_month').hide();
+            $('label[for="id_day_of_week"]').css('display', 'inline');
+            $('#id_day_of_week').css('display', 'inline');
+        }
+    });
+}
+
