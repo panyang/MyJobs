@@ -46,6 +46,10 @@ STATICFILES_DIRS = (
 STATIC_ROOT = os.path.join(_PATH, 'files', 'static')
 STATIC_URL = '/files/'
 
+STATICFILES_DIRS = (
+    os.path.join(PROJ_ROOT, 'static'),
+)
+
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
