@@ -30,6 +30,10 @@ class ProfileUnits(models.Model):
             self.content_type = ContentType.objects.get_for_model(self.__class__)
         super(ProfileUnits, self).save(*args, **kwargs)
 
+    def get_fields(self):
+        return [(field.verbose_name.title(), field.value_to_string(self)) \
+                for field in self._meta.local_fields]
+
     def __unicode__(self):
         return self.content_type.name
 
