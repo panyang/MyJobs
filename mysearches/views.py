@@ -14,27 +14,6 @@ from mysearches.forms import SavedSearchForm, DigestForm
 from mysearches.helpers import *
 
 @login_required
-def edit_saved_search(request, search_id):
-    saved_search = SavedSearch.objects.get(id=search_id)
-    if request.user == saved_search.user:
-        if request.method == "POST":
-            form = SavedSearchForm(user=request.user, data=request.POST,
-                                   instance=saved_search)
-            
-            if request.POST.get('action', None) == 'validate' :
-                pass;
-            else:
-                if form.is_valid():
-                    form.save()
-                    return HttpResponseRedirect('/saved-search')
-        else:
-            saved_search = SavedSearch.objects.get(id=search_id)
-            form = SavedSearchForm(user=request.user, instance=saved_search)
-        return render_to_response('mysearches/saved_search_edit.html',
-                                  {'form':form, 'search_id':search_id},
-                                  RequestContext(request))
-
-@login_required
 def delete_saved_search(request,search_id):
     saved_search = SavedSearch.objects.get(id=search_id)
     if request.user == saved_search.user:
@@ -52,9 +31,12 @@ def saved_search_main(request):
     if request.method == "POST":
         action = request.POST.get('action')
 
+        add_form = SavedSearchForm(user=request.user, instance=digest_obj)
         if action in ['validate', 'save']:
             form = DigestForm(user=request.user, data=request.POST,
                               instance=digest_obj)
+        else:
+            form = DigestForm(user=request.user, instance=digest_obj)
 
         if action == "validate":
             # Ensure that url is a valid job rss feed
@@ -68,7 +50,7 @@ def saved_search_main(request):
         elif action == "get_edit":
             return get_edit_template(request)
         elif action == "save_edit":
-            pass;
+            return save_edit_form(request)
     else:
         form = DigestForm(user=request.user, instance=digest_obj)
         add_form = SavedSearchForm(user=request.user)
@@ -144,3 +126,18 @@ def get_edit_template(request):
     return render_to_response('mysearches/saved_search_edit.html',
                               {'form':form, 'search_id':search_id},
                               RequestContext(request))
+
+def save_edit_form(request):
+    search_id = request.POST.get('search_id')
+    saved_search = SavedSearch.objects.get(id=search_id)
+    if request.user == saved_search.user:
+        form = SavedSearchForm(user=request.user, data=request.POST,
+                               instance=saved_search)
+        if form.is_valid():
+            form.save()
+            print "Form ok"
+            return HttpResponse('success')
+        else:
+            print form.errors
+            return render_to_response('mysearches/saved_search_edit.html',
+                                      {'form': form}, RequestContext(request))
