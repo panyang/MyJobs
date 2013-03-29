@@ -6,7 +6,7 @@ from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponse
-from django.template import RequestContext
+from django.template import RequestContext, loader
 from django.shortcuts import render_to_response, get_object_or_404
 
 from mysearches.models import SavedSearch, SavedSearchDigest
@@ -22,21 +22,13 @@ def edit_saved_search(request, search_id):
                                    instance=saved_search)
             
             if request.POST.get('action', None) == 'validate' :
-                rss_url,rss_soup = validate_dotjobs_url(request.POST['url'])
-                if rss_url:
-                    feed_title = get_feed_title(rss_soup)
-                    data = {'rss_url': rss_url,
-                            'feed_title': feed_title,
-                            'url_status': 'valid'
-                        }
-                else:
-                    data = {'url_status': 'not valid'}
-                return HttpResponse(json.dumps(data))
+                pass;
             else:
                 if form.is_valid():
                     form.save()
                     return HttpResponseRedirect('/saved-search')
         else:
+            saved_search = SavedSearch.objects.get(id=search_id)
             form = SavedSearchForm(user=request.user, instance=saved_search)
         return render_to_response('mysearches/saved_search_edit.html',
                                   {'form':form, 'search_id':search_id},
@@ -60,7 +52,7 @@ def saved_search_main(request):
     if request.method == "POST":
         action = request.POST.get('action')
 
-        if action != 'new_search':
+        if action in ['validate', 'save']:
             form = DigestForm(user=request.user, data=request.POST,
                               instance=digest_obj)
 
@@ -73,6 +65,10 @@ def saved_search_main(request):
         elif action == "new_search":
             # Save new search form
             return save_new_search_form(request)
+        elif action == "get_edit":
+            return get_edit_template(request)
+        elif action == "save_edit":
+            pass;
     else:
         form = DigestForm(user=request.user, instance=digest_obj)
         add_form = SavedSearchForm(user=request.user)
@@ -140,3 +136,11 @@ def save_new_search_form(request):
         return render_to_response('includes/form-error-highlight.html',
                                   {'form': add_form},
                                   context_instance=RequestContext(request))
+
+def get_edit_template(request):
+    search_id = request.POST.get('search_id')
+    saved_search = SavedSearch.objects.get(id=search_id)
+    form = SavedSearchForm(user=request.user, instance=saved_search, auto_id='id_edit_%s')
+    return render_to_response('mysearches/saved_search_edit.html',
+                              {'form':form, 'search_id':search_id},
+                              RequestContext(request))

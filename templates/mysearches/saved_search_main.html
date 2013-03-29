@@ -76,13 +76,13 @@
                     </div>
                     <div class="modal-footer">
                         <a class="btn" data-dismiss="modal">Close</a>
-                        <a class="btn primary">Edit</a>
+                        <a href="{{ search.id }}" class="btn primary edit">Edit</a>
                     </div>
                 </div>
               </td>
               <td class="buttons">
-                <a href="/saved-search/{{search.id}}" class="btn view mobile_hide">View</a>
-                <a href="/saved-search/edit/{{search.id}}" class="btn edit">Edit</a>
+                <a href="/saved-search/{{search.id}}" class="btn mobile_hide">View</a>
+                <a href="{{ search.id }}" class="btn edit">Edit</a>
             </td>
             </tr>
             {% endfor %}
@@ -127,7 +127,7 @@
     <div class="modal-footer">
         <div class="actions">
           <a id="add_save" class="btn pull-right">Save</a>
-          <button id="add_cancel" data-dismiss="modal" aria-hidden="true" class="btn pull-right">{% trans 'Cancel' %}</button>
+          <button data-dismiss="modal" aria-hidden="true" class="btn pull-right">{% trans 'Cancel' %}</button>
         </div>
     </div>
     </form>

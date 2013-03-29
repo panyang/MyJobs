@@ -1,40 +1,14 @@
 $(document).ready(function() {
     check_digest_options();
     save_new_form();
-    resize_modal();
-    add_valid_label();
-    disable_fields();
-
-function disable_fields() {
-    // Disable/hide fields until valid URL is entered
-    if ($("#id_url").val().length == 0 ) {
-        $('#id_label').attr("disabled", "disabled");
-        $('#id_label').hide();
-        $('#id_is_active').attr("disabled", "disabled");
-        $('#id_is_active').hide();
-        $('#id_email').attr("disabled", "disabled");
-        $('#id_email').hide();
-        $('#id_frequency').attr("disabled", "disabled");
-        $('#id_frequency').hide();
-        $('#id_notes').attr("disabled", "disabled");
-        $('#id_notes').hide();
-        $('#id_day_of_week').attr("disabled", "disabled");
-        $('#id_day_of_week').hide();
-        $('#id_day_of_month').attr("disabled", "disabled");
-        $('#id_day_of_month').hide();
-        $('label[for="id_frequency"]').hide();
-        $('label[for="id_email"]').hide();
-        $('label[for="id_is_active"]').hide();
-        $('label[for="id_label"]').replaceWith('&nbsp;');
-        $('label[for="id_notes"]').hide();
-        $('#add_save').hide();
-    }
-}
-
+    resize_modal('#new_modal');
+    add_valid_label('id_');
+    disable_fields('id_');
     validate_url();
 
     $(window).resize(function() {
-        resize_modal();
+        resize_modal('#new_modal');
+        resize_modal('#edit_modal');
     });
 
     $('#new_modal').on('hidden', function() {
@@ -42,38 +16,19 @@ function disable_fields() {
         disable_fields();
         $('.alert-message.block-message.error').remove();
         $('#id_url').blur();
-        $('#validated').replaceWith('&nbsp;');
+        $('#id_validated').replaceWith('&nbsp;');
     });
 
-    function resize_modal() {
-        var max_height, margin_top, width, margin_left;
-        max_height = $(window).height();
-        width = $(window).width();
-        if (!is_mobile()) {
-            max_height = max_height * 0.8;
-            width = width * 0.6;
-        }
-        margin_top = -(max_height/2);
-        margin_left = -(width/2);
-        $('#new_modal').css({
-            'max-height': max_height.toFixed(0) + 'px',
-            'margin-top': margin_top.toFixed(0) + 'px',
-            'width': width.toFixed(0) + 'px',
-            'margin-left': margin_left.toFixed(0) + 'px',
-        });
-    }
-
-    function is_mobile() {
-        return $(window).width() <= 500;
-    }
+    $('#edit_modal').live('hidden', function() {
+        $('#edit_modal').remove();
+    });
 
     $('td.view_search').click(function() {
-//title="<h5>Saved Search Details</h5><div>Last sent: {% if search.last_sent %}{{ search.last_sent }}{% else %}Never{% endif %}</div><div>Sent to: {{ search.email }}</div>"
         var id = $(this).parent().attr('id');
         $('#search_'+id).modal();
-        if (is_mobile() && typeof(href) != 'undefined') {
+        /*if (is_mobile() && typeof(href) != 'undefined') {
             window.location = href;
-        }
+        }*/
     });
 
     $('#new_btn').click(function(e) {
@@ -81,7 +36,39 @@ function disable_fields() {
         $('#new_modal').modal();
     });
 
+    $('a.edit').click(function(e) {
+        e.preventDefault();
+        get_edit($(this).attr('href'));
+        if ($(this).parent().hasClass('modal-footer')) {
+            $(this).parents('.modal.hide.fade').modal('hide');
+        }
+    });
+
 });
+
+function get_edit(id) {
+    var prefix = 'id_edit_';
+    var csrf_token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+    $.ajax({
+        data: { csrfmiddlewaretoken: csrf_token,
+                action: 'get_edit',
+                search_id: id },
+        type: 'POST',
+        url: '',
+        success: function(data) {
+            $('#new_modal').after(data);
+            add_valid_label(prefix);
+            date_select(prefix);
+            reposition_errors(prefix);
+            resize_modal('#edit_modal');
+            disable_fields('id_edit_');
+            $('#edit_modal').live('resize', function() {
+                resize_modal('#edit_modal');
+            });
+            $('#edit_modal').modal();
+        }
+    });
+}
 
 function validate_url() {
     // When user stops typing, an ajax request is sent to Django where it checks for
@@ -114,7 +101,7 @@ function validate_url() {
                 if (json.url_status == 'valid') {
                     validation_status(json.url_status);
                     enable_fields();
-                    date_select();
+                    date_select(prefix);
                     if ($('#id_label').val().length == 0) {
                         $("#id_label").val(json.feed_title);
                     }
@@ -158,12 +145,12 @@ function validate_url() {
             } else {
                 label_text = 'label label-important';
             }
-            if ($("#validated").length) {
-                $('#validated').removeAttr('class');
-                $('#validated').addClass(label_text);
-                $("#validated").text(status);
+            if ($("#id_validated").length) {
+                $('#id_validated').removeAttr('class');
+                $('#id_validated').addClass(label_text);
+                $("#id_validated").text(status);
             } else {
-                form.find("#validated_label").after(' <div id="validated" class="'+label_text+'">'+status+'</div>');
+                form.find("#id_validated_label").after(' <div id="id_validated" class="'+label_text+'">'+status+'</div>');
             }
         };
     }
@@ -230,6 +217,7 @@ function save_new_form() {
     });
 
     function save_form() {
+        var prefix = 'id_'
         var csrf_token = $('#saved-search-form input[name=csrfmiddlewaretoken]').val();
         var is_active = $('#id_is_active').prop('checked')? 'True':'False';
         var form = $('form#saved-search-form fieldset');
@@ -254,65 +242,105 @@ function save_new_form() {
                     window.location.reload(true);
                 } else {
                     form.replaceWith(data);
-                    add_valid_label();
-                    date_select();
-                    reposition_errors();
+                    add_valid_label(prefix);
+                    date_select(prefix);
+                    reposition_errors(prefix);
                 }
             }
         });
     }
 }
 
-function date_select() {
+function date_select(prefix) {
     // Only show the day of week/day of month field when appropriate
-    if ($('#id_frequency').attr('value') == 'D') {
-        $('label[for="id_day_of_month"]').hide();
-        $('label[for="id_day_of_week"]').hide();
-        $('#id_day_of_month').hide();
-        $('#id_day_of_week').hide();
-    } else if ($('#id_frequency').attr('value') == 'M') { 
-        $('label[for="id_day_of_week"]').hide();
-        $('#id_day_of_week').hide();
-        $('label[for="id_day_of_month"]').css('display', 'inline');
-        $('#id_day_of_month').css('display', 'inline');
-    } else if ($('#id_frequency').attr('value') == 'W') {
-        $('label[for="id_day_of_month"]').hide();
-        $('#id_day_of_month').hide();
-        $('label[for="id_day_of_week"]').css('display', 'inline');
-        $('#id_day_of_week').css('display', 'inline');
-    }
+    var hashPrefix = '#' + prefix;
 
-    $('#id_frequency').change(function() {
-        if ($('#id_frequency').attr('value') == 'D') {
-            $('label[for="id_day_of_month"]').hide();
-            $('label[for="id_day_of_week"]').hide();
-            $('#id_day_of_month').hide();
-            $('#id_day_of_week').hide();
-        } else if ($('#id_frequency').attr('value') == 'M') { 
-            $('label[for="id_day_of_week"]').hide();
-            $('#id_day_of_week').hide();
-            $('label[for="id_day_of_month"]').css('display', 'inline');
-            $('#id_day_of_month').css('display', 'inline');
-        } else if ($('#id_frequency').attr('value') == 'W') {
-            $('label[for="id_day_of_month"]').hide();
-            $('#id_day_of_month').hide();
-            $('label[for="id_day_of_week"]').css('display', 'inline');
-            $('#id_day_of_week').css('display', 'inline');
-        }
+    show_dates();
+
+    $(hashPrefix+'frequency').change(function() {
+        show_dates();
     });
+
+    function show_dates() {
+        if ($(hashPrefix+'frequency').attr('value') == 'D') {
+            $('label[for="'+prefix+'day_of_month"]').hide();
+            $('label[for="'+prefix+'day_of_week"]').hide();
+            $(hashPrefix+'day_of_month').hide();
+            $(hashPrefix+'day_of_week').hide();
+        } else if ($(hashPrefix+'frequency').attr('value') == 'M') { 
+            $('label[for="'+prefix+'day_of_week"]').hide();
+            $(hashPrefix+'day_of_week').hide();
+            $('label[for="'+prefix+'day_of_month"]').css('display', 'inline');
+            $(hashPrefix+'day_of_month').css('display', 'inline');
+        } else if ($(hashPrefix+'frequency').attr('value') == 'W') {
+            $('label[for="'+prefix+'day_of_month"]').hide();
+            $(hashPrefix+'day_of_month').hide();
+            $('label[for="'+prefix+'day_of_week"]').css('display', 'inline');
+            $(hashPrefix+'day_of_week').css('display', 'inline');
+        }
+    }
 }
 
-function add_valid_label() {
-    $('#id_url').after('<div id="validated_label" class="form-label pull-left">&nbsp;</div><div id="validated">&nbsp;</div>');
-    $('#id_url').after('<div class="clear"></div>');
-    $('#id_frequency').next('.clear').remove();
-    $('#id_day_of_month').next('.clear').remove();
+function add_valid_label(prefix) {
+    $(prefix+'url').after('<div id="'+prefix+'validated_label" class="form-label pull-left">&nbsp;</div><div id="'+prefix+'validated">&nbsp;</div>');
+    $(prefix+'url').after('<div class="clear"></div>');
+    $(prefix+'frequency').next('.clear').remove();
+    $(prefix+'day_of_month').next('.clear').remove();
 }
 
-function reposition_errors() {
-    $('label[for="id_label"]').replaceWith('&nbsp;');
+function reposition_errors(prefix) {
+    $('label[for="'+prefix+'label"]').replaceWith('&nbsp;');
     $('div.alert-message.block-message.error').each(function() {
         $(this).prev().after($($(this).children('[class!=errorlist]')));
         $(this).css('float', 'right');
     });
+}
+
+function resize_modal(modal) {
+    var max_height, margin_top, width, margin_left;
+    max_height = $(window).height();
+    width = $(window).width();
+    if (!is_mobile()) {
+        max_height = max_height * 0.8;
+        width = width * 0.6;
+    }
+    margin_top = -(max_height/2);
+    margin_left = -(width/2);
+    $(modal).css({
+        'max-height': max_height.toFixed(0) + 'px',
+        'margin-top': margin_top.toFixed(0) + 'px',
+        'width': width.toFixed(0) + 'px',
+        'margin-left': margin_left.toFixed(0) + 'px',
+    });
+}
+
+function is_mobile() {
+    return $(window).width() <= 500;
+}
+
+function disable_fields(prefix) {
+    // Disable/hide fields until valid URL is entered
+    hashPrefix = '#' + prefix;
+    if ($(hashPrefix+'url').val().length == 0 ) {
+        $(hashPrefix+'label').attr("disabled", "disabled");
+        $(hashPrefix+'label').hide();
+        $(hashPrefix+'is_active').attr("disabled", "disabled");
+        $(hashPrefix+'is_active').hide();
+        $(hashPrefix+'email').attr("disabled", "disabled");
+        $(hashPrefix+'email').hide();
+        $(hashPrefix+'frequency').attr("disabled", "disabled");
+        $(hashPrefix+'frequency').hide();
+        $(hashPrefix+'notes').attr("disabled", "disabled");
+        $(hashPrefix+'notes').hide();
+        $(hashPrefix+'day_of_week').attr("disabled", "disabled");
+        $(hashPrefix+'day_of_week').hide();
+        $(hashPrefix+'day_of_month').attr("disabled", "disabled");
+        $(hashPrefix+'day_of_month').hide();
+        $('label[for="'+prefix+'frequency"]').hide();
+        $('label[for="'+prefix+'email"]').hide();
+        $('label[for="'+prefix+'is_active"]').hide();
+        $('label[for="'+prefix+'label"]').replaceWith('&nbsp;');
+        $('label[for="'+prefix+'notes"]').hide();
+        $('#add_save').hide();
+    }
 }

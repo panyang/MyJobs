@@ -1,32 +1,23 @@
-{% extends "myjobs_base.html" %}
 {% load i18n %}
-{% block meta-extra %}
-<script src="{{ STATIC_URL }}saved-search-main.js"></script>
-<script src="{{ STATIC_URL }}saved-search-edit.js"></script>
-{% endblock %}
 
-{% block content %}
-
-<section><div class="section subpage">
-<div class="wrapper"> 
-  <div class="row">
-    <div class="span8">
-      <div class="formBox">
-      <h1>{% trans "Edit" %} <small>{% trans "Saved Search" %}</small></h1>
-        <form action="" method="post" id="saved-search-form">
-          {% include "includes/form-error-highlight.html" %}
-          {% csrf_token %}
-          <div class="actions">
+<div id="edit_modal" class="modal hide fade">
+    <div class="modal-header">
+        <button type="button" class="close mobile_hide" data-dismiss="modal" aria-hidden="true">&times;</button>
+        <h1>{% trans "Edit" %} <small>{% trans "Saved Search" %}</small></h1>
+    </div>
+    <form method="post" id="saved-search-form">
+    <div class="modal-body">
+        <div class="formBox">
+            {% include "includes/form-error-highlight.html" %}
+            {% csrf_token %}
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="actions">
             <button type="submit" class="btn primary pull-right" value="submit">Save</button>
-            <a href="{% url 'saved_search_main' %}" class="btn pull-right">{% trans 'Cancel' %}</a>
+            <button id="edit_cancel" data-dismiss="modal" aria-hidden="true" class="btn pull-right">{% trans 'Cancel' %}</button>
             <a href="/saved-search/delete/{{search_id}}" class="btn pull-right">{% trans 'Delete' %}</a>
-          </div>
-        </form>
+        </div>
     </div>
-    </div>
-  </div>
+    </form>
 </div>
-</div>
-</section>
-
-{% endblock %}

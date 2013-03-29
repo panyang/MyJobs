@@ -510,7 +510,7 @@ em.pendingText{
     #saved-search-form label[for=id_day_of_week] {
         display: none !important;
     }
-    div.actions button {
+    div.actions button, div.actions a {
         float: none;
         width: 100%;
         margin-bottom: 10px;
