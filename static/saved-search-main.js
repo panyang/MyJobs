@@ -194,7 +194,6 @@ function save_modal_form(prefix, modal, action) {
         var is_active = $(hashPrefix+'is_active').prop('checked')? 'True':'False';
         var form = $('#'+modal+' form');
         var id = form.find('a.save').attr('href');
-        console.log(id);
         $.ajax({
             data: { action: action,
                     search_id: id,

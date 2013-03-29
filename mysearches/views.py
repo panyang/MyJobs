@@ -135,9 +135,7 @@ def save_edit_form(request):
                                instance=saved_search)
         if form.is_valid():
             form.save()
-            print "Form ok"
             return HttpResponse('success')
         else:
-            print form.errors
             return render_to_response('mysearches/saved_search_edit.html',
                                       {'form': form}, RequestContext(request))
