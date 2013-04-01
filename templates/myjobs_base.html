@@ -78,7 +78,8 @@
         </div>
     {% endblock %}
     <section><div class="section subpage">
-        {% block page %}
+    {% block homepage_bg %}{% endblock %}   
+    {% block page %}
             {% block main %}
 
                 <div id="header">
@@ -99,7 +100,7 @@
             
         {% endblock %}
     
-
+    {% block homepage_bg_close %}{% endblock %}
   
     </div></section>
     <footer><div id="footer">

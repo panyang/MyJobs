@@ -6,15 +6,14 @@
 {% endblock %}
 
 {% block title-content %}{% trans "My.Jobs - Manage your job search." %}{% endblock title-content %}
+{% block homepage_bg %}
+<div id="home-background">
+{% endblock %}
 
 {% block content %}
     <div class="row" id="titleRow">
         <div class="span6 offset1"  id="title">
-            <h1>{% trans 'My.jobs' %}</h1>
-            <div id="subtitle">
-                {% trans 'Save. Share. Socialize.' %}<br/>
-                {% trans 'Forge your path.' %}
-            </div>
+            &nbsp;
         </div>
         <div class="span4">
             <div class="loginBox">
@@ -65,4 +64,6 @@
             {% include "includes/initial-profile-form.html" %}
         </div>
     </div>
-{% endblock %} 
+{% endblock %}
+{% block homepage_bg_close %}</div>{% endblock %}
+

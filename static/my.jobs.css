@@ -1,6 +1,7 @@
 @import url(http://css.nlx.org/framework/v2/css/def.ui.css);
 /*Main Styles*/
 body{
+    
     background-color: #574e44;
     font-family: Arial, Helvetica, sans-serif;
     }
@@ -8,12 +9,25 @@ body{
 #main {
     padding: 50px;
 }
-
+#home-background {
+        background-image:url('images/homepage_bg.png');
+        background-repeat:no-repeat;
+        background-attachment:fixed;
+        background-position:center top;
+        background-color: #FFF;
+        margin-top: -26px;
+        margin-bottom: -25px;
+        min-height: 598px;
+        border: 2px solid #333333;    
+      }
+#page-content{
+      width: 961px;
+      }
 a{
-    color: #c44e34;
+    color: #FFF;
     }
 a:hover{
-    color: #a42e14;
+    color: #FFF;
     }
 
 /* Form Styles */
@@ -49,7 +63,7 @@ ul.ui-autocomplete{
 .topbar #topbar-logo{
     height: 30px;
     width: 90px;
-    background: transparent url(images/mydotjobs_small.png) center left no-repeat;
+    background: transparent url(images/myjobs_logo.png) center left no-repeat;
     text-indent: -9000px;
 }
 .topbar input{
@@ -88,12 +102,18 @@ ul.ui-autocomplete{
     }
 
 /*Content Box Styles*/
-.loginBox, .formBox, .account-box{
-    background-color: #fff;
+.loginBox, .formBox, .account-box{ 
+    float:right;
+    background-color: #574e44;
     padding: 10px;
     padding-bottom: 30px;
     border: 2px solid #574E44;
     border-radius: 5px;
+    margin-top: 85px;
+    margin-right: 0px;
+    }
+.loginBox, .formBox, .account-box h3 {
+    color: #FFF;    
     }
 #account-page-2 .loginBox{
     padding-left: 0px;
