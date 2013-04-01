@@ -70,7 +70,8 @@ def view_full_feed(request, search_id):
                                   {'label': label,
                                    'feed': saved_search.feed,
                                    'frequency': saved_search.frequency,
-                                   'verbose_frequency': saved_search.get_verbose_frequency(),
+                                   'verbose_frequency':
+                                     saved_search.get_verbose_frequency(),
                                    'link': saved_search.url,
                                    'items': items},
                                   RequestContext(request))
@@ -78,8 +79,8 @@ def view_full_feed(request, search_id):
         return HttpResponseRedirect('/saved-search')
 
 def more_feed_results(request):
-    # Ajax request comes from the view_full_feed view when user scrolls to bottom
-    # of the page
+    # Ajax request comes from the view_full_feed view when user scrolls to
+    # bottom of the page
     if request.is_ajax():
         items = parse_rss(request.GET['feed'], request.GET['frequency'],
                           offset=request.GET['offset'])
@@ -122,7 +123,8 @@ def save_new_search_form(request):
 def get_edit_template(request):
     search_id = request.POST.get('search_id')
     saved_search = SavedSearch.objects.get(id=search_id)
-    form = SavedSearchForm(user=request.user, instance=saved_search, auto_id='id_edit_%s')
+    form = SavedSearchForm(user=request.user, instance=saved_search,
+                           auto_id='id_edit_%s')
     return render_to_response('mysearches/saved_search_edit.html',
                               {'form':form, 'search_id':search_id},
                               RequestContext(request))
