@@ -81,7 +81,7 @@
                 </div>
               </td>
               <td class="buttons">
-                <a href="/saved-search/{{search.id}}" class="btn mobile_hide">View</a>
+                <a href="{% url 'view_full_feed' search_id=search.id %}" class="btn mobile_hide">View</a>
                 <a href="{{ search.id }}" class="btn edit">Edit</a>
             </td>
             </tr>
