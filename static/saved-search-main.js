@@ -22,7 +22,7 @@ $(document).ready(function() {
         disable_fields('id_');
         $('.alert-message.block-message.error').remove();
         $('#id_url').blur();
-        $('#id_validated').replaceWith('&nbsp;');
+        $('#id_validated').remove();
     });
 
     $('#edit_modal').on('hidden', function() {
@@ -46,6 +46,8 @@ $(document).ready(function() {
         get_edit($(this).attr('href'));
     });
 
+    $('#id_url').parent().addClass('input-append');
+    $('#id_url').after('<span id="id_refresh" class="btn add-on">refresh</span>');
 });
 
 
@@ -172,6 +174,8 @@ function get_edit(id) {
             $('#edit_modal').on('resize', function() {
                 resize_modal('#edit_modal');
             });
+            $('#id_edit_url').parent().addClass('input-append');
+            $('#id_edit_url').after('<span id="id_edit_refresh" class="btn add-on">refresh</span>');
             $('#edit_modal').modal();
         }
     });
@@ -246,9 +250,13 @@ function validate_url(prefix, modal) {
         clearTimeout(timer);
         if ($(hashPrefix+'url').val()) {
             timer = setTimeout(function() {
-                validate(prefix, modal)
+                validate(prefix, modal);
             }, pause_interval);
         }
+    });
+
+    $('#'+modal).on('click', hashPrefix+'refresh', function() {
+        validate(prefix, modal);
     });
 
     function validate(prefix, modal) {
@@ -256,7 +264,7 @@ function validate_url(prefix, modal) {
         var csrf_token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
         var form = $(hashPrefix+'url').parents('form');
         var url = $(hashPrefix+'url').val(); 
-        validation_status('Validating...', prefix)
+        validation_status('validating...', prefix)
         $.ajax({
             type: "POST",
             url: "",
@@ -318,7 +326,7 @@ function validate_url(prefix, modal) {
                 $(hashPrefix+'validated').addClass(label_text);
                 $(hashPrefix+'validated').text(status);
             } else {
-                form.find(prefix+'validated_label').after('<div id="'+prefix+'" class="'+label_text+'">'+status+'</div>');
+                $(hashPrefix+'validated_label').after('<div id="'+prefix+'validated" class="'+label_text+'">'+status+'</div>');
             }
         };
     }
