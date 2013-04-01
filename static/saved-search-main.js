@@ -30,8 +30,10 @@ $(document).ready(function() {
     });
 
     $('td.view_search').click(function() {
-        var id = $(this).parent().attr('id');
-        $('#search_'+id).modal();
+        if ($(window).width() > 500) {
+            var id = $(this).parent().attr('id');
+            $('#search_'+id).modal();
+        }
     });
 
     $('#new_btn').click(function(e) {
@@ -270,7 +272,7 @@ function validate_url(prefix, modal) {
                     if ($(hashPrefix+'label').val().length == 0) {
                         $(hashPrefix+'label').val(json.feed_title);
                     }
-                    if ($(hashPrefix+'feed').val().length == 0) {
+                    if ($(hashPrefix+'feed').val() != json.rss_url) {
                         $(hashPrefix+'feed').val(json.rss_url);
                     }
                 }
