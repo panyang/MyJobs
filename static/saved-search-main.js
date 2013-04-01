@@ -4,9 +4,10 @@ $(document).ready(function() {
     save_modal_form('id_edit_', 'edit_modal', 'save_edit');
     resize_modal('#new_modal');
     add_valid_label('id_');
-    disable_fields('id_');
+    disable_fields('id_', 'new_modal');
     validate_url('id_', 'new_modal');
     validate_url('id_edit_', 'edit_modal');
+    add_refresh_btn('id_');
 
     $(window).resize(function() {
         resize_modal('#new_modal');
@@ -19,10 +20,11 @@ $(document).ready(function() {
         // having them actually be null causes errors
         $('#id_day_of_month, #id_day_of_week').val('1');
         $('#id_frequency').val('W');
-        disable_fields('id_');
+        disable_fields('id_', 'new_modal');
         $('.alert-message.block-message.error').remove();
         $('#id_url').blur();
         $('#id_validated').remove();
+        add_errors('id_', '');
     });
 
     $('#edit_modal').on('hidden', function() {
@@ -46,11 +48,13 @@ $(document).ready(function() {
         get_edit($(this).attr('href'));
     });
 
-    $('#id_url').parent().addClass('input-append');
-    $('#id_url').after('<span id="id_refresh" class="btn add-on">refresh</span>');
 });
 
-
+function add_refresh_btn(prefix) {
+    hashPrefix = '#' + prefix;
+    $(hashPrefix+'url').parent().addClass('input-append');
+    $(hashPrefix+'url').after('<span id="'+prefix+'refresh" class="btn add-on">refresh</span>');
+}
 
 function date_select(prefix) {
     // Only show the day of week/day of month field when appropriate
@@ -92,10 +96,10 @@ function add_valid_label(prefix) {
 }
 
 function reposition_errors(prefix) {
-    $('label[for="'+prefix+'label"]').replaceWith('&nbsp;');
     $('div.alert-message.block-message.error').each(function() {
-        $(this).prev().after($($(this).children('[class!=errorlist]')));
-        $(this).css('float', 'right');
+//        $('input select').after('<span class="label label-error">Required</span>');
+        $(this).before($($(this).children('[class!=errorlist]').css('background', '#f00')));
+        $(this).remove();
     });
 }
 
@@ -121,7 +125,7 @@ function is_mobile() {
     return $(window).width() <= 500;
 }
 
-function disable_fields(prefix) {
+function disable_fields(prefix, modal) {
     // Disable/hide fields until valid URL is entered
     hashPrefix = '#' + prefix;
     if ($(hashPrefix+'url').val().length == 0 ) {
@@ -144,7 +148,7 @@ function disable_fields(prefix) {
         $('label[for="'+prefix+'is_active"]').hide();
         $('label[for="'+prefix+'label"]').replaceWith('&nbsp;');
         $('label[for="'+prefix+'notes"]').hide();
-        $('#add_save').hide();
+        $('#'+modal+' .save').hide();
     }
 }
 
@@ -170,12 +174,11 @@ function get_edit(id) {
             date_select(prefix);
             reposition_errors(prefix);
             resize_modal('#edit_modal');
-            disable_fields(prefix);
+            disable_fields(prefix, 'edit_modal');
             $('#edit_modal').on('resize', function() {
                 resize_modal('#edit_modal');
             });
-            $('#id_edit_url').parent().addClass('input-append');
-            $('#id_edit_url').after('<span id="id_edit_refresh" class="btn add-on">refresh</span>');
+            add_refresh_btn('id_edit_');
             $('#edit_modal').modal();
         }
     });
@@ -221,13 +224,42 @@ function save_modal_form(prefix, modal, action) {
                     clearForm(form);
                     window.location.reload(true);
                 } else {
-                    form.replaceWith(data);
-                    add_valid_label(prefix);
-                    date_select(prefix);
-                    reposition_errors(prefix);
+                    json = jQuery.parseJSON(data);
                 }
+            },
+            complete: function(data) {
+                var json;
+                if (data == 'success') {
+                    json = '';
+                } else {
+                    json = jQuery.parseJSON(data['responseText']);
+                }
+                add_errors(prefix, json);
             }
         });
+    }
+}
+
+/*
+Adds/removes errors to new search and edit search forms
+
+:prefix: id prefix used by the form
+:json: JSON string denoting which fields have errors
+*/
+function add_errors(prefix, json) {
+    var hashPrefix = '#' + prefix;
+    $('#saved-search-form [class*=label-important]').remove();
+    if (json.indexOf('url') > -1) {
+        $(hashPrefix+'refresh').after('<span class="label label-important">Required</span>');
+    }
+    if (json.indexOf('label') > -1) {
+        $(hashPrefix+'label').after('<span class="label label-important">Required</span>');
+    }
+    if (json.indexOf('email') > -1) {
+        $(hashPrefix+'email').after('<span class="label label-important">Required</span>');
+    }
+    if (json.indexOf('day_of_week') > -1 || json.indexOf('day_of_month') > -1) {
+        $(hashPrefix+'day_of_week').after('<span class="label label-important">Required</span>');
     }
 }
 
@@ -309,7 +341,7 @@ function validate_url(prefix, modal) {
             $('label[for="'+prefix+'email"]').show();
             $('label[for="'+prefix+'is_active"]').show();
             $('label[for="'+prefix+'notes"]').show();
-            $('#'+modal+' #add_save').show();
+            $('#'+modal+' .save').show();
         }
 
         function validation_status(status, prefix) {

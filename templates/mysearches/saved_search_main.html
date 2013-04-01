@@ -120,10 +120,10 @@
     <form method="post" id="saved-search-form">
     <div class="modal-body">
         <div class="formBox">
-            {% include "includes/form-error-highlight.html" with form=add_form %}
-            {% csrf_token %}
+        {% include "includes/form-error-highlight.html" with form=add_form %}
         </div>
     </div>
+    {% csrf_token %}
     <div class="modal-footer">
         <div class="actions">
           <a id="new_search" class="btn pull-right primary save">Save</a>

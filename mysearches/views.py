@@ -116,9 +116,7 @@ def save_new_search_form(request):
         data = "success"
         return HttpResponse(data)
     else:
-        return render_to_response('includes/form-error-highlight.html',
-                                  {'form': add_form},
-                                  context_instance=RequestContext(request))
+        return HttpResponse(json.dumps(add_form.errors.keys()))
 
 def get_edit_template(request):
     search_id = request.POST.get('search_id')
@@ -139,5 +137,5 @@ def save_edit_form(request):
             form.save()
             return HttpResponse('success')
         else:
-            return render_to_response('mysearches/saved_search_edit.html',
-                                      {'form': form}, RequestContext(request))
+            print form.errors.keys()
+            return HttpResponse(json.dumps(form.errors.keys()))
