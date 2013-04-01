@@ -75,12 +75,12 @@ function date_select(prefix) {
         } else if ($(hashPrefix+'frequency').attr('value') == 'M') { 
             $('label[for="'+prefix+'day_of_week"]').hide();
             $(hashPrefix+'day_of_week').hide();
-            $('label[for="'+prefix+'day_of_month"]').css('display', 'inline');
+            $('label[for="'+prefix+'day_of_month"]').show();
             $(hashPrefix+'day_of_month').css('display', 'inline');
         } else if ($(hashPrefix+'frequency').attr('value') == 'W') {
             $('label[for="'+prefix+'day_of_month"]').hide();
             $(hashPrefix+'day_of_month').hide();
-            $('label[for="'+prefix+'day_of_week"]').css('display', 'inline');
+            $('label[for="'+prefix+'day_of_week"]').show();
             $(hashPrefix+'day_of_week').css('display', 'inline');
         }
     }
@@ -93,14 +93,6 @@ function add_valid_label(prefix) {
     $(hashPrefix+'url').after('<div class="clear"></div>');
     $(hashPrefix+'frequency').next('.clear').remove();
     $(hashPrefix+'day_of_month').next('.clear').remove();
-}
-
-function reposition_errors(prefix) {
-    $('div.alert-message.block-message.error').each(function() {
-//        $('input select').after('<span class="label label-error">Required</span>');
-        $(this).before($($(this).children('[class!=errorlist]').css('background', '#f00')));
-        $(this).remove();
-    });
 }
 
 function resize_modal(modal) {
@@ -146,7 +138,7 @@ function disable_fields(prefix, modal) {
         $('label[for="'+prefix+'frequency"]').hide();
         $('label[for="'+prefix+'email"]').hide();
         $('label[for="'+prefix+'is_active"]').hide();
-        $('label[for="'+prefix+'label"]').replaceWith('&nbsp;');
+        $('label[for="'+prefix+'label"]').hide()
         $('label[for="'+prefix+'notes"]').hide();
         $('#'+modal+' .save').hide();
     }
@@ -172,7 +164,6 @@ function get_edit(id) {
             $('#edit_modal').append(data);
             add_valid_label(prefix);
             date_select(prefix);
-            reposition_errors(prefix);
             resize_modal('#edit_modal');
             disable_fields(prefix, 'edit_modal');
             $('#edit_modal').on('resize', function() {
@@ -338,6 +329,7 @@ function validate_url(prefix, modal) {
             $(hashPrefix+'day_of_month').removeAttr("disabled");
             $(hashPrefix+'day_of_month').show();
             $('label[for="'+prefix+'frequency"]').show();
+            $('label[for="'+prefix+'label"]').show();
             $('label[for="'+prefix+'email"]').show();
             $('label[for="'+prefix+'is_active"]').show();
             $('label[for="'+prefix+'notes"]').show();

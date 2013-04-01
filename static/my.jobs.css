@@ -462,6 +462,10 @@ em.pendingText{
     #saved-search-form #id_edit_url {
         margin-bottom: 10px !important;
     }
+    #saved-search-form label[for=id_label],
+    #saved-search-form label[for=id_edit_label] {
+        margin-top: 10px;
+    }
 }
 @media screen and (max-width: 500px){
     #titleRow{
@@ -530,10 +534,6 @@ em.pendingText{
         padding-left: 1%;
         background-color: #ccc;
         border: 1px solid #bbb;
-    }
-    #saved-search-form #id_url,
-    #saved-search-form #id_edit_url {
-        margin-bottom: -25px !important;
     }
     #saved-search-form #id_url,
     #saved-search-form #id_label,
