@@ -21,7 +21,6 @@ $(document).ready(function() {
         $('#id_day_of_month, #id_day_of_week').val('1');
         $('#id_frequency').val('W');
         disable_fields('id_', 'new_modal');
-        $('.alert-message.block-message.error').remove();
         $('#id_url').blur();
         $('#id_validated').remove();
         add_errors('id_', '');
@@ -60,6 +59,8 @@ function date_select(prefix) {
     // Only show the day of week/day of month field when appropriate
     var hashPrefix = '#' + prefix;
 
+    $('label[for="'+prefix+'day_of_month"]').unwrap();
+    $('label[for="'+prefix+'day_of_week"]').unwrap();
     show_dates();
 
     $(hashPrefix+'frequency').on('change', function() {
@@ -74,14 +75,14 @@ function date_select(prefix) {
             $(hashPrefix+'day_of_week').hide();
         } else if ($(hashPrefix+'frequency').attr('value') == 'M') { 
             $('label[for="'+prefix+'day_of_week"]').hide();
+            $('label[for="'+prefix+'day_of_month"]').css('display', 'inline')
             $(hashPrefix+'day_of_week').hide();
-            $('label[for="'+prefix+'day_of_month"]').show();
-            $(hashPrefix+'day_of_month').css('display', 'inline');
+            $(hashPrefix+'day_of_month').show();
         } else if ($(hashPrefix+'frequency').attr('value') == 'W') {
             $('label[for="'+prefix+'day_of_month"]').hide();
+            $('label[for="'+prefix+'day_of_week"]').css('display', 'inline')
             $(hashPrefix+'day_of_month').hide();
-            $('label[for="'+prefix+'day_of_week"]').show();
-            $(hashPrefix+'day_of_week').css('display', 'inline');
+            $(hashPrefix+'day_of_week').show();
         }
     }
 }
@@ -140,6 +141,8 @@ function disable_fields(prefix, modal) {
         $('label[for="'+prefix+'is_active"]').hide();
         $('label[for="'+prefix+'label"]').hide()
         $('label[for="'+prefix+'notes"]').hide();
+        $('label[for="'+prefix+'day_of_week"]').hide();
+        $('label[for="'+prefix+'day_of_month"]').hide();
         $('#'+modal+' .save').hide();
     }
 }

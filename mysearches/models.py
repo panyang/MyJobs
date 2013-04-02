@@ -39,7 +39,7 @@ class SavedSearch(models.Model):
                                        verbose_name=_("on"))
     day_of_week = models.CharField(max_length=2, choices=DOW_CHOICES,
                                    blank=True, null=True,
-                                   verbose_name=_("on the"))
+                                   verbose_name=_("on"))
     notes = models.TextField(blank=True, null=True,
                              verbose_name=_("Notes and Comments:"))
     last_sent = models.DateTimeField(blank=True, null=True, editable=False)

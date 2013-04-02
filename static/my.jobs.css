@@ -466,6 +466,11 @@ em.pendingText{
     #saved-search-form label[for=id_edit_label] {
         margin-top: 10px;
     }
+    #saved-search-form input,
+    #saved-search-form textarea,
+    #saved-search-form select {
+        margin-bottom: 5px;
+    }
 }
 @media screen and (max-width: 500px){
     #titleRow{
@@ -513,16 +518,6 @@ em.pendingText{
     #saved-search-form label[for=id_is_active],
     #saved-search-form label[for=id_edit_is_active] {
         margin-left: 20px;
-    }
-    #saved-search-form label[for=id_notes],
-    #saved-search-form label[for=id_label],
-    #saved-search-form label[for=id_day_of_month],
-    #saved-search-form label[for=id_day_of_week],
-    #saved-search-form label[for=id_edit_notes],
-    #saved-search-form label[for=id_edit_label],
-    #saved-search-form label[for=id_edit_day_of_month],
-    #saved-search-form label[for=id_edit_day_of_week] {
-        display: none !important;
     }
     div.actions button, div.actions a {
         float: none;
@@ -647,13 +642,6 @@ table td, table th{
     width: 250px;
 }
 
-#saved-search-form .id_day_of_month,
-#saved-search-form .id_day_of_week,
-#saved-search-form .id_edit_day_of_month,
-#saved-search-form .id_edit_day_of_week {
-    display: none;
-}
-
 #saved-search-form #id_day_of_month,
 #saved-search-form #id_day_of_week,
 #saved-search-form #id_edit_day_of_month,
@@ -689,4 +677,13 @@ table td, table th{
 .formBox.span7 {
     margin-top: 20px;
     float: none;
+}
+
+#saved-search-form label[for=id_day_of_month],
+#saved-search-form label[for=id_day_of_week],
+#saved-search-form label[for=id_edit_day_of_month],
+#saved-search-form label[for=id_edit_day_of_week] {
+    margin-left: 5px;
+    margin-right: 5px;
+    margin-top: 5px;
 }
