@@ -37,15 +37,17 @@ class MyProfileTests(TestCase):
         Saving primary names when multiple users are present accurately
         sets and retrieves the correct name
         """
-        self.user_2=User.objects.create_user(**{'email':'foo@example.com', 'password1':'secret'})
+        self.user_2 = UserFactory(email='foo@example.com')
         user_2_initial_name = PrimaryNameFactory(user=self.user_2)
         user_2_new_name = NewPrimaryNameFactory(user=self.user_2)
 
         initial_name = PrimaryNameFactory(user=self.user)
         new_name = NewPrimaryNameFactory(user=self.user)
 
-        user_2_initial_name = Name.objects.get(given_name='Alice', user=self.user_2)
-        user_2_new_name = Name.objects.get(given_name='Alicia', user=self.user_2)
+        user_2_initial_name = Name.objects.get(given_name='Alice',
+                                               user=self.user_2)
+        user_2_new_name = Name.objects.get(given_name='Alicia',
+                                           user=self.user_2)
         initial_name = Name.objects.get(given_name='Alice', user=self.user)
 
         self.assertTrue(new_name.primary)
