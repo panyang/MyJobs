@@ -109,12 +109,17 @@ ul.ui-autocomplete{
     padding-bottom: 30px;
     border: 2px solid #574E44;
     border-radius: 5px;
-    margin-top: 85px;
+    margin-top: 85px;    
     margin-right: 0px;
     }
 .loginBox, .formBox, .account-box h3 {
     color: #FFF;    
     }
+@media screen and (min-width: 1024px){
+    .loginBox, .formBox, .account-box{ 
+        margin-right: -101px;
+    }
+}
 #account-page-2 .loginBox{
     padding-left: 0px;
     padding-right: 0px;
