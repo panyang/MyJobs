@@ -24,10 +24,10 @@ body{
     margin-bottom: 0px;      
     }    
 a{
-    color: #FFF;
+    color: #c44e34;
     }
 a:hover{
-    color: #FFF;
+    color: #a42e14;
     }
 
 /* Form Styles */
@@ -119,6 +119,12 @@ ul.ui-autocomplete{
     }
 .loginBox, .formBox, .account-box h3 {
     color: #FFF;    
+    }
+.loginBox a{
+    color: #FFF;
+    }
+.loginBox a:hover{
+    color: #FFF;
     }
 #account-page-2 .loginBox{
     padding-left: 0px;
