@@ -59,8 +59,10 @@ function date_select(prefix) {
     // Only show the day of week/day of month field when appropriate
     var hashPrefix = '#' + prefix;
 
-    $('label[for="'+prefix+'day_of_month"]').unwrap();
-    $('label[for="'+prefix+'day_of_week"]').unwrap();
+    if ($('label[for="'+prefix+'day_of_month"]').parent().is('div.form-label')) {
+        $('label[for="'+prefix+'day_of_month"]').unwrap();
+        $('label[for="'+prefix+'day_of_week"]').unwrap();
+    }
     show_dates();
 
     $(hashPrefix+'frequency').on('change', function() {
