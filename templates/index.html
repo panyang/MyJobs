@@ -9,12 +9,8 @@
 
 {% block content %}
     <div class="row" id="titleRow">
-        <div class="span6 offset1"  id="title">
+        <div class="span8"  id="title">
             <h1>{% trans 'My.jobs' %}</h1>
-            <div id="subtitle">
-                {% trans 'Save. Share. Socialize.' %}<br/>
-                {% trans 'Forge your path.' %}
-            </div>
         </div>
         <div class="span4">
             <div class="loginBox">
@@ -38,7 +34,7 @@
                     <h3>Sign Up</h3>
                     {% include "includes/widget-user-registration.html" with form=registrationform%}
                     <div class="clear"></div>                                                
-                    <h3>Log In</h3>
+                    <h3>Sign In</h3>
                     {% include "includes/widget-login-username.html" with form=loginform %}
                 {% endif %}
             </div>				
@@ -65,4 +61,5 @@
             {% include "includes/initial-profile-form.html" %}
         </div>
     </div>
-{% endblock %} 
+{% endblock %}
+
