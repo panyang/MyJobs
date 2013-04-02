@@ -101,11 +101,19 @@ ul.ui-autocomplete{
     }
 
 /*Content Box Styles*/
-.loginBox, .formBox, .account-box{    
+.loginBox, .formBox{    
     background-color: #574e44;
     padding: 10px;
     padding-bottom: 30px;
     border: 2px solid #574E44;
+    border-radius: 5px;
+    margin-top: 105px;   
+    }
+.account-box{    
+    background-color: #FFF;
+    padding: 10px;
+    padding-bottom: 30px;
+    
     border-radius: 5px;
     margin-top: 105px;   
     }
@@ -205,14 +213,14 @@ ul.ui-autocomplete{
     margin-right: 10px;
     }
 .btn.primary{
-    background-color: #c44e34;
+    background-color: #b34529;
     background-image: none;
-    background-image: -moz-linear-gradient(#e16b51,#c44e34);
-    background-image: -webkit-gradient(linear, left top, left bottom, #e16b51, #c44e34); 
-    background-image: -webkit-linear-gradient(#e16b51,#c44e34);  
-    background-image: -o-linear-gradient(#e16b51,#c44e34); 
-    background-image: linear-gradient(#e16b51,#c44e34);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#e16b51', endColorstr='#c44e34', GradientType=0)
+    background-image: -moz-linear-gradient(#db5938,#b34529);
+    background-image: -webkit-gradient(linear, left top, left bottom, #db5938, #b34529); 
+    background-image: -webkit-linear-gradient(#db5938,#b34529);  
+    background-image: -o-linear-gradient(#db5938,#b34529); 
+    background-image: linear-gradient(#db5938,#b34529);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#db5938', endColorstr='#b34529', GradientType=0)
     margin-top: 2px;
     padding-left: 25px;
     padding-right: 25px;
