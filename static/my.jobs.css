@@ -11,12 +11,12 @@ body{
 #titleRow {
     background-image:url('images/homepage_bg.png');
     background-repeat:no-repeat;
-    background-attachment:fixed;
+    
     background-position:center top;
     background-color: #FFF;
-    margin-top: 0px;
-    margin-bottom: 0px;
-    min-height: 598px; 
+    margin-top: -26px;
+    margin-bottom: -20px;
+    min-height: 598px;     
     }
 #section-bg-color {
     background-color: #FFF;
@@ -24,6 +24,12 @@ body{
     margin-top: -28px;
     margin-bottom: -22px;      
     }
+.section {
+    background-color: #FFF;
+    border: 2px solid #333333;
+    margin-top: 0px;
+    margin-bottom: 0px;      
+    }    
 a{
     color: #FFF;
     }
@@ -108,7 +114,7 @@ ul.ui-autocomplete{
     padding-bottom: 30px;
     border: 2px solid #574E44;
     border-radius: 5px;
-    margin-top: 85px;   
+    margin-top: 105px;   
     }
 .loginBox, .formBox, .account-box h3 {
     color: #FFF;    
