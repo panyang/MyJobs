@@ -10,8 +10,7 @@ body{
 }
 #titleRow {
     background-image:url('images/homepage_bg.png');
-    background-repeat:no-repeat;
-    
+    background-repeat:no-repeat;    
     background-position:center top;
     background-color: #FFF;
     margin-top: -26px;
