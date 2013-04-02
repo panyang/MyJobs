@@ -6,14 +6,11 @@
 {% endblock %}
 
 {% block title-content %}{% trans "My.Jobs - Manage your job search." %}{% endblock title-content %}
-{% block homepage_bg %}
-<div id="home-background">
-{% endblock %}
 
 {% block content %}
     <div class="row" id="titleRow">
-        <div class="span6 offset1"  id="title">
-            &nbsp;
+        <div class="span8"  id="title">
+            <h1>{% trans 'My.jobs' %}</h1>
         </div>
         <div class="span4">
             <div class="loginBox">
@@ -65,5 +62,4 @@
         </div>
     </div>
 {% endblock %}
-{% block homepage_bg_close %}</div>{% endblock %}
 

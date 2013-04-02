@@ -8,20 +8,22 @@ body{
 #main {
     padding: 50px;
 }
-#home-background {
-        background-image:url('images/homepage_bg.png');
-        background-repeat:no-repeat;
-        background-attachment:fixed;
-        background-position:center top;
-        background-color: #FFF;
-        margin-top: -26px;
-        margin-bottom: -25px;
-        min-height: 598px;
-        border: 2px solid #333333;    
-      }
-#page-content{
-      width: 961px;
-      }
+#titleRow {
+    background-image:url('images/homepage_bg.png');
+    background-repeat:no-repeat;
+    background-attachment:fixed;
+    background-position:center top;
+    background-color: #FFF;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    min-height: 598px; 
+    }
+#section-bg-color {
+    background-color: #FFF;
+    border: 2px solid #333333;
+    margin-top: -28px;
+    margin-bottom: -22px;      
+    }
 a{
     color: #FFF;
     }
@@ -87,8 +89,7 @@ ul.ui-autocomplete{
     padding-bottom: 60px;
     }
 #title h1{
-    text-indent: -9000px;
-    background: url(images/mydotjobs.png) center left no-repeat;
+    text-indent: -9000px;    
     display: block;
     height: 81px;
     }    
@@ -101,8 +102,7 @@ ul.ui-autocomplete{
     }
 
 /*Content Box Styles*/
-.loginBox, .formBox, .account-box{ 
-    float:right;
+.loginBox, .formBox, .account-box{    
     background-color: #574e44;
     padding: 10px;
     padding-bottom: 30px;
@@ -355,10 +355,7 @@ em.pendingText{
     #nav li:hover ul#pop-menu{ 
         display: block;
         text-align: left;
-    }
-    .loginBox, .formBox, .account-box{ 
-        margin-right: -101px;
-    }
+    }    
 }
 #nav.active ul#pop-menu li a:hover,
 #nav li:hover ul#pop-menu li a:hover{ 

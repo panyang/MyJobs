@@ -77,8 +77,8 @@
             </div><!-- /topbar-inner -->
         </div>
     {% endblock %}
-    <section><div class="section subpage">
-    {% block homepage_bg %}{% endblock %}   
+    <section><div class="section subpage">      
+    
     {% block page %}
             {% block main %}
 
@@ -93,15 +93,15 @@
                         </div>
                     </div>
                 </div>
+                <div id="section-bg-color">
                 <div class="wrapper">
                     {% block content %}{% endblock %}
+                </div>
                 </div>
             {% endblock %}
             
         {% endblock %}
     
-    {% block homepage_bg_close %}{% endblock %}
-  
     </div></section>
     <footer><div id="footer">
         {% block footer %}
