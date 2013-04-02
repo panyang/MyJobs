@@ -1,7 +1,6 @@
 @import url(http://css.nlx.org/framework/v2/css/def.ui.css);
 /*Main Styles*/
-body{
-    
+body{    
     background-color: #574e44;
     font-family: Arial, Helvetica, sans-serif;
     }
@@ -114,11 +113,6 @@ ul.ui-autocomplete{
 .loginBox, .formBox, .account-box h3 {
     color: #FFF;    
     }
-@media screen and (min-width: 1024px){
-    .loginBox, .formBox, .account-box{ 
-        margin-right: -101px;
-    }
-}
 #account-page-2 .loginBox{
     padding-left: 0px;
     padding-right: 0px;
@@ -361,6 +355,9 @@ em.pendingText{
     #nav li:hover ul#pop-menu{ 
         display: block;
         text-align: left;
+    }
+    .loginBox, .formBox, .account-box{ 
+        margin-right: -101px;
     }
 }
 #nav.active ul#pop-menu li a:hover,
