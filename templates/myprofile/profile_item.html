@@ -1,0 +1,9 @@
+<div id="{{module}}-{{item.id}}-item"><div class="item-detail">
+    {% for label, value in item.get_fields %}
+    <b>{{ label }}: </b> {{ value }}<br>
+    {% endfor %}
+  </div>
+  <a href="" id="{{module}}-{{item.id}}-delete">Delete</a><br>
+  <button class="btn" id="{{module}}-{{item.id}}-edit" id=>Edit</button>
+  <hr>
+</div>

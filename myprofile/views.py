@@ -48,16 +48,24 @@ def render_form(request):
         item_id = request.POST.get('id',None)
         model = globals()[module_type]
         form = globals()[module_type + 'Form']
+        data_dict = {}
+        data_dict['module'] = module_type
         if item_id == 'new':
             form_instance = form(user=request.user, data=request.POST)
         else:
             obj = model.objects.get(id=item_id)
             form_instance = form(instance=obj, user=request.user, data=request.POST)
+
         if form_instance.is_valid():
-            form_instance.save()
-            return HttpResponse('saved')
+            item = form_instance.save()
+            data_dict['item'] = form_instance.instance
+            return render_to_response('myprofile/profile_item.html', data_dict,
+                                      RequestContext(request))
         else:
-            return HttpResponse('not saved')
+            data_dict['itme_id'] = item_id
+            data_dict['form'] = form_instance
+            return render_to_response('myprofile/profile_form.html', data_dict,
+                                      RequestContext(request))
     else:
         module_type = request.GET.get('module')
         item_id = request.GET.get('id',None)

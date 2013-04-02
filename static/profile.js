@@ -19,7 +19,7 @@ $(function() {
                 data: {'module':module},
                 success: function(data) {
                     btn.hide();
-                    btn.after(data);
+                    btn.before(data);
                     datepicker();
                 }
             });
@@ -65,7 +65,10 @@ $(function() {
                 url: '/profile/form/',
                 data: serialized_data,
                 success: function(data) {
-                    $(e.target).append(data);
+                    if (item_id == 'new') {
+                        form.siblings("[id$='add']").show();
+                    };
+                    form.replaceWith(data);                    
                 }
             });            
         },
