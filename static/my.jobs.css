@@ -502,10 +502,6 @@ em.pendingText{
     #saved-search-form select {
         margin-bottom: 5px;
     }
-
-    .modal-body .formBox {
-        margin-top: 0px;
-    }
 }
 @media screen and (max-width: 500px){
     #titleRow{
@@ -721,4 +717,8 @@ table td, table th{
     margin-left: 5px;
     margin-right: 5px;
     margin-top: 5px;
+}
+
+[class^="icon-"], [class*=" icon-"] {
+    background-image: url("images/glyphicons-halflings.png");
 }

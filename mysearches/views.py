@@ -51,6 +51,13 @@ def saved_search_main(request):
         elif action == "save":
             # Save digest form
             return save_digest_form(request, form)
+        elif action == "delete":
+            # Remove digest from user
+            try:
+                SavedSearchDigest.objects.get(user=request.user)
+            except SavedSearchDigest.DoesNotExist:
+                pass
+            return HttpResponse('success')
         elif action == "new_search":
             # Save new search form
             add_form = SavedSearchForm(user=request.user, data=request.POST)

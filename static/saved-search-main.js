@@ -52,7 +52,7 @@ $(document).ready(function() {
 function add_refresh_btn(prefix) {
     hashPrefix = '#' + prefix;
     $(hashPrefix+'url').parent().addClass('input-append');
-    $(hashPrefix+'url').after('<span id="'+prefix+'refresh" class="btn add-on">refresh</span>');
+    $(hashPrefix+'url').after('<span id="'+prefix+'refresh" class="btn add-on"><i class="icon icon-refresh">');
 }
 
 function date_select(prefix) {
@@ -372,21 +372,8 @@ function check_digest_options() {
 
     $('#digest_submit').click(function(e) {
         e.preventDefault();
-        if (form_valid()) {
-            save_form();
-        }
+        save_form();
     });
-
-    function form_valid() {
-        $('.digest_error').remove();
-        var error;
-        if ($('#id_digest_active').prop('checked')) {
-            if ($('#id_digest_email').val().length) {
-                return true;
-            }
-        }
-        return false;
-    }
 
     function form_status(status) {
         var delay = 5000;
@@ -401,9 +388,16 @@ function check_digest_options() {
 
     function save_form() {
         var csrf_token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+        var is_active = $('#id_digest_active').prop('checked')? 'True':'False'
+        var action;
+        if (is_active == 'True') {
+            action = 'save';
+        } else {
+            action = 'delete';
+        }
         $.ajax({
-            data: { csrfmiddlewaretoken: csrf_token, action: 'save',
-                    is_active: $('#id_digest_active').prop('checked')? 'True':'False',
+            data: { csrfmiddlewaretoken: csrf_token, action: action,
+                    is_active: is_active,
                     email: $('#id_digest_email').val(),
                     send_if_none: $('#id_send_if_none').prop('checked')? 'True':'False' },
             type: 'POST',
