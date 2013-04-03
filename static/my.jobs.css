@@ -502,6 +502,10 @@ em.pendingText{
     #saved-search-form select {
         margin-bottom: 5px;
     }
+
+    .modal-body .formBox {
+        margin-top: 0px;
+    }
 }
 @media screen and (max-width: 500px){
     #titleRow{
