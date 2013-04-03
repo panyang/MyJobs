@@ -18,4 +18,5 @@ class MySearchViewTests(TestCase):
         self.assertTemplateUsed(response, 'mysearches/saved_search_main.html')
         self.assertTemplateUsed(response, 'includes/form-error-highlight.html')
         self.failUnless(isinstance(response.context['form'], forms.DigestForm));
-        self.failUnless(isinstance(response.context['add_form'], forms.SavedSearchForm));
+        self.failUnless(isinstance(response.context['add_form'],
+                        forms.SavedSearchForm));
