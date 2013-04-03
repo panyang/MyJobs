@@ -164,7 +164,7 @@ function get_edit(id) {
                 action: 'get_edit',
                 search_id: id },
         type: 'POST',
-        url: '',
+        url: 'edit',
         success: function(data) {
             $('#edit_modal').append(data);
             add_valid_label(prefix);
@@ -199,6 +199,12 @@ function save_modal_form(prefix, modal, action) {
         var is_active = $(hashPrefix+'is_active').prop('checked')? 'True':'False';
         var form = $('#'+modal+' form');
         var id = form.find('a.save').attr('href');
+        var url
+        if (action == 'new_search') {
+            url = 'new'
+        } else {
+            url = 'save-edit'
+        }
         $.ajax({
             data: { action: action,
                     search_id: id,
@@ -214,23 +220,13 @@ function save_modal_form(prefix, modal, action) {
                     day_of_month: $(hashPrefix+'day_of_month').val()
             },
             type: 'POST',
-            url: '',
+            url: url,
             success: function(data) {
                 if (data == 'success') {
                     clearForm(form);
                     window.location.reload(true);
-                } else {
-                    json = jQuery.parseJSON(data);
                 }
-            },
-            complete: function(data) {
-                var json;
-                if (data == 'success') {
-                    json = '';
-                } else {
-                    json = jQuery.parseJSON(data['responseText']);
-                }
-                add_errors(prefix, json);
+                add_errors(prefix, data);
             }
         });
     }
@@ -240,21 +236,21 @@ function save_modal_form(prefix, modal, action) {
 Adds/removes errors to new search and edit search forms
 
 :prefix: id prefix used by the form
-:json: JSON string denoting which fields have errors
+:data: array denoting which fields have errors
 */
-function add_errors(prefix, json) {
+function add_errors(prefix, data) {
     var hashPrefix = '#' + prefix;
     $('#saved-search-form [class*=label-important]').remove();
-    if (json.indexOf('url') > -1) {
+    if (data.indexOf('url') > -1) {
         $(hashPrefix+'refresh').after('<span class="label label-important">Required</span>');
     }
-    if (json.indexOf('label') > -1) {
+    if (data.indexOf('label') > -1) {
         $(hashPrefix+'label').after('<span class="label label-important">Required</span>');
     }
-    if (json.indexOf('email') > -1) {
+    if (data.indexOf('email') > -1) {
         $(hashPrefix+'email').after('<span class="label label-important">Required</span>');
     }
-    if (json.indexOf('day_of_week') > -1 || json.indexOf('day_of_month') > -1) {
+    if (data.indexOf('day_of_week') > -1 || data.indexOf('day_of_month') > -1) {
         $(hashPrefix+'day_of_week').after('<span class="label label-important">Required</span>');
     }
 }
@@ -295,7 +291,7 @@ function validate_url(prefix, modal) {
         validation_status('validating...', prefix)
         $.ajax({
             type: "POST",
-            url: "",
+            url: "validate-url",
             data: { csrfmiddlewaretoken: csrf_token,
                     action: "validate",
                     url: url},
@@ -389,11 +385,13 @@ function check_digest_options() {
     function save_form() {
         var csrf_token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
         var is_active = $('#id_digest_active').prop('checked')? 'True':'False'
-        var action;
+        var action, url;
         if (is_active == 'True') {
             action = 'save';
+            url = 'save-digest';
         } else {
             action = 'delete';
+            url = 'delete-digest';
         }
         $.ajax({
             data: { csrfmiddlewaretoken: csrf_token, action: action,
@@ -401,7 +399,7 @@ function check_digest_options() {
                     email: $('#id_digest_email').val(),
                     send_if_none: $('#id_send_if_none').prop('checked')? 'True':'False' },
             type: 'POST',
-            url: '',
+            url: url,
             success: function(data) {
                 if (data == 'success') {
                     form_status('Saved!');
