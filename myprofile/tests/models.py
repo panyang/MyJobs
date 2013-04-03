@@ -1,6 +1,7 @@
 from django.core import mail
 from django.test import TestCase
 from django.core.urlresolvers import reverse
+from django.core.exceptions import MultipleObjectsReturned
 
 from myjobs.models import User
 from myjobs.tests.factories import UserFactory
@@ -30,6 +31,36 @@ class MyProfileTests(TestCase):
         initial_name = Name.objects.get(given_name='Alice')
         self.assertTrue(new_name.primary)
         self.assertFalse(initial_name.primary)
+
+    def test_primary_name_save_multiuser(self):
+        """
+        Saving primary names when multiple users are present accurately
+        sets and retrieves the correct name
+        """
+        self.user_2 = UserFactory(email='foo@example.com')
+        user_2_initial_name = PrimaryNameFactory(user=self.user_2)
+        user_2_new_name = NewPrimaryNameFactory(user=self.user_2)
+
+        initial_name = PrimaryNameFactory(user=self.user)
+        new_name = NewPrimaryNameFactory(user=self.user)
+
+        user_2_initial_name = Name.objects.get(given_name='Alice',
+                                               user=self.user_2)
+        user_2_new_name = Name.objects.get(given_name='Alicia',
+                                           user=self.user_2)
+        initial_name = Name.objects.get(given_name='Alice', user=self.user)
+
+        self.assertTrue(new_name.primary)
+        self.assertFalse(initial_name.primary)
+        self.assertTrue(user_2_new_name.primary)
+        self.assertFalse(user_2_initial_name.primary)
+
+        with self.assertRaises(MultipleObjectsReturned):
+            Name.objects.get(primary=True)
+            Name.objects.get(primary=False)
+            Name.objects.get(given_name='Alice')
+            Name.objects.get(given_name='Alicia')
+        Name.objects.get(primary=True, user=self.user_2)
 
     def test_email_activation_creation(self):
         """
