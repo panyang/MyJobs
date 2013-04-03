@@ -54,7 +54,7 @@ def saved_search_main(request):
         elif action == "delete":
             # Remove digest from user
             try:
-                SavedSearchDigest.objects.get(user=request.user)
+                SavedSearchDigest.objects.get(user=request.user).delete()
             except SavedSearchDigest.DoesNotExist:
                 pass
             return HttpResponse('success')
