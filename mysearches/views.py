@@ -34,23 +34,13 @@ def saved_search_main(request):
         action = request.POST.get('action')
 
         add_form = SavedSearchForm(user=request.user, instance=digest_obj)
-        add_form.fields['email'].choices = choices
-        add_form.fields['email'].initial = choices[0][0]
-        if action in ['validate', 'save']:
-            form = DigestForm(user=request.user, data=request.POST,
-                              instance=digest_obj)
-        else:
-            form = DigestForm(user=request.user, instance=digest_obj)
-
-        form.fields['email'].choices = choices
-        form.fields['email'].initial = choices[0][0]
 
         if action == "validate":
             # Ensure that url is a valid job rss feed
-            return validate_url(request, form)
+            return validate_url(request)
         elif action == "save":
             # Save digest form
-            return save_digest_form(request, form)
+            return save_digest_form(request, digest_obj)
         elif action == "delete":
             # Remove digest from user
             try:
@@ -60,33 +50,14 @@ def saved_search_main(request):
             return HttpResponse('success')
         elif action == "new_search":
             # Save new search form
-            add_form = SavedSearchForm(user=request.user, data=request.POST)
-            add_form.fields['email'].choices = choices
-            add_form.fields['email'].initial = choices[0][0]
-            return save_new_search_form(request, add_form)
+            return save_new_search_form(request)
         elif action == "get_edit":
-            search_id = request.POST.get('search_id')
-            saved_search = SavedSearch.objects.get(id=search_id)
-            form = SavedSearchForm(user=request.user, instance=saved_search,
-                                   auto_id='id_edit_%s')
-            form.fields['email'].choices = choices
-            form.fields['email'].initial = choices[0][0]
-            return get_edit_template(request, form, search_id)
+            return get_edit_template(request)
         elif action == "save_edit":
-            search_id = request.POST.get('search_id')
-            saved_search = SavedSearch.objects.get(id=search_id)
-            form = SavedSearchForm(user=request.user, data=request.POST,
-                                   instance=saved_search)
-            form.fields['email'].choices = choices
-            form.fields['email'].initial = choices[0][0]
-            return save_edit_form(request, form, saved_search)
+            return save_edit_form(request)
     else:
         form = DigestForm(user=request.user, instance=digest_obj)
-        form.fields['email'].choices = choices
-        form.fields['email'].initial = choices[0][0]
         add_form = SavedSearchForm(user=request.user)
-        add_form.fields['email'].choices = choices
-        add_form.fields['email'].initial = choices[0][0]
     return render_to_response('mysearches/saved_search_main.html',
                               {'saved_searches': saved_searches,
                                'form':form, 'add_form': add_form},
@@ -120,7 +91,7 @@ def more_feed_results(request):
         return render_to_response('mysearches/feed_page.html',
                                   {'items':items}, RequestContext(request))
 
-def validate_url(request, form):
+def validate_url(request):
     rss_url, rss_soup = validate_dotjobs_url(request.POST['url'])
     if rss_url:
        feed_title = get_feed_title(rss_soup)
@@ -134,7 +105,9 @@ def validate_url(request, form):
         data = {'url_status': 'not valid'}
     return HttpResponse(json.dumps(data))
 
-def save_digest_form(request, form):
+def save_digest_form(request, digest_obj):
+    form = DigestForm(user=request.user, data=request.POST,
+                      instance=digest_obj)
     if form.is_valid():
         form.save()
         data = "success"
@@ -142,7 +115,8 @@ def save_digest_form(request, form):
         data = "failure"
     return HttpResponse(data)
 
-def save_new_search_form(request, add_form):
+def save_new_search_form(request):
+    add_form = SavedSearchForm(user=request.user, data=request.POST)
     if add_form.is_valid():
         add_form.save()
         data = "success"
@@ -150,13 +124,21 @@ def save_new_search_form(request, add_form):
     else:
         return HttpResponse(json.dumps(add_form.errors.keys()))
 
-def get_edit_template(request, form, search_id):
+def get_edit_template(request):
+    search_id = request.POST.get('search_id')
+    saved_search = SavedSearch.objects.get(id=search_id)
+    form = SavedSearchForm(user=request.user, instance=saved_search,
+                           auto_id='id_edit_%s')
     return render_to_response('mysearches/saved_search_edit.html',
                               {'form':form, 'search_id':search_id},
                               RequestContext(request))
 
-def save_edit_form(request, form, saved_search):
+def save_edit_form(request):
+    search_id = request.POST.get('search_id')
+    saved_search = SavedSearch.objects.get(id=search_id)
     if request.user == saved_search.user:
+        form = SavedSearchForm(user=request.user, data=request.POST,
+                               instance=saved_search)
         if form.is_valid():
             form.save()
             return HttpResponse('success')

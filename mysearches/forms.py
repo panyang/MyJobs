@@ -4,11 +4,23 @@ from django.utils.translation import ugettext_lazy as _
 from myjobs.forms import BaseUserForm
 from mysearches.helpers import *
 from mysearches.models import SavedSearch, SavedSearchDigest
+from myprofile.models import SecondaryEmail
 
+def make_choices(user):
+    choices = [(user.email, user.email)]
+    for email in SecondaryEmail.objects.filter(user=user):
+        choices.append((email, email))
+    return choices
 
 class SavedSearchForm(BaseUserForm):
+    def __init__(self, *args, **kwargs):
+        super(SavedSearchForm, self).__init__(*args, **kwargs)
+        choices = make_choices(self.user)
+        self.fields["email"] = ChoiceField(widget=Select(), choices=choices,
+                                           initial=choices[0][0])
+        
+
     feed = URLField(widget=HiddenInput())
-    email = ChoiceField(widget=Select())
 
     # day_of_week and day_of_month are not required in the database.
     # These clean functions ensure that it is required only when
@@ -39,11 +51,17 @@ class SavedSearchForm(BaseUserForm):
 
 
 class DigestForm(BaseUserForm):
+    def __init__(self, *args, **kwargs):
+        super(DigestForm, self).__init__(*args, **kwargs)
+        choices = make_choices(self.user)
+        self.fields["email"] = ChoiceField(widget=Select(attrs={
+                                           'id':'id_digest_email'}),
+                                           choices=choices,
+                                           initial=choices[0][0])
+
     is_active = BooleanField(label=_('Send my results in a single digest email'
                              ' to:'), widget=CheckboxInput(
                              attrs={'id':'id_digest_active'}))
-    email = ChoiceField(label=_('Send results to'), widget=Select(attrs=
-                      {'id':'id_digest_email'}))
     
     class Meta:
         model = SavedSearchDigest
