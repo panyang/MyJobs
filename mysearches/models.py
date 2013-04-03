@@ -8,6 +8,7 @@ from django.template.loader import render_to_string
 from mysearches.helpers import parse_rss
 
 class SavedSearch(models.Model):
+
     FREQUENCY_CHOICES = (
         ('D', _('Daily')),
         ('W', _('Weekly')),

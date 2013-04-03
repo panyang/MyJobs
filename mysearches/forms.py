@@ -8,6 +8,7 @@ from mysearches.models import SavedSearch, SavedSearchDigest
 
 class SavedSearchForm(BaseUserForm):
     feed = URLField(widget=HiddenInput())
+    email = ChoiceField(widget=Select())
 
     # day_of_week and day_of_month are not required in the database.
     # These clean functions ensure that it is required only when
@@ -41,7 +42,7 @@ class DigestForm(BaseUserForm):
     is_active = BooleanField(label=_('Send my results in a single digest email'
                              ' to:'), widget=CheckboxInput(
                              attrs={'id':'id_digest_active'}))
-    email = CharField(label=_('Send results to'), widget=TextInput(attrs=
+    email = ChoiceField(label=_('Send results to'), widget=Select(attrs=
                       {'id':'id_digest_email'}))
     
     class Meta:

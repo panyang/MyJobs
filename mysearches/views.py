@@ -28,15 +28,22 @@ def saved_search_main(request):
     except:
         digest_obj = None
     saved_searches = SavedSearch.objects.filter(user=request.user)
+    email = request.user.email
+    choices = ((email, email),)
     if request.method == "POST":
         action = request.POST.get('action')
 
         add_form = SavedSearchForm(user=request.user, instance=digest_obj)
+        add_form.fields['email'].choices = choices
+        add_form.fields['email'].initial = choices[0][0]
         if action in ['validate', 'save']:
             form = DigestForm(user=request.user, data=request.POST,
                               instance=digest_obj)
         else:
             form = DigestForm(user=request.user, instance=digest_obj)
+
+        form.fields['email'].choices = choices
+        form.fields['email'].initial = choices[0][0]
 
         if action == "validate":
             # Ensure that url is a valid job rss feed
@@ -46,14 +53,33 @@ def saved_search_main(request):
             return save_digest_form(request, form)
         elif action == "new_search":
             # Save new search form
-            return save_new_search_form(request)
+            add_form = SavedSearchForm(user=request.user, data=request.POST)
+            add_form.fields['email'].choices = choices
+            add_form.fields['email'].initial = choices[0][0]
+            return save_new_search_form(request, add_form)
         elif action == "get_edit":
-            return get_edit_template(request)
+            search_id = request.POST.get('search_id')
+            saved_search = SavedSearch.objects.get(id=search_id)
+            form = SavedSearchForm(user=request.user, instance=saved_search,
+                                   auto_id='id_edit_%s')
+            form.fields['email'].choices = choices
+            form.fields['email'].initial = choices[0][0]
+            return get_edit_template(request, form, search_id)
         elif action == "save_edit":
-            return save_edit_form(request)
+            search_id = request.POST.get('search_id')
+            saved_search = SavedSearch.objects.get(id=search_id)
+            form = SavedSearchForm(user=request.user, data=request.POST,
+                                   instance=saved_search)
+            form.fields['email'].choices = choices
+            form.fields['email'].initial = choices[0][0]
+            return save_edit_form(request, form, saved_search)
     else:
         form = DigestForm(user=request.user, instance=digest_obj)
+        form.fields['email'].choices = choices
+        form.fields['email'].initial = choices[0][0]
         add_form = SavedSearchForm(user=request.user)
+        add_form.fields['email'].choices = choices
+        add_form.fields['email'].initial = choices[0][0]
     return render_to_response('mysearches/saved_search_main.html',
                               {'saved_searches': saved_searches,
                                'form':form, 'add_form': add_form},
@@ -109,8 +135,7 @@ def save_digest_form(request, form):
         data = "failure"
     return HttpResponse(data)
 
-def save_new_search_form(request):
-    add_form = SavedSearchForm(user=request.user, data=request.POST)
+def save_new_search_form(request, add_form):
     if add_form.is_valid():
         add_form.save()
         data = "success"
@@ -118,24 +143,15 @@ def save_new_search_form(request):
     else:
         return HttpResponse(json.dumps(add_form.errors.keys()))
 
-def get_edit_template(request):
-    search_id = request.POST.get('search_id')
-    saved_search = SavedSearch.objects.get(id=search_id)
-    form = SavedSearchForm(user=request.user, instance=saved_search,
-                           auto_id='id_edit_%s')
+def get_edit_template(request, form, search_id):
     return render_to_response('mysearches/saved_search_edit.html',
                               {'form':form, 'search_id':search_id},
                               RequestContext(request))
 
-def save_edit_form(request):
-    search_id = request.POST.get('search_id')
-    saved_search = SavedSearch.objects.get(id=search_id)
+def save_edit_form(request, form, saved_search):
     if request.user == saved_search.user:
-        form = SavedSearchForm(user=request.user, data=request.POST,
-                               instance=saved_search)
         if form.is_valid():
             form.save()
             return HttpResponse('success')
         else:
-            print form.errors.keys()
             return HttpResponse(json.dumps(form.errors.keys()))
