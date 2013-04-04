@@ -31,8 +31,6 @@ def add_saved_search(request):
                 data = {'url_status': 'not valid'}
             return HttpResponse(json.dumps(data))
         else:
-            import ipdb
-            ipdb.set_trace()
             if form.is_valid():
                 form.save()
                 return HttpResponseRedirect('/saved-search')

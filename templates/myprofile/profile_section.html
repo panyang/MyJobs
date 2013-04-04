@@ -1,0 +1,28 @@
+<div class="formBox" id="{{module.name}}_items">       
+    <h4>{{ module.verbose }}</h4>
+    {% if module.items.0 %}
+    <table class="table table-bordered table-striped">
+        <tr>
+            {% for label,value in module.items.0.get_fields|slice:":4" %}                            
+                <th>{{label}}</th>
+            {% endfor %}
+            <td class="action"></td>
+        </tr>
+        {% for item in module.items %}      
+        <tr id="{{module.name}}-{{item.id}}-item">
+            {% for   label, value in item.get_fields|slice:":4" %}
+            <td>{{ value }}</td>
+            {% endfor %}
+            <td class="action">
+                <button class="btn" id="{{module.name}}-{{item.id}}-delete">Delete</button>
+                <button class="btn" id="{{module.name}}-{{item.id}}-edit">Edit</button>
+                
+            </td>
+        </tr>
+        {% endfor %}
+    </table>                
+    <button class="btn primary" id="{{module.name}}-new-add">Add Another</button>
+    {%else%}
+    <button class="btn primary" id="{{module.name}}-new-add">Add {{module.verbose}} </button>
+    {% endif %}    
+</div>

@@ -39,6 +39,10 @@ USE_L10N = True
 MEDIA_ROOT = os.path.join(_PATH, 'files', 'media')
 MEDIA_URL = 'http://src.nlx.org/myjobs/admin/'
 
+STATICFILES_DIRS = (
+    os.path.join(PROJ_ROOT, 'static'),
+)
+
 STATIC_ROOT = os.path.join(_PATH, 'files', 'static')
 STATIC_URL = '/files/'
 

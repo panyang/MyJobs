@@ -1,51 +1,41 @@
 {% extends "myjobs_base.html" %}
 {% load i18n %}
 {% block meta-extra %}
+<script src="{{ STATIC_URL }}account-creation.js"></script>
+<script src="{{ STATIC_URL }}profile.js"></script>
 {% endblock %}
 
 {% block content %}
-
-<section><div class="section subpage">
 <div class="wrapper"> 
-  <div class="row">
-    <div class="span8">
-      <h1>{% trans "Your Profile" %}</h1> 
-      {% for module in profile_config %}
-      <div class="formBox">
-        <h4>{{ module.1.Meta.form_name }}</h4>
-      {% for item in module.0 %}
-      {% for label, value in item.get_fields %}
-      <b>{{ label }}: </b> {{ value }}<br>
-      {% endfor %}
-      {% endfor %}
-      <hr>
-      <form action="" method="post" id="">
-          {% include "includes/form-error-highlight.html" with form=module.1 %}
-          {% csrf_token %}
-          <div class="actions">
-            <a href="{% url 'saved_search_main' %}" class="btn pull-right">{% trans 'Cancel' %}</a>
-            <button type="submit" class="btn primary pull-right" value="submit">Save</button>
-          </div>
-        </form>
-      </div>
-      {% endfor %}
-      <!-- {% for form in forms %} -->
-      <!-- <div class="formBox"> -->
-      <!--   <form action="" method="post" id=""> -->
-      <!--     <h4>{{ form.Meta.form_name }}</h4> -->
-      <!--     {% include "includes/form-error-highlight.html" %} -->
-      <!--     {% csrf_token %} -->
-      <!--     <div class="actions"> -->
-      <!--       <a href="{% url 'saved_search_main' %}" class="btn pull-right">{% trans 'Cancel' %}</a> -->
-      <!--       <button type="submit" class="btn primary pull-right" value="submit">Save</button> -->
-      <!--     </div> -->
-      <!--   </form> -->
-      <!-- </div> -->
-      <!-- {% endfor %} -->
+    <div class="row">
+        <div class="span12">
+            <h1>{% trans "Edit" %} <small>{% trans "My Profile" %}</small></h1>
+        </div>
+        <div class="span8" id="moduleColumn">
+            {% csrf_token %}
+            {% for module in profile_config %}
+            {% if module.items %}
+            {% include "myprofile/profile_section.html" %}
+            {% endif %}
+            {% endfor %}
+        </div>
+        <div class="span4">
+            <div class="formBox" id="moduleBank">
+                <h3>Add a New Section</h3>
+                <table class="table table-bordered tables-striped">
+                {% for module in profile_config %}
+                {% if not module.items %}
+                <tr class="profile-section"><td>
+                    <a class="" id="{{module.name}}-section" href="">
+                        {{ module.verbose }}
+                    </a>
+                </td></tr>
+                {% endif %}
+                {% endfor %}
+                </table>
+            </div>
+        </div>
     </div>
-  </div>
 </div>
-</div>
-</section>
 
 {% endblock %}
