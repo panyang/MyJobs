@@ -23,7 +23,7 @@
         <h3>Add a Section</h3>
         {% for module in profile_config %}
         {% if not module.items %}
-        <a id="{{module.name}}-section" href=""><h4>{{ module.verbose }}</h4></a><br>
+        <div class="profile-section"><a id="{{module.name}}-section" href=""><h4>{{ module.verbose }}</h4></a></div>
         {% endif %}
         {% endfor %}
       </div>

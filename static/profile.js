@@ -1,18 +1,31 @@
 $(function() {
     var AppView = Backbone.View.extend({
-        el: $(".formBox"),
+        el: $(".row"),
 
         events: {
+            "click [id$='section']": "addSection",
             "click [id$='add']": "showForm",
             "click [id$='cancel']": "cancelForm",
             "click [id$='edit']": "editForm",
             "click [id$='save']": "saveForm",
-            "click [id$='delete']": "deleteItem",
-            "click [id$='section']": "addSection"
+            "click [id$='delete']": "deleteItem"
         },
-        
-        showForm: function(e) {
 
+        
+        addSection: function(e) {
+            e.preventDefault();
+            var module = $(e.target).parent().attr('id').split('-')[0];
+            $.ajax({
+                url: '/profile/section/',
+                data: {'module': module},
+                success: function(data) {
+                    $(e.target).remove();
+                    $('.span8').append(data);
+                }
+            });
+        },
+
+        showForm: function(e) {
             var btn = $(e.target);
             var module = btn.attr('id').split("-")[0];
             $.ajax({
@@ -94,19 +107,6 @@ $(function() {
                 }
             });
         },
-
-        addSection: function(e) {
-            e.preventDefault();
-            var module = $(e.target).parent().attr('id').split('-')[0];
-            $.ajax({
-                url: '/profile/section/',
-                data: {'module': module},
-                success: function(data) {
-                    $(e.target).remove();
-                    $('.span8').append(data);
-                }
-            });
-        }
     });
 
     var App = new AppView;
