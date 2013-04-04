@@ -6,27 +6,10 @@
 {% endblock %}
 
 {% block content %}
-<style>
-.formBox {
-    margin-top: 0;
-    margin-bottom: 20px;
-}
-.formBox table{
-    color: #000;
-    background: #fff;
-}
-#moduleBank a.btn{
-    width: 200px;
-    margin: 5px auto;
-}
-td.action{
-    width: 135px;
-}
-</style>
 <div class="wrapper"> 
     <div class="row">
         <div class="span12">
-            <h1>{% trans "Your Profile" %}</h1>
+            <h1>{% trans "Edit" %} <small>{% trans "My Profile" %}</small></h1>
         </div>
         <div class="span8" id="moduleColumn">
             {% csrf_token %}
@@ -37,17 +20,19 @@ td.action{
             {% endfor %}
         </div>
         <div class="span4">
-            <div class="formBox">
+            <div class="formBox" id="moduleBank">
                 <h3>Add a New Section</h3>
+                <table class="table table-bordered tables-striped">
                 {% for module in profile_config %}
                 {% if not module.items %}
-                <div class="profile-section" id="moduleBank">
-                    <a class="btn primary" id="{{module.name}}-section" href="">
+                <tr class="profile-section"><td>
+                    <a class="" id="{{module.name}}-section" href="">
                         {{ module.verbose }}
                     </a>
-                </div>
+                </td></tr>
                 {% endif %}
                 {% endfor %}
+                </table>
             </div>
         </div>
     </div>
