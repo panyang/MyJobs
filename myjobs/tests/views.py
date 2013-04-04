@@ -172,7 +172,7 @@ class MyJobsViewsTests(TestCase):
         (3) User is set to disabled.
         """
         
-        user = User.objects.get(id=1)
+        user = User.objects.get(id=self.user.id)
         custom_signals.create_activation_profile(sender=self, user=user,
                                                  email=user.email)
         profile = ActivationProfile.objects.get(user=user)
@@ -181,7 +181,7 @@ class MyJobsViewsTests(TestCase):
         self.assertEqual(profile.activation_key, 'ALREADY ACTIVATED')
 
         resp = self.client.get(reverse('disable_account'), follow=True)
-        user = User.objects.get(id=1)
+        user = User.objects.get(id=self.user.id)
         profile = ActivationProfile.objects.get(user=user)
         self.assertNotEqual(profile.activation_key, 'ALREADY ACTIVATED')
         self.assertFalse(user.is_active)

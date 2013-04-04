@@ -29,11 +29,13 @@ class MyProfileViewsTests(TestCase):
         """
         resp = self.client.get(reverse('edit_profile'))
         soup = BeautifulSoup(resp.content)
+        item_id = Name.objects.all()[0].id
+        
         # The existing name object should be rendered on the main content section
-        self.assertIsNotNone(soup.find('div', id='Name-1-item'))
+        self.assertIsNotNone(soup.find('tr', id='Name-'+str(item_id)+'-item'))
         # profile-section contains the name of a profile section that has no
         # information filled out yet and shows up in the sidebar
-        self.assertTrue(soup.findAll('div',{'class':'profile-section'}))
+        self.assertTrue(soup.findAll('tr',{'class':'profile-section'}))
         
     def test_handle_form_get_new(self):
         """
@@ -75,10 +77,10 @@ class MyProfileViewsTests(TestCase):
         """
         
         resp = self.client.get(reverse('handle_form'),
-                               data = {'module': 'Name', 'id': 1})
+                               data = {'module': 'Name', 'id': self.name.id})
         self.assertTemplateUsed(resp, 'myprofile/profile_form.html')
         soup = BeautifulSoup(resp.content)
-        self.assertEquals(soup.form.attrs['id'], 'Name-1-form')
+        self.assertEquals(soup.form.attrs['id'], 'Name-'+str(self.name.id)+'-form')
         self.assertEquals(soup.find('input', id='id_name-given_name')
                           .attrs['value'], 'Alice')
         self.assertEquals(soup.find('input', id='id_name-family_name')
@@ -101,16 +103,15 @@ class MyProfileViewsTests(TestCase):
         self.assertTemplateUsed(resp, 'myprofile/profile_item.html')
         self.assertEqual(Name.objects.filter(given_name='Susy',
                                              family_name='Smith').count(), 1)
-
+        item_id = Name.objects.get(given_name='Susy', family_name='Smith').id
         soup = BeautifulSoup(resp.content)
-        self.assertEquals(soup.div.attrs['id'], 'Name-2-item')
+        self.assertEquals(soup.tr.attrs['id'], 'Name-'+str(item_id)+'-item')
 
     def test_handle_form_post_invalid(self):
         """
         Invoking the handle_form view as a POST request with an invalid
         form returns the form with errors.
         """
-        
         resp = self.client.post(reverse('handle_form'),
                                data = {'module': 'Name', 'id': 'new',
                                        'given_name': 'Susy'})
@@ -125,17 +126,16 @@ class MyProfileViewsTests(TestCase):
         Invoking the handle_form view as a POST request for an existing
         item updates that item and returns the update item snippet.
         """
-        
         resp = self.client.post(reverse('handle_form'),
-                               data = {'module': 'Name', 'id': 1,
+                               data = {'module': 'Name', 'id': self.name.id,
                                        'given_name': 'Susy',
                                        'family_name': 'Smith'})
         self.assertTemplateUsed(resp, 'myprofile/profile_item.html')
-        name_obj = Name.objects.get(id=1)
+        name_obj = Name.objects.get(id=self.name.id)
         self.assertTrue(name_obj.given_name == 'Susy')
 
         soup = BeautifulSoup(resp.content)
-        self.assertEquals(soup.div.attrs['id'], 'Name-1-item')
+        self.assertEquals(soup.tr.attrs['id'], 'Name-'+str(self.name.id)+'-item')
 
     def test_delete_item(self):
         """
@@ -144,10 +144,10 @@ class MyProfileViewsTests(TestCase):
         """
 
         resp = self.client.post(reverse('delete_item'),
-                                data = {'module': 'Name', 'id': 1})
+                                data = {'module': 'Name', 'id': self.name.id})
 
         self.assertEqual(resp.content, 'Deleted!')
-        self.assertEqual(Name.objects.filter(id=1).count(), 0)
+        self.assertEqual(Name.objects.filter(id=self.name.id).count(), 0)
 
     def test_add_section(self):
         """
