@@ -26,9 +26,9 @@ $(function() {
         },
 
         showForm: function(e) {
-            console.log("add");
             var btn = $(e.target);
             var module = btn.attr('id').split("-")[0];
+            var table = $(e.target).parents('.formBox').children('table')
             $.ajax({
                 url: '/profile/form/',
                 data: {'module':module},
@@ -76,15 +76,16 @@ $(function() {
             var item_id = $(e.target).attr('id').split('-')[1];
             var form = $(e.target).parents('form');
             var table = $(e.target).parents('.formBox').children('table')
-            new_table=false;
+            first_instance=0;
             if(typeof(table.attr("class"))=="undefined"){
-                new_table = true;
+                first_instance = 1;
                 $(e.target).parents('.formBox').children('h4').after(
                     '<table class="table table-bordered table-striped"></table>'
                     );
                 table = $(e.target).parents('.formBox').children('table')
-            }        
-            var serialized_data = form.serialize() + '&module=' + module + '&id=' + item_id;
+            }  
+            console.log(first_instance)    
+            var serialized_data = form.serialize() + '&module=' + module + '&id=' + item_id + '&first_instance=' + first_instance;
             $.ajax({
                 type: 'POST',
                 url: '/profile/form/',
