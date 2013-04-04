@@ -1,4 +1,4 @@
-<div class="formBox">
+<!--<div class="formBox">
   <h4>{{ module.verbose }}</h4>
   <div class="item-list">
     {% for item in module.items %}
@@ -14,4 +14,35 @@
     {% endfor %}
   </div>
   <div><button class="btn primary" id="{{module.name}}-new-add">Add Another</button></div>
+</div>-->
+
+
+<div class="formBox">       
+    <h4>{{ module.verbose }}</h4>
+    <!--<div class="item-list">-->
+    <table class="table table-bordered table-striped">
+        <colgroup>
+            <col span="{{module.items.0.get_fields|length}}"/>
+        </colgroup>
+        <colgroup>
+            <col span="1"/>
+        </colgroup>
+        <tr>
+            {% for label,value in module.items.0.get_fields|slice:":4" %}                            
+                <th>{{label}}</th>
+            {% endfor %}
+            <td></td>
+        </tr>
+        {% for item in module.items %}      
+        <tr id="{{module.name}}-{{item.id}}-item">
+            {% for   label, value in item.get_fields|slice:":4" %}
+            <td>{{ value }}</td>
+            {% endfor %}<td>
+                <button class="btn" id="{{module.name}}-{{item.id}}-delete">Delete</button>
+                <button class="btn" id="{{module.name}}-{{item.id}}-edit" id=>Edit</button>
+            </td>
+        </tr>
+    {% endfor %}
+    </table>                
+    <button class="btn primary" id="{{module.name}}-new-add">Add Another</button>    
 </div>
