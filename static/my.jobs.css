@@ -107,8 +107,13 @@ ul.ui-autocomplete{
     padding-bottom: 30px;
     border: 2px solid #574E44;
     border-radius: 5px;
+    }
+#titleRow .loginBox{
     margin-top: 105px;   
     }
+.formBox + .formBox{
+    margin-top: 20px;
+}
 .account-box{    
     background-color: #FFF;
     padding: 10px;
@@ -143,6 +148,10 @@ ul.ui-autocomplete{
     padding: 10px;
     margin-bottom: 0px;
     }
+.formBox table{
+    color: #000;
+    background: #fff;
+}
 .loginBox input{
     /*display: block;*/
     padding: 4px 0px;
@@ -386,6 +395,32 @@ em.pendingText{
 .module {
     padding: 10px;
     height: 250px;
+}
+/* Profile screen styles */
+#moduleBank a{
+    display: block;
+    width: 100%;
+    padding: 10px 5px;
+    font-weight: bold;
+}
+#moduleBank td{
+    padding: 0px;
+}
+#moduleBank a:hover{
+    color:#fff;
+    background-color: #b34529;
+    background-image: none;
+    background-image: -moz-linear-gradient(#db5938,#b34529);
+    background-image: -webkit-gradient(linear, left top, left bottom, #db5938, #b34529); 
+    background-image: -webkit-linear-gradient(#db5938,#b34529);  
+    background-image: -o-linear-gradient(#db5938,#b34529); 
+    background-image: linear-gradient(#db5938,#b34529);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#db5938', endColorstr='#b34529', GradientType=0);
+    margin: 0px;
+    text-decoration: none;
+}
+#moduleColumn td.action{
+    width: 135px;
 }
 
 /* Footer Styles */

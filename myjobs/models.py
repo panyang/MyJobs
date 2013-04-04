@@ -34,9 +34,6 @@ class CustomUserManager(BaseUserManager):
         user.gravatar = user.email
         user.save(using=self._db)
 
-        import ipdb
-        ipdb.set_trace()
-
         custom_signals.email_created.send(sender=self,user=user,
                                           email=email)
         if send_email:

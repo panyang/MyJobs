@@ -1,9 +1,18 @@
-<div id="{{module}}-{{item.id}}-item"><div class="item-detail">
-    {% for label, value in item.get_fields %}
-    <b>{{ label }}: </b> {{ value }}<br>
+{% if first_instance %}
+<tr id="{{module}}-{{item.id}}-header" class="hidden">
+    {% for label,value in item.get_fields|slice:":4" %}                            
+        <th>{{label}}</th>
     {% endfor %}
-  </div>
-  <a href="" id="{{module}}-{{item.id}}-delete">Delete</a><br>
-  <button class="btn" id="{{module}}-{{item.id}}-edit" id=>Edit</button>
-  <hr>
-</div>
+    <td class="action"></td>
+</tr>
+{% endif %}
+<tr id="{{module}}-{{item.id}}-item">
+    {% for   label, value in item.get_fields|slice:":4" %}
+    <td>{{ value }}</td>
+    {% endfor %}
+    <td class="action">
+        <button class="btn" id="{{module}}-{{item.id}}-delete">Delete</button>
+        <button class="btn" id="{{module}}-{{item.id}}-edit">Edit</button>
+        
+    </td>
+</tr>

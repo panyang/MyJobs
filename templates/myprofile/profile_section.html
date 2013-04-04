@@ -1,19 +1,28 @@
-<div class="formBox">
-  <h4>{{ module.verbose }}</h4>
-  {% if module.items %}
-  <div class="item-list">
-    {% for item in module.items %}
-    <div id="{{module.name}}-{{item.id}}-item"><div class="item-detail">
-        {% for label, value in item.get_fields %}
-        {% if value %} <b>{{ label }}: </b>{{ value }}<br>{% endif %}
+<div class="formBox" id="{{module.name}}_items">       
+    <h4>{{ module.verbose }}</h4>
+    {% if module.items.0 %}
+    <table class="table table-bordered table-striped">
+        <tr>
+            {% for label,value in module.items.0.get_fields|slice:":4" %}                            
+                <th>{{label}}</th>
+            {% endfor %}
+            <td class="action"></td>
+        </tr>
+        {% for item in module.items %}      
+        <tr id="{{module.name}}-{{item.id}}-item">
+            {% for   label, value in item.get_fields|slice:":4" %}
+            <td>{{ value }}</td>
+            {% endfor %}
+            <td class="action">
+                <button class="btn" id="{{module.name}}-{{item.id}}-delete">Delete</button>
+                <button class="btn" id="{{module.name}}-{{item.id}}-edit">Edit</button>
+                
+            </td>
+        </tr>
         {% endfor %}
-      </div>
-      <a href="" id="{{module.name}}-{{item.id}}-delete">Delete</a><br>
-      <button class="btn" id="{{module.name}}-{{item.id}}-edit" id=>Edit</button>
-      <hr>
-    </div>
-    {% endfor %}
-  </div>
-  {% endif %}
-  <div><button class="btn primary" id="{{module.name}}-new-add">Add Another</button></div>
+    </table>                
+    <button class="btn primary" id="{{module.name}}-new-add">Add Another</button>
+    {%else%}
+    <button class="btn primary" id="{{module.name}}-new-add">Add {{module.verbose}} </button>
+    {% endif %}    
 </div>

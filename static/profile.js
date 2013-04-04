@@ -14,13 +14,13 @@ $(function() {
         
         addSection: function(e) {
             e.preventDefault();
-            var module = $(e.target).parent().attr('id').split('-')[0];
+            var module = $(e.target).attr('id').split('-')[0];
             $.ajax({
                 url: '/profile/section/',
                 data: {'module': module},
                 success: function(data) {
                     $(e.target).remove();
-                    $('.span8').append(data);
+                    $('#moduleColumn').append(data);
                 }
             });
         },
@@ -48,21 +48,22 @@ $(function() {
             } else {
                 $('#'+module+'-'+item_id+'-add').show();
             };
-            $('#'+module+'-'+item_id+'-form').hide();
+            $('#'+module+'-'+item_id+'-form').remove();
         },
 
         editForm: function(e) {
             e.preventDefault();
 
-            var item = $(e.target).parent();
+            var item = $(e.target).parent().parent();
             var module = $(e.target).attr('id').split("-")[0];
             var id = $(e.target).attr('id').split("-")[1];
+            var table = $(e.target).parents('.formBox').children('table')
             $.ajax({
                 url: '/profile/form/',
                 data: {'module':module, 'id':id},
                 success: function(data) {
                     item.hide();
-                    item.after(data);
+                    table.after(data);
                     datepicker();
                 }
             });            
@@ -73,7 +74,17 @@ $(function() {
             var module =  $(e.target).attr('id').split('-')[0];
             var item_id = $(e.target).attr('id').split('-')[1];
             var form = $(e.target).parents('form');
-            var serialized_data = form.serialize() + '&module=' + module + '&id=' + item_id;
+            var table = $(e.target).parents('.formBox').children('table')
+            first_instance=0;
+            if(typeof(table.attr("class"))=="undefined"){
+                first_instance = 1;
+                $(e.target).parents('.formBox').children('h4').after(
+                    '<table class="table table-bordered table-striped"></table>'
+                    );
+                table = $(e.target).parents('.formBox').children('table')
+            }  
+            console.log(first_instance)    
+            var serialized_data = form.serialize() + '&module=' + module + '&id=' + item_id + '&first_instance=' + first_instance;
             $.ajax({
                 type: 'POST',
                 url: '/profile/form/',
@@ -82,7 +93,8 @@ $(function() {
                     if (item_id == 'new') {
                         form.siblings("[id$='add']").show();
                     };
-                    form.replaceWith(data);                    
+                    form.replaceWith("");
+                    table.append(data);                    
                 }
             });            
         },
@@ -95,7 +107,7 @@ $(function() {
                 csrf_token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
             }
 
-            var item = $(e.target).parent();
+            var item = $(e.target).parent().parent();
             var module = $(e.target).attr('id').split("-")[0];
             var id = $(e.target).attr('id').split("-")[1];
             $.ajax({
@@ -103,7 +115,15 @@ $(function() {
                 url: '/profile/delete/',
                 data: {'module':module, 'id':id, csrfmiddlewaretoken: csrf_token},
                 success: function(data) {
+                    parent = item.parents("table");
                     item.remove();
+                    if (parent.find("tr").length <=1 ){
+                        parent_name = parent.parents(".formBox").attr("id").split("_")[0] 
+                        parent.parents(".formBox").remove();
+                        $("#moduleBank table").append(
+                            "<tr class='profile_section'><td><a id='"+parent_name+"-section' href=''>"+parent_name+"</a></td></tr>"
+                        );
+                    }
                 }
             });
         },
