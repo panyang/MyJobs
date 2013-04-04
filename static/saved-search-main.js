@@ -30,9 +30,10 @@ $(document).ready(function() {
         $('#edit_modal').children().remove();
     });
 
-    $('td.view_search').click(function() {
+    $('a.btn.mobile_hide.details').click(function(e) {
+        e.preventDefault();
         if ($(window).width() > 500) {
-            var id = $(this).parent().attr('id');
+            var id = $(this).attr('href');
             $('#search_'+id).modal();
         }
     });
