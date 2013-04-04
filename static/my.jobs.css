@@ -1,6 +1,6 @@
 @import url(http://css.nlx.org/framework/v2/css/def.ui.css);
 /*Main Styles*/
-body{
+body{    
     background-color: #574e44;
     font-family: Arial, Helvetica, sans-serif;
     }
@@ -8,7 +8,21 @@ body{
 #main {
     padding: 50px;
 }
-
+#titleRow {
+    background-image:url('images/homepage_bg.png');
+    background-repeat:no-repeat;    
+    background-position:center top;
+    background-color: #FFF;
+    margin-top: -26px;
+    margin-bottom: -20px;
+    min-height: 598px;     
+    }
+.section {
+    background-color: #FFF;
+    border: 2px solid #333333;
+    margin-top: 0px;
+    margin-bottom: 0px;      
+    }    
 a{
     color: #c44e34;
     }
@@ -49,7 +63,7 @@ ul.ui-autocomplete{
 .topbar #topbar-logo{
     height: 30px;
     width: 90px;
-    background: transparent url(images/mydotjobs_small.png) center left no-repeat;
+    background: transparent url(images/myjobs_logo.png) center left no-repeat;
     text-indent: -9000px;
 }
 .topbar input{
@@ -74,8 +88,7 @@ ul.ui-autocomplete{
     padding-bottom: 60px;
     }
 #title h1{
-    text-indent: -9000px;
-    background: url(images/mydotjobs.png) center left no-repeat;
+    text-indent: -9000px;    
     display: block;
     height: 81px;
     }    
@@ -88,12 +101,30 @@ ul.ui-autocomplete{
     }
 
 /*Content Box Styles*/
-.loginBox, .formBox, .account-box{
-    background-color: #fff;
+.loginBox, .formBox{    
+    background-color: #574e44;
     padding: 10px;
     padding-bottom: 30px;
     border: 2px solid #574E44;
     border-radius: 5px;
+    margin-top: 105px;   
+    }
+.account-box{    
+    background-color: #FFF;
+    padding: 10px;
+    padding-bottom: 30px;
+    
+    border-radius: 5px;
+    margin-top: 105px;   
+    }
+.loginBox, .formBox, .account-box h3 {
+    color: #FFF;    
+    }
+.loginBox a{
+    color: #FFF;
+    }
+.loginBox a:hover{
+    color: #FFF;
     }
 #account-page-2 .loginBox{
     padding-left: 0px;
@@ -188,14 +219,14 @@ ul.ui-autocomplete{
     margin-right: 10px;
     }
 .btn.primary{
-    background-color: #c44e34;
+    background-color: #b34529;
     background-image: none;
-    background-image: -moz-linear-gradient(#e16b51,#c44e34);
-    background-image: -webkit-gradient(linear, left top, left bottom, #e16b51, #c44e34); 
-    background-image: -webkit-linear-gradient(#e16b51,#c44e34);  
-    background-image: -o-linear-gradient(#e16b51,#c44e34); 
-    background-image: linear-gradient(#e16b51,#c44e34);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#e16b51', endColorstr='#c44e34', GradientType=0)
+    background-image: -moz-linear-gradient(#db5938,#b34529);
+    background-image: -webkit-gradient(linear, left top, left bottom, #db5938, #b34529); 
+    background-image: -webkit-linear-gradient(#db5938,#b34529);  
+    background-image: -o-linear-gradient(#db5938,#b34529); 
+    background-image: linear-gradient(#db5938,#b34529);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#db5938', endColorstr='#b34529', GradientType=0)
     margin-top: 2px;
     padding-left: 25px;
     padding-right: 25px;
@@ -337,7 +368,7 @@ em.pendingText{
     #nav li:hover ul#pop-menu{ 
         display: block;
         text-align: left;
-    }
+    }    
 }
 #nav.active ul#pop-menu li a:hover,
 #nav li:hover ul#pop-menu li a:hover{ 

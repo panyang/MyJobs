@@ -78,7 +78,7 @@
         </div>
     {% endblock %}
     <section><div class="section subpage">
-        {% block page %}
+    {% block page %}
             {% block main %}
 
                 <div id="header">
@@ -91,16 +91,14 @@
                             </div>
                         </div>
                     </div>
-                </div>
+                </div>                
                 <div class="wrapper">
                     {% block content %}{% endblock %}
-                </div>
+                </div>                
             {% endblock %}
             
         {% endblock %}
     
-
-  
     </div></section>
     <footer><div id="footer">
         {% block footer %}
