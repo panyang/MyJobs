@@ -7,7 +7,8 @@ $(function() {
             "click [id$='cancel']": "cancelForm",
             "click [id$='edit']": "editForm",
             "click [id$='save']": "saveForm",
-            "click [id$='delete']": "deleteItem"
+            "click [id$='delete']": "deleteItem",
+            "click [id$='section']": "addSection"
         },
         
         showForm: function(e) {
@@ -91,9 +92,21 @@ $(function() {
                 success: function(data) {
                     item.remove();
                 }
-            });            
-            
-        }     
+            });
+        },
+
+        addSection: function(e) {
+            e.preventDefault();
+            var module = $(e.target).parent().attr('id').split('-')[0];
+            $.ajax({
+                url: '/profile/section/',
+                data: {'module': module},
+                success: function(data) {
+                    $(e.target).remove();
+                    $('.span8').append(data);
+                }
+            });
+        }
     });
 
     var App = new AppView;

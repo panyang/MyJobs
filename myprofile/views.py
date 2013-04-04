@@ -43,13 +43,13 @@ def edit_profile(request):
 
 @login_required
 def render_form(request):
+    module_type = request.REQUEST.get('module')
+    item_id = request.REQUEST.get('id', None)
+    model = globals()[module_type]
+    form = globals()[module_type + 'Form']
+    data_dict = {'module': module_type}
+
     if request.method == "POST":
-        module_type = request.POST.get('module')
-        item_id = request.POST.get('id',None)
-        model = globals()[module_type]
-        form = globals()[module_type + 'Form']
-        data_dict = {}
-        data_dict['module'] = module_type
         if item_id == 'new':
             form_instance = form(user=request.user, data=request.POST)
         else:
@@ -62,16 +62,11 @@ def render_form(request):
             return render_to_response('myprofile/profile_item.html', data_dict,
                                       RequestContext(request))
         else:
-            data_dict['itme_id'] = item_id
+            data_dict['item_id'] = item_id
             data_dict['form'] = form_instance
             return render_to_response('myprofile/profile_form.html', data_dict,
                                       RequestContext(request))
     else:
-        module_type = request.GET.get('module')
-        item_id = request.GET.get('id',None)
-        form = globals()[module_type + 'Form']
-        model = globals()[module_type]
-        data_dict = {}
         if not item_id:
             form_instance = form()
             data_dict['item_id'] = 'new'
@@ -80,7 +75,6 @@ def render_form(request):
             form_instance = form(instance=obj)
             data_dict['item_id'] = item_id
 
-        data_dict['module'] = module_type
         data_dict['form'] = form_instance
         return render_to_response('myprofile/profile_form.html', 
                                   data_dict, RequestContext(request))
@@ -93,3 +87,24 @@ def delete_item(request):
     obj = model.objects.get(id=item_id, user=request.user)
     obj.delete()
     return HttpResponse('Deleted!')
+
+
+@login_required
+def add_section(request):
+    module = request.GET.get('module')
+    x= []
+    module_config = {}
+    verbose = re.sub("([a-z])([A-Z])","\g<1> \g<2>",module)
+    units = request.user.profileunits_set
+    module_units = units.filter(content_type__name=verbose.lower())
+    module_config['verbose'] = verbose
+    module_config['name'] = module
+
+    for unit in module_units:
+        x.append(getattr(unit, module.lower()))
+
+    module_config['items'] = x
+
+    data_dict = {'module': module_config}
+    return render_to_response('myprofile/profile_section.html',
+                              data_dict, RequestContext(request))

@@ -13,24 +13,20 @@
       {% csrf_token %}
       <h1>{% trans "Your Profile" %}</h1> 
       {% for module in profile_config %}
-      <div class="formBox">
-        <h4>{{ module.verbose }}</h4>
-        <div class="item-list">
-          {% for item in module.items %}
-          <div id="{{module.name}}-{{item.id}}-item"><div class="item-detail">
-              {% for label, value in item.get_fields %}
-              {% if value %} <b>{{ label }}: </b>{{ value }}<br>{% endif %}
-              {% endfor %}
-            </div>
-            <a href="" id="{{module.name}}-{{item.id}}-delete">Delete</a><br>
-            <button class="btn" id="{{module.name}}-{{item.id}}-edit" id=>Edit</button>
-          <hr>
-          </div>
-        {% endfor %}
-        </div>
-        <div><button class="btn primary" id="{{module.name}}-new-add">Add Another</button></div>
-      </div>
+      {% if module.items %}
+      {% include "myprofile/profile_section.html" %}
+      {% endif %}
       {% endfor %}
+    </div>
+    <div class="span4">
+      <div class="formBox">
+        <h3>Add a Section</h3>
+        {% for module in profile_config %}
+        {% if not module.items %}
+        <a id="{{module.name}}-section" href=""><h4>{{ module.verbose }}</h4></a><br>
+        {% endif %}
+        {% endfor %}
+      </div>
     </div>
   </div>
 </div>

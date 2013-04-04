@@ -1,0 +1,17 @@
+<div class="formBox">
+  <h4>{{ module.verbose }}</h4>
+  <div class="item-list">
+    {% for item in module.items %}
+    <div id="{{module.name}}-{{item.id}}-item"><div class="item-detail">
+        {% for label, value in item.get_fields %}
+        {% if value %} <b>{{ label }}: </b>{{ value }}<br>{% endif %}
+        {% endfor %}
+      </div>
+      <a href="" id="{{module.name}}-{{item.id}}-delete">Delete</a><br>
+      <button class="btn" id="{{module.name}}-{{item.id}}-edit" id=>Edit</button>
+      <hr>
+    </div>
+    {% endfor %}
+  </div>
+  <div><button class="btn primary" id="{{module.name}}-new-add">Add Another</button></div>
+</div>
