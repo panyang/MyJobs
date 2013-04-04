@@ -9,7 +9,7 @@ from myprofile.models import SecondaryEmail
 def make_choices(user):
     choices = [(user.email, user.email)]
     for email in SecondaryEmail.objects.filter(user=user):
-        choices.append((email, email))
+        choices.append((email.email, email.email))
     return choices
 
 class SavedSearchForm(BaseUserForm):

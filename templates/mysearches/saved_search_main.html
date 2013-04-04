@@ -31,7 +31,7 @@
           </thead>
           <tbody>
             {% for search in saved_searches %}
-            <tr id="{{ search.id }}">
+            <tr>
               <td class="view_search"><div>{{ search.label }}</div><div class="label label-{% if search.is_active %}success{% else %}default{% endif %}">{% if search.is_active %}Active{%else%}Inactive{%endif%}</div></td>
               <td class="url mobile_hide {% if not search.is_active %}muted{% endif %}"><a href="{{ search.url }}" target="_blank">{{ search.url }}</a></td>
               <td class="frequency mobile_hide {% if not search.is_active %}muted{% endif %}">
@@ -53,9 +53,11 @@
                         <label class="form-label pull-left">Status:</label>
                         <div class="label label-{% if search.is_active %}success{% else %}default{% endif %}">{% if search.is_active %}Active{% else %}Inactive{% endif %}</div>
                         <div class="clear"></div>
+
                         <label class="form-label pull-left">Search URL:</label>
                         <a href="{{ search.url }}" target="_blank">{{ search.url }}</a>
                         <div class="clear"></div>
+
                         <label class="form-label pull-left">Frequency:</label>
                         {% if search.frequency == "W" %}
                         <strong>Weekly</strong>
@@ -67,11 +69,15 @@
                         <strong>Daily</strong>
                         {% endif %}
                         <div class="clear"></div>
+
                         <label class="form-label pull-left">Last Sent:</label>
                         <div>{% if search.last_sent %}{{ search.last_sent }}{% else %}Never{% endif %}</div>
                         <div class="clear"></div>
                         <label class="form-label pull-left">Sent To:</label>
                         <div>{{ search.email }}</div>
+                        <div class="clear"></div>
+                        <label class="form-label pull-left">Notes and Comments:</label>
+                        <div>{% if search.notes %}{{ search.notes }}{% else %}None{% endif %}</div>
                     </div>
                     <div class="modal-footer">
                         <a class="btn" data-dismiss="modal">Close</a>
@@ -82,6 +88,7 @@
               <td class="buttons">
                 <a href="{% url 'view_full_feed' search_id=search.id %}" class="btn mobile_hide">View</a>
                 <a href="{{ search.id }}" class="btn edit">Edit</a>
+                <a href="{{ search.id }}" class="btn mobile_hide details">Details</a>
             </td>
             </tr>
             {% endfor %}
