@@ -110,16 +110,19 @@ class MySearchViewTests(TestCase):
                                     data = { 'url': 'google.com' },
                                     HTTP_X_REQUESTED_WITH = 'XMLHttpRequest')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(json.loads(response.content), { 'url_status': 'not valid' })
+        self.assertEqual(json.loads(response.content),
+                         { 'url_status': 'not valid' })
 
     def test_save_digest_form(self):
-        response = self.client.post('/saved-search/save-digest', self.new_digest_data,
+        response = self.client.post('/saved-search/save-digest',
+                                    self.new_digest_data,
                                     HTTP_X_REQUESTED_WITH = 'XMLHttpRequest')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content, 'success')
 
         del self.new_digest_data['email']
-        response = self.client.post('/saved-search/save-digest', self.new_digest_data,
+        response = self.client.post('/saved-search/save-digest',
+                                    self.new_digest_data,
                                     HTTP_X_REQUESTED_WITH = 'XMLHttpRequest')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content, 'failure')
@@ -127,7 +130,8 @@ class MySearchViewTests(TestCase):
     def test_delete_digest_form(self):
         def delete():
             response = self.client.post('/saved-search/delete-digest',
-                                        HTTP_X_REQUESTED_WITH = 'XMLHttpRequest')
+                                        HTTP_X_REQUESTED_WITH =
+                                            'XMLHttpRequest')
             self.assertEqual(response.status_code, 200)
             self.assertEqual(response.content, 'success')
 
