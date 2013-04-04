@@ -1,8 +1,16 @@
-<tr>
+<tr id="{{module.name}}-{{item.id}}-header" class="hidden">
+    {% for label,value in item.get_fields|slice:":4" %}                            
+        <th>{{label}}</th>
+    {% endfor %}
+    <td class="action"></td>
+</tr>
+<tr id="{{module.name}}-{{item.id}}-item">
     {% for   label, value in item.get_fields|slice:":4" %}
     <td>{{ value }}</td>
-    {% endfor %}<td>
+    {% endfor %}
+    <td class="action">
         <button class="btn" id="{{module.name}}-{{item.id}}-delete">Delete</button>
-        <button class="btn" id="{{module.name}}-{{item.id}}-edit" id=>Edit</button>
+        <button class="btn" id="{{module.name}}-{{item.id}}-edit">Edit</button>
+        
     </td>
 </tr>

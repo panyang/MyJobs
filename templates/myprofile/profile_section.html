@@ -1,6 +1,6 @@
 <div class="formBox">       
     <h4>{{ module.verbose }}</h4>
-    <!--<div class="item-list">-->
+    {% if module.items.0 %}
     <table class="table table-bordered table-striped">
         <tr>
             {% for label,value in module.items.0.get_fields|slice:":4" %}                            
@@ -21,5 +21,8 @@
         </tr>
         {% endfor %}
     </table>                
-    <button class="btn primary" id="{{module.name}}-new-add">Add Another</button>    
+    <button class="btn primary" id="{{module.name}}-new-add">Add Another</button>
+    {%else%}
+    <button class="btn primary" id="{{module.name}}-new-add">Add {{module.verbose}} </button>
+    {% endif %}    
 </div>

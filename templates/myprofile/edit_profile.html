@@ -28,7 +28,7 @@ td.action{
         <div class="span12">
             <h1>{% trans "Your Profile" %}</h1>
         </div>
-        <div class="span8">
+        <div class="span8" id="moduleColumn">
             {% csrf_token %}
             {% for module in profile_config %}
             {% if module.items %}

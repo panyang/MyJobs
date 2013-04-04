@@ -14,18 +14,19 @@ $(function() {
         
         addSection: function(e) {
             e.preventDefault();
-            var module = $(e.target).parent().attr('id').split('-')[0];
+            var module = $(e.target).attr('id').split('-')[0];
             $.ajax({
                 url: '/profile/section/',
                 data: {'module': module},
                 success: function(data) {
                     $(e.target).remove();
-                    $('.span8').append(data);
+                    $('#moduleColumn').append(data);
                 }
             });
         },
 
         showForm: function(e) {
+            console.log("add");
             var btn = $(e.target);
             var module = btn.attr('id').split("-")[0];
             $.ajax({
@@ -75,6 +76,14 @@ $(function() {
             var item_id = $(e.target).attr('id').split('-')[1];
             var form = $(e.target).parents('form');
             var table = $(e.target).parents('.formBox').children('table')
+            new_table=false;
+            if(typeof(table.attr("class"))=="undefined"){
+                new_table = true;
+                $(e.target).parents('.formBox').children('h4').after(
+                    '<table class="table table-bordered table-striped"></table>'
+                    );
+                table = $(e.target).parents('.formBox').children('table')
+            }        
             var serialized_data = form.serialize() + '&module=' + module + '&id=' + item_id;
             $.ajax({
                 type: 'POST',
@@ -85,7 +94,7 @@ $(function() {
                         form.siblings("[id$='add']").show();
                     };
                     form.replaceWith("");
-                    table.append(data);
+                    table.append(data);                    
                 }
             });            
         },
