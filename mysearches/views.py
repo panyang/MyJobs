@@ -63,6 +63,7 @@ def more_feed_results(request):
         return render_to_response('mysearches/feed_page.html',
                                   {'items':items}, RequestContext(request))
 
+@login_required
 def validate_url(request):
     if request.is_ajax():
         rss_url, rss_soup = validate_dotjobs_url(request.POST['url'])
@@ -78,6 +79,7 @@ def validate_url(request):
             data = {'url_status': 'not valid'}
         return HttpResponse(json.dumps(data))
 
+@login_required
 def save_digest_form(request):
     if request.is_ajax():
         try:
@@ -93,6 +95,7 @@ def save_digest_form(request):
             data = "failure"
         return HttpResponse(data)
 
+@login_required
 def delete_digest_form(request):
     if request.is_ajax():
         try:
@@ -101,6 +104,7 @@ def delete_digest_form(request):
             pass
         return HttpResponse('success')
 
+@login_required
 def save_new_search_form(request):
     if request.is_ajax():
         add_form = SavedSearchForm(user=request.user, data=request.POST)
@@ -110,6 +114,7 @@ def save_new_search_form(request):
         else:
             return HttpResponse(json.dumps(add_form.errors.keys()))
 
+@login_required
 def get_edit_template(request):
     if request.is_ajax():
         search_id = request.POST.get('search_id')
@@ -120,6 +125,7 @@ def get_edit_template(request):
                                   {'form':form, 'search_id':search_id},
                                   RequestContext(request))
 
+@login_required
 def save_edit_form(request):
     if request.is_ajax():
         search_id = request.POST.get('search_id')
