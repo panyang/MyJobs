@@ -117,7 +117,15 @@ $(function() {
                 url: '/profile/delete/',
                 data: {'module':module, 'id':id, csrfmiddlewaretoken: csrf_token},
                 success: function(data) {
+                    parent = item.parents("table");
                     item.remove();
+                    if (parent.children("tr").length <=1 ){
+                        parent_name = parent.parents(".formBox").attr("id").split("_")[0] 
+                        parent.parents(".formBox").remove();
+                        $("#moduleBank table").append(
+                            "<tr class='profile_section'><td><a id='"+parent_name+"-section' href=''>"+parent_name+"</a></td></tr>"
+                        );
+                    }
                 }
             });
         },
