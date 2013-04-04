@@ -49,7 +49,7 @@ $(function() {
             } else {
                 $('#'+module+'-'+item_id+'-add').show();
             };
-            $('#'+module+'-'+item_id+'-form').hide();
+            $('#'+module+'-'+item_id+'-form').remove();
         },
 
         editForm: function(e) {
@@ -109,7 +109,6 @@ $(function() {
             }
 
             var item = $(e.target).parent().parent();
-            console.log(item);
             var module = $(e.target).attr('id').split("-")[0];
             var id = $(e.target).attr('id').split("-")[1];
             $.ajax({
@@ -119,7 +118,7 @@ $(function() {
                 success: function(data) {
                     parent = item.parents("table");
                     item.remove();
-                    if (parent.children("tr").length <=1 ){
+                    if (parent.find("tr").length <=1 ){
                         parent_name = parent.parents(".formBox").attr("id").split("_")[0] 
                         parent.parents(".formBox").remove();
                         $("#moduleBank table").append(

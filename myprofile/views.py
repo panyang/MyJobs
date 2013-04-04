@@ -45,13 +45,14 @@ def edit_profile(request):
 def handle_form(request):
     module_type = request.REQUEST.get('module')
     first_instance = request.REQUEST.get('first_instance')
-    print first_instance
+    if first_instance:
+        first_instance = int(first_instance)
         
     item_id = request.REQUEST.get('id', None)
     model = globals()[module_type]
     form = globals()[module_type + 'Form']
     data_dict = {'module': module_type,'first_instance':first_instance}
-    
+
     if request.method == "POST":
         if item_id == 'new':            
             form_instance = form(user=request.user, data=request.POST)

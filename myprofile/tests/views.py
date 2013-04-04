@@ -33,7 +33,7 @@ class MyProfileViewsTests(TestCase):
         self.assertIsNotNone(soup.find('div', id='Name-1-item'))
         # profile-section contains the name of a profile section that has no
         # information filled out yet and shows up in the sidebar
-        self.assertTrue(soup.findAll('div',{'class':'profile-section'})
+        self.assertTrue(soup.findAll('div',{'class':'profile-section'}))
         
     def test_handle_form_get_new(self):
         """
