@@ -107,6 +107,8 @@ ul.ui-autocomplete{
     padding-bottom: 30px;
     border: 2px solid #574E44;
     border-radius: 5px;
+    }
+#titleRow .loginBox{
     margin-top: 105px;   
     }
 .account-box{    
@@ -283,6 +285,11 @@ ul.ui-autocomplete{
     }
 select{
     width: auto;
+}
+/*Modal box overrides*/
+.modal-body{
+    height: auto;
+    max-height: 75%;
 }
 /*Alert and text styls*/
 .pendingText{
