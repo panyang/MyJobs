@@ -7,6 +7,6 @@ from myjobs.views import *
 urlpatterns = patterns('MyJobs.myprofile.views',
     url(r'^edit/$', 'edit_profile', name='edit_profile'),
     url(r'^delete/$', 'delete_item', name='delete_item'),
-    url(r'^form/$', 'render_form', name='render_form'),
+    url(r'^form/$', 'handle_form', name='handle_form'),
     url(r'^section/$', 'add_section', name='add_section'),
 )
