@@ -1,12 +1,12 @@
-import ast
-
 from django.test import TestCase
+import json
 
 from myjobs.tests.views import TestClient
 from myjobs.tests.factories import UserFactory
 
 from mysearches import forms
 from mysearches import models
+from mysearches.tests.factories import SavedSearchDigestFactory, SavedSearchFactory
 
 class MySearchViewTests(TestCase):
     def setUp(self):
@@ -39,14 +39,22 @@ class MySearchViewTests(TestCase):
         self.failUnless(isinstance(response.context['add_form'],
                         forms.SavedSearchForm));
 
-    def test_new_search(self):
+    def test_save_new_search_form(self):
         response = self.client.post('/saved-search/new',
                                     data = self.new_form_data,
                                     HTTP_X_REQUESTED_WITH = 'XMLHttpRequest')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content, 'success')
 
-    def test_get_edit(self):
+        del self.new_form_data['feed']
+        del self.new_form_data['frequency']
+        response = self.client.post('/saved-search/new',
+                                    data = self.new_form_data,
+                                    HTTP_X_REQUESTED_WITH = 'XMLHttpRequest')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(json.loads(response.content), ['feed', 'frequency'])
+
+    def test_get_edit_template(self):
         self.new_form.save()
         search_id = self.new_form.instance.id
         response = self.client.post('/saved-search/edit',
@@ -57,7 +65,15 @@ class MySearchViewTests(TestCase):
                          response.context['form'].instance)
         self.assertTemplateUsed(response, 'mysearches/saved_search_edit.html')
 
-    def test_save_edit(self):
+        search_id += 1
+        response = self.client.post('/saved-search/edit',
+                                    data = {'search_id': search_id,},
+                                    HTTP_X_REQUESTED_WITH = 'XMLHttpRequest')
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'mysearches/saved_search_edit.html')
+        self.assertEqual(response.context['form'].instance, models.SavedSearch())
+
+    def test_save_edit_form(self):
         self.new_form.save()
         search_id = self.new_form.instance.id
 
@@ -71,6 +87,15 @@ class MySearchViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content, 'success')
 
+        del self.new_form_data['frequency']
+        self.new_form_data['search_id'] = search_id
+
+        response = self.client.post('/saved-search/save-edit',
+                                    data = self.new_form_data,
+                                    HTTP_X_REQUESTED_WITH = 'XMLHttpRequest')
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(json.loads(response.content), ['frequency'])
+
     def test_validate_url(self):
         response = self.client.post('/saved-search/validate-url',
                                     data = { 'url': self.new_form_data['url'] },
@@ -79,20 +104,34 @@ class MySearchViewTests(TestCase):
         data = { 'rss_url': 'http://jobs.jobs/jobsfeed/rss?',
                  'feed_title': 'Jobs',
                  'url_status': 'valid' }
-        self.assertEqual(ast.literal_eval(response.content), data)
+        self.assertEqual(json.loads(response.content), data)
 
-    def test_save_delete_digest(self):
-        response = self.client.post('/saved-search/delete-digest',
+        response = self.client.post('/saved-search/validate-url',
+                                    data = { 'url': 'google.com' },
                                     HTTP_X_REQUESTED_WITH = 'XMLHttpRequest')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.content, 'success')
+        self.assertEqual(json.loads(response.content), { 'url_status': 'not valid' })
 
+    def test_save_digest_form(self):
         response = self.client.post('/saved-search/save-digest', self.new_digest_data,
                                     HTTP_X_REQUESTED_WITH = 'XMLHttpRequest')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content, 'success')
 
-        response = self.client.post('/saved-search/delete-digest',
+        del self.new_digest_data['email']
+        response = self.client.post('/saved-search/save-digest', self.new_digest_data,
                                     HTTP_X_REQUESTED_WITH = 'XMLHttpRequest')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.content, 'success')
+        self.assertEqual(response.content, 'failure')
+
+    def test_delete_digest_form(self):
+        def delete():
+            response = self.client.post('/saved-search/delete-digest',
+                                        HTTP_X_REQUESTED_WITH = 'XMLHttpRequest')
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(response.content, 'success')
+
+        delete()
+
+        digest = SavedSearchDigestFactory(user=self.user)
+        delete()

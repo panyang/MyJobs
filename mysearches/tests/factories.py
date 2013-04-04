@@ -21,3 +21,4 @@ class SavedSearchDigestFactory(factory.Factory):
     FACTORY_FOR = SavedSearchDigest
     user = factory.SubFactory(UserFactory)
     email = "alice@example.com"
+    is_active = "True"

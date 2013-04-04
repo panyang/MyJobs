@@ -118,7 +118,10 @@ def save_new_search_form(request):
 def get_edit_template(request):
     if request.is_ajax():
         search_id = request.POST.get('search_id')
-        saved_search = SavedSearch.objects.get(id=search_id)
+        try:
+            saved_search = SavedSearch.objects.get(id=search_id)
+        except SavedSearch.DoesNotExist:
+            saved_search = None
         form = SavedSearchForm(user=request.user, instance=saved_search,
                                auto_id='id_edit_%s')
         return render_to_response('mysearches/saved_search_edit.html',
