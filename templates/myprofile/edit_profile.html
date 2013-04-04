@@ -6,29 +6,51 @@
 {% endblock %}
 
 {% block content %}
-
+<style>
+.formBox {
+    margin-top: 0;
+    margin-bottom: 20px;
+}
+.formBox table{
+    color: #000;
+    background: #fff;
+}
+#moduleBank a.btn{
+    width: 200px;
+    margin: 5px auto;
+}
+td.action{
+    width: 135px;
+}
+</style>
 <div class="wrapper"> 
-  <div class="row">
-    <div class="span8">
-      {% csrf_token %}
-      <h1>{% trans "Your Profile" %}</h1> 
-      {% for module in profile_config %}
-      {% if module.items %}
-      {% include "myprofile/profile_section.html" %}
-      {% endif %}
-      {% endfor %}
+    <div class="row">
+        <div class="span12">
+            <h1>{% trans "Your Profile" %}</h1>
+        </div>
+        <div class="span8">
+            {% csrf_token %}
+            {% for module in profile_config %}
+            {% if module.items %}
+            {% include "myprofile/profile_section.html" %}
+            {% endif %}
+            {% endfor %}
+        </div>
+        <div class="span4">
+            <div class="formBox">
+                <h3>Add a New Section</h3>
+                {% for module in profile_config %}
+                {% if not module.items %}
+                <div class="profile-section" id="moduleBank">
+                    <a class="btn primary" id="{{module.name}}-section" href="">
+                        {{ module.verbose }}
+                    </a>
+                </div>
+                {% endif %}
+                {% endfor %}
+            </div>
+        </div>
     </div>
-    <div class="span4">
-      <div class="formBox">
-        <h3>Add a Section</h3>
-        {% for module in profile_config %}
-        {% if not module.items %}
-        <div class="profile-section"><a id="{{module.name}}-section" href=""><h4>{{ module.verbose }}</h4></a></div>
-        {% endif %}
-        {% endfor %}
-      </div>
-    </div>
-  </div>
 </div>
 
 {% endblock %}

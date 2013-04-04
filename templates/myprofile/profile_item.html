@@ -1,9 +1,8 @@
-<div id="{{module}}-{{item.id}}-item"><div class="item-detail">
-    {% for label, value in item.get_fields %}
-    <b>{{ label }}: </b> {{ value }}<br>
-    {% endfor %}
-  </div>
-  <a href="" id="{{module}}-{{item.id}}-delete">Delete</a><br>
-  <button class="btn" id="{{module}}-{{item.id}}-edit" id=>Edit</button>
-  <hr>
-</div>
+<tr>
+    {% for   label, value in item.get_fields|slice:":4" %}
+    <td>{{ value }}</td>
+    {% endfor %}<td>
+        <button class="btn" id="{{module.name}}-{{item.id}}-delete">Delete</button>
+        <button class="btn" id="{{module.name}}-{{item.id}}-edit" id=>Edit</button>
+    </td>
+</tr>

@@ -54,15 +54,16 @@ $(function() {
         editForm: function(e) {
             e.preventDefault();
 
-            var item = $(e.target).parent();
+            var item = $(e.target).parent().parent();
             var module = $(e.target).attr('id').split("-")[0];
             var id = $(e.target).attr('id').split("-")[1];
+            var table = $(e.target).parents('.formBox').children('table')
             $.ajax({
                 url: '/profile/form/',
                 data: {'module':module, 'id':id},
                 success: function(data) {
                     item.hide();
-                    item.after(data);
+                    table.after(data);
                     datepicker();
                 }
             });            
@@ -73,6 +74,7 @@ $(function() {
             var module =  $(e.target).attr('id').split('-')[0];
             var item_id = $(e.target).attr('id').split('-')[1];
             var form = $(e.target).parents('form');
+            var table = $(e.target).parents('.formBox').children('table')
             var serialized_data = form.serialize() + '&module=' + module + '&id=' + item_id;
             $.ajax({
                 type: 'POST',
@@ -82,7 +84,8 @@ $(function() {
                     if (item_id == 'new') {
                         form.siblings("[id$='add']").show();
                     };
-                    form.replaceWith(data);                    
+                    form.replaceWith("");
+                    table.append(data);
                 }
             });            
         },
@@ -95,7 +98,8 @@ $(function() {
                 csrf_token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
             }
 
-            var item = $(e.target).parent();
+            var item = $(e.target).parent().parent();
+            console.log(item);
             var module = $(e.target).attr('id').split("-")[0];
             var id = $(e.target).attr('id').split("-")[1];
             $.ajax({
