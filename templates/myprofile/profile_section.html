@@ -1,5 +1,6 @@
 <div class="formBox">
   <h4>{{ module.verbose }}</h4>
+  {% if module.items %}
   <div class="item-list">
     {% for item in module.items %}
     <div id="{{module.name}}-{{item.id}}-item"><div class="item-detail">
@@ -13,5 +14,6 @@
     </div>
     {% endfor %}
   </div>
+  {% endif %}
   <div><button class="btn primary" id="{{module.name}}-new-add">Add Another</button></div>
 </div>

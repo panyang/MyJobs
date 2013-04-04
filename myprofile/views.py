@@ -42,7 +42,7 @@ def edit_profile(request):
                               RequestContext(request))
 
 @login_required
-def render_form(request):
+def handle_form(request):
     module_type = request.REQUEST.get('module')
     item_id = request.REQUEST.get('id', None)
     model = globals()[module_type]
@@ -50,7 +50,7 @@ def render_form(request):
     data_dict = {'module': module_type}
 
     if request.method == "POST":
-        if item_id == 'new':
+        if item_id == 'new':            
             form_instance = form(user=request.user, data=request.POST)
         else:
             obj = model.objects.get(id=item_id)
@@ -92,18 +92,11 @@ def delete_item(request):
 @login_required
 def add_section(request):
     module = request.GET.get('module')
-    x= []
     module_config = {}
     verbose = re.sub("([a-z])([A-Z])","\g<1> \g<2>",module)
-    units = request.user.profileunits_set
-    module_units = units.filter(content_type__name=verbose.lower())
     module_config['verbose'] = verbose
     module_config['name'] = module
-
-    for unit in module_units:
-        x.append(getattr(unit, module.lower()))
-
-    module_config['items'] = x
+    module_config['items'] = None
 
     data_dict = {'module': module_config}
     return render_to_response('myprofile/profile_section.html',
