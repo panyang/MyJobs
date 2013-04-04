@@ -19,7 +19,7 @@
           {% for item in module.items %}
           <div id="{{module.name}}-{{item.id}}-item"><div class="item-detail">
               {% for label, value in item.get_fields %}
-              <b>{{ label }}: </b> {{ value }}<br>
+              {% if value %} <b>{{ label }}: </b>{{ value }}<br>{% endif %}
               {% endfor %}
             </div>
             <a href="" id="{{module.name}}-{{item.id}}-delete">Delete</a><br>
