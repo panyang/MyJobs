@@ -28,7 +28,6 @@ $(function() {
         showForm: function(e) {
             var btn = $(e.target);
             var module = btn.attr('id').split("-")[0];
-            var table = $(e.target).parents('.formBox').children('table')
             $.ajax({
                 url: '/profile/form/',
                 data: {'module':module},

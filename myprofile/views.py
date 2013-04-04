@@ -47,7 +47,7 @@ def handle_form(request):
     first_instance = request.REQUEST.get('first_instance')
     if first_instance:
         first_instance = int(first_instance)
-        
+
     item_id = request.REQUEST.get('id', None)
     model = globals()[module_type]
     form = globals()[module_type + 'Form']
