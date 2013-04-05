@@ -603,7 +603,8 @@ label[for=id_digest_active], label[for=id_digest_email] {
 .account-box {
     padding: 0;
     margin: 0;
-    min-height: 400px;
+    min-height: 354px;
+    border: 1px solid #b34529
 }
 
 .settings-nav {

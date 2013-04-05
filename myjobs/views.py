@@ -152,14 +152,30 @@ def edit_basic(request):
         form = EditProfileForm(request.POST)
         if form.is_valid():
             form.save(request.user)
-            return HttpResponseRedirect('/account')
+            return HttpResponseRedirect('?saved=success')
     else:
         form = EditProfileForm(initial=initial_dict)
-        
+    
+    # Check for the saved query parameter. This powers a save alert on the
+    # screen after redirecting.
+    saved = request.REQUEST.get('saved')
+    if saved:
+        if saved=="success":
+            message = "Your informatation has been updated."
+            message_type = "success"
+        else:
+            message = "There as an error, please try again."
+            message_type = "error"
+    else:
+        message = ""
+        message_type = ""
+
     ctx = {'form': form,
            'user': request.user,
            'gravatar_100': request.user.get_gravatar_url(size=100),
-           'name_obj': name_obj}
+           'name_obj': name_obj,
+           'message':message,
+           'messagetype':message_type}
     
     return render_to_response('edit-account.html', ctx,
                               RequestContext(request))
@@ -170,7 +186,7 @@ def edit_password(request):
         form = ChangePasswordForm(user=request.user, data=request.POST)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect('/account')
+            return HttpResponseRedirect('?saved=success')
     else:
         form = ChangePasswordForm(user=request.user)
     
@@ -183,7 +199,7 @@ def edit_password(request):
 
 @login_required
 def edit_delete(request):
-    ctx = {}
+    ctx = {'name_obj': get_name_obj(request)}
     return render_to_response('edit-delete.html', ctx,
                               RequestContext(request))
 
@@ -191,7 +207,7 @@ def edit_delete(request):
 def delete_account(request):
     email = request.user.email
     request.user.delete()
-    ctx = {'email': email}
+    ctx = {'name_obj': get_name_obj(request),'email': email}
     return render_to_response('delete-account-confirmation.html', ctx,
                               RequestContext(request))
 
@@ -201,7 +217,7 @@ def disable_account(request):
     email = user.email
     user.disable()
     logout(request)
-    ctx = {'email': email}
+    ctx = {'email': email,'name_obj': get_name_obj(request)}
     return render_to_response('disable-account-confirmation.html', ctx,
                               RequestContext(request))
 
