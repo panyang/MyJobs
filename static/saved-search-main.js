@@ -186,25 +186,24 @@ function save_form(prefix, modal, action, callback) {
             add_errors(prefix, modal, data);
         }
     });
-
-    function add_errors(prefix, modal, data) {
-        var hashPrefix = '#' + prefix;
-        $('#'+modal+' [class*=label-important]').remove();
-        if (data.indexOf('url') > -1) {
-            $(hashPrefix+'refresh').after('<span class="label label-important">Required</span>');
-        }
-        if (data.indexOf('label') > -1) {
-            $(hashPrefix+'label').after('<span class="label label-important">Required</span>');
-        }
-        if (data.indexOf('email') > -1) {
-            $(hashPrefix+'email').after('<span class="label label-important">Required</span>');
-        }
-        if (data.indexOf('day_of_week') > -1 || data.indexOf('day_of_month') > -1) {
-            $(hashPrefix+'day_of_week').after('<span class="label label-important">Required</span>');
-        }
-    }
 }
 
+function add_errors(prefix, modal, data) {
+    var hashPrefix = '#' + prefix;
+    $('#'+modal+' [class*=label-important]').remove();
+    if (data.indexOf('url') > -1) {
+        $(hashPrefix+'refresh').after('<span class="label label-important">Required</span>');
+    }
+    if (data.indexOf('label') > -1) {
+        $(hashPrefix+'label').after('<span class="label label-important">Required</span>');
+    }
+    if (data.indexOf('email') > -1) {
+        $(hashPrefix+'email').after('<span class="label label-important">Required</span>');
+    }
+    if (data.indexOf('day_of_week') > -1 || data.indexOf('day_of_month') > -1) {
+        $(hashPrefix+'day_of_week').after('<span class="label label-important">Required</span>');
+    }
+}
 
 /*
 Ensures url is a valid job rss feed
