@@ -26,7 +26,7 @@
                             {{user.email|truncatechars:23}}
                         {% endif %}!</b>
                     
-                        <p><a href="{% url 'view_account' %}">View Your Account</a></p>
+                        <p><a href="{% url 'view_profile' %}">View Your Profile</a></p>
                     {% endif %}
                     <a class="btn primary" href="{% url 'auth_logout' %}">Log Out</a></center>
                 
