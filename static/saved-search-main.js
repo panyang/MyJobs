@@ -1,55 +1,3 @@
-$(document).ready(function() {
-    check_digest_options();
-    save_modal_form('id_', 'new_modal', 'new_search');
-    save_modal_form('id_edit_', 'edit_modal', 'save_edit');
-    resize_modal('#new_modal');
-    add_valid_label('id_');
-    disable_fields('id_', 'new_modal');
-    validate_url('id_', 'new_modal');
-    validate_url('id_edit_', 'edit_modal');
-    add_refresh_btn('id_');
-
-    $(window).resize(function() {
-        resize_modal('#new_modal');
-        resize_modal('#edit_modal');
-    });
-
-    $('#new_modal').on('hidden', function() {
-        clearForm($('form#saved-search-form'));
-        // Despite these two elements having null=True in the model,
-        // having them actually be null causes errors
-        $('#id_day_of_month, #id_day_of_week').val('1');
-        $('#id_frequency').val('W');
-        disable_fields('id_', 'new_modal');
-        $('#id_url').blur();
-        $('#id_validated').remove();
-        add_errors('id_', '');
-    });
-
-    $('#edit_modal').on('hidden', function() {
-        $('#edit_modal').children().remove();
-    });
-
-    $('a.btn.mobile_hide.details').click(function(e) {
-        e.preventDefault();
-        if ($(window).width() > 500) {
-            var id = $(this).attr('href');
-            $('#search_'+id).modal();
-        }
-    });
-
-    $('#new_btn').click(function(e) {
-        e.preventDefault();
-        $('#new_modal').modal();
-    });
-
-    $('a.edit').click(function(e) {
-        e.preventDefault();
-        get_edit($(this).attr('href'));
-    });
-
-});
-
 function add_refresh_btn(prefix) {
     hashPrefix = '#' + prefix;
     $(hashPrefix+'url').parent().addClass('input-append');
@@ -91,7 +39,7 @@ function date_select(prefix) {
 }
 
 function add_valid_label(prefix) {
-    hashPrefix = '#' + prefix;
+    var hashPrefix = '#' + prefix;
     $(hashPrefix+'url').after('<div id="'+prefix+'validated_label" class="form-label pull-left">&nbsp;</div>');
     $(hashPrefix+'validated_label').after('<div id="'+prefix+'validated">&nbsp;</div>');
     $(hashPrefix+'url').after('<div class="clear"></div>');
@@ -115,6 +63,7 @@ function resize_modal(modal) {
         'width': width.toFixed(0) + 'px',
         'margin-left': margin_left.toFixed(0) + 'px',
     });
+    return [max_height, margin_top, width, margin_left];
 }
 
 function is_mobile() {
@@ -189,72 +138,73 @@ Saves Saved Search forms
 :action: action to undertake in views.py
 */
 function save_modal_form(prefix, modal, action) {
+    function success_callback(status) {
+        if (status == 'success') {
+            window.location.reload(true);
+        }
+    }
     $('#'+modal).on('click', '#'+action, function(e) {
         e.preventDefault();
-        save_form(prefix, modal, action);
+        save_form(prefix, modal, action, success_callback);
+    });
+}
+
+function save_form(prefix, modal, action, callback) {
+    hashPrefix = '#' + prefix;
+    var csrf_token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+    var is_active = $(hashPrefix+'is_active').prop('checked')? 'True':'False';
+    var form = $('#'+modal+' form');
+    var id = form.find('a.save').attr('href');
+    var url
+    if (action == 'new_search') {
+        url = 'new'
+    } else {
+        url = 'save-edit'
+    }
+    $.ajax({
+        data: { action: action,
+                search_id: id,
+                csrfmiddlewaretoken: csrf_token,
+                feed: $(hashPrefix+'feed').val(),
+                url: $(hashPrefix+'url').val(),
+                label: $(hashPrefix+'label').val(),
+                is_active: is_active,
+                email: $(hashPrefix+'email').val(),
+                notes: $(hashPrefix+'notes').val(),
+                frequency: $(hashPrefix+'frequency').val(),
+                day_of_week: $(hashPrefix+'day_of_week').val(),
+                day_of_month: $(hashPrefix+'day_of_month').val()
+        },
+        type: 'POST',
+        async: false,
+        url: url,
+        success: function(data) {
+            if (data == 'success') {
+                clearForm(form);
+                callback(data);
+            }
+            add_errors(prefix, modal, data);
+        }
     });
 
-    function save_form(prefix, modal, action) {
-        hashPrefix = '#' + prefix;
-        var csrf_token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
-        var is_active = $(hashPrefix+'is_active').prop('checked')? 'True':'False';
-        var form = $('#'+modal+' form');
-        var id = form.find('a.save').attr('href');
-        var url
-        if (action == 'new_search') {
-            url = 'new'
-        } else {
-            url = 'save-edit'
+    function add_errors(prefix, modal, data) {
+        var hashPrefix = '#' + prefix;
+        $('#'+modal+' [class*=label-important]').remove();
+        if (data.indexOf('url') > -1) {
+            $(hashPrefix+'refresh').after('<span class="label label-important">Required</span>');
         }
-        $.ajax({
-            data: { action: action,
-                    search_id: id,
-                    csrfmiddlewaretoken: csrf_token,
-                    feed: $(hashPrefix+'feed').val(),
-                    url: $(hashPrefix+'url').val(),
-                    label: $(hashPrefix+'label').val(),
-                    is_active: is_active,
-                    email: $(hashPrefix+'email').val(),
-                    notes: $(hashPrefix+'notes').val(),
-                    frequency: $(hashPrefix+'frequency').val(),
-                    day_of_week: $(hashPrefix+'day_of_week').val(),
-                    day_of_month: $(hashPrefix+'day_of_month').val()
-            },
-            type: 'POST',
-            url: url,
-            success: function(data) {
-                if (data == 'success') {
-                    clearForm(form);
-                    window.location.reload(true);
-                }
-                add_errors(prefix, data);
-            }
-        });
+        if (data.indexOf('label') > -1) {
+            $(hashPrefix+'label').after('<span class="label label-important">Required</span>');
+        }
+        if (data.indexOf('email') > -1) {
+            $(hashPrefix+'email').after('<span class="label label-important">Required</span>');
+        }
+        if (data.indexOf('day_of_week') > -1 || data.indexOf('day_of_month') > -1) {
+            $(hashPrefix+'day_of_week').after('<span class="label label-important">Required</span>');
+        }
     }
 }
 
-/*
-Adds/removes errors to new search and edit search forms
-
-:prefix: id prefix used by the form
-:data: array denoting which fields have errors
-*/
-function add_errors(prefix, data) {
-    var hashPrefix = '#' + prefix;
-    $('#saved-search-form [class*=label-important]').remove();
-    if (data.indexOf('url') > -1) {
-        $(hashPrefix+'refresh').after('<span class="label label-important">Required</span>');
-    }
-    if (data.indexOf('label') > -1) {
-        $(hashPrefix+'label').after('<span class="label label-important">Required</span>');
-    }
-    if (data.indexOf('email') > -1) {
-        $(hashPrefix+'email').after('<span class="label label-important">Required</span>');
-    }
-    if (data.indexOf('day_of_week') > -1 || data.indexOf('day_of_month') > -1) {
-        $(hashPrefix+'day_of_week').after('<span class="label label-important">Required</span>');
-    }
-}
 
 /*
 Ensures url is a valid job rss feed
@@ -283,79 +233,82 @@ function validate_url(prefix, modal) {
     $('#'+modal).on('click', hashPrefix+'refresh', function() {
         validate(prefix, modal);
     });
+}
 
-    function validate(prefix, modal) {
-        var hashPrefix = '#' + prefix;
-        var csrf_token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
-        var form = $(hashPrefix+'url').parents('form');
-        var url = $(hashPrefix+'url').val(); 
-        validation_status('validating...', prefix)
-        $.ajax({
-            type: "POST",
-            url: "validate-url",
-            data: { csrfmiddlewaretoken: csrf_token,
-                    action: "validate",
-                    url: url},
-            success: function(data) {
-                var json = jQuery.parseJSON(data);
-                if (json.url_status == 'valid') {
-                    validation_status(json.url_status, prefix);
-                    enable_fields(prefix, modal);
-                    date_select(prefix);
-                    if ($(hashPrefix+'label').val().length == 0) {
-                        $(hashPrefix+'label').val(json.feed_title);
-                    }
-                    if ($(hashPrefix+'feed').val() != json.rss_url) {
-                        $(hashPrefix+'feed').val(json.rss_url);
-                    }
+function validate(prefix, modal) {
+    var hashPrefix = '#' + prefix;
+    var csrf_token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+    var form = $(hashPrefix+'url').parents('form');
+    var url = $(hashPrefix+'url').val(); 
+    validation_status('validating...', prefix)
+    $.ajax({
+        type: "POST",
+        url: "validate-url",
+        data: { csrfmiddlewaretoken: csrf_token,
+                action: "validate",
+                url: url},
+        success: function(data) {
+            var json = jQuery.parseJSON(data);
+            if (json.url_status == 'valid') {
+                validation_status(json.url_status, prefix);
+                enable_fields(prefix, modal);
+                date_select(prefix);
+                if ($(hashPrefix+'label').val().length == 0) {
+                    $(hashPrefix+'label').val(json.feed_title);
                 }
-                else {
-                    validation_status(json.url_status, prefix);
+                if ($(hashPrefix+'feed').val() != json.rss_url) {
+                    $(hashPrefix+'feed').val(json.rss_url);
                 }
             }
-        });
-
-        function enable_fields(prefix, modal) {
-            $(hashPrefix+'label').removeAttr("disabled");
-            $(hashPrefix+'label').show();
-            $(hashPrefix+'is_active').removeAttr("disabled");
-            $(hashPrefix+'is_active').show();
-            $(hashPrefix+'email').removeAttr("disabled");
-            $(hashPrefix+'email').show();
-            $(hashPrefix+'frequency').removeAttr("disabled");
-            $(hashPrefix+'frequency').show();
-            $(hashPrefix+'notes').removeAttr("disabled");
-            $(hashPrefix+'notes').show();
-            $(hashPrefix+'day_of_week').removeAttr("disabled");
-            $(hashPrefix+'day_of_week').show();
-            $(hashPrefix+'day_of_month').removeAttr("disabled");
-            $(hashPrefix+'day_of_month').show();
-            $('label[for="'+prefix+'frequency"]').show();
-            $('label[for="'+prefix+'label"]').show();
-            $('label[for="'+prefix+'email"]').show();
-            $('label[for="'+prefix+'is_active"]').show();
-            $('label[for="'+prefix+'notes"]').show();
-            $('#'+modal+' .save').show();
+            else {
+                validation_status(json.url_status, prefix);
+            }
         }
+    });
 
-        function validation_status(status, prefix) {
-            var hashPrefix = '#' + prefix;
-            var label_text;
-
-            if (status == 'valid') {
-                label_text = 'label label-success';
-            } else {
-                label_text = 'label label-important';
-            }
-            if ($(hashPrefix+'validated').length) {
-                $(hashPrefix+'validated').removeAttr('class');
-                $(hashPrefix+'validated').addClass(label_text);
-                $(hashPrefix+'validated').text(status);
-            } else {
-                $(hashPrefix+'validated_label').after('<div id="'+prefix+'validated" class="'+label_text+'">'+status+'</div>');
-            }
-        };
+    function enable_fields(prefix, modal) {
+        $(hashPrefix+'label').removeAttr("disabled");
+        $(hashPrefix+'label').show();
+        $(hashPrefix+'is_active').removeAttr("disabled");
+        $(hashPrefix+'is_active').show();
+        $(hashPrefix+'email').removeAttr("disabled");
+        $(hashPrefix+'email').show();
+        $(hashPrefix+'frequency').removeAttr("disabled");
+        $(hashPrefix+'frequency').show();
+        $(hashPrefix+'notes').removeAttr("disabled");
+        $(hashPrefix+'notes').show();
+        $(hashPrefix+'day_of_week').removeAttr("disabled");
+        $(hashPrefix+'day_of_week').show();
+        $(hashPrefix+'day_of_month').removeAttr("disabled");
+        $(hashPrefix+'day_of_month').show();
+        $('label[for="'+prefix+'frequency"]').show();
+        $('label[for="'+prefix+'label"]').show();
+        $('label[for="'+prefix+'email"]').show();
+        $('label[for="'+prefix+'is_active"]').show();
+        $('label[for="'+prefix+'notes"]').show();
+        $('#'+modal+' .save').show();
     }
+
+    function validation_status(status, prefix) {
+        var hashPrefix = '#' + prefix;
+        var label_text;
+
+        if (status == 'valid') {
+            label_text = 'label label-success';
+        } else {
+            label_text = 'label label-important';
+        }
+        if ($(hashPrefix+'validated').length) {
+            $(hashPrefix+'validated').removeAttr('class');
+            $(hashPrefix+'validated').addClass(label_text);
+            $(hashPrefix+'validated').text(status);
+        } else {
+            $(hashPrefix+'validated_label').after('<div id="'+prefix+
+                                                  'validated" class="'+
+                                                  label_text+'">'+status+
+                                                  '</div>');
+        }
+    };
 }
 
 /*
@@ -369,7 +322,36 @@ function check_digest_options() {
 
     $('#digest_submit').click(function(e) {
         e.preventDefault();
-        save_form();
+        save_digest_form();
+    });
+}
+
+function save_digest_form() {
+    var csrf_token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+    var is_active = $('#id_digest_active').prop('checked')? 'True':'False'
+    var action, url;
+    if (is_active == 'True') {
+        action = 'save';
+        url = 'save-digest';
+    } else {
+        action = 'delete';
+        url = 'delete-digest';
+    }
+    $.ajax({
+        data: { csrfmiddlewaretoken: csrf_token, action: action,
+                is_active: is_active,
+                email: $('#id_digest_email').val(),
+                send_if_none: $('#id_send_if_none').prop('checked')?
+                                                         'True':'False' },
+        type: 'POST',
+        url: url,
+        success: function(data) {
+            if (data == 'success') {
+                form_status('Saved!');
+            } else {
+                form_status('Something went wrong');
+            }
+        }
     });
 
     function form_status(status) {
@@ -382,32 +364,4 @@ function check_digest_options() {
         $('#saved').fadeIn('slow');
         timer = setTimeout('$("#saved").fadeOut("slow")', delay);
     }
-
-    function save_form() {
-        var csrf_token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
-        var is_active = $('#id_digest_active').prop('checked')? 'True':'False'
-        var action, url;
-        if (is_active == 'True') {
-            action = 'save';
-            url = 'save-digest';
-        } else {
-            action = 'delete';
-            url = 'delete-digest';
-        }
-        $.ajax({
-            data: { csrfmiddlewaretoken: csrf_token, action: action,
-                    is_active: is_active,
-                    email: $('#id_digest_email').val(),
-                    send_if_none: $('#id_send_if_none').prop('checked')? 'True':'False' },
-            type: 'POST',
-            url: url,
-            success: function(data) {
-                if (data == 'success') {
-                    form_status('Saved!');
-                } else {
-                    form_status('Something went wrong');
-                }
-            }
-        });
-    }
-};
+}
