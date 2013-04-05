@@ -3,12 +3,17 @@
 
 {% block content %}
 <section>
-<div class="section subpage">
     <div class="wrapper"> 
         <div class="row">
+            {% if message %}
+            <div class="alert alert-{{messagetype}}">
+                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                {{message}}
+            </div>
+            {% endif %}
             <div class="span12">
-                <div class="account-box">
-                    <h2>{% trans "Account Settings" %}</h2>
+                <h1>{% trans "Account " %}<small>{% trans "Settings"%}</small></h1>
+                <div class="account-box">                    
                     <div class="span4 pull-left settings-nav">
                         <ul>
                         <a href="{% url 'edit_basic' %}"><li><h4>{% trans "Basic Information" %}</h4></li></a>
@@ -23,7 +28,7 @@
                             {% include "includes/form-error-highlight.html"%}
                             {% csrf_token %}
                             <div class="actions">
-                                <a href="{% url 'view_account' %}" class="btn pull-right">{% trans 'Cancel' %}</a>
+                                <a href="{% url 'view_profile' %}" class="btn pull-right">{% trans 'Cancel' %}</a>
                                 <button type="submit" class="btn primary pull-right" value="submit">{% trans "Save" %}</button>
                                 <div class="clear"></div>
                             </div>
@@ -35,5 +40,4 @@
         </div>
     </div>
 </div>
-</section>
 {% endblock %}

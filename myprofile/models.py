@@ -30,6 +30,14 @@ class ProfileUnits(models.Model):
             self.content_type = ContentType.objects.get_for_model(self.__class__)
         super(ProfileUnits, self).save(*args, **kwargs)
 
+    def get_fields(self):
+        field_list = []
+        for field in self._meta.local_fields:
+            if not field.primary_key:
+                field_list.append((field.verbose_name.title,
+                                   field.value_to_string(self)))
+        return field_list
+
     def __unicode__(self):
         return self.content_type.name
 
@@ -143,11 +151,9 @@ class Name(ProfileUnits):
                                   verbose_name=_("first name"))
     family_name = models.CharField(max_length=30, 
                                    verbose_name=_("last name"))
-    display_name = models.CharField(max_length=60, blank=True, null=True,
-                                    editable=False)
     primary = models.BooleanField(default=False,
                                   verbose_name=_("Is this your primary name?"))
-        
+    
     def get_full_name(self):
         """
         Returns the first_name plus the last_name, with a space in between.
