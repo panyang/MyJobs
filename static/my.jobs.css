@@ -9,7 +9,7 @@ body{
     padding: 50px;
 }
 #titleRow {
-    background-image:url('images/homepage_bg.png');
+    background-image:url('/files/static/images/homepage_bg.png');
     background-repeat:no-repeat;    
     background-position:center top;
     background-color: #FFF;
@@ -63,7 +63,7 @@ ul.ui-autocomplete{
 .topbar #topbar-logo{
     height: 30px;
     width: 90px;
-    background: transparent url(images/myjobs_logo.png) center left no-repeat;
+    background: transparent url(/files/static/images/myjobs_logo.png) center left no-repeat;
     text-indent: -9000px;
 }
 .topbar input{
@@ -727,5 +727,5 @@ table td, table th{
 }
 
 [class^="icon-"], [class*=" icon-"] {
-    background-image: url("images/glyphicons-halflings.png");
+    background-image: url("/files/static/images/glyphicons-halflings.png");
 }
