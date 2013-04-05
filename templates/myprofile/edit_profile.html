@@ -6,11 +6,34 @@
 {% endblock %}
 
 {% block content %}
+<style>
+#profileTitleRow{
+    margin-bottom: 20px;
+}
+#profileTitleRow img{
+    border-radius:5px;
+    border: 2px solid #b34529;
+}
+#profileTitleBar{
+    border-bottom: 2px solid #b34529;
+}
+#profileSubtitleBar{}
+</style>
 <div class="wrapper"> 
-    <div class="row">
-        <div class="span12">
-            <h1>{% trans "Edit" %} <small>{% trans "My Profile" %}</small></h1>
+    <div class="row" id="profileTitleRow">
+        <div class="span2">
+            <img src="{{user.get_gravatar_url}}&s=140">
         </div>
+        <div class="span10" id="profileTitleBar">
+            <!--<h1>{% trans "Edit" %} <small>{% trans "My Profile" %}</small></h1>-->
+            <h1>{% if name_obj %}{{name_obj}}{%else%}Filler{%endif%}</h1>
+            <h3>{{user.email}}</h3>
+        </div>
+        <div class="span10" id="profileSubtitleBar">
+            <a href="{% url 'edit_basic' %}">{% trans "Account Settings" %}</a>
+        </div>
+    </div>
+    <div class="row">
         <div class="span8" id="moduleColumn">
             {% csrf_token %}
             {% for module in profile_config %}
