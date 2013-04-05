@@ -65,7 +65,7 @@ class MyJobsViewsTests(TestCase):
                                           'gravatar': 'alice@example.com',
                                           'opt_in_myjobs': True}, follow=True)
         name = Name.objects.get(user=resp.context['user'],primary=True)
-        self.assertRedirects(resp, 'http://testserver%s' % '/account/')
+        self.assertRedirects(resp, 'http://testserver%s' % '/edit/basic?saved=success')
         self.assertEqual(name.given_name, 'Alice')
         self.assertEqual(name.family_name, 'Smith')
         self.assertEqual(resp.context['user'].opt_in_myjobs, True)
@@ -75,7 +75,7 @@ class MyJobsViewsTests(TestCase):
                                     data={'password1': 'secret',
                                           'password2': 'secret',
                                           'new_password': 'new'}, follow=True)
-        self.assertRedirects(resp, 'http://testserver%s' % '/account/')
+        self.assertRedirects(resp, 'http://testserver%s' % '/edit/password?saved=success')
         self.assertTrue(resp.context['user'].check_password('new'))
 
     def test_change_password_failure(self):

@@ -190,9 +190,25 @@ def edit_password(request):
     else:
         form = ChangePasswordForm(user=request.user)
     
+    # Check for the saved query parameter. This powers a save alert on the
+    # screen after redirecting.
+    saved = request.REQUEST.get('saved')
+    if saved:
+        if saved=="success":
+            message = "Your password has been updated."
+            message_type = "success"
+        else:
+            message = "There as an error, please try again."
+            message_type = "error"
+    else:
+        message = ""
+        message_type = ""
+        
     ctx = {
         'form':form,
-        'name_obj': get_name_obj(request)
+        'name_obj': get_name_obj(request),
+        'message':message,
+        'messagetype':message_type
         }
     return render_to_response('edit-account.html', ctx,
                               RequestContext(request))
