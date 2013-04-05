@@ -25,7 +25,6 @@
             <img src="{{user.get_gravatar_url}}&s=140">
         </div>
         <div class="span10" id="profileTitleBar">
-            <!--<h1>{% trans "Edit" %} <small>{% trans "My Profile" %}</small></h1>-->
             <h1>{% if name_obj %}{{name_obj}}{%else%}&nbsp;{%endif%}</h1>
             <h3>{{user.email}}</h3>
         </div>
