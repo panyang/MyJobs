@@ -1,31 +1,21 @@
-{% extends "myjobs_base.html" %}
 {% load i18n %}
-{% block meta-extra %}
-<script src="{{ STATIC_URL }}saved-search-edit.js"></script>
-{% endblock %}
 
-{% block content %}
-
-<section><div class="section subpage">
-<div class="wrapper"> 
-  <div class="row">
-    <div class="span8">
-      <h1>{% trans "Save a Search" %}</h1>
-      <div class="formBox">
-        <form action="" method="post" id="saved-search-form">
-          {% include "includes/form-error-highlight.html" %}
-          {% csrf_token %}
-          <div class="actions">
-            <a href="/saved-search/delete/{{search_id}}" class="btn pull-right">{% trans 'Delete' %}</a>
-            <a href="{% url 'saved_search_main' %}" class="btn pull-right">{% trans 'Cancel' %}</a>
-            <button type="submit" class="btn primary pull-right" value="submit">Save</button>
-          </div>
-        </form>
-      </div>
+<div class="modal-header">
+    <button type="button" class="close mobile_hide" data-dismiss="modal" aria-hidden="true">&times;</button>
+    <h1>{% trans "Edit" %} <small>{% trans "Saved Search" %}</small></h1>
+</div>
+<form method="post" id="saved-search-form">
+<div class="modal-body">
+    <div class="formBox">
+        {% include "includes/form-error-highlight.html" %}
+        {% csrf_token %}
     </div>
-  </div>
 </div>
+<div class="modal-footer">
+    <div class="actions">
+        <a href="{{search_id}}" id="save_edit" class="btn primary pull-right save">Save</a>
+        <a id="edit_cancel" data-dismiss="modal" aria-hidden="true" class="btn pull-right">{% trans 'Cancel' %}</a>
+        <a href="{% url 'delete_saved_search' search_id=search_id %}" class="btn pull-right">{% trans 'Delete' %}</a>
+    </div>
 </div>
-</section>
-
-{% endblock %}
+</form>

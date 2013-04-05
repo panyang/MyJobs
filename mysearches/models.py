@@ -8,6 +8,7 @@ from django.template.loader import render_to_string
 from mysearches.helpers import parse_rss
 
 class SavedSearch(models.Model):
+
     FREQUENCY_CHOICES = (
         ('D', _('Daily')),
         ('W', _('Weekly')),
@@ -23,21 +24,25 @@ class SavedSearch(models.Model):
                    ('7', _('Sunday')))
 
     user = models.ForeignKey('myjobs.User',editable=False)
-    url = models.URLField(max_length=300, verbose_name=_("URL of Search Results"))
-    label = models.CharField(max_length=60, verbose_name=_("Label"))
+    url = models.URLField(max_length=300,
+                          verbose_name=_("URL of Search Results:"))
+    label = models.CharField(max_length=60, verbose_name=_("Search Name:"))
     feed = models.URLField(max_length=300)
-    is_active = models.BooleanField(default=True, verbose_name=_("Is this agent active?"))
-    email = models.EmailField(max_length=255, verbose_name=_("Send results to"))
+    is_active = models.BooleanField(default=True,
+                                    verbose_name=_("Is this agent active?"))
+    email = models.EmailField(max_length=255,
+                              verbose_name=_("Which Email Address:"))
     frequency = models.CharField(max_length=2, choices=FREQUENCY_CHOICES,
                                  default='W',
-                                 verbose_name=_("How often do you want an email?"))
+                                 verbose_name=_("How often:"))
     day_of_month = models.IntegerField(choices=DOM_CHOICES,
                                        blank=True, null=True,
-                                       verbose_name=_("On what day of the month?"))
+                                       verbose_name=_("on"))
     day_of_week = models.CharField(max_length=2, choices=DOW_CHOICES,
                                    blank=True, null=True,
-                                   verbose_name=_("On what day of the week?"))
-    notes = models.TextField(blank=True, null=True)
+                                   verbose_name=_("on"))
+    notes = models.TextField(blank=True, null=True,
+                             verbose_name=_("Notes and Comments:"))
     last_sent = models.DateTimeField(blank=True, null=True, editable=False)
 
     def get_verbose_frequency(self):
@@ -58,7 +63,8 @@ class SavedSearch(models.Model):
         subject = self.label.strip()
         message = render_to_string('mysearches/email_digest.html',
                                    context_dict)
-        msg = EmailMessage(subject, message, settings.DEFAULT_FROM_EMAIL, [self.email])
+        msg = EmailMessage(subject, message, settings.DEFAULT_FROM_EMAIL,
+                           [self.email])
         msg.content_subtype='html'
         msg.send()
         self.last_sent = datetime.now()
@@ -73,10 +79,14 @@ class SavedSearch(models.Model):
 
 class SavedSearchDigest(models.Model):
     is_active = models.BooleanField(default=False,
-                                    verbose_name=_("Would you like to receive all your"
-                                    " saved searches as one email?"))
+                                    verbose_name=_("Would you like to receive"
+                                                   " all your saved searches"
+                                                   " as one email?"))
     user = models.OneToOneField('myjobs.User', editable=False)
     email = models.EmailField(max_length=255, verbose_name=_("Send results to"))
+    send_if_none = models.BooleanField(default=False,
+                                       verbose_name=_("Send even if there are"
+                                                      " no results"))
     
     def send_email(self):
         saved_searches = self.user.savedsearch_set.all()
@@ -84,6 +94,7 @@ class SavedSearchDigest(models.Model):
         context_dict = {'saved_searches': saved_searches}
         message = render_to_string('mysearches/email_digest.html',
                                    context_dict)
-        msg = EmailMessage(subject, message, settings.DEFAULT_FROM_EMAIL, [self.email])
+        msg = EmailMessage(subject, message, settings.DEFAULT_FROM_EMAIL,
+                           [self.email])
         msg.content_subtype='html'
         msg.send()

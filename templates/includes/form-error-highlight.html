@@ -34,7 +34,7 @@ form -- the rest of the form.
 
         	{# Don't show placeholder text if auto_id is True #}
         	{% if form.auto_id %}
-        		<div class='form-label pull-left'>
+        		<div class='form-label pull-left {{field.auto_id}}'>
           		{{ field.label_tag }}
         		</div>
         		{{ field|attr:"placeholder:" }}
@@ -74,6 +74,10 @@ form -- the rest of the form.
         		{% endif %}
 		{% endif %}
 
+                {% if field.errors %}
+                    </div>
+                {% endif %}
+
         {% if field.help_text %}
         	<span class="help-block">{{ field.help_text }}</span>
 			<div class="clear"></div>
@@ -82,7 +86,7 @@ form -- the rest of the form.
         {% if field.errors %}
         	<div class="clear"></div>
         {% endif %}
-        	<div class="clear"></div>
+                <div class="clear"></div>
         {% endif %}
 
         {% if field.html_name == "gravatar" %}
