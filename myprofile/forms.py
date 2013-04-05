@@ -62,14 +62,14 @@ class EducationForm(BaseUserForm):
         widgets = generate_custom_widgets(model)        
         
 
-class EmploymentForm(BaseUserForm):
+class EmploymentHistoryForm(BaseUserForm):
     class Meta:
         form_name = _("Most Recent Work History")
         model = EmploymentHistory
         widgets = generate_custom_widgets(model)
 
        
-class PhoneForm(BaseUserForm):
+class TelephoneForm(BaseUserForm):
     class Meta:
         form_name = _("Phone Number")
         model = Telephone
