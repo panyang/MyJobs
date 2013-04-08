@@ -24,7 +24,12 @@ module("saved-search-main.js AJAX Tests", { setup: function() {
 }});
 test("get_edit", function() {
     $('#qunit-fixture').append($('<div />',
-                               { id: 'edit_modal' }));
+                                 { id: 'container',
+                                   'class': 'row' }));
+    $('#container').append($('<div />', { id: 'edit_modal' }));
+    $('#container').append($('<a />',
+                               { 'class': 'edit',
+                                 href: '1' }));
     $.ajax = function(params) {
         if (params.url == 'edit' && params.data.csrfmiddlewaretoken == 'foo') {
             params.success('query successful');
@@ -32,23 +37,26 @@ test("get_edit", function() {
     };
     disable_fields = function(param1, param2) {
     };
-    get_edit(1);
+    $('.edit').trigger('click');
     $('#edit_modal').modal('hide');
     equal($('#edit_modal').html(), 'query successful', "AJAX response should"+
-                                                       "be appended to #edit"+
+                                                       " be appended to #edit"+
                                                        "_modal");
 });
 test("save_form", function() {
     $('#qunit-fixture').append($('<div />',
-                               { id: 'save_test' }));
+                               { id: 'save_test',
+                                 'class': 'row' }));
     $('#save_test').append($('<form />',
-                               { id: 'save_test_form' }));
-    $('#save_test_form').append($('<input />',
+                               { id: 'saved-search-form' }));
+    $('#saved-search-form').append($('<input />',
                                { id: 'id_url', type: 'text' }));
-    $('#save_test_form').append($('<span />',
+    $('#saved-search-form').append($('<span />',
                                { id: 'id_refresh' }));
-    $('#save_test_form').append($('<input />',
+    $('#saved-search-form').append($('<input />',
                                { id: 'id_is_active', type: 'checkbox' }));
+    $('#saved-search-form').append($('<a />',
+                               { id: 'new_search' }));
     $('#id_is_active').checked = true;
     $.ajax = function(params) {
         params.complete = function() {};
@@ -59,67 +67,79 @@ test("save_form", function() {
         }
     };
     function success_callback() {};
-    equal($('#save_test_form').children().length, 3, "Form should have only"+
-                                                     "three children");
-    save_form('id_', 'save_test', 'foo_action', success_callback);
-    equal($('#save_test_form').children().length, 4, "Form should have an"+
-                                                     "error label added");
+    equal($('#saved-search-form').children().length, 4, "Form should have only"+
+                                                        " three children");
+    $('#new_search').trigger('click', { success_callback: success_callback });
+    equal($('#saved-search-form').children().length, 5, "Form should have an"+
+                                                        " error label added");
+
     $('#id_url').val('jobs.jobs/jobs');
-    save_form('id_', 'save_test', 'foo_action', success_callback);
-    equal($('#id_url').val(), '', "#id_url should be cleared");
+    $('#new_search').trigger('click', { success_callback: success_callback });
+    equal($('#id_url').val(), '', "#id_url should be cleared after submitting"+
+                                  " a valid form");
     equal($('#id_is_active').checked, undefined, "#id_is_active should be"+
-                                                 "cleared");
-    equal($('#save_test_form').children().length, 3, "Error label should be"+
-                                                     "removed");
+                                                 " cleared");
+    equal($('#saved-search-form').children().length, 4, "Error label should be"+
+                                                        " removed");
 });
 test("validate", function() {
-    $('#qunit-fixture').append($('<input />',
+    $('#qunit-fixture').append($('<div />',
+                               { id: 'container',
+                                 'class': 'row' }));
+    $('#container').append($('<form />',
+                               { id: 'saved-search-form' }));
+    $('#saved-search-form').append($('<input />',
                                { id: 'id_url', type: 'text' }));
-    $('#qunit-fixture').append($('<input />',
+    $('#saved-search-form').append($('<div />',
+                               { 'class': 'refresh' }));
+    $('#saved-search-form').append($('<input />',
                                { id: 'id_feed', type: 'text' }));
-    $('#qunit-fixture').append($('<input />',
+    $('#saved-search-form').append($('<input />',
                                { id: 'id_label', type: 'text' }));
-    $('#qunit-fixture').append($('<div />', { id: 'id_validated' }));
+    $('#saved-search-form').append($('<div />', { id: 'validated' }));
     $.ajax = function(params) {
         if (params.data.url == 'jobs.jobs/jobs') {
             params.success('{"url_status":"valid","feed_title":"foo","rss_url"'+
                            ':"bar"}');
         } else {
-            params.success('{"url_status":"fail"}');
+            params.success('{"url_status":"not valid"}');
         }
     }
-    validate('id_', '');
-    equal($('#id_validated').text(), 'fail', "Running validate with no feed"+
-                                             "url returns 'fail'");
+    $('.refresh').click();
+    equal($('#validated').text(), 'not valid', "Running validate with no feed"+
+                                             " url returns 'not valid'");
     equal($('#id_feed').text(), '', "With no url, #id_feed should be empty");
     equal($('#id_label').text(), '', "With no url, #id_label should be empty");
 
     $('#id_url').val('google.com');
-    validate('id_', '');
-    equal($('#id_validated').text(), 'fail', "Running validate with an invalid"+
-                                             "feed url returns 'fail'");
+    $('.refresh').click();
+    equal($('#validated').text(), 'not valid', "Running validate with an"+
+                                               " invalid feed url returns"+
+                                               " 'not valid'");
     equal($('#id_feed').text(), '', "With an invalid url, #id_feed should be"+
-                                    "empty");
+                                    " empty");
     equal($('#id_label').text(), '', "With an invalid url, #id_label should be"+
-                                     "empty");
+                                     " empty");
 
     $('#id_url').val('jobs.jobs/jobs');
-    validate('id_', '');
-    equal($('#id_validated').text(), 'valid', "Running validate with a valid"+
-                                              "url returns 'valid'");
+    $('.refresh').click();
+    equal($('#validated').text(), 'valid', "Running validate with a valid"+
+                                           " url returns 'valid'");
     equal($('#id_feed').val(), 'bar', "With a valid url, #id_feed should get"+
-                                      "set");
+                                      " set");
     equal($('#id_label').val(), 'foo', "With a valid url, #id_label should"+
-                                       "get set");
+                                       " get set");
 });
 test("save_digest_form", function() {
-    $('#qunit-fixture').append($('<input />', { id: 'id_digest_active',
+    $('#qunit-fixture').append($('<div />', { id: 'digest-option' }));
+    $('#digest-option').append($('<input />', { id: 'id_digest_active',
                                                 type: 'checkbox' }));
-    $('#qunit-fixture').append($('<input />', { id: 'id_digest_email',
+    $('#digest-option').append($('<input />', { id: 'id_digest_email',
                                                 type: 'text' }));
-    $('#qunit-fixture').append($('<input />', { id: 'id_send_if_none',
+    $('#digest-option').append($('<input />', { id: 'id_send_if_none',
                                                 type: 'checkbox' }));
-    $('#qunit-fixture').append($('<span />', { id: 'saved' }));
+    $('#digest-option').append($('<span />', { id: 'saved' }));
+    $('#digest-option').append($('<div />', { id: 'digest_submit' }));
     $.ajax = function(params) {
         if (params.data.is_active == 'True') {
             if (params.data.email == '') {
@@ -131,20 +151,22 @@ test("save_digest_form", function() {
             params.success('success');
         }
     }
-    save_digest_form();
+    $('#digest_submit').click();
     equal($('#saved').text(), 'Saved!', "When #id_digest_active is not"+
-                                        "checked, delete user's digest"+
-                                        "settings and return success");
+                                        " checked, delete user's digest"+
+                                        " settings and return success");
 
     $('#id_digest_active').prop('checked', 'checked');
-    save_digest_form();
+    $('#digest_submit').click();
     equal($('#saved').text(), 'Something went wrong', "When #id_digest_active"+
-                                                      "is checked and no email"+
-                                                      "is provided, return"+
-                                                      "error condition");
+                                                      " is checked and no"+
+                                                      " email is provided,"+
+                                                      " return an error"+
+                                                      " condition");
 
     $('#id_digest_email').val('foo@example.com');
-    save_digest_form();
+    $('#digest_submit').click();
     equal($('#saved').text(), 'Saved!', "When #id_digest_active is checked and"+
-                                        "an email is provided, return success");
+                                        " an email is provided, return"+
+                                        " success");
 });
