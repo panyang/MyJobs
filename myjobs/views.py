@@ -11,6 +11,7 @@ from django.template import RequestContext
 from django.shortcuts import render_to_response, get_object_or_404
 from django.views.generic import TemplateView
 
+from myjobs.models import User
 from myjobs.forms import *
 from myjobs.helpers import *
 from myprofile.forms import *
