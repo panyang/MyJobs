@@ -3,7 +3,7 @@ import logging
 
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import user_passes_test, login_required
 from django.core.urlresolvers import reverse
 from django.forms.models import model_to_dict
 from django.http import HttpResponseRedirect, HttpResponse
@@ -141,7 +141,7 @@ def view_account(request):
     ctx = {'name_obj': get_name_obj(request)}
     return render_to_response('done.html', ctx, RequestContext(request))
 
-@login_required
+@user_passes_test(User.objects.not_disabled)
 def edit_basic(request):
     initial_dict = model_to_dict(request.user)
     name_obj = get_name_obj(request)
@@ -180,7 +180,7 @@ def edit_basic(request):
     return render_to_response('edit-account.html', ctx,
                               RequestContext(request))
 
-@login_required
+@user_passes_test(User.objects.not_disabled)
 def edit_password(request):
     if request.method == "POST":
         form = ChangePasswordForm(user=request.user, data=request.POST)
@@ -213,13 +213,13 @@ def edit_password(request):
     return render_to_response('edit-account.html', ctx,
                               RequestContext(request))
 
-@login_required
+@user_passes_test(User.objects.not_disabled)
 def edit_delete(request):
     ctx = {'name_obj': get_name_obj(request)}
     return render_to_response('edit-delete.html', ctx,
                               RequestContext(request))
 
-@login_required
+@user_passes_test(User.objects.not_disabled)
 def delete_account(request):
     email = request.user.email
     request.user.delete()
@@ -227,7 +227,7 @@ def delete_account(request):
     return render_to_response('delete-account-confirmation.html', ctx,
                               RequestContext(request))
 
-@login_required
+@user_passes_test(User.objects.not_disabled)
 def disable_account(request):
     user = request.user
     email = user.email

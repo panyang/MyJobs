@@ -4,7 +4,7 @@ import re
 
 from django.contrib import messages
 from django.contrib.auth import authenticate, login
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.urlresolvers import reverse
 from django.forms.models import model_to_dict
 from django.http import HttpResponseRedirect, HttpResponse
@@ -12,12 +12,13 @@ from django.template import RequestContext
 from django.shortcuts import render_to_response, get_object_or_404
 from django.views.generic import TemplateView
 
+from myjobs.models import User
 from myjobs.forms import *
 from myjobs.helpers import *
 from myprofile.forms import *
 from registration.forms import *
 
-@login_required
+@user_passes_test(User.objects.not_disabled)
 def edit_profile(request):
     settings = {'user': request.user}
     module_list = ['Name', 'Education', 'EmploymentHistory', 'SecondaryEmail',
@@ -43,7 +44,7 @@ def edit_profile(request):
     return render_to_response('myprofile/edit_profile.html', data_dict,
                               RequestContext(request))
 
-@login_required
+@user_passes_test(User.objects.not_disabled)
 def handle_form(request):
     module_type = request.REQUEST.get('module')
     first_instance = request.REQUEST.get('first_instance')
@@ -85,7 +86,8 @@ def handle_form(request):
         return render_to_response('myprofile/profile_form.html', 
                                   data_dict, RequestContext(request))
 
-@login_required
+
+@user_passes_test(User.objects.not_disabled)
 def delete_item(request):
     module_type = request.POST.get('module')
     item_id = request.POST.get('id')
@@ -95,7 +97,7 @@ def delete_item(request):
     return HttpResponse('Deleted!')
 
 
-@login_required
+@user_passes_test(User.objects.not_disabled)
 def add_section(request):
     module = request.GET.get('module')
     module_config = {}
