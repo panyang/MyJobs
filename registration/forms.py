@@ -52,13 +52,13 @@ class CustomAuthForm(AuthenticationForm):
 
 
 class CustomPasswordResetForm(PasswordResetForm):
+    """
+    Custom password reset form validates even when user is not active.
+    """
     def __init__(self, *args, **kwargs):
         super(CustomPasswordResetForm, self).__init__(*args, **kwargs)
 
     def clean_email(self):
-        """
-        Validates that an active user exists with the given email address.
-        """
         UserModel = get_user_model()
         email = self.cleaned_data["email"]
         self.users_cache = UserModel._default_manager.filter(email__iexact=email)
