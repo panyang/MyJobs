@@ -1,7 +1,7 @@
 from django.conf.urls.defaults import *
 from django.contrib.auth import views as auth_views
 
-from registration.forms import CustomAuthForm
+from registration.forms import CustomAuthForm, CustomPasswordResetForm
 from registration.views import *
 
 # Authorization URLS
@@ -23,6 +23,7 @@ urlpatterns = patterns('',
                            name='auth_password_change_done'),
                        url(r'^password/reset/$',
                            auth_views.password_reset,
+                           {'password_reset_form': CustomPasswordResetForm},
                            name='auth_password_reset'),
                        url(r'^password/reset/confirm/(?P<uidb36>[0-9A-Za-z]+)-(?P<token>.+)/$',
                            auth_views.password_reset_confirm,

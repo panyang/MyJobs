@@ -1,6 +1,7 @@
 from django import forms
-from django.contrib.auth.forms import AuthenticationForm
-from django.contrib.auth import authenticate
+from django.contrib.auth.forms import AuthenticationForm, PasswordResetForm
+from django.contrib.auth import authenticate, get_user_model
+from django.contrib.auth.hashers import UNUSABLE_PASSWORD
 from django.utils.translation import ugettext_lazy as _
 
 from myjobs.models import *
@@ -49,6 +50,25 @@ class CustomAuthForm(AuthenticationForm):
     def get_user(self):
         return self.user_cache
 
+
+class CustomPasswordResetForm(PasswordResetForm):
+    def __init__(self, *args, **kwargs):
+        super(CustomPasswordResetForm, self).__init__(*args, **kwargs)
+
+    def clean_email(self):
+        """
+        Validates that an active user exists with the given email address.
+        """
+        UserModel = get_user_model()
+        email = self.cleaned_data["email"]
+        self.users_cache = UserModel._default_manager.filter(email__iexact=email)
+        if not len(self.users_cache):
+            raise forms.ValidationError(self.error_messages['unknown'])
+        if any((user.password == UNUSABLE_PASSWORD)
+               for user in self.users_cache):
+            raise forms.ValidationError(self.error_messages['unusable'])
+        return email
+        
         
 class RegistrationForm(forms.Form):
     email = forms.EmailField(label=_("Email"), required=True,
