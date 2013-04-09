@@ -12,46 +12,36 @@ from myprofile.models import SecondaryEmail
 def validate_dotjobs_url(search_url):
     """
     Validate (but not parse) a .jobs URL. Nothing is returned if the URL has no
-    .jobs TLD. 
+    no rss link is found. Only the title is returned if the rss url is invalid.
 
     Inputs:
     :search_url:   URL to be validated
 
     Outputs:
-    :rss_url:      The corresponding RSS URL. None is returned if not a .jobs URL
-    :rss_soup:     The soup object that contains 1 item. Soup is returned if jobs
-                   found but None is returned if either the search url is invalid
-                   or there were no jobs in the soup.
+    :title:        The title attribute taken from the rss link
+    :rss_url:      The href attribute taken from the rss link
     """
-
     if search_url.find('://') == -1:
         search_url = "http://" + search_url
-    parsed = urlparse(search_url)
 
-    rss_url = 'http://' + parsed.netloc + parsed.path + 'feed/rss?' + parsed.query
-    
-    try:
-        rss_soup = get_rss_soup(rss_url+'&num_items=1')    
-    except:
-        return None, None
+    soup = BeautifulSoup(urllib2.urlopen(search_url).read())
+    link = soup.find("link", {"type":"application/rss+xml"})
 
-    if rss_soup.find("item"):
-        return rss_url, rss_soup
+    if link:
+        title = link.get('title')
+        rss_url = link.get('href')
+        try:
+            params = ''
+            if rss_url.find('?') == -1:
+                params += '?num_items=1'
+            else:
+                params += '&num_items=1'
+            rss_soup = get_rss_soup(rss_url+params)
+        except:
+            return title, None
+        return title, rss_url
     else:
-        return rss_url, None
-
-def get_feed_title(rss_soup):
-    """
-    Finds the title of the RSS feed. 
-    
-    Inputs:
-    :rss_soup:     Soup object of the RSS feed.
-
-    Outputs:
-                   String of the RSS feed title.
-    """
-    
-    return rss_soup.find("title").get_text().strip()
+        return None, None
 
 def get_rss_soup(rss_url):
     """

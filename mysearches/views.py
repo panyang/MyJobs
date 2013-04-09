@@ -66,9 +66,8 @@ def more_feed_results(request):
 @login_required
 def validate_url(request):
     if request.is_ajax():
-        rss_url, rss_soup = validate_dotjobs_url(request.POST['url'])
+        feed_title, rss_url = validate_dotjobs_url(request.POST['url'])
         if rss_url:
-           feed_title = get_feed_title(rss_soup)
            # returns the RSS url via AJAX to show if field is validated
            # id valid, the label field is auto populated with the feed_title
            data = {'rss_url': rss_url,
