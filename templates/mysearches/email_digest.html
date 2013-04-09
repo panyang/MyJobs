@@ -1,3 +1,4 @@
+{{ if saved_searches }}
 {% for saved_search in saved_searches %}
 <h2>{{ saved_search.label }}</h2>
 {% for item in saved_search.get_feed_items %}
@@ -7,3 +8,6 @@
 {% endfor %}
 <b><a href="http://my.jobs/saved-search/{{ saved_search.id }}">View all new jobs on my.jobs....</a></b><br>
 {% endfor %}
+{{ else }}
+There are no results for today!
+{% endif %}

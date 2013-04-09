@@ -90,11 +90,12 @@ class SavedSearchDigest(models.Model):
     
     def send_email(self):
         saved_searches = self.user.savedsearch_set.all()
-        subject = _('Your Daily Saved Search Digest')
-        context_dict = {'saved_searches': saved_searches}
-        message = render_to_string('mysearches/email_digest.html',
-                                   context_dict)
-        msg = EmailMessage(subject, message, settings.DEFAULT_FROM_EMAIL,
-                           [self.email])
-        msg.content_subtype='html'
-        msg.send()
+        if saved_searches or self.send_if_none:
+            subject = _('Your Daily Saved Search Digest')
+            context_dict = {'saved_searches': saved_searches}
+            message = render_to_string('mysearches/email_digest.html',
+                                       context_dict)
+            msg = EmailMessage(subject, message, settings.DEFAULT_FROM_EMAIL,
+                               [self.email])
+            msg.content_subtype='html'
+            msg.send()
