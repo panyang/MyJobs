@@ -117,8 +117,7 @@ ul.ui-autocomplete{
 .account-box{    
     background-color: #FFF;
     padding: 10px;
-    padding-bottom: 30px;
-    
+    padding-bottom: 30px;    
     border-radius: 5px;
     margin-top: 105px;   
     }
@@ -235,7 +234,7 @@ ul.ui-autocomplete{
     background-image: -webkit-linear-gradient(#db5938,#b34529);  
     background-image: -o-linear-gradient(#db5938,#b34529); 
     background-image: linear-gradient(#db5938,#b34529);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#db5938', endColorstr='#b34529', GradientType=0)
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#db5938', endColorstr='#b34529', GradientType=0);
     margin-top: 2px;
     padding-left: 25px;
     padding-right: 25px;

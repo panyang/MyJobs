@@ -81,6 +81,8 @@ def handle_form(request):
             form_instance = form(instance=obj)
             data_dict['item_id'] = item_id
 
+        verbose = re.sub("([a-z])([A-Z])","\g<1> \g<2>",module_type)
+        data_dict['verbose'] = verbose
         data_dict['form'] = form_instance
         return render_to_response('myprofile/profile_form.html', 
                                   data_dict, RequestContext(request))
