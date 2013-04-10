@@ -124,6 +124,18 @@ function date_select() {
     });
 };
 
+var settings = {
+	tl: { radius: 12 },
+	tr: { radius: 12 },
+	bl: { radius: 12 },
+	br: { radius: 12 },
+	antiAlias: true
+};
+/* moooo */
+$$('.round').each(function(rd) {
+  curvyCorners(settings,rd);
+});
+
 /*Combobox Widget. Based loosely on the jQuery UI example*/
 (function($){$.widget( "ui.makeCombobox",{
     _create: function(){

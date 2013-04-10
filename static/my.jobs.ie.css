@@ -107,14 +107,14 @@ ul.ui-autocomplete{
     padding-bottom: 30px;
     border: 2px solid #574E44;
     border-radius: 5px;
-    margin-top: 105px;   
+    margin-top: 80px;   
     }
 .account-box{    
     background-color: #FFF;
     padding: 10px;
     padding-bottom: 30px;    
     border-radius: 5px;
-    margin-top: 105px;   
+    margin-top: 80px;   
     }
 .loginBox, .formBox, .account-box h3 {
     color: #FFF;    
@@ -210,7 +210,8 @@ ul.ui-autocomplete{
 .btn{
     color: #000;
     text-shadow: 0 1px 1px rgba(0, 0, 0, 0.75) !important;
-    }
+    border-radius: 4px;    
+}
 .btn + .btn{
     margin-left: 10px;
     }
@@ -218,20 +219,16 @@ ul.ui-autocomplete{
     margin-right: 10px;
     }
 .btn.primary{
-    background-color: #b34529;
-    background-image: none;
-    background-image: -moz-linear-gradient(#db5938,#b34529);
-    background-image: -webkit-gradient(linear, left top, left bottom, #db5938, #b34529); 
-    background-image: -webkit-linear-gradient(#db5938,#b34529);  
-    background-image: -o-linear-gradient(#db5938,#b34529); 
-    background-image: linear-gradient(#db5938,#b34529);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#db5938', endColorstr='#b34529', GradientType=0);
+    background-image: none !important;
+    background-color: #db5938;
+    filter: none !important;     
     margin-top: 2px;
     padding-left: 25px;
     padding-right: 25px;
     font-weight:bold;
     font-size: 1.1em;
-    color: #fff
+    color: #fff;
+    box-shadow: inset 0 -8px 10px rgba(0,0,0,0.18), 0 0px 0 rgba(255,255,255, 0.3), inset 0 0px 0 rgba(255,255,255, 0.3);  
     }
 
 .alert-message ul{

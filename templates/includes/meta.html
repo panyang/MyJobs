@@ -5,11 +5,16 @@ meta.html -- default page metadata
 <title>{% block title-content %}{{ site_name }}{% endblock title-content %}</title>
 <meta name="description" content="{{ description }}">
 <meta name="author" content="DirectEmployers Foundation">
-
+<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 <meta name="viewport" content="width=device-width"/>
 <script src="http://js.nlx.org/framework/js/def.ui.core.js"></script>
 <script src="{{ STATIC_URL }}my.jobs.js"></script>
 
+<!--[if IE]>
+<link href="{{ STATIC_URL }}my.jobs.ie.css" rel="stylesheet" type="text/css">
+<![endif]-->
+<!--[if !IE]><!-->
 <link href="{{ STATIC_URL }}my.jobs.css" rel="stylesheet" type="text/css">
+<!--<![endif]-->
 
 <link rel="icon" type="image/png" href="{{ STATIC_URL }}favicon.ico">
