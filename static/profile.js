@@ -4,14 +4,14 @@ $(function() {
 
         events: {
             "click [id$='section']": "addSection",
-            "click [id$='add']": "showForm",
+            "click [id$='add']": "editForm",
             "click [id$='cancel']": "cancelForm",
+            "hidden #edit_modal": "cancelForm",
             "click [id$='edit']": "editForm",
             "click [id$='save']": "saveForm",
-            "click [id$='delete']": "deleteItem"
+            "click [id$='delete']": "deleteItem",
         },
 
-        
         addSection: function(e) {
             e.preventDefault();
             var module = $(e.target).attr('id').split('-')[0];
@@ -25,45 +25,42 @@ $(function() {
             });
         },
 
-        showForm: function(e) {
-            var btn = $(e.target);
-            var module = btn.attr('id').split("-")[0];
-            $.ajax({
-                url: '/profile/form/',
-                data: {'module':module},
-                success: function(data) {
-                    btn.hide();
-                    btn.before(data);
-                    datepicker();
-                }
-            });
-        },
-
         cancelForm: function(e) {
             e.preventDefault();
-            var module =  $(e.target).attr('id').split('-')[0];
-            var item_id = $(e.target).attr('id').split('-')[1];
+            var target;
+            if (e.target.tagName.toLowerCase() == 'a') {
+                target = $(e.target)
+            } else {
+                target = $(e.target).parents('.formBox').find('tr:hidden')
+            }
+            var module = target.attr('id').split('-')[0];
+            var item_id = target.attr('id').split('-')[1];
+            $("div#edit_modal").remove();
+            var action;
             if (item_id != 'new') {
                 $('#'+module+'-'+item_id+'-item').show();
-            } else {
-                $('#'+module+'-'+item_id+'-add').show();
-            };
-            $('#'+module+'-'+item_id+'-form').remove();
+            }
         },
 
         editForm: function(e) {
             e.preventDefault();
 
-            var item = $(e.target).parent().parent();
             var module = $(e.target).attr('id').split("-")[0];
             var id = $(e.target).attr('id').split("-")[1];
-            var table = $(e.target).parents('.formBox').children('table')
+            var item;
+            if (id != 'new') {
+                item = $(e.target).parent().parent();
+            }
+            var button = $(e.target).parents('.formBox').children('button')
             $.ajax({
                 url: '/profile/form/',
                 data: {'module':module, 'id':id},
                 success: function(data) {
-                    item.hide();
-                    table.after(data);
+                    if (item) {
+                        item.hide();
+                    }
+                    button.before(data);
+                    $('#edit_modal').modal();
                     datepicker();
                 }
             });            
@@ -73,28 +70,43 @@ $(function() {
             e.preventDefault();
             var module =  $(e.target).attr('id').split('-')[0];
             var item_id = $(e.target).attr('id').split('-')[1];
-            var form = $(e.target).parents('form');
+            var form = $('#edit_modal form');
             var table = $(e.target).parents('.formBox').children('table')
+
+            csrf_token_tag = document.getElementsByName('csrfmiddlewaretoken')[0];
+            var csrf_token = "";
+            if(typeof(csrf_token_tag)!='undefined'){
+                csrf_token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+            }
+
             first_instance=0;
             if(typeof(table.attr("class"))=="undefined"){
                 first_instance = 1;
-                $(e.target).parents('.formBox').children('h4').after(
-                    '<table class="table table-bordered table-striped"></table>'
-                    );
-                table = $(e.target).parents('.formBox').children('table')
             }  
             console.log(first_instance)    
-            var serialized_data = form.serialize() + '&module=' + module + '&id=' + item_id + '&first_instance=' + first_instance;
+            var serialized_data = form.serialize() + '&module=' + module + '&id=' + item_id + '&first_instance=' + first_instance + '&csrfmiddlewaretoken=' + csrf_token;
             $.ajax({
                 type: 'POST',
                 url: '/profile/form/',
                 data: serialized_data,
                 success: function(data) {
-                    if (item_id == 'new') {
-                        form.siblings("[id$='add']").show();
-                    };
-                    form.replaceWith("");
-                    table.append(data);                    
+                    if (data.indexOf('<td>') >= 0) {
+                        if (first_instance) {
+                            $(e.target).parents('.formBox').children('h4').after(
+                                '<table class="table table-bordered table-striped"></table>'
+                                );
+                            table = $(e.target).parents('.formBox').children('table')
+                        }
+                        table.append(data);
+                        $('#'+module+'-'+item_id+'-item').remove();
+                        $('#edit_modal').modal('hide');
+                    } else {
+                        var json = jQuery.parseJSON(data);
+                        $('[class*=label-important]').remove();
+                        for (var i=0; i<json.length; i++) {
+                            $('[id$="-'+json[i]+'"]').after('<span class="label label-important">Required</span>');
+                        }
+                    }
                 }
             });            
         },
@@ -126,6 +138,10 @@ $(function() {
                     }
                 }
             });
+        },
+
+        closeEdit: function(e) {
+            e.preventDefault();
         },
     });
 
