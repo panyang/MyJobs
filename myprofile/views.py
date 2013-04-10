@@ -32,7 +32,8 @@ def edit_profile(request):
         module_config['verbose'] = verbose
         module_config['name'] = module
         for unit in module_units:
-            x.append(getattr(unit, module.lower()))
+            if hasattr(unit, module.lower()):
+                x.append(getattr(unit, module.lower()))
         module_config['items'] = x
         
         profile_config.append(module_config)
@@ -70,10 +71,9 @@ def handle_form(request):
         else:
             data_dict['item_id'] = item_id
             data_dict['form'] = form_instance
-            return render_to_response('myprofile/profile_form.html', data_dict,
-                                      RequestContext(request))
+            return HttpResponse(json.dumps(form_instance.errors.keys()))
     else:
-        if not item_id:
+        if not item_id or item_id == 'new':
             form_instance = form()
             data_dict['item_id'] = 'new'
         else:

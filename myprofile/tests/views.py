@@ -1,5 +1,6 @@
 from bs4 import BeautifulSoup
 from importlib import import_module
+import json
 
 from django.conf import settings
 from django.contrib.auth import login
@@ -30,7 +31,7 @@ class MyProfileViewsTests(TestCase):
         resp = self.client.get(reverse('edit_profile'))
         soup = BeautifulSoup(resp.content)
         item_id = Name.objects.all()[0].id
-        
+
         # The existing name object should be rendered on the main content section
         self.assertIsNotNone(soup.find('tr', id='Name-'+str(item_id)+'-item'))
         # profile-section contains the name of a profile section that has no
@@ -110,16 +111,12 @@ class MyProfileViewsTests(TestCase):
     def test_handle_form_post_invalid(self):
         """
         Invoking the handle_form view as a POST request with an invalid
-        form returns the form with errors.
+        form returns the list of form errors.
         """
         resp = self.client.post(reverse('handle_form'),
                                data = {'module': 'Name', 'id': 'new',
                                        'given_name': 'Susy'})
-        self.assertTemplateUsed(resp, 'myprofile/profile_form.html')
-
-        soup = BeautifulSoup(resp.content)
-        self.assertIsNotNone(soup.find("ul",{"class":"errorlist"}))
-        
+        self.assertEqual(json.loads(resp.content), ['family_name'])
 
     def test_handle_form_post_existing_valid(self):
         """

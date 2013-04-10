@@ -1,5 +1,5 @@
 {% if first_instance %}
-<tr id="{{module}}-{{item.id}}-header" class="hidden">
+<tr>
     {% for label,value in item.get_fields|slice:":4" %}                            
         <th>{{label}}</th>
     {% endfor %}
@@ -13,6 +13,5 @@
     <td class="action">
         <button class="btn" id="{{module}}-{{item.id}}-delete">Delete</button>
         <button class="btn" id="{{module}}-{{item.id}}-edit">Edit</button>
-        
     </td>
 </tr>
