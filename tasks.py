@@ -10,10 +10,10 @@ def send_search_digests():
     today = datetime.today()
     day_of_week = today.isoweekday()
 
-    digest = SavedSearchDigest.objects.filter(default=True)
+    digest = SavedSearchDigest.objects.filter(is_active=True)
     digest.send_email()
     
-    not_digest = SavedSearchDigest.objects.filter(default=False)    
+    not_digest = SavedSearchDigest.objects.filter(is_active=False)    
     for item in not_digest:
         saved_searches = item.user.savedsearch_set.all()
         daily = saved_searches.objects.filter(frequency='D')

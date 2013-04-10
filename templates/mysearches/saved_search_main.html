@@ -5,7 +5,6 @@
 {% block meta-extra %}
 <script src="{{ STATIC_URL }}saved-search-main-ready.js"></script>
 <script src="{{ STATIC_URL }}saved-search-main.js"></script>
-<script src="http://js.nlx.org/framework/js/code/bootstrap-modal.js"></script>
 {% endblock %}
 
 {% block content %}
@@ -16,10 +15,6 @@
 </div>
 
 <div class="row">
-  <script type="text/javascript">
-    var emails = {% if emails %}{{emails}}{%else%}""{%endif%}
-  </script>
-              
     <div class="span12">
       <div id="saved-search-list">
         {% if saved_searches %}
@@ -114,12 +109,12 @@
         <div>{{ form.send_if_none }}{{form.send_if_none.label_tag}}</div>
       <div class="pull-right">
       <span id="saved"></span>
-      <button type="submit" value="submit" class="btn primary" id="digest_submit">Save</button>
+      <a class="btn primary" id="digest_submit">Save</a>
       </div>
     </form>
 </div>
 
-<div id="new_modal" class="modal hide fade">
+<div id="new_modal" class="modal hide fade row">
     <div class="modal-header">
         <button class="close mobile_hide" aria-hidden="true" data-dismiss="modal" type="button">×</button>
         <h1>{% trans "Save" %} <small>{% trans "a Search" %}</small></h1>
@@ -139,6 +134,6 @@
     </div>
     </form>
 </div>
-<div id="edit_modal" class="modal hide fade">
+<div id="edit_modal" class="modal hide fade row">
 </div>
 {% endblock content %}

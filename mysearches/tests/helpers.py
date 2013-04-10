@@ -19,25 +19,21 @@ class SavedSearchHelperTests(TestCase):
         self.assertIsNotNone(soup)
 
         no_netloc = 'jobs.jobs/search?location=chicago&q=nurse'
-        url, soup = validate_dotjobs_url(no_netloc)
+        title, url = validate_dotjobs_url(no_netloc)
+        self.assertIsNotNone(title)
         self.assertIsNotNone(url)
-        self.assertIsNotNone(soup)
+        self.assertEquals(title, 'Jobs - nurse Jobs in Chicago')
 
         valid_filter_url = 'jobs.jobs/chicago/illinois/usa/jobs/mcdonalds/careers/'
-        url, soup = validate_dotjobs_url(valid_filter_url)
+        title, url = validate_dotjobs_url(valid_filter_url)
+        self.assertIsNotNone(title)
         self.assertIsNotNone(url)
-        self.assertIsNotNone(soup)
 
     def test_invalid_dotjobs_url(self):
         invalid_url = 'http://google.com'
-        url, soup = validate_dotjobs_url(invalid_url)
+        title, url = validate_dotjobs_url(invalid_url)
+        self.assertIsNone(title)
         self.assertIsNone(url)
-        self.assertIsNone(soup)
-
-    def test_get_feed_title(self):
-        soup = get_rss_soup(self.valid_url)
-        title = get_feed_title(soup)
-        self.assertEquals(title, 'Jobs - nurse Jobs in Chicago')
 
     def test_date_in_range(self):
         start = datetime.date(month=1,day=1,year=2013)

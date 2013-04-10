@@ -1,7 +1,8 @@
 from django.test import TestCase
 
 from myjobs.models import User
-from registration import forms
+from myjobs.tests.factories import UserFactory
+from registration.forms import *
 
 
 class RegistrationFormTests(TestCase):
@@ -9,6 +10,7 @@ class RegistrationFormTests(TestCase):
     Test the default registration forms.
 
     """
+
     def test_registration_form(self):
         """
         Test that ``RegistrationForm`` enforces username constraints
@@ -33,13 +35,21 @@ class RegistrationFormTests(TestCase):
             ]
 
         for invalid_dict in invalid_data_dicts:
-            form = forms.RegistrationForm(data=invalid_dict['data'])
+            form = RegistrationForm(data=invalid_dict['data'])
             self.failIf(form.is_valid())
             self.assertEqual(form.errors[invalid_dict['error'][0]],
                              invalid_dict['error'][1])
 
-        form = forms.RegistrationForm(data={'email': 'foo@example.com',
-                                            'password1': 'foo',
-                                            'password2': 'foo'})
+        form = RegistrationForm(data={'email': 'foo@example.com',
+                                      'password1': 'foo',
+                                      'password2': 'foo'})
         self.failUnless(form.is_valid())
 
+    def test_custom_password_reset_form(self):
+        user = UserFactory(is_active=True)
+        form = CustomPasswordResetForm({'email':user.email})
+        self.assertTrue(form.is_valid())
+        user = UserFactory(email='alice2@example.com', is_active=False)
+        form = CustomPasswordResetForm({'email':user.email})
+        self.assertTrue(form.is_valid())
+        

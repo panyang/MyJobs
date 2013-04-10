@@ -101,7 +101,7 @@ class MySearchViewTests(TestCase):
                                     data = { 'url': self.new_form_data['url'] },
                                     HTTP_X_REQUESTED_WITH = 'XMLHttpRequest')
         self.assertEqual(response.status_code, 200)
-        data = { 'rss_url': 'http://jobs.jobs/jobsfeed/rss?',
+        data = { 'rss_url': 'http://jobs.jobs/jobs/feed/rss',
                  'feed_title': 'Jobs',
                  'url_status': 'valid' }
         self.assertEqual(json.loads(response.content), data)
