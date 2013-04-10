@@ -1,42 +1,11 @@
-.loginBox, .formBox{    
-    background-color: #574e44;
-    padding: 10px;
-    padding-bottom: 30px;
-    border: 2px solid #574E44;
-    border-radius: 5px;
+.loginBox, .formBox{
     margin-top: 80px;   
     }
-.account-box{    
-    background-color: #FFF;
-    padding: 10px;
-    padding-bottom: 30px;    
-    border-radius: 5px;
+.account-box{   
     margin-top: 80px;   
-    }
-    
-/*form styles*/
-.btn{
-    color: #000;
-    text-shadow: 0 1px 1px rgba(0, 0, 0, 0.75) !important;
-    border-radius: 4px;    
-    }
-.btn + .btn{
-    margin-left: 10px;
-    }
-.btn.pull-right + .btn{
-    margin-right: 10px;
     }
 .btn.primary{
-    background-image: none !important;
-    background-color: #db5938;
-    filter: none !important;     
-    margin-top: 2px;
-    padding-left: 25px;
-    padding-right: 25px;
-    font-weight:bold;
-    font-size: 1.1em;    
-    color: #fff;    
+    background-image: none !important;    
+    filter: none !important;   
     box-shadow: inset 0 -8px 10px rgba(0,0,0,0.18), 0 0px 0 rgba(255,255,255, 0.3), inset 0 0px 0 rgba(255,255,255, 0.3);  
     }
-
-
