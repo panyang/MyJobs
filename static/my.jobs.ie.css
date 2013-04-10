@@ -19,7 +19,7 @@
     color: #000;
     text-shadow: 0 1px 1px rgba(0, 0, 0, 0.75) !important;
     border-radius: 4px;    
-}
+    }
 .btn + .btn{
     margin-left: 10px;
     }
