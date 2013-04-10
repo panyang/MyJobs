@@ -41,8 +41,13 @@ $(function() {
                 url: '/profile/section/',
                 data: {'module': module},
                 success: function(data) {
-                    $(e.target).remove();
+                    $(e.target).parents('tr').remove();
+                    if ($('#moduleBank').find('tr').length == 0) {
+                        $('#moduleBank').hide();
+                    }
                     $('#moduleColumn').append(data);
+                    module_elem = $('#'+module+'_items');
+                    module_elem.find('[id$="add"]').click();
                 }
             });
         },
@@ -212,10 +217,11 @@ $(function() {
                         // Remove the empty section
                         parent.parents(".formBox").remove();
 
-                        // Replace the button within the #moduleBank table
+                        // Replace the button within the moduleBank table and show the moduleBank
                         $("#moduleBank table").append(
                             "<tr class='profile_section'><td><a id='"+parent_name+"-section' href=''>"+parent_name+"</a></td></tr>"
                         );
+                        $("#moduleBank").show();
                     }
                 }
             });
