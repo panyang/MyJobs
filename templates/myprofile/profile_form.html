@@ -3,7 +3,7 @@
 <div id="edit_modal" class="modal hide fade">
     <div class="modal-header">
         <button class="close mobile_hide" aria-hidden="true" data-dismiss="modal" type="button">×</button>
-        <h1>{% if item_id == "new" %}{% trans 'Add' %}{% else %}{% trans 'Edit' %}{% endif %} <small>{% trans 'a ' %} {{ module }}</small></h1>
+        <h1>{% if item_id == "new" %}{% trans 'Add' %}{% else %}{% trans 'Edit' %}{% endif %}</h1>
     </div>
     <form action="" method="post" id="{{module}}-{{item_id}}-form">
         <div class="modal-body">
@@ -16,7 +16,6 @@
             <div class="actions">
                 <a href="" data-dismiss="modal" aria-hidden="true" class="btn pull-right" id="{{module}}-{{item_id}}-cancel">{% trans 'Cancel' %}</a>
                 <button type="submit" class="btn primary pull-right" id="{{module}}-{{item_id}}-save" value="submit">Save</button>
-              <!--<a id="detail_close" data-dismiss="modal" aria-hidden="true" class="btn pull-right">{% trans 'Close' %}</a>-->
             </div>
         </div>
     </form>
