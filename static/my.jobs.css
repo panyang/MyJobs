@@ -9,7 +9,7 @@ body{
     padding: 50px;
 }
 #titleRow {
-    background-image:url('/files/static/images/homepage_bg.png');
+    background-image:url(/files/static/images/homepage_bg.png);
     background-repeat:no-repeat;    
     background-position:center top;
     background-color: #FFF;
@@ -546,10 +546,17 @@ em.pendingText{
     #titleRow{
         margin-top: 0px;
     }
-    #titleRow #title{
+    #titleRow #title{        
         display: none;
     }
-    
+    #titleRow{
+         background-image: none;
+         min-height: 100px; 
+    }
+    #titleRow .loginBox{
+         margin-top: 5px;
+         margin-bottom: 5px;
+    }    
     .topbar #topbar-login input{
         padding-left: 0px;
         padding-right: 0px;
