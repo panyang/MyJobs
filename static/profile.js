@@ -106,9 +106,9 @@ $(function() {
                     if (item) {
                         item.hide();
                     }
-//                    data = $(data).addClass('row');
                     data = $(data).hide();
                     $('#moduleColumn').append(data);
+                    resize_modal('#edit_modal');
                     $('#edit_modal').modal();
                     datepicker();
                 }
@@ -212,6 +212,10 @@ $(function() {
     });
 
     var App = new AppView;
+
+    $(window).on('resize', function() {
+        resize_modal('#edit_modal');
+    });
 });
 
 function manageModuleDisplay(module) {

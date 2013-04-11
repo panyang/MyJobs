@@ -222,3 +222,26 @@ function clearForm(form) {
             this.selectedIndex = -1;
     });
 };
+
+function resize_modal(modal) {
+    var max_height, margin_top, width, margin_left;
+    max_height = $(window).height();
+    width = $(window).width();
+    if (!is_mobile()) {
+        max_height = max_height * 0.8;
+        width = width * 0.6;
+    }
+    margin_top = -(max_height/2);
+    margin_left = -(width/2);
+    $(modal).css({
+        'max-height': max_height.toFixed(0) + 'px',
+        'margin-top': margin_top.toFixed(0) + 'px',
+        'width': width.toFixed(0) + 'px',
+        'margin-left': margin_left.toFixed(0) + 'px',
+    });
+//    return [max_height, margin_top, width, margin_left];
+}
+
+function is_mobile() {
+    return $(window).width() <= 500;
+}

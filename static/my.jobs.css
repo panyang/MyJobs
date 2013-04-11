@@ -630,6 +630,33 @@ em.pendingText{
     .modal {
         bottom: 0px;
     }
+
+    #moduleColumn #id_name-primary,
+    #moduleColumn #id_employmenthistory-current_indicator {
+        display: block;
+        margin-right: 5px;
+    }
+
+    #moduleColumn label[for=id_name-primary],
+    #moduleColumn label[for=id_employmenthistory-current_indicator] {
+        padding-left: 20px;
+    }
+
+    #moduleColumn + .span4 #moduleBank {
+        margin-top: 20px;
+    }
+
+    body.modal-open {
+        overflow: hidden;
+    }
+
+    .modal {
+        overflow-y: scroll;
+    }
+
+    #profileTitleBar {
+        overflow-x: hidden;
+    }
 }
 
 table td, table th{
@@ -739,10 +766,6 @@ table td, table th{
     display: inline-block;
     margin-right: 5px;
     margin-top: 3px !important;
-}
-
-#new_modal .modal-body {
-    max-height: 50%;
 }
 
 .formBox.span7 {
