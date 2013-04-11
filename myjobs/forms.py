@@ -43,29 +43,42 @@ class BaseUserForm(forms.ModelForm):
         return instance.save()
     
 
-class EditProfileForm(forms.Form):
-    """
-    This will get deprecated anyway, no need to change it to new format
-    """
+class EditAccountForm(forms.Form):
     given_name = forms.CharField(label=_("First Name"), 
-                                 max_length=40)
+                                 max_length=40, required=False)
     family_name = forms.CharField(label=_("Last Name"),
-                                max_length=40)
+                                max_length=40, required=False)
     gravatar = forms.EmailField(label=_("Gravatar Email"))
     opt_in_myjobs = forms.BooleanField(label=_("Receive messages from my.jobs"),
                                        required=False)
+
+    def clean(self):
+        first = self.cleaned_data.get("given_name", None)
+        last = self.cleaned_data.get("family_name", None)
+
+        # Exclusive or. These fields must either both exist or not at all
+        if bool(first) != bool(last):
+            raise ValidationError(_("You must enter both a first and last name."))
+        else:
+            return self.cleaned_data
+
     def save(self,u):
-        first = self.cleaned_data['given_name']
-        last = self.cleaned_data['family_name']
+        first = self.cleaned_data.get("given_name", None)
+        last = self.cleaned_data.get("family_name", None)
+
         try:
             obj = Name.objects.get(user=u, primary=True)
-            obj.given_name = first
-            obj.family_name = last
-            obj.save()
+            if not first and not last:
+                obj.delete()
+            else:
+                obj.given_name = first
+                obj.family_name = last
+                obj.save()
         except Name.DoesNotExist:
-            obj = Name(user=u, primary=True, given_name=first,family_name=last)
+            obj = Name(user=u, primary=True, given_name=first,
+                       family_name=last)
             obj.save()
-            
+
         u.opt_in_myjobs = self.cleaned_data["opt_in_myjobs"]
         u.gravatar = self.cleaned_data["gravatar"]
         u.save()
@@ -105,5 +118,3 @@ class ChangePasswordForm(forms.Form):
     def save(self):
         self.user.set_password(self.cleaned_data["new_password"])
         self.user.save()
-        
-        
