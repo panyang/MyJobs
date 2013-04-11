@@ -9,7 +9,7 @@ body{
     padding: 50px;
 }
 #titleRow {
-    background-image:url(/files/static/images/homepage_bg.png);
+    background-image:url('/files/static/images/homepage_bg.png');
     background-repeat:no-repeat;    
     background-position:center top;
     background-color: #FFF;
