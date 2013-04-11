@@ -3,24 +3,27 @@ from datetime import datetime
 from itertools import chain
 
 from django.contrib.auth import authenticate, login
-from django.contrib.auth.decorators import login_required
+from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponse
 from django.template import RequestContext, loader
 from django.shortcuts import render_to_response, get_object_or_404
 
+from myjobs.models import User
 from mysearches.models import SavedSearch, SavedSearchDigest
 from mysearches.forms import SavedSearchForm, DigestForm
 from mysearches.helpers import *
 
-@login_required
+@user_passes_test(User.objects.is_active)
+@user_passes_test(User.objects.not_disabled)
 def delete_saved_search(request,search_id):
     saved_search = SavedSearch.objects.get(id=search_id)
     if request.user == saved_search.user:
         saved_search.delete()
     return  HttpResponseRedirect('/saved-search')
         
-@login_required
+@user_passes_test(User.objects.is_active)
+@user_passes_test(User.objects.not_disabled)
 def saved_search_main(request):
     # instantiate the form if the digest object exists
     try:
@@ -35,7 +38,8 @@ def saved_search_main(request):
                                'form':form, 'add_form': add_form},
                               RequestContext(request))
 
-@login_required
+@user_passes_test(User.objects.is_active)
+@user_passes_test(User.objects.not_disabled)
 def view_full_feed(request, search_id):
     saved_search = SavedSearch.objects.get(id=search_id)
     if request.user == saved_search.user:
@@ -54,6 +58,8 @@ def view_full_feed(request, search_id):
     else:
         return HttpResponseRedirect('/saved-search')
 
+@user_passes_test(User.objects.is_active)
+@user_passes_test(User.objects.not_disabled)
 def more_feed_results(request):
     # Ajax request comes from the view_full_feed view when user scrolls to
     # bottom of the page
@@ -63,7 +69,8 @@ def more_feed_results(request):
         return render_to_response('mysearches/feed_page.html',
                                   {'items':items}, RequestContext(request))
 
-@login_required
+@user_passes_test(User.objects.is_active)
+@user_passes_test(User.objects.not_disabled)
 def validate_url(request):
     if request.is_ajax():
         feed_title, rss_url = validate_dotjobs_url(request.POST['url'])
@@ -78,7 +85,8 @@ def validate_url(request):
             data = {'url_status': 'not valid'}
         return HttpResponse(json.dumps(data))
 
-@login_required
+@user_passes_test(User.objects.is_active)
+@user_passes_test(User.objects.not_disabled)
 def save_digest_form(request):
     if request.is_ajax():
         try:
@@ -94,7 +102,8 @@ def save_digest_form(request):
             data = "failure"
         return HttpResponse(data)
 
-@login_required
+@user_passes_test(User.objects.is_active)
+@user_passes_test(User.objects.not_disabled)
 def delete_digest_form(request):
     if request.is_ajax():
         try:
@@ -103,7 +112,9 @@ def delete_digest_form(request):
             pass
         return HttpResponse('success')
 
-@login_required
+
+@user_passes_test(User.objects.is_active)
+@user_passes_test(User.objects.not_disabled)
 def save_new_search_form(request):
     if request.is_ajax():
         add_form = SavedSearchForm(user=request.user, data=request.POST)
@@ -113,7 +124,8 @@ def save_new_search_form(request):
         else:
             return HttpResponse(json.dumps(add_form.errors.keys()))
 
-@login_required
+@user_passes_test(User.objects.is_active)
+@user_passes_test(User.objects.not_disabled)
 def get_edit_template(request):
     if request.is_ajax():
         search_id = request.POST.get('search_id')
@@ -127,7 +139,8 @@ def get_edit_template(request):
                                   {'form':form, 'search_id':search_id},
                                   RequestContext(request))
 
-@login_required
+@user_passes_test(User.objects.is_active)
+@user_passes_test(User.objects.not_disabled)
 def save_edit_form(request):
     if request.is_ajax():
         search_id = request.POST.get('search_id')

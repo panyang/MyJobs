@@ -1,7 +1,7 @@
 import datetime
 import urllib, hashlib
 
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, _user_has_perm
 from django.core.mail import send_mail
 from django.db import models
 from django.db.models.signals import post_save
@@ -71,7 +71,23 @@ class CustomUserManager(BaseUserManager):
         u.save(using=self._db)
         return u
 
+    def not_disabled(self, user):
+        """
+        Used by the user_passes_test decorator to set view permissions.
+        The user_passes_test method, passes in the user from the request,
+        and gives permission to access the view if the value returned is true.
+        This returns true as long as the user hasn't disabled their account.
+        """
         
+        return not user.is_disabled
+
+    def is_active(self, user):
+        """
+        Used by the user_passes_test decorator to set view permissions
+        """
+
+        return user.is_active
+
 # New in Django 1.5. This is now the default auth user table. 
 class User(AbstractBaseUser):
     email = models.EmailField(verbose_name=_("email address"),
@@ -167,3 +183,4 @@ class User(AbstractBaseUser):
         
         custom_signals.user_disabled.send(sender=self, user=self,
                                           email=self.email)
+
