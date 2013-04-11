@@ -150,12 +150,12 @@ def edit_basic(request):
         initial_dict.update(model_to_dict(name_obj))
     
     if request.method == "POST":
-        form = EditProfileForm(request.POST)
+        form = EditAccountForm(request.POST)
         if form.is_valid():
             form.save(request.user)
             return HttpResponseRedirect('?saved=success')
     else:
-        form = EditProfileForm(initial=initial_dict)
+        form = EditAccountForm(initial=initial_dict)
     
     # Check for the saved query parameter. This powers a save alert on the
     # screen after redirecting.
