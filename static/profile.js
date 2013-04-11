@@ -75,7 +75,7 @@ $(function() {
                 // Since nothing has changed, the item needs to be re-shown
                 $('#'+module+'-'+item_id+'-item').show();
             } else {
-                showModuleBank(module);
+                manageModuleDisplay(module);
             }
         },
 
@@ -205,7 +205,7 @@ $(function() {
                 data: {'module':module, 'id':id, csrfmiddlewaretoken: csrf_token},
                 success: function(data) {
                     item.remove();
-                    showModuleBank(module);
+                    manageModuleDisplay(module);
                 }
             });
         },
@@ -214,11 +214,12 @@ $(function() {
     var App = new AppView;
 });
 
-function showModuleBank(module) {
+function manageModuleDisplay(module) {
     var target = $('#'+module+'_items');
     if (target.find('table tr').length <= 1) {
         // The last item in a module section was deleted or the add operation was canceled
 
+        // The module section's h4 element contains the correct verbose name for each module
         var parent_name = target.find('h4').text();
 
         // Remove the empty section
