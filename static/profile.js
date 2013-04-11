@@ -45,6 +45,7 @@ $(function() {
                     if ($('#moduleBank').find('tr').length == 0) {
                         $('#moduleBank').hide();
                     }
+                    data = $(data).hide();
                     $('#moduleColumn').append(data);
                     module_elem = $('#'+module+'_items');
                     module_elem.find('[id$="add"]').click();
@@ -80,6 +81,8 @@ $(function() {
                 // When "Edit" was clicked, the relevant item was hidden
                 // Since nothing has changed, the item needs to be re-shown
                 $('#'+module+'-'+item_id+'-item').show();
+            } else {
+                showModuleBank(module);
             }
         },
 
@@ -103,7 +106,6 @@ $(function() {
             }
 
             // targets the "Add Another" button for the current module section
-            var button = $(e.target).parents('.formBox').children('button[id$="add"]')
             $.ajax({
                 url: '/profile/form/',
                 data: {'module':module, 'id':id},
@@ -111,7 +113,9 @@ $(function() {
                     if (item) {
                         item.hide();
                     }
-                    button.before(data);
+                    data = $(data).addClass('row');
+                    data = data.hide();
+                    $('#moduleColumn').after(data);
                     $('#edit_modal').modal();
                     datepicker();
                 }
@@ -134,7 +138,7 @@ $(function() {
             var form = $('#edit_modal form');
 
             // targets the item table in the current module section
-            var table = $(e.target).parents('.formBox').children('table')
+            var table = $('#'+module+'_items').children('table')
 
             csrf_token_tag = document.getElementsByName('csrfmiddlewaretoken')[0];
             var csrf_token = "";
@@ -159,14 +163,15 @@ $(function() {
                     if (data.indexOf('<td>') >= 0) {
                         // form was valid; data should be appended to the table
                         if (first_instance) {
-                            $(e.target).parents('.formBox').children('h4').after(
+                            $('#'+module+'_items').children('h4').after(
                                 '<table class="table table-bordered table-striped"></table>'
                             );
-                            table = $(e.target).parents('.formBox').children('table')
+                            table = $('#'+module+'_items').children('table')
                         }
                         table.append(data);
                         $('#'+module+'-'+item_id+'-item').remove();
                         $('#edit_modal').modal('hide');
+                        $('#'+module+'_items').show();
                     } else {
                         // form was a json-encoded list of errors
                         var json = jQuery.parseJSON(data);
@@ -206,23 +211,8 @@ $(function() {
                 url: '/profile/delete/',
                 data: {'module':module, 'id':id, csrfmiddlewaretoken: csrf_token},
                 success: function(data) {
-                    parent = item.parents("table");
                     item.remove();
-                    if (parent.find("tr").length <=1 ){
-                        // The last item in a module section was deleted
-
-                        // id is formatted [module_type]-items
-                        parent_name = parent.parents(".formBox").attr("id").split("_")[0];
-
-                        // Remove the empty section
-                        parent.parents(".formBox").remove();
-
-                        // Replace the button within the moduleBank table and show the moduleBank
-                        $("#moduleBank table").append(
-                            "<tr class='profile_section'><td><a id='"+parent_name+"-section' href=''>"+parent_name+"</a></td></tr>"
-                        );
-                        $("#moduleBank").show();
-                    }
+                    showModuleBank(module);
                 }
             });
         },
@@ -230,6 +220,25 @@ $(function() {
 
     var App = new AppView;
 });
+
+function showModuleBank(module) {
+    var target = $('#'+module+'_items');
+    if (target.find('table tr').length <= 1) {
+        // The last item in a module section was deleted or the add operation was canceled
+
+        // id is formatted [module_type]_items
+        var parent_name = target.find('h4').text();
+
+        // Remove the empty section
+        target.remove();
+
+        // Replace the button within the moduleBank table and display the moduleBank
+        $("#moduleBank table").append(
+            "<tr class='profile_section'><td><a id='"+module+"-section' href=''>"+parent_name+"</a></td></tr>"
+        );
+        $("#moduleBank").show();
+    }
+}
 
 function datepicker() {
     $(function() {
