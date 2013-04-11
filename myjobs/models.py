@@ -73,7 +73,10 @@ class CustomUserManager(BaseUserManager):
 
     def not_disabled(self, user):
         """
-        Used by the user_passes_test decorator to set view permissions
+        Used by the user_passes_test decorator to set view permissions.
+        The user_passes_test method, passes in the user from the request,
+        and gives permission to access the view if the value returned is true.
+        This returns true as long as the user hasn't disabled their account.
         """
         
         return not user.is_disabled
