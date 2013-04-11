@@ -30,7 +30,7 @@
                         {% endif %}
                         {% if not user.is_active %}
                         <div class="alert-message info">
-                          <p>{% trans "Your account doesn't have full access to MyJobs features! Please activate it using the activation link sent to your email. "%} <a href="{% url 'resend_activation' %}">Didn't get an email?</a></p>
+                          <p>{% trans "Your account doesn't have full access to MyJobs features! Please activate it using the activation link sent to your email. "%} <a href="{% url 'resend_activation' %}">{% trans "Resend my activation email." %}</a></p>
                         </div>
                         {% endif %}
                         <a class="btn primary" href="{% url 'auth_logout' %}">Log Out</a></center>
