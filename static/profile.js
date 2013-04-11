@@ -12,12 +12,10 @@ $(function() {
             "click [id$='edit']": "editForm",
             // targets "Edit" buttons for individual modules
 
-            "click [id$='cancel']": "cancelForm",
-            // targets "Cancel" button in the modal window
-
             "hidden #edit_modal": "cancelForm",
-            // targets event fired when #edit_modal is closed by means other
-            // than the cancel button
+            // targets event fired when #edit_modal is closed
+            // includes clicking any of the modal close buttons, pressing Esc,
+            // and clicking on the dark modal background
 
             "click [id$='save']": "saveForm",
             // targets "Save" button  in the modal window
@@ -57,19 +55,14 @@ $(function() {
         Returns document to the state it was in prior to opening the form modal
         Called on "Cancel" button click or closure of the modal window
 
-        :e: "Cancel" button within a modal or the modal itself
+        :e: new/edit module modal window
         */
         cancelForm: function(e) {
             e.preventDefault();
 
-            var target;
-            if (e.target.tagName.toLowerCase() == 'a') {
-                // e is the modal cancel button; target it
-                target = $(e.target)
-            } else {
-                // e is the modal itself; target its cancel button instead
-                target = $(e.target).find('a[id$="cancel"]');
-            }
+            // targets the cancel button located within the modal window
+            var target = $(e.target).find('a[id$="cancel"]');
+
             // id is formatted [module_type]-[item_id]-[event]
             var module = target.attr('id').split('-')[0];
             var item_id = target.attr('id').split('-')[1];
@@ -82,7 +75,7 @@ $(function() {
                 // Since nothing has changed, the item needs to be re-shown
                 $('#'+module+'-'+item_id+'-item').show();
             } else {
-                showModuleBank(module);
+                manageModuleDisplay(module);
             }
         },
 
@@ -113,9 +106,9 @@ $(function() {
                     if (item) {
                         item.hide();
                     }
-                    data = $(data).addClass('row');
-                    data = data.hide();
-                    $('#moduleColumn').after(data);
+//                    data = $(data).addClass('row');
+                    data = $(data).hide();
+                    $('#moduleColumn').append(data);
                     $('#edit_modal').modal();
                     datepicker();
                 }
@@ -212,7 +205,7 @@ $(function() {
                 data: {'module':module, 'id':id, csrfmiddlewaretoken: csrf_token},
                 success: function(data) {
                     item.remove();
-                    showModuleBank(module);
+                    manageModuleDisplay(module);
                 }
             });
         },
@@ -221,12 +214,12 @@ $(function() {
     var App = new AppView;
 });
 
-function showModuleBank(module) {
+function manageModuleDisplay(module) {
     var target = $('#'+module+'_items');
     if (target.find('table tr').length <= 1) {
         // The last item in a module section was deleted or the add operation was canceled
 
-        // id is formatted [module_type]_items
+        // The module section's h4 element contains the correct verbose name for each module
         var parent_name = target.find('h4').text();
 
         // Remove the empty section
