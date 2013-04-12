@@ -99,7 +99,6 @@ ul.ui-autocomplete{
     padding-top: 13px;
     font-weight: bold;
     }
-
 /*Content Box Styles*/
 .loginBox, .formBox{    
     background-color: #574e44;
@@ -291,11 +290,6 @@ ul.ui-autocomplete{
     }
 select{
     width: auto;
-}
-/*Modal box overrides*/
-.modal-body{
-    height: auto;
-    max-height: 75%;
 }
 /*Alert and text styls*/
 .pendingText{
@@ -634,8 +628,23 @@ em.pendingText{
         background-color: #fff;
     }
 
-    .modal {
-        bottom: 0px;
+    #moduleColumn #id_name-primary,
+    #moduleColumn #id_employmenthistory-current_indicator {
+        display: block;
+        margin-right: 5px;
+    }
+
+    #moduleColumn label[for=id_name-primary],
+    #moduleColumn label[for=id_employmenthistory-current_indicator] {
+        padding-left: 20px;
+    }
+
+    #moduleColumn + .span4 #moduleBank {
+        margin-top: 20px;
+    }
+
+    #profileTitleBar {
+        overflow-x: hidden;
     }
 }
 
@@ -748,10 +757,6 @@ table td, table th{
     margin-top: 3px !important;
 }
 
-#new_modal .modal-body {
-    max-height: 50%;
-}
-
 .formBox.span7 {
     margin-top: 20px;
     float: none;
@@ -768,4 +773,8 @@ table td, table th{
 
 [class^="icon-"], [class*=" icon-"] {
     background-image: url("/files/static/images/glyphicons-halflings.png");
+}
+
+body.modal-open {
+    overflow: hidden;
 }

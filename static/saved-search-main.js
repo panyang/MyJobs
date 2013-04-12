@@ -33,9 +33,6 @@ $(function() {
                     enable_fields(that);
                     date_select(that);
                     resize_modal('#edit_modal');
-                    $('#edit_modal').on('resize', function() {
-                        resize_modal('#edit_modal');
-                    });
                     add_refresh_btn(that);
                     $('#edit_modal').modal();
                 }
@@ -278,29 +275,6 @@ function add_valid_label(that) {
     that.find('[id$="url"]').after('<div class="clear"></div>');
     that.find('[id$="frequency"]').next('.clear').remove();
     that.find('[id$="day_of_month"]').next('.clear').remove();
-}
-
-function resize_modal(modal) {
-    var max_height, margin_top, width, margin_left;
-    max_height = $(window).height();
-    width = $(window).width();
-    if (!is_mobile()) {
-        max_height = max_height * 0.8;
-        width = width * 0.6;
-    }
-    margin_top = -(max_height/2);
-    margin_left = -(width/2);
-    $(modal).css({
-        'max-height': max_height.toFixed(0) + 'px',
-        'margin-top': margin_top.toFixed(0) + 'px',
-        'width': width.toFixed(0) + 'px',
-        'margin-left': margin_left.toFixed(0) + 'px',
-    });
-    return [max_height, margin_top, width, margin_left];
-}
-
-function is_mobile() {
-    return $(window).width() <= 500;
 }
 
 function disable_fields(that) {
