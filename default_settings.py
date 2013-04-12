@@ -88,7 +88,7 @@ CELERYBEAT_SCHEDULE = {
         'schedule': crontab(minute=0,hour=16),
     },
 }
-)
+
 
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.auth.context_processors.auth',
