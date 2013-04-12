@@ -224,24 +224,35 @@ function clearForm(form) {
 };
 
 function resize_modal(modal) {
-    var max_height, margin_top, width, margin_left;
-    max_height = $(window).height();
-    width = $(window).width();
-    if (!is_mobile()) {
-        max_height = max_height * 0.8;
-        width = width * 0.6;
-    }
-    margin_top = -(max_height/2);
-    margin_left = -(width/2);
-    $(modal).css({
-        'max-height': max_height.toFixed(0) + 'px',
-        'margin-top': margin_top.toFixed(0) + 'px',
-        'width': width.toFixed(0) + 'px',
-        'margin-left': margin_left.toFixed(0) + 'px',
-    });
-//    return [max_height, margin_top, width, margin_left];
-}
+    var window_width = $(window).width();
+    var window_height = $(window).height();
+    var top_, bottom, left, right;
+    var height, max_height;
 
-function is_mobile() {
-    return $(window).width() <= 500;
+    if (window_width <= 500) {
+        left = right = '1%';
+        top_ = bottom = '1%';
+    } else {
+        left = right = '150px';
+        top_ = '50px';
+        bottom = '100px';
+    }
+
+    max_height = window_height - 270;
+
+    height = window_height - 300;
+
+    $(modal).css({ 'top': top_,
+                   bottom: bottom,
+                   left: left,
+                   right: right,
+                   margin: 0,
+                   position: 'fixed',
+                   width: 'auto',
+    });
+
+    $(modal).find('.modal-body').css({ 'overflow-y': 'auto',
+                                       height: height,
+                                       'max-height': max_height,
+    });
 }
