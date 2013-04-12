@@ -87,6 +87,7 @@ CELERYBEAT_SCHEDULE = {
         'task': 'tasks.send_search_digests',
         'schedule': crontab(minute=0,hour=16),
     },
+}
 )
 
 TEMPLATE_CONTEXT_PROCESSORS = (
@@ -116,7 +117,7 @@ INSTALLED_APPS = (
     'django_jenkins',
     'widget_tweaks',
     'south',
-    'django_nose',
+    'django_nose'
 )
 
 # Add all MyJobs apps here. This separation ensures that automated Jenkins tests
