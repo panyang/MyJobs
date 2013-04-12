@@ -229,7 +229,7 @@ function resize_modal(modal) {
     var top_, bottom, left, right;
     var height, max_height;
 
-    if (window_width <= 500) {
+    if (window_width <= 1024) {
         left = right = '1%';
         top_ = bottom = '1%';
     } else {
