@@ -80,13 +80,14 @@ TEMPLATE_DIRS = (
 
 
 CELERY_IMPORTS = ('MyJobs.tasks',)
-CELERY_TIMEZONE='EST'
+CELERY_TIMEZONE = 'US/Eastern'
+CELERYBEAT_PIDFILE = '/var/run/celerybeat.pid'
 CELERYBEAT_SCHEDULE = {
     'daily-search-digest': {
         'task': 'tasks.send_search_digests',
         'schedule': crontab(minute=0,hour=16),
     },
-}
+)
 
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.auth.context_processors.auth',
@@ -116,7 +117,6 @@ INSTALLED_APPS = (
     'widget_tweaks',
     'south',
     'django_nose',
-    'django_qunit'
 )
 
 # Add all MyJobs apps here. This separation ensures that automated Jenkins tests
@@ -131,8 +131,6 @@ JENKINS_TASKS = (
     'django_jenkins.tasks.django_tests',
     'django_jenkins.tasks.run_pyflakes',
 )
-
-QUNIT_TEST_DIRECTORY = os.path.join(PROJ_ROOT, 'static/tests')
 
 # Registration
 ACCOUNT_ACTIVATION_DAYS = 14  
