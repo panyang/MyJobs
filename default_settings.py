@@ -115,7 +115,8 @@ INSTALLED_APPS = (
     'django_jenkins',
     'widget_tweaks',
     'south',
-    'django_nose'
+    'django_nose',
+    'django_qunit'
 )
 
 # Add all MyJobs apps here. This separation ensures that automated Jenkins tests
@@ -130,6 +131,8 @@ JENKINS_TASKS = (
     'django_jenkins.tasks.django_tests',
     'django_jenkins.tasks.run_pyflakes',
 )
+
+QUNIT_TEST_DIRECTORY = os.path.join(PROJ_ROOT, 'static/tests')
 
 # Registration
 ACCOUNT_ACTIVATION_DAYS = 14  
