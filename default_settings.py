@@ -80,13 +80,15 @@ TEMPLATE_DIRS = (
 
 
 CELERY_IMPORTS = ('MyJobs.tasks',)
-CELERY_TIMEZONE='EST'
+CELERY_TIMEZONE = 'US/Eastern'
+CELERYBEAT_PIDFILE = '/var/run/celerybeat.pid'
 CELERYBEAT_SCHEDULE = {
     'daily-search-digest': {
         'task': 'tasks.send_search_digests',
         'schedule': crontab(minute=0,hour=16),
     },
 }
+
 
 TEMPLATE_CONTEXT_PROCESSORS = (
     'django.contrib.auth.context_processors.auth',
