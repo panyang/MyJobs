@@ -1,3 +1,4 @@
+import datetime
 import json
 import logging
 
@@ -9,14 +10,17 @@ from django.forms.models import model_to_dict
 from django.http import HttpResponseRedirect, HttpResponse
 from django.template import RequestContext
 from django.shortcuts import render_to_response, get_object_or_404
+from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
 
 from myjobs.models import User
 from myjobs.forms import *
 from myjobs.helpers import *
 from myprofile.forms import *
+from myprofile.models import EmailLog
 from registration.forms import *
 
+from django.contrib.auth.decorators import login_required, user_passes_test
 
 
 logger = logging.getLogger('__name__')
@@ -247,3 +251,31 @@ def error(request):
         'messages': messages
         }
     return render_to_response('error.html', ctx, RequestContext(request))
+
+@csrf_exempt
+def batch_message_digest(request):
+    """
+    Used by SendGrid to POST batch events.
+
+    Accepts a POST request containing a batch of events from SendGrid. A batch
+    of events is a series of JSON strings separated by new lines.
+    """
+    events = request.POST.get('raw_post_data')
+    event_list = []
+    try:
+        # Handles both a lack of submitted data and
+        # the submission of invalid data
+        events = events.splitlines()
+        for event_str in events:
+            event_list.append(json.loads(event_str))
+    except:
+        return HttpResponse(status=500)
+    for event in event_list:
+        received = event['timestamp']
+        EmailLog(email=event['email'], event=event['event'],
+                 received=datetime.datetime.fromtimestamp(
+                     float(event['timestamp'])
+                 )
+        ).save()
+    return HttpResponse(status=200)
+

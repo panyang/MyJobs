@@ -1,4 +1,4 @@
-{{ if saved_searches }}
+{% if saved_searches %}
 {% for saved_search in saved_searches %}
 <h2>{{ saved_search.label }}</h2>
 {% for item in saved_search.get_feed_items %}

@@ -1,4 +1,6 @@
 from importlib import import_module
+from datetime import timedelta
+import time
 
 from django.conf import settings
 from django.contrib.auth import login
@@ -57,6 +59,7 @@ class MyJobsViewsTests(TestCase):
         self.user = UserFactory()
         self.client = TestClient()
         self.client.login_user(self.user)
+        self.events = ['open', 'delivered', 'click']
         
     def test_edit_account_success(self):
         resp = self.client.post(reverse('edit_basic'),
@@ -194,3 +197,56 @@ class MyJobsViewsTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'about.html')
 
+    def test_batch_message_digest(self):
+        """
+        POSTing correct data to this view should result in new EmailLog
+        instances being created.
+        """
+        def make_message_and_get_response(msg_time):
+            message = '{{"email":"alice@example.com","timestamp":"{0}","event":"{1}"}}'
+            messages = ''
+            for event in self.events:
+                if event != 'open':
+                    # The only sources I could find suggest SendGrid uses CRLF
+                    # endings.
+                    messages += '\r\n'
+                messages += message.format(time.mktime(msg_time.timetuple()),
+                                           event)
+            response = self.client.post(reverse('batch_message_digest'),
+                                        data={'raw_post_data':messages})
+            return response
+
+        # Submit a batch of three events created recently
+        now = datetime.datetime.now()
+        response = make_message_and_get_response(now)
+        self.assertTrue(response.status_code, 200)
+        self.assertEqual(EmailLog.objects.count(), 3)
+
+        for log in EmailLog.objects.all():
+            self.assertTrue(log.event in self.events)
+
+        # Submit a batch of events created a month ago
+        month_ago = now - timedelta(days=30)
+        response = make_message_and_get_response(month_ago)
+        self.assertTrue(response.status_code, 200)
+        self.assertEqual(EmailLog.objects.count(), 6)
+        self.assertEqual(
+            EmailLog.objects.filter(
+                received__range=(now - timedelta(days=30), now)
+            ).count(), 6
+        )
+
+        # Submit a batch of events created a month and a week ago
+        month_and_week_ago = month_ago - timedelta(days=7)
+        response = make_message_and_get_response(month_and_week_ago)
+        self.assertTrue(response.status_code, 200)
+        self.assertEqual(EmailLog.objects.count(), 9)
+        self.assertEqual(
+            EmailLog.objects.filter(
+                received__lte=(now - timedelta(days=37))
+            ).count(), 3
+        )
+
+        response = self.client.post(reverse('batch_message_digest'),
+                                    data={'raw_post_data':'this is invalid'})
+        self.assertEqual(response.status_code, 500)
