@@ -222,3 +222,37 @@ function clearForm(form) {
             this.selectedIndex = -1;
     });
 };
+
+function resize_modal(modal) {
+    var window_width = $(window).width();
+    var window_height = $(window).height();
+    var top_, bottom, left, right;
+    var height, max_height;
+
+    if (window_width <= 1024) {
+        left = right = '1%';
+        top_ = bottom = '1%';
+    } else {
+        left = right = '150px';
+        top_ = '50px';
+        bottom = '100px';
+    }
+
+    max_height = window_height - 270;
+
+    height = window_height - 300;
+
+    $(modal).css({ 'top': top_,
+                   bottom: bottom,
+                   left: left,
+                   right: right,
+                   margin: 0,
+                   position: 'fixed',
+                   width: 'auto',
+    });
+
+    $(modal).find('.modal-body').css({ 'overflow-y': 'auto',
+                                       height: height,
+                                       'max-height': max_height,
+    });
+}
