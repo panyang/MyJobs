@@ -29,10 +29,13 @@ a{
 a:hover{
     color: #a42e14;
     }
-.action th{
+.profile-unit h4 {
+    color: #000;    
+    }
+.action th {
     background-color: #FFF;   
     }
-.profile th{
+.profile th {
     background-color: #FFF;   
     }
 .profile {
@@ -122,6 +125,13 @@ ul.ui-autocomplete{
     }
 
 /*Content Box Styles*/
+.profileBox{    
+    background-color: #f4f1ea;
+    padding: 10px;
+    padding-bottom: 30px;
+    border: 2px solid #574E44;
+    border-radius: 5px;
+    }
 .loginBox{    
     background-color: #574e44;
     padding: 10px;
@@ -134,12 +144,12 @@ ul.ui-autocomplete{
     padding: 10px;
     padding-bottom: 30px;
     border: 2px solid #a3aeb1;
-    border-radius: 5px;
+    border-radius: 5px;    
     }
 .formBox table{
     width: 100%;    
     }
-#titleRow .loginBox{
+#titleRow .loginBox, #titleRow .profileBox{
     margin-top: 105px;   
     }
 .formBox + .formBox{
@@ -164,14 +174,21 @@ ul.ui-autocomplete{
 .loginBox a:hover{
     color: #FFF;
     }
-#account-page-2 .loginBox{
+#account-page-2 .loginBox, #account-page-2 .profileBox{
     padding-left: 0px;
     padding-right: 0px;
     }
 .loginBox + .loginBox{
     margin-top: 20px;
+    border-color: #a3aeb1;
+    } 
+.profileBox + .profileBox{
+    margin-top: 20px;
     border-color: #C44E34;
-    }    
+    }
+.profileBox p{
+    color: #000;    
+    }
 .loginBox p{
     min-height: 36px;
     }
@@ -185,7 +202,7 @@ ul.ui-autocomplete{
     color: #000;
     background: #fff;
 }
-.loginBox input{
+.loginBox input, .profileBox input{
     /*display: block;*/
     padding: 4px 0px;
     text-indent: 4px;
@@ -193,14 +210,14 @@ ul.ui-autocomplete{
 #titleRow input{
     width: 100%;
     }
-.loginBox input[type=checkbox]{
+.loginBox input, .initial-profileBox input[type=checkbox]{
     float: left;
     width: auto;
     }
-#account-page-2 .loginBox input[type=text]{
+#account-page-2 .loginBox input, #account-page-2 .initial-profileBox input[type=text]{
     width: 100%;
     }
-.loginBox input.comboboxWidget,
+.initial-profileBox input.comboboxWidget, .loginBox input.comboboxWidget,
 #account-page-2 .loginBox input.comboboxWidget{
     width: 230px;
     }
@@ -241,7 +258,7 @@ ul.ui-autocomplete{
 
 .profile-unit{
     background: #EFEADE;
-    /*border: 1px solid #ccc;*/
+    border: 1px solid #a3aeb1;
     padding: 10px;
     margin-bottom: 10px;
     -moz-border-radius: 4px;
