@@ -6,7 +6,7 @@
             {% for label,value in module.items.0.get_fields|slice:":4" %}                            
                 <th>{{label}}</th>
             {% endfor %}
-            <td class="action" bgcolor="#FFF"></td>
+            <th class="action"></th>
         </tr>
         {% for item in module.items %}      
         <tr id="{{module.name}}-{{item.id}}-item">

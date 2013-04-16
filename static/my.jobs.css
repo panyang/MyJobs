@@ -29,6 +29,9 @@ a{
 a:hover{
     color: #a42e14;
     }
+.action th{
+    background-color: #FFF;   
+    }
 .profile th{
     background-color: #FFF;   
     }
@@ -573,7 +576,7 @@ em.pendingText{
         margin-bottom: 5px;
     }
 }
-@media screen and (max-width: 500px){    
+@media screen and (max-width: 500px){
     #titleRow{
         margin-top: 0px;
     }
