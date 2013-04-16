@@ -19,7 +19,7 @@ body{
     }
 .section {
     background-color: #FFF;
-    border: 2px solid #333333;
+    border: 1px solid #333333;
     margin-top: 0px;
     margin-bottom: 0px;      
     }    
@@ -29,6 +29,22 @@ a{
 a:hover{
     color: #a42e14;
     }
+
+.profile {
+    border-collapse:collapse; 
+border-color:#FFF; 
+border-style:solid; 
+border-width:2px;
+    }
+.profile td, th {
+    border-color:#FFF; /*grey*/
+border-style:solid; 
+border-width:1px;
+    padding: 5px; 
+    text-align: left;
+    }
+.profile tr:nth-child(even) {background: #eae6de}
+.profile tr:nth-child(odd) {background: #f4f1ea}
 
 /* Form Styles */
 .form-label{
@@ -101,11 +117,18 @@ ul.ui-autocomplete{
     }
 
 /*Content Box Styles*/
-.loginBox, .formBox{    
+.loginBox{    
     background-color: #574e44;
     padding: 10px;
     padding-bottom: 30px;
     border: 2px solid #574E44;
+    border-radius: 5px;
+    }
+.formBox{    
+    background-color: #FFF;
+    padding: 10px;
+    padding-bottom: 30px;
+    border: 2px solid #a3aeb1;
     border-radius: 5px;
     }
 #titleRow .loginBox{
@@ -123,6 +146,9 @@ ul.ui-autocomplete{
     }
 .loginBox, .formBox, .account-box h3 {
     color: #FFF;    
+    }
+.formBox, .account-box h3 {
+    color: #000;    
     }
 .loginBox a{
     color: #FFF;
@@ -543,6 +569,9 @@ em.pendingText{
     }
 }
 @media screen and (max-width: 500px){
+    .profile table, thead, tbody, tfoot, th, td, tr { display:block; }
+    .profile tr + tr { margin-top:1em; }
+    
     #titleRow{
         margin-top: 0px;
     }
