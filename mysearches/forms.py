@@ -1,16 +1,11 @@
 from django.forms import *
 from django.utils.translation import ugettext_lazy as _
 
-from myjobs.forms import BaseUserForm
+from myjobs.forms import BaseUserForm, make_choices
 from mysearches.helpers import *
 from mysearches.models import SavedSearch, SavedSearchDigest
 from myprofile.models import SecondaryEmail
 
-def make_choices(user):
-    choices = [(user.email, user.email)]
-    for email in SecondaryEmail.objects.filter(user=user):
-        choices.append((email.email, email.email))
-    return choices
 
 class SavedSearchForm(BaseUserForm):
     def __init__(self, *args, **kwargs):
