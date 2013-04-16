@@ -95,7 +95,7 @@ def home(request):
             loginform = CustomAuthForm(request.POST)
             if loginform.is_valid():
                 login(request, loginform.get_user())
-                return HttpResponseRedirect('/account')
+                return HttpResponseRedirect('/profile')
                 
         elif request.POST['action'] == "save_profile":
             # rebuild the form object with the post parameter = True            

@@ -103,7 +103,7 @@ function save(csrf_token) {
                     $("#id_address-country_sub_division_code").makeCombobox();        
                     buttons();
                 } else {
-                    window.location = '/account';
+                    window.location = '/profile';
                 }
             }
         });
@@ -120,6 +120,6 @@ function buttons() {
     // skip to profile page on click
     $('button#profile').click(function(e) {
         e.preventDefault();
-        window.location = '/account';
+        window.location = '/profile';
     });
 };
