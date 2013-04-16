@@ -10,7 +10,7 @@ from django.test.client import Client
 from django.test import TestCase
 
 from myjobs.forms import *
-from myjobs.models import User
+from myjobs.models import User, EmailLog
 from myjobs.tests.factories import *
 
 from myprofile.models import *

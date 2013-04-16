@@ -226,20 +226,12 @@ class SecondaryEmail(ProfileUnits):
         else:
             return False
         
-class EmailLog(models.Model):
-    user = models.ForeignKey(User, editable=False, null=True)
-    email = models.EmailField(max_length=254)
-    event = models.CharField(max_length=11)
-    received = models.DateField()
-
 class Profile(models.Model):
     name = models.CharField(max_length=30)
     user = models.ForeignKey(User)
     profile_units = models.ManyToManyField(ProfileUnits)
     display_order = models.CommaSeparatedIntegerField(max_length=255,blank=True,
                                                       null=True)
-    email_log = models.ManyToManyField(EmailLog)
-    last_response = models.DateField(default=datetime.datetime.now, blank=True)
 
     class Meta:
         unique_together = (("name", "user"),)

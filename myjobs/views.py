@@ -13,11 +13,10 @@ from django.shortcuts import render_to_response, get_object_or_404
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
 
-from myjobs.models import User
+from myjobs.models import User, EmailLog
 from myjobs.forms import *
 from myjobs.helpers import *
 from myprofile.forms import *
-from myprofile.models import EmailLog
 from registration.forms import *
 
 from django.contrib.auth.decorators import login_required, user_passes_test
