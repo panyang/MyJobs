@@ -60,4 +60,5 @@ def process_batch_events():
     # These users have not responded in a month and a week. Stop sending email.
     stop_sending = User.objects.filter(last_response__lte=now-timedelta(days=37))
     for user in stop_sending:
-        user.disable()
+        user.opt_in_myjobs = False
+        user.save()

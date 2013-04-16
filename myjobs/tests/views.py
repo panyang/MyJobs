@@ -206,7 +206,8 @@ class MyJobsViewsTests(TestCase):
         instances being created.
         """
         def make_message_and_get_response(msg_time):
-            message = '{{"email":"alice@example.com","timestamp":"{0}","event":"{1}"}}'
+            message = '{{"email":"alice@example.com","timestamp":"{0}",'+\
+                '"event":"{1}"}}'
             messages = ''
             for event in self.events:
                 if event != 'open':
@@ -220,7 +221,9 @@ class MyJobsViewsTests(TestCase):
             return response
 
         # Create activation profile for user; Used when disabling an account
-        custom_signals.create_activation_profile(sender=self, user=self.user, email=self.user.email)
+        custom_signals.create_activation_profile(sender=self,
+                                                 user=self.user,
+                                                 email=self.user.email)
 
         # Submit a batch of three events created recently
         now = date.today()
@@ -259,9 +262,21 @@ class MyJobsViewsTests(TestCase):
         process_batch_events()
 
         user = User.objects.get(pk=self.user.pk)
-        self.assertFalse(user.is_active)
+        self.assertFalse(user.opt_in_myjobs)
 
         # Submit a batch with invalid data
         response = self.client.post(reverse('batch_message_digest'),
                                     data={'raw_post_data':'this is invalid'})
         self.assertEqual(response.status_code, 400)
+
+    def test_continue_sending_mail(self):
+        self.user.last_response = date.today() - timedelta(days=7)
+        self.user.save()
+
+        response = self.client.get(reverse('continue_sending_mail'),
+                                    data={'user': self.user}, follow=True)
+
+        self.assertEqual(self.user.last_response, date.today() - timedelta(days=7))
+        self.assertRedirects(response, '/')
+        user = User.objects.get(pk=self.user.pk)
+        self.assertEqual(user.last_response, date.today())
