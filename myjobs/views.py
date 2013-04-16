@@ -19,8 +19,6 @@ from myjobs.helpers import *
 from myprofile.forms import *
 from registration.forms import *
 
-from django.contrib.auth.decorators import login_required, user_passes_test
-
 
 logger = logging.getLogger('__name__')
 
@@ -268,7 +266,7 @@ def batch_message_digest(request):
         for event_str in events:
             event_list.append(json.loads(event_str))
     except:
-        return HttpResponse(status=500)
+        return HttpResponse(status=400)
     for event in event_list:
         received = event['timestamp']
         EmailLog(email=event['email'], event=event['event'],

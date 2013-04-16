@@ -87,6 +87,10 @@ CELERYBEAT_SCHEDULE = {
         'task': 'tasks.send_search_digests',
         'schedule': crontab(minute=0,hour=16),
     },
+    'daily-batch-processing': {
+        'task': 'tasks.process_batch_events',
+        'schedule': crontab(minute=0, hour=0),
+    },
 }
 
 

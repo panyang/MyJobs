@@ -1,9 +1,10 @@
 from importlib import import_module
-from datetime import timedelta
+from datetime import timedelta, date
 import time
 
 from django.conf import settings
 from django.contrib.auth import login
+from django.core import mail
 from django.core.urlresolvers import reverse
 from django.http import HttpRequest
 from django.test.client import Client
@@ -17,6 +18,8 @@ from myprofile.models import *
 from registration.forms import *
 from registration.models import ActivationProfile
 from registration import signals as custom_signals
+
+from tasks import process_batch_events
 
 class TestClient(Client):
     """
@@ -216,8 +219,11 @@ class MyJobsViewsTests(TestCase):
                                         data={'raw_post_data':messages})
             return response
 
+        # Create activation profile for user; Used when disabling an account
+        custom_signals.create_activation_profile(sender=self, user=self.user, email=self.user.email)
+
         # Submit a batch of three events created recently
-        now = datetime.datetime.now()
+        now = date.today()
         response = make_message_and_get_response(now)
         self.assertTrue(response.status_code, 200)
         self.assertEqual(EmailLog.objects.count(), 3)
@@ -226,6 +232,7 @@ class MyJobsViewsTests(TestCase):
             self.assertTrue(log.event in self.events)
 
         # Submit a batch of events created a month ago
+        # The owners of these addresses should be sent an email
         month_ago = now - timedelta(days=30)
         response = make_message_and_get_response(month_ago)
         self.assertTrue(response.status_code, 200)
@@ -235,8 +242,11 @@ class MyJobsViewsTests(TestCase):
                 received__range=(now - timedelta(days=30), now)
             ).count(), 6
         )
+        process_batch_events()
+        self.assertEqual(len(mail.outbox), 1)
 
         # Submit a batch of events created a month and a week ago
+        # The owners of these addresses should no longer receive email
         month_and_week_ago = month_ago - timedelta(days=7)
         response = make_message_and_get_response(month_and_week_ago)
         self.assertTrue(response.status_code, 200)
@@ -246,7 +256,12 @@ class MyJobsViewsTests(TestCase):
                 received__lte=(now - timedelta(days=37))
             ).count(), 3
         )
+        process_batch_events()
 
+        user = User.objects.get(pk=self.user.pk)
+        self.assertFalse(user.is_active)
+
+        # Submit a batch with invalid data
         response = self.client.post(reverse('batch_message_digest'),
                                     data={'raw_post_data':'this is invalid'})
-        self.assertEqual(response.status_code, 500)
+        self.assertEqual(response.status_code, 400)
