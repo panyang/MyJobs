@@ -573,10 +573,7 @@ em.pendingText{
         margin-bottom: 5px;
     }
 }
-@media screen and (max-width: 500px){
-    .profile table, thead, tbody, tfoot, th, td, tr { display:block; }
-    .profile tr + tr { margin-top:1em; }
-    
+@media screen and (max-width: 500px){    
     #titleRow{
         margin-top: 0px;
     }
