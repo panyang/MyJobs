@@ -34,14 +34,14 @@ a:hover{
     }
 .profile {
     border-collapse:collapse; 
-border-color:#FFF; 
-border-style:solid; 
-border-width:2px;
+    border-color:#FFF; 
+    border-style:solid; 
+    border-width:2px;
     }
 .profile td, th {
     border-color:#FFF; /*grey*/
-border-style:solid; 
-border-width:1px;
+    border-style:solid; 
+    border-width:1px;
     padding: 5px; 
     text-align: left;
     }
@@ -196,7 +196,7 @@ ul.ui-autocomplete{
     }
 #account-page-2 .loginBox input[type=text]{
     width: 100%;
-}
+    }
 .loginBox input.comboboxWidget,
 #account-page-2 .loginBox input.comboboxWidget{
     width: 230px;
@@ -366,17 +366,17 @@ em.pendingText{
     text-decoration: none;
     display: block;
     padding-right: 4px;
-}
+    }
 #nav ul#pop-menu{
-	background:#333;
+    background:#333;
     padding: 0;
     margin: 3px 0 0 -2px;
-	position:absolute;
-	display: none;
-	corner-bottom-left-radius: 4px;
-	corner-bottom-right-radius: 4px;
-	width: 275px;
-}
+    position:absolute;
+    display: none;
+    corner-bottom-left-radius: 4px;
+    corner-bottom-right-radius: 4px;
+    width: 275px;
+    }
 .topbar #nav .arrow{
     float: right;
     display: block;
