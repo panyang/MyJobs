@@ -29,7 +29,9 @@ a{
 a:hover{
     color: #a42e14;
     }
-
+.profile th{
+    background-color: #FFF;   
+    }
 .profile {
     border-collapse:collapse; 
 border-color:#FFF; 
@@ -44,7 +46,7 @@ border-width:1px;
     text-align: left;
     }
 .profile tr:nth-child(even) {background: #eae6de}
-.profile tr:nth-child(odd) {background: #f4f1ea}
+.profile tr:nth-child(odd) {background: #d2cfc7}
 
 /* Form Styles */
 .form-label{
@@ -125,11 +127,14 @@ ul.ui-autocomplete{
     border-radius: 5px;
     }
 .formBox{    
-    background-color: #FFF;
+    background-color: #f4f1ea;
     padding: 10px;
     padding-bottom: 30px;
     border: 2px solid #a3aeb1;
     border-radius: 5px;
+    }
+.formBox table{
+    width: 100%;    
     }
 #titleRow .loginBox{
     margin-top: 105px;   
