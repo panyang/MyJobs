@@ -116,7 +116,11 @@ class MyProfileViewsTests(TestCase):
         resp = self.client.post(reverse('handle_form'),
                                data = {'module': 'Name', 'id': 'new',
                                        'given_name': 'Susy'})
-        self.assertEqual(json.loads(resp.content), ['family_name'])
+        self.assertEqual(json.loads(resp.content),
+            { u'errors':
+                [[u'family_name', [u'This field is required.']]]
+            }
+        )
 
     def test_handle_form_post_existing_valid(self):
         """
@@ -158,3 +162,20 @@ class MyProfileViewsTests(TestCase):
         self.assertTemplateUsed(resp, 'myprofile/profile_section.html')
         self.assertEqual(soup.find('h4').text, 'Employment History')
         self.assertIsNone(soup.find('div',{'class':'item-list'}))
+
+    def test_add_duplicate_primary_email(self):
+        """
+        Attempting to add a secondary email with a value equal to the user's
+        current primary email results in an error.
+
+        Due to how the instance is constructed, this validation is form-level
+        rather than model-level.
+        """
+        resp = self.client.post(reverse('handle_form'),
+                                data = {'module': 'SecondaryEmail',
+                                        'id': 'new',
+                                        'email': self.user.email
+                                })
+        self.assertEqual(json.loads(resp.content), {u'errors':
+            [[u'email', [u'This email is already registered.']]]
+        })

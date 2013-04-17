@@ -1,7 +1,9 @@
 from django.core import mail
-from django.test import TestCase
-from django.core.urlresolvers import reverse
 from django.core.exceptions import MultipleObjectsReturned
+from django.core.urlresolvers import reverse
+from django.db import IntegrityError
+from django.forms import forms
+from django.test import TestCase
 
 from myjobs.models import User
 from myjobs.tests.factories import UserFactory
@@ -116,13 +118,14 @@ class MyProfileTests(TestCase):
         ActivationProfile.objects.activate_user(activation.activation_key)
         secondary_email = SecondaryEmail.objects.get(user=self.user,
                                                      email=secondary_email.email)
+        new_primary = secondary_email.email
         secondary_email.set_as_primary()
 
         with self.assertRaises(SecondaryEmail.DoesNotExist):
             SecondaryEmail.objects.get(email=secondary_email.email)
         old_email = SecondaryEmail.objects.get(email=old_primary)
         self.assertTrue(old_email.verified)
-        user = User.objects.get(email=secondary_email.email)
+        user = User.objects.get(email=new_primary)
 
     def test_unverified_primary_email(self):
         """
@@ -154,8 +157,20 @@ class MyProfileTests(TestCase):
         ActivationProfile.objects.activate_user(activation.activation_key)
         secondary_email = SecondaryEmail.objects.get(user=self.user,
                                                      email=secondary_email.email)
+        new_primary = secondary_email.email
         secondary_email.set_as_primary()
 
         old_email = SecondaryEmail.objects.get(email=old_primary)
         self.assertFalse(old_email.verified)
-        user = User.objects.get(email=secondary_email.email)
+        user = User.objects.get(email=new_primary)
+
+    def test_same_secondary_email(self):
+        """
+        All emails are unique. If an email is used as a user's primary email or
+        another secondary email, it may not be used as a secondary email again.
+        """
+        secondary_email = SecondaryEmailFactory(user=self.user)
+        with self.assertRaises(IntegrityError):
+            new_secondary_email = SecondaryEmailFactory(user=self.user)
+        new_secondary_email = SecondaryEmailFactory(user=self.user,
+            email='email@example.com')
