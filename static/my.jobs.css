@@ -91,6 +91,7 @@ ul.ui-autocomplete{
     text-indent: -9000px;    
     display: block;
     height: 81px;
+    background: transparent url('/files/static/images/mydotjobs_home_logo.png') 65px 3px no-repeat;
     }    
 #subtitle{
     font-size: 1.85em;
