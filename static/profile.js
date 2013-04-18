@@ -111,6 +111,8 @@ $(function() {
                     resize_modal('#edit_modal');
                     $('#edit_modal').modal();
                     datepicker();
+                    $("[id$='-country_code']").makeCombobox();
+                    $("[id$='-country_sub_division_code']").makeCombobox();
                 }
             });            
         },

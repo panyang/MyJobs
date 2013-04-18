@@ -58,11 +58,11 @@ def handle_form(request):
     data_dict = {'module': module_type,'first_instance':first_instance}
 
     if request.method == "POST":
-        if item_id == 'new':            
-            form_instance = form(user=request.user, data=request.POST)
+        if item_id == 'new':
+            form_instance = form(user=request.user, data=request.POST, auto_id=False)
         else:
             obj = model.objects.get(id=item_id)
-            form_instance = form(instance=obj, user=request.user, data=request.POST)
+            form_instance = form(instance=obj, user=request.user, data=request.POST, auto_id=False)
 
         if form_instance.is_valid():
             item = form_instance.save()
@@ -75,11 +75,11 @@ def handle_form(request):
             return HttpResponse(json.dumps(form_instance.errors.keys()))
     else:
         if not item_id or item_id == 'new':
-            form_instance = form()
+            form_instance = form(auto_id=False)
             data_dict['item_id'] = 'new'
         else:
             obj = model.objects.get(id=item_id)
-            form_instance = form(instance=obj)
+            form_instance = form(instance=obj, auto_id=False)
             data_dict['item_id'] = item_id
 
         verbose = re.sub("([a-z])([A-Z])","\g<1> \g<2>",module_type)
