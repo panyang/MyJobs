@@ -8,4 +8,4 @@ class Message(models.Model):
    date_read = models.DateTimeField(null=True)
    recipient = models.ForeignKey(User, editable=False)
    sender = models.CharField(max_length=255, blank=True)
-   priority = models.PositiveIntegerField()
+   priority = models.IntegerField()
