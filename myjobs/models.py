@@ -191,3 +191,4 @@ class EmailLog(models.Model):
     email = models.EmailField(max_length=254)
     event = models.CharField(max_length=11)
     received = models.DateField()
+    processed = models.BooleanField(default=False, blank=True)

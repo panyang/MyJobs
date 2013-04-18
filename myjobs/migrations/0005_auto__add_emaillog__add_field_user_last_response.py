@@ -14,6 +14,7 @@ class Migration(SchemaMigration):
             ('email', self.gf('django.db.models.fields.EmailField')(max_length=254)),
             ('event', self.gf('django.db.models.fields.CharField')(max_length=11)),
             ('received', self.gf('django.db.models.fields.DateField')()),
+            ('processed', self.gf('django.db.models.fields.BooleanField')(default=False)),
         ))
         db.send_create_signal(u'myjobs', ['EmailLog'])
 
@@ -37,6 +38,7 @@ class Migration(SchemaMigration):
             'email': ('django.db.models.fields.EmailField', [], {'max_length': '254'}),
             'event': ('django.db.models.fields.CharField', [], {'max_length': '11'}),
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
+            'processed': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'received': ('django.db.models.fields.DateField', [], {})
         },
         u'myjobs.user': {

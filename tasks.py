@@ -34,8 +34,8 @@ def send_search_digests():
 @task(name='tasks.process_batch_events')
 def process_batch_events():
     now = date.today()
-    EmailLog.objects.filter(received__lte=now-timedelta(days=60)).delete()
-    new_logs = EmailLog.objects.all()#.filter(received__gte=now-timedelta(days=1))
+    EmailLog.objects.filter(received__lte=now-timedelta(days=60), processed=True).delete()
+    new_logs = EmailLog.objects.filter(processed=False)
     for log in new_logs:
         try:
             # Check if this is a user's primary address
@@ -48,6 +48,9 @@ def process_batch_events():
             # interacting with an email and the batch process being run
             # There is no course of action but to ignore that event
             continue
+        finally:
+            log.processed = True
+            log.save()
         user.last_response = log.received
         user.save()
 
