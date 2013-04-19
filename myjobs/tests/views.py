@@ -206,6 +206,7 @@ class MyJobsViewsTests(TestCase):
         POSTing correct data to this view should result in new EmailLog
         instances being created.
         """
+        self.skipTest("Remove this when the digest url is readded")
         def make_message_and_get_response(msg_time):
             message = '{{"email":"alice@example.com","timestamp":"{0}",'+\
                 '"event":"{1}"}}'
@@ -270,6 +271,7 @@ class MyJobsViewsTests(TestCase):
         self.assertFalse(user.opt_in_myjobs)
 
     def test_invalid_batch_post(self):
+        self.skipTest("Remove this when the digest url is readded")
         response = self.client.post(reverse('batch_message_digest'),
                                     data='this is invalid',
                                     content_type="text/json",
@@ -278,6 +280,7 @@ class MyJobsViewsTests(TestCase):
         self.assertEqual(response.status_code, 400)
 
     def test_invalid_user(self):
+        self.skipTest("Remove this when the digest url is readded")
         message = '{{"email":"alice@example.com","timestamp":"{0}",'+\
             '"event":"{1}"}}'
         messages = ''
