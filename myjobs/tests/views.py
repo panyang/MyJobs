@@ -9,6 +9,7 @@ from django.core.urlresolvers import reverse
 from django.http import HttpRequest
 from django.test.client import Client
 from django.test import TestCase
+from django.utils.http import urlquote
 
 from myjobs.forms import *
 from myjobs.models import User, EmailLog
@@ -217,9 +218,13 @@ class MyJobsViewsTests(TestCase):
                 messages += message.format(time.mktime(msg_time.timetuple()),
                                            event)
             response = self.client.post(reverse('batch_message_digest'),
-                                        data={'raw_post_data':messages})
+                                        data=messages.join('\r\n'),
+                                        content_type="text/json",
+                                        HTTP_AUTHORIZATION='BASIC %s:%s'%
+                                            (self.user.email,'secret'))
             return response
 
+        self.client = TestClient()
         # Create activation profile for user; Used when disabling an account
         custom_signals.create_activation_profile(sender=self,
                                                  user=self.user,
@@ -228,7 +233,7 @@ class MyJobsViewsTests(TestCase):
         # Submit a batch of three events created recently
         now = date.today()
         response = make_message_and_get_response(now)
-        self.assertTrue(response.status_code, 200)
+        self.assertEqual(response.status_code, 200)
         self.assertEqual(EmailLog.objects.count(), 3)
 
         for log in EmailLog.objects.all():
@@ -264,10 +269,38 @@ class MyJobsViewsTests(TestCase):
         user = User.objects.get(pk=self.user.pk)
         self.assertFalse(user.opt_in_myjobs)
 
-        # Submit a batch with invalid data
+    def test_invalid_batch_post(self):
         response = self.client.post(reverse('batch_message_digest'),
-                                    data={'raw_post_data':'this is invalid'})
+                                    data='this is invalid',
+                                    content_type="text/json",
+                                    HTTP_AUTHORIZATION='BASIC %s:%s'%
+                                        (self.user.email,'secret'))
         self.assertEqual(response.status_code, 400)
+
+    def test_invalid_user(self):
+        message = '{{"email":"alice@example.com","timestamp":"{0}",'+\
+            '"event":"{1}"}}'
+        messages = ''
+        now = datetime.datetime.now()
+        for event in self.events:
+            if event != 'open':
+                # The only sources I could find suggest SendGrid uses CRLF
+                # endings.
+                messages += '\r\n'
+            messages += message.format(time.mktime(now.timetuple()),
+                                       event)
+
+        response = self.client.post(reverse('batch_message_digest'),
+                                    data=messages.join(''),
+                                    content_type="text/json")
+        self.assertEqual(response.status_code, 403)
+
+        response = self.client.post(reverse('batch_message_digest'),
+                                    data=messages.join(''),
+                                    content_type="text/json",
+                                    HTTP_AUTHORIZATION='BASIC %s:%s'%
+                                        (self.user.email,'wrong_pass'))
+        self.assertEqual(response.status_code, 403)
 
     def test_continue_sending_mail(self):
         self.user.last_response = date.today() - timedelta(days=7)

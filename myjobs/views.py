@@ -257,24 +257,33 @@ def batch_message_digest(request):
     Accepts a POST request containing a batch of events from SendGrid. A batch
     of events is a series of JSON strings separated by new lines.
     """
-    events = request.POST.get('raw_post_data')
-    event_list = []
-    try:
-        # Handles both a lack of submitted data and
-        # the submission of invalid data
-        events = events.splitlines()
-        for event_str in events:
-            event_list.append(json.loads(event_str))
-    except:
-        return HttpResponse(status=400)
-    for event in event_list:
-        received = event['timestamp']
-        EmailLog(email=event['email'], event=event['event'],
-                 received=datetime.datetime.fromtimestamp(
-                     float(event['timestamp'])
-                 )
-        ).save()
-    return HttpResponse(status=200)
+    if 'HTTP_AUTHORIZATION' in request.META:
+        method, details = request.META['HTTP_AUTHORIZATION'].split()
+        if method.lower() == 'basic':
+            login_info = details.split(':')
+            user = authenticate(username=login_info[0], password=login_info[1])
+            if user is not None:
+                events = request.raw_post_data
+                event_list = []
+                try:
+                    # Handles both a lack of submitted data and
+                    # the submission of invalid data
+                    events = events.splitlines()
+                    for event_str in events:
+                        if event_str == '':
+                            continue
+                        event_list.append(json.loads(event_str))
+                except:
+                    return HttpResponse(status=400)
+                for event in event_list:
+                    received = event['timestamp']
+                    EmailLog(email=event['email'], event=event['event'],
+                             received=datetime.datetime.fromtimestamp(
+                                 float(event['timestamp'])
+                             )
+                    ).save()
+                return HttpResponse(status=200)
+    return HttpResponse(status=403)
 
 @user_passes_test(User.objects.not_disabled)
 def continue_sending_mail(request):
