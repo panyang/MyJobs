@@ -65,6 +65,8 @@ class MyJobsViewsTests(TestCase):
         self.client.login_user(self.user)
         self.events = ['open', 'delivered', 'click']
         
+        self.email_user = UserFactory(email='accounts@my.jobs')
+
     def test_edit_account_success(self):
         resp = self.client.post(reverse('edit_basic'),
                                     data={'given_name': 'Alice',
@@ -168,9 +170,9 @@ class MyJobsViewsTests(TestCase):
         """
         Going to the delete_account view removes a user and their date completely
         """
-        self.assertTrue(User.objects.all().exists())
+        self.assertEqual(User.objects.count(), 2)
         resp = self.client.get(reverse('delete_account'), follow=True)
-        self.assertFalse(User.objects.all().exists())
+        self.assertEqual(User.objects.count(), 1)
 
     def test_disable_account(self):
         """
@@ -206,7 +208,6 @@ class MyJobsViewsTests(TestCase):
         POSTing correct data to this view should result in new EmailLog
         instances being created.
         """
-        self.skipTest("Remove this when the digest url is readded")
         def make_message_and_get_response(msg_time):
             message = '{{"email":"alice@example.com","timestamp":"{0}",'+\
                 '"event":"{1}"}}'
@@ -222,7 +223,7 @@ class MyJobsViewsTests(TestCase):
                                         data=messages.join('\r\n'),
                                         content_type="text/json",
                                         HTTP_AUTHORIZATION='BASIC %s:%s'%
-                                            (self.user.email,'secret'))
+                                            ('accounts@my.jobs','secret'))
             return response
 
         self.client = TestClient()
@@ -271,16 +272,14 @@ class MyJobsViewsTests(TestCase):
         self.assertFalse(user.opt_in_myjobs)
 
     def test_invalid_batch_post(self):
-        self.skipTest("Remove this when the digest url is readded")
         response = self.client.post(reverse('batch_message_digest'),
                                     data='this is invalid',
                                     content_type="text/json",
                                     HTTP_AUTHORIZATION='BASIC %s:%s'%
-                                        (self.user.email,'secret'))
+                                        ('accounts@my.jobs','secret'))
         self.assertEqual(response.status_code, 400)
 
     def test_invalid_user(self):
-        self.skipTest("Remove this when the digest url is readded")
         message = '{{"email":"alice@example.com","timestamp":"{0}",'+\
             '"event":"{1}"}}'
         messages = ''
@@ -302,7 +301,7 @@ class MyJobsViewsTests(TestCase):
                                     data=messages.join(''),
                                     content_type="text/json",
                                     HTTP_AUTHORIZATION='BASIC %s:%s'%
-                                        (self.user.email,'wrong_pass'))
+                                        ('does@not.exist','wrong_pass'))
         self.assertEqual(response.status_code, 403)
 
     def test_continue_sending_mail(self):

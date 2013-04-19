@@ -262,7 +262,8 @@ def batch_message_digest(request):
         if method.lower() == 'basic':
             login_info = details.split(':')
             user = authenticate(username=login_info[0], password=login_info[1])
-            if user is not None:
+            target_user = User.objects.get(email='accounts@my.jobs')
+            if user is not None and user == target_user:
                 events = request.raw_post_data
                 event_list = []
                 try:
