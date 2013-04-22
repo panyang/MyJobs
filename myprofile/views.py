@@ -72,7 +72,7 @@ def handle_form(request):
         else:
             data_dict['item_id'] = item_id
             data_dict['form'] = form_instance
-            return HttpResponse(json.dumps(form_instance.errors.keys()))
+            return HttpResponse(json.dumps({'errors': form_instance.errors.items()}))
     else:
         if not item_id or item_id == 'new':
             form_instance = form()
@@ -103,7 +103,7 @@ def delete_item(request):
 def add_section(request):
     module = request.GET.get('module')
     module_config = {}
-    verbose = re.sub("([a-z])([A-Z])","\g<1> \g<2>",module)
+    verbose = re.sub("([a-z])([A-Z])", "\g<1> \g<2>", module)
     module_config['verbose'] = verbose
     module_config['name'] = module
     module_config['items'] = None

@@ -1,11 +1,13 @@
 import datetime
 
 from django.contrib.contenttypes.models import ContentType
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from registration import signals as reg_signals
 from myjobs.models import User
+
 
 class ProfileUnits(models.Model):
     """
@@ -43,7 +45,7 @@ class ProfileUnits(models.Model):
 
 
 class Education(ProfileUnits):
-    EDUCATION_LEVEL_CHOICES = ( 
+    EDUCATION_LEVEL_CHOICES = (
         (3, _('High School')),
         (5, _('Associate')),
         (6, _('Bachelor')),
@@ -76,7 +78,7 @@ class Education(ProfileUnits):
 
     
 class Address(ProfileUnits):
-    label = models.CharField(max_length=60, verbose_name=_('Address Label'))	
+    label = models.CharField(max_length=60, verbose_name=_('Address Label'))
     address_line_one = models.CharField(max_length=255,
                                         verbose_name=_('Street Address'))
     address_line_two = models.CharField(max_length=255, blank=True,null=True,
@@ -107,19 +109,19 @@ class Telephone(ProfileUnits):
     area_dialing = models.IntegerField(max_length=3, verbose_name=_("Area Code")) 
     number = models.CharField(max_length=8, verbose_name=_("Local Number"))
     extension = models.CharField(max_length=5, blank=True, null=True)
-    use_code = models.CharField(max_length=30, choices=USE_CODE_CHOICES, 
-    	     			        verbose_name=_("Phone Type"))
-    
+    use_code = models.CharField(max_length=30, choices=USE_CODE_CHOICES,
+                                verbose_name=_("Phone Type"))
+
     def save(self, *args, **kwargs):
-    	if self.use_code == "Home" or self.use_code == "Work" or self.use_code == "Other":
-    	     self.channel_code = "Telephone"
-    	if self.use_code == "Mobile":
-    	     self.channel_code = "MobileTelephone"
-    	if self.use_code == "Pager":
-    	     self.channel_code = "Pager"
-    	if self.use_code == "Fax":
-    	     self.channel_code = "Fax"
-    	super(Telephone, self).save(*args, **kwargs);
+        if self.use_code == "Home" or self.use_code == "Work" or self.use_code == "Other":
+            self.channel_code = "Telephone"
+        if self.use_code == "Mobile":
+            self.channel_code = "MobileTelephone"
+        if self.use_code == "Pager":
+            self.channel_code = "Pager"
+        if self.use_code == "Fax":
+            self.channel_code = "Fax"
+        super(Telephone, self).save(*args, **kwargs)
 
 
 class EmploymentHistory(ProfileUnits):
@@ -178,7 +180,8 @@ class Name(ProfileUnits):
 
 
 class SecondaryEmail(ProfileUnits):
-    email = models.EmailField(max_length=255)
+    email = models.EmailField(max_length=255, unique=True, error_messages={
+                                'unique':'This email is already registered.'})
     label = models.CharField(max_length=30, blank=True, null=True)
     verified = models.BooleanField(default=False, editable=False)
     verified_date = models.DateTimeField(blank=True, null=True, editable=False)
@@ -190,12 +193,12 @@ class SecondaryEmail(ProfileUnits):
         primary = kwargs.pop('old_primary', None)
         if not self.pk and primary==None:
             reg_signals.email_created.send(sender=self,user=self.user,
-                                              email=self.email)
+                                           email=self.email)
         super(SecondaryEmail,self).save(*args,**kwargs)
             
     def send_activation(self):
         reg_signals.send_activation.send(sender=self,user=self.user,
-                                            email=self.email)
+                                         email=self.email)
 
     def set_as_primary(self):
         """
@@ -215,17 +218,19 @@ class SecondaryEmail(ProfileUnits):
             else:
                 verified=False
 
-            email=SecondaryEmail(email=old_primary,verified=verified,
-                                 user=self.user)
-            email.save(**{'old_primary':True})
-            SecondaryEmail.objects.get(email=new_primary,user=self.user).delete()
+            self.email = ''
             self.user.email = new_primary
             self.user.is_active = self.verified
             self.user.save()
+            SecondaryEmail.objects.get(email=new_primary,user=self.user).delete()
+            email=SecondaryEmail(email=old_primary,verified=verified,
+                                 user=self.user)
+            email.save(**{'old_primary':True})
             return True
         else:
             return False
-        
+
+
 class Profile(models.Model):
     name = models.CharField(max_length=30)
     user = models.ForeignKey(User)

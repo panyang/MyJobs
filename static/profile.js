@@ -166,14 +166,17 @@ $(function() {
                         $('#edit_modal').modal('hide');
                         $('#'+module+'_items').show();
                     } else {
-                        // form was a json-encoded list of errors
+                        // form was a json-encoded list of errors and error messages
                         var json = jQuery.parseJSON(data);
 
                         // remove current errors
                         $('[class*=label-important]').remove();
-                        for (var i=0; i<json.length; i++) {
+                        for (var index in json.errors) {
+                            console.log(json.errors[index])
                             // insert new errors after the relevant inputs
-                            $('[id$="-'+json[i]+'"]').after('<span class="label label-important">Required</span>');
+                            $('[id$="-'+json.errors[index][0]+'"]').after(
+                                '<span class="label label-important">'+
+                                json.errors[index][1]+'</span>');
                         }
                     }
                 }
