@@ -340,9 +340,6 @@ ul.ui-autocomplete{
 .friendlyPhoneForm #use_code_prependLabel{
     display: inline;
     }
-select{
-    /*width: auto;*/
-}
 /*Alert and text styls*/
 .pendingText{
     color: #c44e34;

@@ -7,11 +7,9 @@
     </div>
         <div class="modal-body">
             <form action="" method="post" id="{{module}}-{{item_id}}-form">
-                <div class="formBox row">
-                    <div class="span4">
-                        {% include "includes/form-error-highlight.html" %}
-                        {% csrf_token %}
-                    </div>
+                <div class="formBox">
+                    {% include "includes/form-error-highlight.html" %}
+                    {% csrf_token %}
                 </div>
             </form>
         </div>
