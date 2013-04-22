@@ -22,6 +22,9 @@ $(function() {
 
             "click [id$='delete']": "deleteItem",
             // targets "Delete" buttons for individual modules
+
+            "change [id$='-country_code']": "getSelect",
+            // targets country select boxes
         },
 
         /*
@@ -98,7 +101,6 @@ $(function() {
                 item = $(e.target).parents('tr');
             }
 
-            // targets the "Add Another" button for the current module section
             $.ajax({
                 url: '/profile/form/',
                 data: {'module':module, 'id':id},
@@ -111,15 +113,10 @@ $(function() {
                     resize_modal('#edit_modal');
                     $('#edit_modal').modal();
                     datepicker();
-                    $("[id$='-country_code']").makeCombobox();
-                    $("[id$='-country_sub_division_code']").makeCombobox();
-                    // The region selector does not have a value yet
 
-                    // Hide the selector, its label, and its dropdown
-                    // until a country has been chosen
                     $('[id$="-country_sub_division_code"]').hide();
                     $('label[for$="-country_sub_division_code"]').hide();
-                    $('[id$="-country_sub_division_code"]').next().hide();
+                    $('[id$="-country_code"]').change();
                 }
             });            
         },
@@ -153,7 +150,6 @@ $(function() {
                 first_instance = 1;
             }  
             var serialized_data = form.serialize();
-            console.log(serialized_data)
             serialized_data += '&module=' + module + '&id=' + item_id +
                                '&first_instance=' + first_instance +
                                '&csrfmiddlewaretoken=' + csrf_token;
@@ -224,6 +220,64 @@ $(function() {
                     item.remove();
                     manageModuleDisplay(module);
                 }
+            });
+        },
+
+        /*
+        Gets a list of regions, if any, for a specific country
+        and formats them in a select menu.
+        */
+        getSelect: function() {
+            var country = $('[id$="-country_code"]').val();
+            var elem = $('[id$="-country_sub_division_code"]');
+            var id = elem.attr('id');
+            var name = elem.attr('name');
+            var old_val = elem.val();
+            if (!old_val) {
+                old_val = "";
+            }
+
+            var region_url = "http://js.nlx.org/myjobs/data/";
+            region_url += country.toLowerCase();
+            region_url += "_regions.jsonp";
+
+            $("label[for='"+id+"']").hide();
+            elem.hide();
+
+            $.ajax({
+                url: region_url,
+                dataType: "jsonp",
+                data: {},
+                jsonpCallback: "returnRegionData",
+                success: function(data) {
+                    var opts = "";
+                    for (var i in data.regions) {
+                        item = data.regions[i]
+                        opts_attrs = "value='"+item.code+"'";
+                        if (item.code.toLowerCase() == old_val.toLowerCase() ||
+                                item.code.toLowerCase() == data.default_option.toLowerCase()) {
+                            opts_attrs += " SELECTED";
+                        }
+                        opts += "<option "+opts_attrs+">";
+                        opts += item.name+"</option>";
+                    }
+                    if (typeof(data.friendly_label) != "undefined") {
+                        label = data.friendly_label;
+                    } else {
+                        label = "Region";
+                    }
+                    if (opts != "") {
+                        select = $("<select />", {
+                            id: id,
+                            name: name,
+                        });
+                        select.html(opts);
+                        elem.after(select);
+                        elem.remove();
+                        $("label[for="+id+"]").html(label)
+                        $("label[for="+id+"]").show();
+                    }
+                },
             });
         },
     });

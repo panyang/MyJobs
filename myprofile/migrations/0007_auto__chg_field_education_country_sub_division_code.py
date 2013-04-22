@@ -9,19 +9,13 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
 
-        # Changing field 'Address.country_sub_division_code'
-        db.alter_column(u'myprofile_address', 'country_sub_division_code', self.gf('django.db.models.fields.CharField')(max_length=5, null=True))
-
-        # Changing field 'EmploymentHistory.country_sub_division_code'
-        db.alter_column(u'myprofile_employmenthistory', 'country_sub_division_code', self.gf('django.db.models.fields.CharField')(max_length=5, null=True))
+        # Changing field 'Education.country_sub_division_code'
+        db.alter_column(u'myprofile_education', 'country_sub_division_code', self.gf('django.db.models.fields.CharField')(default='', max_length=5))
 
     def backwards(self, orm):
 
-        # Changing field 'Address.country_sub_division_code'
-        db.alter_column(u'myprofile_address', 'country_sub_division_code', self.gf('django.db.models.fields.CharField')(default='', max_length=5))
-
-        # Changing field 'EmploymentHistory.country_sub_division_code'
-        db.alter_column(u'myprofile_employmenthistory', 'country_sub_division_code', self.gf('django.db.models.fields.CharField')(default='', max_length=5))
+        # Changing field 'Education.country_sub_division_code'
+        db.alter_column(u'myprofile_education', 'country_sub_division_code', self.gf('django.db.models.fields.CharField')(max_length=5, null=True))
 
     models = {
         u'contenttypes.contenttype': {
@@ -51,7 +45,7 @@ class Migration(SchemaMigration):
             'address_line_two': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
             'city_name': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
             'country_code': ('django.db.models.fields.CharField', [], {'max_length': '3'}),
-            'country_sub_division_code': ('django.db.models.fields.CharField', [], {'max_length': '5', 'null': 'True', 'blank': 'True'}),
+            'country_sub_division_code': ('django.db.models.fields.CharField', [], {'max_length': '5', 'blank': 'True'}),
             'label': ('django.db.models.fields.CharField', [], {'max_length': '60'}),
             'post_office_box': ('django.db.models.fields.CharField', [], {'max_length': '60', 'null': 'True', 'blank': 'True'}),
             'postal_code': ('django.db.models.fields.CharField', [], {'max_length': '12'}),
@@ -62,7 +56,7 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'Education', '_ormbases': [u'myprofile.ProfileUnits']},
             'city_name': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
             'country_code': ('django.db.models.fields.CharField', [], {'max_length': '3', 'blank': 'True'}),
-            'country_sub_division_code': ('django.db.models.fields.CharField', [], {'max_length': '5', 'null': 'True', 'blank': 'True'}),
+            'country_sub_division_code': ('django.db.models.fields.CharField', [], {'max_length': '5', 'blank': 'True'}),
             'degree_date': ('django.db.models.fields.DateField', [], {}),
             'degree_major': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
             'degree_minor': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
@@ -78,7 +72,7 @@ class Migration(SchemaMigration):
             'Meta': {'object_name': 'EmploymentHistory', '_ormbases': [u'myprofile.ProfileUnits']},
             'city_name': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
             'country_code': ('django.db.models.fields.CharField', [], {'max_length': '3', 'null': 'True', 'blank': 'True'}),
-            'country_sub_division_code': ('django.db.models.fields.CharField', [], {'max_length': '5', 'null': 'True', 'blank': 'True'}),
+            'country_sub_division_code': ('django.db.models.fields.CharField', [], {'max_length': '5', 'blank': 'True'}),
             'current_indicator': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
             'description': ('django.db.models.fields.TextField', [], {'null': 'True', 'blank': 'True'}),
             'end_date': ('django.db.models.fields.DateField', [], {'null': 'True', 'blank': 'True'}),
