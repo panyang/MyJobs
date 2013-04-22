@@ -235,6 +235,7 @@ $(function() {
             region_url += country.toLowerCase();
             region_url += "_regions.jsonp";
 
+            // Hide region selector and its label in case we receive a 404
             $("label[for='"+id+"']").hide();
             elem.hide();
 
@@ -249,7 +250,9 @@ $(function() {
                         item = data.regions[i]
                         opts_attrs = "value='"+item.code+"'";
                         if (item.code.toLowerCase() == old_val.toLowerCase() ||
-                                item.code.toLowerCase() == data.default_option.toLowerCase()) {
+                            item.code.toLowerCase() == data.default_option.toLowerCase()) {
+                            // This is either the default for a new profile unit
+                            // or the value of a unit being edited
                             opts_attrs += " SELECTED";
                         }
                         opts += "<option "+opts_attrs+">";
