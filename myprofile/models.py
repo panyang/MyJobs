@@ -180,7 +180,8 @@ class Name(ProfileUnits):
 
 
 class SecondaryEmail(ProfileUnits):
-    email = models.EmailField(max_length=255, unique=True, error_messages={'unique':'This email is already registered.'})
+    email = models.EmailField(max_length=255, unique=True, error_messages={
+                                'unique':'This email is already registered.'})
     label = models.CharField(max_length=30, blank=True, null=True)
     verified = models.BooleanField(default=False, editable=False)
     verified_date = models.DateTimeField(blank=True, null=True, editable=False)
