@@ -171,22 +171,16 @@ $(function() {
                         $('#edit_modal').modal('hide');
                         $('#'+module+'_items').show();
                     } else {
-                        // form was a json-encoded list of errors
+                        // form was a json-encoded list of errors and error messages
                         var json = jQuery.parseJSON(data);
 
                         // remove current errors
                         $('[class*=label-important]').remove();
-                        var error = '<span class="label label-important">Required</span>'
-                        for (var i=0; i<json.length; i++) {
-                            elem = $('[id$="-'+json[i]+'"]')
+                        for (var index in json.errors) {
                             // insert new errors after the relevant inputs
-                            if (elem.next().attr('data-for') !== undefined) {
-                                // Element is a jQuery autocomplete;
-                                // insert error after 'show all' button
-                                elem.next().after(error)
-                            } else {
-                                elem.after(error)
-                            }
+                            $('[id$="-'+json.errors[index][0]+'"]').after(
+                                '<span class="label label-important">'+
+                                json.errors[index][1]+'</span>');
                         }
                     }
                 }

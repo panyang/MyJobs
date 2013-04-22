@@ -54,12 +54,19 @@ class SecondaryEmailForm(BaseUserForm):
         model = SecondaryEmail
         widgets = generate_custom_widgets(model)
 
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        user = self.user
+        if email == self.user.email:
+            raise forms.ValidationError('This email is already registered.')
+        return email
+            
 
 class EducationForm(BaseUserForm):
     class Meta:
         form_name = _("Education")
         model = Education
-        widgets = generate_custom_widgets(model)        
+        widgets = generate_custom_widgets(model)
         
 
 class EmploymentHistoryForm(BaseUserForm):

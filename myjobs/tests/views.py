@@ -1,20 +1,26 @@
 from importlib import import_module
+from datetime import timedelta, date
+import time
 
 from django.conf import settings
 from django.contrib.auth import login
+from django.core import mail
 from django.core.urlresolvers import reverse
 from django.http import HttpRequest
 from django.test.client import Client
 from django.test import TestCase
+from django.utils.http import urlquote
 
 from myjobs.forms import *
-from myjobs.models import User
+from myjobs.models import User, EmailLog
 from myjobs.tests.factories import *
 
 from myprofile.models import *
 from registration.forms import *
 from registration.models import ActivationProfile
 from registration import signals as custom_signals
+
+from tasks import process_batch_events
 
 class TestClient(Client):
     """
@@ -57,7 +63,10 @@ class MyJobsViewsTests(TestCase):
         self.user = UserFactory()
         self.client = TestClient()
         self.client.login_user(self.user)
+        self.events = ['open', 'delivered', 'click']
         
+        self.email_user = UserFactory(email='accounts@my.jobs')
+
     def test_edit_account_success(self):
         resp = self.client.post(reverse('edit_basic'),
                                     data={'given_name': 'Alice',
@@ -161,9 +170,9 @@ class MyJobsViewsTests(TestCase):
         """
         Going to the delete_account view removes a user and their date completely
         """
-        self.assertTrue(User.objects.all().exists())
+        self.assertEqual(User.objects.count(), 2)
         resp = self.client.get(reverse('delete_account'), follow=True)
-        self.assertFalse(User.objects.all().exists())
+        self.assertEqual(User.objects.count(), 1)
 
     def test_disable_account(self):
         """
@@ -194,3 +203,115 @@ class MyJobsViewsTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'about.html')
 
+    def test_batch_message_digest(self):
+        """
+        POSTing correct data to this view should result in new EmailLog
+        instances being created.
+        """
+        def make_message_and_get_response(msg_time):
+            message = '{{"email":"alice@example.com","timestamp":"{0}",'+\
+                '"event":"{1}"}}'
+            messages = ''
+            for event in self.events:
+                if event != 'open':
+                    # The only sources I could find suggest SendGrid uses CRLF
+                    # endings.
+                    messages += '\r\n'
+                messages += message.format(time.mktime(msg_time.timetuple()),
+                                           event)
+            response = self.client.post(reverse('batch_message_digest'),
+                                        data=messages.join('\r\n'),
+                                        content_type="text/json",
+                                        HTTP_AUTHORIZATION='BASIC %s:%s'%
+                                            ('accounts@my.jobs','secret'))
+            return response
+
+        self.client = TestClient()
+        # Create activation profile for user; Used when disabling an account
+        custom_signals.create_activation_profile(sender=self,
+                                                 user=self.user,
+                                                 email=self.user.email)
+
+        # Submit a batch of three events created recently
+        now = date.today()
+        response = make_message_and_get_response(now)
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(EmailLog.objects.count(), 3)
+
+        for log in EmailLog.objects.all():
+            self.assertTrue(log.event in self.events)
+
+        # Submit a batch of events created a month ago
+        # The owners of these addresses should be sent an email
+        month_ago = now - timedelta(days=30)
+        response = make_message_and_get_response(month_ago)
+        self.assertTrue(response.status_code, 200)
+        self.assertEqual(EmailLog.objects.count(), 6)
+        self.assertEqual(
+            EmailLog.objects.filter(
+                received__range=(now - timedelta(days=30), now)
+            ).count(), 6
+        )
+        process_batch_events()
+        self.assertEqual(len(mail.outbox), 1)
+
+        # Submit a batch of events created a month and a week ago
+        # The owners of these addresses should no longer receive email
+        month_and_week_ago = month_ago - timedelta(days=7)
+        response = make_message_and_get_response(month_and_week_ago)
+        self.assertTrue(response.status_code, 200)
+        self.assertEqual(EmailLog.objects.count(), 9)
+        self.assertEqual(
+            EmailLog.objects.filter(
+                received__lte=(now - timedelta(days=37))
+            ).count(), 3
+        )
+        process_batch_events()
+
+        user = User.objects.get(pk=self.user.pk)
+        self.assertFalse(user.opt_in_myjobs)
+
+    def test_invalid_batch_post(self):
+        response = self.client.post(reverse('batch_message_digest'),
+                                    data='this is invalid',
+                                    content_type="text/json",
+                                    HTTP_AUTHORIZATION='BASIC %s:%s'%
+                                        ('accounts@my.jobs','secret'))
+        self.assertEqual(response.status_code, 400)
+
+    def test_invalid_user(self):
+        message = '{{"email":"alice@example.com","timestamp":"{0}",'+\
+            '"event":"{1}"}}'
+        messages = ''
+        now = datetime.datetime.now()
+        for event in self.events:
+            if event != 'open':
+                # The only sources I could find suggest SendGrid uses CRLF
+                # endings.
+                messages += '\r\n'
+            messages += message.format(time.mktime(now.timetuple()),
+                                       event)
+
+        response = self.client.post(reverse('batch_message_digest'),
+                                    data=messages.join(''),
+                                    content_type="text/json")
+        self.assertEqual(response.status_code, 403)
+
+        response = self.client.post(reverse('batch_message_digest'),
+                                    data=messages.join(''),
+                                    content_type="text/json",
+                                    HTTP_AUTHORIZATION='BASIC %s:%s'%
+                                        ('does@not.exist','wrong_pass'))
+        self.assertEqual(response.status_code, 403)
+
+    def test_continue_sending_mail(self):
+        self.user.last_response = date.today() - timedelta(days=7)
+        self.user.save()
+
+        response = self.client.get(reverse('continue_sending_mail'),
+                                    data={'user': self.user}, follow=True)
+
+        self.assertEqual(self.user.last_response, date.today() - timedelta(days=7))
+        self.assertRedirects(response, '/')
+        user = User.objects.get(pk=self.user.pk)
+        self.assertEqual(user.last_response, date.today())
