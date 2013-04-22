@@ -85,6 +85,7 @@ class Address(ProfileUnits):
                             verbose_name=_("Apartment/Unit Number"))
     city_name = models.CharField(max_length=255, verbose_name=_("City"))
     country_sub_division_code = models.CharField(max_length=5,
+                                                 blank=True, null=True,
                                                  verbose_name=_("State/Region"))
     country_code = models.CharField(max_length=3, verbose_name=_("Country"))
     postal_code = models.CharField(max_length=12, verbose_name=_("Zip Code"))
@@ -133,6 +134,7 @@ class EmploymentHistory(ProfileUnits):
     end_date = models.DateField(blank=True, null=True)
     city_name = models.CharField(max_length=255, blank=True,null=True)
     country_sub_division_code = models.CharField(max_length=5, blank=True,
+                                                 null=True,
                                                  verbose_name=_("State/Region")) 
     country_code = models.CharField(max_length=3, blank=True,null=True,
                                     verbose_name=_("country"))

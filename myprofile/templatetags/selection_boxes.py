@@ -51,6 +51,7 @@ def country_region_select(selected="can", html_id="", input_name="country",
                     in order to provide javascript functionality.
     
     """
+    selected = selected.lower()
     country_tag = country_select(selected,html_id,input_name,True,region_html_id)
     if country_tag[0] != "<":
         region_tag = ""
@@ -86,6 +87,7 @@ def country_select(selected="usa", html_id="", input_name="country",
     :html_str:      HTML <select> block
     
     """
+    selected = selected.lower()
     data_url = 'http://js.nlx.org/myjobs/data/countries.json'
     data_list = _load_json_data(data_url)
     country_list = data_list["countries"];
@@ -126,6 +128,8 @@ def region_select(country="usa",selected="az",html_id="",input_name="region",
     """
     
     #there is a single file per country, else it returns null.
+    country = country.lower()
+    selected = selected.lower()
     data_url = 'http://js.nlx.org/myjobs/data/%s_regions.json' % country
     data_list = _load_json_data(data_url)
     try:

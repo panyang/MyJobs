@@ -113,6 +113,13 @@ $(function() {
                     datepicker();
                     $("[id$='-country_code']").makeCombobox();
                     $("[id$='-country_sub_division_code']").makeCombobox();
+                    // The region selector does not have a value yet
+
+                    // Hide the selector, its label, and its dropdown
+                    // until a country has been chosen
+                    $('[id$="-country_sub_division_code"]').hide();
+                    $('label[for$="-country_sub_division_code"]').hide();
+                    $('[id$="-country_sub_division_code"]').next().hide();
                 }
             });            
         },
@@ -145,8 +152,8 @@ $(function() {
             if(typeof(table.attr("class"))=="undefined"){
                 first_instance = 1;
             }  
-            console.log(first_instance)    
             var serialized_data = form.serialize();
+            console.log(serialized_data)
             serialized_data += '&module=' + module + '&id=' + item_id +
                                '&first_instance=' + first_instance +
                                '&csrfmiddlewaretoken=' + csrf_token;
@@ -173,9 +180,17 @@ $(function() {
 
                         // remove current errors
                         $('[class*=label-important]').remove();
+                        var error = '<span class="label label-important">Required</span>'
                         for (var i=0; i<json.length; i++) {
+                            elem = $('[id$="-'+json[i]+'"]')
                             // insert new errors after the relevant inputs
-                            $('[id$="-'+json[i]+'"]').after('<span class="label label-important">Required</span>');
+                            if (elem.next().attr('data-for') !== undefined) {
+                                // Element is a jQuery autocomplete;
+                                // insert error after 'show all' button
+                                elem.next().after(error)
+                            } else {
+                                elem.after(error)
+                            }
                         }
                     }
                 }

@@ -40,12 +40,12 @@ $(document).ready(function(){
         parent.attr("id",parent_id_orig)
         parent.hide();
         new_ac = $("<input>")
-            .attr("id",parent_id)                                           
+            .attr("id",parent_id)
             .attr("type","text")
             .attr("value",selected.html())
             .attr("placeholder",parent_label.html())
             .addClass("comboboxWidget")
-            .addClass(parent.attr("class"))            
+            .addClass(parent.attr("class"))
             .insertBefore(parent)
             .autocomplete({
                 source: function(req,resp){
@@ -91,21 +91,22 @@ $(document).ready(function(){
                             if (ui.item.label==$(orig_options[opt]).html()){
                                 val_to_get = $(orig_options[opt]).val()
                             }
-                        }       
+                        }
                         // build the url for the jsonp ajax call
                         region_url = "http://js.nlx.org/myjobs/data/";
                         region_url+= val_to_get.toLowerCase();
                         region_url+= "_regions.jsonp";
                         //store label visibility state
                         label_visibility = false;
-                        if($("label[for="+target_id+"]").is(":visible")){
+                        if($("label[for$="+target_id+"]").is(":visible")){
                             label_visibility = true;
                         }
-                        //temp hide the region select in case of 404 on the json                        
-                        $("label[for="+target_id+"]").hide()
-                        $("#"+target_id+" + a").hide()
-                        $("#"+target_id+"").hide()
-                        $("#"+target_id+"_orig").val("none")
+                        //temp hide the region select in case of 404 on the json
+                        $("label[for$='"+target_id+"']").hide();
+                        $("a[data-for$='"+target_id+"']").hide();
+                        $("[id$='"+target_id+"'] + a").hide();
+                        $("[id$='"+target_id+"']").hide();
+                        $("[id$='"+target_id+"_orig']").val("none");
                         //make the ajax call for region data
                          $.ajax({
                             url: region_url,
@@ -122,7 +123,7 @@ $(document).ready(function(){
                                 for(var i in data.regions){
                                     item = data.regions[i]
                                     opts_attrs = "value='"+item.code+"'";
-                                    if(item.code.toLowerCase()==data.default_option.toLowerCase()){
+                                    if(item.code.toLowerCase()==data.default_option.toLowerCase()) {
                                         opts_attrs += " SELECTED";
                                     }
                                     opts+="<option "+opts_attrs+">";
@@ -134,22 +135,22 @@ $(document).ready(function(){
                                     label = "Region";
                                 }
                                 if(opts!=""){
-                                    $("#"+target_id+"_orig").html(opts);
+                                    $("[id$='"+target_id+"_orig']").html(opts);
                                     // turn on the region widget
-                                    $("label[for="+target_id+"]").html(label)
+                                    $("label[for$="+target_id+"]").html(label)
                                     if(label_visibility){
-                                        $("label[for="+target_id+"]").show()
+                                        $("label[for$="+target_id+"]").show()
                                     }
-                                    $("#"+target_id+" + a").show()
-                                    $("#"+target_id+"").show()
+                                    $("[id$='"+target_id+"'] + a").show()
+                                    $("[id$='"+target_id+"']").show()
                                     //set widget default value
-                                    $("#"+target_id+"").val(
-                                        $("#"+target_id+"_orig")
+                                    $("[id$='"+target_id+"']").val(
+                                        $("[id$='"+target_id+"_orig']")
                                         .children(":selected").html()
-                                        );
+                                    );
                                 }
                             }
-                        });                         
+                        });
                     }
                 },
                 change: function(){
@@ -200,7 +201,7 @@ $(document).ready(function(){
             $("label[for="+parent_id+"]").hide();
             $("#"+parent_id+" + a").hide();
             $("#"+parent_id+"").hide();
-            $("#"+parent_id+"_orig").val("none");
+            $("#"+parent_id_orig).val("none");
         }
     },
     destroy: function() {
