@@ -14,8 +14,6 @@ $(document).ready(function() {
     // perform display modifications for fields
     $("#id_name-primary").hide()
     $("label[for=id_name-primary]").hide()
-    $("#id_address-country_code").makeCombobox();
-    $("#id_address-country_sub_division_code").makeCombobox();
     user_email = "";    
 });
 
@@ -99,8 +97,6 @@ function save(csrf_token) {
                     save(csrf_token);
                     $("#id_name-primary").hide()
                     $("label[for=id_name-primary]").hide()
-                    $("#id_address-country_code").makeCombobox();
-                    $("#id_address-country_sub_division_code").makeCombobox();        
                     buttons();
                 } else {
                     window.location = '/profile';

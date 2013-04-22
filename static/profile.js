@@ -22,6 +22,9 @@ $(function() {
 
             "click [id$='delete']": "deleteItem",
             // targets "Delete" buttons for individual modules
+
+            "change [id$='-country_code']": "getSelect",
+            // targets country select boxes
         },
 
         /*
@@ -98,7 +101,6 @@ $(function() {
                 item = $(e.target).parents('tr');
             }
 
-            // targets the "Add Another" button for the current module section
             $.ajax({
                 url: '/profile/form/',
                 data: {'module':module, 'id':id},
@@ -111,6 +113,10 @@ $(function() {
                     resize_modal('#edit_modal');
                     $('#edit_modal').modal();
                     datepicker();
+
+                    $('[id$="-country_sub_division_code"]').hide();
+                    $('label[for$="-country_sub_division_code"]').hide();
+                    $('[id$="-country_code"]').change();
                 }
             });            
         },
@@ -143,7 +149,6 @@ $(function() {
             if(typeof(table.attr("class"))=="undefined"){
                 first_instance = 1;
             }  
-            console.log(first_instance)    
             var serialized_data = form.serialize();
             serialized_data += '&module=' + module + '&id=' + item_id +
                                '&first_instance=' + first_instance +
@@ -172,7 +177,6 @@ $(function() {
                         // remove current errors
                         $('[class*=label-important]').remove();
                         for (var index in json.errors) {
-                            console.log(json.errors[index])
                             // insert new errors after the relevant inputs
                             $('[id$="-'+json.errors[index][0]+'"]').after(
                                 '<span class="label label-important">'+
@@ -210,6 +214,67 @@ $(function() {
                     item.remove();
                     manageModuleDisplay(module);
                 }
+            });
+        },
+
+        /*
+        Gets a list of regions, if any, for a specific country
+        and formats them in a select menu.
+        */
+        getSelect: function() {
+            var country = $('[id$="-country_code"]').val();
+            var elem = $('[id$="-country_sub_division_code"]');
+            var id = elem.attr('id');
+            var name = elem.attr('name');
+            var old_val = elem.val();
+            if (!old_val) {
+                old_val = "";
+            }
+
+            var region_url = "http://js.nlx.org/myjobs/data/";
+            region_url += country.toLowerCase();
+            region_url += "_regions.jsonp";
+
+            // Hide region selector and its label in case we receive a 404
+            $("label[for='"+id+"']").hide();
+            elem.hide();
+
+            $.ajax({
+                url: region_url,
+                dataType: "jsonp",
+                data: {},
+                jsonpCallback: "returnRegionData",
+                success: function(data) {
+                    var opts = "";
+                    for (var i in data.regions) {
+                        item = data.regions[i]
+                        opts_attrs = "value='"+item.code+"'";
+                        if (item.code.toLowerCase() == old_val.toLowerCase() ||
+                            item.code.toLowerCase() == data.default_option.toLowerCase()) {
+                            // This is either the default for a new profile unit
+                            // or the value of a unit being edited
+                            opts_attrs += " SELECTED";
+                        }
+                        opts += "<option "+opts_attrs+">";
+                        opts += item.name+"</option>";
+                    }
+                    if (typeof(data.friendly_label) != "undefined") {
+                        label = data.friendly_label;
+                    } else {
+                        label = "Region";
+                    }
+                    if (opts != "") {
+                        select = $("<select />", {
+                            id: id,
+                            name: name,
+                        });
+                        select.html(opts);
+                        elem.after(select);
+                        elem.remove();
+                        $("label[for="+id+"]").html(label)
+                        $("label[for="+id+"]").show();
+                    }
+                },
             });
         },
     });

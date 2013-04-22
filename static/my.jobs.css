@@ -340,9 +340,6 @@ ul.ui-autocomplete{
 .friendlyPhoneForm #use_code_prependLabel{
     display: inline;
     }
-select{
-    width: auto;
-}
 /*Alert and text styls*/
 .pendingText{
     color: #c44e34;
@@ -829,4 +826,13 @@ table td, table th{
 
 body.modal-open {
     overflow: hidden;
+}
+
+#edit_modal .input-prepend .add-on {
+    width: 96px;
+}
+
+#edit_modal .input-prepend input,
+#edit_mdoal .input-prepend select {
+    width: auto;
 }
