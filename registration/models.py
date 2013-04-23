@@ -4,6 +4,7 @@ import random
 import re
 
 from django.conf import settings
+from django.contrib.auth import views as auth_views
 from django.db import models
 from django.db import transaction
 from django.core.mail import send_mail
@@ -94,9 +95,10 @@ class ActivationProfile(models.Model):
         self.activation_key = self.generate_key()
         self.save()
 
-    def send_activation_email(self):
+    def send_activation_email(self, password=None):
         ctx_dict = {'activation_key': self.activation_key,
-                    'expiration_days': settings.ACCOUNT_ACTIVATION_DAYS}
+                    'expiration_days': settings.ACCOUNT_ACTIVATION_DAYS,
+                    'password': password}
         subject = render_to_string('registration/activation_email_subject.txt',
                                    ctx_dict)
         subject = ''.join(subject.splitlines())
@@ -109,4 +111,3 @@ class ActivationProfile(models.Model):
         if not self.pk:
             self.activation_key = self.generate_key()
         super(ActivationProfile,self).save(*args,**kwargs)
-

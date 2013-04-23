@@ -25,10 +25,16 @@ class CustomUserManager(BaseUserManager):
         :user: User object instance
         """
         email = kwargs['email']
-        password = kwargs['password1']
+        password = kwargs.get('password1')
         if not email:
             raise ValueError('Email address required.')
         user = self.model(email=CustomUserManager.normalize_email(email))
+        if password:
+            auto_generated = False
+        else:
+            auto_generated = True
+            user.password_change = True
+            password = self.make_random_password(length=8)
         user.set_password(password)
         user.is_active = False
         user.gravatar = user.email
@@ -37,8 +43,13 @@ class CustomUserManager(BaseUserManager):
         custom_signals.email_created.send(sender=self,user=user,
                                           email=email)
         if send_email:
-            custom_signals.send_activation.send(sender=self,user=user,
-                                                email=email)
+            if auto_generated:
+                custom_signals.send_activation.send(sender=self,user=user,
+                                                    email=email,
+                                                    password=password)
+            else:
+                custom_signals.send_activation.send(sender=self,user=user,
+                                                    email=email)
         return user
 
     def create_user(self, **kwargs):
@@ -118,6 +129,10 @@ class User(AbstractBaseUser):
                                                     to send email updates to you.'))
     
     last_response = models.DateField(default=datetime.datetime.now, blank=True)
+
+    # Password Settings
+    password_change = models.BooleanField(_('Password must be changed on next \
+                                            login'), default=False)
 
     USERNAME_FIELD = 'email'
     objects = CustomUserManager()
