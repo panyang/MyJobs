@@ -3,14 +3,34 @@ import urllib, hashlib
 
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, _user_has_perm
 from django.core.mail import send_mail
-from django.db import models
+from django.db import models, IntegrityError
 from django.db.models.signals import post_save
 from django.utils.translation import ugettext_lazy as _
 
 from default_settings import GRAVATAR_URL_PREFIX, GRAVATAR_URL_DEFAULT
 from registration import signals as custom_signals
 
+
 class CustomUserManager(BaseUserManager):
+    def is_user_or_secondary_email(self, email):
+        """
+        Tests if the specified email is already in use.
+
+        Inputs:
+        :email: String representation of email to be checked
+
+        Outputs:
+        :user: User object if one exists; None otherwise
+        """
+        user = self.model.objects.filter(
+            email__iexact=CustomUserManager.normalize_email(email))
+        if not user:
+            for test_user in self.all():
+                if test_user.profileunits_set.filter(
+                        secondaryemail__email__iexact=email):
+                    user = test_user
+        return user or None
+
     def create_inactive_user(self, send_email=True, **kwargs):
         """
         Creates an inactive user, calls the regisration app to generate a
@@ -28,28 +48,31 @@ class CustomUserManager(BaseUserManager):
         password = kwargs.get('password1')
         if not email:
             raise ValueError('Email address required.')
-        user = self.model(email=CustomUserManager.normalize_email(email))
-        if password:
-            auto_generated = False
-        else:
-            auto_generated = True
-            user.password_change = True
-            password = self.make_random_password(length=8)
-        user.set_password(password)
-        user.is_active = False
-        user.gravatar = user.email
-        user.save(using=self._db)
 
-        custom_signals.email_created.send(sender=self,user=user,
-                                          email=email)
-        if send_email:
-            if auto_generated:
-                custom_signals.send_activation.send(sender=self,user=user,
-                                                    email=email,
-                                                    password=password)
+        user = self.is_user_or_secondary_email(email)
+        if user is None:
+            user = self.model(email=CustomUserManager.normalize_email(email))
+            if password:
+                auto_generated = False
             else:
-                custom_signals.send_activation.send(sender=self,user=user,
-                                                    email=email)
+                auto_generated = True
+                user.password_change = True
+                password = self.make_random_password(length=8)
+            user.set_password(password)
+            user.is_active = False
+            user.gravatar = user.email
+            user.save(using=self._db)
+
+            custom_signals.email_created.send(sender=self,user=user,
+                                              email=email)
+            if send_email:
+                if auto_generated:
+                    custom_signals.send_activation.send(sender=self,user=user,
+                                                        email=email,
+                                                        password=password)
+                else:
+                    custom_signals.send_activation.send(sender=self,user=user,
+                                                        email=email)
         return user
 
     def create_user(self, **kwargs):

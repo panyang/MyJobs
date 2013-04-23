@@ -5,6 +5,7 @@ from django.contrib.auth.hashers import UNUSABLE_PASSWORD
 from django.utils.translation import ugettext_lazy as _
 
 from myjobs.models import *
+from myprofile.models import SecondaryEmail
 
 class CustomAuthForm(AuthenticationForm):
     """
@@ -37,7 +38,7 @@ class CustomAuthForm(AuthenticationForm):
                         "password. Note that both fields are case-sensitive."))
         self.check_for_test_cookie()
         return self.cleaned_data
-        
+
     def check_for_test_cookie(self):
         if self.request and not self.request.session.test_cookie_worked():
             raise forms.ValidationError(self.error_messages['no_cookies'])
@@ -96,8 +97,7 @@ class RegistrationForm(forms.Form):
         in use.
         
         """
-        existing = User.objects.filter(email__iexact=self.cleaned_data['email'])
-        if existing.exists():
+        if User.objects.is_user_or_secondary_email(self.cleaned_data['email']):
             raise forms.ValidationError(_("A user with that email already exists."))
         else:
             return self.cleaned_data['email']

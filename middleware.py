@@ -6,7 +6,7 @@ from django.http import HttpResponseRedirect
 
 class PasswordChangeMiddleware:
     """
-    If a user is logged in, their password_change flag is not set, and they
+    If a user is logged in, their password_change flag is set, and they
     are not trying to log out, change their password, or activate their
     account, redirect them to the change password form.
     """
