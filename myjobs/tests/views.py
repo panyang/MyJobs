@@ -320,8 +320,6 @@ class MyJobsViewsTests(TestCase):
     def test_inactive_user_nav(self):
         """ Test that inactive users can't access restricted apps"""
         inactive_user = UserFactory(email='inactive@my.jobs',is_active=False)
-        #inactive_user.is_active=False
-        #inactive_user.save()
         self.client.login_user(inactive_user)
         response = self.client.get("/")
         soup = BeautifulSoup(response.content)
