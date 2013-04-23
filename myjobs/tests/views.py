@@ -1,3 +1,4 @@
+from bs4 import BeautifulSoup
 from importlib import import_module
 from datetime import timedelta, date
 import time
@@ -315,3 +316,13 @@ class MyJobsViewsTests(TestCase):
         self.assertRedirects(response, '/')
         user = User.objects.get(pk=self.user.pk)
         self.assertEqual(user.last_response, date.today())
+        
+    def test_inactive_user_nav(self):
+        """ Test that inactive users can't access restricted apps"""
+        inactive_user = UserFactory(email='inactive@my.jobs',is_active=False)
+        #inactive_user.is_active=False
+        #inactive_user.save()
+        self.client.login_user(inactive_user)
+        response = self.client.get("/")
+        soup = BeautifulSoup(response.content)
+        self.assertFalse(soup.findAll('a',{'id':'savedsearch_link'}))
