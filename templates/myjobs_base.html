@@ -54,11 +54,13 @@
                                     </a>
                                     <ul class="span4" id="pop-menu">
                                         {% if not user.is_disabled %}
-                                            <li><a href="{% url 'view_profile' %}">{% trans "My Profile" %}</a></li> 
-                                            <li><a href="{% url 'saved_search_main' %}">{% trans "Saved Searches" %}</a></li>
-                                            <li><a href="{% url 'edit_basic' %}">{% trans "Account Settings" %}</a></li>
+                                            <li><a id="profile_link" href="{% url 'view_profile' %}">{% trans "My Profile" %}</a></li> 
+                                            {% if user.is_active %}
+                                            <li><a id="savedsearch_link" href="{% url 'saved_search_main' %}">{% trans "Saved Searches" %}</a></li>
+                                            {% endif %}
+                                            <li><a id="account_link" href="{% url 'edit_basic' %}">{% trans "Account Settings" %}</a></li>
                                        {% endif %}
-                                            <li><a href="{% url 'auth_logout' %}">Log Out</a></li>
+                                            <li><a id="logout_link" href="{% url 'auth_logout' %}">Log Out</a></li>
                                     </ul></a>
                                 </li>
                             </ul>
