@@ -317,6 +317,11 @@ class MyJobsViewsTests(TestCase):
         self.assertEqual(user.last_response, date.today())
 
     def test_redirect_autocreated_user(self):
+        """
+        When users are created with no password, their password_change
+        flag is set to true; If this is the case, all pages except for
+        a select few should redirect to the password change form
+        """
         self.user.password_change = True
         self.user.save()
 
