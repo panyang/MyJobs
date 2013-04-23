@@ -315,3 +315,20 @@ class MyJobsViewsTests(TestCase):
         self.assertRedirects(response, '/')
         user = User.objects.get(pk=self.user.pk)
         self.assertEqual(user.last_response, date.today())
+
+    def test_redirect_autocreated_user(self):
+        self.user.password_change = True
+        self.user.save()
+
+        response = self.client.get(reverse('saved_search_main'))
+
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse('auth_password_change'))
+
+        self.user.password_change = False
+        self.user.save()
+
+        response = self.client.get(reverse('saved_search_main'))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'mysearches/saved_search_main.html')
