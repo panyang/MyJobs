@@ -6,8 +6,12 @@ from django.template import loader, Context
 from django.utils.http import int_to_base36
 from django.utils.translation import ugettext_lazy as _
 
+from captcha.fields import ReCaptchaField
+
 from myjobs.models import User
 from myprofile.models import Name, SecondaryEmail
+
+from secrets import RECAPTCHA_PUBLIC_KEY, RECAPTCHA_PRIVATE_KEY
 
 def make_choices(user):
     choices = [(user.email, user.email)]
@@ -94,7 +98,21 @@ class EditAccountForm(Form):
         u.gravatar = self.cleaned_data["gravatar"]
         u.save()
 
-        
+
+class EditCommunicationForm(BaseUserForm):
+    def __init__(self, *args, **kwargs):
+        super(EditCommunicationForm,self).__init__(*args, **kwargs)
+        choices = make_choices(self.user)
+        self.fields["email"] = ChoiceField(widget=Select(attrs={
+                                           'id':'id_digest_email'}),
+                                           choices=choices,
+                                           initial=choices[0][0])
+
+    class Meta:
+        model = User
+        fields = ('email', 'opt_in_myjobs', 'opt_in_employers')
+
+
 class ChangePasswordForm(Form):
     password1 = CharField(label=_("Password"),
                                 widget=PasswordInput(attrs={'placeholder':
@@ -129,3 +147,8 @@ class ChangePasswordForm(Form):
     def save(self):
         self.user.set_password(self.cleaned_data["new_password"])
         self.user.save()
+
+
+class DeleteForm(Form):
+    captcha = ReCaptchaField(label="", attrs={'theme': 'clean'})
+    

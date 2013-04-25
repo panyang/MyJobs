@@ -14,5 +14,6 @@ urlpatterns = patterns('MyJobs.myjobs.views',
     url(r'^edit/basic$', 'edit_basic', name='edit_basic'),
     url(r'^edit/password$', 'edit_password', name='edit_password'),
     url(r'^edit/delete$', 'edit_delete', name='edit_delete'),
+    url(r'^edit/communication$', 'edit_communication', name='edit_communication'),
     url(r'^error/$', 'error', name='error'),
 )

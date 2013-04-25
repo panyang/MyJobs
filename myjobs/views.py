@@ -18,7 +18,6 @@ from myprofile.forms import *
 from registration.forms import *
 
 
-
 logger = logging.getLogger('__name__')
 
 class About(TemplateView):
@@ -182,6 +181,38 @@ def edit_basic(request):
                               RequestContext(request))
 
 @user_passes_test(User.objects.not_disabled)
+def edit_communication(request):
+    initial_dict = model_to_dict(request.user)
+    if request.method == "POST":
+        form = EditCommunicationForm(user=request.user, data=request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('?saved=success')
+    else:
+        form = EditCommunicationForm(user=request.user, initial=initial_dict)
+    saved = request.REQUEST.get('saved')
+    if saved:
+        if saved=="success":
+            message = "Your password has been updated."
+            message_type = "success"
+        else:
+            message = "There as an error, please try again."
+            message_type = "error"
+    else:
+        message = ""
+        message_type = ""
+        
+    ctx = {
+        'form':form,
+        'name_obj': get_name_obj(request),
+        'message':message,
+        'messagetype':message_type
+        }
+    return render_to_response('edit-account.html', ctx,
+                              RequestContext(request))
+        
+    
+@user_passes_test(User.objects.not_disabled)
 def edit_password(request):
     if request.method == "POST":
         form = ChangePasswordForm(user=request.user, data=request.POST)
@@ -216,7 +247,9 @@ def edit_password(request):
 
 @user_passes_test(User.objects.not_disabled)
 def edit_delete(request):
-    ctx = {'name_obj': get_name_obj(request)}
+    form = DeleteForm()
+    ctx = {'form':form,
+           'name_obj': get_name_obj(request)}
     return render_to_response('edit-delete.html', ctx,
                               RequestContext(request))
 

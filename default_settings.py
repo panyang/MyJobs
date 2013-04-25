@@ -117,7 +117,8 @@ INSTALLED_APPS = (
     'django_jenkins',
     'widget_tweaks',
     'south',
-    'django_nose'
+    'django_nose',
+    'captcha'
 )
 
 # Add all MyJobs apps here. This separation ensures that automated Jenkins tests
@@ -194,3 +195,8 @@ LOGGING = {
 
 GRAVATAR_URL_PREFIX = "http://www.gravatar.com/avatar/"
 GRAVATAR_URL_DEFAULT = 'mm'
+
+#reCAPTCHA
+RECAPTCHA_PUBLIC_KEY = '6LfRKeASAAAAAHHz1eARd9XYJWK4-o_sBhm1DQD1'
+RECAPTCHA_PRIVATE_KEY = '98dfg6df7g56df6gdfgdfg65JHJH656565GFGFGs'
+RECAPTCHA_USE_SSL = True
