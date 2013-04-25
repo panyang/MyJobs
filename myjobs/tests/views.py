@@ -1,3 +1,4 @@
+from bs4 import BeautifulSoup
 from importlib import import_module
 from datetime import timedelta, date
 import time
@@ -337,3 +338,11 @@ class MyJobsViewsTests(TestCase):
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'mysearches/saved_search_main.html')
+        
+    def test_inactive_user_nav(self):
+        """ Test that inactive users can't access restricted apps"""
+        inactive_user = UserFactory(email='inactive@my.jobs',is_active=False)
+        self.client.login_user(inactive_user)
+        response = self.client.get("/")
+        soup = BeautifulSoup(response.content)
+        self.assertFalse(soup.findAll('a',{'id':'savedsearch_link'}))
