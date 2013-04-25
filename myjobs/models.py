@@ -123,6 +123,8 @@ class User(AbstractBaseUser):
                                                        "know your email address unless "+\
                                                        "you tell it to them."))
     
+    last_response = models.DateField(default=datetime.datetime.now, blank=True)
+
     USERNAME_FIELD = 'email'
     objects = CustomUserManager()
 
@@ -190,3 +192,9 @@ class User(AbstractBaseUser):
         custom_signals.user_disabled.send(sender=self, user=self,
                                           email=self.email)
 
+
+class EmailLog(models.Model):
+    email = models.EmailField(max_length=254)
+    event = models.CharField(max_length=11)
+    received = models.DateField()
+    processed = models.BooleanField(default=False, blank=True)

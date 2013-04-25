@@ -1,12 +1,12 @@
 <div class="formBox" id="{{module.name}}_items">       
     <h4>{{ module.verbose }}</h4>
-    {% if module.items.0 %}
-    <table class="table table-bordered table-striped">
+    {% if module.items.0 %}    
+    <table class="profile">
         <tr>
             {% for label,value in module.items.0.get_fields|slice:":4" %}                            
                 <th>{{label}}</th>
             {% endfor %}
-            <td class="action"></td>
+            <th class="action"></th>
         </tr>
         {% for item in module.items %}      
         <tr id="{{module.name}}-{{item.id}}-item">

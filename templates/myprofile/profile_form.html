@@ -6,10 +6,10 @@
         <h1>{% if item_id == "new" %}{% trans 'Add' %}{% else %}{% trans 'Edit' %}{% endif %} <small>{% trans verbose %}</small></h1>
     </div>
         <div class="modal-body">
-                <form action="" method="post" id="{{module}}-{{item_id}}-form">
+            <form action="" method="post" id="{{module}}-{{item_id}}-form">
                 <div class="formBox">
-                      {% include "includes/form-error-highlight.html" %}
-                      {% csrf_token %}
+                    {% include "includes/form-error-highlight.html" %}
+                    {% csrf_token %}
                 </div>
             </form>
         </div>

@@ -19,7 +19,7 @@ body{
     }
 .section {
     background-color: #FFF;
-    border: 2px solid #333333;
+    border: 1px solid #333333;
     margin-top: 0px;
     margin-bottom: 0px;      
     }    
@@ -29,6 +29,30 @@ a{
 a:hover{
     color: #a42e14;
     }
+.profile-unit h4 {
+    color: #000;    
+    }
+.action th {
+    background-color: #FFF;   
+    }
+.profile th {
+    background-color: #FFF;   
+    }
+.profile {
+    border-collapse:collapse; 
+    border-color:#FFF; 
+    border-style:solid; 
+    border-width:2px;
+    }
+.profile td, th {
+    border-color:#FFF; /*grey*/
+    border-style:solid; 
+    border-width:1px;
+    padding: 5px; 
+    text-align: left;
+    }
+.profile tr:nth-child(even) {background: #eae6de}
+.profile tr:nth-child(odd) {background: #d2cfc7}
 
 /* Form Styles */
 .form-label{
@@ -91,6 +115,7 @@ ul.ui-autocomplete{
     text-indent: -9000px;    
     display: block;
     height: 81px;
+    background: transparent url('/files/static/images/mydotjobs_home_logo.png') 65px 3px no-repeat;
     }    
 #subtitle{
     font-size: 1.85em;
@@ -100,14 +125,31 @@ ul.ui-autocomplete{
     font-weight: bold;
     }
 /*Content Box Styles*/
-.loginBox, .formBox{    
+.profileBox{    
+    background-color: #f4f1ea;
+    padding: 10px;
+    padding-bottom: 30px;
+    border: 2px solid #574E44;
+    border-radius: 5px;
+    }
+.loginBox{    
     background-color: #574e44;
     padding: 10px;
     padding-bottom: 30px;
     border: 2px solid #574E44;
     border-radius: 5px;
     }
-#titleRow .loginBox{
+.formBox{    
+    background-color: #f4f1ea;
+    padding: 10px;
+    padding-bottom: 30px;
+    border: 2px solid #a3aeb1;
+    border-radius: 5px;    
+    }
+.formBox table{
+    width: 100%;    
+    }
+#titleRow .loginBox, #titleRow .profileBox{
     margin-top: 105px;   
     }
 .formBox + .formBox{
@@ -123,20 +165,30 @@ ul.ui-autocomplete{
 .loginBox, .formBox, .account-box h3 {
     color: #FFF;    
     }
+.formBox, .account-box h3 {
+    color: #000;    
+    }
 .loginBox a{
     color: #FFF;
     }
 .loginBox a:hover{
     color: #FFF;
     }
-#account-page-2 .loginBox{
+#account-page-2 .loginBox, #account-page-2 .profileBox{
     padding-left: 0px;
     padding-right: 0px;
     }
 .loginBox + .loginBox{
     margin-top: 20px;
+    border-color: #a3aeb1;
+    } 
+.profileBox + .profileBox{
+    margin-top: 20px;
     border-color: #C44E34;
-    }    
+    }
+.profileBox p{
+    color: #000;    
+    }
 .loginBox p{
     min-height: 36px;
     }
@@ -150,7 +202,7 @@ ul.ui-autocomplete{
     color: #000;
     background: #fff;
 }
-.loginBox input{
+.loginBox input, .profileBox input{
     /*display: block;*/
     padding: 4px 0px;
     text-indent: 4px;
@@ -158,14 +210,14 @@ ul.ui-autocomplete{
 #titleRow input{
     width: 100%;
     }
-.loginBox input[type=checkbox]{
+.loginBox input, .initial-profileBox input[type=checkbox]{
     float: left;
     width: auto;
     }
-#account-page-2 .loginBox input[type=text]{
+#account-page-2 .loginBox input, #account-page-2 .initial-profileBox input[type=text]{
     width: 100%;
-}
-.loginBox input.comboboxWidget,
+    }
+.initial-profileBox input.comboboxWidget, .loginBox input.comboboxWidget,
 #account-page-2 .loginBox input.comboboxWidget{
     width: 230px;
     }
@@ -206,7 +258,7 @@ ul.ui-autocomplete{
 
 .profile-unit{
     background: #EFEADE;
-    /*border: 1px solid #ccc;*/
+    border: 1px solid #a3aeb1;
     padding: 10px;
     margin-bottom: 10px;
     -moz-border-radius: 4px;
@@ -288,9 +340,6 @@ ul.ui-autocomplete{
 .friendlyPhoneForm #use_code_prependLabel{
     display: inline;
     }
-select{
-    width: auto;
-}
 /*Alert and text styls*/
 .pendingText{
     color: #c44e34;
@@ -329,17 +378,17 @@ em.pendingText{
     text-decoration: none;
     display: block;
     padding-right: 4px;
-}
+    }
 #nav ul#pop-menu{
-	background:#333;
+    background:#333;
     padding: 0;
     margin: 3px 0 0 -2px;
-	position:absolute;
-	display: none;
-	corner-bottom-left-radius: 4px;
-	corner-bottom-right-radius: 4px;
-	width: 275px;
-}
+    position:absolute;
+    display: none;
+    corner-bottom-left-radius: 4px;
+    corner-bottom-right-radius: 4px;
+    width: 275px;
+    }
 .topbar #nav .arrow{
     float: right;
     display: block;
@@ -783,4 +832,13 @@ body.modal-open {
 .account-captcha {
     text-align: center;
     padding-bottom: 30px;
+}
+
+#edit_modal .input-prepend .add-on {
+    width: 96px;
+}
+
+#edit_modal .input-prepend input,
+#edit_mdoal .input-prepend select {
+    width: auto;
 }

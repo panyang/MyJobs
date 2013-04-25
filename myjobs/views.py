@@ -1,3 +1,4 @@
+import datetime
 import json
 import logging
 
@@ -8,10 +9,11 @@ from django.core.urlresolvers import reverse
 from django.forms.models import model_to_dict
 from django.http import HttpResponseRedirect, HttpResponse
 from django.template import RequestContext
-from django.shortcuts import render_to_response, get_object_or_404
+from django.shortcuts import render_to_response, get_object_or_404, redirect
+from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
 
-from myjobs.models import User
+from myjobs.models import User, EmailLog
 from myjobs.forms import *
 from myjobs.helpers import *
 from myprofile.forms import *
@@ -280,3 +282,51 @@ def error(request):
         'messages': messages
         }
     return render_to_response('error.html', ctx, RequestContext(request))
+
+@csrf_exempt
+def batch_message_digest(request):
+    """
+    Used by SendGrid to POST batch events.
+
+    Accepts a POST request containing a batch of events from SendGrid. A batch
+    of events is a series of JSON strings separated by new lines.
+    """
+    if 'HTTP_AUTHORIZATION' in request.META:
+        method, details = request.META['HTTP_AUTHORIZATION'].split()
+        if method.lower() == 'basic':
+            login_info = details.split(':')
+            user = authenticate(username=login_info[0], password=login_info[1])
+            target_user = User.objects.get(email='accounts@my.jobs')
+            if user is not None and user == target_user:
+                events = request.raw_post_data
+                event_list = []
+                try:
+                    # Handles both a lack of submitted data and
+                    # the submission of invalid data
+                    events = events.splitlines()
+                    for event_str in events:
+                        if event_str == '':
+                            continue
+                        event_list.append(json.loads(event_str))
+                except:
+                    return HttpResponse(status=400)
+                for event in event_list:
+                    received = event['timestamp']
+                    EmailLog(email=event['email'], event=event['event'],
+                             received=datetime.datetime.fromtimestamp(
+                                 float(event['timestamp'])
+                             )
+                    ).save()
+                return HttpResponse(status=200)
+    return HttpResponse(status=403)
+
+@user_passes_test(User.objects.not_disabled)
+def continue_sending_mail(request):
+    """
+    Updates the user's last response time to right now.
+    Allows the user to choose to continue receiving emails if they are inactive.
+    """
+    user = request.user
+    user.last_response = datetime.date.today()
+    user.save()
+    return redirect('/')
