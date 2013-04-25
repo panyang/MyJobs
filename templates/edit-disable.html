@@ -1,6 +1,32 @@
 {% extends "edit-account.html" %}
 {% load i18n %}
 
+{% block modal %}
+<div id="captcha_modal" class="modal hide fade row">
+  <div class="modal-body">
+    <button class="close mobile_hide" aria-hidden="true" data-dismiss="modal" type="button">×</button>
+    <div class="gravatar-warning pull-left"><img src="{{gravatar_150}}"><br><img class="warning-badge" src="{{STATIC_URL}}images/caution-badge.png"></div>
+    <div class="account-warning pull-right">
+      <p>{% trans "Are you sure you want to disable your account?" %}</p>
+      <p>{% trans "This will do the following:" %}</p>
+      <ul>
+        <li>{% trans "Deactivate all your job search tools" %}</li>
+        <li>{% trans "Deactivate all your saved searches" %}</li>
+        <li>{% trans "Disable all profile modules except your name and email" %}</li>
+        <li>{% trans "Prevent my.jobs from sending you any email" %}</li>
+      </ul>
+      <p>{% trans "You can activate your account at a lter time, which will re-enable everything and let you pick up where you left off." %}</p>
+    </div>
+  </div>
+  <div class="modal-footer">
+    <div class="actions">
+      <a href="{% url 'disable_account' %}" class="btn primary pull-right">Yes, disable my account</a>
+      <a data-dismiss="modal" aria-hidden="true" class="btn pull-left">{% trans 'Cancel' %}</a>
+    </div>
+  </div>f
+</div>
+{% endblock %}
+
 {% block edit-main %}
 <form action="" method="POST" id="captcha-form">
   <div class="account-captcha">
@@ -17,27 +43,5 @@
     <div class="clear"></div>
   </div>
 </form>
-  <div id="captcha_modal" class="modal hide fade row">
-    <div class="modal-body">
-      <button class="close mobile_hide" aria-hidden="true" data-dismiss="modal" type="button">×</button>
-      <div class="captch-warning">
-        <p>{% trans "Are you sure you want to disable your account?" %}</p>
-        <p>{% trans "This will do the following:" %}</p>
-        <ul>
-          <li>{% trans "Deactivate all your job search tools" %}</li>
-          <li>{% trans "Deactivate all your saved searches" %}</li>
-          <li>{% trans "Disable all profile modules except your name and email" %}</li>
-          <li>{% trans "Prevent my.jobs from sending you any email" %}</li>
-        </ul>
-        <p>{% trans "You can activate your account at a lter time, which will re-enable everything and let you pick up where you left off." %}</p>
-      </div>
-    </div>
-    <div class="modal-footer">
-        <div class="actions">
-          <a href="{% url 'disable_account' %}" class="btn primary pull-right">Yes, disable my account</a>
-          <a data-dismiss="modal" aria-hidden="true" class="btn pull-left">{% trans 'Cancel' %}</a>
-        </div>
-    </div>
-  </div>
 {% endblock %}
 

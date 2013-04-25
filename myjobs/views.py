@@ -184,15 +184,15 @@ def edit_basic(request):
 
 @user_passes_test(User.objects.not_disabled)
 def edit_communication(request):
-    initial_dict = model_to_dict(request.user)
+    obj = User.objects.get(id=request.user.id)
     if request.method == "POST":
-        form = EditCommunicationForm(user=request.user, initial=initial_dict,
+        form = EditCommunicationForm(user=request.user, instance=obj,
                                      data=request.POST)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect('?saved=success')
     else:
-        form = EditCommunicationForm(user=request.user, initial=initial_dict)
+        form = EditCommunicationForm(user=request.user, instance=obj)
     saved = request.REQUEST.get('saved')
     if saved:
         if saved=="success":
@@ -259,6 +259,7 @@ def edit_delete(request):
     else:
         form = CaptchaForm()
         ctx = {'form':form,
+               'gravatar_150': request.user.get_gravatar_url(size=150),
                'name_obj': get_name_obj(request)}
         return render_to_response('edit-delete.html', ctx,
                                   RequestContext(request))
@@ -274,6 +275,7 @@ def edit_disable(request):
     else:
         form = CaptchaForm()
         ctx = {'form':form,
+               'gravatar_150': request.user.get_gravatar_url(size=150),
                'name_obj': get_name_obj(request)}
         return render_to_response('edit-disable.html', ctx,
                                   RequestContext(request))

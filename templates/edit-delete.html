@@ -21,7 +21,8 @@
   <div id="captcha_modal" class="modal hide fade row">
     <div class="modal-body">
       <button class="close mobile_hide" aria-hidden="true" data-dismiss="modal" type="button">×</button>
-      <div class="captch-warning">
+    <div class="gravatar-warning pull-left"><img src="{{gravatar_150}}"><br><img class="warning-badge" src="{{STATIC_URL}}images/critical-badge.png"></div>
+    <div class="account-warning pull-right">
         <p>{% trans "Are you sure you want to delete your account?" %}</p>
         <p>{% trans "This will do the following:" %}</p>
         <ul>
@@ -38,7 +39,7 @@
         <div class="actions">
           <a href="{% url 'delete_account' %}" class="btn primary pull-right">Yes, delete my account</a>
           <a data-dismiss="modal" aria-hidden="true" class="btn pull-left">{% trans 'Cancel' %}</a>
-          <a href="{% url 'disable_account' %}" class="btn pull-left">{% trans 'Disable my account' %}</a>
+          <a href="{% url 'edit_disable' %}" class="btn pull-left">{% trans 'Disable my account' %}</a>
         </div>
     </div>
   </div>

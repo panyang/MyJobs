@@ -842,3 +842,18 @@ body.modal-open {
 #edit_mdoal .input-prepend select {
     width: auto;
 }
+
+
+#captcha_modal {
+    width: 620px;
+}
+
+.account-warning {
+    width: 400px;
+}
+
+.warning-badge {
+    position: relative;
+    top: -57px;
+    left: 80px;
+}

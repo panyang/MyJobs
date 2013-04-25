@@ -30,6 +30,7 @@ $(document).ready(function(){
             data: $("#captcha-form").serialize(),
             success: function(data) {
                 if (data == 'success') {
+                    $("#captcha-errors").html('');
                     $("#captcha_modal").modal();
                 } else {
                     var error = jQuery.parseJSON(data)[0][0];
