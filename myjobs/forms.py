@@ -149,6 +149,6 @@ class ChangePasswordForm(Form):
         self.user.save()
 
 
-class DeleteForm(Form):
+class CaptchaForm(Form):
     captcha = ReCaptchaField(label="", attrs={'theme': 'clean'})
     

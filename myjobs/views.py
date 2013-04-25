@@ -186,7 +186,8 @@ def edit_basic(request):
 def edit_communication(request):
     initial_dict = model_to_dict(request.user)
     if request.method == "POST":
-        form = EditCommunicationForm(user=request.user, data=request.POST)
+        form = EditCommunicationForm(user=request.user, initial=initial_dict,
+                                     data=request.POST)
         if form.is_valid():
             form.save()
             return HttpResponseRedirect('?saved=success')
@@ -249,12 +250,35 @@ def edit_password(request):
 
 @user_passes_test(User.objects.not_disabled)
 def edit_delete(request):
-    form = DeleteForm()
-    ctx = {'form':form,
-           'name_obj': get_name_obj(request)}
-    return render_to_response('edit-delete.html', ctx,
-                              RequestContext(request))
+    if request.method == "POST":
+        form = CaptchaForm(request.POST)
+        if form.is_valid():
+            return HttpResponse('success')
+        else: 
+            return HttpResponse(json.dumps(form.errors.values()))
+    else:
+        form = CaptchaForm()
+        ctx = {'form':form,
+               'name_obj': get_name_obj(request)}
+        return render_to_response('edit-delete.html', ctx,
+                                  RequestContext(request))
 
+@user_passes_test(User.objects.not_disabled)
+def edit_disable(request):
+    if request.method == "POST":
+        form = CaptchaForm(request.POST)
+        if form.is_valid():
+            return HttpResponse('success')
+        else: 
+            return HttpResponse(json.dumps(form.errors.values()))
+    else:
+        form = CaptchaForm()
+        ctx = {'form':form,
+               'name_obj': get_name_obj(request)}
+        return render_to_response('edit-disable.html', ctx,
+                                  RequestContext(request))
+
+        
 @user_passes_test(User.objects.not_disabled)
 def delete_account(request):
     email = request.user.email
