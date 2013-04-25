@@ -331,6 +331,10 @@ class MyJobsViewsTests(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(response, reverse('auth_password_change'))
 
+        response = self.client.get(reverse('registration_activate', args=['activation_code_here']))
+
+        self.assertEqual(response.status_code, 200)
+
         self.user.password_change = False
         self.user.save()
 
