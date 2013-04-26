@@ -207,7 +207,7 @@ $(function() {
             var module = $(e.target).attr('id').split("-")[0];
             var id = $(e.target).attr('id').split("-")[1];
 
-            var verbose_name = item.parents('table').find('h4').text()
+            var verbose_name = $('#'+module+'-verbose').text();
             var answer = confirm('Are you sure you want to delete this '+verbose_name+'?');
             if (answer) {
                 $.ajax({
@@ -296,15 +296,14 @@ function manageModuleDisplay(module) {
     if (target.find('table tr').length <= 1) {
         // The last item in a module section was deleted or the add operation was canceled
 
-        // The module section's h4 element contains the correct verbose name for each module
-        var parent_name = target.find('h4').text();
+        var verbose_name = $('#'+module+'-verbose').text();
 
         // Remove the empty section
         target.remove();
 
         // Replace the button within the moduleBank table and display the moduleBank
         $("#moduleBank table").append(
-            "<tr class='profile_section'><td><a id='"+module+"-section' href=''>"+parent_name+"</a></td></tr>"
+            "<tr class='profile_section'><td><a id='"+module+"-section' href=''>"+verbose_name+"</a></td></tr>"
         );
         $("#moduleBank").show();
     }
