@@ -12,7 +12,7 @@ from registration import signals as custom_signals
 
 
 class CustomUserManager(BaseUserManager):
-    def is_user_or_secondary_email(self, email):
+    def get_email_owner(self, email):
         """
         Tests if the specified email is already in use.
 
@@ -29,6 +29,7 @@ class CustomUserManager(BaseUserManager):
                 if test_user.profileunits_set.filter(
                         secondaryemail__email__iexact=email):
                     user = test_user
+                    break
         return user or None
 
     def create_inactive_user(self, send_email=True, **kwargs):
@@ -49,7 +50,7 @@ class CustomUserManager(BaseUserManager):
         if not email:
             raise ValueError('Email address required.')
 
-        user = self.is_user_or_secondary_email(email)
+        user = self.get_email_owner(email)
         if user is None:
             user = self.model(email=CustomUserManager.normalize_email(email))
             if password:
