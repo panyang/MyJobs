@@ -97,7 +97,7 @@ class RegistrationForm(forms.Form):
         in use.
         
         """
-        if User.objects.is_user_or_secondary_email(self.cleaned_data['email']):
+        if User.objects.get_email_owner(self.cleaned_data['email']):
             raise forms.ValidationError(_("A user with that email already exists."))
         else:
             return self.cleaned_data['email']
