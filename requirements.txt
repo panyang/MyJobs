@@ -12,3 +12,4 @@ celery==3.0.15
 django-celery==3.0.11
 beautifulsoup4==4.1.3
 newrelic
+django-recaptcha==0.0.6
