@@ -200,17 +200,18 @@ $(function() {
                 csrf_token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
             }
 
-            // targets the table row containing the item to be deleted
-            var item = $(e.target).parents('tr');
-
-            // id is formatted [module_type]-[item_id]-[event]
+            // id is formatted [module_type]-[item_id]-delete
             var module = $(e.target).attr('id').split("-")[0];
             var id = $(e.target).attr('id').split("-")[1];
+            var item = $('#'+module+'-'+id+'-item');
+
             $.ajax({
                 type: 'POST',
                 url: '/profile/delete/',
                 data: {'module':module, 'id':id, csrfmiddlewaretoken: csrf_token},
                 success: function(data) {
+                    $('#edit_modal').modal('hide');
+                    $('#edit_modal').remove();
                     item.remove();
                     manageModuleDisplay(module);
                 }
