@@ -206,15 +206,20 @@ $(function() {
             // id is formatted [module_type]-[item_id]-[event]
             var module = $(e.target).attr('id').split("-")[0];
             var id = $(e.target).attr('id').split("-")[1];
-            $.ajax({
-                type: 'POST',
-                url: '/profile/delete/',
-                data: {'module':module, 'id':id, csrfmiddlewaretoken: csrf_token},
-                success: function(data) {
-                    item.remove();
-                    manageModuleDisplay(module);
-                }
-            });
+
+            var verbose_name = item.parents('table').find('h4').text()
+            var answer = confirm('Are you sure you want to delete this '+verbose_name+'?');
+            if (answer) {
+                $.ajax({
+                    type: 'POST',
+                    url: '/profile/delete/',
+                    data: {'module':module, 'id':id, csrfmiddlewaretoken: csrf_token},
+                    success: function(data) {
+                        item.remove();
+                        manageModuleDisplay(module);
+                    }
+                });
+            }
         },
 
         /*
