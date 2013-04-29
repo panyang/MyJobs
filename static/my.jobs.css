@@ -148,6 +148,9 @@ ul.ui-autocomplete{
 .formBox + .formBox{
     margin-top: 20px;
 }
+#profile-mobile + #profile-mobile{
+    margin-top: 20px;
+}
 .account-box{    
     background-color: #FFF;
     padding: 10px;
