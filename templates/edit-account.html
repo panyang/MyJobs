@@ -7,10 +7,10 @@
 <section>
     <div class="wrapper"> 
         <div class="row">
-            {% if message %}
+            {% if message_body %}
             <div class="alert alert-{{messagetype}}">
                 <button type="button" class="close" data-dismiss="alert">&times;</button>
-                {{message}}
+                {{message_body}}
             </div>
             {% endif %}
             <div class="span12">
