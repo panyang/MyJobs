@@ -12,8 +12,8 @@ $(function() {
             "click [id$='edit']": "editForm",
             // targets "Edit" buttons for individual modules
 
-            "hidden #edit_modal": "cancelForm",
-            // targets event fired when #edit_modal is closed
+            "hidden [id$='_modal']": "cancelForm",
+            // targets event fired when modal windows are closed
             // includes clicking any of the modal close buttons, pressing Esc,
             // and clicking on the dark modal background
 
@@ -25,6 +25,9 @@ $(function() {
 
             "change [id$='-country_code']": "getSelect",
             // targets country select boxes
+
+            "click [id$='view']": "viewDetails",
+            // targets "View" button for each item
         },
 
         /*
@@ -72,7 +75,7 @@ $(function() {
 
             // Upon closing the modal window, it should be removed from the
             // document to allow for additional modals
-            $("div#edit_modal").remove();
+            $("[id$='modal']").remove();
             if (item_id != 'new') {
                 // When "Edit" was clicked, the relevant item was hidden
                 // Since nothing has changed, the item needs to be re-shown
@@ -277,6 +280,32 @@ $(function() {
                     }
                 },
             });
+        },
+
+        viewDetails: function(e) {
+            e.preventDefault();
+
+            // id is formatted [module_type]-[item_id]-view
+            var module = $(e.target).attr('id').split('-')[0];
+            var id = $(e.target).attr('id').split('-')[1];
+            console.log(id)
+            console.log($(e.target).attr('id'))
+
+            var target = '#'+module+'-'+id+'-detail_modal';
+            console.log($(target).length)
+            if ($(target).length == 1) {
+                $(target).modal({'backdrop':'static','keyboard':false});
+            } else {
+                $.ajax({
+                    url: '/profile/details/',
+                    data: {'module': module, 'id': id},
+                    success: function(data) {
+                        $(e.target).parents('table').after(data);
+                        console.log($(target).length)
+                        $(target).modal({'backdrop':'static','keyboard':false});
+                    }
+                });
+            }
         },
     });
 

@@ -94,6 +94,7 @@ def delete_item(request):
     module_type = request.POST.get('module')
     item_id = request.POST.get('id')
     model = globals()[module_type]
+    print model.content_type.name
     obj = model.objects.get(id=item_id, user=request.user)
     obj.delete()
     return HttpResponse('Deleted!')
@@ -110,4 +111,21 @@ def add_section(request):
 
     data_dict = {'module': module_config}
     return render_to_response('myprofile/profile_section.html',
+                              data_dict, RequestContext(request))
+
+@user_passes_test(User.objects.not_disabled)
+def get_details(request):
+    module = request.GET.get('module')
+    module_config = {}
+    item_id = request.GET.get('id')
+    model = globals()[module]
+    module_config['verbose'] = model._meta.verbose_name.title()
+    module_config['name'] = module
+    try:
+        obj = model.objects.get(id=item_id, user=request.user)
+    except model.DoesNotExist:
+        return HttpResponse('Item not found')
+    module_config['item'] = obj
+    data_dict = {'module': module_config}
+    return render_to_response('myprofile/profile_details.html',
                               data_dict, RequestContext(request))

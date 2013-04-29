@@ -3,14 +3,14 @@
     {% if module.items.0 %}
     <table class="profile">
         <tr>
-            {% for label,value in module.items.0.get_fields|slice:":4" %}                            
+            {% for label,value in module.items.0.get_fields|slice:":3" %}                            
                 <th>{{label}}</th>
             {% endfor %}
             <th class="action"></th>
         </tr>
         {% for item in module.items %}
         <tr id="{{module.name}}-{{item.id}}-item">
-            {% for   label, value in item.get_fields|slice:":4" %}
+            {% for   label, value in item.get_fields|slice:":3" %}
             <td>{{ value }}</td>
             {% endfor %}
             <td class="action">

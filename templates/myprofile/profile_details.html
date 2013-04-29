@@ -1,0 +1,25 @@
+{% load i18n %}
+
+<div class="modal hide fade" id="{{module.name}}-{{module.item.id}}-detail_modal">
+    <div class="modal-header">
+        {{module.verbose}} Details
+    </div>
+    <div class="modal-body">
+        <div class="form-box">
+            <table>
+                <tr>
+                {% for label, value in module.item.get_fields %}
+                    <th>{{label}}</th>
+                    <td>{{value}}</td>
+                {% endfor %}
+                </tr>
+            </table>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <div class="actions">
+            <a href="" data-dismiss="modal" aria-hidden="true" class="btn pull-right" id="{{module.name}}-{{module.id}}-cancel">{% trans 'Cancel' %}</a>
+            <a class="btn pull-right" id="{{module.name}}-{{module.id}}-edit">{% trans 'Edit' %}</a>
+        </div>
+    </div>
+</div>
