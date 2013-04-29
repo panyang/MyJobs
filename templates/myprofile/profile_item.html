@@ -8,11 +8,7 @@
 {% endif %}
 <tr id="{{module}}-{{item.id}}-item">
     {% for   label, value in item.get_fields|slice:":4" %}
-    {% if label == "Is This Your Primary Name?" %}
-        <td data-title="Is Primary">{{ value }}</td>
-    {% else %}
-        <td data-title="{{ label }}">{{ value }}</td>
-    {% endif %}
+    <td data-title="{{ label }}">{{ value }}</td>    
     {% endfor %}
     <td class="action">
         <button class="btn" id="{{module}}-{{item.id}}-delete">Delete</button>
