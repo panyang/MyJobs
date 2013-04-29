@@ -2,6 +2,8 @@
 {% load i18n %}
 
 {% block content %}
+{% block modal %}
+{% endblock %}
 <section>
     <div class="wrapper"> 
         <div class="row">
@@ -16,15 +18,18 @@
                 <div class="account-box">                    
                     <div class="span4 pull-left settings-nav">
                         <ul>
-                        <a href="{% url 'edit_basic' %}"><li><h4>{% trans "Basic Information" %}</h4></li></a>
+                        <a href="{% url 'edit_basic' %}"><li><h4>{% trans "Personal Information" %}</h4></li></a>
+                        <a href="{% url 'edit_communication' %}"><li><h4>{% trans "Communication Settings" %}</h4></li></a>                                    
                         <a href="{% url 'edit_password' %}"><li><h4>{% trans "Change Password" %}</h4></li></a>
-                        <a href="{% url 'edit_delete' %}"><li><h4>{% trans "Delete/Disable Account" %}</h4></li></a>
+                        <a href="{% url 'edit_disable' %}"><li><h4>{% trans "Disable Account" %}</h4></li></a>
+                        <a href="{% url 'edit_delete' %}"><li><h4>{% trans "Delete Account" %}</h4></li></a>
+
                         </ul>
                     </div>  
 
-                    <div class="span7 pull-right account-settings">
+                    <div class="span7 account-settings">
                         {% block edit-main %}
-                        <form action="" method="POST"
+                        <form action="" method="POST">
                             {% include "includes/form-error-highlight.html"%}
                             {% csrf_token %}
                             <div class="actions">
