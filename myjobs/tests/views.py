@@ -312,7 +312,8 @@ class MyJobsViewsTests(TestCase):
         response = self.client.get(reverse('continue_sending_mail'),
                                     data={'user': self.user}, follow=True)
 
-        self.assertEqual(self.user.last_response, date.today() - timedelta(days=7))
+        self.assertEqual(self.user.last_response,
+                         date.today() - timedelta(days=7))
         self.assertRedirects(response, '/')
         user = User.objects.get(pk=self.user.pk)
         self.assertEqual(user.last_response, date.today())
@@ -331,7 +332,8 @@ class MyJobsViewsTests(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(response, reverse('auth_password_change'))
 
-        response = self.client.get(reverse('registration_activate', args=['activation_code_here']))
+        response = self.client.get(reverse('registration_activate',
+                                   args=['activation_code_here']))
 
         self.assertEqual(response.status_code, 200)
 

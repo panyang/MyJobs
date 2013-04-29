@@ -23,8 +23,7 @@ class CustomUserManager(BaseUserManager):
         :user: User object if one exists; None otherwise
         """
         try:
-            user = self.get(
-                email__iexact=email)
+            user = self.get(email__iexact=email)
         except User.DoesNotExist:
             try:
                 user = self.get(
