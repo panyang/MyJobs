@@ -127,7 +127,8 @@ INSTALLED_APPS = (
     'django_jenkins',
     'widget_tweaks',
     'south',
-    'django_nose'
+    'django_nose',
+    'django_messages'
 )
 
 # Add all MyJobs apps here. This separation ensures that automated Jenkins tests
