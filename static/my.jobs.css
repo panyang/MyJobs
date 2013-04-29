@@ -751,6 +751,7 @@ table td, table th{
 .account-settings {
     padding-top: 20px;
     padding-right: 20px;
+    width: 580px;
 }
 
 .settings-nav ul {
@@ -828,6 +829,11 @@ body.modal-open {
     overflow: hidden;
 }
 
+.account-captcha {
+    text-align: center;
+    padding-bottom: 30px;
+}
+
 #edit_modal .input-prepend .add-on {
     width: 96px;
 }
@@ -835,4 +841,19 @@ body.modal-open {
 #edit_modal .input-prepend input,
 #edit_mdoal .input-prepend select {
     width: auto;
+}
+
+
+#captcha_modal {
+    width: 620px;
+}
+
+.account-warning {
+    width: 400px;
+}
+
+.warning-badge {
+    position: relative;
+    top: -57px;
+    left: 80px;
 }

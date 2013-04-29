@@ -1,4 +1,4 @@
-from django import forms
+from django.forms import *
 from django.contrib.auth.tokens import default_token_generator
 from django.contrib.sites.models import get_current_site
 from django.core.validators import validate_email, ValidationError
@@ -6,11 +6,20 @@ from django.template import loader, Context
 from django.utils.http import int_to_base36
 from django.utils.translation import ugettext_lazy as _
 
+from captcha.fields import ReCaptchaField
+
 from myjobs.models import User
-from myprofile.models import Name
+from myprofile.models import Name, SecondaryEmail
 
+from secrets import RECAPTCHA_PUBLIC_KEY, RECAPTCHA_PRIVATE_KEY
 
-class BaseUserForm(forms.ModelForm):
+def make_choices(user):
+    choices = [(user.email, user.email)]
+    for email in SecondaryEmail.objects.filter(user=user):
+        choices.append((email.email, email.email))
+    return choices
+
+class BaseUserForm(ModelForm):
     """
     Most models in the other apps are associated with a user. This base form
     will take a user object as a key word argument and saves the form instance
@@ -43,14 +52,21 @@ class BaseUserForm(forms.ModelForm):
         return instance.save()
     
 
-class EditAccountForm(forms.Form):
-    given_name = forms.CharField(label=_("First Name"), 
+class EditAccountForm(Form):
+    given_name = CharField(label=_("First Name"), 
                                  max_length=40, required=False)
-    family_name = forms.CharField(label=_("Last Name"),
+    family_name = CharField(label=_("Last Name"),
                                 max_length=40, required=False)
-    gravatar = forms.EmailField(label=_("Gravatar Email"))
-    opt_in_myjobs = forms.BooleanField(label=_("Receive messages from my.jobs"),
-                                       required=False)
+
+    def __init__(self, *args, **kwargs):
+        self.user = kwargs.pop('user',None)
+        self.choices = make_choices(self.user)
+        super(EditAccountForm, self).__init__(*args, **kwargs)
+        self.fields["gravatar"] = ChoiceField(label=_("Gravatar Email"),
+                                              widget=Select(attrs=
+                                            {'id':'id_gravatar'}),
+                                              choices=self.choices,
+                                              initial=self.choices[0][0])
 
     def clean(self):
         first = self.cleaned_data.get("given_name", None)
@@ -79,20 +95,33 @@ class EditAccountForm(forms.Form):
                        family_name=last)
             obj.save()
 
-        u.opt_in_myjobs = self.cleaned_data["opt_in_myjobs"]
         u.gravatar = self.cleaned_data["gravatar"]
         u.save()
 
-        
-class ChangePasswordForm(forms.Form):
-    password1 = forms.CharField(label=_("Password"),
-                                widget=forms.PasswordInput(attrs={'placeholder':
+
+class EditCommunicationForm(BaseUserForm):
+    def __init__(self, *args, **kwargs):
+        super(EditCommunicationForm,self).__init__(*args, **kwargs)
+        choices = make_choices(self.user)
+        self.fields["email"] = ChoiceField(widget=Select(attrs={
+                                           'id':'id_digest_email'}),
+                                           choices=choices,
+                                           initial=choices[0][0])
+
+    class Meta:
+        model = User
+        fields = ('email', 'opt_in_myjobs', 'opt_in_employers')
+
+
+class ChangePasswordForm(Form):
+    password1 = CharField(label=_("Password"),
+                                widget=PasswordInput(attrs={'placeholder':
                                                            _('Password')}))
-    password2 = forms.CharField(label=_("Password (again)"),
-                                widget=forms.PasswordInput(attrs={'placeholder':
+    password2 = CharField(label=_("Password (again)"),
+                                widget=PasswordInput(attrs={'placeholder':
                                                            _('Password (again)')}))
-    new_password = forms.CharField(label=_("New Password"),
-                                   widget=forms.PasswordInput(attrs={'placeholder':
+    new_password = CharField(label=_("New Password"),
+                                   widget=PasswordInput(attrs={'placeholder':
                                                            _('New Password')}))
     
     def __init__(self,*args, **kwargs):
@@ -102,7 +131,7 @@ class ChangePasswordForm(forms.Form):
     def clean_password1(self):
         password = self.cleaned_data['password1']
         if not self.user.check_password(password):
-            raise forms.ValidationError(("Wrong password."))
+            raise ValidationError(("Wrong password."))
         else:
             return self.cleaned_data['password1']
         
@@ -118,3 +147,8 @@ class ChangePasswordForm(forms.Form):
     def save(self):
         self.user.set_password(self.cleaned_data["new_password"])
         self.user.save()
+
+
+class CaptchaForm(Form):
+    captcha = ReCaptchaField(label="", attrs={'theme': 'clean'})
+    

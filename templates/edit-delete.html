@@ -1,9 +1,47 @@
 {% extends "edit-account.html" %}
+{% load i18n %}
 
 {% block edit-main %}
-<center>
-    <button type="button" class="btn primary" id="delete-account">Delete your account</button>
-    <br><br>
-    <button type="button" class="btn primary" id="disable-account">Deactivate your account</button>
-</center>
+<form action="" method="POST" id="captcha-form">
+  <div class="account-captcha">
+    <center>
+      <div id="captcha-errors" class="text-error"></div>
+      {{form}}
+    </center>
+    <p>{% trans "This will permanently delete your account." %}</p>
+    <strong><div class="text-error">{% trans "THIS ACTION CANNOT BE UNDONE." %}</div></strong>
+  </div>
+  {% csrf_token %}
+  <div class="actions">
+    <a href="{% url 'view_profile' %}" class="btn pull-right">{% trans 'Cancel' %}</a>
+    <button type="submit" class="btn primary pull-left show-captcha-modal" value="submit">{% trans "Delete Account" %}</button>
+    <div class="clear"></div>
+  </div>
+</form>
+  <div id="captcha_modal" class="modal hide fade row">
+    <div class="modal-body">
+      <button class="close mobile_hide" aria-hidden="true" data-dismiss="modal" type="button">×</button>
+    <div class="gravatar-warning pull-left"><img src="{{gravatar_150}}"><br><img class="warning-badge" src="{{STATIC_URL}}images/critical-badge.png"></div>
+    <div class="account-warning pull-right">
+        <p>{% trans "Are you sure you want to delete your account?" %}</p>
+        <p>{% trans "This will do the following:" %}</p>
+        <ul>
+          <li>{% trans "Delete all your profile data" %}</li>
+          <li>{% trans "Delete all your saved searches" %}</li>
+          <li>{% trans "Delete your login information" %}</li>
+        </ul>
+        <p>{% trans "This cannot be reversed." %}</p>
+        <p>{% trans "If you want to preserve your account for use later, then you should" %}
+          <a href="{% url 'disable_account' %}">{% trans "disable your account" %}</a> {% trans "instead." %}</p>
+      </div>
+    </div>
+    <div class="modal-footer">
+        <div class="actions">
+          <a href="{% url 'delete_account' %}" class="btn primary pull-right">Yes, delete my account</a>
+          <a data-dismiss="modal" aria-hidden="true" class="btn pull-left">{% trans 'Cancel' %}</a>
+          <a href="{% url 'edit_disable' %}" class="btn pull-left">{% trans 'Disable my account' %}</a>
+        </div>
+    </div>
+  </div>
 {% endblock %}
+
