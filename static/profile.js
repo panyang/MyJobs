@@ -166,7 +166,7 @@ $(function() {
                             );
                             table = $('#'+module+'_items').children('table')
                         }
-                        table.append(data);
+                        table.children("tbody").append(data);
                         $('#'+module+'-'+item_id+'-item').remove();
                         $('#edit_modal').modal('hide');
                         $('#'+module+'_items').show();
