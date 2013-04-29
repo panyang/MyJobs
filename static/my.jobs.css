@@ -35,25 +35,18 @@ a:hover{
 .action th {
     background-color: #FFF;   
     }
-.profile th {
-    background-color: #FFF;   
-    }
-.profile {
-    border-collapse:collapse; 
-    border-color:#FFF; 
-    border-style:solid; 
-    border-width:2px;
-    }
-.profile td, th {
-    border-color:#FFF; /*grey*/
-    border-style:solid; 
-    border-width:1px;
-    padding: 5px; 
-    text-align: left;
-    }
-.profile tr:nth-child(even) {background: #eae6de}
-.profile tr:nth-child(odd) {background: #d2cfc7}
 
+/* bootstrap .table-striped class */
+.table-striped thead th {
+    background-color: #574e44;   
+    color: #FFF;
+    }    
+.table-striped tr:nth-child(odd) {background-color: #d2cfc7;}
+.table-striped tr:nth-child(even) {background-color: #FFF;}
+
+.table-striped tbody tr:nth-child(even) {background-color: #d2cfc7 !important;}
+.table-striped tbody tr:nth-child(odd) {background-color: #FFF !important;}    
+    
 /* Form Styles */
 .form-label{
     text-align: right;
@@ -585,7 +578,51 @@ em.pendingText{
         margin-bottom: 5px;
     }
 }
-@media screen and (max-width: 500px){
+@media screen and (max-width: 500px){  
+    #profile-mobile table, 
+    #profile-mobile thead, 
+    #profile-mobile tbody, 
+    #profile-mobile th, 
+    #profile-mobile td, 
+    #profile-mobile tr { 
+        display: block; 
+    } 
+    #profile-mobile thead tr { 
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    } 
+    #profile-mobile tr { 
+        border: 1px solid #ccc; 
+    } 
+    #profile-mobile td {    
+        border: none;
+        border-bottom: 1px solid #eee; 
+        position: relative;
+        padding-left: 50%; 
+        white-space: normal;
+        text-align:left;
+    } 
+    #profile-mobile td:before {
+        position: absolute;
+        top: 6px;
+        left: 6px;
+        width: 45%; 
+        padding-right: 10px; 
+        white-space: nowrap;
+        text-align:left;
+        font-weight: bold;
+     }
+  
+    .table-striped tr:nth-child(odd) {background-color: #FFF;}
+    .table-striped tr:nth-child(even) {background-color: #FFF;}
+
+    .table-striped tbody tr:nth-child(even) {background-color: #FFF !important;}
+    .table-striped tbody tr:nth-child(odd) {background-color: #FFF !important;}  
+      
+    #profile-mobile td:before { content: attr(data-title); }
+    
+    
     #titleRow{
         margin-top: 0px;
     }

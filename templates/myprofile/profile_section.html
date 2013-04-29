@@ -1,26 +1,35 @@
+<section id="profile-mobile">
 <div class="formBox" id="{{module.name}}_items">       
     <h4>{{ module.verbose }}</h4>
     {% if module.items.0 %}    
-    <table class="profile">
+    <table class="table table-bordered table-striped" id="{{module.name}}_items_table">
+        <thead>    
         <tr>
             {% for label,value in module.items.0.get_fields|slice:":4" %}                            
                 <th>{{label}}</th>
             {% endfor %}
             <th class="action"></th>
         </tr>
+        </thead>
+        <tbody>
         {% for item in module.items %}      
         <tr id="{{module.name}}-{{item.id}}-item">
             {% for   label, value in item.get_fields|slice:":4" %}
-            <td>{{ value }}</td>
+            {% if label == "Is This Your Primary Name?" %}
+            <td data-title="Is Primary">{{ value }} &nbsp;</td>
+            {% else %}
+            <td data-title="{{label}}">{{ value }} &nbsp;</td>
+            {% endif %}
             {% endfor %}
             <td class="action">
                 <button class="btn" id="{{module.name}}-{{item.id}}-delete">Delete</button>
-                <button class="btn" id="{{module.name}}-{{item.id}}-edit">Edit</button>
-                
+                <button class="btn" id="{{module.name}}-{{item.id}}-edit">Edit</button>                
             </td>
         </tr>
         {% endfor %}
+        </tbody>
     </table>                
     {% endif %}    
     <button class="btn primary" id="{{module.name}}-new-add">Add</button>
 </div>
+</section>

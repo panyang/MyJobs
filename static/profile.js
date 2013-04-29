@@ -158,7 +158,7 @@ $(function() {
                 url: '/profile/form/',
                 data: serialized_data,
                 success: function(data) {
-                    if (data.indexOf('<td>') >= 0) {
+                    if (data.indexOf('<td') >= 0) {
                         // form was valid; data should be appended to the table
                         if (first_instance) {
                             $('#'+module+'_items').children('h4').after(
