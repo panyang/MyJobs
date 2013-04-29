@@ -22,12 +22,16 @@ class CustomUserManager(BaseUserManager):
         Outputs:
         :user: User object if one exists; None otherwise
         """
-        user = self.filter(
-            email__iexact=email)
-        if not user:
-            user = self.filter(
-                profileunits__secondaryemail__email__iexact=email)
-        return user or None
+        try:
+            user = self.get(
+                email__iexact=email)
+        except User.DoesNotExist:
+            try:
+                user = self.get(
+                    profileunits__secondaryemail__email__iexact=email)
+            except User.DoesNotExist:
+                user = None
+        return user
 
     def create_inactive_user(self, send_email=True, **kwargs):
         """
