@@ -324,3 +324,21 @@ class MyJobsViewsTests(TestCase):
         response = self.client.get("/")
         soup = BeautifulSoup(response.content)
         self.assertFalse(soup.findAll('a',{'id':'savedsearch_link'}))
+    
+    def test_success_msg_on_account_save(self):
+        """test that the success message displays on a successful save"""
+        response = self.client.post("/edit/basic",
+                                    {'given_name':'alice','family_name':'evans',
+                                    'gravatar':'alice@example.com'},follow=True)
+        soup = BeautifulSoup(response.content)
+        self.assertTrue(soup.findAll('div',{'class':'alert-success'}))
+        
+    def test_clear_success_msg_on_account_save_error(self):
+        """test that the success message clears out when an error follows it"""
+        response = self.client.get("/edit/basic?saved=success")
+        response = self.client.post("/edit/basic?saved=success",
+                                    {'given_name':'alice','family_name':''})
+        soup = BeautifulSoup(response.content)
+        self.assertFalse(soup.findAll('div',{'class':'alert-success'}))
+        
+        
