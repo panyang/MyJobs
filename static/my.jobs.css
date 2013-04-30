@@ -558,6 +558,9 @@ em.pendingText{
         width: 35px;
         height: 35px;
     }
+    #moduleBank a{
+        width: auto;
+    }
 }
 @media screen and (min-width: 501px){
     #saved-search-form #id_label,
