@@ -19,21 +19,10 @@ class UserResource(ModelResource):
         authorization = Authorization()
 
     def obj_create(self, bundle, **kwargs):
-        """
-        Custom create sets password, active state, and gravatar on post
-        """
-
         try:
-            bundle = self.full_hydrate(bundle)
-            bundle.obj.set_password(bundle.data.get('password'))
-            bundle.obj.is_active = False
-            bundle.obj.gravatar = bundle.data.get('email')
-            bundle.obj.save()
-
-            custom_signals.email_created.send(sender=self,user=bundle.obj,
-                                              email=bundle.obj.email )
-            custom_signals.send_activation.send(sender=self,user=bundle.obj,
-                                                email=bundle.obj.email)
+            kwargs = {'email': bundle.data.get('email'),
+                      'password1': bundle.data.get('password')}
+            User.objects.create_inactive_user(**kwargs)
         except IntegrityError:
             raise BadRequest('That username already exists')
         return bundle
