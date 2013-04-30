@@ -14,7 +14,7 @@ def create_activation_profile(sender,**kwargs):
     email = kwargs.get("email")
     activation = models.ActivationProfile.objects.create(user=user,email=email)
 
-send_activation = Signal(providing_args=["user","email"])
+send_activation = Signal(providing_args=["user","email","password"])
 
 @receiver(send_activation)
 def send_activation_email(sender,**kwargs):
@@ -25,8 +25,9 @@ def send_activation_email(sender,**kwargs):
     
     user = kwargs.get("user")
     email = kwargs.get("email")
+    password = kwargs.get("password")
     activation = models.ActivationProfile.objects.get(user=user,email=email)
-    activation.send_activation_email()
+    activation.send_activation_email(password)
 
 user_disabled = Signal(providing_args=["user","email"])
 
