@@ -44,6 +44,7 @@ class CustomUserManager(BaseUserManager):
 
         Outputs:
         :user: User object instance
+        :created: Boolean indicating whether a new user was created
         """
         email = kwargs['email']
         password = kwargs.get('password1')
