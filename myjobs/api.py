@@ -6,7 +6,6 @@ from django.contrib.auth import authenticate, login
 from tastypie.authorization import Authorization
 from tastypie.authentication import ApiKeyAuthentication
 from tastypie.exceptions import BadRequest
-from tastypie.http import HttpUnauthorized, HttpForbidden
 from tastypie.resources import ModelResource
 from tastypie.utils import trailing_slash
 

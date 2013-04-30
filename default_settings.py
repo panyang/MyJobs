@@ -130,8 +130,6 @@ INSTALLED_APPS = (
     'south',
     'django_nose',
     'tastypie',
-    'provider',
-    'provider.oauth2'
 )
 
 # Add all MyJobs apps here. This separation ensures that automated Jenkins tests
