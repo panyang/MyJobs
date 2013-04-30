@@ -75,7 +75,7 @@ def home(request):
         if request.POST['action'] == "register":
             registrationform = RegistrationForm(request.POST, auto_id=False)
             if registrationform.is_valid():
-                new_user = User.objects.create_inactive_user(**registrationform.
+                new_user, created = User.objects.create_inactive_user(**registrationform.
                                                              cleaned_data)
                 user_cache = authenticate(username = registrationform.
                                           cleaned_data['email'],
