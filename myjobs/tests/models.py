@@ -11,7 +11,7 @@ class UserManagerTests(TestCase):
                  'email': 'alice@example.com'}
 
     def test_inactive_user_creation(self):
-        new_user = User.objects.create_inactive_user(**self.user_info)
+        new_user, created = User.objects.create_inactive_user(**self.user_info)
         self.assertEqual(User.objects.count(), 1)
         self.assertEqual(new_user.is_active, False)
         self.assertEqual(len(mail.outbox), 1)
