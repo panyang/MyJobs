@@ -151,37 +151,50 @@ def edit_basic(request):
         initial_dict.update(model_to_dict(name_obj))
     
     if request.method == "POST":
-        form = EditAccountForm(request.POST)
+        form = EditAccountForm(user=request.user, data=request.POST)
         if form.is_valid():
             form.save(request.user)
             return HttpResponseRedirect('?saved=success')
     else:
-        form = EditAccountForm(initial=initial_dict)
-    
+        form = EditAccountForm(initial=initial_dict, user=request.user)
+        
     # Check for the saved query parameter. This powers a save alert on the
-    # screen after redirecting.
-    saved = request.REQUEST.get('saved')
-    if saved:
-        if saved=="success":
-            message = "Your informatation has been updated."
-            message_type = "success"
-        else:
-            message = "There as an error, please try again."
-            message_type = "error"
-    else:
-        message = ""
-        message_type = ""
+    # screen after redirecting.    
+    message = __check_for_successful_save(form,request)
 
     ctx = {'form': form,
            'user': request.user,
            'gravatar_100': request.user.get_gravatar_url(size=100),
            'name_obj': name_obj,
-           'message':message,
-           'messagetype':message_type}
+           'message_body':message['message_body'],
+           'messagetype':message['message_type']}
     
     return render_to_response('edit-account.html', ctx,
                               RequestContext(request))
 
+@user_passes_test(User.objects.not_disabled)
+def edit_communication(request):
+    obj = User.objects.get(id=request.user.id)
+    if request.method == "POST":
+        form = EditCommunicationForm(user=request.user, instance=obj,
+                                     data=request.POST)
+        if form.is_valid():
+            form.save()
+            return HttpResponseRedirect('?saved=success')
+    else:
+        form = EditCommunicationForm(user=request.user, instance=obj)
+    
+    message = __check_for_successful_save(form,request)        
+    ctx = {
+        'form':form,
+        'name_obj': get_name_obj(request),
+        'message_body':message['message_body'],
+        'messagetype':message['message_type']
+        }
+    return render_to_response('edit-account.html', ctx,
+                              RequestContext(request))
+        
+    
 @user_passes_test(User.objects.not_disabled)
 def edit_password(request):
     if request.method == "POST":
@@ -217,10 +230,37 @@ def edit_password(request):
 
 @user_passes_test(User.objects.not_disabled)
 def edit_delete(request):
-    ctx = {'name_obj': get_name_obj(request)}
-    return render_to_response('edit-delete.html', ctx,
-                              RequestContext(request))
+    if request.method == "POST":
+        form = CaptchaForm(request.POST)
+        if form.is_valid():
+            return HttpResponse('success')
+        else: 
+            return HttpResponse(json.dumps(form.errors.values()))
+    else:
+        form = CaptchaForm()
+        ctx = {'form':form,
+               'gravatar_150': request.user.get_gravatar_url(size=150),
+               'name_obj': get_name_obj(request)}
+        return render_to_response('edit-delete.html', ctx,
+                                  RequestContext(request))
 
+@user_passes_test(User.objects.not_disabled)
+def edit_disable(request):
+    if request.method == "POST":
+        form = CaptchaForm(request.POST)
+        if form.is_valid():
+            return HttpResponse('success')
+        else: 
+            return HttpResponse(json.dumps(form.errors.values()))
+    else:
+        form = CaptchaForm()
+        ctx = {'form':form,
+               'gravatar_150': request.user.get_gravatar_url(size=150),
+               'name_obj': get_name_obj(request)}
+        return render_to_response('edit-disable.html', ctx,
+                                  RequestContext(request))
+
+        
 @user_passes_test(User.objects.not_disabled)
 def delete_account(request):
     email = request.user.email
@@ -296,3 +336,34 @@ def continue_sending_mail(request):
     user.last_response = datetime.date.today()
     user.save()
     return redirect('/')
+
+
+def __check_for_successful_save(form,request):
+    """
+    This is an internal function that controls thealert message displayed
+    after saving a form.
+    
+    Inputs:
+        :form:      django form object to test for errors
+        :request:   django request object with any get message params
+    
+    Returns:
+        :message:   A dictionary object with messagebody and type.
+        
+    """
+    saved = request.REQUEST.get('saved')
+    if saved and not form.errors:
+        if saved=="success":
+            message_body = "Your information has been updated."
+            message_type = "success"
+        else:
+            message_body = "There as an error, please try again."
+            message_type = "error"
+    elif form.errors:
+        message_body = "Please check your information and try again."
+        message_type = "error"
+    else:
+        message_body = ""
+        message_type = ""
+    message = {'message_body':message_body,'message_type':message_type}
+    return message

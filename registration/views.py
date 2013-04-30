@@ -1,4 +1,5 @@
 from django.contrib.auth import authenticate, login
+from django.contrib.auth import views as auth_views
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render_to_response
 from django.template import RequestContext
@@ -56,3 +57,9 @@ def activate(request, activation_key):
     ctx = {'activated': activated}
     return render_to_response('registration/activate.html',
                               ctx, context_instance=RequestContext(request))
+
+def custom_password_change_done(request):
+    user = request.user
+    user.password_change = False
+    user.save()
+    return auth_views.password_change_done(request)

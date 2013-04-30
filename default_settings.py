@@ -72,6 +72,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
     'django.contrib.redirects.middleware.RedirectFallbackMiddleware',
+    'middleware.PasswordChangeMiddleware',
 )
 
 AUTHENTICATION_BACKENDS = (
@@ -130,6 +131,7 @@ INSTALLED_APPS = (
     'south',
     'django_nose',
     'tastypie',
+    'captcha'
 )
 
 # Add all MyJobs apps here. This separation ensures that automated Jenkins tests
@@ -206,3 +208,4 @@ LOGGING = {
 
 GRAVATAR_URL_PREFIX = "http://www.gravatar.com/avatar/"
 GRAVATAR_URL_DEFAULT = 'mm'
+
