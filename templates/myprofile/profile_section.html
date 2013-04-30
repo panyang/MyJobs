@@ -1,25 +1,28 @@
-<div class="formBox" id="{{module.name}}_items">       
+<div class="formBox profile-mobile" id="{{module.name}}_items">       
     <h4>{{ module.verbose }}</h4>
     {% if module.items.0 %}    
-    <table class="profile">
+    <table class="table table-bordered table-striped">
+        <thead>    
         <tr>
             {% for label,value in module.items.0.get_fields|slice:":4" %}                            
                 <th>{{label}}</th>
             {% endfor %}
             <th class="action"></th>
         </tr>
+        </thead>
+        <tbody>
         {% for item in module.items %}      
         <tr id="{{module.name}}-{{item.id}}-item">
             {% for   label, value in item.get_fields|slice:":4" %}
-            <td>{{ value }}</td>
+            <td data-title="{{label}}">{{ value }} &nbsp;</td>
             {% endfor %}
             <td class="action">
                 <button class="btn" id="{{module.name}}-{{item.id}}-delete">Delete</button>
-                <button class="btn" id="{{module.name}}-{{item.id}}-edit">Edit</button>
-                
+                <button class="btn" id="{{module.name}}-{{item.id}}-edit">Edit</button>                
             </td>
         </tr>
         {% endfor %}
+        </tbody>
     </table>                
     {% endif %}    
     <button class="btn primary" id="{{module.name}}-new-add">Add</button>
