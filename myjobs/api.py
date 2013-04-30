@@ -17,6 +17,8 @@ class UserResource(ModelResource):
         queryset = User.objects.all()
         resource_name = 'user'
         authorization = Authorization()
+        list_allowed_methods = ['post']
+        detail_allowed_methods = []
 
     def obj_create(self, bundle, **kwargs):
         try:
