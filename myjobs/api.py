@@ -4,6 +4,7 @@ from django.conf.urls.defaults import patterns, url
 from django.contrib.auth import authenticate, login
 
 from tastypie.authorization import Authorization
+from tastypie.authentication import ApiKeyAuthentication
 from tastypie.exceptions import BadRequest
 from tastypie.http import HttpUnauthorized, HttpForbidden
 from tastypie.resources import ModelResource
@@ -19,6 +20,7 @@ class UserResource(ModelResource):
         authorization = Authorization()
         list_allowed_methods = ['post']
         detail_allowed_methods = []
+        authentication = ApiKeyAuthentication() 
 
     def obj_create(self, bundle, **kwargs):
         try:
