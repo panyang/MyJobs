@@ -148,9 +148,6 @@ ul.ui-autocomplete{
 .formBox + .formBox{
     margin-top: 20px;
 }
-#profile-mobile + #profile-mobile{
-    margin-top: 20px;
-}
 .account-box{    
     background-color: #FFF;
     padding: 10px;
@@ -561,9 +558,6 @@ em.pendingText{
         width: 35px;
         height: 35px;
     }
-    #moduleBank a{
-        width: auto;
-    }
 }
 @media screen and (min-width: 501px){
     #saved-search-form #id_label,
@@ -585,23 +579,23 @@ em.pendingText{
     }
 }
 @media screen and (max-width: 500px){  
-    #profile-mobile table, 
-    #profile-mobile thead, 
-    #profile-mobile tbody, 
-    #profile-mobile th, 
-    #profile-mobile td, 
-    #profile-mobile tr { 
+    .profile-mobile table, 
+    .profile-mobile thead, 
+    .profile-mobile tbody, 
+    .profile-mobile th, 
+    .profile-mobile td, 
+    .profile-mobile tr { 
         display: block; 
     } 
-    #profile-mobile thead tr { 
+    .profile-mobile thead tr { 
         position: absolute;
         top: -9999px;
         left: -9999px;
     } 
-    #profile-mobile tr { 
+    .profile-mobile tr { 
         border: 1px solid #ccc; 
     } 
-    #profile-mobile td {    
+    .profile-mobile td {    
         border: none;
         border-bottom: 1px solid #eee; 
         position: relative;
@@ -609,7 +603,7 @@ em.pendingText{
         white-space: normal;
         text-align:left;
     } 
-    #    -mobile td:before {
+    .profile-mobile td:before {
         position: absolute;
         top: 6px;
         left: 6px;
@@ -626,7 +620,7 @@ em.pendingText{
     .table-striped tbody tr:nth-child(even) {background-color: #FFF !important;}
     .table-striped tbody tr:nth-child(odd) {background-color: #FFF !important;}  
       
-    #profile-mobile td:before { content: attr(data-title); }
+    .profile-mobile td:before { content: attr(data-title); }
     
     
     #titleRow{
@@ -737,9 +731,6 @@ em.pendingText{
 
     #profileTitleBar {
         overflow-x: hidden;
-    }
-    #moduleBank a{
-        width: auto;
     }
 }
 
