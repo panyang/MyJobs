@@ -41,9 +41,6 @@ a:hover{
     background-color: #FFF;   
     color: #000;
     }    
-.table-striped.test tr:nth-child(odd) {background-color: #d2cfc7 !important;}
-.table-striped.test tr:nth-child(even) {background-color: #eae6de !important;}
-
 .table-striped tbody tr:nth-child(even) td {background-color: #d2cfc7 !important;}
 .table-striped tbody tr:nth-child(odd) td {background-color: #eae6de !important;}
     
