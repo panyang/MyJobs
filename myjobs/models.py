@@ -44,6 +44,7 @@ class CustomUserManager(BaseUserManager):
 
         Outputs:
         :user: User object instance
+        :created: Boolean indicating whether a new user was created
         """
         email = kwargs['email']
         password = kwargs.get('password1')
@@ -51,6 +52,7 @@ class CustomUserManager(BaseUserManager):
             raise ValueError('Email address required.')
 
         user = self.get_email_owner(email)
+        created = False
         if user is None:
             user = self.model(email=CustomUserManager.normalize_email(email))
             if password:
@@ -63,7 +65,7 @@ class CustomUserManager(BaseUserManager):
             user.is_active = False
             user.gravatar = user.email
             user.save(using=self._db)
-
+            created = True
             custom_signals.email_created.send(sender=self,user=user,
                                               email=email)
             if send_email:
@@ -74,7 +76,7 @@ class CustomUserManager(BaseUserManager):
                 else:
                     custom_signals.send_activation.send(sender=self,user=user,
                                                         email=email)
-        return user
+        return (user, created)
 
     def create_user(self, **kwargs):
         """

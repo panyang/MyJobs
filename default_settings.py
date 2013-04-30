@@ -32,6 +32,7 @@ TIME_ZONE = 'America/New_York'
 LANGUAGE_CODE = 'en-us'
 # Support for Django Sites framework
 SITE_ID = 1
+USE_TZ = True
 
 USE_I18N = True
 USE_L10N = True
@@ -129,6 +130,7 @@ INSTALLED_APPS = (
     'widget_tweaks',
     'south',
     'django_nose',
+    'tastypie',
     'captcha'
 )
 
