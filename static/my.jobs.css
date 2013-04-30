@@ -565,6 +565,13 @@ em.pendingText{
         width: 35px;
         height: 35px;
     }
+
+    .modal-fullscreen {
+        left: 0 !important;
+        right: 0 !important;
+        margin-top: 0 !important;
+        margin-left: 0 !important;
+    }
 }
 @media screen and (min-width: 501px){
     #saved-search-form #id_label,
@@ -833,6 +840,6 @@ body.modal-open {
 }
 
 #edit_modal .input-prepend input,
-#edit_mdoal .input-prepend select {
+#edit_modal .input-prepend select {
     width: auto;
 }

@@ -12,7 +12,7 @@ $(function() {
             "click [id$='edit']": "editForm",
             // targets "Edit" buttons for individual modules
 
-            "hidden #edit_modal": "cancelForm",
+            "hidden [id$='_modal']": "cancelForm",
             // targets event fired when #edit_modal is closed
             // includes clicking any of the modal close buttons, pressing Esc,
             // and clicking on the dark modal background
@@ -21,10 +21,13 @@ $(function() {
             // targets "Save" button  in the modal window
 
             "click [id$='delete']": "deleteItem",
-            // targets "Delete" buttons for individual modules
+            // targets "Delete" button on confirmation modal
 
             "change [id$='-country_code']": "getSelect",
             // targets country select boxes
+
+            "click [id$='confirm']": "confirmDelete",
+            // targets "Delete" button on add/edit modal
         },
 
         /*
@@ -58,7 +61,7 @@ $(function() {
         Returns document to the state it was in prior to opening the form modal
         Called on "Cancel" button click or closure of the modal window
 
-        :e: new/edit module modal window
+        :e: modal window
         */
         cancelForm: function(e) {
             e.preventDefault();
@@ -70,9 +73,13 @@ $(function() {
             var module = target.attr('id').split('-')[0];
             var item_id = target.attr('id').split('-')[1];
 
-            // Upon closing the modal window, it should be removed from the
+            // Upon closing the modal window, all modals should be removed from
             // document to allow for additional modals
-            $("div#edit_modal").remove();
+            $("div[id$='_modal']").each(function() {
+                $(this).modal('hide');
+                $(this).remove();
+            });
+
             if (item_id != 'new') {
                 // When "Edit" was clicked, the relevant item was hidden
                 // Since nothing has changed, the item needs to be re-shown
@@ -98,7 +105,7 @@ $(function() {
             var item;
             if (id != 'new') {
                 // targets the table row containing the item to be edited
-                item = $(e.target).parents('tr');
+                item = $('#'+module+'-'+id+'-item');
             }
 
             $.ajax({
@@ -148,7 +155,7 @@ $(function() {
             first_instance=0;
             if(typeof(table.attr("class"))=="undefined"){
                 first_instance = 1;
-            }  
+            }
             var serialized_data = form.serialize();
             serialized_data += '&module=' + module + '&id=' + item_id +
                                '&first_instance=' + first_instance +
@@ -190,7 +197,7 @@ $(function() {
         /*
         Deletes the specified item
 
-        :e: "Delete" button associated with the item to be deleted
+        :e: "Delete" button within the delete confirmation modal
         */
         deleteItem: function(e) {
             e.preventDefault();
@@ -200,26 +207,23 @@ $(function() {
                 csrf_token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
             }
 
-            // targets the table row containing the item to be deleted
-            var item = $(e.target).parents('tr');
-
             // id is formatted [module_type]-[item_id]-[event]
             var module = $(e.target).attr('id').split("-")[0];
             var id = $(e.target).attr('id').split("-")[1];
 
-            var verbose_name = $('#'+module+'-verbose').text();
-            var answer = confirm('Are you sure you want to delete this '+verbose_name+'?');
-            if (answer) {
-                $.ajax({
-                    type: 'POST',
-                    url: '/profile/delete/',
-                    data: {'module':module, 'id':id, csrfmiddlewaretoken: csrf_token},
-                    success: function(data) {
-                        item.remove();
-                        manageModuleDisplay(module);
-                    }
-                });
-            }
+            // targets the table row containing the item to be deleted
+            var item = $('#'+module+'-'+id+'-item');
+
+            $.ajax({
+                type: 'POST',
+                url: '/profile/delete/',
+                data: {'module':module, 'id':id, csrfmiddlewaretoken: csrf_token},
+                success: function(data) {
+                    item.remove();
+                    manageModuleDisplay(module);
+                    $('[id$="_modal"]').modal('hide');
+                }
+            });
         },
 
         /*
@@ -282,11 +286,27 @@ $(function() {
                 },
             });
         },
+
+        /*
+        Shows a confirmation message to determine if user really wants
+        to delete the specified item
+
+        :e: "Delete" button within item details modal
+        */
+        confirmDelete: function(e) {
+            e.preventDefault();
+            console.log(e.target)
+            console.log($(e.target).parents('[id$="modal"]')[0])
+            $(e.target).parents('[id$="modal"]').hide();
+            resize_modal('#confirm_modal');
+            $("#confirm_modal").modal({backdrop:false});
+        },
     });
 
     var App = new AppView;
 
     $(window).on('resize', function() {
+        resize_modal('#confirm_modal');
         resize_modal('#edit_modal');
     });
 });
