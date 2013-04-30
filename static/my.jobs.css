@@ -38,14 +38,14 @@ a:hover{
 
 /* bootstrap .table-striped class */
 .table-striped thead th {
-    background-color: #574e44;   
-    color: #FFF;
+    background-color: #FFF;   
+    color: #000;
     }    
-.table-striped tr:nth-child(odd) {background-color: #d2cfc7;}
-.table-striped tr:nth-child(even) {background-color: #FFF;}
+.table-striped.test tr:nth-child(odd) {background-color: #d2cfc7 !important;}
+.table-striped.test tr:nth-child(even) {background-color: #eae6de !important;}
 
-.table-striped tbody tr:nth-child(even) {background-color: #d2cfc7 !important;}
-.table-striped tbody tr:nth-child(odd) {background-color: #FFF !important;}    
+.table-striped tbody tr:nth-child(even) td {background-color: #d2cfc7 !important;}
+.table-striped tbody tr:nth-child(odd) td {background-color: #eae6de !important;}
     
 /* Form Styles */
 .form-label{
