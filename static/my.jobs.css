@@ -460,7 +460,7 @@ em.pendingText{
     text-decoration: none;
 }
 #moduleColumn td.action{
-    width: 135px;
+    min-width: 135px;
 }
 
 /* Footer Styles */
