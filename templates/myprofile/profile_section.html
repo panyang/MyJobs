@@ -14,7 +14,7 @@
         {% for item in module.items %}      
         <tr id="{{module.name}}-{{item.id}}-item">
             {% for   label, value in item.get_fields|slice:":4" %}
-            <td data-title="{{label}}">{{ value }} &nbsp;</td>            
+            <td data-title="{{label}}">{{ value }} &nbsp;</td>
             {% endfor %}
             <td class="action">
                 <button class="btn" id="{{module.name}}-{{item.id}}-delete">Delete</button>
