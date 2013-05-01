@@ -17,7 +17,7 @@
             {% for   label, value in item.get_fields|slice:":4" %}
             <td data-title="{{label}}">{{ value|lookup }} &nbsp;</td>
             {% endfor %}
-            <td class="action">                      
+            <td class="action">
                 <button class="btn" id="{{module.name}}-{{item.id}}-delete">Delete</button>
                 <button class="btn" id="{{module.name}}-{{item.id}}-edit">Edit</button>                
             </td>
