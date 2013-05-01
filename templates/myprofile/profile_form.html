@@ -1,8 +1,8 @@
 {% load i18n %}
 
-<div id="edit_modal" class="modal hide fade modal-fullscreen">
+<div id="edit_modal" class="modal hide fade">
     <div class="modal-header">
-        <button class="close mobile_hide" aria-hidden="true" data-dismiss="modal" type="button">×</button>
+        <button id="modal-header-cancel" class="close mobile_hide" aria-hidden="true" data-dismiss="modal" type="button">×</button>
         <h1>{% if item_id == "new" %}{% trans 'Add' %}{% else %}{% trans 'Edit' %}{% endif %} <small>{% trans verbose %}</small></h1>
     </div>
         <div class="modal-body">
@@ -24,7 +24,7 @@
         </div>
 </div>
 {% if item_id != "new" %}
-<div id="confirm_modal" class="modal hide fade" role="dialog" aria-hidden="true">
+<div id="confirm_modal" class="modal hide fade choice" aria-hidden="true">
     <div class="modal-header">
         Really Delete?
     </div>

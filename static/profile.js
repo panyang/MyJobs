@@ -3,31 +3,31 @@ $(function() {
         el: $(".row"),
 
         events: {
+            // targets event fired when buttons within #moduleBank are clicked
             "click [id$='section']": "addSection",
-            // targets buttons within #moduleBank
 
+            // targets event fired when "Add Another" buttons in each module
+            // section are clicked
             "click [id$='add']": "editForm",
-            // targets "Add Another" buttons in each module section
 
-            "click [id$='edit']": "editForm",
             // targets "Edit" buttons for individual modules
+            "click [id$='edit']": "editForm",
 
-            "hidden [id$='_modal']": "cancelForm",
-            // targets event fired when #edit_modal is closed
-            // includes clicking any of the modal close buttons, pressing Esc,
-            // and clicking on the dark modal background
+            // targets event fired when "Cancel" or "x" buttons within modals
+            // are clicked
+            "click [id$='cancel']": "cancelForm",
 
-            "click [id$='save']": "saveForm",
             // targets "Save" button  in the modal window
+            "click [id$='save']": "saveForm",
 
-            "click [id$='delete']": "deleteItem",
             // targets "Delete" button on confirmation modal
+            "click [id$='delete']": "deleteItem",
 
-            "change [id$='-country_code']": "getSelect",
             // targets country select boxes
+            "change [id$='-country_code']": "getSelect",
 
-            "click [id$='confirm']": "confirmDelete",
             // targets "Delete" button on add/edit modal
+            "click [id$='confirm']": "confirmDelete",
         },
 
         /*
@@ -58,27 +58,37 @@ $(function() {
         },
 
         /*
-        Returns document to the state it was in prior to opening the form modal
-        Called on "Cancel" button click or closure of the modal window
+        Returns document to the state it was in prior to opening the most 
+        recent modal. Called on "Cancel" button click or closure of the
+        modal window
 
-        :e: modal window
+        :e: cancel buttons within modal window
         */
         cancelForm: function(e) {
             e.preventDefault();
 
-            // targets the cancel button located within the modal window
-            var target = $(e.target).find('a[id$="cancel"]');
+            // e.target may be either the cancel button or the x button;
+            // We need the cancel button
+            var target = $(e.target).parents('[id$="modal"]')
+                .find('a[id$="cancel"]');
 
             // id is formatted [module_type]-[item_id]-[event]
             var module = target.attr('id').split('-')[0];
             var item_id = target.attr('id').split('-')[1];
 
-            // Upon closing the modal window, all modals should be removed from
-            // document to allow for additional modals
-            $("div[id$='_modal']").each(function() {
-                $(this).modal('hide');
-                $(this).remove();
-            });
+            var modal = target.parents('.modal')
+            if (modal.attr('data-parent') !== undefined) {
+                // The modal being closed was opened by another modal;
+                // It should be hidden and its parent modal should be shown
+                modal.modal('hide');
+                parent_modal = $('#'+modal.attr('data-parent'));
+                modal.removeAttr('data-parent');
+                parent_modal.modal({'backdrop':'static','keyboard':false});
+            } else {
+                // Upon closing certain modal windows, all modals should be
+                // removed from the document
+                $('[id$="modal"]').modal('hide').remove();
+            }
 
             if (item_id != 'new') {
                 // When "Edit" was clicked, the relevant item was hidden
@@ -118,7 +128,7 @@ $(function() {
                     data = $(data).hide();
                     $('#moduleColumn').append(data);
                     resize_modal('#edit_modal');
-                    $('#edit_modal').modal();
+                    $('#edit_modal').modal({'backdrop':'static','keyboard':false});
                     datepicker();
 
                     $('[id$="-country_sub_division_code"]').hide();
@@ -175,7 +185,8 @@ $(function() {
                         }
                         table.append(data);
                         $('#'+module+'-'+item_id+'-item').remove();
-                        $('#edit_modal').modal('hide');
+                        $('[id$="modal"]').modal('hide');
+                        $('[id$="modal"]').remove();
                         $('#'+module+'_items').show();
                     } else {
                         // form was a json-encoded list of errors and error messages
@@ -221,7 +232,7 @@ $(function() {
                 success: function(data) {
                     item.remove();
                     manageModuleDisplay(module);
-                    $('[id$="_modal"]').modal('hide');
+                    $('[id$="modal"]').modal('hide').remove();
                 }
             });
         },
@@ -295,11 +306,11 @@ $(function() {
         */
         confirmDelete: function(e) {
             e.preventDefault();
-            console.log(e.target)
-            console.log($(e.target).parents('[id$="modal"]')[0])
-            $(e.target).parents('[id$="modal"]').hide();
+            var parent_modal = $(e.target).parents('[id$="modal"]')
+            parent_modal.modal('hide');
             resize_modal('#confirm_modal');
-            $("#confirm_modal").modal({backdrop:false});
+            $('#confirm_modal').attr('data-parent', parent_modal.attr('id'));
+            $('#confirm_modal').modal({'backdrop':'static','keyboard':false});
         },
     });
 

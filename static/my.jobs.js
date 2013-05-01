@@ -65,14 +65,14 @@ function resize_modal(modal) {
         left = right = '0px';
         top_ = bottom = '0px';
     } else {
-        if (modal.attr('role') !== 'dialog') {
+        if (!modal.hasClass('choice')) {
             left = right = '150px';
             top_ = '50px';
             bottom = '100px';
         }
     }
 
-    if (modal.attr('role') === 'dialog') {
+    if (modal.hasClass('choice')) {
         if (window_width <= 500) {
             top_ = bottom = left = right = '0px';
         } else {
