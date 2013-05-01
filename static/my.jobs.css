@@ -35,25 +35,15 @@ a:hover{
 .action th {
     background-color: #FFF;   
     }
-.profile th {
-    background-color: #FFF;   
-    }
-.profile {
-    border-collapse:collapse; 
-    border-color:#FFF; 
-    border-style:solid; 
-    border-width:2px;
-    }
-.profile td, th {
-    border-color:#FFF; /*grey*/
-    border-style:solid; 
-    border-width:1px;
-    padding: 5px; 
-    text-align: left;
-    }
-.profile tr:nth-child(even) {background: #eae6de}
-.profile tr:nth-child(odd) {background: #d2cfc7}
 
+/* bootstrap .table-striped class */
+.table-striped thead th {
+    background-color: #FFF;   
+    color: #000;
+    }    
+.table-striped tbody tr:nth-child(even) td {background-color: #d2cfc7 !important;}
+.table-striped tbody tr:nth-child(odd) td {background-color: #eae6de !important;}
+    
 /* Form Styles */
 .form-label{
     text-align: right;
@@ -467,7 +457,7 @@ em.pendingText{
     text-decoration: none;
 }
 #moduleColumn td.action{
-    width: 135px;
+    min-width: 135px;
 }
 
 /* Footer Styles */
@@ -565,6 +555,9 @@ em.pendingText{
         width: 35px;
         height: 35px;
     }
+    #moduleBank a{
+        width: auto;
+    }
 }
 @media screen and (min-width: 501px){
     #saved-search-form #id_label,
@@ -585,7 +578,48 @@ em.pendingText{
         margin-bottom: 5px;
     }
 }
-@media screen and (max-width: 500px){
+@media screen and (max-width: 500px){  
+    .profile-mobile table, 
+    .profile-mobile thead, 
+    .profile-mobile tbody, 
+    .profile-mobile th, 
+    .profile-mobile td, 
+    .profile-mobile tr { 
+        display: block; 
+    } 
+    .profile-mobile thead tr { 
+        position: absolute;
+        top: -9999px;
+        left: -9999px;
+    } 
+    .profile-mobile tr { 
+        border: 1px solid #ccc; 
+    } 
+    .profile-mobile td {    
+        border: none;
+        border-bottom: 1px solid #eee; 
+        position: relative;
+        padding-left: 50%; 
+        white-space: normal;
+        text-align:left;
+    } 
+    .profile-mobile td:before {
+        position: absolute;
+        top: 6px;
+        left: 6px;
+        width: 45%; 
+        padding-right: 10px; 
+        white-space: nowrap;
+        text-align:left;
+        font-weight: bold;
+     }
+  
+    .table-striped tbody tr:nth-child(even) td {background-color: #FFF !important;}
+    .table-striped tbody tr:nth-child(odd) td {background-color: #FFF !important;} 
+      
+    .profile-mobile td:before { content: attr(data-title); }
+    
+    
     #titleRow{
         margin-top: 0px;
     }
@@ -751,6 +785,7 @@ table td, table th{
 .account-settings {
     padding-top: 20px;
     padding-right: 20px;
+    width: 580px;
 }
 
 .settings-nav ul {
@@ -828,6 +863,11 @@ body.modal-open {
     overflow: hidden;
 }
 
+.account-captcha {
+    text-align: center;
+    padding-bottom: 30px;
+}
+
 #edit_modal .input-prepend .add-on {
     width: 96px;
 }
@@ -835,4 +875,19 @@ body.modal-open {
 #edit_modal .input-prepend input,
 #edit_modal .input-prepend select {
     width: auto;
+}
+
+
+#captcha_modal {
+    width: 620px;
+}
+
+.account-warning {
+    width: 400px;
+}
+
+.warning-badge {
+    position: relative;
+    top: -57px;
+    left: 80px;
 }

@@ -175,7 +175,7 @@ $(function() {
                 url: '/profile/form/',
                 data: serialized_data,
                 success: function(data) {
-                    if (data.indexOf('<td>') >= 0) {
+                    if (data.indexOf('<td') >= 0) {
                         // form was valid; data should be appended to the table
                         if (first_instance) {
                             $('#'+module+'_items').children('h4').after(
@@ -183,7 +183,7 @@ $(function() {
                             );
                             table = $('#'+module+'_items').children('table')
                         }
-                        table.append(data);
+                        table.children("tbody").append(data);
                         $('#'+module+'-'+item_id+'-item').remove();
                         $('[id$="modal"]').modal('hide');
                         $('[id$="modal"]').remove();

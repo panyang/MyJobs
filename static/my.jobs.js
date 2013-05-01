@@ -14,18 +14,30 @@ $(document).ready(function(){
         $("#nav").removeClass("active");
     });
 
-    $('#delete-account').click(function(){
-        var answer = confirm('Are you sure you want to delete your account?');
-        if (answer == true) {
-            window.location = '/account/delete';
-        }
-    });
-
     $('#disable-account').click(function(){
         var answer = confirm('Are you sure you want to disable your account?');
         if (answer == true) {
             window.location = '/account/disable';
         }
+    });
+
+
+    $('.show-captcha-modal').click(function(e) {
+        e.preventDefault();
+        $.ajax({
+            type:"POST",
+            url: "/edit/delete",
+            data: $("#captcha-form").serialize(),
+            success: function(data) {
+                if (data == 'success') {
+                    $("#captcha-errors").html('');
+                    $("#captcha_modal").modal();
+                } else {
+                    var error = jQuery.parseJSON(data)[0][0];
+                    $("#captcha-errors").html('<div class="alert-message block-message error">'+error+'</div>');
+                }
+            }
+        });
     });
 });
 
