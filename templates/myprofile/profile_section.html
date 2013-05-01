@@ -1,25 +1,29 @@
 <div class="formBox" id="{{module.name}}_items">
-    <h4>{{ module.verbose }}</h4>
+    <h4 id="{{module.name}}-verbose">{{ module.verbose }}</h4>
     {% if module.items.0 %}
     <table class="profile">
+        <thead>    
         <tr>
             {% for label,value in module.items.0.get_fields|slice:":3" %}                            
                 <th>{{label}}</th>
             {% endfor %}
             <th class="action"></th>
         </tr>
-        {% for item in module.items %}
+        </thead>
+        <tbody>
+        {% for item in module.items %}      
         <tr id="{{module.name}}-{{item.id}}-item">
-            {% for   label, value in item.get_fields|slice:":3" %}
-            <td>{{ value }}</td>
+            {% for label, value in item.get_fields|slice:":3" %}
+            <td data-title="{{label}}">{{ value }} &nbsp;</td>
             {% endfor %}
             <td class="action">
                 <button class="btn" id="{{module.name}}-{{item.id}}-view">View</button>
-                <button class="btn" id="{{module.name}}-{{item.id}}-edit">Edit</button>
+                <button class="btn" id="{{module.name}}-{{item.id}}-edit">Edit</button>                
             </td>
         </tr>
         {% endfor %}
-    </table>
-    {% endif %}
+        </tbody>
+    </table>                
+    {% endif %}    
     <button class="btn primary" id="{{module.name}}-new-add">Add</button>
 </div>

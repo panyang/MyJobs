@@ -3,31 +3,34 @@ $(function() {
         el: $(".row"),
 
         events: {
+            // targets event fired when buttons within #moduleBank are clicked
             "click [id$='section']": "addSection",
-            // targets buttons within #moduleBank
 
+            // targets event fired when "Add Another" buttons in each module
+            // section are clicked
             "click [id$='add']": "editForm",
-            // targets "Add Another" buttons in each module section
 
-            "click [id$='edit']": "editForm",
             // targets "Edit" buttons for individual modules
+            "click [id$='edit']": "editForm",
 
-            "hidden [id$='_modal']": "cancelForm",
-            // targets event fired when modal windows are closed
-            // includes clicking any of the modal close buttons, pressing Esc,
-            // and clicking on the dark modal background
+            // targets event fired when "Cancel" or "x" buttons within modals
+            // are clicked
+            "click [id$='cancel']": "cancelForm",
 
-            "click [id$='save']": "saveForm",
             // targets "Save" button  in the modal window
+            "click [id$='save']": "saveForm",
 
+            // targets "Delete" button on confirmation modal
             "click [id$='delete']": "deleteItem",
-            // targets "Delete" buttons for individual modules
 
-            "change [id$='-country_code']": "getSelect",
             // targets country select boxes
+            "change [id$='-country_code']": "getSelect",
 
-            "click [id$='view']": "viewDetails",
+            // targets "Delete" button on add/edit modal
+            "click [id$='confirm']": "confirmDelete",
+
             // targets "View" button for each item
+            "click [id$='view']": "viewDetails",
         },
 
         /*
@@ -58,24 +61,38 @@ $(function() {
         },
 
         /*
-        Returns document to the state it was in prior to opening the form modal
-        Called on "Cancel" button click or closure of the modal window
+        Returns document to the state it was in prior to opening the most 
+        recent modal. Called on "Cancel" button click or closure of the
+        modal window
 
-        :e: new/edit module modal window
+        :e: cancel buttons within modal window
         */
         cancelForm: function(e) {
             e.preventDefault();
 
-            // targets the cancel button located within the modal window
-            var target = $(e.target).find('a[id$="cancel"]');
+            // e.target may be either the cancel button or the x button;
+            // We need the cancel button
+            var target = $(e.target).parents('[id$="modal"]')
+                .find('a[id$="cancel"]');
 
             // id is formatted [module_type]-[item_id]-[event]
             var module = target.attr('id').split('-')[0];
             var item_id = target.attr('id').split('-')[1];
 
-            // Upon closing the modal window, it should be removed from the
-            // document to allow for additional modals
-            $("[id$='modal']").remove();
+            var modal = target.parents('.modal')
+            if (modal.attr('data-parent') !== undefined) {
+                // The modal being closed was opened by another modal;
+                // It should be hidden and its parent modal should be shown
+                modal.modal('hide');
+                parent_modal = $('#'+modal.attr('data-parent'));
+                modal.removeAttr('data-parent');
+                parent_modal.modal({'backdrop':'static','keyboard':false});
+            } else {
+                // Upon closing certain modal windows, all modals should be
+                // removed from the document
+                $('[id$="modal"]').modal('hide').remove();
+            }
+
             if (item_id != 'new') {
                 // When "Edit" was clicked, the relevant item was hidden
                 // Since nothing has changed, the item needs to be re-shown
@@ -101,7 +118,7 @@ $(function() {
             var item;
             if (id != 'new') {
                 // targets the table row containing the item to be edited
-                item = $(e.target).parents('tr');
+                item = $('#'+module+'-'+id+'-item');
             }
 
             $.ajax({
@@ -114,7 +131,7 @@ $(function() {
                     data = $(data).hide();
                     $('#moduleColumn').append(data);
                     resize_modal('#edit_modal');
-                    $('#edit_modal').modal();
+                    $('#edit_modal').modal({'backdrop':'static','keyboard':false});
                     datepicker();
 
                     $('[id$="-country_sub_division_code"]').hide();
@@ -151,7 +168,7 @@ $(function() {
             first_instance=0;
             if(typeof(table.attr("class"))=="undefined"){
                 first_instance = 1;
-            }  
+            }
             var serialized_data = form.serialize();
             serialized_data += '&module=' + module + '&id=' + item_id +
                                '&first_instance=' + first_instance +
@@ -161,7 +178,7 @@ $(function() {
                 url: '/profile/form/',
                 data: serialized_data,
                 success: function(data) {
-                    if (data.indexOf('<td>') >= 0) {
+                    if (data.indexOf('<td') >= 0) {
                         // form was valid; data should be appended to the table
                         if (first_instance) {
                             $('#'+module+'_items').children('h4').after(
@@ -169,9 +186,10 @@ $(function() {
                             );
                             table = $('#'+module+'_items').children('table')
                         }
-                        table.append(data);
+                        table.children("tbody").append(data);
                         $('#'+module+'-'+item_id+'-item').remove();
-                        $('#edit_modal').modal('hide');
+                        $('[id$="modal"]').modal('hide');
+                        $('[id$="modal"]').remove();
                         $('#'+module+'_items').show();
                     } else {
                         // form was a json-encoded list of errors and error messages
@@ -193,7 +211,7 @@ $(function() {
         /*
         Deletes the specified item
 
-        :e: "Delete" button associated with the item to be deleted
+        :e: "Delete" button within the delete confirmation modal
         */
         deleteItem: function(e) {
             e.preventDefault();
@@ -206,6 +224,8 @@ $(function() {
             // id is formatted [module_type]-[item_id]-delete
             var module = $(e.target).attr('id').split("-")[0];
             var id = $(e.target).attr('id').split("-")[1];
+
+            // targets the table row containing the item to be deleted
             var item = $('#'+module+'-'+id+'-item');
 
             $.ajax({
@@ -217,6 +237,7 @@ $(function() {
                     $('#edit_modal').remove();
                     item.remove();
                     manageModuleDisplay(module);
+                    $('[id$="modal"]').modal('hide').remove();
                 }
             });
         },
@@ -307,11 +328,27 @@ $(function() {
                 });
             }
         },
+
+        /*
+        Shows a confirmation message to determine if user really wants
+        to delete the specified item
+
+        :e: "Delete" button within item details modal
+        */
+        confirmDelete: function(e) {
+            e.preventDefault();
+            var parent_modal = $(e.target).parents('[id$="modal"]')
+            parent_modal.modal('hide');
+            resize_modal('#confirm_modal');
+            $('#confirm_modal').attr('data-parent', parent_modal.attr('id'));
+            $('#confirm_modal').modal({'backdrop':'static','keyboard':false});
+        },
     });
 
     var App = new AppView;
 
     $(window).on('resize', function() {
+        resize_modal('#confirm_modal');
         resize_modal('#edit_modal');
     });
 });
@@ -321,15 +358,14 @@ function manageModuleDisplay(module) {
     if (target.find('table tr').length <= 1) {
         // The last item in a module section was deleted or the add operation was canceled
 
-        // The module section's h4 element contains the correct verbose name for each module
-        var parent_name = target.find('h4').text();
+        var verbose_name = $('#'+module+'-verbose').text();
 
         // Remove the empty section
         target.remove();
 
         // Replace the button within the moduleBank table and display the moduleBank
         $("#moduleBank table").append(
-            "<tr class='profile_section'><td><a id='"+module+"-section' href=''>"+parent_name+"</a></td></tr>"
+            "<tr class='profile_section'><td><a id='"+module+"-section' href=''>"+verbose_name+"</a></td></tr>"
         );
         $("#moduleBank").show();
     }

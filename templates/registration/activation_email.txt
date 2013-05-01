@@ -13,6 +13,9 @@ following context:
     The number of days remaining during which the account may be
     activated.
 
+``password``
+    The user's auto-generated password, if any
+
 {% endcomment %}
 {% blocktrans with site.name as site_name and site.domain as site_domain %}
 
@@ -21,9 +24,22 @@ be activated. To do this, please follow the following link:
 
 http://my.jobs/accounts/activate/{{ activation_key }}
 
+{% endblocktrans %}
+
+{% if password %}
+{% blocktrans %}
+
+Your temporary password is {{password}}
+
+It must be changed upon logging in.
+
+{% endblocktrans %}
+{% endif %}
+
+{% blocktrans %}
+
 Please note that if your activation does not succeed
 within {{ expiration_days }} days, you will have to restart
 the verification process.
-
 
 {% endblocktrans %}

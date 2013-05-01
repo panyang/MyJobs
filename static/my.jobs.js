@@ -14,18 +14,30 @@ $(document).ready(function(){
         $("#nav").removeClass("active");
     });
 
-    $('#delete-account').click(function(){
-        var answer = confirm('Are you sure you want to delete your account?');
-        if (answer == true) {
-            window.location = '/account/delete';
-        }
-    });
-
     $('#disable-account').click(function(){
         var answer = confirm('Are you sure you want to disable your account?');
         if (answer == true) {
             window.location = '/account/disable';
         }
+    });
+
+
+    $('.show-captcha-modal').click(function(e) {
+        e.preventDefault();
+        $.ajax({
+            type:"POST",
+            url: "/edit/delete",
+            data: $("#captcha-form").serialize(),
+            success: function(data) {
+                if (data == 'success') {
+                    $("#captcha-errors").html('');
+                    $("#captcha_modal").modal();
+                } else {
+                    var error = jQuery.parseJSON(data)[0][0];
+                    $("#captcha-errors").html('<div class="alert-message block-message error">'+error+'</div>');
+                }
+            }
+        });
     });
 });
 
@@ -43,36 +55,61 @@ function clearForm(form) {
     });
 };
 
+/*
+Resizes the given modal window.
+At mobile resolutions, all modals are fullscreen.
+At tablet resolutions, choice modals are not fullscreen
+while form and view modals are.
+At desktop resolutions, nothing is fullscreen; choice modals
+are smaller than form and view modals.
+
+:modal: selector for modal to be resized
+*/
 function resize_modal(modal) {
+    modal = $(modal);
     var window_width = $(window).width();
     var window_height = $(window).height();
     var top_, bottom, left, right;
     var height, max_height;
+    var width = 'auto';
 
     if (window_width <= 1024) {
-        left = right = '1%';
-        top_ = bottom = '1%';
+        left = right = '0px';
+        top_ = bottom = '0px';
     } else {
-        left = right = '150px';
-        top_ = '50px';
-        bottom = '100px';
+        if (!modal.hasClass('choice')) {
+            left = right = '150px';
+            top_ = '50px';
+            bottom = '100px';
+        }
     }
 
-    max_height = window_height - 270;
+    if (modal.hasClass('choice')) {
+        if (window_width <= 500) {
+            top_ = bottom = left = right = '0px';
+        } else {
+            top_ = bottom = (window_height-200)/2;
+            left = right = (window_width-500)/2;
+            max_height = '150px';
+            height = '150x';
+            width = '500px';
+        }
+    } else {
+        max_height = window_height - 270;
+        height = window_height - 300
+    }
 
-    height = window_height - 300;
+    modal.css({'top': top_,
+               bottom: bottom,
+               left: left,
+               right: right,
+               margin: 0,
+               position: 'fixed',
+               width: width,
+    })
 
-    $(modal).css({ 'top': top_,
-                   bottom: bottom,
-                   left: left,
-                   right: right,
-                   margin: 0,
-                   position: 'fixed',
-                   width: 'auto',
-    });
-
-    $(modal).find('.modal-body').css({ 'overflow-y': 'auto',
-                                       height: height,
-                                       'max-height': max_height,
+    modal.find('.modal-body').css({'overflow-y': 'auto',
+                                   height: height,
+                                   'max-height': max_height,
     });
 }

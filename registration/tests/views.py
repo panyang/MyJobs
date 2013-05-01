@@ -96,8 +96,8 @@ class RegistrationViewTests(TestCase):
         self.failIf(User.objects.get(email='bob@example.com').is_active)
         
     def test_resend_activation(self):
-        x=User.objects.create_inactive_user(**{'email':'alice@example.com',
-                                           'password1':'secret'})
+        x, created =User.objects.create_inactive_user(**{'email':'alice@example.com',
+                                                         'password1':'secret'})
         self.client.login_user(x)
         self.assertEqual(len(mail.outbox), 1)
         resp = self.client.get('/accounts/register/resend/')

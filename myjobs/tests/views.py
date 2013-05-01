@@ -312,10 +312,38 @@ class MyJobsViewsTests(TestCase):
         response = self.client.get(reverse('continue_sending_mail'),
                                     data={'user': self.user}, follow=True)
 
-        self.assertEqual(self.user.last_response, date.today() - timedelta(days=7))
+        self.assertEqual(self.user.last_response,
+                         date.today() - timedelta(days=7))
         self.assertRedirects(response, '/')
         user = User.objects.get(pk=self.user.pk)
         self.assertEqual(user.last_response, date.today())
+
+    def test_redirect_autocreated_user(self):
+        """
+        When users are created with no password, their password_change
+        flag is set to true; If this is the case, all pages except for
+        a select few should redirect to the password change form
+        """
+        self.user.password_change = True
+        self.user.save()
+
+        response = self.client.get(reverse('saved_search_main'))
+
+        self.assertEqual(response.status_code, 302)
+        self.assertRedirects(response, reverse('auth_password_change'))
+
+        response = self.client.get(reverse('registration_activate',
+                                   args=['activation_code_here']))
+
+        self.assertEqual(response.status_code, 200)
+
+        self.user.password_change = False
+        self.user.save()
+
+        response = self.client.get(reverse('saved_search_main'))
+
+        self.assertEqual(response.status_code, 200)
+        self.assertTemplateUsed(response, 'mysearches/saved_search_main.html')
         
     def test_inactive_user_nav(self):
         """ Test that inactive users can't access restricted apps"""
@@ -324,3 +352,21 @@ class MyJobsViewsTests(TestCase):
         response = self.client.get("/")
         soup = BeautifulSoup(response.content)
         self.assertFalse(soup.findAll('a',{'id':'savedsearch_link'}))
+    
+    def test_success_msg_on_account_save(self):
+        """test that the success message displays on a successful save"""
+        response = self.client.post("/edit/basic",
+                                    {'given_name':'alice','family_name':'evans',
+                                    'gravatar':'alice@example.com'},follow=True)
+        soup = BeautifulSoup(response.content)
+        self.assertTrue(soup.findAll('div',{'class':'alert-success'}))
+        
+    def test_clear_success_msg_on_account_save_error(self):
+        """test that the success message clears out when an error follows it"""
+        response = self.client.get("/edit/basic?saved=success")
+        response = self.client.post("/edit/basic?saved=success",
+                                    {'given_name':'alice','family_name':''})
+        soup = BeautifulSoup(response.content)
+        self.assertFalse(soup.findAll('div',{'class':'alert-success'}))
+        
+        

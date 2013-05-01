@@ -32,6 +32,7 @@ TIME_ZONE = 'America/New_York'
 LANGUAGE_CODE = 'en-us'
 # Support for Django Sites framework
 SITE_ID = 1
+USE_TZ = True
 
 USE_I18N = True
 USE_L10N = True
@@ -71,6 +72,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
     'django.contrib.redirects.middleware.RedirectFallbackMiddleware',
+    'middleware.PasswordChangeMiddleware',
 )
 
 AUTHENTICATION_BACKENDS = (
@@ -127,7 +129,9 @@ INSTALLED_APPS = (
     'django_jenkins',
     'widget_tweaks',
     'south',
-    'django_nose'
+    'django_nose',
+    'tastypie',
+    'captcha'
 )
 
 # Add all MyJobs apps here. This separation ensures that automated Jenkins tests
@@ -204,3 +208,4 @@ LOGGING = {
 
 GRAVATAR_URL_PREFIX = "http://www.gravatar.com/avatar/"
 GRAVATAR_URL_DEFAULT = 'mm'
+

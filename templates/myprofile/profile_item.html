@@ -7,7 +7,7 @@
 </tr>
 {% endif %}
 <tr id="{{module}}-{{item.id}}-item">
-    {% for   label, value in item.get_fields|slice:":3" %}
+    {% for label, value in item.get_fields|slice:":3" %}
     <td>{{ value }}</td>
     {% endfor %}
     <td class="action">
