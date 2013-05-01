@@ -2,8 +2,7 @@ import datetime
 
 from django.core import serializers
 from django.db import IntegrityError
-from django.conf.urls import url
-from django.conf.urls.defaults import patterns, url
+from django.conf.urls import patterns, url
 from django.contrib.auth import authenticate, login
 
 from tastypie import fields

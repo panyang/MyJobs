@@ -20,7 +20,13 @@ class ApiTests(TestCase):
         create_api_key(User, instance=self.user, created=True)
 
     def test_post_new_search_existing_user(self):
-        response = self.client.post('/api/v1/savedsearch/', data=json.dumps(self.data), format='jsonp', content_type='application/json', HTTP_AUTHORIZATION='ApiKey %s:%s' % (self.user.email, self.user.api_key.key))
+        response = self.client.post(
+            '/api/v1/savedsearch/',
+            data=json.dumps(self.data),
+            format='jsonp',
+            content_type='application/json',
+            HTTP_AUTHORIZATION='ApiKey %s:%s' % \
+                (self.user.email, self.user.api_key.key))
         self.assertEqual(response.status_code, 201)
         self.assertEqual(SavedSearch.objects.count(), 1)
         search = SavedSearch.objects.all()[0]
@@ -29,7 +35,14 @@ class ApiTests(TestCase):
 
     def test_post_new_search_new_user(self):
         self.data['email'] = 'new@example.com'
-        response = self.client.post('/api/v1/savedsearch/', data=json.dumps(self.data), format='jsonp', content_type='application/json', HTTP_AUTHORIZATION='ApiKey %s:%s' % (self.user.email, self.user.api_key.key))
+        response = self.client.post(
+            '/api/v1/savedsearch/',
+            data=json.dumps(self.data),
+            format='jsonp',
+            content_type='application/json',
+            HTTP_AUTHORIZATION='ApiKey %s:%s' % \
+                (self.user.email, self.user.api_key.key)
+        )
         self.assertEqual(response.status_code, 201)
         self.assertEqual(SavedSearch.objects.count(), 1)
         self.assertEqual(User.objects.count(), 2)
@@ -38,9 +51,16 @@ class ApiTests(TestCase):
         self.assertEqual(search.user, user)
 
     def test_post_new_search_secondary_email(self):
-        SecondaryEmail.objects.create(user=self.user, email='secondary@example.com')
+        SecondaryEmail.objects.create(user=self.user,
+                                      email='secondary@example.com')
         self.data['email'] = 'secondary@example.com'
-        response = self.client.post('/api/v1/savedsearch/', data=json.dumps(self.data), format='jsonp', content_type='application/json', HTTP_AUTHORIZATION='ApiKey %s:%s' % (self.user.email, self.user.api_key.key))
+        response = self.client.post(
+            '/api/v1/savedsearch/',
+            data=json.dumps(self.data),
+            format='jsonp',
+            content_type='application/json',
+            HTTP_AUTHORIZATION='ApiKey %s:%s' % \
+                (self.user.email, self.user.api_key.key))
         self.assertEqual(response.status_code, 201)
         self.assertEqual(SavedSearch.objects.count(), 1)
         self.assertEqual(User.objects.count(), 1)
