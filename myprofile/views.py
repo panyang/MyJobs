@@ -94,7 +94,6 @@ def delete_item(request):
     module_type = request.POST.get('module')
     item_id = request.POST.get('id')
     model = globals()[module_type]
-    print model.content_type.name
     obj = model.objects.get(id=item_id, user=request.user)
     obj.delete()
     return HttpResponse('Deleted!')

@@ -93,12 +93,12 @@ $(function() {
                 $('[id$="modal"]').modal('hide').remove();
             }
 
-            if (item_id != 'new') {
-                // When "Edit" was clicked, the relevant item was hidden
-                // Since nothing has changed, the item needs to be re-shown
-                $('#'+module+'-'+item_id+'-item').show();
-            } else {
-                manageModuleDisplay(module);
+            if (modal.attr('id') === 'edit_modal') {
+                if (item_id != 'new') {
+                    $('#'+module+'-'+item_id+'-item').show();
+                } else {
+                    manageModuleDisplay(module);
+                }
             }
         },
 
@@ -120,25 +120,45 @@ $(function() {
                 // targets the table row containing the item to be edited
                 item = $('#'+module+'-'+id+'-item');
             }
+            if ($('#edit_modal').length == 0) {
+                $.ajax({
+                    url: '/profile/form/',
+                    data: {'module':module, 'id':id},
+                    success: function(data) {
+                        if (item) {
+                            item.hide();
+                        }
 
-            $.ajax({
-                url: '/profile/form/',
-                data: {'module':module, 'id':id},
-                success: function(data) {
-                    if (item) {
-                        item.hide();
+                        $('#moduleColumn').append(data);
+
+                        var target = $(e.target).parents('[id$="modal"]');
+                        if (target.length) {
+                            $('#edit_modal').attr('data-parent', target.attr('id'));
+                            target.modal('hide');
+                        }
+
+                        resize_modal('#edit_modal');
+                        $('#edit_modal').modal({'backdrop':'static','keyboard':false});
+                        datepicker();
+
+                        $('[id$="-country_sub_division_code"]').hide();
+                        $('label[for$="-country_sub_division_code"]').hide();
+                        $('[id$="-country_code"]').change();
                     }
-                    data = $(data).hide();
-                    $('#moduleColumn').append(data);
-                    resize_modal('#edit_modal');
-                    $('#edit_modal').modal({'backdrop':'static','keyboard':false});
-                    datepicker();
-
-                    $('[id$="-country_sub_division_code"]').hide();
-                    $('label[for$="-country_sub_division_code"]').hide();
-                    $('[id$="-country_code"]').change();
+                });            
+            } else {
+                if (item) {
+                    item.hide();
                 }
-            });            
+
+                var target = $(e.target).parents('[id$="modal"]');
+                if (target.length) {
+                    $('#edit_modal').attr('data-parent', target.attr('id'));
+                    $(target).modal('hide');
+                }
+
+                $('#edit_modal').modal({'backdrop':'static','keyboard':false});
+            }
         },
 
         /*
@@ -180,16 +200,16 @@ $(function() {
                 success: function(data) {
                     if (data.indexOf('<td') >= 0) {
                         // form was valid; data should be appended to the table
+
+                        $('#'+module+'-'+item_id+'-item').remove();
                         if (first_instance) {
                             $('#'+module+'_items').children('h4').after(
-                                '<table class="table table-bordered table-striped"></table>'
+                                '<table class="profile"></table>'
                             );
                             table = $('#'+module+'_items').children('table')
                         }
-                        table.children("tbody").append(data);
-                        $('#'+module+'-'+item_id+'-item').remove();
-                        $('[id$="modal"]').modal('hide');
-                        $('[id$="modal"]').remove();
+                        table.append(data);
+                        $('[id$="modal"]').modal('hide').remove();
                         $('#'+module+'_items').show();
                     } else {
                         // form was a json-encoded list of errors and error messages
@@ -233,11 +253,9 @@ $(function() {
                 url: '/profile/delete/',
                 data: {'module':module, 'id':id, csrfmiddlewaretoken: csrf_token},
                 success: function(data) {
-                    $('#edit_modal').modal('hide');
-                    $('#edit_modal').remove();
+                    $('[id$="modal"]').modal('hide').remove();
                     item.remove();
                     manageModuleDisplay(module);
-                    $('[id$="modal"]').modal('hide').remove();
                 }
             });
         },
@@ -309,11 +327,8 @@ $(function() {
             // id is formatted [module_type]-[item_id]-view
             var module = $(e.target).attr('id').split('-')[0];
             var id = $(e.target).attr('id').split('-')[1];
-            console.log(id)
-            console.log($(e.target).attr('id'))
 
             var target = '#'+module+'-'+id+'-detail_modal';
-            console.log($(target).length)
             if ($(target).length == 1) {
                 $(target).modal({'backdrop':'static','keyboard':false});
             } else {
@@ -322,7 +337,7 @@ $(function() {
                     data: {'module': module, 'id': id},
                     success: function(data) {
                         $(e.target).parents('table').after(data);
-                        console.log($(target).length)
+                        resize_modal(target);
                         $(target).modal({'backdrop':'static','keyboard':false});
                     }
                 });
@@ -348,8 +363,9 @@ $(function() {
     var App = new AppView;
 
     $(window).on('resize', function() {
-        resize_modal('#confirm_modal');
-        resize_modal('#edit_modal');
+        $('[id$="modal"]').each(function() {
+            resize_modal('#'+$(this).attr('id'));
+        });
     });
 });
 
