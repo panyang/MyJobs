@@ -19,7 +19,7 @@ def get_value(value):
         "False": "No"
     }
     if value in value_lookup:
-        return value_lookup[value]
+        return value_lookup.get(value, value)
     
     return value
     
