@@ -51,6 +51,9 @@ class SavedSearchResource(ModelResource):
         authentication = ApiKeyAuthentication()
         always_return_data = True
 
+    def full_dehydrate(self, bundle):
+        return bundle
+
     def obj_create(self, bundle, **kwargs):
         ur = UserResource()
         user_bundle = ur.build_bundle()
@@ -59,7 +62,7 @@ class SavedSearchResource(ModelResource):
 
         label, feed = validate_dotjobs_url(bundle.data.get('url'))
         if not (label and feed):
-            return BadRequest('This is not a valid .JOBS feed')
+            raise BadRequest('This is not a valid .JOBS feed')
 
         notes = bundle.data.get('notes', '')
         if not notes:
@@ -80,4 +83,8 @@ class SavedSearchResource(ModelResource):
                        'notes': notes}
         search = SavedSearch.objects.create(**search_args)
         bundle.obj = search
+        bundle.data = {'email': bundle.data.get('email'),
+                       'frequency': bundle.data.get('frequency', 'D'),
+                       'new_user': user_bundle.data.get('user_created'),
+                       'new_search': True}
         return bundle

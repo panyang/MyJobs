@@ -32,6 +32,9 @@ class ApiTests(TestCase):
         search = SavedSearch.objects.all()[0]
         self.assertEqual(search.user, self.user)
         self.assertTrue('testserver' in search.notes)
+        content = json.loads(response.content)
+        self.assertEqual(len(content), 4)
+        self.assertFalse(content['new_user'])
 
     def test_post_new_search_new_user(self):
         self.data['email'] = 'new@example.com'
@@ -49,6 +52,9 @@ class ApiTests(TestCase):
         search = SavedSearch.objects.all()[0]
         user = User.objects.get(email='new@example.com')
         self.assertEqual(search.user, user)
+        content = json.loads(response.content)
+        self.assertEqual(len(content), 4)
+        self.assertTrue(content['new_user'])
 
     def test_post_new_search_secondary_email(self):
         SecondaryEmail.objects.create(user=self.user,
@@ -67,3 +73,22 @@ class ApiTests(TestCase):
         search = SavedSearch.objects.all()[0]
         self.assertEqual(search.user, self.user)
         self.assertEqual(search.email, 'secondary@example.com')
+        content = json.loads(response.content)
+        self.assertEqual(len(content), 4)
+        self.assertFalse(content['new_user'])
+
+    def test_post_new_search_invalid_data(self):
+        self.data['url'] = 'google.com'
+        response = self.client.post(
+            '/api/v1/savedsearch/',
+            data=json.dumps(self.data),
+            format='jsonp',
+            content_type='application/json',
+            HTTP_AUTHORIZATION='ApiKey %s:%s' % \
+                (self.user.email, self.user.api_key.key)
+        )
+        self.assertEqual(response.status_code, 400)
+        content = json.loads(response.content)
+        self.assertEqual(len(content), 1)
+        self.assertTrue(content.get('error'))
+        self.assertEqual(content['error'], 'This is not a valid .JOBS feed')
