@@ -9,7 +9,7 @@
 {% endif %}
 <tr id="{{module}}-{{item.id}}-item">
     {% for   label, value in item.get_fields|slice:":4" %}
-    <td data-title="{{ label }}">{{ value|lookup }}</td>
+    <td data-title="{{ label }}">{{ value|readable_boolean }}</td>
     {% endfor %}
     <td class="action">
         <button class="btn" id="{{module}}-{{item.id}}-delete">Delete</button>
