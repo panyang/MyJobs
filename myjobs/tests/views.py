@@ -205,29 +205,11 @@ class MyJobsViewsTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'about.html')
 
-    def test_batch_message_digest(self):
+    def test_batch_recent_message_digest(self):
         """
-        POSTing correct data to this view should result in new EmailLog
-        instances being created.
+        Posting data created recently should result in one EmailLog instance
+        being created per message and no emails being sent
         """
-        def make_message_and_get_response(msg_time):
-            message = '{{"email":"alice@example.com","timestamp":"{0}",'+\
-                '"event":"{1}"}}'
-            messages = ''
-            for event in self.events:
-                if event != 'open':
-                    # The only sources I could find suggest SendGrid uses CRLF
-                    # endings.
-                    messages += '\r\n'
-                messages += message.format(time.mktime(msg_time.timetuple()),
-                                           event)
-            response = self.client.post(reverse('batch_message_digest'),
-                                        data=messages.join('\r\n'),
-                                        content_type="text/json",
-                                        HTTP_AUTHORIZATION='BASIC %s'%
-                                            base64.b64encode(
-                                                'accounts%40my.jobs:secret'))
-            return response
 
         self.client = TestClient()
         # Create activation profile for user; Used when disabling an account
@@ -235,44 +217,83 @@ class MyJobsViewsTests(TestCase):
                                                  user=self.user,
                                                  email=self.user.email)
 
-        # Submit a batch of three events created recently
         now = date.today()
-        response = make_message_and_get_response(now)
+
+        # Submit a batch of three events created recently
+        response = self.make_message_and_get_response(now)
         self.assertEqual(response.status_code, 200)
         self.assertEqual(EmailLog.objects.count(), 3)
+        self.assertEqual(len(mail.outbox), 0)
 
         for log in EmailLog.objects.all():
             self.assertTrue(log.event in self.events)
 
+    def test_batch_one_month_old_message_digest(self):
+        """
+        Posting data created a month ago should result in one EmailLog instance
+        being created per message and one email being sent per user
+        """
+
+        self.client = TestClient()
+        # Create activation profile for user; Used when disabling an account
+        custom_signals.create_activation_profile(sender=self,
+                                                 user=self.user,
+                                                 email=self.user.email)
+
+        now = date.today()
+        month_ago = date.today() - timedelta(days=30)
+        self.user.last_response = month_ago - timedelta(days=1)
+        self.user.save()
+
         # Submit a batch of events created a month ago
         # The owners of these addresses should be sent an email
-        month_ago = now - timedelta(days=30)
-        response = make_message_and_get_response(month_ago)
+        response = self.make_message_and_get_response(month_ago)
         self.assertTrue(response.status_code, 200)
-        self.assertEqual(EmailLog.objects.count(), 6)
+        self.assertEqual(EmailLog.objects.count(), 3)
         self.assertEqual(
             EmailLog.objects.filter(
-                received__range=(now - timedelta(days=30), now)
-            ).count(), 6
+                received=month_ago
+            ).count(), 3
         )
         process_batch_events()
         self.assertEqual(len(mail.outbox), 1)
 
+        user = User.objects.get(pk=self.user.pk)
+        self.assertEqual(user.last_response, month_ago)
+
+    def test_batch_month_and_week_old_message_digest(self):
+        """
+        Posting data created a month and a week ago should result in one
+        EmailLog instance being created per message, no emails being sent,
+        and the user's opt-in status being set to False
+        """
+
+        self.client = TestClient()
+        # Create activation profile for user; Used when disabling an account
+        custom_signals.create_activation_profile(sender=self,
+                                                 user=self.user,
+                                                 email=self.user.email)
+
+        month_and_week_ago = date.today() - timedelta(days=37)
+        self.user.last_response = month_and_week_ago - timedelta(days=1)
+        self.user.save()
+
         # Submit a batch of events created a month and a week ago
         # The owners of these addresses should no longer receive email
-        month_and_week_ago = month_ago - timedelta(days=7)
-        response = make_message_and_get_response(month_and_week_ago)
+        response = self.make_message_and_get_response(month_and_week_ago)
         self.assertTrue(response.status_code, 200)
-        self.assertEqual(EmailLog.objects.count(), 9)
+        self.assertEqual(EmailLog.objects.count(), 3)
         self.assertEqual(
             EmailLog.objects.filter(
-                received__lte=(now - timedelta(days=37))
+                received__lte=(date.today() - timedelta(days=37))
             ).count(), 3
         )
         process_batch_events()
+        self.assertEqual(len(mail.outbox), 0)
 
         user = User.objects.get(pk=self.user.pk)
         self.assertFalse(user.opt_in_myjobs)
+        self.assertTrue(user.last_response, month_and_week_ago)
 
     def test_invalid_batch_post(self):
         response = self.client.post(reverse('batch_message_digest'),
@@ -373,4 +394,21 @@ class MyJobsViewsTests(TestCase):
         soup = BeautifulSoup(response.content)
         self.assertFalse(soup.findAll('div',{'class':'alert-success'}))
         
-        
+    def make_message_and_get_response(self, msg_time):
+        message = '{{"email":"alice@example.com","timestamp":"{0}",'+\
+            '"event":"{1}"}}'
+        messages = ''
+        for event in self.events:
+            if event != 'open':
+                # The only sources I could find suggest SendGrid uses CRLF
+                # endings.
+                messages += '\r\n'
+            messages += message.format(time.mktime(msg_time.timetuple()),
+                                       event)
+        response = self.client.post(reverse('batch_message_digest'),
+                                    data=messages,
+                                    content_type="text/json",
+                                    HTTP_AUTHORIZATION='BASIC %s'%
+                                        base64.b64encode(
+                                            'accounts%40my.jobs:secret'))
+        return response

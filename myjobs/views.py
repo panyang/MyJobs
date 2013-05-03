@@ -320,9 +320,8 @@ def batch_message_digest(request):
                 except:
                     return HttpResponse(status=400)
                 for event in event_list:
-                    received = event['timestamp']
                     EmailLog(email=event['email'], event=event['event'],
-                             received=datetime.datetime.fromtimestamp(
+                             received=datetime.date.fromtimestamp(
                                  float(event['timestamp'])
                              )
                     ).save()

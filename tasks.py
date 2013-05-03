@@ -34,34 +34,33 @@ def send_search_digests():
 @task(name='tasks.process_batch_events')
 def process_batch_events():
     now = date.today()
-    EmailLog.objects.filter(received__lte=now-timedelta(days=60), processed=True).delete()
+    EmailLog.objects.filter(received__lte=now-timedelta(days=60),
+                            processed=True).delete()
     new_logs = EmailLog.objects.filter(processed=False)
     for log in new_logs:
-        try:
-            # Check if this is a user's primary address
-            user = User.objects.get(email=log.email)
-        except User.DoesNotExist:
-            # It wasn't a primary address; check secondary addresses
-            user = SecondaryEmail.objects.get(email=log.email).user
-        except SecondaryEmail.DoesNotExist:
-            # This can happen if a user removes a secondary address between
-            # interacting with an email and the batch process being run
+        user = User.objects.get_email_owner(email=log.email)
+        if not user:
+            # This can happen if a user removes a secondary address or deletes
+            # their account before interacting with an email and the batch
+            # process being run
             # There is no course of action but to ignore that event
             continue
-        finally:
-            log.processed = True
-            log.save()
-        user.last_response = log.received
-        user.save()
+        if user.last_response < log.received:
+            user.last_response = log.received
+            user.save()
+        log.processed = True
+        log.save()
 
     # These users have not responded in a month. Send them an email.
     not_responding = User.objects.filter(last_response=now-timedelta(days=30))
     for user in not_responding:
         message = render_to_string('myjobs/email_inactive.html')
-        user.email_user('Account Inactivity', message, settings.DEFAULT_FROM_EMAIL)
+        user.email_user('Account Inactivity', message,
+                        settings.DEFAULT_FROM_EMAIL)
 
-    # These users have not responded in a month and a week. Stop sending email.
-    stop_sending = User.objects.filter(last_response__lte=now-timedelta(days=37))
+    # These users have not responded in a month and a week. Stop sending emails.
+    stop_sending = User.objects.filter(
+        last_response__lte=now-timedelta(days=37))
     for user in stop_sending:
         user.opt_in_myjobs = False
         user.save()
