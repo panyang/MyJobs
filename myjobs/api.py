@@ -10,6 +10,7 @@ from tastypie.authorization import Authorization
 from tastypie.authentication import ApiKeyAuthentication
 from tastypie.exceptions import BadRequest
 from tastypie.resources import ModelResource
+from tastypie.serializers import Serializer
 from tastypie.utils import trailing_slash
 
 from myjobs.models import User
@@ -29,6 +30,8 @@ class UserResource(ModelResource):
         always_return_data = True
 
     def obj_create(self, bundle, **kwargs):
+        if not bundle.data.get('email'):
+            raise BadRequest('No email provided')
         try:
             kwargs = {'email': bundle.data.get('email'),
                       'password1': bundle.data.get('password')}
@@ -50,6 +53,9 @@ class SavedSearchResource(ModelResource):
         detail_allowed_methods = []
         authentication = ApiKeyAuthentication()
         always_return_data = True
+        serializer = Serializer(formats=['jsonp', 'json'],
+                                content_types={'jsonp':'text/javascript',
+                                               'json':'application/json'})
 
     def full_dehydrate(self, bundle):
         return bundle
@@ -60,6 +66,23 @@ class SavedSearchResource(ModelResource):
         user_bundle.data['email'] = bundle.data.get('email')
         user_bundle = ur.obj_create(user_bundle)
 
+        try:
+            SavedSearch.objects.get(user=user_bundle.obj,
+                                    url=bundle.data.get('url'))
+            raise BadRequest('User %s already has a search for %s' % \
+                (user_bundle.obj.email, bundle.data.get('url')))
+        except SavedSearch.DoesNotExist:
+            pass
+
+        frequency = bundle.data.get('frequency')
+        if frequency == 'M' and not bundle.data.get('day_of_month'):
+            raise BadRequest('Must supply day_of_month')
+        elif frequency == 'W' and not bundle.data.get('day_of_week'):
+            raise BadRequest('Must supply day_of_week')
+        else:
+            frequency = 'D'
+            
+        
         label, feed = validate_dotjobs_url(bundle.data.get('url'))
         if not (label and feed):
             raise BadRequest('This is not a valid .JOBS feed')
@@ -77,7 +100,7 @@ class SavedSearchResource(ModelResource):
                        'feed': feed,
                        'user': user_bundle.obj,
                        'email': bundle.data.get('email'),
-                       'frequency': bundle.data.get('frequency', 'D'),
+                       'frequency': frequency,
                        'day_of_week': bundle.data.get('day_of_week'),
                        'day_of_month': bundle.data.get('day_of_month'),
                        'notes': notes}
