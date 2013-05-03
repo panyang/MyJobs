@@ -1,6 +1,8 @@
+import base64
 import datetime
 import json
 import logging
+import urllib2
 
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
@@ -300,8 +302,9 @@ def batch_message_digest(request):
     if 'HTTP_AUTHORIZATION' in request.META:
         method, details = request.META['HTTP_AUTHORIZATION'].split()
         if method.lower() == 'basic':
-            login_info = details.split(':')
-            user = authenticate(username=login_info[0], password=login_info[1])
+            login_info = base64.b64decode(details).split(':')
+            login_info[0] = urllib2.unquote(login_info[0])
+            user = authenticate(email=login_info[0], password=login_info[1])
             target_user = User.objects.get(email='accounts@my.jobs')
             if user is not None and user == target_user:
                 events = request.raw_post_data

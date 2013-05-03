@@ -1,3 +1,4 @@
+import base64
 from bs4 import BeautifulSoup
 from importlib import import_module
 from datetime import timedelta, date
@@ -223,8 +224,9 @@ class MyJobsViewsTests(TestCase):
             response = self.client.post(reverse('batch_message_digest'),
                                         data=messages.join('\r\n'),
                                         content_type="text/json",
-                                        HTTP_AUTHORIZATION='BASIC %s:%s'%
-                                            ('accounts@my.jobs','secret'))
+                                        HTTP_AUTHORIZATION='BASIC %s'%
+                                            base64.b64encode(
+                                                'accounts%40my.jobs:secret'))
             return response
 
         self.client = TestClient()
@@ -276,8 +278,9 @@ class MyJobsViewsTests(TestCase):
         response = self.client.post(reverse('batch_message_digest'),
                                     data='this is invalid',
                                     content_type="text/json",
-                                    HTTP_AUTHORIZATION='BASIC %s:%s'%
-                                        ('accounts@my.jobs','secret'))
+                                    HTTP_AUTHORIZATION='BASIC %s'%
+                                        base64.b64encode(
+                                            'accounts%40my.jobs:secret'))
         self.assertEqual(response.status_code, 400)
 
     def test_invalid_user(self):
@@ -301,8 +304,9 @@ class MyJobsViewsTests(TestCase):
         response = self.client.post(reverse('batch_message_digest'),
                                     data=messages.join(''),
                                     content_type="text/json",
-                                    HTTP_AUTHORIZATION='BASIC %s:%s'%
-                                        ('does@not.exist','wrong_pass'))
+                                    HTTP_AUTHORIZATION='BASIC %s'%
+                                        base64.b64encode(
+                                            'does%40not.exist:wrong_pass'))
         self.assertEqual(response.status_code, 403)
 
     def test_continue_sending_mail(self):
