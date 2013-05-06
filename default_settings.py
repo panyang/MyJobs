@@ -130,7 +130,7 @@ INSTALLED_APPS = (
     'widget_tweaks',
     'south',
     'django_nose',
-    'django_messages'
+    'django_messages',
     'tastypie',
     'captcha'
 )
