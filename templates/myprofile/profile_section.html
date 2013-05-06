@@ -1,5 +1,5 @@
 <div class="formBox profile-mobile" id="{{module.name}}_items">       
-    <h4>{{ module.verbose }}</h4>
+    <h4 id="{{module.name}}-verbose">{{ module.verbose }}</h4>
     {% if module.items.0 %}    
     <table class="table table-bordered table-striped">
         <thead>    
@@ -17,7 +17,6 @@
             <td data-title="{{label}}">{{ value }} &nbsp;</td>
             {% endfor %}
             <td class="action">
-                <button class="btn" id="{{module.name}}-{{item.id}}-delete">Delete</button>
                 <button class="btn" id="{{module.name}}-{{item.id}}-edit">Edit</button>                
             </td>
         </tr>
