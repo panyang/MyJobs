@@ -1,3 +1,4 @@
+{% load form_tags %}
 <div class="formBox profile-mobile" id="{{module.name}}_items">       
     <h4 id="{{module.name}}-verbose">{{ module.verbose }}</h4>
     {% if module.items.0 %}    
@@ -14,7 +15,7 @@
         {% for item in module.items %}      
         <tr id="{{module.name}}-{{item.id}}-item">
             {% for   label, value in item.get_fields|slice:":4" %}
-            <td data-title="{{label}}">{{ value }} &nbsp;</td>
+            <td data-title="{{label}}">{{ value|readable_boolean }} &nbsp;</td>
             {% endfor %}
             <td class="action">
                 <button class="btn" id="{{module.name}}-{{item.id}}-edit">Edit</button>                
