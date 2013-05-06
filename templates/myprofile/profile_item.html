@@ -1,11 +1,13 @@
 {% load form_tags %}
 {% if first_instance %}
+<thead>
 <tr>
     {% for label,value in item.get_fields|slice:":4" %}                            
         <th>{{label}}</th>
     {% endfor %}
     <td class="action"></td>
 </tr>
+</thead>
 {% endif %}
 <tr id="{{module}}-{{item.id}}-item">
     {% for   label, value in item.get_fields|slice:":4" %}
@@ -15,3 +17,4 @@
         <button class="btn" id="{{module}}-{{item.id}}-edit">Edit</button>
     </td>
 </tr>
+
