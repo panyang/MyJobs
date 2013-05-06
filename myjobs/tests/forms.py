@@ -41,8 +41,8 @@ class AccountFormTests(TestCase):
         Leaving both the first and last name fields blank produces a valid save.
         It also deletes the primary name object from the Name model.
         """
-        data = {"gravatar": "alice@example.com"}
-        form = EditAccountForm(data)
+        data = {"gravatar": "alice@example.com", "user": self.user}
+        form = EditAccountForm(data, **{'user':self.user})
         self.assertTrue(form.is_valid())
         form.save(self.user)
         self.assertEqual(Name.objects.count(), 0) 
@@ -51,17 +51,19 @@ class AccountFormTests(TestCase):
         """
         Filling out both name fields produces a valid save.
         """
+        
         data = {"given_name": "Alicia", "family_name": "Smith",
                 "gravatar": "alice@example.com"}
-        form = EditAccountForm(data)
+        form = EditAccountForm(data, **{'user':self.user})
         self.assertTrue(form.is_valid())
 
     def test_partial_name_account_form(self):
         """
         Filling out only the first name or only the last name produces an error.
         """
-        data = {"given_name": "Alicia", "gravatar": "alice@example.com"}
-        form = EditAccountForm(data)
+        data = {"given_name": "Alicia", "gravatar": "alice@example.com",
+                "user": self.user}
+        form = EditAccountForm(data, **{'user':self.user})
         self.assertFalse(form.is_valid())
         self.assertEqual(form.non_field_errors()[0],
                          "You must enter both a first and last name.")
