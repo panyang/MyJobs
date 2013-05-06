@@ -15,6 +15,7 @@ v1_api.register(SavedSearchResource())
 
 urlpatterns = patterns('',
     url('', include('MyJobs.myjobs.urls')),
+    url('', include('django_messages.urls')),
     url(r'^accounts/', include('MyJobs.registration.urls')),
     url(r'^profile/', include('MyJobs.myprofile.urls')),
     url(r'^saved-search/', include('MyJobs.mysearches.urls')),

@@ -130,13 +130,14 @@ INSTALLED_APPS = (
     'widget_tweaks',
     'south',
     'django_nose',
+    'django_messages',
     'tastypie',
     'captcha'
 )
 
 # Add all MyJobs apps here. This separation ensures that automated Jenkins tests
 # only run on these apps
-PROJECT_APPS = ('myjobs','myprofile','mysearches','registration','mymessages')
+PROJECT_APPS = ('myjobs','myprofile','mysearches','registration')
 
 INSTALLED_APPS += PROJECT_APPS
 
