@@ -873,7 +873,7 @@ body.modal-open {
 }
 
 #edit_modal .input-prepend input,
-#edit_mdoal .input-prepend select {
+#edit_modal .input-prepend select {
     width: auto;
 }
 
