@@ -46,10 +46,8 @@ class CustomUserManager(BaseUserManager):
         :user: User object instance
         :created: Boolean indicating whether a new user was created
         """
-        email = kwargs['email']
+        email = kwargs.get('email')
         password = kwargs.get('password1')
-        if not email:
-            raise ValueError('Email address required.')
 
         user = self.get_email_owner(email)
         created = False
