@@ -204,9 +204,9 @@ $(function() {
                         $('#'+module+'-'+item_id+'-item').remove();
                         if (first_instance) {
                             $('#'+module+'_items').children('h4').after(
-                                '<table class="profile"></table>'
+                                '<table class="table table-bordered table-striped"></table>'
                             );
-                            table = $('#'+module+'_items').children('table')
+                            table = $('#'+module+'_items').children('table');
                             table.append(data);
                         }
                         else {

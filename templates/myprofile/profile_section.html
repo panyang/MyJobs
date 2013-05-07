@@ -2,24 +2,28 @@
 <div class="formBox profile-mobile" id="{{module.name}}_items">       
     <h4 id="{{module.name}}-verbose">{{ module.verbose }}</h4>
     {% if module.items.0 %}
-    <table class="profile">
-        <tr>
-            {% for label,value in module.items.0.get_fields|slice:":3" %}                            
-                <th>{{label}}</th>
+    <table class="table table-bordered table-striped">
+        <thead>
+            <tr>
+                {% for label, value in module.items.0.get_fields|slice:":3" %}
+                    <th>{{label}}</th>
+                {% endfor %}
+                <th class="action"></th>
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in module.items %}
+            <tr id="{{module.name}}-{{item.id}}-item">
+                {% for label, value in item.get_fields|slice:":3" %}
+                <td data-title="{{label}}">{{ value|readable_boolean }} &nbsp;</td>
+                {% endfor %}
+                <td class="action">
+                    <button class="btn" id="{{module.name}}-{{item.id}}-view">View</button>
+                    <button class="btn" id="{{module.name}}-{{item.id}}-edit">Edit</button>                
+                </td>
+            </tr>
             {% endfor %}
-            <th class="action"></th>
-        </tr>
-        {% for item in module.items %}      
-        <tr id="{{module.name}}-{{item.id}}-item">
-            {% for label, value in item.get_fields|slice:":3" %}
-            <td data-title="{{label}}">{{ value|readable_boolean }} &nbsp;</td>
-            {% endfor %}
-            <td class="action">
-                <button class="btn" id="{{module.name}}-{{item.id}}-view">View</button>
-                <button class="btn" id="{{module.name}}-{{item.id}}-edit">Edit</button>                
-            </td>
-        </tr>
-        {% endfor %}
+        </tbody>
     </table>                
     {% endif %}    
     <button class="btn primary" id="{{module.name}}-new-add">Add</button>

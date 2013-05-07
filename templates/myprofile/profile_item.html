@@ -2,12 +2,13 @@
 {% if first_instance %}
 <thead>
 <tr>
-    {% for label,value in item.get_fields|slice:":3" %}                            
+    {% for label, value in item.get_fields|slice:":3" %}                            
         <th>{{label}}</th>
     {% endfor %}
     <td class="action"></td>
 </tr>
 </thead>
+<tbody>
 {% endif %}
 <tr id="{{module}}-{{item.id}}-item">
     {% for label, value in item.get_fields|slice:":3" %}
@@ -18,4 +19,6 @@
         <button class="btn" id="{{module}}-{{item.id}}-edit">Edit</button>
     </td>
 </tr>
-
+{% if first_instance %}
+</tbody>
+{% endif %}
