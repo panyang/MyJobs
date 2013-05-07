@@ -9,9 +9,9 @@
         <div class="formBox">
             <table class="table table-bordered table-striped">
                 {% for label, value in module.item.get_fields %}
-                    <tr>
-                        <td>{{ label }}</td>
-                        <td>{{ value|readable_boolean }}</td>
+                    <tr class="row">
+                        <td class="span3">{{ label }}</td>
+                        <td class="span9">{{ value|readable_boolean }}</td>
                     </tr>
                 {% endfor %}
             </table>
