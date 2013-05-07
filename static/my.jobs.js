@@ -21,6 +21,65 @@ $(document).ready(function(){
         }
     });
 
+    $('a.account-menu-item').click(function(e) {
+        e.preventDefault();
+        if ($(window).width() < 500) {
+            $('div.settings-nav').hide();
+            $('div.account-settings').show();
+        }
+    });
+
+    
+    $('#account-basic').click(function(e) {
+        e.preventDefault();
+        $.ajax({
+            url: "/edit/basic",
+            success: function(data) {
+                $('.account-settings').html(data);
+            }
+        });
+    });
+
+
+    $('#account-communication').click(function(e) {
+        e.preventDefault();
+        $.ajax({
+            url: "/edit/communication",
+            success: function(data) {
+                $('.account-settings').html(data);
+            }
+        });
+    });
+
+    $('#account-password').click(function(e) {
+        e.preventDefault();
+        $.ajax({
+            url: "/edit/password",
+            success: function(data) {
+                $('.account-settings').html(data);
+            }
+        });
+    });
+
+    $('#account-delete').click(function(e) {
+        e.preventDefault();
+        $.ajax({
+            url: "/edit/delete",
+            success: function(data) {
+                $('.account-settings').html(data);
+            }
+        });
+    });
+
+    $('#account-disable').click(function(e) {
+        e.preventDefault();
+        $.ajax({
+            url: "/edit/disable",
+            success: function(data) {
+                $('.account-settings').html(data);
+            }
+        });
+    });
 
     $('.show-captcha-modal').click(function(e) {
         e.preventDefault();

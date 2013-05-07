@@ -751,6 +751,24 @@ em.pendingText{
     div.account-settings {
         display: none;
     }
+    div.account-box {
+        min-height: auto;
+        background-color: #f4f1ea;
+    }
+    div.settings-nav ul {
+        height: auto;
+    }
+    h4.account-menu-header {
+        background: transparent url('/files/static/glyphicons_223_chevron-right.png') center right  no-repeat;
+        width: 87%;
+    }
+
+    h4.account-menu-header:hover {
+        background: transparent url('/files/static/glyphicons_223_chevron-right.png') center right  no-repeat;
+        width: 87%;
+    }
+
+
 }
 
 /* Account Settings */

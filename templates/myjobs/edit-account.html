@@ -9,8 +9,8 @@
         <div class="row">
             {% if message_body %}
             <div class="alert alert-{{messagetype}}">
-                <button type="button" class="close" data-dismiss="alert">&times;</button>
-                {{message_body}}
+              <button type="button" class="close" data-dismiss="alert">&times;</button>
+              {{message_body}}
             </div>
             {% endif %}
             <div class="span12">
@@ -18,12 +18,12 @@
                 <div class="account-box">                    
                     <div class="span4 pull-left settings-nav">
                         <ul>
-                        <a href="{% url 'edit_basic' %}" class="account-menu-item"><li><h4>{% trans "Personal Information" %}<i class="icon-chevron-right"></i></h4>
+                        <a href="" class="account-menu-item" id="account-basic"><li><h4 class="account-menu-header">{% trans "Personal Information" %}</h4>
                         </li></a>
-                        <a href="{% url 'edit_communication' %}" class="account-menu-item"><li><h4>{% trans "Communication Settings" %}</h4></li></a>                                    
-                        <a href="{% url 'edit_password' %}" class="account-menu-item"><li><h4>{% trans "Change Password" %}</h4></li></a>
-                        <a href="{% url 'edit_disable' %}" class="account-menu-item"><li><h4>{% trans "Disable Account" %}</h4></li></a>
-                        <a href="{% url 'edit_delete' %}" class="account-menu-item"><li><h4>{% trans "Delete Account" %}</h4></li></a>
+                        <a href="{% url 'edit_communication' %}" class="account-menu-item" id="account-communication"><li><h4 class="account-menu-header">{% trans "Communication Settings" %}</h4></li></a>                                    
+                        <a href="{% url 'edit_password' %}" class="account-menu-item" id="account-password"><li><h4 class="account-menu-header">{% trans "Change Password" %}</h4></li></a>
+                        <a href="{% url 'edit_disable' %}" class="account-menu-item" id="account-disable"><li><h4 class="account-menu-header">{% trans "Disable Account" %}</h4></li></a>
+                        <a href="{% url 'edit_delete' %}" class="account-menu-item" id="account-delete"><li><h4 class="account-menu-header">{% trans "Delete Account" %}</h4></li></a>
 
                         </ul>
                     </div>  
@@ -31,14 +31,15 @@
                     <div class="span7 account-settings">
                         {% block edit-main %}
                         <form action="" method="POST">
-                            {% include "includes/form-error-highlight.html"%}
-                            {% csrf_token %}
-                            <div class="actions">
-                                <a href="{% url 'view_profile' %}" class="btn pull-right">{% trans 'Cancel' %}</a>
-                                <button type="submit" class="btn primary pull-right" value="submit">{% trans "Save" %}</button>
-                                <div class="clear"></div>
-                            </div>
+                          {% include "includes/form-error-highlight.html" %}
+                          {% csrf_token %}
+                          <div class="actions">
+                            <a href="" class="btn pull-right">{% trans 'Cancel' %}</a>
+                            <button type="submit" class="btn primary pull-right" value="submit">{% trans "Save" %}</button>
+                            <div class="clear"></div>
+                          </div>
                         </form>
+
                         {% endblock%}
                     </div>
                 </div>

@@ -144,7 +144,7 @@ def view_account(request):
     return render_to_response('done.html', ctx, RequestContext(request))
 
 @user_passes_test(User.objects.not_disabled)
-def edit_basic(request):
+def edit_account(request):
     initial_dict = model_to_dict(request.user)
     name_obj = get_name_obj(request)
     if name_obj:
@@ -173,6 +173,29 @@ def edit_basic(request):
                               RequestContext(request))
 
 @user_passes_test(User.objects.not_disabled)
+def edit_basic(request):
+    initial_dict = model_to_dict(request.user)
+    name_obj = get_name_obj(request)
+    if name_obj:
+        initial_dict.update(model_to_dict(name_obj))
+
+    if request.method == "POST":
+        form = EditAccountForm(user=request.user, data=request.POST)
+        if form.is_valid():
+            form.save(request.user)
+            return HttpResponseRedirect('?saved=success')
+    else:
+        form = EditAccountForm(initial=initial_dict, user=request.user)
+    
+    message = __check_for_successful_save(form,request)        
+    ctx = {
+        'form':form,
+    }
+    return render_to_response('myjobs/edit-form-template.html', ctx,
+                              RequestContext(request))
+    
+
+@user_passes_test(User.objects.not_disabled)
 def edit_communication(request):
     obj = User.objects.get(id=request.user.id)
     if request.method == "POST":
@@ -187,13 +210,11 @@ def edit_communication(request):
     message = __check_for_successful_save(form,request)        
     ctx = {
         'form':form,
-        'name_obj': get_name_obj(request),
-        'message_body':message['message_body'],
-        'messagetype':message['message_type']
-        }
-    return render_to_response('myjobs/edit-account.html', ctx,
+    }
+    return render_to_response('myjobs/edit-form-template.html', ctx,
                               RequestContext(request))
-        
+
+    
     
 @user_passes_test(User.objects.not_disabled)
 def edit_password(request):
@@ -221,11 +242,8 @@ def edit_password(request):
         
     ctx = {
         'form':form,
-        'name_obj': get_name_obj(request),
-        'message':message,
-        'messagetype':message_type
         }
-    return render_to_response('myjobs/edit-account.html', ctx,
+    return render_to_response('myjobs/edit-form-template.html', ctx,
                               RequestContext(request))
 
 @user_passes_test(User.objects.not_disabled)
@@ -266,7 +284,7 @@ def delete_account(request):
     email = request.user.email
     request.user.delete()
     ctx = {'name_obj': get_name_obj(request),'email': email}
-    return render_to_response('delete-account-confirmation.html', ctx,
+    return render_to_response('myjobs/delete-account-confirmation.html', ctx,
                               RequestContext(request))
 
 @user_passes_test(User.objects.not_disabled)
