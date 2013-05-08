@@ -54,7 +54,10 @@ class UserResource(ModelResource):
             user, created = User.objects.create_inactive_user(**kwargs)
 
             bundle.obj = user
-            bundle.data = {'user_created': created}
+            bundle.data = {
+                'user_created': created,
+                'email': bundle.data.get('email')
+                }
             return bundle
         except IntegrityError:
             error = {'email': 'That username already exists'}
