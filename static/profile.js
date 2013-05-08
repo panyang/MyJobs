@@ -15,7 +15,6 @@ $(function() {
 
             // targets event fired when "Cancel" or "x" buttons within modals
             // are clicked
-            //"hidden [id$='modal']": "cancelForm",
             "click [id$='cancel']": "cancelForm",
 
             // targets "Save" button  in the modal window
@@ -29,6 +28,9 @@ $(function() {
 
             // targets delete buttons not on confirmation modal
             "click [id$='confirm']": "confirmDelete",
+
+            // targets "View" button for each item
+            "click [id$='view']": "viewDetails",
         },
 
         /*
@@ -81,9 +83,9 @@ $(function() {
                 $('[id$="modal"]').remove();
             }
 
-            if (parent_.attr('id') == 'edit_modal') {
-                // When "Edit" was clicked, the item to be edited was hidden
-                // Since nothing has changed, the item needs to be re-shown
+            if (parent_.attr('id') === 'edit_modal') {
+                // When "Edit" was clicked, the item to be edited was hidden;
+                // Since nothing was changed, the item should be re-shown
                 $('#'+module+'-'+item_id+'-item').show();
             } else {
                 manageModuleDisplay(module);
@@ -108,24 +110,33 @@ $(function() {
                 // targets the table row containing the item to be edited
                 item = $('#'+module+'-'+id+'-item');
             }
-            var modal = $('#edit_modal');
-            $.ajax({
-                url: '/profile/form/',
-                data: {'module':module, 'id':id},
-                success: function(data) {
-                    if (item) {
-                        item.hide();
-                    }
-                    $('#moduleColumn').append(data);
-                    $('#edit_modal').modal({'backdrop':'static',
-                                            'keyboard':false});
-                    datepicker();
 
-                    $('[id$="-country_sub_division_code"]').hide();
-                    $('label[for$="-country_sub_division_code"]').hide();
-                    $('[id$="-country_code"]').change();
+            if ($('#edit_modal').length == 0) {
+                $.ajax({
+                    url: '/profile/form/',
+                    data: {'module':module, 'id':id},
+                    success: function(data) {
+                        if (item) {
+                            item.hide();
+                        }
+
+                        $('#moduleColumn').append(data);
+
+                        $('#edit_modal').modal({'backdrop':'static','keyboard':false});
+                        datepicker();
+
+                        $('[id$="-country_sub_division_code"]').hide();
+                        $('label[for$="-country_sub_division_code"]').hide();
+                        $('[id$="-country_code"]').change();
+                    }
+                });            
+            } else {
+                if (item) {
+                    item.hide();
                 }
-            });            
+
+                $('#edit_modal').modal({'backdrop':'static','keyboard':false});
+            }
         },
 
         /*
@@ -167,18 +178,20 @@ $(function() {
                 success: function(data) {
                     if (data.indexOf('<td') >= 0) {
                         // form was valid; data should be appended to the table
+
+                        $('#'+module+'-'+item_id+'-item').remove();
                         if (first_instance) {
                             $('#'+module+'_items').children('h4').after(
                                 '<table class="table table-bordered table-striped"></table>'
                             );
-                            table = $('#'+module+'_items').children('table')
+                            table = $('#'+module+'_items').children('table');
                             table.append(data);
                         }
                         else {
                             table.children("tbody").append(data);
                         }
                         $('#'+module+'-'+item_id+'-item').remove();
-                        $('[id$="modal"]').modal('hide');
+                        $('[id$="modal"]').modal('hide').remove();
                         $('[id$="modal"]').remove();
                         $('#'+module+'_items').show();
                     } else {
@@ -211,7 +224,7 @@ $(function() {
                 csrf_token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
             }
 
-            // id is formatted [module_type]-[item_id]-[event]
+            // id is formatted [module_type]-[item_id]-delete
             var module = $(e.target).attr('id').split("-")[0];
             var id = $(e.target).attr('id').split("-")[1];
 
@@ -223,9 +236,9 @@ $(function() {
                 url: '/profile/delete/',
                 data: {'module':module, 'id':id, csrfmiddlewaretoken: csrf_token},
                 success: function(data) {
+                    $('[id$="modal"]').modal('hide').remove();
                     item.remove();
                     manageModuleDisplay(module);
-                    $('[id$="modal"]').modal('hide').remove();
                 }
             });
         },
@@ -288,6 +301,24 @@ $(function() {
                         $("label[for="+id+"]").show();
                     }
                 },
+            });
+        },
+
+        viewDetails: function(e) {
+            e.preventDefault();
+
+            // id is formatted [module_type]-[item_id]-view
+            var module = $(e.target).attr('id').split('-')[0];
+            var id = $(e.target).attr('id').split('-')[1];
+
+            $.ajax({
+                url: '/profile/details/',
+                data: {'module': module, 'id': id},
+                success: function(data) {
+                    $(e.target).parents('table').after(data);
+                    var target = $('#detail_modal');
+                    target.modal({'backdrop':'static','keyboard':false});
+                }
             });
         },
 
