@@ -1,6 +1,6 @@
 $(function() {
     var AppView = Backbone.View.extend({
-        el: $(".row"),
+        el: $("body"),
 
         events: {
             // targets event fired when buttons within #moduleBank are clicked
@@ -15,6 +15,7 @@ $(function() {
 
             // targets event fired when "Cancel" or "x" buttons within modals
             // are clicked
+            //"hidden [id$='modal']": "cancelForm",
             "click [id$='cancel']": "cancelForm",
 
             // targets "Save" button  in the modal window
@@ -26,7 +27,7 @@ $(function() {
             // targets country select boxes
             "change [id$='-country_code']": "getSelect",
 
-            // targets "Delete" button on add/edit modal
+            // targets delete buttons not on confirmation modal
             "click [id$='confirm']": "confirmDelete",
         },
 
@@ -49,7 +50,6 @@ $(function() {
                     if ($('#moduleBank').find('tr').length == 0) {
                         $('#moduleBank').hide();
                     }
-                    data = $(data).hide();
                     $('#moduleColumn').append(data);
                     module_elem = $('#'+module+'_items');
                     module_elem.find('[id$="add"]').click();
@@ -69,29 +69,20 @@ $(function() {
 
             // e.target may be either the cancel button or the x button;
             // We need the cancel button
-            var target = $(e.target).parents('[id$="modal"]')
-                .find('a[id$="cancel"]');
+            var parent_ = $(e.target).parents('[id$="modal"]')
+            var target = parent_.find('a[id$="cancel"]');
 
             // id is formatted [module_type]-[item_id]-[event]
             var module = target.attr('id').split('-')[0];
             var item_id = target.attr('id').split('-')[1];
 
-            var modal = target.parents('.modal')
-            if (modal.attr('data-parent') !== undefined) {
-                // The modal being closed was opened by another modal;
-                // It should be hidden and its parent modal should be shown
-                modal.modal('hide');
-                parent_modal = $('#'+modal.attr('data-parent'));
-                modal.removeAttr('data-parent');
-                parent_modal.modal({'backdrop':'static','keyboard':false});
-            } else {
-                // Upon closing certain modal windows, all modals should be
-                // removed from the document
-                $('[id$="modal"]').modal('hide').remove();
+            if (!$('[id$="modal"]:visible').length) {
+                // All modals are hidden; Remove them
+                $('[id$="modal"]').remove();
             }
 
-            if (item_id != 'new') {
-                // When "Edit" was clicked, the relevant item was hidden
+            if (parent_.attr('id') == 'edit_modal') {
+                // When "Edit" was clicked, the item to be edited was hidden
                 // Since nothing has changed, the item needs to be re-shown
                 $('#'+module+'-'+item_id+'-item').show();
             } else {
@@ -117,7 +108,7 @@ $(function() {
                 // targets the table row containing the item to be edited
                 item = $('#'+module+'-'+id+'-item');
             }
-
+            var modal = $('#edit_modal');
             $.ajax({
                 url: '/profile/form/',
                 data: {'module':module, 'id':id},
@@ -125,10 +116,9 @@ $(function() {
                     if (item) {
                         item.hide();
                     }
-                    data = $(data).hide();
                     $('#moduleColumn').append(data);
-                    resize_modal('#edit_modal');
-                    $('#edit_modal').modal({'backdrop':'static','keyboard':false});
+                    $('#edit_modal').modal({'backdrop':'static',
+                                            'keyboard':false});
                     datepicker();
 
                     $('[id$="-country_sub_division_code"]').hide();
@@ -309,20 +299,11 @@ $(function() {
         */
         confirmDelete: function(e) {
             e.preventDefault();
-            var parent_modal = $(e.target).parents('[id$="modal"]')
-            parent_modal.modal('hide');
-            resize_modal('#confirm_modal');
-            $('#confirm_modal').attr('data-parent', parent_modal.attr('id'));
             $('#confirm_modal').modal({'backdrop':'static','keyboard':false});
         },
     });
 
     var App = new AppView;
-
-    $(window).on('resize', function() {
-        resize_modal('#confirm_modal');
-        resize_modal('#edit_modal');
-    });
 });
 
 function manageModuleDisplay(module) {
