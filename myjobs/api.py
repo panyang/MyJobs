@@ -21,6 +21,7 @@ from mysearches.helpers import validate_dotjobs_url
 from mysearches.models import SavedSearch
 from registration import signals as custom_signals
 
+        
 class UserResource(ModelResource):
     searches = fields.ToManyField('myjobs.api.SavedSearchResource',
                                   'savedsearch_set')
@@ -167,3 +168,4 @@ class SavedSearchResource(ModelResource):
                        'frequency': bundle.data.get('frequency', 'D'),
                        'new_search': True}
         return bundle
+
