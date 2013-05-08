@@ -1,30 +1,31 @@
 {% load i18n %}
 
-<div id="edit_modal" class="modal hide fade">
+<div id="edit_modal" class="modal hide fade row">
     <div class="modal-header">
         <button id="modal-header-cancel" class="close mobile_hide" aria-hidden="true" data-dismiss="modal" type="button">×</button>
         <h1>{% if item_id == "new" %}{% trans 'Add' %}{% else %}{% trans 'Edit' %}{% endif %} <small>{% trans verbose %}</small></h1>
     </div>
-    <form action="" method="post" id="{{module}}-{{item_id}}-form">
-        <div class="modal-body">
+    <div class="modal-body">
+        <form action="" method="post" id="{{module}}-{{item_id}}-form">
             <div class="formBox">
                 {% include "includes/form-error-highlight.html" %}
                 {% csrf_token %}
             </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <div class="actions">
+            <a class="btn primary pull-right" id="{{module}}-{{item_id}}-save" value="submit">Save</a>
+            <a data-dismiss="modal" class="btn pull-right" id="{{module}}-{{item_id}}-cancel">{% trans 'Cancel' %}</a>
+            {% if item_id != "new" %}
+            <a class="btn pull-left" id="delete-confirm">{% trans 'Delete' %}</a>
+            {% endif %}
         </div>
-        <div class="modal-footer">
-            <div class="actions">
-                <a class="btn primary pull-right" id="{{module}}-{{item_id}}-save" value="submit">{% trans 'Save' %}</a>
-                <a data-dismiss="modal" class="btn pull-right" id="{{module}}-{{item_id}}-cancel">{% trans 'Cancel' %}</a>
-                {% if item_id != 'new' %}
-                    <a class="btn pull-left" id="{{module}}-{{item_id}}-edit_confirm">{% trans 'Delete' %}</a>
-                {% endif %}
-            </div>
-        </div>
-    </form>
+    </div>
 </div>
+
 {% if item_id != "new" %}
-<div id="confirm_modal" class="modal hide fade choice" aria-hidden="true">
+<div id="confirm_modal" class="modal hide fade row">
     <div class="modal-header">
         Really Delete?
     </div>

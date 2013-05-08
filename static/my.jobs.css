@@ -414,7 +414,7 @@ em.pendingText{
     #nav li:hover ul#pop-menu{ 
         display: block;
         text-align: left;
-    }    
+    }
 }
 #nav.active ul#pop-menu li a:hover,
 #nav li:hover ul#pop-menu li a:hover{ 

@@ -73,6 +73,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
     'django.contrib.redirects.middleware.RedirectFallbackMiddleware',
     'middleware.PasswordChangeMiddleware',
+    'middleware.XsSharing'
 )
 
 AUTHENTICATION_BACKENDS = (
