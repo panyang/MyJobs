@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.core import mail
 from django.test import TestCase
 
@@ -15,7 +16,7 @@ class SavedSearchModelsTests(TestCase):
         self.assertEqual(len(mail.outbox), 1)
 
         email = mail.outbox.pop()
-        self.assertEqual(email.from_email, 'savedsearch@my.jobs')
+        self.assertEqual(email.from_email, settings.SAVED_SEARCH_EMAIL)
         self.assertEqual(email.to, [self.user.email])
 
     def test_send_search_digest_email(self):
@@ -28,5 +29,5 @@ class SavedSearchModelsTests(TestCase):
         self.assertEqual(len(mail.outbox), 1)
 
         email = mail.outbox.pop()
-        self.assertEqual(email.from_email, 'savedsearch@my.jobs')
+        self.assertEqual(email.from_email, settings.SAVED_SEARCH_EMAIL)
         self.assertEqual(email.to, [self.user.email])
