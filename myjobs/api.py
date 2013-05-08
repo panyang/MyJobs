@@ -82,6 +82,13 @@ class CustomSearchValidation(Validation):
         url = bundle.data.get('url', '')
         if not url:
             errors['url'] = 'No .JOBS feed provided'
+        else:
+            label, feed = validate_dotjobs_url(url)
+            if not (label and feed):
+                errors['url'] = 'This is not a valid .JOBS feed'
+            else:
+                bundle.data['label'] = label
+                bundle.data['feed'] = feed
         
         frequency = bundle.data.get('frequency')
         day_of_month = bundle.data.get('day_of_month')
@@ -138,13 +145,7 @@ class SavedSearchResource(ModelResource):
         try:
             search = SavedSearch.objects.get(user=user,url=bundle.data.get('url'))
             new_search_flag = False
-        except SavedSearch.DoesNotExist:  
-            label, feed = validate_dotjobs_url(url)
-            if not (label and feed):
-                errors['url'] = 'This is not a valid .JOBS feed'
-            else:
-                bundle.data['label'] = label
-                bundle.data['feed'] = feed
+        except SavedSearch.DoesNotExist:
             search_args = {'url': bundle.data.get('url'),
                            'label': bundle.data.get('label'),
                            'feed': bundle.data.get('feed'),
