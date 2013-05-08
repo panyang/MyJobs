@@ -28,78 +28,9 @@ $(document).ready(function(){
             $('div.account-settings').show();
         }
     });
-
-    
-    $('#account-basic').click(function(e) {
-        e.preventDefault();
-        $.ajax({
-            url: "/edit/basic",
-            success: function(data) {
-                $('.account-settings').html(data);
-            }
-        });
-    });
-
-
-    $('#account-communication').click(function(e) {
-        e.preventDefault();
-        $.ajax({
-            url: "/edit/communication",
-            success: function(data) {
-                $('.account-settings').html(data);
-            }
-        });
-    });
-
-    $('#account-password').click(function(e) {
-        e.preventDefault();
-        $.ajax({
-            url: "/edit/password",
-            success: function(data) {
-                $('.account-settings').html(data);
-            }
-        });
-    });
-
-    $('#account-delete').click(function(e) {
-        e.preventDefault();
-        $.ajax({
-            url: "/edit/delete",
-            success: function(data) {
-                $('.account-settings').html(data);
-            }
-        });
-    });
-
-    $('#account-disable').click(function(e) {
-        e.preventDefault();
-        $.ajax({
-            url: "/edit/disable",
-            success: function(data) {
-                $('.account-settings').html(data);
-            }
-        });
-    });
-
-    $('.show-captcha-modal').click(function(e) {
-        e.preventDefault();
-        $.ajax({
-            type:"POST",
-            url: "/edit/delete",
-            data: $("#captcha-form").serialize(),
-            success: function(data) {
-                if (data == 'success') {
-                    $("#captcha-errors").html('');
-                    $("#captcha_modal").modal();
-                } else {
-                    var error = jQuery.parseJSON(data)[0][0];
-                    $("#captcha-errors").html('<div class="alert-message block-message error">'+error+'</div>');
-                }
-            }
-        });
-    });
 });
 
+             
 function clearForm(form) {
     // clear the inputted form of existing data
     $(':input', form).each(function() {
