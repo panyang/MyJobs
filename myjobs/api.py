@@ -82,22 +82,7 @@ class CustomSearchValidation(Validation):
         url = bundle.data.get('url', '')
         if not url:
             errors['url'] = 'No .JOBS feed provided'
-        else:
-            try:
-                user = User.objects.get_email_owner(email=email)
-                if user:
-                    SavedSearch.objects.get(user=user,
-                                            url=bundle.data.get('url'))
-                    errors['url'] = 'User %s already has a search for %s' % \
-                                    (email, url)
-            except SavedSearch.DoesNotExist:
-                label, feed = validate_dotjobs_url(url)
-                if not (label and feed):
-                    errors['url'] = 'This is not a valid .JOBS feed'
-                else:
-                    bundle.data['label'] = label
-                    bundle.data['feed'] = feed
-
+        
         frequency = bundle.data.get('frequency')
         day_of_month = bundle.data.get('day_of_month')
         day_of_week = bundle.data.get('day_of_week')
@@ -150,20 +135,31 @@ class SavedSearchResource(ModelResource):
             if bundle.request:
                 notes += ' from ' + bundle.request.get_host()
             bundle.data['notes'] = notes
-
-        search_args = {'url': bundle.data.get('url'),
-                       'label': bundle.data.get('label'),
-                       'feed': bundle.data.get('feed'),
-                       'user': user,
-                       'email': bundle.data.get('email'),
-                       'frequency': bundle.data.get('frequency'),
-                       'day_of_week': bundle.data.get('day_of_week'),
-                       'day_of_month': bundle.data.get('day_of_month'),
-                       'notes': notes}
-        search = SavedSearch.objects.create(**search_args)
+        try:
+            search = SavedSearch.objects.get(user=user,url=bundle.data.get('url'))
+            new_search_flag = False
+        except SavedSearch.DoesNotExist:  
+            label, feed = validate_dotjobs_url(url)
+            if not (label and feed):
+                errors['url'] = 'This is not a valid .JOBS feed'
+            else:
+                bundle.data['label'] = label
+                bundle.data['feed'] = feed
+            search_args = {'url': bundle.data.get('url'),
+                           'label': bundle.data.get('label'),
+                           'feed': bundle.data.get('feed'),
+                           'user': user,
+                           'email': bundle.data.get('email'),
+                           'frequency': bundle.data.get('frequency'),
+                           'day_of_week': bundle.data.get('day_of_week'),
+                           'day_of_month': bundle.data.get('day_of_month'),
+                            'notes': notes}
+            search = SavedSearch.objects.create(**search_args)
+            new_search_flag=True
+            
         bundle.obj = search
         bundle.data = {'email': bundle.data.get('email'),
                        'frequency': bundle.data.get('frequency', 'D'),
-                       'new_search': True}
+                       'new_search': new_search_flag}
         return bundle
 
