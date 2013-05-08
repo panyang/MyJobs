@@ -35,9 +35,8 @@ class UserResource(ModelResource):
         authentication = ApiKeyAuthentication()
         excludes = ('password',)
         always_return_data = True
-        serializer = Serializer(formats=['jsonp', 'json'],
-                                content_types={'jsonp':'text/javascript',
-                                               'json':'application/json'})
+        serializer = Serializer(formats=['json'],
+                                content_types={'json':'application/json'})
 
     def full_dehydrate(self, bundle):
         return bundle
@@ -128,9 +127,8 @@ class SavedSearchResource(ModelResource):
         detail_allowed_methods = []
         authentication = ApiKeyAuthentication()
         always_return_data = True
-        serializer = Serializer(formats=['jsonp', 'json'],
-                                content_types={'jsonp':'text/javascript',
-                                               'json':'application/json'})
+        serializer = Serializer(formats=['json'],
+                                content_types={'json':'application/json'})
         validation = CustomSearchValidation()
 
     def full_dehydrate(self, bundle):
