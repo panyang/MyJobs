@@ -3,6 +3,8 @@ import datetime
 from django.test import TestCase
 from django.core import mail
 
+from testfixtures import Replacer
+
 from mysearches.models import SavedSearch, SavedSearchDigest
 from mysearches.helpers import *
 from mysearches.tests.test_helpers import return_file
@@ -13,12 +15,12 @@ class SavedSearchHelperTests(TestCase):
         super(SavedSearchHelperTests, self).setUp()
         self.user = UserFactory()
         self.valid_url = 'http://jobs.jobs/search?location=chicago&q=nurse'
-
-        self.old_open = urllib2.urlopen
-        urllib2.urlopen = return_file
+        
+        self.r = Replacer()
+        self.r.replace('urllib2.urlopen', return_file)
 
     def tearDown(self):
-        urllib2.urlopen = self.old_open
+        self.r.restore()
         
     def test_valid_dotjobs_url(self):
         url, soup = validate_dotjobs_url(self.valid_url)

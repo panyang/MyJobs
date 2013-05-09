@@ -1,5 +1,7 @@
 from django.test import TestCase
 
+from testfixtures import Replacer
+
 from mysearches.forms import SavedSearchForm
 from mysearches import helpers
 from mysearches.models import SavedSearch, SavedSearchDigest
@@ -16,11 +18,11 @@ class SavedSearchFormTests(TestCase):
                      'frequency': 'D',
                      'label': 'All jobs from jobs.jobs'}
 
-        self.old_open = helpers.urllib2.urlopen
-        helpers.urllib2.urlopen = return_file
+        self.r = Replacer()
+        self.r.replace('mysearches.helpers.urllib2.urlopen', return_file)
 
     def tearDown(self):
-        helpers.urllib2.urlopen = self.old_open
+        self.r.restore()
 
     def test_successful_form(self):
         form = SavedSearchForm(user=self.user,data=self.data)
