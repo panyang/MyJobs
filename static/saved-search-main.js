@@ -1,6 +1,6 @@
 $(function() {
     var SearchView = Backbone.View.extend({
-        el: '.row',
+        el: 'body',
 
         events: {
             'click [class$="edit"]': 'get_edit',
