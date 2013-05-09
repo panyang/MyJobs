@@ -5,6 +5,7 @@ from django.core import mail
 
 from mysearches.models import SavedSearch, SavedSearchDigest
 from mysearches.helpers import *
+from mysearches.tests.test_helpers import return_file
 from myjobs.tests.factories import UserFactory
 
 class SavedSearchHelperTests(TestCase):
@@ -12,6 +13,12 @@ class SavedSearchHelperTests(TestCase):
         super(SavedSearchHelperTests, self).setUp()
         self.user = UserFactory()
         self.valid_url = 'http://jobs.jobs/search?location=chicago&q=nurse'
+
+        self.old_open = urllib2.urlopen
+        urllib2.urlopen = return_file
+
+    def tearDown(self):
+        urllib2.urlopen = self.old_open
         
     def test_valid_dotjobs_url(self):
         url, soup = validate_dotjobs_url(self.valid_url)

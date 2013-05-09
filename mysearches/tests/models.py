@@ -3,12 +3,19 @@ from django.core import mail
 from django.test import TestCase
 
 from myjobs.tests.factories import UserFactory
-from mysearches.models import SavedSearch, SavedSearchDigest
+from mysearches import models
 from mysearches.tests.factories import SavedSearchFactory, SavedSearchDigestFactory
+from mysearches.tests.test_helpers import fake_render_to_string
 
 class SavedSearchModelsTests(TestCase):
     def setUp(self):
         self.user = UserFactory()
+
+        self.old_render = models.render_to_string
+        models.render_to_string = fake_render_to_string
+
+    def tearDown(self):
+        models.render_to_string = self.old_render
 
     def test_send_search_email(self):
         search = SavedSearchFactory(user=self.user)
