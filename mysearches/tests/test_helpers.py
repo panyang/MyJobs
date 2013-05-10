@@ -14,17 +14,29 @@ def return_file(url, *args, **kwargs):
     url_file_map = {'http://jobs.jobs/jobs': 'jobs.html',
                     '?location=chicago&q=nurse': 'careers.html',
                     'mcdonalds/careers/': 'careers.html',
-                    'feed/rss': 'rss.rss',
-                    'other': 'other'}
+                    'feed/rss': 'rss.rss'}
+
+    default = 'other'
 
     target = 'mysearches/tests/local/'
     try:
         value = next(v for (k,v) in url_file_map.iteritems()
                          if url.endswith(k))
     except StopIteration:
-        value = url_file_map['other']
+        value = default
     target += value
     return open(target)
 
 def fake_render_to_string(*args, **kwargs):
+    """
+    Returns a static string. Reduces the time that it takes to render emails,
+    which seems to be much greater than the time to render normal templates
+
+    Inputs:
+    :args: Ignored
+    :kwargs: Ignored
+
+    Outputs:
+    :string: Easily-computed string value
+    """
     return 'string'

@@ -2,6 +2,8 @@ from django.conf import settings
 from django.core import mail
 from django.test import TestCase
 
+from testfixtures import Replacer
+
 from myjobs.tests.factories import UserFactory
 from mysearches import models
 from mysearches.tests.factories import SavedSearchFactory, SavedSearchDigestFactory
@@ -11,11 +13,12 @@ class SavedSearchModelsTests(TestCase):
     def setUp(self):
         self.user = UserFactory()
 
-        self.old_render = models.render_to_string
-        models.render_to_string = fake_render_to_string
+        self.r = Replacer()
+        self.r.replace('django.template.loader.render_to_string',
+                       fake_render_to_string)
 
     def tearDown(self):
-        models.render_to_string = self.old_render
+        self.r.restore()
 
     def test_send_search_email(self):
         search = SavedSearchFactory(user=self.user)
