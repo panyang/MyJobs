@@ -70,7 +70,7 @@ class SavedSearchResourceTests(TestCase):
         create_api_key(User, instance=self.user, created=True)
 
         self.r = Replacer()
-        self.r.replace('mysearches.helpers.urllib2.urlopen', return_file)
+        self.r.replace('urllib2.urlopen', return_file)
 
     def tearDown(self):
         self.r.restore()

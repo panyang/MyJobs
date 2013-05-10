@@ -37,7 +37,7 @@ class MySearchViewTests(TestCase):
                                          data=self.new_form_data)
         
         self.r = Replacer()
-        self.r.replace('mysearches.helpers.urllib2.urlopen', return_file)
+        self.r.replace('urllib2.urlopen', return_file)
 
     def tearDown(self):
         self.r.restore()

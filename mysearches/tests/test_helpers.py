@@ -1,14 +1,30 @@
-def return_file(*args, **kwargs):
+def return_file(url, *args, **kwargs):
+    """
+    Translate a url into a known local file. Reduces the time that tests take
+    to complete if they do network access. Replaces `urllib.urlopen`
+
+    Inputs:
+    :url: URL to be retrieved
+    :args: Ignored
+    :kwargs: Ignored
+
+    Outputs:
+    :file: File object with a `read()` method
+    """
+    url_file_map = {'http://jobs.jobs/jobs': 'jobs.html',
+                    '?location=chicago&q=nurse': 'careers.html',
+                    'mcdonalds/careers/': 'careers.html',
+                    'feed/rss': 'rss.rss',
+                    'other': 'other'}
+
     target = 'mysearches/tests/local/'
-    if 'nurse' in args[0]:
-        target += 'nurse.html'
-    elif 'feed' in args[0]:
-        target += 'rss.rss'
-    elif 'jobs' in args[0]:
-        target += 'jobs.html'
-    else:
-        target += 'other'
-    return file(target)
+    try:
+        value = next(v for (k,v) in url_file_map.iteritems()
+                         if url.endswith(k))
+    except StopIteration:
+        value = url_file_map['other']
+    target += value
+    return open(target)
 
 def fake_render_to_string(*args, **kwargs):
     return 'string'
