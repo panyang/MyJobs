@@ -907,7 +907,11 @@ body.modal-open {
 }
 
 .warning-badge {
+    position: absolute;
+    bottom: 0px;
+    right: -15%;
+}
+
+.gravatar-warning {
     position: relative;
-    top: -57px;
-    left: 80px;
 }
