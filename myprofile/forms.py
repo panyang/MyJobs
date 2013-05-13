@@ -74,7 +74,7 @@ class EmploymentHistoryForm(BaseUserForm):
         form_name = _("Most Recent Work History")
         model = EmploymentHistory
         widgets = generate_custom_widgets(model)
-
+        
        
 class TelephoneForm(BaseUserForm):
     class Meta:
@@ -85,7 +85,7 @@ class TelephoneForm(BaseUserForm):
         widgets['area_dialing'].attrs['class'] = "phoneAreaCode"
         widgets['number'].attrs['class'] = "phoneNumber"
         widgets['extension'].attrs['class'] = "phoneExtension"
-        widgets['country_dialing'].attrs['placeholder'] = "+1"
+        widgets['country_dialing'].attrs['value'] = "1"
         widgets['area_dialing'].attrs['placeholder'] = "555"
         widgets['number'].attrs['placeholder'] = "555-5555"
         widgets['extension'].attrs['placeholder'] = "x1234"
