@@ -908,10 +908,16 @@ body.modal-open {
 
 .warning-badge {
     position: absolute;
-    bottom: 0px;
+    bottom: -10%;
     right: -15%;
 }
 
 .gravatar-warning {
+    width: 150px;
     position: relative;
+    margin-bottom: 50px;
+}
+
+#captcha_modal .modal-body {
+    overflow: hidden !important;
 }
