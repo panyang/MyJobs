@@ -47,6 +47,7 @@ class ProfileUnits(models.Model):
 class Education(ProfileUnits):
     EDUCATION_LEVEL_CHOICES = (
         (3, _('High School')),
+        (4, _('Non-Degree Education')),
         (5, _('Associate')),
         (6, _('Bachelor')),
         (7, _('Master')),
