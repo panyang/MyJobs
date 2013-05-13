@@ -7,20 +7,13 @@ from testfixtures import Replacer
 from myjobs.tests.factories import UserFactory
 from mysearches import models
 from mysearches.tests.factories import SavedSearchFactory, SavedSearchDigestFactory
-from mysearches.tests.test_helpers import fake_render_to_string
 
 class SavedSearchModelsTests(TestCase):
     def setUp(self):
         self.user = UserFactory()
 
-        self.r = Replacer()
-        self.r.replace('django.template.loader.render_to_string',
-                       fake_render_to_string)
-
-    def tearDown(self):
-        self.r.restore()
-
     def test_send_search_email(self):
+        print 'search email'
         search = SavedSearchFactory(user=self.user)
         search.send_email()
         self.assertEqual(len(mail.outbox), 1)
@@ -30,6 +23,7 @@ class SavedSearchModelsTests(TestCase):
         self.assertEqual(email.to, [self.user.email])
 
     def test_send_search_digest_email(self):
+        print 'digest email'
         digest = SavedSearchDigestFactory(user=self.user)
         digest.send_email()
         self.assertEqual(len(mail.outbox), 0)

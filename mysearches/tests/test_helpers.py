@@ -26,17 +26,3 @@ def return_file(url, *args, **kwargs):
         value = default
     target += value
     return open(target)
-
-def fake_render_to_string(*args, **kwargs):
-    """
-    Returns a static string. Reduces the time that it takes to render emails,
-    which seems to be much greater than the time to render normal templates
-
-    Inputs:
-    :args: Ignored
-    :kwargs: Ignored
-
-    Outputs:
-    :string: Easily-computed string value
-    """
-    return 'string'
