@@ -4,12 +4,14 @@ from django.core.urlresolvers import reverse
 from django.test import TestCase
 
 from tastypie.models import create_api_key
+from testfixtures import Replacer
 
 from myjobs.models import User
 from myjobs.tests.factories import UserFactory
 from myjobs.tests.views import TestClient
 from myprofile.models import SecondaryEmail
 from mysearches.models import SavedSearch
+from mysearches.tests.test_helpers import return_file
 
 class UserResourceTests(TestCase):
     def setUp(self):
@@ -66,6 +68,12 @@ class SavedSearchResourceTests(TestCase):
         self.client = TestClient()
         self.data = {'email':'alice@example.com', 'url':'jobs.jobs/jobs'}
         create_api_key(User, instance=self.user, created=True)
+
+        self.r = Replacer()
+        self.r.replace('urllib2.urlopen', return_file)
+
+    def tearDown(self):
+        self.r.restore()
 
     def test_new_search_existing_user(self):
         response = self.client.post(

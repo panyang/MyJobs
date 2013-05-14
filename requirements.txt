@@ -15,3 +15,4 @@ newrelic
 django-tastypie==0.9.15
 git+git://github.com/arneb/django-messages.git
 git+git://github.com/zalew/django-recaptcha.git@a870781adfd9ca381eaf408445ff5a7091e57ebf
+testfixtures

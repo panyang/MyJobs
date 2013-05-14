@@ -952,3 +952,42 @@ body.modal-open {
     overflow: hidden;
 }
 
+.account-captcha {
+    text-align: center;
+    padding-bottom: 30px;
+}
+
+#edit_modal .input-prepend .add-on {
+    width: 96px;
+}
+
+#edit_modal .input-prepend input,
+#edit_modal .input-prepend select {
+    width: auto;
+}
+
+
+#captcha_modal {
+    width: 620px;
+}
+
+.account-warning {
+    width: 400px;
+}
+
+.warning-badge {
+    position: absolute;
+    bottom: -10%;
+    right: -15%;
+}
+
+.gravatar-warning {
+    width: 150px;
+    position: relative;
+    margin-bottom: 50px;
+}
+
+#captcha_modal .modal-body {
+    overflow: hidden !important;
+}
+
