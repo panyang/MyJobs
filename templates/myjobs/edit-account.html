@@ -10,6 +10,8 @@
 <section>
     <div class="wrapper"> 
         <div class="row">
+          <div class="form-status">
+          </div>
             {% if message_body %}
             <div class="alert alert-{{messagetype}}">
               <button type="button" class="close" data-dismiss="alert">&times;</button>
@@ -33,7 +35,7 @@
 
                     <div class="span7 account-settings">
                         {% block edit-main %}
-                        <form action="" method="POST">
+                        <form action="" method="POST" id="form-basic">
                           {% include "includes/form-error-highlight.html" %}
                           {% csrf_token %}
                           <div class="actions">

@@ -750,10 +750,17 @@ em.pendingText{
     }
     div.account-settings {
         display: none;
+        width: auto;
+        padding: 10px;
     }
     div.account-box {
         min-height: auto;
         background-color: #f4f1ea;
+    }
+
+    div.account-settings .actions button {
+        width: 100%;
+        margin: 0;
     }
     div.settings-nav ul {
         height: auto;

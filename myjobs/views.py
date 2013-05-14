@@ -149,25 +149,19 @@ def edit_account(request):
     name_obj = get_name_obj(request)
     if name_obj:
         initial_dict.update(model_to_dict(name_obj))
-    
+
+
+    form = EditAccountForm(initial=initial_dict, user=request.user)
     if request.method == "POST":
         form = EditAccountForm(user=request.user, data=request.POST)
         if form.is_valid():
             form.save(request.user)
-            return HttpResponseRedirect('?saved=success')
-    else:
-        form = EditAccountForm(initial=initial_dict, user=request.user)
+            return HttpResponse('success')
         
-    # Check for the saved query parameter. This powers a save alert on the
-    # screen after redirecting.    
-    message = __check_for_successful_save(form,request)
-
     ctx = {'form': form,
            'user': request.user,
            'gravatar_100': request.user.get_gravatar_url(size=100),
-           'name_obj': name_obj,
-           'message_body':message['message_body'],
-           'messagetype':message['message_type']}
+           'name_obj': name_obj}
     
     return render_to_response('myjobs/edit-account.html', ctx,
                               RequestContext(request))
@@ -179,18 +173,16 @@ def edit_basic(request):
     if name_obj:
         initial_dict.update(model_to_dict(name_obj))
 
+    form = EditAccountForm(initial=initial_dict, user=request.user)        
     if request.method == "POST":
         form = EditAccountForm(user=request.user, data=request.POST)
         if form.is_valid():
             form.save(request.user)
-            return HttpResponseRedirect('?saved=success')
-    else:
-        form = EditAccountForm(initial=initial_dict, user=request.user)
+            return HttpResponse('success')
     
-    message = __check_for_successful_save(form,request)        
-    ctx = {
-        'form':form,
-    }
+    ctx = {'form':form,
+           'gravatar_100': request.user.get_gravatar_url(size=100),
+           'section_name': 'basic'}
     return render_to_response('myjobs/edit-form-template.html', ctx,
                               RequestContext(request))
     
@@ -198,19 +190,18 @@ def edit_basic(request):
 @user_passes_test(User.objects.not_disabled)
 def edit_communication(request):
     obj = User.objects.get(id=request.user.id)
+
+    form = EditCommunicationForm(user=request.user, instance=obj)
     if request.method == "POST":
         form = EditCommunicationForm(user=request.user, instance=obj,
                                      data=request.POST)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect('?saved=success')
-    else:
-        form = EditCommunicationForm(user=request.user, instance=obj)
+            return HttpResponse('success')
     
-    message = __check_for_successful_save(form,request)        
-    ctx = {
-        'form':form,
-    }
+    ctx = {'form': form,
+           'section_name': 'communication'}
+    
     return render_to_response('myjobs/edit-form-template.html', ctx,
                               RequestContext(request))
 
@@ -218,31 +209,15 @@ def edit_communication(request):
     
 @user_passes_test(User.objects.not_disabled)
 def edit_password(request):
+    form = ChangePasswordForm(user=request.user)
     if request.method == "POST":
         form = ChangePasswordForm(user=request.user, data=request.POST)
         if form.is_valid():
             form.save()
-            return HttpResponseRedirect('?saved=success')
-    else:
-        form = ChangePasswordForm(user=request.user)
-    
-    # Check for the saved query parameter. This powers a save alert on the
-    # screen after redirecting.
-    saved = request.REQUEST.get('saved')
-    if saved:
-        if saved=="success":
-            message = "Your password has been updated."
-            message_type = "success"
-        else:
-            message = "There as an error, please try again."
-            message_type = "error"
-    else:
-        message = ""
-        message_type = ""
-        
-    ctx = {
-        'form':form,
-        }
+            return HttpResponse('success')
+
+    ctx = {'form':form,
+           'section_name': 'password'}
     return render_to_response('myjobs/edit-form-template.html', ctx,
                               RequestContext(request))
 
