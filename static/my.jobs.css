@@ -59,6 +59,9 @@ a:hover{
 #newAccountData .profile-form-input input {
     width: 95%;   
     }
+#newAccountData .input-prepend {
+    width: 95%;  
+    }
 #newAccountData .hasRegions {
     margin-left: -20px;  
     }
