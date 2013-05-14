@@ -9,6 +9,7 @@ from django.test import TestCase
 
 from myjobs.models import User
 from myjobs.tests.views import TestClient
+from myprofile.models import SecondaryEmail
 from registration import forms
 from registration.models import ActivationProfile
 
@@ -105,3 +106,16 @@ class RegistrationViewTests(TestCase):
         # one email sent for creating an inactive user, another one for resend
         self.assertEqual(len(mail.outbox), 2)
 
+    def test_resend_activation_with_secondary_emails(self):
+        user, created = User.objects.create_inactive_user(**{'email':'alice@example.com',
+                                                    'password1':'secret'})
+        self.assertEqual(ActivationProfile.objects.count(), 1)
+
+        self.client.login_user(user)
+        self.client.get('/accounts/register/resend/')
+        self.assertEqual(len(mail.outbox), 2)
+
+        SecondaryEmail.objects.create(user=user, email='test@example.com')
+        self.assertEqual(ActivationProfile.objects.count(), 2)
+        self.client.get('/accounts/register/resend/')
+        self.assertEqual(len(mail.outbox), 3)
