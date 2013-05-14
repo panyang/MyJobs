@@ -1,6 +1,6 @@
 $(function() {
     var AppView = Backbone.View.extend({
-        el: $(".row"),
+        el: $("body"),
 
         events: {
             // targets event fired when buttons within #moduleBank are clicked
@@ -26,8 +26,11 @@ $(function() {
             // targets country select boxes
             "change [id$='-country_code']": "getSelect",
 
-            // targets "Delete" button on add/edit modal
+            // targets delete buttons not on confirmation modal
             "click [id$='confirm']": "confirmDelete",
+
+            // targets "View" button for each item
+            "click [id$='view']": "viewDetails",
         },
 
         /*
@@ -49,7 +52,6 @@ $(function() {
                     if ($('#moduleBank').find('tr').length == 0) {
                         $('#moduleBank').hide();
                     }
-                    data = $(data).hide();
                     $('#moduleColumn').append(data);
                     module_elem = $('#'+module+'_items');
                     module_elem.find('[id$="add"]').click();
@@ -69,30 +71,21 @@ $(function() {
 
             // e.target may be either the cancel button or the x button;
             // We need the cancel button
-            var target = $(e.target).parents('[id$="modal"]')
-                .find('a[id$="cancel"]');
+            var parent_ = $(e.target).parents('[id$="modal"]')
+            var target = parent_.find('a[id$="cancel"]');
 
             // id is formatted [module_type]-[item_id]-[event]
             var module = target.attr('id').split('-')[0];
             var item_id = target.attr('id').split('-')[1];
 
-            var modal = target.parents('.modal')
-            if (modal.attr('data-parent') !== undefined) {
-                // The modal being closed was opened by another modal;
-                // It should be hidden and its parent modal should be shown
-                modal.modal('hide');
-                parent_modal = $('#'+modal.attr('data-parent'));
-                modal.removeAttr('data-parent');
-                parent_modal.modal({'backdrop':'static','keyboard':false});
-            } else {
-                // Upon closing certain modal windows, all modals should be
-                // removed from the document
-                $('[id$="modal"]').modal('hide').remove();
+            if (!$('[id$="modal"]:visible').length) {
+                // All modals are hidden; Remove them
+                $('[id$="modal"]').remove();
             }
 
-            if (item_id != 'new') {
-                // When "Edit" was clicked, the relevant item was hidden
-                // Since nothing has changed, the item needs to be re-shown
+            if (parent_.attr('id') === 'edit_modal') {
+                // When "Edit" was clicked, the item to be edited was hidden;
+                // Since nothing was changed, the item should be re-shown
                 $('#'+module+'-'+item_id+'-item').show();
             } else {
                 manageModuleDisplay(module);
@@ -118,24 +111,32 @@ $(function() {
                 item = $('#'+module+'-'+id+'-item');
             }
 
-            $.ajax({
-                url: '/profile/form/',
-                data: {'module':module, 'id':id},
-                success: function(data) {
-                    if (item) {
-                        item.hide();
-                    }
-                    data = $(data).hide();
-                    $('#moduleColumn').append(data);
-                    resize_modal('#edit_modal');
-                    $('#edit_modal').modal({'backdrop':'static','keyboard':false});
-                    datepicker();
+            if ($('#edit_modal').length == 0) {
+                $.ajax({
+                    url: '/profile/form/',
+                    data: {'module':module, 'id':id},
+                    success: function(data) {
+                        if (item) {
+                            item.hide();
+                        }
 
-                    $('[id$="-country_sub_division_code"]').hide();
-                    $('label[for$="-country_sub_division_code"]').hide();
-                    $('[id$="-country_code"]').change();
+                        $('#moduleColumn').append(data);
+
+                        $('#edit_modal').modal({'backdrop':'static','keyboard':false});
+                        datepicker();
+
+                        $('[id$="-country_sub_division_code"]').hide();
+                        $('label[for$="-country_sub_division_code"]').hide();
+                        $('[id$="-country_code"]').change();
+                    }
+                });            
+            } else {
+                if (item) {
+                    item.hide();
                 }
-            });            
+
+                $('#edit_modal').modal({'backdrop':'static','keyboard':false});
+            }
         },
 
         /*
@@ -177,18 +178,20 @@ $(function() {
                 success: function(data) {
                     if (data.indexOf('<td') >= 0) {
                         // form was valid; data should be appended to the table
+
+                        $('#'+module+'-'+item_id+'-item').remove();
                         if (first_instance) {
                             $('#'+module+'_items').children('h4').after(
                                 '<table class="table table-bordered table-striped"></table>'
                             );
-                            table = $('#'+module+'_items').children('table')
+                            table = $('#'+module+'_items').children('table');
                             table.append(data);
                         }
                         else {
                             table.children("tbody").append(data);
                         }
                         $('#'+module+'-'+item_id+'-item').remove();
-                        $('[id$="modal"]').modal('hide');
+                        $('[id$="modal"]').modal('hide').remove();
                         $('[id$="modal"]').remove();
                         $('#'+module+'_items').show();
                     } else {
@@ -221,7 +224,7 @@ $(function() {
                 csrf_token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
             }
 
-            // id is formatted [module_type]-[item_id]-[event]
+            // id is formatted [module_type]-[item_id]-delete
             var module = $(e.target).attr('id').split("-")[0];
             var id = $(e.target).attr('id').split("-")[1];
 
@@ -233,9 +236,9 @@ $(function() {
                 url: '/profile/delete/',
                 data: {'module':module, 'id':id, csrfmiddlewaretoken: csrf_token},
                 success: function(data) {
+                    $('[id$="modal"]').modal('hide').remove();
                     item.remove();
                     manageModuleDisplay(module);
-                    $('[id$="modal"]').modal('hide').remove();
                 }
             });
         },
@@ -301,6 +304,24 @@ $(function() {
             });
         },
 
+        viewDetails: function(e) {
+            e.preventDefault();
+
+            // id is formatted [module_type]-[item_id]-view
+            var module = $(e.target).attr('id').split('-')[0];
+            var id = $(e.target).attr('id').split('-')[1];
+
+            $.ajax({
+                url: '/profile/details/',
+                data: {'module': module, 'id': id},
+                success: function(data) {
+                    $(e.target).parents('table').after(data);
+                    var target = $('#detail_modal');
+                    target.modal({'backdrop':'static','keyboard':false});
+                }
+            });
+        },
+
         /*
         Shows a confirmation message to determine if user really wants
         to delete the specified item
@@ -309,20 +330,11 @@ $(function() {
         */
         confirmDelete: function(e) {
             e.preventDefault();
-            var parent_modal = $(e.target).parents('[id$="modal"]')
-            parent_modal.modal('hide');
-            resize_modal('#confirm_modal');
-            $('#confirm_modal').attr('data-parent', parent_modal.attr('id'));
             $('#confirm_modal').modal({'backdrop':'static','keyboard':false});
         },
     });
 
     var App = new AppView;
-
-    $(window).on('resize', function() {
-        resize_modal('#confirm_modal');
-        resize_modal('#edit_modal');
-    });
 });
 
 function manageModuleDisplay(module) {

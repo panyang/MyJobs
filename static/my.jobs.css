@@ -35,7 +35,15 @@ a:hover{
 .action th {
     background-color: #FFF;   
     }
-
+.hasRegions {
+    position: relative;
+    margin-left: 200px;
+    margin-top: -27px;
+    }
+.profile-form-input input {
+    width: 40%;
+    }    
+    
 /* bootstrap .table-striped class */
 .table-striped thead th {
     background-color: #FFF;   
@@ -416,7 +424,7 @@ em.pendingText{
     #nav li:hover ul#pop-menu{ 
         display: block;
         text-align: left;
-    }    
+    }
 }
 #nav.active ul#pop-menu li a:hover,
 #nav li:hover ul#pop-menu li a:hover{ 
@@ -622,6 +630,18 @@ em.pendingText{
       
     .profile-mobile td:before { content: attr(data-title); }
     
+    .hasRegions {        
+        float: left;
+        margin-left: -9px;
+        margin-top: 1px;
+        margin-bottom: 0px;
+    }
+    .checkbox-margin {
+        padding-top: 14px;    
+    }
+    .profile-form-input input {
+        width: 65%;
+    }
     
     #titleRow{
         margin-top: 0px;

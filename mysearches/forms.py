@@ -13,7 +13,7 @@ class SavedSearchForm(BaseUserForm):
         choices = make_choices(self.user)
         self.fields["email"] = ChoiceField(widget=Select(), choices=choices,
                                            initial=choices[0][0])
-        
+
 
     feed = URLField(widget=HiddenInput())
 
@@ -43,6 +43,9 @@ class SavedSearchForm(BaseUserForm):
         
     class Meta:
         model = SavedSearch
+        widgets = {
+            'notes': Textarea(attrs={'rows':5, 'cols':24}),
+        }
 
 
 class DigestForm(BaseUserForm):

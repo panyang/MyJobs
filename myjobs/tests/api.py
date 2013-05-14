@@ -1,4 +1,4 @@
-import simplejson as json
+from django.utils import simplejson as json
 
 from django.core.urlresolvers import reverse
 from django.test import TestCase
@@ -26,9 +26,9 @@ class UserResourceTests(TestCase):
             HTTP_ACCEPT='text/javascript',
             HTTP_AUTHORIZATION='ApiKey %s:%s' % \
                 (self.user.email, self.user.api_key.key))
-        response.content = response.content[9:-1]
         content = json.loads(response.content)
-        self.assertEqual(content, {'user_created':True})
+        self.assertEqual(content, 
+            {'user_created':True, 'email':'foo@example.com'})
         self.assertEqual(response.status_code, 201)
         self.assertEqual(User.objects.count(), 2)
         user = User.objects.get(email=self.data['email'])
@@ -41,7 +41,6 @@ class UserResourceTests(TestCase):
             HTTP_ACCEPT='text/javascript',
             HTTP_AUTHORIZATION='ApiKey %s:%s' % \
                 (self.user.email, self.user.api_key.key))
-        response.content = response.content[9:-1]
         content = json.loads(response.content)
         self.assertEqual(response.status_code, 400)
         self.assertEqual(content['email'], 'No email provided')
@@ -55,10 +54,10 @@ class UserResourceTests(TestCase):
             HTTP_ACCEPT='text/javascript',
             HTTP_AUTHORIZATION='ApiKey %s:%s' % \
                 (self.user.email, self.user.api_key.key))
-        response.content = response.content[9:-1]
         content = json.loads(response.content)
         self.assertEqual(response.status_code, 201)
-        self.assertEqual(content, {'user_created':False})
+        self.assertEqual(content, 
+            {'user_created':False, 'email':'alice@example.com'})
 
 class SavedSearchResourceTests(TestCase):
     def setUp(self):
@@ -76,7 +75,6 @@ class SavedSearchResourceTests(TestCase):
             HTTP_ACCEPT='text/javascript',
             HTTP_AUTHORIZATION='ApiKey %s:%s' % \
                 (self.user.email, self.user.api_key.key))
-        response.content = response.content[9:-1]
         self.assertEqual(response.status_code, 201)
         self.assertEqual(SavedSearch.objects.count(), 1)
         search = SavedSearch.objects.all()[0]
@@ -95,7 +93,6 @@ class SavedSearchResourceTests(TestCase):
             HTTP_AUTHORIZATION='ApiKey %s:%s' % \
                 (self.user.email, self.user.api_key.key)
         )
-        response.content = response.content[9:-1]
         self.assertEqual(response.status_code, 400)
         self.assertEqual(SavedSearch.objects.count(), 0)
         self.assertEqual(User.objects.count(), 1)
@@ -115,7 +112,6 @@ class SavedSearchResourceTests(TestCase):
             content_type='application/json',
             HTTP_AUTHORIZATION='ApiKey %s:%s' % \
                 (self.user.email, self.user.api_key.key))
-        response.content = response.content[9:-1]
         self.assertEqual(response.status_code, 201)
         self.assertEqual(SavedSearch.objects.count(), 1)
         self.assertEqual(User.objects.count(), 1)
@@ -135,7 +131,6 @@ class SavedSearchResourceTests(TestCase):
             HTTP_AUTHORIZATION='ApiKey %s:%s' % \
                 (self.user.email, self.user.api_key.key)
         )
-        response.content = response.content[9:-1]
         self.assertEqual(response.status_code, 400)
         content = json.loads(response.content)
         self.assertEqual(len(content), 1)
@@ -152,7 +147,6 @@ class SavedSearchResourceTests(TestCase):
             HTTP_AUTHORIZATION='ApiKey %s:%s' % \
                 (self.user.email, self.user.api_key.key)
         )
-        response.content = response.content[9:-1]
         self.assertEqual(response.status_code, 400)
         content = json.loads(response.content)
         self.assertEqual(len(content), 1)
@@ -169,7 +163,6 @@ class SavedSearchResourceTests(TestCase):
             HTTP_AUTHORIZATION='ApiKey %s:%s' % \
                 (self.user.email, self.user.api_key.key)
         )
-        response.content = response.content[9:-1]
         self.assertEqual(response.status_code, 400)
         content = json.loads(response.content)
         self.assertEqual(len(content), 1)
@@ -183,7 +176,6 @@ class SavedSearchResourceTests(TestCase):
             HTTP_ACCEPT='text/javascript',
             content_type='application/json'
         )
-        response.content = response.content[9:-1]
         self.assertEqual(response.status_code, 401)
         self.assertEqual(response.content, '')
         self.assertEqual(SavedSearch.objects.count(), 0)
@@ -201,7 +193,6 @@ class SavedSearchResourceTests(TestCase):
                 content_type='application/json',
                 HTTP_AUTHORIZATION='ApiKey %s:%s' % header
             )
-            response.content = response.content[9:-1]
             self.assertEqual(response.status_code, 401)
             self.assertEqual(response.content, '')
             self.assertEqual(SavedSearch.objects.count(), 0)
@@ -217,12 +208,9 @@ class SavedSearchResourceTests(TestCase):
                     (self.user.email, self.user.api_key.key))
         post()
         response = post()
-        response.content = response.content[9:-1]
-        self.assertEqual(response.status_code, 400)
         content = json.loads(response.content)
-        self.assertEqual(len(content), 1)
-        self.assertEqual(content['url'], 'User '+self.user.email+\
-            ' already has a search for '+self.data['url'])
+        self.assertEqual(len(content), 3)
+        self.assertEqual(content['new_search'], False)
         self.assertEqual(SavedSearch.objects.count(), 1)
 
     def test_no_day_of(self):
@@ -235,7 +223,6 @@ class SavedSearchResourceTests(TestCase):
                 content_type='application/json',
                 HTTP_AUTHORIZATION='ApiKey %s:%s' % \
                     (self.user.email, self.user.api_key.key))
-            response.content = response.content[9:-1]
             content = json.loads(response.content)
             self.assertEqual(response.status_code, 400)
             self.assertEqual(len(content), 1)

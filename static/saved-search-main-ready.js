@@ -1,13 +1,7 @@
 $(document).ready(function() {
-    resize_modal('#new_modal');
     add_valid_label($('#new_modal'));
     disable_fields($('#new_modal'));
     add_refresh_btn($('#new_modal'));
-
-    $(window).resize(function() {
-        resize_modal('#new_modal');
-        resize_modal('#edit_modal');
-    });
 
     $('#new_modal').on('hidden', function() {
         clearForm($('form#saved-search-form'));
