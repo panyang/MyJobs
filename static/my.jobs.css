@@ -51,7 +51,18 @@ a:hover{
     }    
 .table-striped tbody tr:nth-child(even) td {background-color: #d2cfc7 !important;}
 .table-striped tbody tr:nth-child(odd) td {background-color: #eae6de !important;}
-    
+
+/*New Account initial form*/
+#newAccountData .initial {
+    display: none;   
+    }
+#newAccountData .profile-form-input input {
+    width: 95%;   
+    }
+#newAccountData .hasRegions {
+    margin-left: -20px;  
+    }
+
 /* Form Styles */
 .form-label{
     text-align: right;
