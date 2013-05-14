@@ -1,12 +1,18 @@
+from django.utils.http import urlquote
 from django.test import TestCase
 import json
+
+from testfixtures import Replacer
 
 from myjobs.tests.views import TestClient
 from myjobs.tests.factories import UserFactory
 
 from mysearches import forms
+from mysearches import helpers
 from mysearches import models
+from mysearches.tests.test_helpers import return_file
 from mysearches.tests.factories import SavedSearchDigestFactory, SavedSearchFactory
+
 
 class MySearchViewTests(TestCase):
     def setUp(self):
@@ -29,6 +35,12 @@ class MySearchViewTests(TestCase):
         }
         self.new_form = forms.SavedSearchForm(user=self.user,
                                          data=self.new_form_data)
+        
+        self.r = Replacer()
+        self.r.replace('urllib2.urlopen', return_file)
+
+    def tearDown(self):
+        self.r.restore()
 
     def test_search_main(self):
         response = self.client.get('/saved-search/')

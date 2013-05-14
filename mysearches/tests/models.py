@@ -2,8 +2,10 @@ from django.conf import settings
 from django.core import mail
 from django.test import TestCase
 
+from testfixtures import Replacer
+
 from myjobs.tests.factories import UserFactory
-from mysearches.models import SavedSearch, SavedSearchDigest
+from mysearches import models
 from mysearches.tests.factories import SavedSearchFactory, SavedSearchDigestFactory
 
 class SavedSearchModelsTests(TestCase):
@@ -11,6 +13,7 @@ class SavedSearchModelsTests(TestCase):
         self.user = UserFactory()
 
     def test_send_search_email(self):
+        print 'search email'
         search = SavedSearchFactory(user=self.user)
         search.send_email()
         self.assertEqual(len(mail.outbox), 1)
@@ -20,6 +23,7 @@ class SavedSearchModelsTests(TestCase):
         self.assertEqual(email.to, [self.user.email])
 
     def test_send_search_digest_email(self):
+        print 'digest email'
         digest = SavedSearchDigestFactory(user=self.user)
         digest.send_email()
         self.assertEqual(len(mail.outbox), 0)
