@@ -42,6 +42,8 @@ def home(request):
 
     """
 
+    import ipdb
+    ipdb.set_trace()
 
     registrationform = RegistrationForm(auto_id=False)
     loginform = CustomAuthForm(auto_id=False)

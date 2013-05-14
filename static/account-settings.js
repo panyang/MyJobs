@@ -21,7 +21,11 @@ $(function() {
         
         showSection: function(e) {
             e.preventDefault();
-            var section_name = $(e.target).parents('a').attr('id').split('-')[1];
+            try {
+                var section_name = $(e.target).parents('a').attr('id').split('-')[1];
+            } catch(err) {
+                var section_name = $(e.target).attr('id').split('-')[1];
+            }
             $.ajax({
                 url: "/edit/" + section_name,
                 success: function(data) {

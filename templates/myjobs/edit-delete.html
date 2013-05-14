@@ -11,7 +11,7 @@
   {% csrf_token %}
   <div class="actions">
     <a href="" class="btn pull-right">{% trans 'Cancel' %}</a>
-    <button type="submit" class="btn primary pull-left show-captcha-modal-delete" value="submit">{% trans "Delete Account" %}</button>
+    <button type="submit" class="btn primary pull-left" id="show-captcha-modal-delete" value="submit">{% trans "Delete Account" %}</button>
     <div class="clear"></div>
   </div>
 </form>
@@ -33,14 +33,14 @@
       </ul>
       <p>{% trans "This cannot be reversed." %}</p>
       <p>{% trans "If you want to preserve your account for use later, then you should" %}
-        <a href="{% url 'disable_account' %}">{% trans "disable your account" %}</a> {% trans "instead." %}</p>
+        <a href="{">{% trans "disable your account" %}</a> {% trans "instead." %}</p>
     </div>
   </div>
   <div class="modal-footer">
       <div class="actions">
         <a href="{% url 'delete_account' %}" class="btn primary pull-right">Yes, delete my account</a>
         <a data-dismiss="modal" aria-hidden="true" class="btn pull-left">{% trans 'Cancel' %}</a>
-        <a href="{% url 'edit_disable' %}" class="btn pull-left">{% trans 'Disable my account' %}</a>
+        <a href="" id="account-disable" data-dismiss="modal" aria-hidden="true" class="btn pull-left">{% trans 'Disable my account' %}</a>
       </div>
   </div>
 </div>
