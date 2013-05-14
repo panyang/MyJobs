@@ -1,6 +1,5 @@
 {% load i18n %}
-
-<form action="" method="POST">
+<form action="" method="POST" id="captcha-form">
   <div class="account-captcha">
     <center>
       <div id="captcha-errors" class="text-error"></div>
@@ -11,7 +10,7 @@
   </div>
   {% csrf_token %}
   <div class="actions">
-    <a href="{% url 'view_profile' %}" class="btn pull-right">{% trans 'Cancel' %}</a>
+    <a href="" class="btn pull-right">{% trans 'Cancel' %}</a>
     <button type="submit" class="btn primary pull-left show-captcha-modal" value="submit">{% trans "Delete Account" %}</button>
     <div class="clear"></div>
   </div>

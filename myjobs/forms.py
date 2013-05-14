@@ -150,5 +150,5 @@ class ChangePasswordForm(Form):
 
 
 class CaptchaForm(Form):
-    captcha = ReCaptchaField(label="")
+    captcha = ReCaptchaField(label="", attrs={'theme': 'clean'})
     
