@@ -1,6 +1,6 @@
 {% load i18n %}
 
-<form action="" method="POST" id="captcha-form">
+<form action="" method="POST">
   <div class="account-captcha">
     <center>
       <div id="captcha-errors" class="text-error"></div>
@@ -35,7 +35,7 @@
     </div>
     <div class="modal-footer">
         <div class="actions">
-          <a href="{% url 'delete_account' %}" class="btn primary pull-right">Yes, delete my account</a>
+          <a href="" class="btn primary pull-right">Yes, delete my account</a>
           <a data-dismiss="modal" aria-hidden="true" class="btn pull-left">{% trans 'Cancel' %}</a>
           <a href="{% url 'edit_disable' %}" class="btn pull-left">{% trans 'Disable my account' %}</a>
         </div>

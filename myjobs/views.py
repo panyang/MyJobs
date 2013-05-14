@@ -209,7 +209,7 @@ def edit_communication(request):
     
 @user_passes_test(User.objects.not_disabled)
 def edit_password(request):
-    form = ChangePasswordForm(user=request.user)
+    form = CaptchaForm()
     if request.method == "POST":
         form = ChangePasswordForm(user=request.user, data=request.POST)
         if form.is_valid():
