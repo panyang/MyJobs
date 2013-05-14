@@ -11,12 +11,10 @@
   {% csrf_token %}
   <div class="actions">
     <a href="" class="btn pull-right">{% trans 'Cancel' %}</a>
-    <button type="submit" class="btn primary pull-left show-captcha-modal" value="submit">{% trans "Delete Account" %}</button>
+    <button type="submit" class="btn primary pull-left show-captcha-modal-delete" value="submit">{% trans "Delete Account" %}</button>
     <div class="clear"></div>
   </div>
 </form>
-{% endblock %}
-{% block modal %}
 <div id="captcha_modal" class="modal hide fade row">
   <div class="modal-header">
     <button class="close mobile_hide" aria-hidden="true" data-dismiss="modal" type="button">×</button>
@@ -25,29 +23,7 @@
   <div class="modal-body">
     <div class="gravatar-warning pull-left"><img src="{{gravatar_150}}" /><br><img class="warning-badge" src="{{STATIC_URL}}images/critical-badge.png" /></div>
     <div class="account-warning pull-right">
-<<<<<<< HEAD:templates/myjobs/edit-delete.html
-        <p>{% trans "Are you sure you want to delete your account?" %}</p>
-        <p>{% trans "This will do the following:" %}</p>
-        <ul>
-          <li>{% trans "Delete all your profile data" %}</li>
-          <li>{% trans "Delete all your saved searches" %}</li>
-          <li>{% trans "Delete your login information" %}</li>
-        </ul>
-        <p>{% trans "This cannot be reversed." %}</p>
-        <p>{% trans "If you want to preserve your account for use later, then you should" %}
-          <a href="{% url 'disable_account' %}">{% trans "disable your account" %}</a> {% trans "instead." %}</p>
-      </div>
-    </div>
-    <div class="modal-footer">
-        <div class="actions">
-          <a href="" class="btn primary pull-right">Yes, delete my account</a>
-          <a data-dismiss="modal" aria-hidden="true" class="btn pull-left">{% trans 'Cancel' %}</a>
-          <a href="{% url 'edit_disable' %}" class="btn pull-left">{% trans 'Disable my account' %}</a>
-        </div>
-    </div>
-  </div>
 
-=======
       <p>{% trans "Are you sure you want to delete your account?" %}</p>
       <p>{% trans "This will do the following:" %}</p>
       <ul>
@@ -68,6 +44,4 @@
       </div>
   </div>
 </div>
-{% endblock %}
->>>>>>> ad3286475d2b2538734e1a6e4133efd89ab103c7:templates/edit-delete.html
 

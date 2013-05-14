@@ -16,7 +16,7 @@ $(function() {
         events: {
             "click [id^='account-']": "showSection",
             "submit form": "saveForm",
-            "click .show-captcha-modal": "captchaModal",
+            "click [id^='show-captcha-modal']": "captchaModal",
         },
         
         showSection: function(e) {
@@ -50,9 +50,10 @@ $(function() {
         
         captchaModal: function(e) {
             e.preventDefault();
+            var section_name = $(e.target).attr('id').split('-')[3];
             $.ajax({
                 type:"POST",
-                url: "/edit/delete",
+                url: "/edit/" + section_name,
                 data: $("#captcha-form").serialize(),
                 success: function(data) {
                     if (data == 'success') {

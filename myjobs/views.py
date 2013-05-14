@@ -329,34 +329,3 @@ def continue_sending_mail(request):
     user.last_response = datetime.date.today()
     user.save()
     return redirect('/')
-
-
-def __check_for_successful_save(form,request):
-    """
-    This is an internal function that controls thealert message displayed
-    after saving a form.
-    
-    Inputs:
-        :form:      django form object to test for errors
-        :request:   django request object with any get message params
-    
-    Returns:
-        :message:   A dictionary object with messagebody and type.
-        
-    """
-    saved = request.REQUEST.get('saved')
-    if saved and not form.errors:
-        if saved=="success":
-            message_body = "Your information has been updated."
-            message_type = "success"
-        else:
-            message_body = "There as an error, please try again."
-            message_type = "error"
-    elif form.errors:
-        message_body = "Please check your information and try again."
-        message_type = "error"
-    else:
-        message_body = ""
-        message_type = ""
-    message = {'message_body':message_body,'message_type':message_type}
-    return message
