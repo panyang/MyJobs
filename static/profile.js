@@ -83,13 +83,7 @@ $(function() {
                 $('[id$="modal"]').remove();
             }
 
-            if (parent_.attr('id') === 'edit_modal') {
-                // When "Edit" was clicked, the item to be edited was hidden;
-                // Since nothing was changed, the item should be re-shown
-                $('#'+module+'-'+item_id+'-item').show();
-            } else {
-                manageModuleDisplay(module);
-            }
+            manageModuleDisplay(module);
         },
 
         /*
@@ -116,10 +110,6 @@ $(function() {
                     url: '/profile/form/',
                     data: {'module':module, 'id':id},
                     success: function(data) {
-                        if (item) {
-                            item.hide();
-                        }
-
                         $('#moduleColumn').append(data);
 
                         $('#edit_modal').modal({'backdrop':'static','keyboard':false});
