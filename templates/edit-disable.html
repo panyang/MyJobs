@@ -3,8 +3,11 @@
 
 {% block modal %}
 <div id="captcha_modal" class="modal hide fade row">
+  <div class="modal-header">
+    <button class="close" aria-hidden="true" data-dismiss="modal" type="button">×</button>
+    <h1>{% trans "Disable <small>Your Account</small>" %}</h1>
+  </div>
   <div class="modal-body">
-    <button class="close mobile_hide" aria-hidden="true" data-dismiss="modal" type="button">×</button>
     <div class="gravatar-warning pull-left"><img src="{{gravatar_150}}"><br><img class="warning-badge" src="{{STATIC_URL}}images/caution-badge.png"></div>
     <div class="account-warning pull-right">
       <p>{% trans "Are you sure you want to disable your account?" %}</p>
@@ -15,7 +18,7 @@
         <li>{% trans "Disable all profile modules except your name and email" %}</li>
         <li>{% trans "Prevent my.jobs from sending you any email" %}</li>
       </ul>
-      <p>{% trans "You can activate your account at a lter time, which will re-enable everything and let you pick up where you left off." %}</p>
+      <p>{% trans "You can activate your account at a later time, which will re-enable everything and let you pick up where you left off." %}</p>
     </div>
   </div>
   <div class="modal-footer">

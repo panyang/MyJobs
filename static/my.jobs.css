@@ -907,7 +907,17 @@ body.modal-open {
 }
 
 .warning-badge {
+    position: absolute;
+    bottom: -10%;
+    right: -15%;
+}
+
+.gravatar-warning {
+    width: 150px;
     position: relative;
-    top: -57px;
-    left: 80px;
+    margin-bottom: 50px;
+}
+
+#captcha_modal .modal-body {
+    overflow: hidden !important;
 }
