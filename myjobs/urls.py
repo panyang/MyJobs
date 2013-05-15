@@ -17,6 +17,6 @@ urlpatterns = patterns('MyJobs.myjobs.views',
     url(r'^edit/disable$', 'edit_disable', name='edit_disable'),
     url(r'^edit/communication$', 'edit_communication', name='edit_communication'),
     url(r'^error/$', 'error', name='error'),
-    url(r'^batch/$', 'batch_message_digest', name='batch_message_digest'),
+    url(r'^batch$', 'batch_message_digest', name='batch_message_digest'),
     url(r'^send/$', 'continue_sending_mail', name='continue_sending_mail'),
 )

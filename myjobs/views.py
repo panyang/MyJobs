@@ -303,7 +303,6 @@ def batch_message_digest(request):
         method, details = request.META['HTTP_AUTHORIZATION'].split()
         if method.lower() == 'basic':
             login_info = base64.b64decode(details).split(':')
-            login_info[0] = urllib2.unquote(login_info[0])
             user = authenticate(email=login_info[0], password=login_info[1])
             target_user = User.objects.get(email='accounts@my.jobs')
             if user is not None and user == target_user:
