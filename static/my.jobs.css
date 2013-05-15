@@ -49,9 +49,9 @@ a:hover{
     display: none;
     margin: 0px 0px 0px -50px; /* left margin is half width of the div, to centre it */
     padding: 30px 10px 10px 10px;
-    position: absolute;
+    position: fixed;
     left: 30%;
-    top: 60%;
+    top: 30%;
     width: 500px;
     height: 150px;
     text-align: center;
@@ -659,19 +659,8 @@ em.pendingText{
     .profile-mobile td:before { content: attr(data-title); }
     
     /*Ajax Indicator*/
-    #ajax-busy {        
-        margin: 0px 0px 0px -50px; /* left margin is half width of the div, to centre it */
-        padding: 30px 10px 10px 10px;
-        position: absolute;
-        left: 30%;
-        top: 50%;
-        width: 300px;
-        height: 150px;
-        text-align: center;
-        background: url(images/ajax-loader.gif) no-repeat center center;  
-        background-color: #FFF;
-        opacity: 0.75;
-        border: 1px solid #000;
+    #ajax-busy {
+        width: 300px;        
     }   
     
     .hasRegions {        
