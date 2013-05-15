@@ -87,7 +87,6 @@ class SavedSearchResourceTests(TestCase):
         self.assertEqual(SavedSearch.objects.count(), 1)
         search = SavedSearch.objects.all()[0]
         self.assertEqual(search.user, self.user)
-        print search.notes
         self.assertTrue('jobs.jobs' in search.notes)
         content = json.loads(response.content)
         self.assertEqual(len(content), 3)
