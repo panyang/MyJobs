@@ -699,7 +699,7 @@ em.pendingText{
     }    
     input[type=checkbox]{
         float: left;
-        margin-top: -20px;
+        margin: 2px;
     }
     input.comboboxWidget{
         width: 60%;
@@ -812,7 +812,15 @@ em.pendingText{
         width: 87%;
     }
 
+    #gravatar-img {
+        float: left;
+        padding-bottom: 10px;
+    }
 
+    #gravatar-link {
+        float: right;
+        width: 50%;
+    }
 }
 
 /* Account Settings */
