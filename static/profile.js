@@ -1,30 +1,36 @@
 $(function() {
     var AppView = Backbone.View.extend({
-        el: $(".row"),
+        el: $("body"),
 
         events: {
+            // targets event fired when buttons within #moduleBank are clicked
             "click [id$='section']": "addSection",
-            // targets buttons within #moduleBank
 
+            // targets event fired when "Add Another" buttons in each module
+            // section are clicked
             "click [id$='add']": "editForm",
-            // targets "Add Another" buttons in each module section
 
-            "click [id$='edit']": "editForm",
             // targets "Edit" buttons for individual modules
+            "click [id$='edit']": "editForm",
 
-            "hidden #edit_modal": "cancelForm",
-            // targets event fired when #edit_modal is closed
-            // includes clicking any of the modal close buttons, pressing Esc,
-            // and clicking on the dark modal background
+            // targets event fired when "Cancel" or "x" buttons within modals
+            // are clicked
+            "click [id$='cancel']": "cancelForm",
 
-            "click [id$='save']": "saveForm",
             // targets "Save" button  in the modal window
+            "click [id$='save']": "saveForm",
 
+            // targets "Delete" button on confirmation modal
             "click [id$='delete']": "deleteItem",
-            // targets "Delete" buttons for individual modules
 
-            "change [id$='-country_code']": "getSelect",
             // targets country select boxes
+            "change [id$='-country_code']": "getSelect",
+
+            // targets delete buttons not on confirmation modal
+            "click [id$='confirm']": "confirmDelete",
+
+            // targets "View" button for each item
+            "click [id$='view']": "viewDetails",
         },
 
         /*
@@ -46,7 +52,6 @@ $(function() {
                     if ($('#moduleBank').find('tr').length == 0) {
                         $('#moduleBank').hide();
                     }
-                    data = $(data).hide();
                     $('#moduleColumn').append(data);
                     module_elem = $('#'+module+'_items');
                     module_elem.find('[id$="add"]').click();
@@ -55,31 +60,30 @@ $(function() {
         },
 
         /*
-        Returns document to the state it was in prior to opening the form modal
-        Called on "Cancel" button click or closure of the modal window
+        Returns document to the state it was in prior to opening the most 
+        recent modal. Called on "Cancel" button click or closure of the
+        modal window
 
-        :e: new/edit module modal window
+        :e: cancel buttons within modal window
         */
         cancelForm: function(e) {
             e.preventDefault();
 
-            // targets the cancel button located within the modal window
-            var target = $(e.target).find('a[id$="cancel"]');
+            // e.target may be either the cancel button or the x button;
+            // We need the cancel button
+            var parent_ = $(e.target).parents('[id$="modal"]')
+            var target = parent_.find('a[id$="cancel"]');
 
             // id is formatted [module_type]-[item_id]-[event]
             var module = target.attr('id').split('-')[0];
             var item_id = target.attr('id').split('-')[1];
 
-            // Upon closing the modal window, it should be removed from the
-            // document to allow for additional modals
-            $("div#edit_modal").remove();
-            if (item_id != 'new') {
-                // When "Edit" was clicked, the relevant item was hidden
-                // Since nothing has changed, the item needs to be re-shown
-                $('#'+module+'-'+item_id+'-item').show();
-            } else {
-                manageModuleDisplay(module);
+            if (!$('[id$="modal"]:visible').length) {
+                // All modals are hidden; Remove them
+                $('[id$="modal"]').remove();
             }
+
+            manageModuleDisplay(module);
         },
 
         /*
@@ -98,27 +102,31 @@ $(function() {
             var item;
             if (id != 'new') {
                 // targets the table row containing the item to be edited
-                item = $(e.target).parents('tr');
+                item = $('#'+module+'-'+id+'-item');
             }
 
-            $.ajax({
-                url: '/profile/form/',
-                data: {'module':module, 'id':id},
-                success: function(data) {
-                    if (item) {
-                        item.hide();
-                    }
-                    data = $(data).hide();
-                    $('#moduleColumn').append(data);
-                    resize_modal('#edit_modal');
-                    $('#edit_modal').modal();
-                    datepicker();
+            if ($('#edit_modal').length == 0) {
+                $.ajax({
+                    url: '/profile/form/',
+                    data: {'module':module, 'id':id},
+                    success: function(data) {
+                        $('#moduleColumn').append(data);
 
-                    $('[id$="-country_sub_division_code"]').hide();
-                    $('label[for$="-country_sub_division_code"]').hide();
-                    $('[id$="-country_code"]').change();
+                        $('#edit_modal').modal({'backdrop':'static','keyboard':false});
+                        datepicker();
+
+                        $('[id$="-country_sub_division_code"]').hide();
+                        $('label[for$="-country_sub_division_code"]').hide();
+                        $('[id$="-country_code"]').change();
+                    }
+                });            
+            } else {
+                if (item) {
+                    item.hide();
                 }
-            });            
+
+                $('#edit_modal').modal({'backdrop':'static','keyboard':false});
+            }
         },
 
         /*
@@ -148,7 +156,7 @@ $(function() {
             first_instance=0;
             if(typeof(table.attr("class"))=="undefined"){
                 first_instance = 1;
-            }  
+            }
             var serialized_data = form.serialize();
             serialized_data += '&module=' + module + '&id=' + item_id +
                                '&first_instance=' + first_instance +
@@ -160,15 +168,21 @@ $(function() {
                 success: function(data) {
                     if (data.indexOf('<td') >= 0) {
                         // form was valid; data should be appended to the table
+
+                        $('#'+module+'-'+item_id+'-item').remove();
                         if (first_instance) {
                             $('#'+module+'_items').children('h4').after(
                                 '<table class="table table-bordered table-striped"></table>'
                             );
-                            table = $('#'+module+'_items').children('table')
+                            table = $('#'+module+'_items').children('table');
+                            table.append(data);
                         }
-                        table.children("tbody").append(data);
+                        else {
+                            table.children("tbody").append(data);
+                        }
                         $('#'+module+'-'+item_id+'-item').remove();
-                        $('#edit_modal').modal('hide');
+                        $('[id$="modal"]').modal('hide').remove();
+                        $('[id$="modal"]').remove();
                         $('#'+module+'_items').show();
                     } else {
                         // form was a json-encoded list of errors and error messages
@@ -190,7 +204,7 @@ $(function() {
         /*
         Deletes the specified item
 
-        :e: "Delete" button associated with the item to be deleted
+        :e: "Delete" button within the delete confirmation modal
         */
         deleteItem: function(e) {
             e.preventDefault();
@@ -200,17 +214,19 @@ $(function() {
                 csrf_token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
             }
 
-            // targets the table row containing the item to be deleted
-            var item = $(e.target).parents('tr');
-
-            // id is formatted [module_type]-[item_id]-[event]
+            // id is formatted [module_type]-[item_id]-delete
             var module = $(e.target).attr('id').split("-")[0];
             var id = $(e.target).attr('id').split("-")[1];
+
+            // targets the table row containing the item to be deleted
+            var item = $('#'+module+'-'+id+'-item');
+
             $.ajax({
                 type: 'POST',
                 url: '/profile/delete/',
                 data: {'module':module, 'id':id, csrfmiddlewaretoken: csrf_token},
                 success: function(data) {
+                    $('[id$="modal"]').modal('hide').remove();
                     item.remove();
                     manageModuleDisplay(module);
                 }
@@ -277,13 +293,38 @@ $(function() {
                 },
             });
         },
+
+        viewDetails: function(e) {
+            e.preventDefault();
+
+            // id is formatted [module_type]-[item_id]-view
+            var module = $(e.target).attr('id').split('-')[0];
+            var id = $(e.target).attr('id').split('-')[1];
+
+            $.ajax({
+                url: '/profile/details/',
+                data: {'module': module, 'id': id},
+                success: function(data) {
+                    $(e.target).parents('table').after(data);
+                    var target = $('#detail_modal');
+                    target.modal({'backdrop':'static','keyboard':false});
+                }
+            });
+        },
+
+        /*
+        Shows a confirmation message to determine if user really wants
+        to delete the specified item
+
+        :e: "Delete" button within item details modal
+        */
+        confirmDelete: function(e) {
+            e.preventDefault();
+            $('#confirm_modal').modal({'backdrop':'static','keyboard':false});
+        },
     });
 
     var App = new AppView;
-
-    $(window).on('resize', function() {
-        resize_modal('#edit_modal');
-    });
 });
 
 function manageModuleDisplay(module) {
@@ -291,15 +332,14 @@ function manageModuleDisplay(module) {
     if (target.find('table tr').length <= 1) {
         // The last item in a module section was deleted or the add operation was canceled
 
-        // The module section's h4 element contains the correct verbose name for each module
-        var parent_name = target.find('h4').text();
+        var verbose_name = $('#'+module+'-verbose').text();
 
         // Remove the empty section
         target.remove();
 
         // Replace the button within the moduleBank table and display the moduleBank
         $("#moduleBank table").append(
-            "<tr class='profile_section'><td><a id='"+module+"-section' href=''>"+parent_name+"</a></td></tr>"
+            "<tr class='profile_section'><td><a id='"+module+"-section' href=''>"+verbose_name+"</a></td></tr>"
         );
         $("#moduleBank").show();
     }

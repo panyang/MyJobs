@@ -63,7 +63,7 @@ class SavedSearch(models.Model):
         subject = self.label.strip()
         message = render_to_string('mysearches/email_digest.html',
                                    context_dict)
-        msg = EmailMessage(subject, message, settings.DEFAULT_FROM_EMAIL,
+        msg = EmailMessage(subject, message, settings.SAVED_SEARCH_EMAIL,
                            [self.email])
         msg.content_subtype='html'
         msg.send()
@@ -95,7 +95,7 @@ class SavedSearchDigest(models.Model):
             context_dict = {'saved_searches': saved_searches}
             message = render_to_string('mysearches/email_digest.html',
                                        context_dict)
-            msg = EmailMessage(subject, message, settings.DEFAULT_FROM_EMAIL,
+            msg = EmailMessage(subject, message, settings.SAVED_SEARCH_EMAIL,
                                [self.email])
             msg.content_subtype='html'
             msg.send()

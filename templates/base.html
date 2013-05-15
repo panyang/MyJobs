@@ -1,166 +1,130 @@
-{% comment %}
-!!DEPRICATION NOTICE!!
-This file is being phased out in favor of myjobs_base.html. Use that file instead.
-{% endcomment %}
 {% load i18n %}
-{% comment %}
-base.html -- implements MyJobs page.
-
-Where practical, the HTML structure is separated from content... so to override
-content only, override whatever-content in your template. To override the 
-structure of the page (e.g. single column for content) you would override 
-whatever.
-{% endcomment %}
 <!DOCTYPE html>
 <html lang="en">
 <head>
-  {% block meta %}
-  {% include "includes/meta.html" %}
-  {% endblock meta %}
-  {# use meta-append to add template specific scripts and styles #}
-  {% block meta-append %}{% endblock meta-append %}
-</head>
-<body{% block body_extra %}{% endblock body_extra %}>
-{% block page %}
-{% block topbar %}
-  {% include "includes/topbar.html" %}
-{% endblock topbar %}
-{% block subpage %}
-<section><div class="section subpage">
-  {# Show messages only if we have messages to show #}
-  {% block message %}
-     {% include "includes/message.html" %}
-  {% endblock message %}
-  {# Header is full content area width #}
-  {% block header %}
-  <div class="wrapper">
-    <div class="row">
-      <div class="span16">
-      {% block header-content %}
-	{{ site_title }}
-      {% endblock header-content %}
-      </div>
-    </div>
-  </div>
-  {% endblock header %}
-  {# to change layouts, override content-area in your template #}
-  {# for custom content, just override the content block #}
-  
-  {% block content-area %}
-    <div class="wrapper">
-      <div class="row">
-	<div class="span-three-fifths">
-	  {% block content %}
-	
-	  {% endblock content %}
-	</div>
-	{# Sidebar #}
-	{% block focusbox %}
-	  <div class="span-two-fifths">
-	      <div id="focusBox">
-		  {% block focusbox-content %}
-		    <div class="h2block takeover">
-		      <h3>Focus Box Content</h3>
-		      <p>Goes here.</p>
-		    </div>
-		  {% endblock focusbox-content %}    
-	      </div>
-	      </div>
-	  {% endblock focusbox %}
-      </div>
-    </div>
-  {% endblock content-area %}
-  
-</div></section>
-{% endblock subpage %}
-{% endblock page %}
-{# Footer Starts Here #}
-{% block footer %}
-<footer><div class="footer">
-  {% block bottomtabs %}      
-  <div id="bottomTabs">
-    <div class="wrapper">
-      {% block bottomtabs-content %}
-   	<div id="robot"></div>
-	<div class="row">
-	    <div class="span-one-fifth">
-		<h3 id="save">Save.</h3>
-		<p>{% trans "Collect jobs you've discovered anywhere in the .jobs universe." %}</p>
-	    </div>
-	    <div class="span-one-fifth">
-		<h3 id="share">{% trans "Share." %}</h3>
-		<p>{% trans "Personalize the jobs you share with your social networks." %}</p>
-	    </div>
-	    <div class="span-one-fifth">
-		<h3 id="socialize">Socialize.</h3>
-		<p>{% trans "Join to promote yourself and the jobs you are sharing." %}</p>
-	    </div>
-	    <div class="span-two-fifths">
-		<h3 id="future">{% trans "Future." %}</h3>
-		<p>{% trans "Verified jobs, sidebar, browser extension, personalized job matching, search cloud, application & interview assistants, job alerts, mobile...and more." %}</p>
-	    </div>
-	</div>
-      {% endblock bottomtabs-content %}
-    </div>
-  </div>
- {% endblock bottomtabs %}
-
-    <div id="direct_dotJobsFooter">
-        <div class="wrapper" id="bottomLinks">            
-          
-        <div class="row" id="direct_dotjobsFooterContent">
-            <div class="span4">
-            {% blocktrans %}A Service of {% endblocktrans %}<a href="http://directemployers.org" target="_blank">DirectEmployers</a><p>
-            <a class="social_icon facebook_icon" href="http://www.facebook.com/Universe.jobs/"></a>
-            <a class="social_icon twitter_icon" href="http://twitter.com/dotjobsuniverse/"></a>
-            <a class="social_icon youtube_icon" href="http://www.youtube.com/universedotjobs/"></a>
-            </p>
-            <br>
-            <br>
-            
-            </div>
-            <div class="span4" style="position: relative">
-            <a href="http://about.jobs/" class="direct_dotjobsFooterLink">{% blocktrans %}About{% endblocktrans %}</a>        
-            <a href="http://about.jobs/contact/" class="direct_dotjobsFooterLink">{% blocktrans %}Contact{% endblocktrans %}</a>        
-            <a href="http://about.jobs/privacy-policy/" class="direct_dotjobsFooterLink">{% blocktrans %}Privacy{% endblocktrans %}</a>        
-            <a href="http://about.jobs/terms-of-use/" class="direct_dotjobsFooterLink">{% blocktrans %}Terms{% endblocktrans %}</a>
-            <p id="direct_dotjobsScamAlert" style="font-size: 10px; margin-bottom: 0px;">
-            <a href="https://www.privacyrights.org/Online-Privacy-and-Technology">Privacy &amp; Security tips</a> for online job seekers.</p>
-            </div>
-            <div class="span4">
-            <a href="http://veterans.jobs/" class="direct_dotjobsFooterLink">{% blocktrans %}Veterans Jobs{% endblocktrans %}</a>
-            <a href="http://disability.jobs/" class="direct_dotjobsFooterLink">{% blocktrans %}Disability Jobs{% endblocktrans %}</a>
-            <a href="http://diversity.jobs/" class="direct_dotjobsFooterLink">{% blocktrans %}Diversity Jobs{% endblocktrans %}</a>
-            <a href="http://minority.jobs/" class="direct_dotjobsFooterLink">{% blocktrans %}Minority Jobs{% endblocktrans %}</a>
-            </div>
-            <div class="span4">
-            <a href="http://universe.jobs/" class="direct_dotjobsFooterLink">{% blocktrans %}Online Recruitment Solutions{% endblocktrans %}</a>
-            <a href="http://universe.jobs/employment-marketing/" class="direct_dotjobsFooterLink">{% blocktrans %}Employment Marketing{% endblocktrans %}</a>
-            <a href="http://universe.jobs/talent-acquisition/" class="direct_dotjobsFooterLink">{% blocktrans %}Talent Acquisition{% endblocktrans %}</a>
-            </div>
-        </div>
-        <div class="row" id="subfooter">
-            <div class="span16">
-                <p>The <a href="http://goto.jobs/about.asp">.JOBS Top Level Domain</a> is sponsored by the Society for Human Resource Management (SHRM)<br>
-                The <a href="http://us.jobs/">National Labor Exchange</a> is sponsored by the National Association of State Work Force Agencies (NASWA)
-                </p>
-            </div>
-        </div>
-    </div>
-</div>
-
-      
-      
-      
+    {% block meta %}
+        {% include "includes/meta.html" %}
+    {% endblock %}
     
-  </div>
-  </div>
+    {% block meta-extra %}{% endblock %}
+    <script type="text/javascript">
+    loc = document.location+""; 
+    if(loc.indexOf(".jobs:")<0){ //only run this on live sites
+        var _gaq = _gaq || [];
+        _gaq.push(['_setAccount', 'UA-19801062-4']);
+        _gaq.push(['_trackPageview']);
+        
+        (function() {
+            var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
+            ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
+            var s = document.getElementsByTagName('script')[0]; s.parentNode.insertBefore(ga, s);
+        })();
+    }
+    </script>
+</head>
 
-</div></footer>
-{% endblock footer %}
+<body>
+    {% block topbar %}
+        <div class="topbar" data-dropdown="dropdown">
+            <div class="topbar-inner">
+                <div class="wrapper">
+                <div class="row">
+                    <div class="span2" id="logo-block">
+                    <a href="/">
+                       <h3 id="topbar-logo" class="pull-left">my.jobs</h3>
+                    </a><span id="alpha-flag">beta</span>
+                    </div>
+                    <div class="pull-right">
+                    <div class="inline-inputs">
+                        {% if user.is_authenticated %}                                               
+                        <div class="span6">&nbsp;</div>                       
+                        <div class="menu-bar span4 pagination-right pull-right">
+                            <ul id="nav">
+                                <li><a href="" class="main-nav">
+                                    <img src="{{user.get_gravatar_url}}">
+                                        {% trans "Logged in as " %} 
+                                        <b>
+                                        {% if name_obj %}
+                                            {{name_obj}}
+                                        {% else %}
+                                            {{user.email|truncatechars:20}}
+                                        {% endif %} 
+                                        </b>
+                                        <span class="arrow"></span>
+                                    </a>
+                                    <ul class="span4" id="pop-menu">
+                                        {% if not user.is_disabled %}
+                                            <li><a id="profile_link" href="{% url 'view_profile' %}">{% trans "My Profile" %}</a></li> 
+                                            {% if user.is_active %}
+                                            <li><a id="savedsearch_link" href="{% url 'saved_search_main' %}">{% trans "Saved Searches" %}</a></li>
+                                            {% endif %}
+                                            <li><a id="account_link" href="{% url 'edit_basic' %}">{% trans "Account Settings" %}</a></li>
+                                       {% endif %}
+                                            <li><a id="logout_link" href="{% url 'auth_logout' %}">Log Out</a></li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                        {% else %}
+                        <div class="span10 pull-right pagination-right" id="topbar-login">
+                        {% block topbarlogin %}
+                        {% include "includes/widget-top-bar-login.html" with form=loginform %}
+                        {% endblock %}
+                        </div>
+                        {% endif %}
+                    </div> <!-- /inline-inputs -->
+                </div>
+                </div>
+                </div>
+            </div><!-- /topbar-inner -->
+        </div>
+    {% endblock %}
+    <section><div class="section subpage">
+    {% block page %}
+            {% block main %}
 
-{% include "includes/analytics.html" %}
-{# Use page-append when you need to insert something just above the /body tag #}
-{% block page-append %}{% endblock page-append %}
+                <div id="header">
+                    <div class="wrapper">
+                        <div class="row">
+                            <div class="span12">
+                                {% block header %}
+                                    {{ site_title }}
+                                {% endblock header %}
+                            </div>
+                        </div>
+                    </div>
+                </div>                
+                <div class="wrapper">
+                    {% block content %}{% endblock %}
+                    {% block sidebar %}{% endblock sidebar %}
+                </div>                
+            {% endblock %}
+            
+        {% endblock %}
+
+
+    
+    </div></section>
+    <footer><div id="footer">
+        {% block footer %}
+            <div class="wrapper footer">
+                <div class="span1 offset5">
+		    <a href="{% url 'about' %}">About</a>
+		</div>
+                <div class="span1">
+                    <a href="http://about.jobs/contact/" target="_blank">Contact</a>
+                </div>
+                <div class="span1">
+                    <a href="http://about.jobs/privacy-policy/" target="_blank">Privacy</a>
+                </div>
+                <div class="span1">
+                    <a href="http://about.jobs/terms-of-use/" target="_blank">Terms</a>
+                </div>
+                <div class="span3">
+                    <a href="http://directemployers.org" target="_blank">by DirectEmployers</a>
+                </div>
+            </div>
+        {% endblock %}
+    </div></footer>
 </body>
 </html>

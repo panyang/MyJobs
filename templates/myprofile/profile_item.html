@@ -1,17 +1,24 @@
+{% load form_tags %}
 {% if first_instance %}
+<thead>
 <tr>
-    {% for label,value in item.get_fields|slice:":4" %}                            
+    {% for label, value in item.get_fields|slice:":3" %}                            
         <th>{{label}}</th>
     {% endfor %}
     <td class="action"></td>
 </tr>
+</thead>
+<tbody>
 {% endif %}
 <tr id="{{module}}-{{item.id}}-item">
-    {% for   label, value in item.get_fields|slice:":4" %}
-    <td data-title="{{ label }}">{{ value }}</td>
+    {% for label, value in item.get_fields|slice:":3" %}
+    <td data-title="{{ label }}">{{ value|readable_boolean }}&nbsp;</td>
     {% endfor %}
     <td class="action">
-        <button class="btn" id="{{module}}-{{item.id}}-delete">Delete</button>
+        <button class="btn" id="{{module}}-{{item.id}}-view">View</button>
         <button class="btn" id="{{module}}-{{item.id}}-edit">Edit</button>
     </td>
 </tr>
+{% if first_instance %}
+</tbody>
+{% endif %}

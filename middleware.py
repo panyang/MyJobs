@@ -1,5 +1,9 @@
 import re
 
+from django.utils.text import compress_string
+from django.utils.cache import patch_vary_headers
+
+from django import http
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect
 
@@ -18,3 +22,42 @@ class PasswordChangeMiddleware:
                                  request.path) and
             request.user.password_change):
             return HttpResponseRedirect(reverse('auth_password_change'))
+
+
+
+XS_SHARING_ALLOWED_ORIGINS = '*'
+XS_SHARING_ALLOWED_METHODS = ['POST','GET','OPTIONS', 'PUT', 'DELETE']
+XS_SHARING_ALLOWED_HEADERS = 'Content-Type'
+
+
+
+class XsSharing(object):
+    """
+        This middleware allows cross-domain XHR using the html5 postMessage API.
+         
+
+        Access-Control-Allow-Origin: http://foo.example
+        Access-Control-Allow-Methods: POST, GET, OPTIONS, PUT, DELETE
+    """
+    def process_request(self, request):
+
+        if 'HTTP_ACCESS_CONTROL_REQUEST_METHOD' in request.META:
+            response = http.HttpResponse()
+            response['Access-Control-Allow-Origin']  = XS_SHARING_ALLOWED_ORIGINS 
+            response['Access-Control-Allow-Headers']  = XS_SHARING_ALLOWED_HEADERS
+            response['Access-Control-Allow-Methods'] = ",".join( XS_SHARING_ALLOWED_METHODS ) 
+            
+            return response
+
+        return None
+
+    def process_response(self, request, response):
+        # Avoid unnecessary work
+        if response.has_header('Access-Control-Allow-Origin'):
+            return response
+
+        response['Access-Control-Allow-Origin']  = XS_SHARING_ALLOWED_ORIGINS
+        response['Access-Control-Allow-Headers']  = XS_SHARING_ALLOWED_HEADERS
+        response['Access-Control-Allow-Methods'] = ",".join( XS_SHARING_ALLOWED_METHODS )
+
+        return response 

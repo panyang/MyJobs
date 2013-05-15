@@ -1,22 +1,42 @@
 {% load i18n %}
 
-<div id="edit_modal" class="modal hide fade">
+<div id="edit_modal" class="modal hide fade row">
     <div class="modal-header">
-        <button class="close mobile_hide" aria-hidden="true" data-dismiss="modal" type="button">×</button>
+        <button id="modal-header-cancel" class="close mobile_hide" aria-hidden="true" data-dismiss="modal" type="button">×</button>
         <h1>{% if item_id == "new" %}{% trans 'Add' %}{% else %}{% trans 'Edit' %}{% endif %} <small>{% trans verbose %}</small></h1>
     </div>
-        <div class="modal-body">
-            <form action="" method="post" id="{{module}}-{{item_id}}-form">
-                <div class="formBox">
-                    {% include "includes/form-error-highlight.html" %}
-                    {% csrf_token %}
-                </div>
-            </form>
-        </div>
-        <div class="modal-footer">
-            <div class="actions">
-                <a class="btn primary pull-right" id="{{module}}-{{item_id}}-save" value="submit">Save</a>
-                <a href="" data-dismiss="modal" aria-hidden="true" class="btn pull-right" id="{{module}}-{{item_id}}-cancel">{% trans 'Cancel' %}</a>
+    <div class="modal-body">
+        <form action="" method="post" id="{{module}}-{{item_id}}-form">
+            <div class="formBox">
+                {% include "includes/form-error-highlight.html" %}
+                {% csrf_token %}
             </div>
+        </form>
+    </div>
+    <div class="modal-footer">
+        <div class="actions">
+            <a class="btn primary pull-right" id="{{module}}-{{item_id}}-save" value="submit">Save</a>
+            <a data-dismiss="modal" class="btn pull-right" id="{{module}}-{{item_id}}-cancel">{% trans 'Cancel' %}</a>
+            {% if item_id != "new" %}
+            <a class="btn pull-left" id="delete-confirm">{% trans 'Delete' %}</a>
+            {% endif %}
         </div>
+    </div>
 </div>
+
+{% if item_id != "new" %}
+<div id="confirm_modal" class="modal hide fade row">
+    <div class="modal-header">
+        Really Delete?
+    </div>
+    <div class="modal-body">
+        Are you sure you want to delete this {{verbose}}?
+    </div>
+    <div class="modal-footer">
+        <div class="actions">
+            <a data-dismiss="modal" class="btn primary pull-right" id="{{module}}-{{item_id}}-confirm-cancel">{% trans 'Cancel' %}</a>
+            <a class="btn pull-right" id="{{module}}-{{item_id}}-delete">{% trans 'Delete' %}</a>
+        </div>
+    </div>
+</div>
+{% endif %}

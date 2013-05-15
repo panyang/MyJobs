@@ -1,6 +1,6 @@
 $(function() {
     var SearchView = Backbone.View.extend({
-        el: '.row',
+        el: 'body',
 
         events: {
             'click [class$="edit"]': 'get_edit',
@@ -32,7 +32,6 @@ $(function() {
                     disable_fields(that);
                     enable_fields(that);
                     date_select(that);
-                    resize_modal('#edit_modal');
                     add_refresh_btn(that);
                     $('#edit_modal').modal();
                 }
@@ -238,11 +237,6 @@ function add_refresh_btn(that) {
 }
 
 function date_select(that) {
-    // Only show the day of week/day of month field when appropriate
-    if (that.find('label[for$="day_of_month"]').parent().is('div.form-label')) {
-        that.find('label[for$="day_of_month"]').unwrap();
-        that.find('label[for$="day_of_week"]').unwrap();
-    }
     show_dates();
 
     that.find('[id$="frequency"]').on('change', function() {
@@ -257,12 +251,12 @@ function date_select(that) {
             that.find('[id$="day_of_week"]').hide();
         } else if (that.find('[id$="frequency"]').attr('value') == 'M') { 
             that.find('label[for$="day_of_week"]').hide();
-            that.find('label[for$="day_of_month"]').css('display', 'inline')
+            that.find('label[for$="day_of_month"]').show();
             that.find('[id$="day_of_week"]').hide();
             that.find('[id$="day_of_month"]').show();
         } else if (that.find('[id$="frequency"]').attr('value') == 'W') {
             that.find('label[for$="day_of_month"]').hide();
-            that.find('label[for$="day_of_week"]').css('display', 'inline')
+            that.find('label[for$="day_of_week"]').show();
             that.find('[id$="day_of_month"]').hide();
             that.find('[id$="day_of_week"]').show();
         }
@@ -273,7 +267,6 @@ function add_valid_label(that) {
     that.find('[id$="url"]').after('<div id="label_validated" class="form-label pull-left">&nbsp;</div>');
     that.find('[id$="label_validated"]').after('<div id="validated">&nbsp;</div>');
     that.find('[id$="url"]').after('<div class="clear"></div>');
-    that.find('[id$="frequency"]').next('.clear').remove();
     that.find('[id$="day_of_month"]').next('.clear').remove();
 }
 

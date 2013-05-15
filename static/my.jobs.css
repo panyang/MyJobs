@@ -35,7 +35,15 @@ a:hover{
 .action th {
     background-color: #FFF;   
     }
-
+.hasRegions {
+    position: relative;
+    margin-left: 200px;
+    margin-top: -27px;
+    }
+.profile-form-input input {
+    width: 40%;
+    }    
+    
 /* bootstrap .table-striped class */
 .table-striped thead th {
     background-color: #FFF;   
@@ -43,7 +51,21 @@ a:hover{
     }    
 .table-striped tbody tr:nth-child(even) td {background-color: #d2cfc7 !important;}
 .table-striped tbody tr:nth-child(odd) td {background-color: #eae6de !important;}
-    
+
+/*New Account initial form*/
+#newAccountData .initial {
+    display: none;   
+    }
+#newAccountData .profile-form-input input {
+    width: 95%;   
+    }
+#newAccountData .input-prepend {
+    width: 95%;  
+    }
+#newAccountData .hasRegions {
+    margin-left: -20px;  
+    }
+
 /* Form Styles */
 .form-label{
     text-align: right;
@@ -414,7 +436,7 @@ em.pendingText{
     #nav li:hover ul#pop-menu{ 
         display: block;
         text-align: left;
-    }    
+    }
 }
 #nav.active ul#pop-menu li a:hover,
 #nav li:hover ul#pop-menu li a:hover{ 
@@ -619,6 +641,18 @@ em.pendingText{
       
     .profile-mobile td:before { content: attr(data-title); }
     
+    .hasRegions {        
+        float: left;
+        margin-left: -9px;
+        margin-top: 1px;
+        margin-bottom: 0px;
+    }
+    .checkbox-margin {
+        padding-top: 14px;    
+    }
+    .profile-form-input input {
+        width: 65%;
+    }
     
     #titleRow{
         margin-top: 0px;
@@ -873,7 +907,7 @@ body.modal-open {
 }
 
 #edit_modal .input-prepend input,
-#edit_mdoal .input-prepend select {
+#edit_modal .input-prepend select {
     width: auto;
 }
 
@@ -887,7 +921,17 @@ body.modal-open {
 }
 
 .warning-badge {
+    position: absolute;
+    bottom: -10%;
+    right: -15%;
+}
+
+.gravatar-warning {
+    width: 150px;
     position: relative;
-    top: -57px;
-    left: 80px;
+    margin-bottom: 50px;
+}
+
+#captcha_modal .modal-body {
+    overflow: hidden !important;
 }
