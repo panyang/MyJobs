@@ -113,15 +113,20 @@ class CustomUserManager(BaseUserManager):
         and gives permission to access the view if the value returned is true.
         This returns true as long as the user hasn't disabled their account.
         """
-        
-        return not user.is_disabled
+
+        if user.is_anonymous():
+            return False
+        else:
+            return not user.is_disabled
 
     def is_active(self, user):
         """
         Used by the user_passes_test decorator to set view permissions
         """
-
-        return user.is_active
+        if user.is_anonymous():
+            return False
+        else:
+            return user.is_active
 
 # New in Django 1.5. This is now the default auth user table. 
 class User(AbstractBaseUser):

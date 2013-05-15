@@ -1,9 +1,11 @@
 import urllib
 from django.core import mail
+from django.core.urlresolvers import reverse
 from django.test import TestCase
 
 from myjobs.models import *
-from myjobs.tests.factories import *
+from myjobs.tests.views import TestClient
+from myjobs.tests.factories import UserFactory
 
 
 class UserManagerTests(TestCase):
@@ -47,3 +49,54 @@ class UserManagerTests(TestCase):
         self.assertEqual(static_gravatar_url, generated_gravatar_url)
         status_code = urllib.urlopen(static_gravatar_url).getcode()
         self.assertEqual(status_code, 200)
+
+    def test_not_disabled(self):
+        """
+        Should return True if user isn't disabled and False if they are disabled.
+        Also always returns False if user is anonymous and redirect to the front
+        page.
+        """
+        client = TestClient()
+        user = UserFactory()
+        
+        #Anonymous user
+        resp = client.get(reverse('edit_profile'))
+        self.assertRedirects(resp, "http://testserver/?next=/profile/edit/")
+
+        # Active user
+        client.login_user(user)
+        resp = client.get(reverse('edit_profile'))
+        self.assertTrue(resp.status_code, 200)
+        
+        #Disabled user
+        user.is_disabled = True
+        user.save()
+        resp = client.get(reverse('edit_profile'))
+        self.assertRedirects(resp, "http://testserver/?next=/profile/edit/")
+
+    def test_is_active(self):
+        """
+        Should return True if user isn't disabled and False if they are disabled.
+        Also always returns False if user is anonymous and redirect to the front
+        page.
+        """
+        client = TestClient()
+        user = UserFactory()
+        
+        #Anonymous user
+        resp = client.get(reverse('saved_search_main'))
+        self.assertRedirects(resp, "http://testserver/?next=/saved-search/")
+
+
+        # Active user
+        client.login_user(user)
+        resp = client.get(reverse('saved_search_main'))
+        self.assertTrue(resp.status_code, 200)
+
+        # Inactive user
+        user.is_active = False
+        user.save()        
+        resp = client.get(reverse('saved_search_main'))
+        self.assertRedirects(resp, "http://testserver/?next=/saved-search/")
+        
+        
