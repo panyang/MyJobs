@@ -21,6 +21,7 @@ $(function() {
         
         showSection: function(e) {
             e.preventDefault();
+            $('div.account-settings').html("");            
             try {
                 var section_name = $(e.target).parents('a').attr('id').split('-')[1];
             } catch(err) {
