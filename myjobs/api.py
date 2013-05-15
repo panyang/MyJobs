@@ -1,4 +1,5 @@
 import datetime
+from urlparse import urlparse
 
 from django.core import serializers
 from django.db import IntegrityError
@@ -140,10 +141,11 @@ class SavedSearchResource(ModelResource):
         notes = bundle.data.get('notes', '')
         if not notes:
             # Monday, April 29, 2013 10:26 AM
-            now = datetime.datetime.now().strftime('%A, %B %d, %Y %H:%M %p')
-            notes += 'Sent on ' + now
+            now = datetime.datetime.now().strftime('%A, %B %d, %Y %l:%M %p')
+            notes += 'Saved on ' + now
             if bundle.request:
-                notes += ' from ' + bundle.request.get_host()
+                netloc = urlparse('//' + bundle.data.get('url')).netloc
+                notes += ' from ' + netloc
             bundle.data['notes'] = notes
         try:
             search = SavedSearch.objects.get(user=user,url=bundle.data.get('url'))

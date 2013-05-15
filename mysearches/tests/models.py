@@ -13,7 +13,6 @@ class SavedSearchModelsTests(TestCase):
         self.user = UserFactory()
 
     def test_send_search_email(self):
-        print 'search email'
         search = SavedSearchFactory(user=self.user)
         search.send_email()
         self.assertEqual(len(mail.outbox), 1)
@@ -23,7 +22,6 @@ class SavedSearchModelsTests(TestCase):
         self.assertEqual(email.to, [self.user.email])
 
     def test_send_search_digest_email(self):
-        print 'digest email'
         digest = SavedSearchDigestFactory(user=self.user)
         digest.send_email()
         self.assertEqual(len(mail.outbox), 0)
