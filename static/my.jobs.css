@@ -46,13 +46,11 @@ a:hover{
 
 /*Ajax Indicator*/
 #ajax-busy {
-    display: none;
-    margin: 0px 0px 0px -50px; /* left margin is half width of the div, to centre it */
-    padding: 30px 10px 10px 10px;
+    display: none;    
     position: fixed;
-    left: 30%;
+    left: 31%;
     top: 30%;
-    width: 500px;
+    width: 400px;
     height: 150px;
     text-align: center;
     background: url(images/ajax-loader.gif) no-repeat center center;  
@@ -660,6 +658,9 @@ em.pendingText{
     
     /*Ajax Indicator*/
     #ajax-busy {
+        margin: 0px 0px 0px -50px; /* left margin is half width of the div, to centre it */
+        padding: 30px 10px 10px 10px;
+        left: 25%;
         width: 300px;        
     }   
     
