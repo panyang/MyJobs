@@ -212,6 +212,8 @@ def edit_password(request):
     if request.method == "POST":
         form = ChangePasswordForm(user=request.user, data=request.POST)
         if form.is_valid():
+            request.user.password_change = False
+            request.user.save()
             form.save()
             return HttpResponse('success')
 
