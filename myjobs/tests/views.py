@@ -69,6 +69,15 @@ class MyJobsViewsTests(TestCase):
         
         self.email_user = UserFactory(email='accounts@my.jobs')
 
+    def make_messages(self, when):
+        message = '{{"email":"alice@example.com","timestamp":"{0}",'+\
+            '"event":"{1}"}}'
+        messages = []
+        for event in self.events:
+            messages.append(message.format(time.mktime(when.timetuple()),
+                                           event))
+        return '\r\n'.join(messages)
+
     def test_edit_account_success(self):
         resp = self.client.post(reverse('edit_account'),
                                     data={'given_name': 'Alice',
@@ -222,7 +231,13 @@ class MyJobsViewsTests(TestCase):
         now = date.today()
 
         # Submit a batch of three events created recently
-        response = self.make_message_and_get_response(now)
+        messages = self.make_messages(now)
+        response = self.client.post(reverse('batch_message_digest'),
+                                    data=messages,
+                                    content_type="text/json",
+                                    HTTP_AUTHORIZATION='BASIC %s'%
+                                        base64.b64encode(
+                                            'accounts%40my.jobs:secret'))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(EmailLog.objects.count(), 3)
         self.assertEqual(len(mail.outbox), 0)
@@ -249,7 +264,13 @@ class MyJobsViewsTests(TestCase):
 
         # Submit a batch of events created a month ago
         # The owners of these addresses should be sent an email
-        response = self.make_message_and_get_response(month_ago)
+        messages = self.make_messages(month_ago)
+        response = self.client.post(reverse('batch_message_digest'),
+                                    data=messages,
+                                    content_type="text/json",
+                                    HTTP_AUTHORIZATION='BASIC %s'%
+                                        base64.b64encode(
+                                            'accounts%40my.jobs:secret'))
         self.assertTrue(response.status_code, 200)
         self.assertEqual(EmailLog.objects.count(), 3)
         self.assertEqual(
@@ -282,7 +303,13 @@ class MyJobsViewsTests(TestCase):
 
         # Submit a batch of events created a month and a week ago
         # The owners of these addresses should no longer receive email
-        response = self.make_message_and_get_response(month_and_week_ago)
+        messages = self.make_messages(month_and_week_ago)
+        response = self.client.post(reverse('batch_message_digest'),
+                                    data=messages,
+                                    content_type="text/json",
+                                    HTTP_AUTHORIZATION='BASIC %s'%
+                                        base64.b64encode(
+                                            'accounts%40my.jobs:secret'))
         self.assertTrue(response.status_code, 200)
         self.assertEqual(EmailLog.objects.count(), 3)
         self.assertEqual(
@@ -307,25 +334,16 @@ class MyJobsViewsTests(TestCase):
         self.assertEqual(response.status_code, 400)
 
     def test_invalid_user(self):
-        message = '{{"email":"alice@example.com","timestamp":"{0}",'+\
-            '"event":"{1}"}}'
-        messages = ''
         now = datetime.datetime.now()
-        for event in self.events:
-            if event != 'open':
-                # The only sources I could find suggest SendGrid uses CRLF
-                # endings.
-                messages += '\r\n'
-            messages += message.format(time.mktime(now.timetuple()),
-                                       event)
+        messages = self.make_messages(now)
 
         response = self.client.post(reverse('batch_message_digest'),
-                                    data=messages.join(''),
+                                    data=messages,
                                     content_type="text/json")
         self.assertEqual(response.status_code, 403)
 
         response = self.client.post(reverse('batch_message_digest'),
-                                    data=messages.join(''),
+                                    data=messages,
                                     content_type="text/json",
                                     HTTP_AUTHORIZATION='BASIC %s'%
                                         base64.b64encode(

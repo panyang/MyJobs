@@ -296,29 +296,33 @@ def batch_message_digest(request):
     if 'HTTP_AUTHORIZATION' in request.META:
         method, details = request.META['HTTP_AUTHORIZATION'].split()
         if method.lower() == 'basic':
+            # login_info is intended to be a base64-encoded string in the format
+            # "email:password" where email is a urlquoted string
             login_info = base64.b64decode(details).split(':')
-            user = authenticate(email=login_info[0], password=login_info[1])
-            target_user = User.objects.get(email='accounts@my.jobs')
-            if user is not None and user == target_user:
-                events = request.raw_post_data
-                event_list = []
-                try:
-                    # Handles both a lack of submitted data and
-                    # the submission of invalid data
-                    events = events.splitlines()
-                    for event_str in events:
-                        if event_str == '':
-                            continue
-                        event_list.append(json.loads(event_str))
-                except:
-                    return HttpResponse(status=400)
-                for event in event_list:
-                    EmailLog(email=event['email'], event=event['event'],
-                             received=datetime.date.fromtimestamp(
-                                 float(event['timestamp'])
-                             )
-                    ).save()
-                return HttpResponse(status=200)
+            if len(login_info) == 2:
+                login_info[0] = urllib2.unquote(login_info[0])
+                user = authenticate(email=login_info[0], password=login_info[1])
+                target_user = User.objects.get(email='accounts@my.jobs')
+                if user is not None and user == target_user:
+                    events = request.raw_post_data
+                    event_list = []
+                    try:
+                        # Handles both a lack of submitted data and
+                        # the submission of invalid data
+                        events = events.splitlines()
+                        for event_str in events:
+                            if event_str == '':
+                                continue
+                            event_list.append(json.loads(event_str))
+                    except:
+                        return HttpResponse(status=400)
+                    for event in event_list:
+                        EmailLog(email=event['email'], event=event['event'],
+                                 received=datetime.date.fromtimestamp(
+                                     float(event['timestamp'])
+                                 )
+                        ).save()
+                    return HttpResponse(status=200)
     return HttpResponse(status=403)
 
 @user_passes_test(User.objects.not_disabled)
