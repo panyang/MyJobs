@@ -10,6 +10,7 @@ from django.forms.models import model_to_dict
 from django.http import HttpResponseRedirect, HttpResponse
 from django.template import RequestContext
 from django.shortcuts import render_to_response, get_object_or_404, redirect
+from django.utils.html import mark_safe
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
 
@@ -149,18 +150,22 @@ def edit_account(request):
     if name_obj:
         initial_dict.update(model_to_dict(name_obj))
 
-
-    form = EditAccountForm(initial=initial_dict, user=request.user)
-    if request.method == "POST":
-        form = EditAccountForm(user=request.user, data=request.POST)
-        if form.is_valid():
-            form.save(request.user)
-            return HttpResponse('success')
-        
-    ctx = {'form': form,
-           'user': request.user,
+    ctx = {'user': request.user,
            'gravatar_100': request.user.get_gravatar_url(size=100),
            'name_obj': name_obj}
+
+    if request.user.password_change:
+        resp = edit_password(request)
+        ctx['change_pass'] = mark_safe(resp.content)
+    else:
+        form = EditAccountForm(initial=initial_dict, user=request.user)
+        if request.method == "POST":
+            form = EditAccountForm(user=request.user, data=request.POST)
+            if form.is_valid():
+                form.save(request.user)
+                return HttpResponse('success')
+        ctx['form'] = form
+           
     
     return render_to_response('myjobs/edit-account.html', ctx,
                               RequestContext(request))
@@ -178,10 +183,11 @@ def edit_basic(request):
         if form.is_valid():
             form.save(request.user)
             return HttpResponse('success')
-    
-    ctx = {'form':form,
+
+    ctx = {'form': form,
            'gravatar_100': request.user.get_gravatar_url(size=100),
            'section_name': 'basic'}
+           
     return render_to_response('myjobs/edit-form-template.html', ctx,
                               RequestContext(request))
     
