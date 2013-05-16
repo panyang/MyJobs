@@ -6,12 +6,8 @@ from django.template import loader, Context
 from django.utils.http import int_to_base36
 from django.utils.translation import ugettext_lazy as _
 
-from captcha.fields import ReCaptchaField
-
 from myjobs.models import User
 from myprofile.models import Name, SecondaryEmail
-
-from secrets import RECAPTCHA_PUBLIC_KEY, RECAPTCHA_PRIVATE_KEY
 
 def make_choices(user):
     choices = [(user.email, user.email)]
