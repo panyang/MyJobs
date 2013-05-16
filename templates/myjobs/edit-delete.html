@@ -1,10 +1,6 @@
 {% load i18n %}
 <form action="" method="POST" id="captcha-form">
   <div class="account-captcha">
-    <center>
-      <div id="captcha-errors" class="text-error"></div>
-      {{form}}
-    </center>
     <p>{% trans "This will permanently delete your account." %}</p>
     <strong><div class="text-error">{% trans "THIS ACTION CANNOT BE UNDONE." %}</div></strong>
   </div>

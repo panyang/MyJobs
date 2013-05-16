@@ -224,35 +224,17 @@ def edit_password(request):
 
 @user_passes_test(User.objects.not_disabled)
 def edit_delete(request):
-    if request.method == "POST":
-        form = CaptchaForm(request.POST)
-        if form.is_valid():
-            return HttpResponse('success')
-        else: 
-            return HttpResponse(json.dumps(form.errors.values()))
-    else:
-        form = CaptchaForm()
-        ctx = {'form':form,
-               'gravatar_150': request.user.get_gravatar_url(size=150),
-               'name_obj': get_name_obj(request)}
-        return render_to_response('myjobs/edit-delete.html', ctx,
-                                  RequestContext(request))
+    ctx = {'gravatar_150': request.user.get_gravatar_url(size=150),
+           'name_obj': get_name_obj(request)}
+    return render_to_response('myjobs/edit-delete.html', ctx,
+                              RequestContext(request))
 
 @user_passes_test(User.objects.not_disabled)
 def edit_disable(request):
-    if request.method == "POST":
-        form = CaptchaForm(request.POST)
-        if form.is_valid():
-            return HttpResponse('success')
-        else: 
-            return HttpResponse(json.dumps(form.errors.values()))
-    else:
-        form = CaptchaForm()
-        ctx = {'form':form,
-               'gravatar_150': request.user.get_gravatar_url(size=150),
-               'name_obj': get_name_obj(request)}
-        return render_to_response('myjobs/edit-disable.html', ctx,
-                                  RequestContext(request))
+    ctx = {'gravatar_150': request.user.get_gravatar_url(size=150),
+           'name_obj': get_name_obj(request)}
+    return render_to_response('myjobs/edit-disable.html', ctx,
+                              RequestContext(request))
 
         
 @user_passes_test(User.objects.not_disabled)
