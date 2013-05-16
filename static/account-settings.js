@@ -55,21 +55,7 @@ $(function() {
         
         captchaModal: function(e) {
             e.preventDefault();
-            var section_name = $(e.target).attr('id').split('-')[3];
-            $.ajax({
-                type:"POST",
-                url: "/edit/" + section_name,
-                data: $("#captcha-form").serialize(),
-                success: function(data) {
-                    if (data == 'success') {
-                        $("#captcha-errors").html('');
-                        $("#captcha_modal").modal();
-                    } else {
-                        var error = jQuery.parseJSON(data)[0][0];
-                        $("#captcha-errors").html('<div class="alert-message block-message error">'+error+'</div>');
-                    }
-                }
-            });
+            $("#captcha_modal").modal();
         },
 
     });

@@ -146,9 +146,4 @@ class ChangePasswordForm(Form):
 
     def save(self):
         self.user.set_password(self.cleaned_data["new_password"])
-        self.user.save()
-
-
-class CaptchaForm(Form):
-    captcha = ReCaptchaField(label="", attrs={'theme': 'clean'})
-    
+        self.user.save()    
