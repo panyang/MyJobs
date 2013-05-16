@@ -51,7 +51,21 @@ a:hover{
     }    
 .table-striped tbody tr:nth-child(even) td {background-color: #d2cfc7 !important;}
 .table-striped tbody tr:nth-child(odd) td {background-color: #eae6de !important;}
-    
+
+/*New Account initial form*/
+#newAccountData .initial {
+    display: none;   
+    }
+#newAccountData .profile-form-input input {
+    width: 95%;   
+    }
+#newAccountData .input-prepend {
+    width: 95%;  
+    }
+#newAccountData .hasRegions {
+    margin-left: -20px;  
+    }
+
 /* Form Styles */
 .form-label{
     text-align: right;
@@ -81,6 +95,7 @@ ul.ui-autocomplete{
     height: 12em;
     overflow-y: scroll;
     }
+
 /*Topbar Styles*/
 .topbar #topbar-logo{
     height: 30px;
@@ -122,6 +137,7 @@ ul.ui-autocomplete{
     padding-top: 13px;
     font-weight: bold;
     }
+
 /*Content Box Styles*/
 .profileBox{    
     background-color: #f4f1ea;
@@ -263,7 +279,7 @@ ul.ui-autocomplete{
     -webkit-order-radius: 4px;
     border-radius: 4px;
 }
-    
+
 /*form styles*/
 .btn{
     color: #000;
@@ -476,6 +492,7 @@ em.pendingText{
     color: #FFF;
     padding: 10px;
 }
+
 @media screen and (max-width: 1024px){
     .topbar-inner {
         height: 50px;        
@@ -566,6 +583,16 @@ em.pendingText{
     #moduleBank a{
         width: auto;
     }
+    div.settings-nav {
+        display: block;
+    }
+    a.account-menu-item {
+        background: none;
+        border-style: none;
+        padding: 0;
+        display: block;
+    }
+
 }
 @media screen and (min-width: 501px){
     #saved-search-form #id_label,
@@ -585,6 +612,8 @@ em.pendingText{
     #saved-search-form select {
         margin-bottom: 5px;
     }
+
+
 }
 @media screen and (max-width: 500px){  
     .profile-mobile table, 
@@ -679,7 +708,7 @@ em.pendingText{
     }    
     input[type=checkbox]{
         float: left;
-        margin-top: -20px;
+        margin: 2px;
     }
     input.comboboxWidget{
         width: 60%;
@@ -749,38 +778,61 @@ em.pendingText{
     #profileTitleBar {
         overflow-x: hidden;
     }
+
+    a.account-menu-item {
+        background-color: rgba(255,255,255,.5);
+        border-style: none;
+        -webkit-border-radius: 0px;
+        -moz-border-radius: 0px;
+        border-radius: 0px;
+        padding: 0;
+        display: block;
+        border-bottom: 1px solid;
+    }
+
+    div.settings-nav {
+        background: none;
+        border-right: none;
+    }
+    div.account-settings {
+        display: none;
+        width: auto;
+        padding: 10px;
+    }
+    div.account-box {
+        min-height: auto;
+        background-color: #f4f1ea;
+    }
+
+    div.account-settings .actions button {
+        width: 100%;
+        margin: 0;
+    }
+    div.settings-nav ul {
+        height: auto;
+    }
+    h4.account-menu-header {
+        background: transparent url('/files/static/glyphicons_223_chevron-right.png') center right  no-repeat;
+        width: 87%;
+    }
+
+    h4.account-menu-header:hover {
+        background: transparent url('/files/static/glyphicons_223_chevron-right.png') center right  no-repeat;
+        width: 87%;
+    }
+
+    #gravatar-img {
+        float: left;
+        padding-bottom: 10px;
+    }
+
+    #gravatar-link {
+        float: right;
+        width: 50%;
+    }
 }
 
-table td, table th{
-    overflow: hidden;
-}
-
-#validated {
-    display: inline;
-    padding: 7px;
-}
-
-/*
-.profile-unit input.comboboxWidget{
-    width: 212px;
-}
-
-.profile-unit select {
-    width: 260px;
-}
-
-.profile-unit .form-label {
-    margin-right: 20px;
-    width: auto;
-}*/
-
-#digest-option label[for=id_digest_active],
-#digest-option label[for=id_digest_email],
-#digest-option label[for=id_send_if_none] {
-    display: inline-block;
-    margin-right: 10px;
-}
-
+/* Account Settings */
 .account-box {
     padding: 0;
     margin: 0;
@@ -831,6 +883,48 @@ table td, table th{
 
 .account-settings input[type="text"], input[type="password"] {
     width: 250px;
+}
+
+.account-captcha {
+    text-align: center;
+    padding-bottom: 30px;
+}
+
+#edit_modal .input-prepend .add-on {
+    width: 96px;
+}
+
+#edit_modal .input-prepend input,
+#edit_modal .input-prepend select {
+    width: auto;
+}
+
+
+#captcha_modal {
+    width: 620px;
+}
+
+.account-warning {
+    width: 400px;
+}
+
+
+/* Saved Search */
+
+table td, table th{
+    overflow: hidden;
+}
+
+#validated {
+    display: inline;
+    padding: 7px;
+}
+
+#digest-option label[for=id_digest_active],
+#digest-option label[for=id_digest_email],
+#digest-option label[for=id_send_if_none] {
+    display: inline-block;
+    margin-right: 10px;
 }
 
 #saved-search-form #id_day_of_month,
@@ -921,3 +1015,4 @@ body.modal-open {
 #captcha_modal .modal-body {
     overflow: hidden !important;
 }
+

@@ -16,12 +16,12 @@ class PasswordChangeMiddleware:
     """
     def process_request(self, request):
         if (request.user.is_authenticated() and
-            not re.match(reverse('auth_password_change'), request.path) and
+            not re.match(reverse('edit_password'), request.path) and
             not re.match(reverse('auth_logout'), request.path) and
             not re.match(reverse('registration_activate', args=['a'])[0:-2],
                                  request.path) and
             request.user.password_change):
-            return HttpResponseRedirect(reverse('auth_password_change'))
+            return HttpResponseRedirect(reverse('edit_password'))
 
 
 

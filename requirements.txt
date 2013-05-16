@@ -11,8 +11,8 @@ django-nose==1.1
 celery==3.0.15
 django-celery==3.0.11
 beautifulsoup4==4.1.3
-newrelic
+newrelic==1.11.0.55
 django-tastypie==0.9.15
-django-recaptcha==0.0.6
-git+git://github.com/arneb/django-messages.git
-testfixtures
+git+git://github.com/zalew/django-recaptcha.git@a870781adfd9ca381eaf408445ff5a7091e57ebf
+git+git://github.com/arneb/django-messages.git@bc443623fde4945a841c48665b477a529f4ec676
+testfixtures==3.0.0

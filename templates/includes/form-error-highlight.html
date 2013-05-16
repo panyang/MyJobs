@@ -44,7 +44,7 @@ form -- the rest of the form.
         		{{ field|attr:"placeholder:" }}
 
         	{% elif is_select %}
-        	    <div class="span3 form-label pull-left">&nbsp;</div>
+        	    <div class="span3 form-label pull-left initial">&nbsp;</div>
         		<div class="input-prepend" id="{{field.name}}_prependLabel">
           			<span class="add-on">
             			{{ field.label_tag }}
@@ -61,7 +61,7 @@ form -- the rest of the form.
         	{% elif 'country_code' in field.html_name %}
         		
         	    <div class="span3 form-label pull-left">
-                <div class="clear" id="test"></div>
+                <div class="clear"></div>
                 {% with "id_"|add:form.prefix|add:"-country_sub_division_code" as region_id %}
         			{% country_select selected="USA" html_id=field.id_for_label  region_html_id=region_id input_name=field.html_name %}
         		{% endwith %}
@@ -79,7 +79,7 @@ form -- the rest of the form.
           				{{field}}
         			</div>
         		{% else %}
-        			<div class="span3 form-label pull-left">{{ field.label_tag }}</div><div class="profile-form-input">{{ field  }}</div>
+        			<div class="span3 form-label pull-left initial">{{ field.label_tag }}</div><div class="profile-form-input">{{ field  }}</div>
         		{% endif %}
 		{% endif %}
 
@@ -100,9 +100,9 @@ form -- the rest of the form.
 
         {% if field.html_name == "gravatar" %}
         	<div class="form-label pull-left">
-            	<img src="{{ gravatar_100 }}">
+            	<img src="{{ gravatar_100 }}" id="gravatar-img">
             </div>
-            <a href="http://www.gravatar.com" target="_blank">Change your profile image on gravatar.com</a>
+            <a href="http://www.gravatar.com" target="_blank" id="gravatar-link">Change your profile image on gravatar.com</a>
             <div class="clear"></div>
         {% endif %}
 	{% endfor %}

@@ -211,3 +211,4 @@ LOGGING = {
 GRAVATAR_URL_PREFIX = "http://www.gravatar.com/avatar/"
 GRAVATAR_URL_DEFAULT = 'mm'
 
+CAPTCHA_AJAX = True

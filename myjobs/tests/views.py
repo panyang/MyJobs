@@ -69,24 +69,26 @@ class MyJobsViewsTests(TestCase):
         self.email_user = UserFactory(email='accounts@my.jobs')
 
     def test_edit_account_success(self):
-        resp = self.client.post(reverse('edit_basic'),
+        resp = self.client.post(reverse('edit_account'),
                                     data={'given_name': 'Alice',
                                           'family_name': 'Smith',
                                           'gravatar': 'alice@example.com',
                                           'opt_in_myjobs': True}, follow=True)
-        name = Name.objects.get(user=resp.context['user'],primary=True)
-        self.assertRedirects(resp, 'http://testserver%s' % '/edit/basic?saved=success')
+        name = Name.objects.get(user=self.user)
         self.assertEqual(name.given_name, 'Alice')
         self.assertEqual(name.family_name, 'Smith')
-        self.assertEqual(resp.context['user'].opt_in_myjobs, True)
-
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.content, 'success')
+        
     def test_change_password_success(self):
         resp = self.client.post(reverse('edit_password'),
                                     data={'password1': 'secret',
                                           'password2': 'secret',
                                           'new_password': 'new'}, follow=True)
-        self.assertRedirects(resp, 'http://testserver%s' % '/edit/password?saved=success')
-        self.assertTrue(resp.context['user'].check_password('new'))
+        user = User.objects.get(id=self.user.id)
+        self.assertEqual(resp.status_code, 200)
+        self.assertEqual(resp.content, 'success')
+        self.assertTrue(user.check_password('new'))
 
     def test_change_password_failure(self):
         resp = self.client.post(reverse('edit_password'),
@@ -330,7 +332,7 @@ class MyJobsViewsTests(TestCase):
         response = self.client.get(reverse('saved_search_main'))
 
         self.assertEqual(response.status_code, 302)
-        self.assertRedirects(response, reverse('auth_password_change'))
+        self.assertRedirects(response, reverse('edit_password'))
 
         response = self.client.get(reverse('registration_activate',
                                    args=['activation_code_here']))
@@ -352,21 +354,3 @@ class MyJobsViewsTests(TestCase):
         response = self.client.get("/")
         soup = BeautifulSoup(response.content)
         self.assertFalse(soup.findAll('a',{'id':'savedsearch_link'}))
-    
-    def test_success_msg_on_account_save(self):
-        """test that the success message displays on a successful save"""
-        response = self.client.post("/edit/basic",
-                                    {'given_name':'alice','family_name':'evans',
-                                    'gravatar':'alice@example.com'},follow=True)
-        soup = BeautifulSoup(response.content)
-        self.assertTrue(soup.findAll('div',{'class':'alert-success'}))
-        
-    def test_clear_success_msg_on_account_save_error(self):
-        """test that the success message clears out when an error follows it"""
-        response = self.client.get("/edit/basic?saved=success")
-        response = self.client.post("/edit/basic?saved=success",
-                                    {'given_name':'alice','family_name':''})
-        soup = BeautifulSoup(response.content)
-        self.assertFalse(soup.findAll('div',{'class':'alert-success'}))
-        
-        

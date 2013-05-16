@@ -57,9 +57,3 @@ def activate(request, activation_key):
     ctx = {'activated': activated}
     return render_to_response('registration/activate.html',
                               ctx, context_instance=RequestContext(request))
-
-def custom_password_change_done(request):
-    user = request.user
-    user.password_change = False
-    user.save()
-    return auth_views.password_change_done(request)
