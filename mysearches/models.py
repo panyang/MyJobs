@@ -76,6 +76,11 @@ class SavedSearch(models.Model):
             SavedSearchDigest.objects.create(user=self.user, email=self.email)
         super(SavedSearch,self).save(*args,**kwargs)
 
+    def __unicode__(self):
+        return "Saved Search for %s" % self.user.email
+
+    class Meta:
+        verbose_name_plural = "saved searches"
 
 class SavedSearchDigest(models.Model):
     is_active = models.BooleanField(default=False,
