@@ -885,6 +885,10 @@ em.pendingText{
     width: 250px;
 }
 
+.account-menu-item.password-required {
+    display: none;
+}
+
 .account-captcha {
     text-align: center;
     padding-bottom: 30px;

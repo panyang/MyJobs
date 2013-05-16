@@ -44,8 +44,15 @@ $(function() {
                 url: "/edit/" + section_name,
                 success: function(data) {
                     if (data == "success") {
-                        $('.form-status').html('<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Your information has been updated.</div>');
+                        $('ul.errorlist').remove();
+                        if (auto_user) {
+                            window.location.href='/';
+                        } else {
+                            $("a[id^='account-']")
+                                .removeClass("password-required");
+                            $('.form-status').html('<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Your information has been updated.</div>');                       }
                     } else {
+                        $('.form-status').html('');
                         $('div.account-settings').html(data);
                     }
                 }
