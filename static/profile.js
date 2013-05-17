@@ -1,4 +1,13 @@
 $(function() {
+    // Ajax processing indicator
+    $(this).ajaxStart(function () {
+        $("#ajax-busy").show();   
+    });
+    $(this).ajaxStop(function () {
+        $("#ajax-busy").hide();
+        $(this).dialog("close"); 
+    });    
+        
     var AppView = Backbone.View.extend({
         el: $("body"),
 

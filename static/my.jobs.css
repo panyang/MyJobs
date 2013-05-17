@@ -43,6 +43,21 @@ a:hover{
 .profile-form-input input {
     width: 40%;
     }    
+
+/*Ajax Indicator*/
+#ajax-busy {
+    display: none;    
+    position: fixed;
+    left: 31%;
+    top: 30%;
+    width: 400px;
+    height: 150px;
+    text-align: center;
+    background: url(images/ajax-loader.gif) no-repeat center center;  
+    background-color: #FFF;
+    opacity: 0.75;
+    border: 1px solid #000;
+}   
     
 /* bootstrap .table-striped class */
 .table-striped thead th {
@@ -655,6 +670,14 @@ em.pendingText{
     .table-striped tbody tr:nth-child(odd) td {background-color: #FFF !important;} 
       
     .profile-mobile td:before { content: attr(data-title); }
+    
+    /*Ajax Indicator*/
+    #ajax-busy {
+        margin: 0px 0px 0px -50px; /* left margin is half width of the div, to centre it */
+        padding: 30px 10px 10px 10px;
+        left: 25%;
+        width: 300px;        
+    }   
     
     .hasRegions {        
         float: left;
