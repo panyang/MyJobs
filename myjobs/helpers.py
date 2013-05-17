@@ -39,5 +39,8 @@ def get_name_obj(request):
     :name_obj:  User's display name (str)|None
     
     """
-    name_obj = Name.objects.filter(user=request.user,primary=True)[0]
+    try:
+        name_obj = Name.objects.filter(user=request.user,primary=True)[0]
+    except:
+        name_obj = None
     return name_obj
