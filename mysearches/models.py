@@ -77,7 +77,7 @@ class SavedSearch(models.Model):
         super(SavedSearch,self).save(*args,**kwargs)
 
     def __unicode__(self):
-        return "Saved Search for %s" % self.user.email
+        return "Saved Search %s for %s" % (self.url, self.user.email)
 
     class Meta:
         verbose_name_plural = "saved searches"
