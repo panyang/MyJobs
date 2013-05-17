@@ -77,6 +77,15 @@ class EmploymentHistoryForm(BaseUserForm):
         
        
 class TelephoneForm(BaseUserForm):
+    
+    def clean_country_dialing(self):
+        country_dial = self.cleaned_data.get('country_dialing')        
+        if country_dial is None:
+            country_dial = 1
+            return country_dial            
+        else:
+            return country_dial
+            
     class Meta:
         form_name = _("Phone Number")
         model = Telephone
@@ -89,7 +98,7 @@ class TelephoneForm(BaseUserForm):
         widgets['area_dialing'].attrs['placeholder'] = "555"
         widgets['number'].attrs['placeholder'] = "555-5555"
         widgets['extension'].attrs['placeholder'] = "x1234"
-
+    
 
 class AddressForm(BaseUserForm):
     class Meta:
