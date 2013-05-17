@@ -80,11 +80,10 @@ class TelephoneForm(BaseUserForm):
     
     def clean_country_dialing(self):
         country_dial = self.cleaned_data.get('country_dialing')        
-        if country_dial is None:
+        if not country_dial:
             country_dial = 1
-            return country_dial            
-        else:
-            return country_dial
+            # returns 1 so that initial-profile page will save properly    
+        return country_dial
             
     class Meta:
         form_name = _("Phone Number")
