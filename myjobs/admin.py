@@ -6,7 +6,7 @@ from registration.models import ActivationProfile
 from mysearches.models import SavedSearch
 
 class SavedSearchAdmin(admin.ModelAdmin):
-    list_display = ['email', 'url', 'label', 'last_sent']
+    list_display = ['user', 'url', 'label', 'last_sent']
     search_fields = ['email',]
 
 admin.site.register(User)
