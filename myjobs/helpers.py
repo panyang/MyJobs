@@ -39,8 +39,5 @@ def get_name_obj(request):
     :name_obj:  User's display name (str)|None
     
     """
-    try:
-        name_obj = Name.objects.get(user=request.user,primary=True)
-    except (Name.DoesNotExist,TypeError):
-        name_obj = None
+    name_obj = Name.objects.filter(user=request.user,primary=True)[0]
     return name_obj
