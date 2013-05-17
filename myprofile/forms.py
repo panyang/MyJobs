@@ -82,7 +82,7 @@ class TelephoneForm(BaseUserForm):
         country_dial = self.cleaned_data.get('country_dialing')        
         if not country_dial:
             country_dial = 1
-            # returns 1 so that initial-profile page will save properly    
+            # returns 1 as default country code so that initial-profile-page will save properly    
         return country_dial
             
     class Meta:
