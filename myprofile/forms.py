@@ -98,7 +98,7 @@ class TelephoneForm(BaseUserForm):
         widgets['area_dialing'].attrs['placeholder'] = "555"
         widgets['number'].attrs['placeholder'] = "555-5555"
         widgets['extension'].attrs['placeholder'] = "x1234"
-    
+
 
 class AddressForm(BaseUserForm):
     class Meta:
