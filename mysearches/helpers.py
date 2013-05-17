@@ -27,7 +27,10 @@ def validate_dotjobs_url(search_url):
     if search_url.find('://') == -1:
         search_url = "http://" + search_url
 
-    soup = BeautifulSoup(urllib2.urlopen(search_url).read())
+    try:
+        soup = BeautifulSoup(urllib2.urlopen(search_url).read())
+    except:
+        return None, None
     link = soup.find("link", {"type":"application/rss+xml"})
 
     if link:
