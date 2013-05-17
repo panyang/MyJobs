@@ -39,7 +39,7 @@ def register(request):
 
 def resend_activation(request):
     user = request.user
-    activation = ActivationProfile.objects.get(user=user)
+    activation = ActivationProfile.objects.get(user=user, email=user.email)
     activation.send_activation_email()
     return render_to_response('registration/resend_activation.html',
                               context_instance=RequestContext(request))
@@ -57,9 +57,3 @@ def activate(request, activation_key):
     ctx = {'activated': activated}
     return render_to_response('registration/activate.html',
                               ctx, context_instance=RequestContext(request))
-
-def custom_password_change_done(request):
-    user = request.user
-    user.password_change = False
-    user.save()
-    return auth_views.password_change_done(request)

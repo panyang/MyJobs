@@ -58,7 +58,7 @@
                                             {% if user.is_active %}
                                             <li><a id="savedsearch_link" href="{% url 'saved_search_main' %}">{% trans "Saved Searches" %}</a></li>
                                             {% endif %}
-                                            <li><a id="account_link" href="{% url 'edit_basic' %}">{% trans "Account Settings" %}</a></li>
+                                            <li><a id="account_link" href="{% url 'edit_account' %}">{% trans "Account Settings" %}</a></li>
                                        {% endif %}
                                             <li><a id="logout_link" href="{% url 'auth_logout' %}">Log Out</a></li>
                                     </ul>

@@ -1,0 +1,65 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% load disable_tags %}
+{% block meta-extra %}
+<script type="text/javascript" src="http://www.google.com/recaptcha/api/js/recaptcha_ajax.js"></script>
+<script src="{{ STATIC_URL }}account-settings.js"></script>
+<script type="text/javascript">
+    var auto_user = {% if user.password_change %}true{% else %}false{% endif %}
+</script>
+{% endblock %}
+
+{% block content %}
+{% block modal %}
+{% endblock %}
+<section>
+    <div class="wrapper"> 
+        <div class="row">
+          <div class="form-status">
+          </div>
+            {% if message_body %}
+            <div class="alert alert-{{messagetype}}">
+              <button type="button" class="close" data-dismiss="alert">&times;</button>
+              {{message_body}}
+            </div>
+            {% endif %}
+            <div class="span12">
+                <h1>{% trans "Account " %}<small>{% trans "Settings"%}</small></h1>
+                <div class="account-box">                    
+                    <div class="span4 pull-left settings-nav">
+                        <ul>
+                        <a href="" class="account-menu-item {{user.password_change|display}}" id="account-basic"><li><h4 class="account-menu-header">{% trans "Personal Information" %}</h4>
+                        </li></a>
+                        <a href="{% url 'edit_communication' %}" class="account-menu-item {{user.password_change|display}}" id="account-communication"><li><h4 class="account-menu-header">{% trans "Communication Settings" %}</h4></li></a>
+                        <a href="{% url 'edit_password' %}" class="account-menu-item" id="account-password"><li><h4 class="account-menu-header">{% trans "Change Password" %}</h4></li></a>
+                        <a href="{% url 'edit_disable' %}" class="account-menu-item {{user.password_change|display}}" id="account-disable"><li><h4 class="account-menu-header">{% trans "Disable Account" %}</h4></li></a>
+                        <a href="{% url 'edit_delete' %}" class="account-menu-item {{user.password_change|display}}" id="account-delete"><li><h4 class="account-menu-header">{% trans "Delete Account" %}</h4></li></a>
+
+                        </ul>
+                    </div>  
+
+                    <div class="span7 account-settings">
+                        {% block edit-main %}
+                        {% if user.password_change %}
+                            <p>Welcome to my.jobs. Before doing anything else, you need to change your password from the one we created for you.</p>
+                            {{ change_pass }}
+                        {% else %}
+                            <form action="" method="POST" id="form-basic">
+                              {% include "includes/form-error-highlight.html" %}
+                              {% csrf_token %}
+                              <div class="actions">
+                                <a href="" class="btn pull-right">{% trans 'Cancel' %}</a>
+                                <button type="submit" class="btn primary pull-right" value="submit">{% trans "Save" %}</button>
+                                <div class="clear"></div>
+                              </div>
+                            </form>
+                        {% endif %}
+
+                        {% endblock%}
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock %}

@@ -21,26 +21,16 @@ $(document).ready(function(){
         }
     });
 
-
-    $('.show-captcha-modal').click(function(e) {
+    $('a.account-menu-item').click(function(e) {
         e.preventDefault();
-        $.ajax({
-            type:"POST",
-            url: "/edit/delete",
-            data: $("#captcha-form").serialize(),
-            success: function(data) {
-                if (data == 'success') {
-                    $("#captcha-errors").html('');
-                    $("#captcha_modal").modal();
-                } else {
-                    var error = jQuery.parseJSON(data)[0][0];
-                    $("#captcha-errors").html('<div class="alert-message block-message error">'+error+'</div>');
-                }
-            }
-        });
+        if ($(window).width() < 500) {
+            $('div.settings-nav').hide();
+            $('div.account-settings').show();
+        }
     });
 });
 
+             
 function clearForm(form) {
     // clear the inputted form of existing data
     $(':input', form).each(function() {
