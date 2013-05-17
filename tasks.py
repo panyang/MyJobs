@@ -10,6 +10,7 @@ from django.template.loader import render_to_string
 from myjobs.models import EmailLog, User
 from myprofile.models import SecondaryEmail
 from mysearches.models import SavedSearch, SavedSearchDigest
+from registration.models import ActivationProfile
 
 @task(name='tasks.send_search_digests')
 def send_search_digests():
@@ -30,6 +31,19 @@ def send_search_digests():
         saved_search_objs = chain(daily, weekly, monthly)
         for search_obj in saved_search_objs:
             search_obj.send_email()
+
+@task(name='task.delete_inactive_activations')
+def delete_inactive_activations():
+    for profile in ActivationProfile.objects.all():
+        try:
+            if profile.activation_key_expired():
+                user = profile.user
+                if not user.is_disabled and not user.is_active:
+                    user.delete()
+                    profile.delete()
+        except User.DoesNotExist:
+            profile.delete()
+
 
 @task(name='tasks.process_batch_events')
 def process_batch_events():
