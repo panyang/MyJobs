@@ -77,6 +77,17 @@ class EmploymentHistoryForm(BaseUserForm):
         
        
 class TelephoneForm(BaseUserForm):
+    """
+    Returns 1 as default country code so that initial-profile-page 
+    will save properly and prevent a null error.
+    """
+    def clean_country_dialing(self):
+        country_dial = self.cleaned_data.get('country_dialing')        
+        if not country_dial:
+            country_dial = 1
+            
+        return country_dial
+            
     class Meta:
         form_name = _("Phone Number")
         model = Telephone
