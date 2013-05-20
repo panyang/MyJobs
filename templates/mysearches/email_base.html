@@ -1,6 +1,6 @@
 <table style="border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-left-radius: 0px; border-bottom-right-radius: 0px; border: 1px solid #ddd; border-collapse: separate; border-spacing: 0; display: table;">
     <tr>
-        <td colspan=3>
+        <td colspan=2>
             <table>
                 <tr>
                     <td style="text-align: left;"><a href="my.jobs"><img src="http://my.jobs/files/static/images/myjobs_logo.png" alt="My.Jobs logo"></a></td>
@@ -10,7 +10,7 @@
         </td>
     </tr>
     <tr>
-        <td colspan=3>
+        <td colspan=2>
             {% block content %}
                 There are no results for today!
             {% endblock %}
@@ -21,7 +21,7 @@
             Saved Search Settings<br>
             <a href="http://my.jobs{% url 'saved_search_main' %}">change settings</a>
         </td>
-        <td colspan=2 style="border-left: 1px solid #ddd; padding: 8px; line-height: 20px; border-top: 1px solid #ddd;">
+        <td colspan=1 style="border-left: 1px solid #ddd; padding: 8px; line-height: 20px; border-top: 1px solid #ddd;">
             {% block footer %}
             {% endblock %}
         </td>
