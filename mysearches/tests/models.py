@@ -20,6 +20,9 @@ class SavedSearchModelsTests(TestCase):
         email = mail.outbox.pop()
         self.assertEqual(email.from_email, settings.SAVED_SEARCH_EMAIL)
         self.assertEqual(email.to, [self.user.email])
+        self.assertEqual(email.subject, search.label)
+        self.assertTrue("table" in email.body)
+        self.assertTrue(email.to[0] in email.body)
 
     def test_send_search_digest_email(self):
         digest = SavedSearchDigestFactory(user=self.user)
@@ -33,3 +36,6 @@ class SavedSearchModelsTests(TestCase):
         email = mail.outbox.pop()
         self.assertEqual(email.from_email, settings.SAVED_SEARCH_EMAIL)
         self.assertEqual(email.to, [self.user.email])
+        self.assertEqual(email.subject, "Your Daily Saved Search Digest")
+        self.assertTrue("table" in email.body)
+        self.assertTrue(email.to[0] in email.body)
