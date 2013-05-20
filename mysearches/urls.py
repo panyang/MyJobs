@@ -14,4 +14,6 @@ urlpatterns = patterns('',
     url(r'^new$', save_new_search_form, name='save_new_search_form'),
     url(r'^edit$', get_edit_template, name='get_edit_template'),
     url(r'^save-edit$', save_edit_form, name='save_edit_form'),
+    url(r'^digest-unsub/(?P<digest_id>\d+)/$', digest_unsubscribe, name='digest_unsubscribe'),
+    url(r'^search-unsub/(?P<search_id>\d+)/$', search_unsubscribe, name='search_unsubscribe'),
 )
