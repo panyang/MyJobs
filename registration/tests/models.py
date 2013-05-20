@@ -206,3 +206,17 @@ class RegistrationModelTests(TestCase):
         self.assertEqual(profile.activation_key, 'ALREADY ACTIVATED')
         profile.reset_activation()
         self.assertNotEqual(profile.activation_key, 'ALREADY ACTIVATED')
+
+    def test_reactivate_disabled_user(self):
+        new_user, created = User.objects.create_inactive_user(**self.user_info)
+        new_user.disable()
+        profile = ActivationProfile.objects.get(user=new_user)
+        activated = ActivationProfile.objects.activate_user(profile.activation_key)
+
+        self.failUnless(isinstance(activated, User))
+        self.assertEqual(activated.id, new_user.id)
+        self.failUnless(activated.is_active)
+
+        profile = ActivationProfile.objects.get(user=new_user)
+        self.assertEqual(profile.activation_key, ActivationProfile.ACTIVATED)
+        
