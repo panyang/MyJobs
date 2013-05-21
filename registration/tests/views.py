@@ -71,6 +71,27 @@ class RegistrationViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.failUnless(User.objects.get(email='alice@example.com').is_active)
 
+    def test_valid_activation(self):
+        """
+        Test that the ``activate`` view properly handles a valid
+        activation (in this case, based on the default backend's
+        activation window).
+
+        """
+        data={'email': 'alice@example.com',
+              'password1': 'swordfish',
+              'password2': 'swordfish'}
+        
+        # First, register an account.
+        self.client.post(reverse('register'),
+                         data=data)
+        self.client.post(reverse('auth_logout'))
+        profile = ActivationProfile.objects.get(user__email='alice@example.com')
+        response = self.client.get(reverse('registration_activate',
+                                           kwargs={'activation_key': profile.activation_key}))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, data['email'])
+
     def test_invalid_activation(self):
         """
         Test that the ``activate`` view properly handles an invalid

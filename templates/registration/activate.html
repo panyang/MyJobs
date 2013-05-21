@@ -16,10 +16,10 @@ Used to check if registration was successful.
         </div>
         <div class="row" id="profileTitleRow">                
             <div class="span2">
-                <img src="{{user.get_gravatar_url}}&s=140">
+                <img src="{{activated.get_gravatar_url}}&s=140">
             </div>
             <div class="span6" id="profileTitleBar">
-                <h2>{{user.email}}</h2>
+                <h2>{{activated.email}}</h2>
                 <p>
                 {% if user.is_authenticated %}
                     {% trans "Your account hass been successfully activated, and you are now logged in."%}
