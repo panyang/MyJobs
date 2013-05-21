@@ -78,7 +78,7 @@ def parse_rss(feed_url, frequency='W', num_items=20, offset=0):
                     publish date.
     """
 
-    if feed_url.index('?') > -1:
+    if feed_url.find('?') > -1:
         separator = '&'
     else:
         separator = '?'
@@ -95,7 +95,7 @@ def parse_rss(feed_url, frequency='W', num_items=20, offset=0):
 
     end = datetime.date.today()
     start = end + datetime.timedelta(days=interval)
-    
+
     for item in items:
         item_dict = {}
         item_dict['title'] = item.findChild('title').text
