@@ -92,11 +92,14 @@ def home(request):
                                           context_instance=RequestContext(request))
 
         elif request.POST['action'] == "login":
-            loginform = CustomAuthForm(request.POST)
+            loginform = CustomAuthForm(data=request.POST)
             if loginform.is_valid():
                 login(request, loginform.get_user())
-                return HttpResponseRedirect('/profile')
-                
+                return HttpResponse('valid')
+            else:
+                return render_to_response('includes/widget-login-username.html',
+                                          {'form': loginform},
+                                          context_instance=RequestContext(request))
         elif request.POST['action'] == "save_profile":
             # rebuild the form object with the post parameter = True            
             name_form = instantiate_profile_forms(request,[NameForm],
