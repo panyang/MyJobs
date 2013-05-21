@@ -168,7 +168,8 @@ class Name(ProfileUnits):
     def save(self, *args, **kwargs):
         if self.primary:
             try:
-                temp = Name.objects.get(primary=True, user=self.user)
+                temp = Name.objects.select_for_update().get(primary=True,
+                                                          user=self.user)
                 if self != temp:
                     temp.primary = False
                     temp.save()

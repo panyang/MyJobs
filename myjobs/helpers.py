@@ -40,7 +40,7 @@ def get_name_obj(request):
     
     """
     try:
-        name_obj = Name.objects.filter(user=request.user,primary=True)[0]
-    except:
+        name_obj = Name.objects.get(user=request.user,primary=True)
+    except Name.DoesNotExist:
         name_obj = None
     return name_obj
