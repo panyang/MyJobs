@@ -41,6 +41,6 @@ def get_name_obj(request):
     """
     try:
         name_obj = Name.objects.get(user=request.user,primary=True)
-    except Name.DoesNotExist:
+    except (Name.DoesNotExist, TypeError):
         name_obj = None
     return name_obj
