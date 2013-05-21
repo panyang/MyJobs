@@ -121,10 +121,6 @@ $(function() {
                     }
                 });            
             } else {
-                if (item) {
-                    item.hide();
-                }
-
                 $('#edit_modal').modal({'backdrop':'static','keyboard':false});
             }
         },
@@ -180,9 +176,7 @@ $(function() {
                         else {
                             table.children("tbody").append(data);
                         }
-                        $('#'+module+'-'+item_id+'-item').remove();
                         $('[id$="modal"]').modal('hide').remove();
-                        $('[id$="modal"]').remove();
                         $('#'+module+'_items').show();
                     } else {
                         // form was a json-encoded list of errors and error messages
