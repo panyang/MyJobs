@@ -71,12 +71,10 @@ class RegistrationViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.failUnless(User.objects.get(email='alice@example.com').is_active)
 
-    def test_valid_activation(self):
+    def test_anonymous_activation(self):
         """
-        Test that the ``activate`` view properly handles a valid
-        activation (in this case, based on the default backend's
-        activation window).
-
+        Test that the ``activate`` view properly handles activation
+        when the user to be activated is not currently logged in.
         """
         data={'email': 'alice@example.com',
               'password1': 'swordfish',
