@@ -58,7 +58,6 @@ class SavedSearchHelperTests(TestCase):
         self.assertFalse(is_in_range)
         
     def test_parse_rss(self):
-        self.r.restore()
         feed_url = 'http://jobs.jobs/feed/rss'
         items = parse_rss(feed_url)
-        self.assertEqual(len(items), 20)
+        self.assertTrue(len(items) <= 20)
