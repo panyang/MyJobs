@@ -147,22 +147,18 @@ class SavedSearchResource(ModelResource):
                 netloc = urlparse('//' + bundle.data.get('url')).netloc
                 notes += ' from ' + netloc
             bundle.data['notes'] = notes
-        try:
-            search = SavedSearch.objects.get(user=user,url=bundle.data.get('url'))
-            new_search_flag = False
-        except SavedSearch.DoesNotExist:
-            search_args = {'url': bundle.data.get('url'),
-                           'label': bundle.data.get('label'),
-                           'feed': bundle.data.get('feed'),
-                           'user': user,
-                           'email': bundle.data.get('email'),
-                           'frequency': bundle.data.get('frequency'),
-                           'day_of_week': bundle.data.get('day_of_week'),
-                           'day_of_month': bundle.data.get('day_of_month'),
-                            'notes': notes}
-            search = SavedSearch.objects.create(**search_args)
-            new_search_flag=True
-            
+
+        search_args = {'url': bundle.data.get('url'),
+                       'label': bundle.data.get('label'),
+                       'feed': bundle.data.get('feed'),
+                       'user': user,
+                       'email': bundle.data.get('email'),
+                       'frequency': bundle.data.get('frequency'),
+                       'day_of_week': bundle.data.get('day_of_week'),
+                       'day_of_month': bundle.data.get('day_of_month'),
+                       'notes': notes}
+        search, new_search_flag = SavedSearch.objects.get_or_create(**search_args)
+
         bundle.obj = search
         bundle.data = {'email': bundle.data.get('email'),
                        'frequency': bundle.data.get('frequency', 'D'),

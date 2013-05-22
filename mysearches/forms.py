@@ -39,6 +39,10 @@ class SavedSearchForm(BaseUserForm):
         rss_url = validate_dotjobs_url(self.cleaned_data['url'])[0]
         if not rss_url:
             raise ValidationError(_('This URL is not valid.'))
+
+        if SavedSearch.objects.filter(user=self.user,
+                                      url=self.cleaned_data['url']):
+            raise ValidationError('URL must be unique.')
         return self.cleaned_data['url']
         
     class Meta:

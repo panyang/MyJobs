@@ -122,7 +122,7 @@ def save_new_search_form(request):
             add_form.save()
             return HttpResponse('success')
         else:
-            return HttpResponse(json.dumps(add_form.errors.keys()))
+            return HttpResponse(json.dumps(add_form.errors))
 
 @user_passes_test(User.objects.is_active)
 @user_passes_test(User.objects.not_disabled)
