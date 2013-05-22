@@ -74,7 +74,7 @@ class SavedSearch(models.Model):
     def save(self, *args,**kwargs):
         duplicates = SavedSearch.objects.filter(user=self.user, url=self.url)
 
-        if duplicates and duplicates[0].pk != self.pk:
+        if duplicates:
             raise ValidationError('Saved Search URLS must be unique.') 
 
         # Create a new saved search digest if one doesn't exist yet
