@@ -508,6 +508,15 @@ em.pendingText{
     padding: 10px;
 }
 
+input[type='checkbox'] + .help-block{
+    display:inline;
+    padding-left: 5px;
+}
+
+form input[type='checkbox']{
+    margin-top: -1px;
+}
+
 @media screen and (max-width: 1024px){
     .topbar-inner {
         height: 50px;        
@@ -853,6 +862,9 @@ em.pendingText{
         float: right;
         width: 50%;
     }
+    form input[type='checkbox']{
+        margin-top: 3px;
+    }
 }
 
 /* Account Settings */
@@ -1041,9 +1053,4 @@ body.modal-open {
 
 #captcha_modal .modal-body {
     overflow: hidden !important;
-}
-
-input[type='checkbox'] + .help-block{
-    display:inline;
-    padding-left: 5px;
 }
