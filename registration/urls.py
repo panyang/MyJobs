@@ -27,7 +27,6 @@ urlpatterns = patterns('',
 
 #Registration URLS
 urlpatterns += patterns('',
-                        url(r'^register/$', register, name='register'),
                         url(r'^activate/(?P<activation_key>\w+)/$', activate,
                             name='registration_activate'),
                         url(r'^register/resend/$', resend_activation,
