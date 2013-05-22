@@ -87,7 +87,7 @@ class SavedSearch(models.Model):
 
     class Meta:
         verbose_name_plural = "saved searches"
-        unique_together = ('user', 'url')
+
 
 class SavedSearchDigest(models.Model):
     is_active = models.BooleanField(default=False,
