@@ -106,7 +106,7 @@ class EditCommunicationForm(BaseUserForm):
 
     class Meta:
         model = User
-        fields = ('email', #'opt_in_myjobs', temp hiding
+        fields = ('email', #'opt_in_myjobs',
         'opt_in_employers')
 
 
