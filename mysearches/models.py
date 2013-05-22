@@ -2,6 +2,7 @@ from datetime import datetime
 
 from django.conf import settings
 from django.db import models
+from django.core.exceptions import ValidationError
 from django.core.mail import send_mail,EmailMultiAlternatives,EmailMessage
 from django.utils.translation import ugettext_lazy as _
 from django.template.loader import render_to_string
@@ -70,7 +71,15 @@ class SavedSearch(models.Model):
         self.last_sent = datetime.now()
         self.save()
 
+    def create(self, *args, **kwargs):
+        duplicates = SavedSearch.objects.filter(user=self.user, url=self.url)
+
+        if duplicates:
+            raise ValidationError('Saved Search URLS must be unique.') 
+        super(SavedSearch,self).create(*args,**kwargs)
+
     def save(self, *args,**kwargs):
+
         # Create a new saved search digest if one doesn't exist yet
         if not SavedSearchDigest.objects.filter(user=self.user):
             SavedSearchDigest.objects.create(user=self.user, email=self.email)
@@ -81,6 +90,7 @@ class SavedSearch(models.Model):
 
     class Meta:
         verbose_name_plural = "saved searches"
+
 
 class SavedSearchDigest(models.Model):
     is_active = models.BooleanField(default=False,

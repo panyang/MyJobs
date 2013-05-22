@@ -6,6 +6,7 @@ from mysearches.forms import SavedSearchForm
 from mysearches import helpers
 from mysearches.models import SavedSearch, SavedSearchDigest
 from mysearches.tests.test_helpers import return_file
+from mysearches.tests.factories import SavedSearchFactory
 from myjobs.tests.factories import UserFactory
 
 class SavedSearchFormTests(TestCase):
@@ -53,4 +54,11 @@ class SavedSearchFormTests(TestCase):
         self.data['day_of_month'] = '1'
         form = SavedSearchForm(user=self.user,data=self.data)        
         self.assertTrue(form.is_valid())
-        
+
+    def test_duplicate_url(self):
+        original = SavedSearchFactory(user=self.user)
+        form = SavedSearchForm(user=self.user,data=self.data)
+
+        self.assertFalse(form.is_valid())
+        self.assertEqual(form.errors['url'][0], 'URL must be unique.')
+
