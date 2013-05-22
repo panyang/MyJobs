@@ -6,11 +6,6 @@ from registration.views import *
 
 # Authorization URLS
 urlpatterns = patterns('',
-                       url(r'^login/$',
-                           auth_views.login,
-                           {'template_name': 'registration/login.html',
-                            'authentication_form': CustomAuthForm },
-                           name='auth_login'),
                        url(r'^logout/$',
                            auth_views.logout,
                            {'next_page': '/'},
@@ -25,9 +20,6 @@ urlpatterns = patterns('',
                        url(r'^password/reset/complete/$',
                            auth_views.password_reset_complete,
                            name='auth_password_reset_complete'),
-                       url(r'^password/reset/done/$',
-                           auth_views.password_reset_done,
-                           name='auth_password_reset_done'),
 )
 
 #Registration URLS
@@ -37,8 +29,6 @@ urlpatterns += patterns('',
                             name='registration_activate'),
                         url(r'^register/resend/$', resend_activation,
                             name='resend_activation'),
-                        url(r'^activate/complete/$', ActivationComplete.as_view(),
-                            name='activate_complete'),
                         url(r'^register/complete/$', RegistrationComplete.as_view(),
-                            name='register_complete')
+                            name='register_complete'),
 )
