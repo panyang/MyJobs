@@ -6,11 +6,6 @@ from registration.views import *
 
 # Authorization URLS
 urlpatterns = patterns('',
-                       url(r'^login/$',
-                           auth_views.login,
-                           {'template_name': 'registration/login.html',
-                            'authentication_form': CustomAuthForm },
-                           name='auth_login'),
                        url(r'^logout/$',
                            auth_views.logout,
                            {'next_page': '/'},
@@ -32,7 +27,6 @@ urlpatterns = patterns('',
 
 #Registration URLS
 urlpatterns += patterns('',
-                        url(r'^register/$', register, name='register'),
                         url(r'^activate/(?P<activation_key>\w+)/$', activate,
                             name='registration_activate'),
                         url(r'^register/resend/$', resend_activation,
