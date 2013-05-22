@@ -106,7 +106,7 @@ class EditCommunicationForm(BaseUserForm):
 
     class Meta:
         model = User
-        fields = ('email', 'opt_in_myjobs', 'opt_in_employers')
+        fields = ('email','opt_in_employers')
 
 
 class ChangePasswordForm(Form):
