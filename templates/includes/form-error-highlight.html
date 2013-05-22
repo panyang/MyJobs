@@ -30,7 +30,7 @@ form -- the rest of the form.
         {% is_boolean_field field as is_boolean %}
         {% is_select_field field as is_select %}
 
-        {# if is_boolean or not form.only_show_required or form.only_show_required and field.field.required #}
+        {% if is_boolean or not form.only_show_required or form.only_show_required and field.field.required %}
             {% if field.errors %}
                 <div class="alert-message block-message error">
                 {{ field.errors }}
@@ -77,7 +77,7 @@ form -- the rest of the form.
                 {% else %}
                     <div class="span3 form-label pull-left initial">{{ field.label_tag }}</div><div class="profile-form-input">{{ field  }}</div>
                 {% endif %}
-        {# endif #}
+        {% endif %}
 
         {% if field.errors %}
             </div>
