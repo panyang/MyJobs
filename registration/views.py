@@ -10,9 +10,6 @@ from registration.models import ActivationProfile
 from registration.forms import RegistrationForm
 
 # New in Django 1.5. Class based template views for static pages
-class ActivationComplete(TemplateView):
-    template_name = 'registration/activation_complete.html'
-
 class RegistrationComplete(TemplateView):
     template_name = 'registration/registration_complete.html'
 

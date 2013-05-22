@@ -58,8 +58,6 @@ class RegistrationViewTests(TestCase):
         activation window).
 
         """
-        success_redirect = 'http://testserver%s' % reverse('activate_complete')
-        
         # First, register an account.
         self.client.post(reverse('register'),
                          data={'email': 'alice@example.com',
