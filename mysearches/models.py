@@ -71,11 +71,14 @@ class SavedSearch(models.Model):
         self.last_sent = datetime.now()
         self.save()
 
-    def save(self, *args,**kwargs):
+    def create(self, *args, **kwargs):
         duplicates = SavedSearch.objects.filter(user=self.user, url=self.url)
 
         if duplicates:
             raise ValidationError('Saved Search URLS must be unique.') 
+        super(SavedSearch,self).create(*args,**kwargs)
+
+    def save(self, *args,**kwargs):
 
         # Create a new saved search digest if one doesn't exist yet
         if not SavedSearchDigest.objects.filter(user=self.user):
