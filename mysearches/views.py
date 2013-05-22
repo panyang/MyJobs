@@ -152,4 +152,4 @@ def save_edit_form(request):
                 form.save()
                 return HttpResponse('success')
             else:
-                return HttpResponse(json.dumps(form.errors.keys()))
+                return HttpResponse(json.dumps(form.errors))

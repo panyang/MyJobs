@@ -40,9 +40,10 @@ class SavedSearchForm(BaseUserForm):
         if not rss_url:
             raise ValidationError(_('This URL is not valid.'))
 
-        if SavedSearch.objects.filter(user=self.user,
-                                      url=self.cleaned_data['url']):
-            raise ValidationError('URL must be unique.')
+        # Check if form is editing existing instance and if duplicates exist
+        if not self.instance.pk and SavedSearch.objects.filter(user=self.user,
+                                                url=self.cleaned_data['url']):
+            raise ValidationError(_('URL must be unique.'))
         return self.cleaned_data['url']
         
     class Meta:

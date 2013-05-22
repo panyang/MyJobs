@@ -304,9 +304,9 @@ function add_errors(that, data) {
     for (var key in errors) {
         if (errors.hasOwnProperty(key)) {
             if (key == 'day_of_week' || key == 'day_of_month') {
-            that.find('label[for="id_frequency"]').before('<span class="label label-important">'+errors[key]+'</span>');
+            that.find('label[for$="frequency"]').before('<span class="label label-important">'+errors[key]+'</span>');
             } else {
-                that.find('label[for="id_'+key+'"]').before('<span class="label label-important">'+errors[key]+'</span>');
+                that.find('label[for$="'+key+'"]').before('<span class="label label-important">'+errors[key]+'</span>');
             }
         }
     }

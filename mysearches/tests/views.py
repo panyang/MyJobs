@@ -58,13 +58,15 @@ class MySearchViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content, 'success')
 
+    def test_save_new_search_invalid(self):
         del self.new_form_data['feed']
         del self.new_form_data['frequency']
         response = self.client.post('/saved-search/new',
                                     data = self.new_form_data,
                                     HTTP_X_REQUESTED_WITH = 'XMLHttpRequest')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(json.loads(response.content), ['feed', 'frequency'])
+        self.assertEqual(json.loads(response.content).keys(),
+                         ['feed', 'frequency'])
 
     def test_get_edit_template(self):
         self.new_form.save()
@@ -106,7 +108,7 @@ class MySearchViewTests(TestCase):
                                     data = self.new_form_data,
                                     HTTP_X_REQUESTED_WITH = 'XMLHttpRequest')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(json.loads(response.content), ['frequency'])
+        self.assertEqual(json.loads(response.content).keys(), ['frequency'])
 
     def test_validate_url(self):
         response = self.client.post('/saved-search/validate-url',
