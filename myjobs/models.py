@@ -159,7 +159,7 @@ class User(AbstractBaseUser):
                                         help_text=_('Checking this enables my.jobs\
                                                     to send email updates to you.'))
 
-    opt_in_employers = models.BooleanField(_('Employers can message me'),
+    opt_in_employers = models.BooleanField(_('Email Preferences:'),
                                            default=True,
                                            help_text=_("Employers can message me."))
     

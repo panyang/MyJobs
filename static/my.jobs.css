@@ -1043,3 +1043,7 @@ body.modal-open {
     overflow: hidden !important;
 }
 
+input[type='checkbox'] + .help-block{
+    display:inline;
+    padding-left: 5px;
+}
