@@ -153,3 +153,21 @@ def save_edit_form(request):
                 return HttpResponse('success')
             else:
                 return HttpResponse(json.dumps(form.errors.keys()))
+
+@user_passes_test(User.objects.is_active)
+@user_passes_test(User.objects.not_disabled)
+def search_unsubscribe(request, search_id):
+    search = SavedSearch.objects.get(id=search_id)
+    if request.user == search.user:
+        search.is_active = False;
+        search.save();
+    return HttpResponseRedirect(reverse('saved_search_main'))
+
+@user_passes_test(User.objects.is_active)
+@user_passes_test(User.objects.not_disabled)
+def digest_unsubscribe(request, digest_id):
+    digest = SavedSearchDigest.objects.get(id=digest_id)
+    if request.user == digest.user:
+        digest.is_active = False;
+        digest.save();
+    return HttpResponseRedirect(reverse('saved_search_main'))

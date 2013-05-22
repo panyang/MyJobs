@@ -61,7 +61,7 @@ class SavedSearch(models.Model):
     def send_email(self):
         context_dict = {'saved_searches': [self]}
         subject = self.label.strip()
-        message = render_to_string('mysearches/email_digest.html',
+        message = render_to_string('mysearches/email_single.html',
                                    context_dict)
         msg = EmailMessage(subject, message, settings.SAVED_SEARCH_EMAIL,
                            [self.email])
@@ -94,10 +94,10 @@ class SavedSearchDigest(models.Model):
                                                       " no results"))
     
     def send_email(self):
-        saved_searches = self.user.savedsearch_set.all()
+        saved_searches = self.user.savedsearch_set.filter(is_active=True)
         if saved_searches or self.send_if_none:
             subject = _('Your Daily Saved Search Digest')
-            context_dict = {'saved_searches': saved_searches}
+            context_dict = {'saved_searches': saved_searches, 'digest': self}
             message = render_to_string('mysearches/email_digest.html',
                                        context_dict)
             msg = EmailMessage(subject, message, settings.SAVED_SEARCH_EMAIL,

@@ -11,18 +11,16 @@ def return_file(url, *args, **kwargs):
     Outputs:
     :file: File object with a `read()` method
     """
-    url_file_map = {'http://jobs.jobs/jobs': 'jobs.html',
-                    '?location=chicago&q=nurse': 'careers.html',
-                    'mcdonalds/careers/': 'careers.html',
-                    'feed/rss': 'rss.rss'}
-
-    default = 'other'
+    if 'feed/rss' in url:
+        file_ = 'rss.rss'
+    elif 'mcdonalds/careers/' in url or \
+       url.endswith('?location=chicago&q=nurse'):
+        file_ = 'careers.html'
+    elif url.startswith('http://jobs.jobs/jobs'):
+        file_ = 'jobs.html'
+    else:
+        file_ = 'other'
 
     target = 'mysearches/tests/local/'
-    try:
-        value = next(v for (k,v) in url_file_map.iteritems()
-                         if url.endswith(k))
-    except StopIteration:
-        value = default
-    target += value
+    target += file_
     return open(target)

@@ -18,6 +18,6 @@ def get_value(value):
         "True": "Yes",
         "False": "No"
     }
-    return value_lookup.get(value, value)    
+    return value_lookup.get(str(value), value)
     
     
