@@ -53,6 +53,7 @@ class RegistrationManager(models.Manager):
             try:
                 if profile.activation_key_expired():
                     user = profile.user
+
                     if not user.is_disabled and not user.is_active:
                         user.delete()
                         profile.delete()
