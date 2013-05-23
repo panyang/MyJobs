@@ -30,7 +30,7 @@ class About(TemplateView):
 
 
 class Privacy(TemplateView):
-    template_name = "privacy.html"
+    template_name = "privacy-policy.html"
 
 
 def home(request):
