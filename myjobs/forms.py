@@ -74,7 +74,7 @@ class EditAccountForm(Form):
         else:
             return self.cleaned_data
 
-    def save(self,u):
+    def save(self, u):
         first = self.cleaned_data.get("given_name", None)
         last = self.cleaned_data.get("family_name", None)
 
@@ -106,7 +106,7 @@ class EditCommunicationForm(BaseUserForm):
 
     class Meta:
         model = User
-        fields = ('email','opt_in_employers')
+        fields = ('email', 'opt_in_employers')
 
 
 class ChangePasswordForm(Form):
@@ -132,7 +132,6 @@ class ChangePasswordForm(Form):
             return self.cleaned_data['password1']
         
     def clean(self):
-        
         cleaned_data = super(ChangePasswordForm, self).clean()
         if 'password1' in self.cleaned_data and 'password2' in self.cleaned_data:
             if self.cleaned_data['password1'] != self.cleaned_data['password2']:

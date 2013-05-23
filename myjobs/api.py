@@ -70,6 +70,7 @@ class UserResource(ModelResource):
 
 class CustomSearchValidation(Validation):
     def is_valid(self, bundle, request):
+        
         if not bundle.data:
             return {'__all__':'No information provided'}
 
@@ -131,6 +132,14 @@ class SavedSearchResource(ModelResource):
         return bundle
 
     def obj_create(self, bundle, **kwargs):
+        """
+        Overrides object create method. Runs validation, sets timestamp in
+        note field and either gets the existing object or creates it.
+
+        Returns JSON with the email, frequency, and the new_search boolean
+        indicating if the search was created or not. A 400 error is
+        raised if the URL has been used by the user already.
+        """
         self.is_valid(bundle)
         if bundle.errors:
             raise ImmediateHttpResponse(self.error_response(

@@ -72,6 +72,11 @@ class SavedSearch(models.Model):
         self.save()
 
     def create(self, *args, **kwargs):
+        """
+        On creation, check if that same URL exists for the user and raise
+        validation if it's a duplicate.
+        """
+        
         duplicates = SavedSearch.objects.filter(user=self.user, url=self.url)
 
         if duplicates:
@@ -79,8 +84,10 @@ class SavedSearch(models.Model):
         super(SavedSearch,self).create(*args,**kwargs)
 
     def save(self, *args,**kwargs):
+        """"
+        Create a new saved search digest if one doesn't exist yet
+        """
 
-        # Create a new saved search digest if one doesn't exist yet
         if not SavedSearchDigest.objects.filter(user=self.user):
             SavedSearchDigest.objects.create(user=self.user, email=self.email)
         super(SavedSearch,self).save(*args,**kwargs)

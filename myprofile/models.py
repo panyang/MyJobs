@@ -160,12 +160,18 @@ class Name(ProfileUnits):
     def get_full_name(self):
         """
         Returns the first_name plus the last_name, with a space in between.
-        
         """
+
         full_name = '%s %s' % (self.given_name, self.family_name)
         return full_name.strip()
 
     def save(self, *args, **kwargs):
+        """
+        Custom name save method to ensure only one name object per user
+        has primary=True. We avoid a race condition by locking the transaction
+        using select_for_update.
+        """
+        
         if self.primary:
             try:
                 temp = Name.objects.select_for_update().get(primary=True,
@@ -192,6 +198,11 @@ class SecondaryEmail(ProfileUnits):
         return self.email
 
     def save(self, *args, **kwargs):
+        """
+        Custom save triggers the creation of an activation profile if the
+        email is new.
+        """
+        
         primary = kwargs.pop('old_primary', None)
         if not self.pk and primary==None:
             reg_signals.email_created.send(sender=self,user=self.user,
@@ -199,6 +210,11 @@ class SecondaryEmail(ProfileUnits):
         super(SecondaryEmail,self).save(*args,**kwargs)
             
     def send_activation(self):
+        """
+        Triggers registration signal to send activation email for this
+        SecondaryEmail instance.
+        """
+        
         reg_signals.send_activation.send(sender=self,user=self.user,
                                          email=self.email)
 
