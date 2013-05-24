@@ -5,7 +5,6 @@
     {% block meta %}
         {% include "includes/meta.html" %}
     {% endblock %}
-    
     {% block meta-extra %}{% endblock %}
     <script type="text/javascript">
     loc = document.location+""; 
@@ -30,9 +29,10 @@
                 <div class="wrapper">
                 <div class="row">
                     <div class="span2" id="logo-block">
-                    <a href="/">
-                       <h3 id="topbar-logo" class="pull-left">my.jobs</h3>
-                    </a><span id="alpha-flag">beta</span>
+                        <a href="/">
+                            <h3 id="topbar-logo" class="pull-left">my.jobs</h3>
+                        </a>
+                        <span id="alpha-flag">beta</span>
                     </div>
                     <div class="pull-right">
                     <div class="inline-inputs">
@@ -44,11 +44,11 @@
                                     <img src="{{user.get_gravatar_url}}">
                                         {% trans "Logged in as " %} 
                                         <b>
-                                        {% if name_obj %}
-                                            {{name_obj}}
-                                        {% else %}
-                                            {{user.email|truncatechars:20}}
-                                        {% endif %} 
+                                            {% if name_obj %}
+                                                {{name_obj}}
+                                            {% else %}
+                                                {{user.email|truncatechars:20}}
+                                            {% endif %} 
                                         </b>
                                         <span class="arrow"></span>
                                     </a>
@@ -59,8 +59,8 @@
                                             <li><a id="savedsearch_link" href="{% url 'saved_search_main' %}">{% trans "Saved Searches" %}</a></li>
                                             {% endif %}
                                             <li><a id="account_link" href="{% url 'edit_account' %}">{% trans "Account Settings" %}</a></li>
-                                       {% endif %}
-                                            <li><a id="logout_link" href="{% url 'auth_logout' %}">Log Out</a></li>
+                                        {% endif %}
+                                        <li><a id="logout_link" href="{% url 'auth_logout' %}">Log Out</a></li>
                                     </ul>
                                 </li>
                             </ul>
@@ -80,9 +80,8 @@
         </div>
     {% endblock %}
     <section><div class="section subpage">
-    {% block page %}
+        {% block page %}
             {% block main %}
-
                 <div id="header">
                     <div class="wrapper">
                         <div class="row">
@@ -99,24 +98,20 @@
                     <div id="ajax-busy"></div>
                     {% block sidebar %}{% endblock sidebar %}
                 </div>                
-            {% endblock %}
-            
+            {% endblock %} 
         {% endblock %}
-
-
-    
     </div></section>
     <footer><div id="footer">
         {% block footer %}
             <div class="wrapper footer">
                 <div class="span1 offset5">
-		    <a href="{% url 'about' %}">About</a>
-		</div>
+		              <a href="{% url 'about' %}">About</a>
+		        </div>
                 <div class="span1">
                     <a href="http://about.jobs/contact/" target="_blank">Contact</a>
                 </div>
                 <div class="span1">
-                    <a href="http://about.jobs/privacy-policy/" target="_blank">Privacy</a>
+                    <a href="{% url 'privacy' %}">Privacy</a>
                 </div>
                 <div class="span1">
                     <a href="http://about.jobs/terms-of-use/" target="_blank">Terms</a>

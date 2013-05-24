@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% comment %}
+This page was created to make editing 
+style for static pages (about.html, privacy, etc)
+easier and faster
+{% endcomment %}
+
+{% block content %}
+	<div class="row">
+    	<div class="span8">
+			{% block text %}{% endblock %}
+		</div>
+	</div>
+{% endblock %}
+
