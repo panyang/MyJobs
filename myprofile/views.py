@@ -20,11 +20,25 @@ from registration.forms import *
 
 @user_passes_test(User.objects.not_disabled)
 def edit_profile(request):
+    """
+    Main profile view that the user first sees. Ultimately generates the
+    following in data_dict:
+
+    :profile_config: A list of dictionaries. Each dictionary represents a
+                     different module (based on module_list) with the keys:
+                     verbose - the displayable title of the module
+                     name - the module name as it's named in the models.
+                     items - all the instances in that module for the user
+
+    :name_obj:       The name of the user or, if not provided, the user's email
+    """
+
     settings = {'user': request.user}
     module_list = ['Name', 'Education', 'EmploymentHistory', 'SecondaryEmail',
                    'Telephone', 'Address']
     units = request.user.profileunits_set
     profile_config = []
+    
     for module in module_list:
         x= []
         module_config = {}
@@ -39,14 +53,27 @@ def edit_profile(request):
         
         profile_config.append(module_config)
 
-    data_dict = {
-        'profile_config': profile_config,        
-        'name_obj': get_name_obj(request)}
+    data_dict = {'profile_config': profile_config,        
+                 'name_obj': get_name_obj(request)}
+    
     return render_to_response('myprofile/edit_profile.html', data_dict,
                               RequestContext(request))
 
 @user_passes_test(User.objects.not_disabled)
 def handle_form(request):
+    """
+    All profile forms are routed through here. On a GET, it returns
+    the form. On a valid POST, it renders the profile item to be appended
+    to the existing profile. On an invalid post, it returns a JSON dump of
+    all the errors. The data_dict includes the following:
+
+    :module:          camel case name of the module
+    :first_instance:  boolean
+    :item_id:         ID of the form item if it exists. If it doesn't, it is the
+                      string 'new'
+    :form:            Form instance
+    
+    """
     module_type = request.REQUEST.get('module')
     first_instance = request.REQUEST.get('first_instance')
     if first_instance:
@@ -54,15 +81,18 @@ def handle_form(request):
 
     item_id = request.REQUEST.get('id', None)
     model = globals()[module_type]
+    # This assumes that form names follow the convention 'moduleForm'
     form = globals()[module_type + 'Form']
     data_dict = {'module': module_type,'first_instance':first_instance}
 
     if request.method == "POST":
         if item_id == 'new':
-            form_instance = form(user=request.user, data=request.POST, auto_id=False)
+            form_instance = form(user=request.user, data=request.POST,
+                                 auto_id=False)
         else:
             obj = model.objects.get(id=item_id)
-            form_instance = form(instance=obj, user=request.user, data=request.POST, auto_id=False)
+            form_instance = form(instance=obj, user=request.user, data=request.POST,
+                                 auto_id=False)
 
         if form_instance.is_valid():
             item = form_instance.save()

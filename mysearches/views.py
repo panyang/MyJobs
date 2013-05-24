@@ -79,8 +79,8 @@ def validate_url(request):
            # id valid, the label field is auto populated with the feed_title
            data = {'rss_url': rss_url,
                    'feed_title': feed_title,
-                   'url_status': 'valid'
-           }
+                   'url_status': 'valid'}
+
         else:
             data = {'url_status': 'not valid'}
         return HttpResponse(json.dumps(data))

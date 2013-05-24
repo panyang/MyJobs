@@ -123,6 +123,7 @@ class CustomUserManager(BaseUserManager):
         """
         Used by the user_passes_test decorator to set view permissions
         """
+
         if user.is_anonymous():
             return False
         else:

@@ -14,6 +14,12 @@ from registration.models import ActivationProfile
 
 @task(name='tasks.send_search_digests')
 def send_search_digests():
+    """
+    Daily task to send saved searches. If user opted in for a digest, they
+    receive it daily and do not get individual saved search emails. Otherwise,
+    each active saved search is sent individually.
+    """
+    
     today = datetime.today()
     day_of_week = today.isoweekday()
 
@@ -34,6 +40,11 @@ def send_search_digests():
 
 @task(name='task.delete_inactive_activations')
 def delete_inactive_activations():
+    """
+    Daily task checks if a activation keys are expired and deletes them.
+    Disabled users are exempt from this check.
+    """
+    
     for profile in ActivationProfile.objects.all():
         try:
             if profile.activation_key_expired():
