@@ -299,14 +299,16 @@ function disable_fields(that) {
 }
 
 function add_errors(that, data) {
-    errors = jQuery.parseJSON(data)
     that.find('[class*=label-important]').remove();
-    for (var key in errors) {
-        if (errors.hasOwnProperty(key)) {
-            if (key == 'day_of_week' || key == 'day_of_month') {
-            that.find('label[for$="frequency"]').before('<span class="label label-important">'+errors[key]+'</span>');
-            } else {
-                that.find('label[for$="'+key+'"]').before('<span class="label label-important">'+errors[key]+'</span>');
+    if (data != 'success') {
+        errors = jQuery.parseJSON(data)
+        for (var key in errors) {
+            if (errors.hasOwnProperty(key)) {
+                if (key == 'day_of_week' || key == 'day_of_month') {
+                that.find('label[for$="frequency"]').before('<span class="label label-important">'+errors[key]+'</span>');
+                } else {
+                    that.find('label[for$="'+key+'"]').before('<span class="label label-important">'+errors[key]+'</span>');
+                }
             }
         }
     }
