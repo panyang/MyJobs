@@ -153,7 +153,10 @@ class SavedSearchResource(ModelResource):
             now = datetime.datetime.now().strftime('%A, %B %d, %Y %l:%M %p')
             notes += 'Saved on ' + now
             if bundle.request:
-                netloc = urlparse('//' + bundle.data.get('url')).netloc
+                url = bundle.data.get('url')
+                if url.find('//') == -1:
+                    url = '//' + url
+                netloc = urlparse(url).netloc
                 notes += ' from ' + netloc
             bundle.data['notes'] = notes
 
