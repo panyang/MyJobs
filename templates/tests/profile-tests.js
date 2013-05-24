@@ -24,7 +24,7 @@ module("profile.js Tests - addSection", {
         $.ajax = ajax;
     }
 });
-test("", function() {
+test("adding a new module section", function() {
     expect(6);
 
     // Before click: #moduleBank is visible and has one child
@@ -64,7 +64,7 @@ module("profile.js Tests - editForm", {
         $.ajax = ajax;
     }
 });
-test("", function() {
+test("adding a new profile item", function() {
     expect(3);
 
     //Before click: #edit_modal does not exist
@@ -87,7 +87,7 @@ module("profile.js Tests - cancelForm", {
         fixture.append($('<div />', {id: 'background_modal'}));
     }
 });
-test("", function() {
+test("canceling an active modal", function() {
     expect(4);
 
     // When cancel is clicked but modals exist and are visible,
@@ -221,7 +221,7 @@ module("profile.js Tests - deleteItem", {
         $.ajax = ajax;
     }
 });
-test("", function() {
+test("deleting an item", function() {
     var fixture = $('#qunit-fixture');
     fixture.append($('<div />', {id: 'modal'}));
     var modal = $('#modal');
@@ -303,7 +303,7 @@ module("profile.js Tests - confirmDelete", {
         fixture.append($('<a />', {id: 'delete_confirm'}));
     }
 });
-test("", function() {
+test("confirming module deletion", function() {
     expect(2);
 
     $('#confirm_modal').hide();
@@ -340,7 +340,7 @@ module("profile.js Tests - viewDetails", {
         $('#detail_modal').modal('hide');
     }
 });
-test("", function() {
+test("viewing module details", function() {
     expect(4);
 
     equal($('#view_table').next().length, 0,
