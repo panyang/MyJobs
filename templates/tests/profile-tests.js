@@ -9,9 +9,6 @@ module("profile.js Tests - addSection", {
         $('#moduleBank table').append($('<tbody />'));
         $('#moduleBank table tbody').append($('<tr />', {id: 'table_tr'}));
         $('#table_tr').append($('<button />', { id: 'Name-new-section'}));
-        $('#qunit-fixture').append($('<input />',
-                                   { name: 'csrfmiddlewaretoken',
-                                     value: 'foo' }));
 
         ajax = $.ajax;
 
@@ -23,17 +20,24 @@ module("profile.js Tests - addSection", {
                                'id="Name-new-add"></button></div>')
             }
         };
-
     }, teardown: function() {
         $.ajax = ajax;
     }
 });
-test("good data", function() {
-    expect(3);
+test("", function() {
+    expect(6);
 
-    equal($('#moduleBank:visible').length, 1, "moduleBank is visible");
+    // Before click: #moduleBank is visible and has one child
+    //               #Name_items does not exist
+    equal($('#moduleBank:visible').length, 1, 'moduleBank is visible');
+    equal($('#moduleBank').children().length, 1, 'moduleBank has one child');
+    equal($('#Name_items').length, 0, 'Name_items does not exist yet');
+
     $('[id$="section"]').click();
-    equal($('#moduleBank:visible').length, 0, "moduleBank is hidden");
+    // After click: #moduleBank is not visible and has no children
+    //              #Name_items exists
+    equal($('#moduleBank').length, 1, 'moduleBank still exists');
+    equal($('#moduleBank:visible').length, 0, 'moduleBank is hidden');
     equal($('#moduleColumn').children().attr('id'), 'Name_items',
           'Name_items should be appended to moduleColumn');
 });
@@ -44,63 +48,46 @@ module("profile.js Tests - editForm", {
         var fixture = $('#qunit-fixture');
         fixture.append($('<div />', { id: 'moduleColumn'}));
         $('#moduleColumn').append($('<div />', {id: 'Name_items'}));
-        $('#Name_items').append($('<h4 />'));
         $('#Name_items').append('<table><tbody><tr id="table_tr"></tr></tbody></table>');
         $('#table_tr').append($('<button />', {id: 'Name-new-add'}));
-        $('#qunit-fixture').append($('<input />',
-                                   { name: 'csrfmiddlewaretoken',
-                                     value: 'foo' }));
 
         ajax = $.ajax;
+
+        $.ajax = function(params) {
+            if (params.url == '/profile/form/' && params.data.module == 'Name' &&
+                params.data.id == 'new') {
+                // params are correct; return a new "modal"
+                params.success('<div id="edit_modal"></div>');
+            }
+        }
     }, teardown: function() {
         $.ajax = ajax;
     }
 });
-test("good data", function() {
-    expect(2);
+test("", function() {
+    expect(3);
 
-    $.ajax = function(params) {
-        if (params.url == '/profile/form/' && params.data.module == 'Name' &&
-            params.data.id == 'new') {
-            // params are correct; return a new "modal"
-            params.success('<div id="edit_modal"></div>');
-        }
-    }
+    //Before click: #edit_modal does not exist
+    equal($('#edit_modal').length, 0, 'edit_modal should not exist yet');
 
     $('[id$="add"]').click();
-    equal($('#moduleColumn').children('#edit_modal').length, 1,
-       'edit_modal should be appended to moduleColumn');
+    //After click: #edit_modal exists and is visible
+    equal($('#edit_modal').length, 1,
+        'edit_modal should be appended to moduleColumn');
     equal($('#edit_modal:visible').length, 1, 'edit_modal is visible');
     $('#edit_modal').modal('hide');
 });
 
 module("profile.js Tests - cancelForm", {
     setup: function() {
-        // insert document structure common to all tests
-        var fixture = $('#qunit-fixture');
-        fixture.append($('<div />', { id: 'moduleBank' }));
-        fixture.append($('<div />', { id: 'moduleColumn'}));
-        $('#moduleBank').append($('<table />'));
-        $('#moduleBank table').append($('<tbody />'));
-        $('#moduleBank table tbody').append($('<tr />', {id: 'table_tr'}));
-        $('#moduleColumn').append($('<div />', {id: 'Name_items'}));
-        $('#Name_items').append($('<h4 />'));
-        $('#qunit-fixture').append($('<input />',
-                                   { name: 'csrfmiddlewaretoken',
-                                     value: 'foo' }));
-
-        ajax = $.ajax;
-    }, teardown: function() {
-        $.ajax = ajax;
+        var fixture = $('#qunit-fixture')
+        fixture.append($('<div />', {id: 'foo_modal'}));
+        $('#foo_modal').append($('<a />', {id: 'Name-1-cancel',
+                                           'data-dismiss': 'modal'}));
+        fixture.append($('<div />', {id: 'background_modal'}));
     }
 });
-test("good data", function() {
-    var fixture = $('#qunit-fixture')
-    fixture.append($('<div />', {id: 'foo_modal'}));
-    $('#foo_modal').append($('<a />', {id: 'Name-1-cancel',
-                                       'data-dismiss': 'modal'}));
-    fixture.append($('<div />', {id: 'background_modal'}));
-
+test("", function() {
     expect(4);
 
     // When cancel is clicked but modals exist and are visible,
@@ -121,55 +108,55 @@ module("profile.js Tests - saveForm", {
     setup: function() {
         // insert document structure common to all tests
         var fixture = $('#qunit-fixture');
-        fixture.append($('<div />', { id: 'moduleBank' }));
         fixture.append($('<div />', { id: 'moduleColumn'}));
-        $('#moduleBank').append($('<table />'));
-        $('#moduleBank table').append($('<tbody />'));
-        $('#moduleBank table tbody').append($('<tr />', {id: 'table_tr'}));
+        fixture.append($('<div />', {id: 'edit_modal'}));
         $('#moduleColumn').append($('<div />', {id: 'Name_items'}));
         $('#Name_items').append($('<h4 />'));
         $('#qunit-fixture').append($('<input />',
                                    { name: 'csrfmiddlewaretoken',
                                      value: 'foo' }));
+        var modal = $('#edit_modal');
+        modal.append($('<input />', {type: 'hidden',
+                                     name: 'csrfmiddlewaretoken',
+                                     value: 'foo'}));
+        modal.append($('<form />', {id: 'save_form'}));
+        var form = $('#save_form');
+        form.append($('<input />', {type: 'hidden',
+                                    id: 'id-given_name',
+                                    name: 'given_name',
+                                    value: 'Alice'}));
+        form.append($('<input />', {type: 'hidden',
+                                    id: 'id-family_name',
+                                    name: 'family_name',
+                                    value: 'Smith'}));
+        modal.append($('<a />', {id: 'Name-new-save'}));
+        $('#edit_modal').modal()
 
         ajax = $.ajax;
+
+        $.ajax = function(params) {
+            if (params.url == '/profile/form/' &&
+                params.data == 'given_name=Alice&family_name=Smith&module='+
+                               'Name&id=new&first_instance=1'+
+                               '&csrfmiddlewaretoken=foo') {
+                params.success('<tr id="Name-1-item"><td>foo</td></tr>')
+            } else {
+                params.success('{"errors":[["given_name",["This field is required"]],["family_name",["This field is required"]]]}');
+            }
+        }
     }, teardown: function() {
+        $('#edit_modal').modal('hide');
+
         $.ajax = ajax;
     }
 });
-test("good data", function() {
-    $('table').remove();
-    var fixture = $('#qunit-fixture');
-    fixture.append($('<div />', {id: 'edit_modal'}));
-    var modal = $('#edit_modal');
-    modal.append($('<input />', {type: 'hidden',
-                                 name: 'csrfmiddlewaretoken',
-                                 value: 'foo'}));
-    modal.append($('<form />', {id: 'save_form'}));
-    var form = $('#save_form');
-    form.append($('<input />', {type: 'hidden',
-                                name: 'name',
-                                value: 'Alice'}));
-    modal.append($('<a />', {id: 'Name-new-save'}));
-
+test("all data is provided and valid", function() {
     expect(5);
 
-    $.ajax = function(params) {
-        if (params.url == '/profile/form/' &&
-            params.data == 'name=Alice&module=Name&id=new&first_instance=1'+
-                           '&csrfmiddlewaretoken=foo') {
-            ok(1, 'parameters are okay');
-            params.success('<tr id="Name-1-item"><td>foo</td></tr>')
-        } else {
-            ok(0, 'parameters are not okay');
-        }
-    }
-
-    $('#edit_modal').modal()
     equal($('#Name_items').children().length, 1,
           'Name_items should have only one child');
     equal($('#Name_items').html(), '<h4></h4>',
-          "Name_items's child should be an h4 element");
+          "Name_items's child should be a single h4 element");
     equal($('#Name_items table tr').length, 0,
           'there should be no table rows');
 
@@ -178,6 +165,28 @@ test("good data", function() {
     $('a[id$="save"]').click();
     equal($('#Name_items table tr').length, 1,
           'after clicking, there should be one row');
+    equal($('#Name_items').children().length, 2,
+          'after clicking, Name_items should have two children');
+});
+test("name values are missing", function() {
+    $('[name$="name"]').val('');
+
+    expect(5);
+
+    equal($('#Name_items').children().length, 1,
+          'Name_items should have only one child');
+    equal($('#Name_items').html(), '<h4></h4>',
+          "Name_items's child should be an h4 element");
+    equal($('#Name_items table tr').length, 0,
+          'there should be no table rows');
+
+    // When save is clicked and parameters are incorrect,
+    // errors should be added to the modal
+    $('a[id$="save"]').click();
+    equal($('#Name_items table tr').length, 0,
+          'after clicking, there should still be no rows');
+    equal($('[class*="label-important"]').length, 2,
+          'errors should have been added');
 });
 
 module("profile.js Tests - deleteItem", {
@@ -196,11 +205,23 @@ module("profile.js Tests - deleteItem", {
                                      value: 'foo' }));
 
         ajax = $.ajax;
+
+        $.ajax = function(params) {
+            if (params.url == '/profile/delete/' &&
+                params.data.module == 'Name' &&
+                params.data.id == '1' &&
+                params.data.csrfmiddlewaretoken == 'foo') {
+                ok(1, 'params are okay');
+                params.success();
+            } else {
+                ok(0, 'params are not okay');
+            }
+        }
     }, teardown: function() {
         $.ajax = ajax;
     }
 });
-test("good data", function() {
+test("", function() {
     var fixture = $('#qunit-fixture');
     fixture.append($('<div />', {id: 'modal'}));
     var modal = $('#modal');
@@ -211,18 +232,6 @@ test("good data", function() {
                             '</tr></tbody></table>');
 
     expect(3);
-
-    $.ajax = function(params) {
-        if (params.url == '/profile/delete/' &&
-            params.data.module == 'Name' &&
-            params.data.id == '1' &&
-            params.data.csrfmiddlewaretoken == 'foo') {
-            ok(1, 'params are okay');
-            params.success();
-        } else {
-            ok(0, 'params are not okay');
-        }
-    }
 
     equal($('#Name_items table tbody tr').length, 1,
           'there should be one tr element');
@@ -235,80 +244,66 @@ module("profile.js Tests - getSelect", {
     setup: function() {
         // insert document structure common to all tests
         var fixture = $('#qunit-fixture');
-        fixture.append($('<div />', { id: 'moduleBank' }));
-        fixture.append($('<div />', { id: 'moduleColumn'}));
-        $('#moduleBank').append($('<table />'));
-        $('#moduleBank table').append($('<tbody />'));
-        $('#moduleBank table tbody').append($('<tr />', {id: 'table_tr'}));
-        $('#moduleColumn').append($('<div />', {id: 'Name_items'}));
-        $('#Name_items').append($('<h4 />'));
-        $('#qunit-fixture').append($('<input />',
-                                   { name: 'csrfmiddlewaretoken',
-                                     value: 'foo' }));
+        fixture.append($('<label />', {'for': 'foo-country_code'}));
+        fixture.append($('<input />', {type: 'hidden',
+                                       value: 'USA',
+                                       id: 'foo-country_code'}));
+        fixture.append($('<label />',
+                       {'for': 'foo-country_sub_division_code'}));
+        fixture.append($('<input />',
+                       {type: 'hidden',
+                        id: 'foo-country_sub_division_code'}));
 
         ajax = $.ajax;
+
+        $.ajax = function(params) {
+            if (params.url.indexOf('usa_regions.jsonp') > -1) {
+                params.success({"regions": [{"code": "AZ", "name": "Arizona"}],
+                                "friendly_label": "State",
+                                "default_option": "az"});
+            }
+        }
     }, teardown: function() {
         $.ajax = ajax;
     }
 });
-test("good data", function() {
-    $('#qunit-fixture').children().remove();
-    $('#qunit-fixture').append($('<label />', {'for': 'foo-country_code'}));
-    $('#qunit-fixture').append($('<input />', {type: 'hidden',
-                                               value: 'USA',
-                                               id: 'foo-country_code'}));
-    $('#qunit-fixture').append($('<label />',
-                               {'for': 'foo-country_sub_division_code'}));
-    $('#qunit-fixture').append($('<input />',
-                               {type: 'hidden',
-                                id: 'foo-country_sub_division_code'}));
+test("selected country has regions", function() {
     expect(3);
 
-    $.ajax = function(params) {
-        if (params.url.indexOf('usa_regions.jsonp') > -1) {
-            ok(1, 'retrieving usa_regions.jsonp');
-            params.success({"regions": [{"code": "AZ", "name": "Arizona"}],
-                            "friendly_label": "State",
-                            "default_option": "az"});
-        } else {
-            ok(0, 'retrieving wrong jsonp file');
-        }
-    }
-
-    // foo-country_sub_division_code should not have a value until
-    // foo-country_code has triggered the change event
+    // foo-country_sub_division_code should not have a value unless
+    // foo-country_code has triggered the change event and has as a
+    // value a country that contains subdivisions (states, etc)
     equal($('[id$="-country_sub_division_code"]').val(), '',
           'nothing should be selected');
-    $('[id$="-country_code"]').trigger('change')
+    $('[id$="-country_code"]').trigger('change');
     equal($('[id$="-country_sub_division_code"]').val(), 'AZ',
           'AZ should be selected');
+    equal($('[id$="-country_sub_division_code"]:visible').length, 1,
+          'country_sub_division_code should be visible');
+});
+test("selected country does not have regions", function() {
+    $('#foo-country_code').val('GBR');
+
+    expect(3);
+
+    equal($('[id$="-country_sub_division_code"]').val(), '',
+          'nothing should be selected');
+    $('[id$="-country_code"]').trigger('change');
+    equal($('[id$="-country_sub_division_code"]').val(), '',
+          'nothing should still be selected');
+    equal($('[id$="-country_sub_division_code"]:visible').length, 0,
+          'country_sub_division_code should not be visible');
 });
 
 module("profile.js Tests - confirmDelete", {
     setup: function() {
         // insert document structure common to all tests
         var fixture = $('#qunit-fixture');
-        fixture.append($('<div />', { id: 'moduleBank' }));
-        fixture.append($('<div />', { id: 'moduleColumn'}));
-        $('#moduleBank').append($('<table />'));
-        $('#moduleBank table').append($('<tbody />'));
-        $('#moduleBank table tbody').append($('<tr />', {id: 'table_tr'}));
-        $('#moduleColumn').append($('<div />', {id: 'Name_items'}));
-        $('#Name_items').append($('<h4 />'));
-        $('#qunit-fixture').append($('<input />',
-                                   { name: 'csrfmiddlewaretoken',
-                                     value: 'foo' }));
-
-        ajax = $.ajax;
-    }, teardown: function() {
-        $.ajax = ajax;
+        fixture.append($('<div />', {id: 'confirm_modal'}));
+        fixture.append($('<a />', {id: 'delete_confirm'}));
     }
 });
-test("good data", function() {
-    var framework = $('#qunit-fixture');
-    framework.append($('<div />', {id: 'confirm_modal'}));
-    framework.append($('<a />', {id: 'delete_confirm'}));
-    
+test("", function() {
     expect(2);
 
     $('#confirm_modal').hide();
@@ -324,38 +319,29 @@ module("profile.js Tests - viewDetails", {
     setup: function() {
         // insert document structure common to all tests
         var fixture = $('#qunit-fixture');
-        fixture.append($('<div />', { id: 'moduleBank' }));
         fixture.append($('<div />', { id: 'moduleColumn'}));
-        $('#moduleBank').append($('<table />'));
-        $('#moduleBank table').append($('<tbody />'));
-        $('#moduleBank table tbody').append($('<tr />', {id: 'table_tr'}));
         $('#moduleColumn').append($('<div />', {id: 'Name_items'}));
         $('#Name_items').append($('<h4 />'));
-        $('#qunit-fixture').append($('<input />',
-                                   { name: 'csrfmiddlewaretoken',
-                                     value: 'foo' }));
+        $('#Name_items').append($('<table />', {id: 'view_table'}));
+        $('#view_table').append($('<tr />'));
+        $('#view_table tr').append($('<a />', {id: 'Name-1-view'}));
 
         ajax = $.ajax;
+
+        $.ajax = function(params) {
+            if (params.url == '/profile/details/' &&
+                params.data.module == 'Name' &&
+                params.data.id == '1') {
+                params.success('<div id="detail_modal"></div>');
+            }
+        }
     }, teardown: function() {
         $.ajax = ajax;
+        $('#detail_modal').modal('hide');
     }
 });
-test("good data", function() {
-    $('#qunit-fixture').append($('<table />', {id: 'view_table'}));
-    $('#view_table').append($('<a />', {id: 'Name-1-view'}));
-
-    expect(5);
-
-    $.ajax = function(params) {
-        if (params.url == '/profile/details/' &&
-            params.data.module == 'Name' &&
-            params.data.id == '1') {
-            ok(1, 'params are okay');
-            params.success('<div id="detail_modal"></div>');
-        } else {
-            ok(0, 'params are not okay');
-        }
-    }
+test("", function() {
+    expect(4);
 
     equal($('#view_table').next().length, 0,
           'table should not be followed by other elements');
@@ -366,5 +352,4 @@ test("good data", function() {
           'the element following table should be #detail_modal');
     equal($('#detail_modal:visible').length, 1,
           'detail_modal should be visible');
-    $('#detail_modal').modal('hide');
 });
