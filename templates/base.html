@@ -2,6 +2,10 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
+    {% block site-title %}
+        <title>My.jobs</title>
+        <meta name="title" content="My.jobs">
+    {% endblock %}
     {% block meta %}
         {% include "includes/meta.html" %}
     {% endblock %}
