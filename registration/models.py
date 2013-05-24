@@ -35,8 +35,11 @@ class RegistrationManager(models.Manager):
                 profile = self.get(activation_key=activation_key)
             except self.model.DoesNotExist:
                 return False
-            if not profile.activation_key_expired():
-                user = profile.user
+            
+            user = profile.user
+            if not user.is_disabled and profile.activation_key_expired():
+                return False
+            else:
                 from myprofile import signals
                 signals.activated.send(sender=self,user=user,
                                        email=profile.email)
@@ -50,10 +53,11 @@ class RegistrationManager(models.Manager):
             try:
                 if profile.activation_key_expired():
                     user = profile.user
-                    if not user.is_active:
+
+                    if not user.is_disabled and not user.is_active:
                         user.delete()
                         profile.delete()
-            except User.DoesNotExist:
+            except DoesNotExist:
                 profile.delete()
 
 

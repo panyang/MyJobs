@@ -7,16 +7,83 @@ Used to check if registration was successful.
 {% endcomment %}
 
 {% block content %}
-    {% if activated %}
-        <h1>{% trans "Activation successful" %}</h1>
-        <p>You can now proceed to
-        {% if user.is_authenticated %}
-            <a href="{% url 'view_account' %}">your account.</a></p>
-        {% else %}
-            <a href="{% url 'auth_login' %}">login.</a></p>
-        {% endif %}
+    <div class="wrapper"> 
+    {% if activated %}        
+        <div class="row">
+            <div class="span12">
+                <h1>{% trans "Account Activated" %}
+            </div>
+        </div>
+        <div class="row" id="profileTitleRow">                
+            <div class="span2">
+                <img src="{{activated.get_gravatar_url}}&s=140">
+            </div>
+            <div class="span6" id="profileTitleBar">
+                <h2>{{activated.email}}</h2>
+                <p>
+                {% if user.is_authenticated %}
+                    {% trans "Your account hass been successfully activated, and you are now logged in."%}
+                {%else%}
+                    {% trans "Your account hass been successfully activated, but you need to login before you use it."%}
+                {%endif%}
+                <br/>
+                <a href="{% url 'edit_account' %}">{% trans "Account Settings" %}</a>
+                </p>
+            </div>
+            <div class="span4">
+                <div class="formBox" id="moduleBank"> 
+                    <h2>Next Steps:</h2>
+                    <table class="table table-bordered tables-striped">
+                    {% if user.is_authenticated %}
+                        <tr class="profile-section">
+                            <td><a href="{% url 'view_profile' %}">Add to your profile</a></td>
+                        </tr>
+                        <tr class="profile-section">
+                            <td><a href="{% url 'saved_search_main' %}">Manage your saved searches</a></td>
+                        </tr>
+                        <tr class="profile-section">
+                            <td><a href="{% url 'edit_account' %}">Manage your account</a></td>
+                        </tr>
+                    {% else %}
+                        <tr class="profile-section">
+                            <td><a href="/">Login</a></td>
+                        </tr>
+                    {% endif %}
+                    </table>
+                </div>
+            </div>
+        </div>  
     {% else %}
-        <h1>{% trans "Activation failed" %}</h1>
-        <p>{% trans "Something went wrong while activating your account. This might mean that the activation code was wrong or that your account has already been activated." %}</p>
+        <div class="row">
+            <div class="span12">
+                <h1>{% trans "Activation failed" %}</h1>
+            </div>
+        </div>
+        <div class="row">
+            <div class="span8">        
+            <p>
+            {% trans "Something went wrong while activating your account. "%}
+            {% trans "This might mean that:"%}
+            <ul>
+                <li>{% trans "The activation code was wrong" %}</li>
+                <li>{% trans "Your account has already been activated" %}</li>
+                <li>{% trans "You waited longer than 2 weeks to activate your account" %}</li>
+            </p>
+            </div>
+            <div class="span4">
+                <div class="formBox" id="moduleBank"> 
+                    <h2>What now:</h2>
+                    <table class="table table-bordered tables-striped">
+                        <tr class="profile-section">
+                            <td><a href="/">Try to login</a></td>
+                        </tr>
+                        <tr class="profile-section">
+                            <td><a href="http://about.jobs/contact">Contact us</a></td>
+                        </tr>
+                    </table>
+                </div>
+            </div>
+            
     {% endif %}
+    </div>
 {% endblock %}

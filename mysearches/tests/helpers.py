@@ -39,10 +39,13 @@ class SavedSearchHelperTests(TestCase):
         self.assertIsNotNone(url)
 
     def test_invalid_dotjobs_url(self):
-        invalid_url = 'http://google.com'
-        title, url = validate_dotjobs_url(invalid_url)
-        self.assertIsNone(title)
-        self.assertIsNone(url)
+        urls = [ 'http://google.com', # url does not contain a feed
+                 '', # url not provided
+                 'http://'] # invalid url provided
+        for url in urls:
+            title, url = validate_dotjobs_url(url)
+            self.assertIsNone(title)
+            self.assertIsNone(url)
 
     def test_date_in_range(self):
         start = datetime.date(month=1,day=1,year=2013)
@@ -57,3 +60,7 @@ class SavedSearchHelperTests(TestCase):
         is_in_range = date_in_range(start, end, x)
         self.assertFalse(is_in_range)
         
+    def test_parse_rss(self):
+        feed_url = 'http://jobs.jobs/feed/rss'
+        items = parse_rss(feed_url)
+        self.assertTrue(len(items) <= 20)

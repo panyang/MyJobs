@@ -96,6 +96,10 @@ CELERYBEAT_SCHEDULE = {
         'task': 'tasks.send_search_digests',
         'schedule': crontab(minute=0,hour=16),
     },
+    'daily-delete-activation': {
+        'task': 'tasks.delete_inactive_activations',
+        'schedule': crontab(minute=0, hour=2)
+    },
     'daily-batch-processing': {
         'task': 'tasks.process_batch_events',
         'schedule': crontab(minute=0, hour=0),

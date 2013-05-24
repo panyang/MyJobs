@@ -39,6 +39,11 @@ class SavedSearchForm(BaseUserForm):
         rss_url = validate_dotjobs_url(self.cleaned_data['url'])[0]
         if not rss_url:
             raise ValidationError(_('This URL is not valid.'))
+
+        # Check if form is editing existing instance and if duplicates exist
+        if not self.instance.pk and SavedSearch.objects.filter(user=self.user,
+                                                url=self.cleaned_data['url']):
+            raise ValidationError(_('URL must be unique.'))
         return self.cleaned_data['url']
         
     class Meta:

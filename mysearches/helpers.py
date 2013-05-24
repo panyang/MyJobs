@@ -27,7 +27,10 @@ def validate_dotjobs_url(search_url):
     if search_url.find('://') == -1:
         search_url = "http://" + search_url
 
-    soup = BeautifulSoup(urllib2.urlopen(search_url).read())
+    try:
+        soup = BeautifulSoup(urllib2.urlopen(search_url).read())
+    except:
+        return None, None
     link = soup.find("link", {"type":"application/rss+xml"})
 
     if link:
@@ -78,7 +81,11 @@ def parse_rss(feed_url, frequency='W', num_items=20, offset=0):
                     publish date.
     """
 
-    rss_soup = get_rss_soup(feed_url+'?num_items='+str(num_items)+'&offset='+str(offset))
+    if feed_url.find('?') > -1:
+        separator = '&'
+    else:
+        separator = '?'
+    rss_soup = get_rss_soup(feed_url+separator+'num_items='+str(num_items)+'&offset='+str(offset))
     item_list = []
     items = rss_soup.find_all("item")
 
@@ -90,8 +97,8 @@ def parse_rss(feed_url, frequency='W', num_items=20, offset=0):
         interval = -1
 
     end = datetime.date.today()
-    start = end + datetime.timedelta(interval)
-    
+    start = end + datetime.timedelta(days=interval)
+
     for item in items:
         item_dict = {}
         item_dict['title'] = item.findChild('title').text

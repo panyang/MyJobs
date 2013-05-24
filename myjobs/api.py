@@ -70,6 +70,7 @@ class UserResource(ModelResource):
 
 class CustomSearchValidation(Validation):
     def is_valid(self, bundle, request):
+        
         if not bundle.data:
             return {'__all__':'No information provided'}
 
@@ -131,6 +132,14 @@ class SavedSearchResource(ModelResource):
         return bundle
 
     def obj_create(self, bundle, **kwargs):
+        """
+        Overrides object create method. Runs validation, sets timestamp in
+        note field and either gets the existing object or creates it.
+
+        Returns JSON with the email, frequency, and the new_search boolean
+        indicating if the search was created or not. A 400 error is
+        raised if the URL has been used by the user already.
+        """
         self.is_valid(bundle)
         if bundle.errors:
             raise ImmediateHttpResponse(self.error_response(
@@ -144,25 +153,24 @@ class SavedSearchResource(ModelResource):
             now = datetime.datetime.now().strftime('%A, %B %d, %Y %l:%M %p')
             notes += 'Saved on ' + now
             if bundle.request:
-                netloc = urlparse('//' + bundle.data.get('url')).netloc
+                url = bundle.data.get('url')
+                if url.find('//') == -1:
+                    url = '//' + url
+                netloc = urlparse(url).netloc
                 notes += ' from ' + netloc
             bundle.data['notes'] = notes
-        try:
-            search = SavedSearch.objects.get(user=user,url=bundle.data.get('url'))
-            new_search_flag = False
-        except SavedSearch.DoesNotExist:
-            search_args = {'url': bundle.data.get('url'),
-                           'label': bundle.data.get('label'),
-                           'feed': bundle.data.get('feed'),
-                           'user': user,
-                           'email': bundle.data.get('email'),
-                           'frequency': bundle.data.get('frequency'),
-                           'day_of_week': bundle.data.get('day_of_week'),
-                           'day_of_month': bundle.data.get('day_of_month'),
-                            'notes': notes}
-            search = SavedSearch.objects.create(**search_args)
-            new_search_flag=True
-            
+
+        search_args = {'url': bundle.data.get('url'),
+                       'label': bundle.data.get('label'),
+                       'feed': bundle.data.get('feed'),
+                       'user': user,
+                       'email': bundle.data.get('email'),
+                       'frequency': bundle.data.get('frequency'),
+                       'day_of_week': bundle.data.get('day_of_week'),
+                       'day_of_month': bundle.data.get('day_of_month'),
+                       'notes': notes}
+        search, new_search_flag = SavedSearch.objects.get_or_create(**search_args)
+
         bundle.obj = search
         bundle.data = {'email': bundle.data.get('email'),
                        'frequency': bundle.data.get('frequency', 'D'),
