@@ -682,7 +682,7 @@ form input[type='checkbox']{
     
     /*Ajax Indicator*/
     #ajax-busy {
-        margin: 0px 0px 0px -50px; /* left margin is half width of the div, to centre it */
+        margin: 0px 0px 0px -65px; /* left margin is half width of the div, to center it */
         padding: 30px 10px 10px 10px;
         left: 25%;
         width: 300px;        
