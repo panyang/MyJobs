@@ -1,4 +1,8 @@
 {% extends "base.html" %}
+{% block site-title %}
+    <title>{% if name_obj %}{{ name_obj }}'s{% else %}&nbsp;{% endif %} My.jobs Profile</title>
+    <meta name="title" content="{% if name_obj %}{{ name_obj }}'s{% else %}&nbsp;{% endif %} My.jobs Profile">
+{% endblock %}
 {% load i18n %}
 {% block meta-extra %}
 <script src="{{ STATIC_URL }}account-creation.js"></script>
