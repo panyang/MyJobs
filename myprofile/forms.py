@@ -107,3 +107,7 @@ class AddressForm(BaseUserForm):
         form_name = _("Address")
         model = Address
         widgets = generate_custom_widgets(model)
+
+class InitialAddressForm(AddressForm):
+    label = CharField(widget=HiddenInput(), required=False, initial="Primary")
+    country_sub_division_code = CharField(widget=TextInput(), required=True)
