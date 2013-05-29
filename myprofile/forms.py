@@ -108,6 +108,36 @@ class AddressForm(BaseUserForm):
         model = Address
         widgets = generate_custom_widgets(model)
 
-class InitialAddressForm(AddressForm):
-    label = CharField(widget=HiddenInput(), required=False, initial="Primary")
-    country_sub_division_code = CharField(widget=TextInput(), required=True)
+
+#adding forms for initial user set up using ModelForms
+class InitialNameForm(ModelForm):
+    class Meta:
+        model = Name
+        # fields = (given_name, family_name)
+
+
+class InitialAddressForm(ModelForm):
+    class Meta:
+        model = Address
+        # fields = (address_line_one, address_line_two, city_name,
+        #           country_sub_division_code, country_code, postal_code)
+
+
+class InitialPhoneForm(ModelForm):
+    class Meta:
+        model = Telephone
+        # fields = (area_dialing, number, extension, use_code)
+
+
+class InitialWorkForm(ModelForm):
+    class Meta:
+        model = EmploymentHistory
+        # fields = (position_title, organization_name, start_date,
+        #          current_indicator)
+
+
+class InitialEducationForm(ModelForm):
+    class Meta:
+        model = Education
+        # fields = (organization_name, degree_date, education_level_code,
+        #           degree_name)

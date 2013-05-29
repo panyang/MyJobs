@@ -27,6 +27,7 @@ from myprofile.models import *
 
 logger = logging.getLogger('__name__')
 
+
 class About(TemplateView):
     template_name = "about.html"
 
@@ -58,10 +59,10 @@ def home(request):
     settings_show_all = {'auto_id':False, 'empty_permitted':True,
                          'only_show_required':False, 'user': request.user}
 
-    # Becuase of the way (I think) our models are set up, specifying the fields
-    # in the usual fashion, i.e. `fields = ['given_name', 'family_name'] doesn't
+    # Because of the way (I think) our models are set up, specifying the fields
+    # as in the docs, i.e. `fields = ['given_name', 'family_name'], doesn't
     # work. I'm instantiating the forms and then popping the fields we don't
-    # want on the sign up page.
+    # want on the sign up page. Yes, this is _terribly_ hacky. 
     name_form = InitialNameForm()
     name_form.fields.pop('primary')
 
@@ -90,13 +91,9 @@ def home(request):
     address_form.fields.pop('unit') # Unit is part of the first line of an address
     address_form.fields.pop('post_office_box') # Ditto
 
-
-
-
-
     # debugging
-    import ipdb
-    ipdb.set_trace()
+    # import ipdb
+    # ipdb.set_trace()
 
     # name_form = instantiate_profile_forms(request,[NameForm],settings)[0]
     # education_form = instantiate_profile_forms(request,[EducationForm],
