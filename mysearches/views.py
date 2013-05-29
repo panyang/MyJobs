@@ -104,17 +104,6 @@ def save_digest_form(request):
 
 @user_passes_test(User.objects.is_active)
 @user_passes_test(User.objects.not_disabled)
-def delete_digest_form(request):
-    if request.is_ajax():
-        try:
-            SavedSearchDigest.objects.get(user=request.user).delete()
-        except SavedSearchDigest.DoesNotExist:
-            pass
-        return HttpResponse('success')
-
-
-@user_passes_test(User.objects.is_active)
-@user_passes_test(User.objects.not_disabled)
 def save_new_search_form(request):
     if request.is_ajax():
         add_form = SavedSearchForm(user=request.user, data=request.POST)
