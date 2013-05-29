@@ -34,8 +34,11 @@ class CustomAuthForm(AuthenticationForm):
         if username and password:
             self.user_cache = authenticate(username=username, password=password)
             if self.user_cache is None:
-                raise forms.ValidationError(_("Please enter a correct username and " + \
-                        "password. Note that both fields are case-sensitive."))
+                message = "Please enter a correct username and password. " \
+                    "Note that password is case-sensitive but email is not."
+                raise forms.ValidationError(_(message))
+                                              
+                                              
         self.check_for_test_cookie()
         return self.cleaned_data
 

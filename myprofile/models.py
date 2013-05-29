@@ -236,13 +236,21 @@ class SecondaryEmail(ProfileUnits):
             else:
                 verified=False
 
-            self.email = ''
-            self.user.email = new_primary
-            self.user.is_active = self.verified
-            self.user.save()
-            SecondaryEmail.objects.get(email=new_primary,user=self.user).delete()
-            email=SecondaryEmail(email=old_primary,verified=verified,
-                                 user=self.user)
+            user = self.user
+            user.is_active = self.verified
+
+            # secondary emails are unique along with the user who owns them
+            # To reset the user's email, the secondary email must be deleted
+            self.delete()
+
+            user.email = new_primary
+            user.save()
+
+            # Create a new secondary email with the user's old primary email,
+            # keeping its verification status
+            email=SecondaryEmail(email=old_primary,
+                                 verified=verified,
+                                 user=user)
             email.save(**{'old_primary':True})
             return True
         else:

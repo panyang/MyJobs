@@ -16,7 +16,7 @@ def return_file(url, *args, **kwargs):
     elif 'mcdonalds/careers/' in url or \
        url.endswith('?location=chicago&q=nurse'):
         file_ = 'careers.html'
-    elif url.startswith('http://jobs.jobs/jobs'):
+    elif 'jobs.jobs/jobs' in url or 'jobs.jobs/search' in url:
         file_ = 'jobs.html'
     else:
         file_ = 'other'

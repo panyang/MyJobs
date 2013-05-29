@@ -52,7 +52,8 @@ class CustomUserManager(BaseUserManager):
         user = self.get_email_owner(email)
         created = False
         if user is None:
-            user = self.model(email=CustomUserManager.normalize_email(email))
+            email = CustomUserManager.normalize_email(email)
+            user = self.model(email=email)
             if password:
                 auto_generated = False
             else:
