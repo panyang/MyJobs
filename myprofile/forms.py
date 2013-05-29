@@ -57,7 +57,7 @@ class SecondaryEmailForm(BaseUserForm):
     def clean_email(self):
         email = self.cleaned_data['email']
         user = self.user
-        if email == self.user.email:
+        if email.lower() == self.user.email.lower():
             raise forms.ValidationError('This email is already registered.')
         return email
             
