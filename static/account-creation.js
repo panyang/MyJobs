@@ -1,3 +1,4 @@
+var current_url = ""; //init current_url as global
 $(document).ready(function() {
     // collect the csrf token on the page to pass into views with ajax
     csrf_token_tag = document.getElementsByName('csrfmiddlewaretoken')[0];
@@ -12,7 +13,8 @@ $(document).ready(function() {
     // perform display modifications for fields
     $("#id_name-primary").hide()
     $("label[for=id_name-primary]").hide()
-    user_email = "";    
+    user_email = "";
+    current_url = window.location.pathname;    
 });
 
 /* When register button is clicked, this triggers an AJAX POST that sends the
@@ -26,7 +28,7 @@ $(document).on("click", "button#register", function(e) {
     user_email = $("#id_email").val();
     $.ajax({
         type: "POST",
-        url: "",
+        url: current_url,
         data: json_data,
         success: function(data) {
             try {
@@ -55,10 +57,10 @@ $(document).on("click", "button#register", function(e) {
 $(document).on("click", "button#login", function(e) {
     e.preventDefault();
     var form = $('form#login-form');
-    var json_data = form.serialize()+'&action=login';        
+    var json_data = form.serialize()+'&action=login';    
     $.ajax({
         type: "POST",
-        url: "",
+        url: current_url,
         data: json_data,
         success: function(data) {
             if (data != 'valid') {
@@ -81,7 +83,7 @@ $(document).on("click", "button#save", function(e) {
         .replace('=off','=False')+'&action=save_profile';        
     $.ajax({
         type: "POST",
-        url: "",
+        url: current_url,
         data: json_data,
         success: function(data) {
             if (data != 'valid') {
