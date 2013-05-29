@@ -28,9 +28,11 @@ logger = logging.getLogger('__name__')
 class About(TemplateView):
     template_name = "about.html"
 
-
 class Privacy(TemplateView):
-    template_name = "privacy.html"
+    template_name = "privacy-policy.html"
+
+class Terms(TemplateView):
+    template_name = "terms.html"
 
 
 def home(request):

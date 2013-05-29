@@ -1,11 +1,12 @@
 {% load i18n %}
+{% load common_tags %}
 {% load staticfiles %}
 {% comment %}
 meta.html -- default page metadata 
 {% endcomment %}
-<title>{% block title-content %}{{ site_name }}{% endblock title-content %}</title>
 <meta name="description" content="{{ description }}">
 <meta name="author" content="DirectEmployers Foundation">
+<meta name="keywords" content="{{ keywords }}">
 <meta http-equiv="X-UA-Compatible" content="IE=9" >
 <meta name="viewport" content="width=device-width"/>
 <script src="http://js.nlx.org/framework/js/def.ui.core.js"></script>
@@ -14,11 +15,11 @@ meta.html -- default page metadata
 <script src="{% static "bootstrap/bootstrap-modal.js" %}"></script>
 <script src="{{ STATIC_URL }}underscore-min.js"></script>
 <script src="{{ STATIC_URL }}backbone-min.js"></script>
-<script src="{{ STATIC_URL }}my.jobs.js"></script>
+<script src="{{ STATIC_URL }}my.jobs.js{% cache_buster %}"></script>
 
-<link href="{{ STATIC_URL }}my.jobs.css" rel="stylesheet" type="text/css">
+<link href="{{ STATIC_URL }}my.jobs.css{% cache_buster %}" rel="stylesheet" type="text/css">
 <!--[if IE]>
-<link href="{{ STATIC_URL }}my.jobs.ie.css" rel="stylesheet" type="text/css">
+<link href="{{ STATIC_URL }}my.jobs.ie.css{% cache_buster %}" rel="stylesheet" type="text/css">
 <![endif]-->
 <link href="{% static "bootstrap/bootstrap-modal.css" %}" rel="stylesheet" type="text/css">
 <link rel="icon" type="image/png" href="{{ STATIC_URL }}favicon.ico">
