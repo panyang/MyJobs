@@ -449,6 +449,15 @@ em.pendingText{
 	display: block;
 	text-align: left;
 }
+/*Firefox fix for homepage alignment issues*/
+@-moz-document url-prefix(){
+    #title {
+        margin-top: -25px;
+    }
+    #titleRow .loginBox{
+        margin-top: 80px;
+    }
+}
 @media screen and (min-width: 1025px){
     #nav li:hover ul#pop-menu{ 
         display: block;
