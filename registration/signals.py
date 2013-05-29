@@ -26,7 +26,8 @@ def send_activation_email(sender,**kwargs):
     user = kwargs.get("user")
     email = kwargs.get("email")
     password = kwargs.get("password")
-    activation = models.ActivationProfile.objects.get(user=user,email=email)
+    activation = models.ActivationProfile.objects.get(user=user,
+                                                      email__iexact=email)
     activation.send_activation_email(password)
 
 user_disabled = Signal(providing_args=["user","email"])
@@ -39,5 +40,6 @@ def reset_activation_profile(sender,**kwargs):
 
     user = kwargs.get("user")
     email = kwargs.get("email")
-    activation = models.ActivationProfile.objects.get(user=user,email=email)
+    activation = models.ActivationProfile.objects.get(user=user,
+                                                      email__iexact=email)
     activation.reset_activation()

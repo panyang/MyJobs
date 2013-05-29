@@ -104,6 +104,13 @@ class EditCommunicationForm(BaseUserForm):
                                            choices=choices,
                                            initial=choices[0][0])
 
+    def save(self):
+        if self.cleaned_data['email'] != self.user.email:
+            new_email = SecondaryEmail.objects.get(
+                email__iexact=self.cleaned_data['email'])
+            new_email.set_as_primary()
+        super(EditCommunicationForm, self).save(self)
+
     class Meta:
         model = User
         fields = ('email', 'opt_in_employers')

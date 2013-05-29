@@ -77,6 +77,7 @@ MIDDLEWARE_CLASSES = (
 )
 
 AUTHENTICATION_BACKENDS = (
+    'backends.CaseInsensitiveAuthBackend',
     'django.contrib.auth.backends.ModelBackend', # default
     'django.contrib.auth.backends.RemoteUserBackend', # http
 )

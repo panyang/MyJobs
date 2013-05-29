@@ -17,6 +17,7 @@ def activate_email(sender,**kwargs):
         user.is_disabled = False
         user.save()
     else:
-        email = models.SecondaryEmail.objects.get(user=user,email=email)
+        email = models.SecondaryEmail.objects.get(user=user,
+                                                  email__iexact=email)
         email.verified = True
         email.save()
