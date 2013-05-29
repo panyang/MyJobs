@@ -164,23 +164,16 @@ $(function() {
 
             function save_digest_form() {
                 var csrf_token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
-                var is_active = $('#id_digest_active').prop('checked')? 'True':'False'
-                var action, url;
-                if (is_active == 'True') {
-                    action = 'save';
-                    url = 'save-digest';
-                } else {
-                    action = 'delete';
-                    url = 'delete-digest';
-                }
+
                 $.ajax({
-                    data: { csrfmiddlewaretoken: csrf_token, action: action,
-                            is_active: is_active,
+                    data: { csrfmiddlewaretoken: csrf_token, action: 'save',
+                            is_active: $('#id_digest_active').prop('checked')?
+                                                                   'True':'False',
                             email: $('#id_digest_email').val(),
                             send_if_none: $('#id_send_if_none').prop('checked')?
                                                                      'True':'False' },
                     type: 'POST',
-                    url: url,
+                    url: 'save-digest',
                     success: function(data) {
                         if (data == 'success') {
                             form_status('Saved!');
