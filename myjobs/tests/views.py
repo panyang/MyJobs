@@ -408,18 +408,12 @@ class MyJobsViewsTests(TestCase):
         """
         Test that emails are case-insensitive when logging in
         """
-        response = self.client.post(reverse('home'),
-                                    data={'username': self.user.email,
-                                          'password': 'secret',
-                                          'action': 'login'})
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.content, 'valid')
+        for email in [self.user.email, self.user.email.upper()]:
+            response = self.client.post(reverse('home'),
+                                        data={'username': email,
+                                              'password': 'secret',
+                                              'action': 'login'})
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(response.content, 'valid')
 
-        self.client.get(reverse('auth_logout'))
-
-        response = self.client.post(reverse('home'),
-                                    data={'username': self.user.email.upper(),
-                                    'password': 'secret',
-                                    'action': 'login'})
-        self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.content, 'valid')
+            self.client.get(reverse('auth_logout'))

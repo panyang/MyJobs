@@ -59,7 +59,7 @@ class UserResourceTests(TestCase):
                     (self.user.email, self.user.api_key.key))
             content = json.loads(response.content)
             self.assertEqual(response.status_code, 201)
-            self.assertEqual(content['user_created'], False)
+            self.assertFalse(content['user_created'])
             self.assertEqual(content['email'].lower(), 'alice@example.com')
 
 class SavedSearchResourceTests(TestCase):
@@ -204,7 +204,7 @@ class SavedSearchResourceTests(TestCase):
                                           self.user.api_key.key)
             content = json.loads(response.content)
             self.assertEqual(len(content), 3)
-            self.assertEqual(content['new_search'], False)
+            self.assertFalse(content['new_search'])
         self.assertEqual(SavedSearch.objects.count(), 1)
 
     def test_no_day_of(self):

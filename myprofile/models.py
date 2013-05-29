@@ -245,6 +245,9 @@ class SecondaryEmail(ProfileUnits):
 
             user.email = new_primary
             user.save()
+
+            # Create a new secondary email with the user's old primary email,
+            # keeping its verification status
             email=SecondaryEmail(email=old_primary,
                                  verified=verified,
                                  user=user)
