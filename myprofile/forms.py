@@ -44,10 +44,6 @@ class NameForm(BaseUserForm):
         widgets = generate_custom_widgets(model)
         
 
-class InitialNameForm(NameForm):
-    primary = BooleanField(widget=HiddenInput(), required=False, initial="off")
-
-
 class SecondaryEmailForm(BaseUserForm):
     class Meta:
         form_name = _("Secondary Email")
@@ -108,35 +104,45 @@ class AddressForm(BaseUserForm):
         model = Address
         widgets = generate_custom_widgets(model)
 
+class InitialForm(ModelForm):
+    def __init__(self, *args, **kwargs):
+        super(InitialForm, self).__init__(*args, **kwargs)
+        for key, field in self.fields.items():
+            if isinstance(field.widget, TextInput) or \
+                isinstance(field.widget, Textarea) or \
+                isinstance(field.widget, DateInput) or \
+                isinstance(field.widget, DateTimeInput) or \
+                isinstance(field.widget, TimeInput):
+                field.widget.attrs.update({'placeholder': field.label})
 
 #adding forms for initial user set up using ModelForms
-class InitialNameForm(ModelForm):
+class InitialNameForm(InitialForm):
     class Meta:
         model = Name
         # fields = (given_name, family_name)
 
 
-class InitialAddressForm(ModelForm):
+class InitialAddressForm(InitialForm):
     class Meta:
         model = Address
         # fields = (address_line_one, address_line_two, city_name,
         #           country_sub_division_code, country_code, postal_code)
 
 
-class InitialPhoneForm(ModelForm):
+class InitialPhoneForm(InitialForm):
     class Meta:
         model = Telephone
         # fields = (area_dialing, number, extension, use_code)
 
 
-class InitialWorkForm(ModelForm):
+class InitialWorkForm(InitialForm):
     class Meta:
         model = EmploymentHistory
         # fields = (position_title, organization_name, start_date,
         #          current_indicator)
 
 
-class InitialEducationForm(ModelForm):
+class InitialEducationForm(InitialForm):
     class Meta:
         model = Education
         # fields = (organization_name, degree_date, education_level_code,
