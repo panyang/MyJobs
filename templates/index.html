@@ -1,8 +1,9 @@
 {% extends "base.html" %}
 {% load i18n %}
+{% load common_tags %}
 {% block topbarlogin %}{% endblock topbarlogin %}
 {% block meta-extra %}
-<script type="text/javascript" src="{{STATIC_URL}}account-creation.js"></script>
+<script type="text/javascript" src="{{STATIC_URL}}account-creation.js{% cache_buster %}"></script>
 {% endblock %}
 
 {% block title-content %}{% trans "My.Jobs - Manage your job search." %}{% endblock title-content %}
