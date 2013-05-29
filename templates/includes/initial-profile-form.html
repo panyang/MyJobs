@@ -5,7 +5,8 @@
         <div class="span4">
             <div class="profile-unit">
                 <h4>{{name_form.Meta.form_name}}</h4>
-                {% include 'includes/form-error-highlight.html' with form=name_form %}
+                {{ name_form.as_ul }}
+                {# include 'includes/form-error-highlight.html' with form=name_form #}
             </div>
             <div class="profile-unit">
                 <h4>{% trans "Primary Contact Info"%}</h4>

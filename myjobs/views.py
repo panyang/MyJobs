@@ -22,6 +22,7 @@ from myjobs.forms import *
 from myjobs.helpers import *
 from myprofile.forms import *
 from registration.forms import *
+from myprofile.models import *
 
 
 logger = logging.getLogger('__name__')
@@ -57,43 +58,52 @@ def home(request):
     settings_show_all = {'auto_id':False, 'empty_permitted':True,
                          'only_show_required':False, 'user': request.user}
 
+    # Becuase of the way (I think) our models are set up, specifying the fields
+    # in the usual fashion, i.e. `fields = ['given_name', 'family_name'] doesn't
+    # work. I'm instantiating the forms and then popping the fields we don't
+    # want on the sign up page.
+    name_form = InitialNameForm()
+    name_form.fields.pop('primary')
 
-    # adding forms for initial user set up using ModelForms
-    class InitialNameForm(ModelForm):
-        class Meta:
-            model = Name
-            fields = (given_name, family_name)
+    education_form = InitialEducationForm()
+    education_form.fields.pop('city_name')
+    education_form.fields.pop('country_sub_division_code')
+    education_form.fields.pop('country_code')
+    education_form.fields.pop('start_date')
+    education_form.fields.pop('end_date')
+    education_form.fields.pop('education_score')
+    education_form.fields.pop('degree_name')
+    education_form.fields.pop('degree_minor')
 
-    class InitialAddressForm(ModelForm):
-        class Meta:
-            model = Address
-            fields = (address_line_one, address_line_two, city_name,
-                      country_sub_division_code, country_code, postal_code)
+    phone_form = InitialPhoneForm()
+    phone_form.fields.pop('country_dialing')
 
-    class InitialPhoneForm(ModelForm):
-        class Meta:
-            model = Telephone
-            fields = (area_dialing, number, extension, use_code)
+    work_form = InitialWorkForm()
+    work_form.fields.pop('end_date')
+    work_form.fields.pop('city_name')
+    work_form.fields.pop('country_sub_division_code')
+    work_form.fields.pop('country_code')
+    work_form.fields.pop('description')
 
-    class InitialWorkForm(ModelForm):
-        class Meta:
-            model = EmploymentHistory
-            fields = (position_title, organization_name, start_date,
-                      current_indicator)
+    address_form = InitialAddressForm()
+    address_form.fields.pop('label')
+    address_form.fields.pop('unit') # Unit is part of the first line of an address
+    address_form.fields.pop('post_office_box') # Ditto
 
-    class InitialEducationForm(ModelForm):
-        class Meta:
-            model = Education
-            fields = (organization_name, degree_date, education_level_code,
-                      degree_name)
 
-    name_form = instantiate_profile_forms(request,[NameForm],settings)[0]
-    education_form = instantiate_profile_forms(request,[EducationForm],
-                                               settings)[0]
-    phone_form = instantiate_profile_forms(request,[TelephoneForm],settings)[0]
-    work_form = instantiate_profile_forms(request,[EmploymentHistoryForm],settings)[0]
-    address_form = instantiate_profile_forms(request,[AddressForm],settings)[0]
 
+
+
+    # debugging
+    import ipdb
+    ipdb.set_trace()
+
+    # name_form = instantiate_profile_forms(request,[NameForm],settings)[0]
+    # education_form = instantiate_profile_forms(request,[EducationForm],
+    #                                            settings)[0]
+    # phone_form = instantiate_profile_forms(request,[TelephoneForm],settings)[0]
+    # work_form = instantiate_profile_forms(request,[EmploymentHistoryForm],settings)[0]
+    # address_form = instantiate_profile_forms(request,[AddressForm],settings)[0]
         
     data_dict = {'registrationform':registrationform,
                  'loginform': loginform,

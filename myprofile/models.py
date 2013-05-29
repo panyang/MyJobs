@@ -3,6 +3,7 @@ import datetime
 from django.contrib.contenttypes.models import ContentType
 from django.core.exceptions import ValidationError
 from django.db import models
+from django.forms import ModelForm
 from django.utils.translation import ugettext_lazy as _
 
 from registration import signals as reg_signals
@@ -76,7 +77,7 @@ class Education(ProfileUnits):
     degree_minor = models.CharField(max_length=255, blank=True, null=True,
                                     verbose_name=_('minor'))
 
-    
+
 class Address(ProfileUnits):
     label = models.CharField(max_length=60, verbose_name=_('Address Label'))
     address_line_one = models.CharField(max_length=255,
@@ -244,3 +245,32 @@ class Profile(models.Model):
     
     def __unicode__(self):
         return self.name
+
+#adding forms for initial user set up using ModelForms
+class InitialNameForm(ModelForm):
+    class Meta:
+        model = Name
+        # fields = (given_name, family_name)
+
+class InitialAddressForm(ModelForm):
+    class Meta:
+        model = Address
+        # fields = (address_line_one, address_line_two, city_name,
+        #           country_sub_division_code, country_code, postal_code)
+
+class InitialPhoneForm(ModelForm):
+    class Meta:
+        model = Telephone
+        # fields = (area_dialing, number, extension, use_code)
+
+class InitialWorkForm(ModelForm):
+    class Meta:
+        model = EmploymentHistory
+        # fields = (position_title, organization_name, start_date,
+        #          current_indicator)
+
+class InitialEducationForm(ModelForm):
+    class Meta:
+        model = Education
+        # fields = (organization_name, degree_date, education_level_code,
+        #           degree_name)
