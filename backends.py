@@ -11,7 +11,7 @@ class CaseInsensitiveAuthBackend(ModelBackend):
     the user typed  in.
 
     Override ModelBackground's `authenticate` method to allow for
-    case-insensitive 
+    case-insensitive login
     """
     def authenticate(self, username=None, password=None):
         try:
