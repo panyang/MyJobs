@@ -6,14 +6,11 @@
             <div class="profile-unit">
                 <h4>{% trans "Personal Information" %}</h4>
                 {{ name_form.as_ul }}
-                {# include 'includes/form-error-highlight.html' with form=name_form #}
             </div>
             <div class="profile-unit">
                 <h4>{% trans "Primary Contact Info" %}</h4>
-                {{ address_form.as_ul }}
+                {{ address_form.as_ul }}<hr>
                 {{ phone_form.as_ul }}
-                {# include 'includes/form-error-highlight.html' with form=address_form #}  
-                {# include 'includes/form-error-highlight.html' with form=phone_form #}
                 <input type="text" id="usaPhoneField" name="friendlyPhoneField" 
                     class="friendlyPhoneField" placeholder="Phone Number"/>
                 <br/>
@@ -23,12 +20,10 @@
             <div class="profile-unit">
                 <h4>{% trans "Most Recent Job" %}</h4>
                 {{ work_form.as_ul }}
-                {# include 'includes/form-error-highlight.html' with form=work_form #}
             </div>
             <div class="profile-unit">
                 <h4>{% trans "Most Recent Education" %}</h4>
                 {{ education_form.as_ul }}
-                {# include 'includes/form-error-highlight.html' with form=education_form #}
             </div>
         </div>            
         {% csrf_token %}
