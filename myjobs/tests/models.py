@@ -1,4 +1,5 @@
 import urllib
+from django.contrib.auth.models import Group
 from django.core import mail
 from django.core.urlresolvers import reverse
 from django.test import TestCase
@@ -101,5 +102,17 @@ class UserManagerTests(TestCase):
         user.save()        
         resp = client.get(reverse('saved_search_main'))
         self.assertRedirects(resp, "http://testserver/?next=/saved-search/")
-        
-        
+
+    def test_group_status(self):
+        client = TestClient()
+        user = UserFactory()
+
+        user.groups.all().delete()
+
+        for group in Group.objects.all():
+            user.groups.add(group.pk)
+            user.save()
+
+            for group_name in Group.objects.filter(~models.Q(name=group.name)):
+                self.assertFalse(User.objects.is_group_member(user, group_name.name))
+            self.assertTrue(User.objects.is_group_member(user, group.name))

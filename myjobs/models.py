@@ -132,6 +132,9 @@ class CustomUserManager(BaseUserManager):
         else:
             return user.is_active
 
+    def is_group_member(self, user, group):
+        return user.groups.filter(name=group).count() >= 1
+
 # New in Django 1.5. This is now the default auth user table. 
 class User(AbstractBaseUser):
     email = models.EmailField(verbose_name=_("email address"),
