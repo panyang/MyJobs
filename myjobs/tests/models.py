@@ -2,6 +2,7 @@ import urllib
 from django.contrib.auth.models import Group
 from django.core import mail
 from django.core.urlresolvers import reverse
+from django.db.models import Q
 from django.test import TestCase
 
 from myjobs.models import *
@@ -104,15 +105,26 @@ class UserManagerTests(TestCase):
         self.assertRedirects(resp, "http://testserver/?next=/saved-search/")
 
     def test_group_status(self):
+        """
+        Should return True if user.groups contains the group specified and False
+        if it does not.
+        """
         client = TestClient()
         user = UserFactory()
 
         user.groups.all().delete()
 
         for group in Group.objects.all():
+            # Makes a list of all group names, excluding the one that the
+            # user will be a member of
+            names = map(lambda group: group.name,
+                        Group.objects.filter(~Q(name=group.name)))
+
             user.groups.add(group.pk)
             user.save()
 
-            for group_name in Group.objects.filter(~models.Q(name=group.name)):
-                self.assertFalse(User.objects.is_group_member(user, group_name.name))
+            for name in names:
+                self.assertFalse(User.objects.is_group_member(user, name))
             self.assertTrue(User.objects.is_group_member(user, group.name))
+
+            user.groups.all().delete()

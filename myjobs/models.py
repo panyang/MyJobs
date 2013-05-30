@@ -133,6 +133,10 @@ class CustomUserManager(BaseUserManager):
             return user.is_active
 
     def is_group_member(self, user, group):
+        """
+        Used by the user_passes_test decorator to determine if the user's group
+        membership is adequate for certain actions
+        """
         return user.groups.filter(name=group).count() >= 1
 
 # New in Django 1.5. This is now the default auth user table. 
