@@ -60,7 +60,7 @@ def home(request):
                          'only_show_required':False, 'user': request.user}
 
     # Because of the way (I think) our models are set up, specifying the fields
-    # as in the docs, i.e. `fields = ['given_name', 'family_name'], doesn't
+    # as in the docs, i.e. `fields = ['given_name', 'family_name']`, doesn't
     # work. I'm instantiating the forms and then popping the fields we don't
     # want on the sign up page. Yes, this is _terribly_ hacky. 
     name_form = InitialNameForm()
