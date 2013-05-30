@@ -19,6 +19,7 @@ class UserManagerTests(TestCase):
         self.assertEqual(len(mail.outbox), 1)
         self.assertEqual(new_user.email, 'alice@example.com')
         self.failUnless(new_user.check_password('complicated_password'))
+        self.failUnless(new_user.groups.filter(name='Job Seeker').count() == 1)
 
 
     def test_active_user_creation(self):
@@ -28,6 +29,7 @@ class UserManagerTests(TestCase):
         self.assertEqual(new_user.is_active, True)
         self.assertEqual(new_user.email, 'alice@example.com')
         self.failUnless(new_user.check_password('complicated_password'))
+        self.failUnless(new_user.groups.filter(name='Job Seeker').count() == 1)
 
     def test_superuser_creation(self):
         new_user = User.objects.create_superuser(**{'password': 'complicated_password',
@@ -37,6 +39,7 @@ class UserManagerTests(TestCase):
         self.assertEqual(new_user.is_staff, True)
         self.assertEqual(new_user.email, 'alice@example.com')
         self.failUnless(new_user.check_password('complicated_password'))
+        self.failUnless(new_user.groups.filter(name='Job Seeker').count() == 1)
 
     def test_gravatar_url(self):
         """

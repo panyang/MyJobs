@@ -6,4 +6,3 @@ from registration.models import ActivationProfile
 
 admin.site.register(User)
 admin.site.register(ActivationProfile)
-admin.site.unregister(Group)

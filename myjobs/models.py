@@ -1,7 +1,7 @@
 import datetime
 import urllib, hashlib
 
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, _user_has_perm
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, _user_has_perm, Group
 from django.core.mail import send_mail
 from django.db import models
 from django.db.models.signals import post_save
@@ -63,6 +63,7 @@ class CustomUserManager(BaseUserManager):
             user.is_active = False
             user.gravatar = user.email
             user.save(using=self._db)
+            user.add_default_group()
             created = True
             custom_signals.email_created.send(sender=self,user=user,
                                               email=email)
@@ -90,6 +91,7 @@ class CustomUserManager(BaseUserManager):
         user.gravatar = user.email
         user.set_password(password)
         user.save(using=self._db)
+        user.add_default_group()
         return user
         
     def create_superuser(self, **kwargs):
@@ -104,6 +106,7 @@ class CustomUserManager(BaseUserManager):
         u.gravatar = u.email
         u.set_password(password)
         u.save(using=self._db)
+        u.add_default_group()
         return u
 
     def not_disabled(self, user):
@@ -151,6 +154,7 @@ class User(AbstractBaseUser):
                                                    "has all permissions without " +\
                                                    "explicitly assigning them."))
     is_disabled = models.BooleanField(_('disabled'), default=False)
+    groups = models.ManyToManyField(Group, blank=True, null=True)
 
     # Communication Settings
 
@@ -236,6 +240,11 @@ class User(AbstractBaseUser):
         
         custom_signals.user_disabled.send(sender=self, user=self,
                                           email=self.email)
+
+    def add_default_group(self):
+        group = Group.objects.get(name='Job Seeker')
+        self.groups.add(group.pk)
+        self.save()
 
 
 class EmailLog(models.Model):
