@@ -1,6 +1,8 @@
 import urllib
+from django.contrib.auth.models import Group
 from django.core import mail
 from django.core.urlresolvers import reverse
+from django.db.models import Q
 from django.test import TestCase
 
 from myjobs.models import *
@@ -19,6 +21,7 @@ class UserManagerTests(TestCase):
         self.assertEqual(len(mail.outbox), 1)
         self.assertEqual(new_user.email, 'alice@example.com')
         self.failUnless(new_user.check_password('complicated_password'))
+        self.failUnless(new_user.groups.filter(name='Job Seeker').count() == 1)
 
 
     def test_active_user_creation(self):
@@ -28,6 +31,7 @@ class UserManagerTests(TestCase):
         self.assertEqual(new_user.is_active, True)
         self.assertEqual(new_user.email, 'alice@example.com')
         self.failUnless(new_user.check_password('complicated_password'))
+        self.failUnless(new_user.groups.filter(name='Job Seeker').count() == 1)
 
     def test_superuser_creation(self):
         new_user = User.objects.create_superuser(**{'password': 'complicated_password',
@@ -37,6 +41,7 @@ class UserManagerTests(TestCase):
         self.assertEqual(new_user.is_staff, True)
         self.assertEqual(new_user.email, 'alice@example.com')
         self.failUnless(new_user.check_password('complicated_password'))
+        self.failUnless(new_user.groups.filter(name='Job Seeker').count() == 1)
 
     def test_gravatar_url(self):
         """
@@ -98,5 +103,28 @@ class UserManagerTests(TestCase):
         user.save()        
         resp = client.get(reverse('saved_search_main'))
         self.assertRedirects(resp, "http://testserver/?next=/saved-search/")
-        
-        
+
+    def test_group_status(self):
+        """
+        Should return True if user.groups contains the group specified and False
+        if it does not.
+        """
+        client = TestClient()
+        user = UserFactory()
+
+        user.groups.all().delete()
+
+        for group in Group.objects.all():
+            # Makes a list of all group names, excluding the one that the
+            # user will be a member of
+            names = map(lambda group: group.name,
+                        Group.objects.filter(~Q(name=group.name)))
+
+            user.groups.add(group.pk)
+            user.save()
+
+            for name in names:
+                self.assertFalse(User.objects.is_group_member(user, name))
+            self.assertTrue(User.objects.is_group_member(user, group.name))
+
+            user.groups.all().delete()
