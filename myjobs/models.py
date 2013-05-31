@@ -136,6 +136,12 @@ class CustomUserManager(BaseUserManager):
         """
         Used by the user_passes_test decorator to determine if the user's group
         membership is adequate for certain actions
+
+        Example usage
+        -------------
+
+        Determine if user is in the 'Job Seeker' group:
+        @user_passes_test(lambda u: User.objects.is_group_member(u, 'Job Seeker'))
         """
         return user.groups.filter(name=group).count() >= 1
 
