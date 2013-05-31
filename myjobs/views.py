@@ -9,7 +9,6 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import user_passes_test, login_required
 from django.core.urlresolvers import reverse
 from django.forms.models import model_to_dict
-from django.forms import ModelForm
 from django.http import HttpResponseRedirect, HttpResponse
 from django.template import RequestContext
 from django.shortcuts import render_to_response, get_object_or_404, redirect
@@ -22,17 +21,16 @@ from myjobs.forms import *
 from myjobs.helpers import *
 from myprofile.forms import *
 from registration.forms import *
-from myprofile.models import *
-
 
 logger = logging.getLogger('__name__')
-
 
 class About(TemplateView):
     template_name = "about.html"
 
+
 class Privacy(TemplateView):
     template_name = "privacy-policy.html"
+
 
 class Terms(TemplateView):
     template_name = "terms.html"
@@ -125,10 +123,6 @@ def home(request):
                                           {'form': loginform},
                                           context_instance=RequestContext(request))
         elif request.POST['action'] == "save_profile":
-            # debugging
-            import ipdb
-            ipdb.set_trace()
-
             # See note about terrible hackiness above. Our models prevent us
             # from using Django as intended; this is a temporary workaround.
             name_form = InitialNameForm(request.POST, prefix="name")
