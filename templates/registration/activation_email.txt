@@ -18,7 +18,7 @@ following context:
 
 {% endcomment %}
 {% if primary %}
-{% blocktrans with site.name as site_name and site.domain as site_domain %}
+{% blocktrans %}
 You have created an account for My Jobs, which has to
 be activated. To do this, please follow the following link:
 {% endblocktrans %}

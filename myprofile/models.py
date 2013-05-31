@@ -205,7 +205,7 @@ class SecondaryEmail(ProfileUnits):
         """
 
         primary = kwargs.pop('old_primary', None)
-        if not self.pk and not primary:
+        if not self.pk and primary==None:
             reg_signals.email_created.send(sender=self,user=self.user,
                                            email=self.email)
             reg_signals.send_activation.send(sender=self, user=self.user,
@@ -269,11 +269,11 @@ def delete_secondary_activation(sender, **kwargs):
     """
 
     instance = kwargs.get('instance')
-    activation = ActivationProfile.objects.filter(user=instance.user,
-                                                  email__iexact=instance.email)
+    activation = ActivationProfile.objects.get(user=instance.user,
+                                               email__iexact=instance.email)
     activation.delete()
 
-# Call `delete_secondary_activation` after a secondary email is deleted.
+# Calls `delete_secondary_activation` after a secondary email is deleted.
 # dispatch_uid: arbitrary unique string that prevents this signal from
 # being connected to multiple times
 models.signals.post_delete.connect(delete_secondary_activation,
