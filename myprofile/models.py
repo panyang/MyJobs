@@ -6,6 +6,7 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
 from registration import signals as reg_signals
+from registration.models import ActivationProfile
 from myjobs.models import User
 
 
@@ -202,11 +203,13 @@ class SecondaryEmail(ProfileUnits):
         Custom save triggers the creation of an activation profile if the
         email is new.
         """
-        
+
         primary = kwargs.pop('old_primary', None)
-        if not self.pk and primary==None:
+        if not self.pk and not primary:
             reg_signals.email_created.send(sender=self,user=self.user,
                                            email=self.email)
+            reg_signals.send_activation.send(sender=self, user=self.user,
+                                             email=self.email)
         super(SecondaryEmail,self).save(*args,**kwargs)
             
     def send_activation(self):
@@ -255,6 +258,27 @@ class SecondaryEmail(ProfileUnits):
             return True
         else:
             return False
+
+def delete_secondary_activation(sender, **kwargs):
+    """
+    When a secondary email is deleted, deletes that email's associated
+    activation profile
+
+    Inputs:
+    :sender: Model 
+    """
+
+    instance = kwargs.get('instance')
+    activation = ActivationProfile.objects.filter(user=instance.user,
+                                                  email__iexact=instance.email)
+    activation.delete()
+
+# Call `delete_secondary_activation` after a secondary email is deleted.
+# dispatch_uid: arbitrary unique string that prevents this signal from
+# being connected to multiple times
+models.signals.post_delete.connect(delete_secondary_activation,
+                                   sender=SecondaryEmail,
+                                   dispatch_uid='delete_secondary_activation')
 
 
 class Profile(models.Model):
