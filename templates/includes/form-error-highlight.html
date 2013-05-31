@@ -43,6 +43,7 @@ form -- the rest of the form.
                 </div>
                 {{ field|attr:"placeholder:" }}
 
+<<<<<<< HEAD
             {% elif is_select %}
                 <div class="span3 form-label pull-left initial">&nbsp;</div>
                 <div class="input-prepend" id="{{field.name}}_prependLabel">
@@ -57,12 +58,38 @@ form -- the rest of the form.
                 <div class="span3 form-label pull-left checkbox-label">
                     {{ field.label_tag }}
                 </div>
+=======
+        	{% elif is_select %}
+        	    {% if field.html_name == "use_code" %}
+        	    <div class="input-prepend" id="{{field.name}}_prependLabel">
+          			<span class="add-on">
+            			{{ field.label_tag }}
+          			</span>
+          			{{field}}
+        		</div>
+        	    {% else %}
+        	    <div class="span3 form-label pull-left initial">&nbsp;</div>
+        		<div class="input-prepend" id="{{field.name}}_prependLabel">
+          			<span class="add-on">
+            			{{ field.label_tag }}
+          			</span>
+          			{{field}}
+        		</div>
+        		{% endif %}
+        		
+        	{% elif is_boolean %}
+        		{{field}}
+        		<div class="span3 form-label pull-left checkbox-label">
+         	 		{{ field.label_tag }}
+        		</div>
+>>>>>>> 40987bf2c23b61c0b694849881ba354340cf2f27
         
             {% elif 'country_code' in field.html_name %}
                 
                 <div class="span3 form-label pull-left">
                 <div class="clear"></div>
                 {% with "id_"|add:form.prefix|add:"-country_sub_division_code" as region_id %}
+<<<<<<< HEAD
                     {% country_select selected="USA" html_id=field.id_for_label  region_html_id=region_id input_name=field.html_name %}
                 {% endwith %}
                 </div>
@@ -73,6 +100,29 @@ form -- the rest of the form.
                             {{ field.label_tag }}
                         </span>
                         {{field}}
+=======
+        			{% country_select selected="USA" html_id=field.id_for_label  region_html_id=region_id input_name=field.html_name %}
+        		{% endwith %}
+        		</div>
+
+        	{% elif 'country_sub_division_code' in field.html_name %}
+                    <div class="span3 form-label pull-left"><label for="{{field.id_for_label}}">Region</label><div class="clear"></div></div>
+                    <input type="hidden" name="{{field.html_name}}" value="{{field.value|default_if_none:" "}}" id="{{field.id_for_label}}" />
+        	{% else %}
+        		{% if '_dialing' in field.html_name or field.html_name == "telephone-number" or field.html_name == "telephone-extension" or field.html_name == "number" or field.html_name == "extension" %}
+        			<div class="input-prepend" data-for="{{field.id}}">
+         				<span class="add-on">
+            				{{ field.label_tag }}
+          				</span>
+          				{{field}}
+        			</div>
+        		{% else %}
+        			<div class="span3 form-label pull-left initial">{{ field.label_tag }}</div><div class="profile-form-input">{{ field  }}</div>
+        		{% endif %}
+		{% endif %}
+
+                {% if field.errors %}
+>>>>>>> 40987bf2c23b61c0b694849881ba354340cf2f27
                     </div>
                 {% else %}
                     <div class="span3 form-label pull-left initial">{{ field.label_tag }}</div><div class="profile-form-input">{{ field  }}</div>

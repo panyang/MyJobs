@@ -1,10 +1,15 @@
 {% extends "base.html" %}
-{% load i18n %}
+{% load common_tags %}
 {% load humanize %}
+{% load i18n %}
 
+{% block site-title %}
+    <title>Saved Search - My.jobs</title>
+    <meta name="title" content="Saved Search - My.jobs">
+{% endblock %}
 {% block meta-extra %}
-<script src="{{ STATIC_URL }}saved-search-main-ready.js"></script>
-<script src="{{ STATIC_URL }}saved-search-main.js"></script>
+<script src="{{ STATIC_URL }}saved-search-main-ready.js{% cache_buster %}"></script>
+<script src="{{ STATIC_URL }}saved-search-main.js{% cache_buster %}"></script>
 {% endblock %}
 
 {% block content %}

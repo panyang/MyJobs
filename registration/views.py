@@ -10,9 +10,6 @@ from registration.models import ActivationProfile
 from registration.forms import RegistrationForm
 
 # New in Django 1.5. Class based template views for static pages
-class ActivationComplete(TemplateView):
-    template_name = 'registration/activation_complete.html'
-
 class RegistrationComplete(TemplateView):
     template_name = 'registration/registration_complete.html'
 
@@ -39,7 +36,7 @@ def register(request):
 
 def resend_activation(request):
     user = request.user
-    activation = ActivationProfile.objects.get(user=user, email=user.email)
+    activation = ActivationProfile.objects.get(user=user, email__iexact=user.email)
     activation.send_activation_email()
     return render_to_response('registration/resend_activation.html',
                               context_instance=RequestContext(request))

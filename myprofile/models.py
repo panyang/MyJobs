@@ -160,15 +160,22 @@ class Name(ProfileUnits):
     def get_full_name(self):
         """
         Returns the first_name plus the last_name, with a space in between.
-        
         """
+
         full_name = '%s %s' % (self.given_name, self.family_name)
         return full_name.strip()
 
     def save(self, *args, **kwargs):
+        """
+        Custom name save method to ensure only one name object per user
+        has primary=True. We avoid a race condition by locking the transaction
+        using select_for_update.
+        """
+        
         if self.primary:
             try:
-                temp = Name.objects.get(primary=True, user=self.user)
+                temp = Name.objects.select_for_update().get(primary=True,
+                                                          user=self.user)
                 if self != temp:
                     temp.primary = False
                     temp.save()
@@ -191,6 +198,11 @@ class SecondaryEmail(ProfileUnits):
         return self.email
 
     def save(self, *args, **kwargs):
+        """
+        Custom save triggers the creation of an activation profile if the
+        email is new.
+        """
+        
         primary = kwargs.pop('old_primary', None)
         if not self.pk and primary==None:
             reg_signals.email_created.send(sender=self,user=self.user,
@@ -198,6 +210,11 @@ class SecondaryEmail(ProfileUnits):
         super(SecondaryEmail,self).save(*args,**kwargs)
             
     def send_activation(self):
+        """
+        Triggers registration signal to send activation email for this
+        SecondaryEmail instance.
+        """
+        
         reg_signals.send_activation.send(sender=self,user=self.user,
                                          email=self.email)
 
@@ -219,13 +236,21 @@ class SecondaryEmail(ProfileUnits):
             else:
                 verified=False
 
-            self.email = ''
-            self.user.email = new_primary
-            self.user.is_active = self.verified
-            self.user.save()
-            SecondaryEmail.objects.get(email=new_primary,user=self.user).delete()
-            email=SecondaryEmail(email=old_primary,verified=verified,
-                                 user=self.user)
+            user = self.user
+            user.is_active = self.verified
+
+            # secondary emails are unique along with the user who owns them
+            # To reset the user's email, the secondary email must be deleted
+            self.delete()
+
+            user.email = new_primary
+            user.save()
+
+            # Create a new secondary email with the user's old primary email,
+            # keeping its verification status
+            email=SecondaryEmail(email=old_primary,
+                                 verified=verified,
+                                 user=user)
             email.save(**{'old_primary':True})
             return True
         else:

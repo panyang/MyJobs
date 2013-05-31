@@ -1,0 +1,10 @@
+{% extends 'mysearches/email_base.html' %}
+
+{% block content %}
+    {% include 'mysearches/email_table_include.html' with saved_search=saved_searches.0 %}
+{% endblock %}
+
+{% block footer %}
+    Sent to: {{saved_searches.0.email}}  <a href="http://my.jobs{% url 'search_unsubscribe' search_id=saved_searches.0.id %}">unsubscribe</a><br>
+    Sent as Digest: No<br>
+{% endblock %}

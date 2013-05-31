@@ -479,6 +479,15 @@ em.pendingText{
 	display: block;
 	text-align: left;
 }
+/*Firefox fix for homepage alignment issues*/
+@-moz-document url-prefix(){
+    #title {
+        margin-top: -25px;
+    }
+    #titleRow .loginBox{
+        margin-top: 80px;
+    }
+}
 @media screen and (min-width: 1025px){
     #nav li:hover ul#pop-menu{ 
         display: block;
@@ -536,6 +545,15 @@ em.pendingText{
 .footer a {
     color: #FFF;
     padding: 10px;
+}
+
+input[type='checkbox'] + .help-block{
+    display:inline;
+    padding-left: 5px;
+}
+
+form input[type='checkbox']{
+    margin-top: -1px;
 }
 
 @media screen and (max-width: 1024px){
@@ -703,7 +721,7 @@ em.pendingText{
     
     /*Ajax Indicator*/
     #ajax-busy {
-        margin: 0px 0px 0px -50px; /* left margin is half width of the div, to centre it */
+        margin: 0px 0px 0px -65px; /* left margin is half width of the div, to center it */
         padding: 30px 10px 10px 10px;
         left: 25%;
         width: 300px;        
@@ -881,7 +899,10 @@ em.pendingText{
 
     #gravatar-link {
         float: right;
-        width: 50%;
+        width: 45%;
+    }
+    form input[type='checkbox']{
+        margin-top: 3px;
     }
 }
 
@@ -1072,4 +1093,3 @@ body.modal-open {
 #captcha_modal .modal-body {
     overflow: hidden !important;
 }
-

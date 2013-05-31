@@ -38,6 +38,8 @@ test("save_form", function() {
                                  'class': 'row' }));
     $('#save_test').append($('<form />',
                                { id: 'saved-search-form' }));
+    $('#saved-search-form').append($('<label />',
+                               { 'for': 'id_url' }));
     $('#saved-search-form').append($('<input />',
                                { id: 'id_url', type: 'text' }));
     $('#saved-search-form').append($('<span />',
@@ -52,15 +54,15 @@ test("save_form", function() {
         if (params.data.url == 'jobs.jobs/jobs') {
             params.success('success');
         } else {
-            params.success(['url']);
+            params.success('{"url":["This field is required."]}');
         }
     };
     function success_callback() {};
-    equal($('#saved-search-form').children().length, 4, "Form should have only"+
-                                                        " three children");
+    equal($('#saved-search-form').children().length, 5, "Form should have"+
+                                                        " five children");
     $('#new_search').trigger('click', { success_callback: success_callback });
-    equal($('#saved-search-form').children().length, 5, "Form should have an"+
-                                                        " error label added");
+    equal($('[class="label label-important"]').length, 1, "Form should have an"+
+                                                          " error label added");
 
     $('#id_url').val('jobs.jobs/jobs');
     $('#new_search').trigger('click', { success_callback: success_callback });
@@ -68,8 +70,8 @@ test("save_form", function() {
                                   " a valid form");
     equal($('#id_is_active').checked, undefined, "#id_is_active should be"+
                                                  " cleared");
-    equal($('#saved-search-form').children().length, 4, "Error label should be"+
-                                                        " removed");
+    equal($('[class="label label-important"]').length, 0, "Error label should be"+
+                                                          " removed");
 });
 test("validate", function() {
     $('#qunit-fixture').append($('<div />',

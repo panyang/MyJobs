@@ -79,8 +79,8 @@ def validate_url(request):
            # id valid, the label field is auto populated with the feed_title
            data = {'rss_url': rss_url,
                    'feed_title': feed_title,
-                   'url_status': 'valid'
-           }
+                   'url_status': 'valid'}
+
         else:
             data = {'url_status': 'not valid'}
         return HttpResponse(json.dumps(data))
@@ -104,17 +104,6 @@ def save_digest_form(request):
 
 @user_passes_test(User.objects.is_active)
 @user_passes_test(User.objects.not_disabled)
-def delete_digest_form(request):
-    if request.is_ajax():
-        try:
-            SavedSearchDigest.objects.get(user=request.user).delete()
-        except SavedSearchDigest.DoesNotExist:
-            pass
-        return HttpResponse('success')
-
-
-@user_passes_test(User.objects.is_active)
-@user_passes_test(User.objects.not_disabled)
 def save_new_search_form(request):
     if request.is_ajax():
         add_form = SavedSearchForm(user=request.user, data=request.POST)
@@ -122,7 +111,7 @@ def save_new_search_form(request):
             add_form.save()
             return HttpResponse('success')
         else:
-            return HttpResponse(json.dumps(add_form.errors.keys()))
+            return HttpResponse(json.dumps(add_form.errors))
 
 @user_passes_test(User.objects.is_active)
 @user_passes_test(User.objects.not_disabled)
@@ -152,4 +141,22 @@ def save_edit_form(request):
                 form.save()
                 return HttpResponse('success')
             else:
-                return HttpResponse(json.dumps(form.errors.keys()))
+                return HttpResponse(json.dumps(form.errors))
+
+@user_passes_test(User.objects.is_active)
+@user_passes_test(User.objects.not_disabled)
+def search_unsubscribe(request, search_id):
+    search = SavedSearch.objects.get(id=search_id)
+    if request.user == search.user:
+        search.is_active = False;
+        search.save();
+    return HttpResponseRedirect(reverse('saved_search_main'))
+
+@user_passes_test(User.objects.is_active)
+@user_passes_test(User.objects.not_disabled)
+def digest_unsubscribe(request, digest_id):
+    digest = SavedSearchDigest.objects.get(id=digest_id)
+    if request.user == digest.user:
+        digest.is_active = False;
+        digest.save();
+    return HttpResponseRedirect(reverse('saved_search_main'))

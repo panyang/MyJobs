@@ -403,3 +403,17 @@ class MyJobsViewsTests(TestCase):
         response = self.client.get("/")
         soup = BeautifulSoup(response.content)
         self.assertFalse(soup.findAll('a',{'id':'savedsearch_link'}))
+
+    def test_case_insensitive_login(self):
+        """
+        Test that emails are case-insensitive when logging in
+        """
+        for email in [self.user.email, self.user.email.upper()]:
+            response = self.client.post(reverse('home'),
+                                        data={'username': email,
+                                              'password': 'secret',
+                                              'action': 'login'})
+            self.assertEqual(response.status_code, 200)
+            self.assertEqual(response.content, 'valid')
+
+            self.client.get(reverse('auth_logout'))

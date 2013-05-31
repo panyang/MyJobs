@@ -1,13 +1,14 @@
-{% if saved_searches %}
-{% for saved_search in saved_searches %}
-<h2>{{ saved_search.label }}</h2>
-{% for item in saved_search.get_feed_items %}
-<h4><a href="{{item.link}}">{{item.title}}</a><br></h4>
-{{ item.pubdate }}<br>
-{{ item.description|truncatechars:200 }}<br><br>
-{% endfor %}
-<b><a href="http://my.jobs/saved-search/{{ saved_search.id }}">View all new jobs on my.jobs....</a></b><br>
-{% endfor %}
-{{ else }}
-There are no results for today!
-{% endif %}
+{% extends 'mysearches/email_base.html' %}
+
+{% load form_tags %}
+
+{% block content %}
+    {% for saved_search in saved_searches %}
+        {% include 'mysearches/email_table_include.html' with saved_search=saved_search %}
+    {% endfor %}
+{% endblock %}
+
+{% block footer %}
+    Sent to: {{digest.email}}  <a href="http://my.jobs{% url 'digest_unsubscribe' digest_id=digest.id %}">unsubscribe</a><br>
+    Sent as Digest: {{digest.is_active|readable_boolean}}<br>
+{% endblock %}

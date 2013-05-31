@@ -74,7 +74,7 @@ class EditAccountForm(Form):
         else:
             return self.cleaned_data
 
-    def save(self,u):
+    def save(self, u):
         first = self.cleaned_data.get("given_name", None)
         last = self.cleaned_data.get("family_name", None)
 
@@ -104,9 +104,16 @@ class EditCommunicationForm(BaseUserForm):
                                            choices=choices,
                                            initial=choices[0][0])
 
+    def save(self):
+        if self.cleaned_data['email'] != self.user.email:
+            new_email = SecondaryEmail.objects.get(
+                email__iexact=self.cleaned_data['email'])
+            new_email.set_as_primary()
+        super(EditCommunicationForm, self).save(self)
+
     class Meta:
         model = User
-        fields = ('email', 'opt_in_myjobs', 'opt_in_employers')
+        fields = ('email', 'opt_in_employers')
 
 
 class ChangePasswordForm(Form):
@@ -132,7 +139,6 @@ class ChangePasswordForm(Form):
             return self.cleaned_data['password1']
         
     def clean(self):
-        
         cleaned_data = super(ChangePasswordForm, self).clean()
         if 'password1' in self.cleaned_data and 'password2' in self.cleaned_data:
             if self.cleaned_data['password1'] != self.cleaned_data['password2']:

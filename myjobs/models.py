@@ -52,7 +52,8 @@ class CustomUserManager(BaseUserManager):
         user = self.get_email_owner(email)
         created = False
         if user is None:
-            user = self.model(email=CustomUserManager.normalize_email(email))
+            email = CustomUserManager.normalize_email(email)
+            user = self.model(email=email)
             if password:
                 auto_generated = False
             else:
@@ -123,6 +124,7 @@ class CustomUserManager(BaseUserManager):
         """
         Used by the user_passes_test decorator to set view permissions
         """
+
         if user.is_anonymous():
             return False
         else:
@@ -152,16 +154,16 @@ class User(AbstractBaseUser):
     is_disabled = models.BooleanField(_('disabled'), default=False)
 
     # Communication Settings
+
+    # opt_in_myjobs is current hidden on the top level, refer to forms.py
     opt_in_myjobs = models.BooleanField(_('My.jobs can send me emails'),
                                         default=True,
                                         help_text=_('Checking this enables my.jobs\
                                                     to send email updates to you.'))
-    opt_in_employers = models.BooleanField(_('Employers can message me'),
+
+    opt_in_employers = models.BooleanField(_('Email Preferences:'),
                                            default=True,
-                                           help_text=_("All communication is through "+\
-                                                       "my.jobs. Employers will not "+\
-                                                       "know your email address unless "+\
-                                                       "you tell it to them."))
+                                           help_text=_("Employers can message me."))
     
     last_response = models.DateField(default=datetime.datetime.now, blank=True)
 

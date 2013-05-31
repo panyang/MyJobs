@@ -48,18 +48,19 @@ class UserResourceTests(TestCase):
         self.assertEqual(content['email'], 'No email provided')
 
     def test_existing_user(self):
-        self.data['email'] = self.user.email
-        response = self.client.post(
-            '/api/v1/user/',
-            data=json.dumps(self.data),
-            content_type='application/json',
-            HTTP_ACCEPT='text/javascript',
-            HTTP_AUTHORIZATION='ApiKey %s:%s' % \
-                (self.user.email, self.user.api_key.key))
-        content = json.loads(response.content)
-        self.assertEqual(response.status_code, 201)
-        self.assertEqual(content, 
-            {'user_created':False, 'email':'alice@example.com'})
+        for email in [self.user.email, self.user.email.upper()]:
+            self.data['email'] = email
+            response = self.client.post(
+                '/api/v1/user/',
+                data=json.dumps(self.data),
+                content_type='application/json',
+                HTTP_ACCEPT='text/javascript',
+                HTTP_AUTHORIZATION='ApiKey %s:%s' % \
+                    (self.user.email, self.user.api_key.key))
+            content = json.loads(response.content)
+            self.assertEqual(response.status_code, 201)
+            self.assertFalse(content['user_created'])
+            self.assertEqual(content['email'].lower(), 'alice@example.com')
 
 class SavedSearchResourceTests(TestCase):
     def setUp(self):
@@ -75,32 +76,45 @@ class SavedSearchResourceTests(TestCase):
     def tearDown(self):
         self.r.restore()
 
-    def test_new_search_existing_user(self):
+    def make_response(self, data, *credentials):
         response = self.client.post(
             '/api/v1/savedsearch/',
-            data=json.dumps(self.data),
+            data=json.dumps(data),
             content_type='application/json',
             HTTP_ACCEPT='text/javascript',
-            HTTP_AUTHORIZATION='ApiKey %s:%s' % \
-                (self.user.email, self.user.api_key.key))
-        self.assertEqual(response.status_code, 201)
-        self.assertEqual(SavedSearch.objects.count(), 1)
-        search = SavedSearch.objects.all()[0]
-        self.assertEqual(search.user, self.user)
-        self.assertTrue('jobs.jobs' in search.notes)
-        content = json.loads(response.content)
-        self.assertEqual(len(content), 3)
+            HTTP_AUTHORIZATION='ApiKey %s' % \
+                ':'.join(credentials))
+        return response
+
+    def test_new_search_existing_user(self):
+        for data in [('alice@example.com', 'jobs.jobs/search?q=django'),
+                     ('ALICE@EXAMPLE.COM', 'jobs.jobs/search?q=python')]:
+            self.data['email'] = data[0]
+            self.data['url'] = data[1]
+            response = self.make_response(self.data,
+                                          self.user.email,
+                                          self.user.api_key.key)
+            self.assertEqual(response.status_code, 201)
+            search = SavedSearch.objects.all()[0]
+            self.assertEqual(search.user, self.user)
+            content = json.loads(response.content)
+            self.assertEqual(len(content), 3)
+            self.assertTrue(content['new_search'])
+        self.assertEqual(SavedSearch.objects.filter(user=self.user).count(), 2)
+
+        self.data['url'] = 'http://jobs.jobs/jobs'
+        response = self.make_response(self.data,
+                                      self.user.email,
+                                      self.user.api_key.key)
+
+        for search in SavedSearch.objects.all():
+            self.assertTrue('jobs.jobs' in search.notes)
 
     def test_new_search_new_user(self):
         self.data['email'] = 'new@example.com'
-        response = self.client.post(
-            '/api/v1/savedsearch/',
-            data=json.dumps(self.data),
-            HTTP_ACCEPT='text/javascript',
-            content_type='application/json',
-            HTTP_AUTHORIZATION='ApiKey %s:%s' % \
-                (self.user.email, self.user.api_key.key)
-        )
+        response = self.make_response(self.data,
+                                      self.user.email,
+                                      self.user.api_key.key)
         self.assertEqual(response.status_code, 400)
         self.assertEqual(SavedSearch.objects.count(), 0)
         self.assertEqual(User.objects.count(), 1)
@@ -113,13 +127,9 @@ class SavedSearchResourceTests(TestCase):
         SecondaryEmail.objects.create(user=self.user,
                                       email='secondary@example.com')
         self.data['email'] = 'secondary@example.com'
-        response = self.client.post(
-            '/api/v1/savedsearch/',
-            data=json.dumps(self.data),
-            HTTP_ACCEPT='text/javascript',
-            content_type='application/json',
-            HTTP_AUTHORIZATION='ApiKey %s:%s' % \
-                (self.user.email, self.user.api_key.key))
+        response = self.make_response(self.data,
+                                      self.user.email,
+                                      self.user.api_key.key)
         self.assertEqual(response.status_code, 201)
         self.assertEqual(SavedSearch.objects.count(), 1)
         self.assertEqual(User.objects.count(), 1)
@@ -131,14 +141,9 @@ class SavedSearchResourceTests(TestCase):
 
     def test_new_search_invalid_url(self):
         self.data['url'] = 'google.com'
-        response = self.client.post(
-            '/api/v1/savedsearch/',
-            data=json.dumps(self.data),
-            HTTP_ACCEPT='text/javascript',
-            content_type='application/json',
-            HTTP_AUTHORIZATION='ApiKey %s:%s' % \
-                (self.user.email, self.user.api_key.key)
-        )
+        response = self.make_response(self.data,
+                                      self.user.email,
+                                      self.user.api_key.key)
         self.assertEqual(response.status_code, 400)
         content = json.loads(response.content)
         self.assertEqual(len(content), 1)
@@ -147,14 +152,9 @@ class SavedSearchResourceTests(TestCase):
 
     def test_new_search_no_url(self):
         del self.data['url']
-        response = self.client.post(
-            '/api/v1/savedsearch/',
-            data=json.dumps(self.data),
-            HTTP_ACCEPT='text/javascript',
-            content_type='application/json',
-            HTTP_AUTHORIZATION='ApiKey %s:%s' % \
-                (self.user.email, self.user.api_key.key)
-        )
+        response = self.make_response(self.data,
+                                      self.user.email,
+                                      self.user.api_key.key)
         self.assertEqual(response.status_code, 400)
         content = json.loads(response.content)
         self.assertEqual(len(content), 1)
@@ -163,14 +163,9 @@ class SavedSearchResourceTests(TestCase):
 
     def test_no_email(self):
         del self.data['email']
-        response = self.client.post(
-            '/api/v1/savedsearch/',
-            data=json.dumps(self.data),
-            HTTP_ACCEPT='text/javascript',
-            content_type='application/json',
-            HTTP_AUTHORIZATION='ApiKey %s:%s' % \
-                (self.user.email, self.user.api_key.key)
-        )
+        response = self.make_response(self.data,
+                                      self.user.email,
+                                      self.user.api_key.key)
         self.assertEqual(response.status_code, 400)
         content = json.loads(response.content)
         self.assertEqual(len(content), 1)
@@ -180,10 +175,9 @@ class SavedSearchResourceTests(TestCase):
     def test_no_auth(self):
         response = self.client.post(
             '/api/v1/savedsearch/',
-            data = json.dumps(self.data),
+            data=json.dumps(self.data),
             HTTP_ACCEPT='text/javascript',
-            content_type='application/json'
-        )
+            content_type='application/json')
         self.assertEqual(response.status_code, 401)
         self.assertEqual(response.content, '')
         self.assertEqual(SavedSearch.objects.count(), 0)
@@ -194,43 +188,31 @@ class SavedSearchResourceTests(TestCase):
                    ('invalid_user@example.com', 'invalid_key')]
 
         for header in headers:
-            response = self.client.post(
-                '/api/v1/savedsearch/',
-                data = json.dumps(self.data),
-                HTTP_ACCEPT='text/javascript',
-                content_type='application/json',
-                HTTP_AUTHORIZATION='ApiKey %s:%s' % header
-            )
+            response = self.make_response(self.data,
+                                          *header)
             self.assertEqual(response.status_code, 401)
             self.assertEqual(response.content, '')
             self.assertEqual(SavedSearch.objects.count(), 0)
 
     def test_existing_search(self):
-        def post():
-            return self.client.post(
-                '/api/v1/savedsearch/',
-                data=json.dumps(self.data),
-                HTTP_ACCEPT='text/javascript',
-                content_type='application/json',
-                HTTP_AUTHORIZATION='ApiKey %s:%s' % \
-                    (self.user.email, self.user.api_key.key))
-        post()
-        response = post()
-        content = json.loads(response.content)
-        self.assertEqual(len(content), 3)
-        self.assertEqual(content['new_search'], False)
+        self.make_response(self.data,
+                           self.user.email,
+                           self.user.api_key.key)
+        for email in [self.user.email, self.user.email.upper()]:
+            response = self.make_response(self.data,
+                                          self.user.email,
+                                          self.user.api_key.key)
+            content = json.loads(response.content)
+            self.assertEqual(len(content), 3)
+            self.assertFalse(content['new_search'])
         self.assertEqual(SavedSearch.objects.count(), 1)
 
     def test_no_day_of(self):
         for frequency in ['W','M']:
             self.data['frequency'] = frequency
-            response = self.client.post(
-                '/api/v1/savedsearch/',
-                data = json.dumps(self.data),
-                HTTP_ACCEPT='text/javascript',
-                content_type='application/json',
-                HTTP_AUTHORIZATION='ApiKey %s:%s' % \
-                    (self.user.email, self.user.api_key.key))
+            response = self.make_response(self.data,
+                                          self.user.email,
+                                          self.user.api_key.key)
             content = json.loads(response.content)
             self.assertEqual(response.status_code, 400)
             self.assertEqual(len(content), 1)

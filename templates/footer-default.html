@@ -21,8 +21,8 @@
         <div class="span4" style="position: relative">
         <a href="{% url 'about' %}" class="direct_dotjobsFooterLink">{% blocktrans %}About{% endblocktrans %}</a>        
         <a href="http://about.jobs/contact/" class="direct_dotjobsFooterLink">{% blocktrans %}Contact{% endblocktrans %}</a>        
-        <a href="http://about.jobs/privacy-policy/" class="direct_dotjobsFooterLink">{% blocktrans %}Privacy{% endblocktrans %}</a>        
-        <a href="http://about.jobs/terms-of-use/" class="direct_dotjobsFooterLink">{% blocktrans %}Terms{% endblocktrans %}</a>
+        <a href="{% url 'privacy' %}" class="direct_dotjobsFooterLink">{% blocktrans %}Privacy{% endblocktrans %}</a>        
+        <a href="{% url 'terms' %}" class="direct_dotjobsFooterLink">{% blocktrans %}Terms{% endblocktrans %}</a>
         <p id="direct_dotjobsScamAlert" style="font-size: 10px; margin-bottom: 0px;">
         <a href="https://www.privacyrights.org/Online-Privacy-and-Technology">Privacy &amp; Security tips</a> for online job seekers.</p>
         </div>

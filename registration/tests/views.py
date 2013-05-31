@@ -31,25 +31,10 @@ class RegistrationViewTests(TestCase):
         self.old_activation = getattr(settings, 'ACCOUNT_ACTIVATION_DAYS', None)
         if self.old_activation is None:
             settings.ACCOUNT_ACTIVATION_DAYS = 7 # pragma: no cover
-
-            
-    def test_registration_view_initial(self):
-        response = self.client.get('/accounts/register/')
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response,
-                                'registration/registration_form.html')
-        self.failUnless(isinstance(response.context['form'],
-                                   forms.RegistrationForm))
-
-    def test_registration_view_success(self):
-        response = self.client.post('/accounts/register/',
-                                    data={'email': 'bob@example.com',
-                                          'password1': 'password123',
-                                          'password2': 'password123'})
-        self.assertRedirects(response,
-                             'http://testserver%s' % reverse('register_complete'))
-        self.assertEqual(ActivationProfile.objects.count(), 1)
-        self.assertEqual(len(mail.outbox), 1)
+        self.data={'email': 'alice@example.com',
+                   'password1': 'swordfish',
+                   'password2': 'swordfish',
+                   'action': 'register'}
 
     def test_valid_activation(self):
         """
@@ -58,18 +43,27 @@ class RegistrationViewTests(TestCase):
         activation window).
 
         """
-        success_redirect = 'http://testserver%s' % reverse('activate_complete')
-        
         # First, register an account.
-        self.client.post(reverse('register'),
-                         data={'email': 'alice@example.com',
-                               'password1': 'swordfish',
-                               'password2': 'swordfish'})
+        self.client.post(reverse('home'), data=self.data)
         profile = ActivationProfile.objects.get(user__email='alice@example.com')
         response = self.client.get(reverse('registration_activate',
                                            kwargs={'activation_key': profile.activation_key}))
         self.assertEqual(response.status_code, 200)
         self.failUnless(User.objects.get(email='alice@example.com').is_active)
+
+    def test_anonymous_activation(self):
+        """
+        Test that the ``activate`` view properly handles activation
+        when the user to be activated is not currently logged in.
+        """
+        # First, register an account.
+        self.client.post(reverse('home'), data=self.data)
+        self.client.post(reverse('auth_logout'))
+        profile = ActivationProfile.objects.get(user__email='alice@example.com')
+        response = self.client.get(reverse('registration_activate',
+                                           kwargs={'activation_key': profile.activation_key}))
+        self.assertEqual(response.status_code, 200)
+        self.assertContains(response, self.data['email'])
 
     def test_invalid_activation(self):
         """
@@ -80,11 +74,8 @@ class RegistrationViewTests(TestCase):
         """
         # Register an account and reset its date_joined to be outside
         # the activation window.
-        self.client.post(reverse('register'),
-                         data={'email': 'bob@example.com',
-                               'password1': 'secret',
-                               'password2': 'secret'})
-        expired_user = User.objects.get(email='bob@example.com')
+        self.client.post(reverse('home'), data=self.data)
+        expired_user = User.objects.get(email='alice@example.com')
         expired_user.date_joined = expired_user.date_joined - datetime.timedelta(days=settings.ACCOUNT_ACTIVATION_DAYS)
         expired_user.save()
 
@@ -94,7 +85,7 @@ class RegistrationViewTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertNotEqual(response.context['activated'],
                          expired_profile.activation_key_expired())
-        self.failIf(User.objects.get(email='bob@example.com').is_active)
+        self.failIf(User.objects.get(email='alice@example.com').is_active)
         
     def test_resend_activation(self):
         x, created =User.objects.create_inactive_user(**{'email':'alice@example.com',
