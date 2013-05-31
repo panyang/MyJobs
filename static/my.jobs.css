@@ -449,6 +449,15 @@ em.pendingText{
 	display: block;
 	text-align: left;
 }
+/*Firefox fix for homepage alignment issues*/
+@-moz-document url-prefix(){
+    #title {
+        margin-top: -25px;
+    }
+    #titleRow .loginBox{
+        margin-top: 80px;
+    }
+}
 @media screen and (min-width: 1025px){
     #nav li:hover ul#pop-menu{ 
         display: block;
@@ -682,7 +691,7 @@ form input[type='checkbox']{
     
     /*Ajax Indicator*/
     #ajax-busy {
-        margin: 0px 0px 0px -50px; /* left margin is half width of the div, to centre it */
+        margin: 0px 0px 0px -65px; /* left margin is half width of the div, to center it */
         padding: 30px 10px 10px 10px;
         left: 25%;
         width: 300px;        
@@ -860,7 +869,7 @@ form input[type='checkbox']{
 
     #gravatar-link {
         float: right;
-        width: 50%;
+        width: 45%;
     }
     form input[type='checkbox']{
         margin-top: 3px;

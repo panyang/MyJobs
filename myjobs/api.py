@@ -43,14 +43,15 @@ class UserResource(ModelResource):
         return bundle
 
     def obj_create(self, bundle, **kwargs):
-        if not bundle.data.get('email'):
+        email = User.objects.normalize_email(bundle.data.get('email'))
+        if not email:
             error = {'email': 'No email provided'}
             raise ImmediateHttpResponse(self.error_response(
                                             bundle.request,
                                             error,
                                             response_class=HttpBadRequest))
         try:
-            kwargs = {'email': bundle.data.get('email'),
+            kwargs = {'email': email,
                       'password1': bundle.data.get('password')}
             user, created = User.objects.create_inactive_user(**kwargs)
 
@@ -76,7 +77,7 @@ class CustomSearchValidation(Validation):
 
         errors = {}
 
-        email = bundle.data.get('email', '')
+        email = bundle.data.get('email')
         if not email:
             errors['email'] = 'No email provided'
         else:
@@ -141,12 +142,13 @@ class SavedSearchResource(ModelResource):
         raised if the URL has been used by the user already.
         """
         self.is_valid(bundle)
+        email = User.objects.normalize_email(bundle.data.get('email'))
         if bundle.errors:
             raise ImmediateHttpResponse(self.error_response(
                                             bundle.request,
                                             bundle.errors['savedsearch'],
                                             response_class=HttpBadRequest))
-        user = User.objects.get_email_owner(bundle.data.get('email'))
+        user = User.objects.get_email_owner(email)
         notes = bundle.data.get('notes', '')
         if not notes:
             # Monday, April 29, 2013 10:26 AM
@@ -164,7 +166,7 @@ class SavedSearchResource(ModelResource):
                        'label': bundle.data.get('label'),
                        'feed': bundle.data.get('feed'),
                        'user': user,
-                       'email': bundle.data.get('email'),
+                       'email': email,
                        'frequency': bundle.data.get('frequency'),
                        'day_of_week': bundle.data.get('day_of_week'),
                        'day_of_month': bundle.data.get('day_of_month'),

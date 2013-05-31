@@ -63,8 +63,10 @@ class DigestForm(BaseUserForm):
                                            initial=choices[0][0])
 
     is_active = BooleanField(label=_('Send my results in a single digest email'
-                             ' to:'), widget=CheckboxInput(
-                             attrs={'id':'id_digest_active'}))
+                                         ' to:'),
+                                     widget=CheckboxInput(
+                                         attrs={'id': 'id_digest_active'}),
+                                     required=False)
     
     class Meta:
         model = SavedSearchDigest

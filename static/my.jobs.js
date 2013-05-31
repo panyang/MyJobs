@@ -28,6 +28,10 @@ $(document).ready(function(){
             $('div.account-settings').show();
         }
     });
+    
+    $(function() {
+        $('input, textarea').placeholder();
+    });
 });
 
              

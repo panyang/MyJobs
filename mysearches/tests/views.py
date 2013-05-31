@@ -140,16 +140,3 @@ class MySearchViewTests(TestCase):
                                     HTTP_X_REQUESTED_WITH = 'XMLHttpRequest')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content, 'failure')
-
-    def test_delete_digest_form(self):
-        def delete():
-            response = self.client.post('/saved-search/delete-digest',
-                                        HTTP_X_REQUESTED_WITH =
-                                            'XMLHttpRequest')
-            self.assertEqual(response.status_code, 200)
-            self.assertEqual(response.content, 'success')
-
-        delete()
-
-        digest = SavedSearchDigestFactory(user=self.user)
-        delete()
