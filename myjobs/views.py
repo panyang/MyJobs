@@ -50,25 +50,18 @@ def home(request):
 
     """
 
+    # TODO - rename using snake case
     registrationform = RegistrationForm(auto_id=False)
     loginform = CustomAuthForm(auto_id=False)
 
-    
-    # Parameters passed into the form class. See forms.py in myprofile
-    # for more detailed docs
-    settings = {'auto_id':False, 'empty_permitted':True, 'only_show_required':True,
-                'user': request.user}
-    settings_show_all = {'auto_id':False, 'empty_permitted':True,
-                         'only_show_required':False, 'user': request.user}
-
-    # Because of the way (I think) our models are set up, specifying the fields
-    # as in the docs, i.e. `fields = ['given_name', 'family_name']`, doesn't
-    # work. I'm instantiating the forms and then popping the fields we don't
-    # want on the sign up page. Yes, this is _terribly_ hacky. 
-    name_form = InitialNameForm()
+    # Because of the way profile models are set up, specifying the fields as in
+    # the docs, i.e. `fields = ['given_name', 'family_name']`, doesn't work.
+    # I'm creating the forms and then popping the fields we don't want on the
+    # sign up page. Yes, this is _terribly_ hacky. It should be a mere 5 lines.
+    name_form = InitialNameForm(prefix="name")
     name_form.fields.pop('primary')
 
-    education_form = InitialEducationForm()
+    education_form = InitialEducationForm(prefix="edu")
     education_form.fields.pop('city_name')
     education_form.fields.pop('country_sub_division_code')
     education_form.fields.pop('country_code')
@@ -78,31 +71,20 @@ def home(request):
     education_form.fields.pop('degree_name')
     education_form.fields.pop('degree_minor')
 
-    phone_form = InitialPhoneForm()
+    phone_form = InitialPhoneForm(prefix="ph")
     phone_form.fields.pop('country_dialing')
 
-    work_form = InitialWorkForm()
+    work_form = InitialWorkForm(prefix="work")
     work_form.fields.pop('end_date')
     work_form.fields.pop('city_name')
     work_form.fields.pop('country_sub_division_code')
     work_form.fields.pop('country_code')
     work_form.fields.pop('description')
 
-    address_form = InitialAddressForm()
+    address_form = InitialAddressForm(prefix="addr")
     address_form.fields.pop('label')
     address_form.fields.pop('unit') # Unit is part of the first line of an address
     address_form.fields.pop('post_office_box') # Ditto
-
-    # debugging
-    # import ipdb
-    # ipdb.set_trace()
-
-    # name_form = instantiate_profile_forms(request,[NameForm],settings)[0]
-    # education_form = instantiate_profile_forms(request,[EducationForm],
-    #                                            settings)[0]
-    # phone_form = instantiate_profile_forms(request,[TelephoneForm],settings)[0]
-    # work_form = instantiate_profile_forms(request,[EmploymentHistoryForm],settings)[0]
-    # address_form = instantiate_profile_forms(request,[AddressForm],settings)[0]
         
     data_dict = {'registrationform':registrationform,
                  'loginform': loginform,
@@ -125,7 +107,7 @@ def home(request):
                                           cleaned_data['password1'])
                 login(request, user_cache)
                 # pass in gravatar url once user is logged in. Image generated
-                # in AJAX success
+                # on AJAX success
                 data={'gravatar_url': new_user.get_gravatar_url(size=100)}
                 return HttpResponse(json.dumps(data))
             else:
@@ -143,33 +125,44 @@ def home(request):
                                           {'form': loginform},
                                           context_instance=RequestContext(request))
         elif request.POST['action'] == "save_profile":
-            # rebuild the form object with the post parameter = True            
-            name_form = instantiate_profile_forms(request,[NameForm],
-                                                  settings,post=True)[0]
-            education_form = instantiate_profile_forms(request,[EducationForm],
-                                                  settings,post=True)[0]
-            phone_form = instantiate_profile_forms(request,[TelephoneForm],
-                                                  settings,post=True)[0]
-            work_form = instantiate_profile_forms(request,[EmploymentHistoryForm],
-                                                  settings,post=True)[0]
-            address_form = instantiate_profile_forms(request,[AddressForm],
-                                                  settings_show_all,post=True)[0]
-            #required_forms = [name_form,phone_form]
-            form_list = []
-            form_list.append(name_form)
-            form_list.append(education_form)
-            form_list.append(phone_form)
-            form_list.append(work_form)
-            form_list.append(address_form)
-            all_valid = True
-            for form in form_list:
-                if not form.is_valid():
-                    all_valid = False
+            # debugging
+            import ipdb
+            ipdb.set_trace()
 
-            if all_valid:
-                for form in form_list:
-                    if form.cleaned_data:
-                        form.save()
+            # See note about terrible hackiness above. Our models prevent us
+            # from using Django as intended; this is a temporary workaround.
+            name_form = InitialNameForm(request.POST, prefix="name")
+            name_form.fields.pop('primary')
+
+            education_form = InitialEducationForm(request.POST, prefix="edu")
+            education_form.fields.pop('city_name')
+            education_form.fields.pop('country_sub_division_code')
+            education_form.fields.pop('country_code')
+            education_form.fields.pop('start_date')
+            education_form.fields.pop('end_date')
+            education_form.fields.pop('education_score')
+            education_form.fields.pop('degree_name')
+            education_form.fields.pop('degree_minor')
+
+            phone_form = InitialPhoneForm(request.POST, prefix="ph")
+            phone_form.fields.pop('country_dialing')
+
+            work_form = InitialWorkForm(request.POST, prefix="work")
+            work_form.fields.pop('end_date')
+            work_form.fields.pop('city_name')
+            work_form.fields.pop('country_sub_division_code')
+            work_form.fields.pop('country_code')
+            work_form.fields.pop('description')
+
+            address_form = InitialAddressForm(request.POST, prefix="addr")
+            address_form.fields.pop('label')
+            address_form.fields.pop('unit') # Unit is part of the first line of an address
+            address_form.fields.pop('post_office_box') # Ditto
+
+            form_list = [name_form, education_form, phone_form, work_form, 
+                        address_form]
+
+            if False not in [form.is_valid() for form in form_list]:
                 return HttpResponse('valid')
             else:
                 return render_to_response('includes/initial-profile-form.html',

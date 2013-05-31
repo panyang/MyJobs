@@ -87,22 +87,23 @@ a:hover{
 #newAccountData li label {
     display: none;
 }
-#newAccountData li input {
+#newAccountData li input, 
+#newAccountData li select {
     width: 100%;
 }
-#newAccountData label[for="id_current_indicator"] {
+#newAccountData label[for="id_work-current_indicator"] {
     display: inline;
 }
-#newAccountData #id_area_dialing {
+#newAccountData #id_ph-area_dialing {
     float: left;
     width: 30%;
 }
-#newAccountData #id_number {
+#newAccountData #id_ph-number {
     float: right;
     width: 67%;
     clear: right;
 }
-#newAccountData #id_current_indicator {
+#newAccountData #id_work-current_indicator {
     width: 15%;
 }
 #newAccountData hr {

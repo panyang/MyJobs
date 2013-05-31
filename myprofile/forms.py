@@ -115,7 +115,8 @@ class InitialForm(ModelForm):
                 isinstance(field.widget, TimeInput):
                 field.widget.attrs.update({'placeholder': field.label})
 
-#adding forms for initial user set up using ModelForms
+# Forms for the sign up page. A model issue prevents the commented lines from
+# being used--that method would be the ideal approach, however.
 class InitialNameForm(InitialForm):
     class Meta:
         model = Name
