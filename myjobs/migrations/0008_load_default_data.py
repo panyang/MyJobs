@@ -8,15 +8,10 @@ from django.core.management import call_command
 class Migration(DataMigration):
 
     def forwards(self, orm):
-        "Write your forwards methods here."
         # Note: Remember to use orm['appname.ModelName'] rather than "from appname.models..."
         call_command("loaddata", "myjobs/migrations/auth_group.json")
-        group_key = orm['auth.Group'].objects.get(name='Job Seeker').pk
-        for user in orm['myjobs.User'].objects.iterator():
-            user.groups.add(group_key)
 
     def backwards(self, orm):
-        "Write your backwards methods here."
         db.clear_table(orm['auth.Group']._meta.db_table)
 
     models = {
