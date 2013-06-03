@@ -17,14 +17,21 @@ following context:
     The user's auto-generated password, if any
 
 {% endcomment %}
-{% blocktrans with site.name as site_name and site.domain as site_domain %}
-
+{% if primary %}
+{% blocktrans %}
 You have created an account for My Jobs, which has to
 be activated. To do this, please follow the following link:
+{% endblocktrans %}
+{% else %}
+{% blocktrans %}
+You have added a secondary email address to your My Jobs
+account, which has to be activated. To do this, please follow
+the following link:
+{% endblocktrans %}
+{% endif %}
 
 http://my.jobs/accounts/activate/{{ activation_key }}
 
-{% endblocktrans %}
 
 {% if password %}
 {% blocktrans %}

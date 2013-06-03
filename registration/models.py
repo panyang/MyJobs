@@ -99,14 +99,15 @@ class ActivationProfile(models.Model):
         self.activation_key = self.generate_key()
         self.save()
 
-    def send_activation_email(self, password=None):
+    def send_activation_email(self, primary=True, password=None):
         ctx_dict = {'activation_key': self.activation_key,
                     'expiration_days': settings.ACCOUNT_ACTIVATION_DAYS,
-                    'password': password}
+                    'password': password,
+                    'primary': primary}
         subject = render_to_string('registration/activation_email_subject.txt',
                                    ctx_dict)
         subject = ''.join(subject.splitlines())
-        
+
         message = render_to_string('registration/activation_email.txt',
                                    ctx_dict)
         send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [self.email])

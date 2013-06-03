@@ -11,7 +11,7 @@ from myprofile.models import Name, SecondaryEmail
 
 def make_choices(user):
     choices = [(user.email, user.email)]
-    for email in SecondaryEmail.objects.filter(user=user):
+    for email in SecondaryEmail.objects.filter(user=user, verified=True):
         choices.append((email.email, email.email))
     return choices
 
@@ -108,7 +108,10 @@ class EditCommunicationForm(BaseUserForm):
         if self.cleaned_data['email'] != self.user.email:
             new_email = SecondaryEmail.objects.get(
                 email__iexact=self.cleaned_data['email'])
-            new_email.set_as_primary()
+            if new_email.verified:
+                new_email.set_as_primary()
+            else:
+                self.cleaned_data['email'] = self.user.email
         super(EditCommunicationForm, self).save(self)
 
     class Meta:

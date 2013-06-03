@@ -9,18 +9,19 @@ def create_activation_profile(sender,**kwargs):
     Signalled when any email is created (whether as the primary user email or
     a secondary email)
     """
-    
+
     user = kwargs.get("user")
     email = kwargs.get("email")
-    activation = models.ActivationProfile.objects.create(user=user,email=email)
+    activation = models.ActivationProfile.objects.get_or_create(user=user,
+                                                                email=email)
 
 send_activation = Signal(providing_args=["user","email","password"])
 
 @receiver(send_activation)
 def send_activation_email(sender,**kwargs):
     """
-    Triggers an email that has the activation link  automatically when a user
-    creates an account but triggered manually for secondard email creation.
+    Triggers an email that has the activation link automatically when a user
+    creates an account or a secondary email.
     """
     
     user = kwargs.get("user")
@@ -28,7 +29,8 @@ def send_activation_email(sender,**kwargs):
     password = kwargs.get("password")
     activation = models.ActivationProfile.objects.get(user=user,
                                                       email__iexact=email)
-    activation.send_activation_email(password)
+    primary = user.email == email
+    activation.send_activation_email(primary, password)
 
 user_disabled = Signal(providing_args=["user","email"])
 

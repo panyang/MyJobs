@@ -81,9 +81,9 @@ class MyProfileTests(TestCase):
         """
 
         secondary_email = SecondaryEmailFactory(user=self.user)
-        secondary_email.send_activation()
         self.assertEqual(len(mail.outbox), 1)
         self.assertEqual(mail.outbox[0].to, [secondary_email.email])
+        self.assertTrue('secondary email' in mail.outbox[0].body)
 
     def test_verify_email(self):
         """
@@ -113,16 +113,19 @@ class MyProfileTests(TestCase):
         """
         old_primary = self.user.email
         secondary_email = SecondaryEmailFactory(user=self.user)
-        activation = ActivationProfile.objects.get(user=self.user,
-                                                   email=secondary_email.email)
-        ActivationProfile.objects.activate_user(activation.activation_key)
-        secondary_email = SecondaryEmail.objects.get(user=self.user,
-                                                     email=secondary_email.email)
         new_primary = secondary_email.email
+
+        for email in [old_primary, new_primary]:
+            # Emails must be verified to make them primary.
+            activation = ActivationProfile.objects.get_or_create(user=self.user,
+                                                                 email=email)[0]
+            ActivationProfile.objects.activate_user(activation.activation_key)
+
+        secondary_email = SecondaryEmail.objects.get(email=new_primary)
         secondary_email.set_as_primary()
 
         with self.assertRaises(SecondaryEmail.DoesNotExist):
-            SecondaryEmail.objects.get(email=secondary_email.email)
+            SecondaryEmail.objects.get(email=new_primary)
         old_email = SecondaryEmail.objects.get(email=old_primary)
         self.assertTrue(old_email.verified)
         user = User.objects.get(email=new_primary)
@@ -174,3 +177,13 @@ class MyProfileTests(TestCase):
             new_secondary_email = SecondaryEmailFactory(user=self.user)
         new_secondary_email = SecondaryEmailFactory(user=self.user,
             email='email@example.com')
+
+    def test_delete_secondary_email(self):
+        """
+        Deleting a secondary email should also delete its activation profile
+        """
+        self.assertEqual(ActivationProfile.objects.count(), 0)
+        secondary_email = SecondaryEmailFactory(user=self.user)
+        self.assertEqual(ActivationProfile.objects.count(), 1)
+        secondary_email.delete()
+        self.assertEqual(ActivationProfile.objects.count(), 0)
