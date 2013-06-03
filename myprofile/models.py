@@ -200,27 +200,18 @@ class SecondaryEmail(ProfileUnits):
 
     def save(self, *args, **kwargs):
         """
-        Custom save triggers the creation of an activation profile if the
-        email is new.
+        Custom save triggers the creation of an activation profile and the
+        sending of an activation email if the email is new.
         """
 
         primary = kwargs.pop('old_primary', None)
-        if not self.pk and primary==None:
+        if not self.pk and not self.verified and primary==None:
             reg_signals.email_created.send(sender=self,user=self.user,
                                            email=self.email)
             reg_signals.send_activation.send(sender=self, user=self.user,
                                              email=self.email)
         super(SecondaryEmail,self).save(*args,**kwargs)
             
-    def send_activation(self):
-        """
-        Triggers registration signal to send activation email for this
-        SecondaryEmail instance.
-        """
-        
-        reg_signals.send_activation.send(sender=self,user=self.user,
-                                         email=self.email)
-
     def set_as_primary(self):
         """
         Replaces the User email with this email object, saves the old primary
@@ -231,30 +222,15 @@ class SecondaryEmail(ProfileUnits):
         """
         
         if self.verified:
-            old_primary = self.user.email
-            new_primary = self.email
-
-            if self.user.is_active:
-                verified=True
-            else:
-                verified=False
-
             user = self.user
-            user.is_active = self.verified
+            user.is_active, self.verified = self.verified, user.is_active
 
-            # secondary emails are unique along with the user who owns them
-            # To reset the user's email, the secondary email must be deleted
-            self.delete()
+            self.email, user.email = user.email, self.email
 
-            user.email = new_primary
             user.save()
+            self.user = user
+            self.save(old_primary=True)
 
-            # Create a new secondary email with the user's old primary email,
-            # keeping its verification status
-            email=SecondaryEmail(email=old_primary,
-                                 verified=verified,
-                                 user=user)
-            email.save(**{'old_primary':True})
             return True
         else:
             return False
@@ -265,12 +241,13 @@ def delete_secondary_activation(sender, **kwargs):
     activation profile
 
     Inputs:
-    :sender: Model 
+    :sender: Model that sent this signal
+    :instance: instance of :sender:
     """
 
     instance = kwargs.get('instance')
-    activation = ActivationProfile.objects.get(user=instance.user,
-                                               email__iexact=instance.email)
+    activation = ActivationProfile.objects.filter(user=instance.user,
+                                                  email__iexact=instance.email)
     activation.delete()
 
 # Calls `delete_secondary_activation` after a secondary email is deleted.

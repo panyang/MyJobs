@@ -113,16 +113,19 @@ class MyProfileTests(TestCase):
         """
         old_primary = self.user.email
         secondary_email = SecondaryEmailFactory(user=self.user)
-        activation = ActivationProfile.objects.get(user=self.user,
-                                                   email=secondary_email.email)
-        ActivationProfile.objects.activate_user(activation.activation_key)
-        secondary_email = SecondaryEmail.objects.get(user=self.user,
-                                                     email=secondary_email.email)
         new_primary = secondary_email.email
+
+        for email in [old_primary, new_primary]:
+            # Emails must be verified to make them primary.
+            activation = ActivationProfile.objects.get_or_create(user=self.user,
+                                                                 email=email)[0]
+            ActivationProfile.objects.activate_user(activation.activation_key)
+
+        secondary_email = SecondaryEmail.objects.get(email=new_primary)
         secondary_email.set_as_primary()
 
         with self.assertRaises(SecondaryEmail.DoesNotExist):
-            SecondaryEmail.objects.get(email=secondary_email.email)
+            SecondaryEmail.objects.get(email=new_primary)
         old_email = SecondaryEmail.objects.get(email=old_primary)
         self.assertTrue(old_email.verified)
         user = User.objects.get(email=new_primary)
