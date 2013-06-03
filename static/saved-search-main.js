@@ -125,6 +125,9 @@ $(function() {
                             if (that.find('[id$="feed"]').val() != json.rss_url) {
                                 that.find('[id$="feed"]').val(json.rss_url);
                             }
+                        
+                        marginTop = (($('#new_modal').height())/2) *-1 + "px";
+                        $('#new_modal').css({'margin-top': marginTop});
                         }
                         else {
                             validation_status(json.url_status, that);
