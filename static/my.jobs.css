@@ -449,6 +449,9 @@ em.pendingText{
 	display: block;
 	text-align: left;
 }
+#ui-datepicker-div {
+    position: relative;
+}
 /*Firefox fix for homepage alignment issues*/
 @-moz-document url-prefix(){
     #title {
