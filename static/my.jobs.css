@@ -451,6 +451,7 @@ em.pendingText{
 }
 #ui-datepicker-div {
     position: relative;
+    z-index: 9999 !important;
 }
 /*Firefox fix for homepage alignment issues*/
 @-moz-document url-prefix(){
