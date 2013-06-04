@@ -104,7 +104,7 @@ class AddressForm(BaseUserForm):
         model = Address
         widgets = generate_custom_widgets(model)
 
-class InitialForm(ModelForm):
+class InitialForm(BaseUserForm):
     def __init__(self, *args, **kwargs):
         super(InitialForm, self).__init__(*args, **kwargs)
         for key, field in self.fields.items():

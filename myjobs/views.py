@@ -125,10 +125,10 @@ def home(request):
         elif request.POST['action'] == "save_profile":
             # See note about terrible hackiness above. Our models prevent us
             # from using Django as intended; this is a temporary workaround.
-            name_form = InitialNameForm(request.POST, prefix="name")
+            name_form = InitialNameForm(request.POST, prefix="name", user=request.user)
             name_form.fields.pop('primary')
 
-            education_form = InitialEducationForm(request.POST, prefix="edu")
+            education_form = InitialEducationForm(request.POST, prefix="edu", user=request.user)
             education_form.fields.pop('city_name')
             education_form.fields.pop('country_sub_division_code')
             education_form.fields.pop('country_code')
@@ -138,25 +138,30 @@ def home(request):
             education_form.fields.pop('degree_name')
             education_form.fields.pop('degree_minor')
 
-            phone_form = InitialPhoneForm(request.POST, prefix="ph")
+            phone_form = InitialPhoneForm(request.POST, prefix="ph", user=request.user)
             phone_form.fields.pop('country_dialing')
 
-            work_form = InitialWorkForm(request.POST, prefix="work")
+            work_form = InitialWorkForm(request.POST, prefix="work", user=request.user)
             work_form.fields.pop('end_date')
             work_form.fields.pop('city_name')
             work_form.fields.pop('country_sub_division_code')
             work_form.fields.pop('country_code')
             work_form.fields.pop('description')
 
-            address_form = InitialAddressForm(request.POST, prefix="addr")
+            address_form = InitialAddressForm(request.POST, prefix="addr", user=request.user)
             address_form.fields.pop('label')
             address_form.fields.pop('unit') # Unit is part of the first line of an address
             address_form.fields.pop('post_office_box') # Ditto
 
-            form_list = [name_form, education_form, phone_form, work_form, 
-                        address_form]
+            forms = [name_form, education_form, phone_form, work_form, 
+                    address_form]
+            valid_forms = [form for form in forms if form.is_valid()]
 
-            if False not in [form.is_valid() for form in form_list]:
+            if valid_forms:
+                for form in valid_forms:
+                    form.save(commit=False)
+                    form.user = request.user
+                    form.save_m2m()
                 return HttpResponse('valid')
             else:
                 return render_to_response('includes/initial-profile-form.html',
