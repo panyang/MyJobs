@@ -263,7 +263,6 @@ function add_valid_label(that) {
     that.find('[id$="url"]').after('<div id="label_validated" class="form-label pull-left">&nbsp;</div>');
     that.find('[id$="label_validated"]').after('<div id="validated">&nbsp;</div>');
     that.find('[id$="url"]').after('<div class="clear"></div>');
-    that.find('[id$="day_of_month"]');
 }
 
 function disable_fields(that) {
