@@ -107,6 +107,7 @@ class RegistrationViewTests(TestCase):
         self.assertEqual(len(mail.outbox), 2)
 
         SecondaryEmail.objects.create(user=user, email='test@example.com')
+        self.assertEqual(len(mail.outbox), 3)
         self.assertEqual(ActivationProfile.objects.count(), 2)
         self.client.get('/accounts/register/resend/')
-        self.assertEqual(len(mail.outbox), 3)
+        self.assertEqual(len(mail.outbox), 4)
