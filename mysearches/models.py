@@ -25,6 +25,7 @@ class SavedSearch(models.Model):
                    ('7', _('Sunday')))
 
     user = models.ForeignKey('myjobs.User',editable=False)
+    created_on = models.DateTimeField(auto_add_now=True)
     url = models.URLField(max_length=300,
                           verbose_name=_("URL of Search Results:"))
     label = models.CharField(max_length=60, verbose_name=_("Search Name:"))
