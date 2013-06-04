@@ -52,37 +52,11 @@ def home(request):
     registrationform = RegistrationForm(auto_id=False)
     loginform = CustomAuthForm(auto_id=False)
 
-    # Because of the way profile models are set up, specifying the fields as in
-    # the docs, i.e. `fields = ['given_name', 'family_name']`, doesn't work.
-    # I'm creating the forms and then popping the fields we don't want on the
-    # sign up page. Yes, this is _terribly_ hacky. It should be a mere 5 lines.
     name_form = InitialNameForm(prefix="name")
-    name_form.fields.pop('primary')
-
     education_form = InitialEducationForm(prefix="edu")
-    education_form.fields.pop('city_name')
-    education_form.fields.pop('country_sub_division_code')
-    education_form.fields.pop('country_code')
-    education_form.fields.pop('start_date')
-    education_form.fields.pop('end_date')
-    education_form.fields.pop('education_score')
-    education_form.fields.pop('degree_name')
-    education_form.fields.pop('degree_minor')
-
     phone_form = InitialPhoneForm(prefix="ph")
-    phone_form.fields.pop('country_dialing')
-
     work_form = InitialWorkForm(prefix="work")
-    work_form.fields.pop('end_date')
-    work_form.fields.pop('city_name')
-    work_form.fields.pop('country_sub_division_code')
-    work_form.fields.pop('country_code')
-    work_form.fields.pop('description')
-
     address_form = InitialAddressForm(prefix="addr")
-    address_form.fields.pop('label')
-    address_form.fields.pop('unit') # Unit is part of the first line of an address
-    address_form.fields.pop('post_office_box') # Ditto
         
     data_dict = {'registrationform':registrationform,
                  'loginform': loginform,
@@ -123,35 +97,11 @@ def home(request):
                                           {'form': loginform},
                                           context_instance=RequestContext(request))
         elif request.POST['action'] == "save_profile":
-            # See note about terrible hackiness above. Our models prevent us
-            # from using Django as intended; this is a temporary workaround.
             name_form = InitialNameForm(request.POST, prefix="name", user=request.user)
-            name_form.fields.pop('primary')
-
             education_form = InitialEducationForm(request.POST, prefix="edu", user=request.user)
-            education_form.fields.pop('city_name')
-            education_form.fields.pop('country_sub_division_code')
-            education_form.fields.pop('country_code')
-            education_form.fields.pop('start_date')
-            education_form.fields.pop('end_date')
-            education_form.fields.pop('education_score')
-            education_form.fields.pop('degree_name')
-            education_form.fields.pop('degree_minor')
-
             phone_form = InitialPhoneForm(request.POST, prefix="ph", user=request.user)
-            phone_form.fields.pop('country_dialing')
-
             work_form = InitialWorkForm(request.POST, prefix="work", user=request.user)
-            work_form.fields.pop('end_date')
-            work_form.fields.pop('city_name')
-            work_form.fields.pop('country_sub_division_code')
-            work_form.fields.pop('country_code')
-            work_form.fields.pop('description')
-
             address_form = InitialAddressForm(request.POST, prefix="addr", user=request.user)
-            address_form.fields.pop('label')
-            address_form.fields.pop('unit') # Unit is part of the first line of an address
-            address_form.fields.pop('post_office_box') # Ditto
 
             forms = [name_form, education_form, phone_form, work_form, 
                     address_form]
