@@ -125,6 +125,9 @@ $(function() {
                             if (that.find('[id$="feed"]').val() != json.rss_url) {
                                 that.find('[id$="feed"]').val(json.rss_url);
                             }
+                        
+                        marginTop = (($('#new_modal').height())/2) *-1 + "px";
+                        $('#new_modal').css({'margin-top': marginTop});
                         }
                         else {
                             validation_status(json.url_status, that);
@@ -257,10 +260,9 @@ function date_select(that) {
 }
 
 function add_valid_label(that) {
-    that.find('[id$="url"]').after('<div id="label_validated" class="form-label pull-left">&nbsp;</div>');
+    that.find('[id$="url"]').after('<div id="label_validated" class="span3 form-label pull-left id_label"><div class="form-label pull-left">&nbsp;</div>');
     that.find('[id$="label_validated"]').after('<div id="validated">&nbsp;</div>');
     that.find('[id$="url"]').after('<div class="clear"></div>');
-    that.find('[id$="day_of_month"]').next('.clear').remove();
 }
 
 function disable_fields(that) {

@@ -331,6 +331,7 @@ function manageModuleDisplay(module) {
 
 function datepicker() {
     $(function() {
-        $( "input[id$='date']" ).datepicker({dateFormat: "yy-mm-dd"});
+        $( "input[id$='date']" ).datepicker({dateFormat: "mm/dd/yy",
+                                             constrainInput: false});
     });
 };

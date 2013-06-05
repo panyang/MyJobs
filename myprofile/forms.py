@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.forms import *
 from django.utils.translation import ugettext_lazy as _
 from myjobs.forms import BaseUserForm
@@ -63,6 +64,10 @@ class SecondaryEmailForm(BaseUserForm):
             
 
 class EducationForm(BaseUserForm):
+    def __init__(self, *args, **kwargs):
+        super(EducationForm, self).__init__(*args, **kwargs)
+        self.fields['degree_date'].input_formats = settings.DATE_INPUT_FORMATS  
+
     class Meta:
         form_name = _("Education")
         model = Education
@@ -70,6 +75,11 @@ class EducationForm(BaseUserForm):
         
 
 class EmploymentHistoryForm(BaseUserForm):
+    def __init__(self, *args, **kwargs):
+        super(EmploymentHistoryForm, self).__init__(*args, **kwargs)
+        self.fields['start_date'].input_formats = settings.DATE_INPUT_FORMATS  
+        self.fields['end_date'].input_formats = settings.DATE_INPUT_FORMATS  
+
     class Meta:
         form_name = _("Most Recent Work History")
         model = EmploymentHistory
