@@ -1,9 +1,19 @@
 $(function() {
-    // Ajax processing indicator
     $(this).ajaxStart(function () {
+        // Disable errant clicks when an ajax request is active
+        // Does not prevent the user from closing the modal
+        $('button').attr('disabled', 'disabled');
+        $('[id$="modal"] a').attr('disabled', 'disabled');
+
+        // Show ajax processing indicator
         $("#ajax-busy").show();
     });
     $(this).ajaxStop(function () {
+        // Allow button clicks when ajax request ends
+        $('button').removeAttr('disabled');
+        $('[id$="modal"] a').removeAttr('disabled');
+
+        // Hide ajax processing indicator
         $("#ajax-busy").hide();
         $(this).dialog("close");
     });
@@ -186,7 +196,7 @@ $(function() {
                         }
                     }
                 }
-            });            
+            });
         },
 
         /*
@@ -196,6 +206,7 @@ $(function() {
         */
         deleteItem: function(e) {
             e.preventDefault();
+
             csrf_token_tag = document.getElementsByName('csrfmiddlewaretoken')[0];
             var csrf_token = "";
             if(typeof(csrf_token_tag)!='undefined'){
@@ -226,6 +237,7 @@ $(function() {
         and formats them in a select menu.
         */
         getSelect: function() {
+
             var country = $('[id$="-country_code"]').val();
             var elem = $('[id$="-country_sub_division_code"]');
             var id = elem.attr('id');
@@ -331,7 +343,7 @@ function manageModuleDisplay(module) {
 
 function datepicker() {
     $(function() {
-        $( "input[id$='date']" ).datepicker({dateFormat: "mm/dd/yy",
+        $( "input[id$='date']" ).datepicker({dateFormat: "yy-mm-dd",
                                              constrainInput: false});
     });
 };
