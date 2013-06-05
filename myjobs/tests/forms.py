@@ -13,14 +13,14 @@ class AccountFormTests(TestCase):
         
     def test_password_form(self):
         invalid_data = [
-            { 'data': {'password1': 'cats',
-                       'password2': 'dogs',
-                       'new_password': 'newpassword'},
-              'error': ('password1', [u"Wrong password."])},
-            { 'data': {'password1': 'secret',
-                       'password2': 'dogs',
-                       'new_password': 'newpassword'},
-              'error': ('__all__', [u"The two password fields didn't match."])}]
+            { 'data': {'password': 'cats',
+                       'new_password1': 'newpassword',
+                       'new_password2': 'newpassword'},
+              'error': ('password', [u"Wrong password."])},
+            { 'data': {'password': 'secret',
+                       'new_password1': 'newpassword',
+                       'new_password2': 'notnewpassword'},
+              'error': ('__all__', [u"The two new password fields did not match."])}]
 
         for item in invalid_data:
             form = ChangePasswordForm(user=self.user, data=item['data'])
@@ -28,9 +28,9 @@ class AccountFormTests(TestCase):
             self.assertEqual(form.errors[item['error'][0]],
                              item['error'][1])
 
-        form = ChangePasswordForm(user=self.user,data={'password1': 'secret',
-                                                       'password2': 'secret',
-                                                       'new_password': 'anothersecret'})
+        form = ChangePasswordForm(user=self.user,data={'password': 'secret',
+                                                       'new_password1': 'anothersecret',
+                                                       'new_password2': 'anothersecret'})
         
         self.failUnless(form.is_valid())
         form.save()
