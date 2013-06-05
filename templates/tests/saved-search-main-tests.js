@@ -12,25 +12,23 @@ module("saved-search-main.js AJAX Tests", { setup: function() {
     disable_fields = disable;
 }});
 test("get_edit", function() {
-    $('#qunit-fixture').append($('<div />',
-                                 { id: 'container',
-                                   'class': 'row' }));
-    $('#container').append($('<div />', { id: 'edit_modal' }));
-    $('#container').append($('<a />',
-                               { 'class': 'edit',
-                                 href: '1' }));
+    var fixture = $('#qunit-fixture');
+    fixture.append($('<div />', {id: 'edit_modal'}));
+    fixture.append($('<a />', {'class': 'edit', href: '1'}));
+
     $.ajax = function(params) {
         if (params.url == 'edit' && params.data.csrfmiddlewaretoken == 'foo') {
             params.success('query successful');
         }
     };
+
     disable_fields = function(param1, param2) {
     };
     $('.edit').trigger('click');
-    $('#edit_modal').modal('hide');
     equal($('#edit_modal').html(), 'query successful', "AJAX response should"+
                                                        " be appended to #edit"+
                                                        "_modal");
+    $('#edit_modal').modal('hide');
 });
 test("save_form", function() {
     $('#qunit-fixture').append($('<div />',
