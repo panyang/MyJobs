@@ -92,9 +92,9 @@ class MyJobsViewsTests(TestCase):
         
     def test_change_password_success(self):
         resp = self.client.post(reverse('edit_password'),
-                                    data={'password1': 'secret',
-                                          'password2': 'secret',
-                                          'new_password': 'new'}, follow=True)
+                                    data={'password': 'secret',
+                                          'new_password1': 'new',
+                                          'new_password2': 'new'}, follow=True)
         user = User.objects.get(id=self.user.id)
         self.assertEqual(resp.status_code, 200)
         self.assertEqual(resp.content, 'success')
@@ -102,12 +102,12 @@ class MyJobsViewsTests(TestCase):
 
     def test_change_password_failure(self):
         resp = self.client.post(reverse('edit_password'),
-                                    data={'password1': 'secret',
-                                          'password2': 'secretzzzz',
-                                          'new_password': 'new'}, follow=True)
+                                    data={'password': 'secret',
+                                          'new_password1': 'new',
+                                          'new_password2': 'notNew'}, follow=True)
         self.failIf(resp.context['form'].is_valid())
         self.assertFormError(resp, 'form', field=None,
-                             errors=u"The two password fields didn't match.")
+                             errors=u"The two new password fields did not match.")
 
     def test_partial_successful_profile_form(self):
         resp = self.client.post(reverse('home'),
@@ -383,9 +383,9 @@ class MyJobsViewsTests(TestCase):
         self.assertEqual(response.status_code, 200)
 
         response = self.client.post(reverse('edit_password'),
-                                    data={'password1':'secret',
-                                          'password2':'secret',
-                                          'new_password':'secret2'})
+                                    data={'password':'secret',
+                                          'new_password1':'secret2',
+                                          'new_password2':'secret2'})
 
         # When models are updated, instances still reference old data
         self.user = User.objects.get(email=self.user.email)

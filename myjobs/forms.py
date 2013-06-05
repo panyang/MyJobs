@@ -120,35 +120,32 @@ class EditCommunicationForm(BaseUserForm):
 
 
 class ChangePasswordForm(Form):
-    password1 = CharField(label=_("Password"),
-                                widget=PasswordInput(attrs={'placeholder':
-                                                           _('Password')}))
-    password2 = CharField(label=_("Password (again)"),
-                                widget=PasswordInput(attrs={'placeholder':
-                                                           _('Password (again)')}))
-    new_password = CharField(label=_("New Password"),
-                                   widget=PasswordInput(attrs={'placeholder':
-                                                           _('New Password')}))
+    password = CharField(label=_("Password"),
+                                widget=PasswordInput(attrs={'placeholder':_('Password')}))
+    new_password1 = CharField(label=_("New Password"),
+                                widget=PasswordInput(attrs={'placeholder':_('New Password')}))
+    new_password2 = CharField(label=_("New Password (again)"),
+                                   widget=PasswordInput(attrs={'placeholder':_('New Password (again)')}))
     
     def __init__(self,*args, **kwargs):
         self.user = kwargs.pop('user',None)
         super(ChangePasswordForm, self).__init__(*args, **kwargs)
 
-    def clean_password1(self):
-        password = self.cleaned_data['password1']
+    def clean_password(self):
+        password = self.cleaned_data['password']
         if not self.user.check_password(password):
             raise ValidationError(("Wrong password."))
         else:
-            return self.cleaned_data['password1']
+            return self.cleaned_data['password']
         
     def clean(self):
         cleaned_data = super(ChangePasswordForm, self).clean()
-        if 'password1' in self.cleaned_data and 'password2' in self.cleaned_data:
-            if self.cleaned_data['password1'] != self.cleaned_data['password2']:
-                raise forms.ValidationError(_("The two password fields didn't match."))
+        if 'new_password1' in self.cleaned_data and 'new_password2' in self.cleaned_data:
+            if self.cleaned_data['new_password1'] != self.cleaned_data['new_password2']:
+                raise forms.ValidationError(_("The two new password fields did not match."))
             else:
                 return self.cleaned_data
 
     def save(self):
-        self.user.set_password(self.cleaned_data["new_password"])
+        self.user.set_password(self.cleaned_data["new_password1"])
         self.user.save()    
