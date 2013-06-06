@@ -44,7 +44,6 @@ class RegistrationManager(models.Manager):
                 signals.activated.send(sender=self,user=user,
                                        email=profile.email)
                 profile.activation_key = self.model.ACTIVATED
-                profile.sent = datetime_now()
                 profile.save()
                 return user
         return False
@@ -97,6 +96,7 @@ class ActivationProfile(models.Model):
         Used to reset activation key when user is disabled.
         """
         self.activation_key = self.generate_key()
+        self.sent = datetime_now()
         self.save()
 
     def send_activation_email(self, primary=True, password=None):
