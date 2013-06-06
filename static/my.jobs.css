@@ -780,7 +780,8 @@ form input[type='checkbox']{
     }
     #saved-search-form label[for=id_url],
     #saved-search-form label[for=id_edit_url] {
-        padding-left: 1%;
+        padding-left: 3%;
+        margin-left:-10px;
         background-color: #ccc;
         border: 1px solid #bbb;
     }
