@@ -143,19 +143,6 @@ def delete_item(request):
 
 
 @user_passes_test(User.objects.not_disabled)
-def add_section(request):
-    module = request.GET.get('module')
-    module_config = {}
-    verbose = re.sub("([a-z])([A-Z])", "\g<1> \g<2>", module)
-    module_config['verbose'] = verbose
-    module_config['name'] = module
-    module_config['items'] = None
-
-    data_dict = {'module': module_config}
-    return render_to_response('myprofile/profile_section.html',
-                              data_dict, RequestContext(request))
-
-@user_passes_test(User.objects.not_disabled)
 def get_details(request):
     module = request.GET.get('module')
     module_config = {}
