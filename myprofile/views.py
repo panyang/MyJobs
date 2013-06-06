@@ -9,7 +9,6 @@ from django.core.urlresolvers import reverse
 from django.forms.models import model_to_dict
 from django.http import HttpResponseRedirect, HttpResponse
 from django.template import RequestContext
-from django.template.defaultfilters import title
 from django.shortcuts import render_to_response, get_object_or_404
 from django.views.generic import TemplateView
 
@@ -48,7 +47,7 @@ def edit_profile(request):
         module_config = {}
         module_units = units.filter(content_type__name=verbose)
 
-        module_config['verbose'] = title(verbose)
+        module_config['verbose'] = verbose.title()
         module_config['name'] = module
         for unit in module_units:
             if hasattr(unit, module.lower()):
@@ -88,7 +87,7 @@ def handle_form(request):
     # This assumes that form names follow the convention 'moduleForm'
     form = globals()[module_type + 'Form']
     data_dict = {'module': module_type,'first_instance':first_instance}
-    verbose = title(model._meta.verbose_name)
+    verbose = model._meta.verbose_name.title()
 
     if request.method == "POST":
         data_dict['name'] = module_type
