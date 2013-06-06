@@ -40,11 +40,14 @@ def edit_profile(request):
     profile_config = []
     
     for module in module_list:
+        model = globals()[module]
+        verbose = model._meta.verbose_name
+
         x= []
         module_config = {}
-        verbose = re.sub("([a-z])([A-Z])","\g<1> \g<2>",module)
-        module_units = units.filter(content_type__name=verbose.lower())
-        module_config['verbose'] = verbose
+        module_units = units.filter(content_type__name=verbose)
+
+        module_config['verbose'] = verbose.title()
         module_config['name'] = module
         for unit in module_units:
             if hasattr(unit, module.lower()):
@@ -84,24 +87,34 @@ def handle_form(request):
     # This assumes that form names follow the convention 'moduleForm'
     form = globals()[module_type + 'Form']
     data_dict = {'module': module_type,'first_instance':first_instance}
+    verbose = model._meta.verbose_name.title()
 
     if request.method == "POST":
+        data_dict['name'] = module_type
         if item_id == 'new':
             form_instance = form(user=request.user, data=request.POST,
                                  auto_id=False)
+            if first_instance:
+                template = 'myprofile/profile_section.html'
+                data_dict['verbose'] = verbose
+            else:
+                template = 'myprofile/profile_item.html'
         else:
             obj = model.objects.get(id=item_id)
             form_instance = form(instance=obj, user=request.user, data=request.POST,
                                  auto_id=False)
+            template = 'myprofile/profile_item.html'
 
         if form_instance.is_valid():
-            item = form_instance.save()
-            data_dict['item'] = form_instance.instance
-            return render_to_response('myprofile/profile_item.html', data_dict,
+            form_instance.save()
+            if first_instance:
+                data_dict['items'] = [form_instance.instance]
+                data_dict = {'module': data_dict}
+            else:
+                data_dict['item'] = form_instance.instance
+            return render_to_response(template, data_dict,
                                       RequestContext(request))
         else:
-            data_dict['item_id'] = item_id
-            data_dict['form'] = form_instance
             return HttpResponse(json.dumps({'errors': form_instance.errors.items()}))
     else:
         if not item_id or item_id == 'new':
@@ -112,7 +125,6 @@ def handle_form(request):
             form_instance = form(instance=obj, auto_id=False)
             data_dict['item_id'] = item_id
 
-        verbose = re.sub("([a-z])([A-Z])","\g<1> \g<2>",module_type)
         data_dict['verbose'] = verbose
         data_dict['form'] = form_instance
         return render_to_response('myprofile/profile_form.html', 
@@ -128,19 +140,6 @@ def delete_item(request):
     obj.delete()
     return HttpResponse('Deleted!')
 
-
-@user_passes_test(User.objects.not_disabled)
-def add_section(request):
-    module = request.GET.get('module')
-    module_config = {}
-    verbose = re.sub("([a-z])([A-Z])", "\g<1> \g<2>", module)
-    module_config['verbose'] = verbose
-    module_config['name'] = module
-    module_config['items'] = None
-
-    data_dict = {'module': module_config}
-    return render_to_response('myprofile/profile_section.html',
-                              data_dict, RequestContext(request))
 
 @user_passes_test(User.objects.not_disabled)
 def get_details(request):

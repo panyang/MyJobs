@@ -1,19 +1,33 @@
 $(function() {
-    // Ajax processing indicator
     $(this).ajaxStart(function () {
-        $("#ajax-busy").show();   
+        // Disable errant clicks when an ajax request is active
+        // Does not prevent the user from closing the modal
+        $('button').attr('disabled', 'disabled');
+        $('[id$="modal"] a').attr('disabled', 'disabled');
+
+        // Show ajax processing indicator
+        $("#ajax-busy").show();
     });
     $(this).ajaxStop(function () {
+        // Allow button clicks when ajax request ends
+        $('button').removeAttr('disabled');
+        $('[id$="modal"] a').removeAttr('disabled');
+
+        // Hide ajax processing indicator
         $("#ajax-busy").hide();
-        $(this).dialog("close"); 
-    });    
+        $(this).dialog("close");
+    });
+
+    if ($('#moduleBank').find('tr:visible').length == 0) {
+        $('#moduleBank').hide();
+    }
         
     var AppView = Backbone.View.extend({
         el: $("body"),
 
         events: {
             // targets event fired when buttons within #moduleBank are clicked
-            "click [id$='section']": "addSection",
+            "click [id$='section']": "editForm",
 
             // targets event fired when "Add Another" buttons in each module
             // section are clicked
@@ -22,9 +36,8 @@ $(function() {
             // targets "Edit" buttons for individual modules
             "click [id$='edit']": "editForm",
 
-            // targets event fired when "Cancel" or "x" buttons within modals
-            // are clicked
-            "click [id$='cancel']": "cancelForm",
+            // targets event fired when a modal is hidden
+            "hidden [id$='modal']": "cancelForm",
 
             // targets "Save" button  in the modal window
             "click [id$='save']": "saveForm",
@@ -43,50 +56,25 @@ $(function() {
         },
 
         /*
-        Opens an empty module section (Name, Secondary Email, etc),
-        allowing the user to add new modules to it
-
-        :e: button contained within #moduleBank
-        */
-        addSection: function(e) {
-            e.preventDefault();
-
-            // id is formatted [module_type]-[item_id]
-            var module = $(e.target).attr('id').split('-')[0];
-            $.ajax({
-                url: '/profile/section/',
-                data: {'module': module},
-                success: function(data) {
-                    $(e.target).parents('tr').remove();
-                    if ($('#moduleBank').find('tr').length == 0) {
-                        $('#moduleBank').hide();
-                    }
-                    $('#moduleColumn').append(data);
-                    module_elem = $('#'+module+'_items');
-                    module_elem.find('[id$="add"]').click();
-                }
-            });
-        },
-
-        /*
         Returns document to the state it was in prior to opening the most 
-        recent modal. Called on "Cancel" button click or closure of the
-        modal window
+        recent modal. Called when a modal is hidden
 
-        :e: cancel buttons within modal window
+        :e: modal window
         */
         cancelForm: function(e) {
             e.preventDefault();
 
-            // e.target may be either the cancel button or the x button;
-            // We need the cancel button
-            var parent_ = $(e.target).parents('[id$="modal"]')
-            var target = parent_.find('a[id$="cancel"]');
+            var target = $(e.target).find('a[id$="cancel"]');
 
-            // id is formatted [module_type]-[item_id]-[event]
-            var module = target.attr('id').split('-')[0];
-            var item_id = target.attr('id').split('-')[1];
-
+            // this file may be included in a location whose structure does not
+            // support this event. If it does not, return immediately.
+            try {
+                // id is formatted [module_type]-[item_id]-[event]
+                var module = target.attr('id').split('-')[0];
+                var item_id = target.attr('id').split('-')[1];
+            } catch(e) {
+                return;
+            }
             if (!$('[id$="modal"]:visible').length) {
                 // All modals are hidden; Remove them
                 $('[id$="modal"]').remove();
@@ -109,10 +97,15 @@ $(function() {
             var module = $(e.target).attr('id').split("-")[0];
             var id = $(e.target).attr('id').split("-")[1];
             var item;
-            if (id != 'new') {
+            if (id == 'new') {
+                $(e.target).parents('.profile-section').hide();
+                if ($('#moduleBank').find('tr:visible').length == 0) {
+                    $('#moduleBank').hide();
+                }
+            } else {
                 // targets the table row containing the item to be edited
                 item = $('#'+module+'-'+id+'-item');
-            }
+            } 
 
             if ($('#edit_modal').length == 0) {
                 $.ajax({
@@ -121,7 +114,7 @@ $(function() {
                     success: function(data) {
                         $('#moduleColumn').append(data);
 
-                        $('#edit_modal').modal({'backdrop':'static','keyboard':false});
+                        $('#edit_modal').modal();
                         datepicker();
 
                         $('[id$="-country_sub_division_code"]').hide();
@@ -130,7 +123,7 @@ $(function() {
                     }
                 });            
             } else {
-                $('#edit_modal').modal({'backdrop':'static','keyboard':false});
+                $('#edit_modal').modal();
             }
         },
 
@@ -172,21 +165,23 @@ $(function() {
                 data: serialized_data,
                 success: function(data) {
                     if (data.indexOf('<td') >= 0) {
-                        // form was valid; data should be appended to the table
-
-                        $('#'+module+'-'+item_id+'-item').remove();
-                        if (first_instance) {
-                            $('#'+module+'_items').children('h4').after(
-                                '<table class="table table-bordered table-striped"></table>'
-                            );
-                            table = $('#'+module+'_items').children('table');
-                            table.append(data);
+                        // form was valid
+                        if ($('#'+module+'_items').length < 1) {
+                            $('#moduleColumn').append(data);
+                        } else {
+                            $('#'+module+'-'+item_id+'-item').remove();
+                            if (first_instance) {
+                                $('#'+module+'_items').children('h4').after(
+                                    '<table class="table table-bordered table-striped"></table>'
+                                );
+                                table = $('#'+module+'_items').children('table');
+                                table.append(data);
+                            }
+                            else {
+                                table.children("tbody").append(data);
+                            }
                         }
-                        else {
-                            table.children("tbody").append(data);
-                        }
-                        $('[id$="modal"]').modal('hide').remove();
-                        $('#'+module+'_items').show();
+                        $('[id$="modal"]').modal('hide');
                     } else {
                         // form was a json-encoded list of errors and error messages
                         var json = jQuery.parseJSON(data);
@@ -201,7 +196,7 @@ $(function() {
                         }
                     }
                 }
-            });            
+            });
         },
 
         /*
@@ -211,6 +206,7 @@ $(function() {
         */
         deleteItem: function(e) {
             e.preventDefault();
+
             csrf_token_tag = document.getElementsByName('csrfmiddlewaretoken')[0];
             var csrf_token = "";
             if(typeof(csrf_token_tag)!='undefined'){
@@ -241,6 +237,7 @@ $(function() {
         and formats them in a select menu.
         */
         getSelect: function() {
+
             var country = $('[id$="-country_code"]').val();
             var elem = $('[id$="-country_sub_division_code"]');
             var id = elem.attr('id');
@@ -310,7 +307,7 @@ $(function() {
                 success: function(data) {
                     $(e.target).parents('table').after(data);
                     var target = $('#detail_modal');
-                    target.modal({'backdrop':'static','keyboard':false});
+                    target.modal();
                 }
             });
         },
@@ -323,7 +320,7 @@ $(function() {
         */
         confirmDelete: function(e) {
             e.preventDefault();
-            $('#confirm_modal').modal({'backdrop':'static','keyboard':false});
+            $('#confirm_modal').modal();
         },
     });
 
@@ -335,22 +332,18 @@ function manageModuleDisplay(module) {
     if (target.find('table tr').length <= 1) {
         // The last item in a module section was deleted or the add operation was canceled
 
-        var verbose_name = $('#'+module+'-verbose').text();
-
         // Remove the empty section
         target.remove();
 
-        // Replace the button within the moduleBank table and display the moduleBank
-        $("#moduleBank table").append(
-            "<tr class='profile_section'><td><a id='"+module+"-section' href=''>"+verbose_name+"</a></td></tr>"
-        );
+        // Re-show the button within the moduleBank table and display the moduleBank
+        $('#'+module+'-new-section').parents('.profile-section').show();
         $("#moduleBank").show();
     }
 }
 
 function datepicker() {
     $(function() {
-        $( "input[id$='date']" ).datepicker({dateFormat: "mm/dd/yy",
+        $( "input[id$='date']" ).datepicker({dateFormat: "yy-mm-dd",
                                              constrainInput: false});
     });
 };
