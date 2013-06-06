@@ -31,6 +31,7 @@ $(document).on("click", "button#register", function(e) {
         type: "POST",
         url: current_url,
         data: json_data,
+        global: false,
         success: function(data) {
             try {
                 var gravatar_url = jQuery.parseJSON(data).gravatar_url;
@@ -63,6 +64,7 @@ $(document).on("click", "button#login", function(e) {
         type: "POST",
         url: current_url,
         data: json_data,
+        global: false,
         success: function(data) {
             if (data != 'valid') {
                 form.replaceWith(data);
@@ -86,6 +88,7 @@ $(document).on("click", "button#save", function(e) {
         type: "POST",
         url: current_url,
         data: json_data,
+        global: false,
         success: function(data) {
             if (data != 'valid') {
                 form.replaceWith(data);

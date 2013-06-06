@@ -1,23 +1,4 @@
 $(function() {
-    $(this).ajaxStart(function () {
-        // Disable errant clicks when an ajax request is active
-        // Does not prevent the user from closing the modal
-        $('button').attr('disabled', 'disabled');
-        $('[id$="modal"] a').attr('disabled', 'disabled');
-
-        // Show ajax processing indicator
-        $("#ajax-busy").show();
-    });
-    $(this).ajaxStop(function () {
-        // Allow button clicks when ajax request ends
-        $('button').removeAttr('disabled');
-        $('[id$="modal"] a').removeAttr('disabled');
-
-        // Hide ajax processing indicator
-        $("#ajax-busy").hide();
-        $(this).dialog("close");
-    });
-
     if ($('#moduleBank').find('tr:visible').length == 0) {
         $('#moduleBank').hide();
     }

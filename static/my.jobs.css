@@ -57,6 +57,7 @@ a:hover{
     background-color: #FFF;
     opacity: 0.75;
     border: 1px solid #000;
+    z-index: 9999;
 }   
     
 /* bootstrap .table-striped class */
