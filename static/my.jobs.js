@@ -3,6 +3,15 @@ Document Level Actions
 *******/
 $(document).ready(function(){
     var offset = 0;
+
+    // Ajax processing indicator
+    $(this).ajaxStart(function () {
+        $("#ajax-busy").show();   
+    });
+    $(this).ajaxStop(function () {
+        $("#ajax-busy").hide();
+        $(this).dialog("close"); 
+    });    
     
     /*Explicit control of main menu, primarily for mobile but also provides
     non hover and cover option if that becomes an issue.*/
