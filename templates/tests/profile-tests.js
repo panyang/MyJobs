@@ -7,13 +7,13 @@ module("profile.js Tests - addSection", {
         fixture.append($('<div />', { id: 'moduleColumn'}));
         $('#moduleBank').append($('<table />'));
         $('#moduleBank table').append($('<tbody />'));
-        $('#moduleBank table tbody').append($('<tr />', {id: 'table_tr'}));
-        $('#table_tr').append($('<button />', { id: 'Name-new-section'}));
+        $('#moduleBank table tbody').append($('<tr />', {'class': 'profile-section'}));
+        $('.profile-section').append($('<button />', { id: 'Name-new-section'}));
 
         ajax = $.ajax;
 
         $.ajax = function(params) {
-            if (params.url == '/profile/section/' &&
+            if (params.url == '/profile/form/' &&
                 params.data.module == 'Name') {
                 // params are correct; return a new profile section
                 params.success('<div id="Name_items"><h4></h4><button '+
@@ -83,23 +83,27 @@ module("profile.js Tests - cancelForm", {
         var fixture = $('#qunit-fixture')
         fixture.append($('<div />', {id: 'foo_modal'}));
         $('#foo_modal').append($('<a />', {id: 'Name-1-cancel',
-                                           'data-dismiss': 'modal'}));
+                                           'data-dismiss': 'modal',
+                                           'class': 'modal hide fade'}));
         fixture.append($('<div />', {id: 'background_modal'}));
     }
 });
 test("canceling an active modal", function() {
-    expect(4);
+    expect(5);
 
     // When cancel is clicked but modals exist and are visible,
     // nothing should happen
+    $('[id$="modal"]').modal();
+    equal($('[id$="modal"]:visible').length, 2, 'both modals are visible');
     $('[id$="cancel"]').click();
     equal($('[id$="modal"]').length, 2, 'there are two modals');
-    equal($('[id$="modal"]:visible').length, 2, 'both modals are visible');
+    equal($('[id$="modal"]:visible').length, 1, 'one modal is visible');
+    $('#foo_modal').modal();
+    $('#background_modal').modal('hide');
 
     // When cancel is clicked and no modals are visible,
     // modals should be removed
-    $('[id$="modal"]').hide();
-    equal($('[id$="modal"]:visible').length, 0, 'all modals should be hidden');
+    equal($('[id$="modal"]:visible').length, 1, 'one modal should still be visible');
     $('[id$="cancel"]').click();
     equal($('[id$="modal"]').length, 0, 'all modals have been removed');
 });

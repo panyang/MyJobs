@@ -148,7 +148,7 @@ class EmploymentHistory(ProfileUnits):
     job_category_code = models.CharField(max_length=255, blank=True,null=True,
                                          verbose_name=_("job category"), editable=False)
     onet_code = models.CharField(max_length=255, blank=True, null=True,editable=False)
-        
+
 
 class Name(ProfileUnits):
     given_name = models.CharField(max_length=30,
@@ -267,6 +267,6 @@ class Profile(models.Model):
 
     class Meta:
         unique_together = (("name", "user"),)
-    
+
     def __unicode__(self):
         return self.name
