@@ -72,14 +72,15 @@ class RegistrationViewTests(TestCase):
         activation window).
 
         """
-        # Register an account and reset its date_joined to be outside
-        # the activation window.
+        # Register an account and reset its activation profile's sent date
+        # to be outside the activation window.
         self.client.post(reverse('home'), data=self.data)
         expired_user = User.objects.get(email='alice@example.com')
-        expired_user.date_joined = expired_user.date_joined - datetime.timedelta(days=settings.ACCOUNT_ACTIVATION_DAYS)
-        expired_user.save()
 
         expired_profile = ActivationProfile.objects.get(user=expired_user)
+        expired_profile.sent -= datetime.timedelta(
+                                   days=settings.ACCOUNT_ACTIVATION_DAYS)
+        expired_profile.save()
         response = self.client.get(reverse('registration_activate',
                                            kwargs={'activation_key': expired_profile.activation_key}))
         self.assertEqual(response.status_code, 200)
