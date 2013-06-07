@@ -95,7 +95,6 @@ class Address(ProfileUnits):
                                     verbose_name=_("Postal Code"))
 
 
-
 class Telephone(ProfileUnits):
     USE_CODE_CHOICES = ( 
         ('Home', _('Home')),
