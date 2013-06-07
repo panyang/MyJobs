@@ -1,0 +1,70 @@
+{% extends "base.html" %}
+{% load i18n %}
+
+{% block content %}
+    {% with count=searches|length %}
+    <div class="row">
+        <div class="span12">
+            <h1>
+                {% blocktrans count counter=count %}
+                Saved Search Deactivated
+                {% plural %}
+                Saved Searches Deactivated
+                {% endblocktrans %}
+            </h1>
+        </div>
+    </div>{# row #}
+    <div class="row">
+        <div class="span8">
+            {% if count %}
+            <p>
+                {% blocktrans count counter=count %}
+                The following saved search has been deactivated:
+                {% plural %}
+                The following saved searches have been deactivated:
+                {% endblocktrans %}
+            </p>
+            <table class="table table-bordered table-striped">
+                <thead>
+                    <tr>
+                        <th>{% trans "Search Name" %}</th>
+                    </tr>
+                </thead>
+                <tbody>
+                {% for search in searches %}
+                <tr class="profile-section">
+                    <td>{{search.label}}</td>
+                </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+            {% else %}
+            <p>{% trans "No saved searches disabled" %}.</p>
+            {% endif %}{# count #}
+        </div>{# span8 #}
+        <div class="span4">
+            <div class="formBox" id="moduleBank">
+                <h2>{% trans "What now:" %}</h2>
+                <table class="table table-bordered table-striped">
+                    {% if searches|length %}
+                        {% url 'delete_saved_search' search_id=search_id as delete_url %}
+                        <tr class="profile-section">
+                            <td>
+                                <a href="{{delete_url}}">
+                                    {% blocktrans count counter=count %}
+                                    Delete it instead
+                                    {% plural %}
+                                    Delete them instead
+                                    {% endblocktrans %}
+                                </a>
+                            </td>
+                        </tr>
+                    {% endif %}
+                    <tr class="profile-section">
+                        <td><a href="{% url 'saved_search_main' %}">{% trans "Manage your searches" %}</a></td>
+                    </tr>
+                </table>
+            </div>
+    </div>{# row #}
+    {% endwith %}{# count=searches.length #}
+{% endblock %}

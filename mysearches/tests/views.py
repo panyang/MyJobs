@@ -1,3 +1,4 @@
+from django.core.urlresolvers import reverse
 from django.utils.http import urlquote
 from django.test import TestCase
 import json
@@ -140,3 +141,45 @@ class MySearchViewTests(TestCase):
                                     HTTP_X_REQUESTED_WITH = 'XMLHttpRequest')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content, 'failure')
+
+    def test_unsubscribe_search(self):
+        search = SavedSearchFactory(user=self.user)
+        self.assertTrue(search.is_active)
+
+        response = self.client.get('/saved-search/unsubscribe/%s/' % search.id)
+        search = models.SavedSearch.objects.get(id=search.id)
+        self.assertFalse(search.is_active)
+        self.assertTemplateUsed(response, 'mysearches/saved_search_disable.html')
+
+    def test_unsubscribe_digest(self):
+        digest = SavedSearchDigestFactory(user=self.user)
+        searches = []
+        for url in ['jobs.jobs/search?q=python', 'jobs.jobs/search?q=django']:
+            searches.append(SavedSearchFactory(url=url, user=self.user))
+
+        for search in searches:
+            self.assertTrue(search.is_active)
+
+        response = self.client.get(reverse('unsubscribe', kwargs={'search_id':'digest'}))
+        searches = list(models.SavedSearch.objects.all())
+        for search in searches:
+            self.assertFalse(search.is_active)
+        self.assertTemplateUsed(response, 'mysearches/saved_search_disable.html')
+
+    def test_delete_search(self):
+        search = SavedSearchFactory(user=self.user)
+        self.assertEqual(models.SavedSearch.objects.count(), 1)
+
+        response = self.client.get('/saved-search/delete/%s/' % search.id)
+        self.assertEqual(models.SavedSearch.objects.count(), 0)
+
+    def test_delete_searches_by_digest(self):
+        digest = SavedSearchDigestFactory(user=self.user)
+        searches = []
+        for url in ['jobs.jobs/search?q=python', 'jobs.jobs/search?q=django']:
+            searches.append(SavedSearchFactory(url=url, user=self.user))
+
+        self.assertEqual(models.SavedSearch.objects.count(), 2)
+
+        response = self.client.get('/saved-search/delete/digest/')
+        self.assertEqual(models.SavedSearch.objects.count(), 0)

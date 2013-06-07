@@ -17,9 +17,13 @@ from mysearches.helpers import *
 @user_passes_test(User.objects.is_active)
 @user_passes_test(User.objects.not_disabled)
 def delete_saved_search(request,search_id):
-    saved_search = SavedSearch.objects.get(id=search_id)
-    if request.user == saved_search.user:
-        saved_search.delete()
+    try:
+        search_id = int(search_id)
+        SavedSearch.objects.get(id=search_id, user=request.user).delete()
+    except SavedSearch.DoesNotExist:
+        pass
+    except ValueError:
+        SavedSearch.objects.filter(user=request.user).delete()
     return  HttpResponseRedirect('/saved-search')
         
 @user_passes_test(User.objects.is_active)
@@ -145,18 +149,22 @@ def save_edit_form(request):
 
 @user_passes_test(User.objects.is_active)
 @user_passes_test(User.objects.not_disabled)
-def search_unsubscribe(request, search_id):
-    search = SavedSearch.objects.get(id=search_id)
-    if request.user == search.user:
-        search.is_active = False;
-        search.save();
-    return HttpResponseRedirect(reverse('saved_search_main'))
-
-@user_passes_test(User.objects.is_active)
-@user_passes_test(User.objects.not_disabled)
-def digest_unsubscribe(request, digest_id):
-    digest = SavedSearchDigest.objects.get(id=digest_id)
-    if request.user == digest.user:
-        digest.is_active = False;
-        digest.save();
-    return HttpResponseRedirect(reverse('saved_search_main'))
+def unsubscribe(request, search_id):
+    try:
+        search_id = int(search_id)
+        # a single search is being deactivated
+        saved_search = SavedSearch.objects.filter(id=search_id, user=request.user)
+        saved_search.update(is_active=False)
+    except ValueError:
+        # a digest is being deactivated
+        digests = SavedSearchDigest.objects.filter(user=request.user,
+                                                 is_active=True)
+        if digests.count() == 1:
+            digests.update(is_active=False)
+            saved_search = SavedSearch.objects.filter(user=request.user)
+            saved_search.update(is_active=False)
+        else:
+            saved_search = []
+    return render_to_response('mysearches/saved_search_disable.html',
+                              {'search_id': search_id, 'searches': saved_search},
+                              RequestContext(request))
