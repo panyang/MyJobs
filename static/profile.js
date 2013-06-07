@@ -167,13 +167,22 @@ $(function() {
                         // form was a json-encoded list of errors and error messages
                         var json = jQuery.parseJSON(data);
 
+                        // remove color from labels of current errors
+                        $('[class*=required]').parent().prev().css('color', '#000');
+
                         // remove current errors
-                        $('[class*=label-important]').remove();
+                        $('[class*=required]').children().unwrap();
+
+
+                        console.log($('[class*=required]'));
                         for (var index in json.errors) {
+                            var $error = $('[id$="-'+json.errors[index][0]+'"]');
+                            var $labelOfError = $error.parent().prev();
                             // insert new errors after the relevant inputs
-                            $('[id$="-'+json.errors[index][0]+'"]').after(
-                                '<span class="label label-important">'+
-                                json.errors[index][1]+'</span>');
+                            $error.wrap('<span class="required" />');
+                            $error.attr("placeholder","Required Field");
+                            $labelOfError.css('color', '#900');
+
                         }
                     }
                 }

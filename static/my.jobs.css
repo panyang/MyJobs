@@ -1079,3 +1079,8 @@ body.modal-open {
 #captcha_modal .modal-body {
     overflow: hidden !important;
 }
+
+.required input[type=text],
+.required select {
+    border: 1px solid #900;
+}
