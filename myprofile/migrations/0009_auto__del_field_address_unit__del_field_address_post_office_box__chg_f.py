@@ -17,8 +17,6 @@ class Migration(SchemaMigration):
 
         # Changing field 'Address.address_line_two'
         db.alter_column(u'myprofile_address', 'address_line_two', self.gf('django.db.models.fields.CharField')(default='', max_length=255))
-        # Adding unique constraint on 'SecondaryEmail', fields ['email']
-        db.create_unique(u'myprofile_secondaryemail', ['email'])
 
 
     def backwards(self, orm):
