@@ -19,12 +19,14 @@ from mysearches.helpers import *
 def delete_saved_search(request,search_id):
     try:
         search_id = int(search_id)
-        SavedSearch.objects.get(id=search_id, user=request.user).delete()
+        # a single search is being disabled
+        SavedSearch.objects.filter(id=search_id, user=request.user).delete()
     except SavedSearch.DoesNotExist:
         pass
     except ValueError:
+        # all searches are being disabled
         SavedSearch.objects.filter(user=request.user).delete()
-    return  HttpResponseRedirect('/saved-search')
+    return HttpResponseRedirect('/saved-search')
         
 @user_passes_test(User.objects.is_active)
 @user_passes_test(User.objects.not_disabled)
@@ -153,18 +155,22 @@ def unsubscribe(request, search_id):
     try:
         search_id = int(search_id)
         # a single search is being deactivated
-        saved_search = SavedSearch.objects.filter(id=search_id, user=request.user)
+        saved_search = SavedSearch.objects.filter(id=search_id,
+                                                  user=request.user)
         saved_search.update(is_active=False)
     except ValueError:
         # a digest is being deactivated
         digests = SavedSearchDigest.objects.filter(user=request.user,
                                                  is_active=True)
         if digests.count() == 1:
+            # the user's digest is active; deactivate their saved searches
             digests.update(is_active=False)
             saved_search = SavedSearch.objects.filter(user=request.user)
             saved_search.update(is_active=False)
         else:
+            # the user's digest is inactive
             saved_search = []
     return render_to_response('mysearches/saved_search_disable.html',
-                              {'search_id': search_id, 'searches': saved_search},
+                              {'search_id': search_id,
+                               'searches': saved_search},
                               RequestContext(request))
