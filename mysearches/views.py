@@ -21,8 +21,6 @@ def delete_saved_search(request,search_id):
         search_id = int(search_id)
         # a single search is being disabled
         SavedSearch.objects.filter(id=search_id, user=request.user).delete()
-    except SavedSearch.DoesNotExist:
-        pass
     except ValueError:
         # all searches are being disabled
         SavedSearch.objects.filter(user=request.user).delete()
@@ -160,11 +158,11 @@ def unsubscribe(request, search_id):
         saved_search.update(is_active=False)
     except ValueError:
         # a digest is being deactivated
-        digests = SavedSearchDigest.objects.filter(user=request.user,
-                                                 is_active=True)
-        if digests.count() == 1:
+        digest = SavedSearchDigest.objects.filter(user=request.user,
+                                                  is_active=True)
+        if digest.count() == 1:
             # the user's digest is active; deactivate their saved searches
-            digests.update(is_active=False)
+            digest.update(is_active=False)
             saved_search = SavedSearch.objects.filter(user=request.user)
             saved_search.update(is_active=False)
         else:
