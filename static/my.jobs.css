@@ -45,10 +45,14 @@ a:hover{
     }    
 
 /*Inbox styling*/
-.messages {
-    position: relative;
+.wrapper form {
+    position: absolute;
     margin-left: 184px;
-    width: 75%;    
+}
+.messages {
+    position: absolute;
+    margin-left: 184px;
+    width: 55%;    
 }
 .messages table {
     border-collapse:collapse;
@@ -57,18 +61,21 @@ a:hover{
     border:1px solid #000;
 }
 .messages td {
+    text-align: left;
     padding: .5em;
 }
 .messages th {
+    text-align: left;
     background-color: #CCC;
+    padding-left: .5em; 
 }
 
 .messages tr:nth-child(even) td {background-color: #d2cfc7 !important;}
-.messages tr:nth-child(odd) td {background-color: #eae6de !important;}
+.messages tr:nth-child(odd) td {background-color: #FFF !important;}
 
 .subnavilist {
     position: relative;
-    margin-top: -70px;
+    margin-top: -10px;
     margin-left: -25px;
     width: 200px; 
     list-style: none;
