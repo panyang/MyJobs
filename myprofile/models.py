@@ -79,21 +79,20 @@ class Education(ProfileUnits):
 
     
 class Address(ProfileUnits):
-    label = models.CharField(max_length=60, verbose_name=_('Address Label'))
-    address_line_one = models.CharField(max_length=255,
-                                        verbose_name=_('Street Address'))
-    address_line_two = models.CharField(max_length=255, blank=True,null=True,
-                                        verbose_name=_('Street Address 2'))
-    unit = models.CharField(max_length=25, blank=True, null=True,
-                            verbose_name=_("Apartment/Unit Number"))
-    city_name = models.CharField(max_length=255, verbose_name=_("City"))
-    country_sub_division_code = models.CharField(max_length=5,
-                                                 blank=True,
+    label = models.CharField(max_length=60, blank=True, 
+                            verbose_name=_('Address Label'))
+    address_line_one = models.CharField(max_length=255, blank=True,
+                                        verbose_name=_('Address Line One'))
+    address_line_two = models.CharField(max_length=255, blank=True,
+                                        verbose_name=_('Address Line Two'))
+    city_name = models.CharField(max_length=255, blank=True, 
+                                verbose_name=_("City"))
+    country_sub_division_code = models.CharField(max_length=5, blank=True,
                                                  verbose_name=_("State/Region"))
-    country_code = models.CharField(max_length=3, verbose_name=_("Country"))
-    postal_code = models.CharField(max_length=12, verbose_name=_("Zip Code"))
-    post_office_box = models.CharField(max_length=60, blank=True, null=True,
-                                       verbose_name=_("PO Box Number"))
+    country_code = models.CharField(max_length=3, blank=True, 
+                                    verbose_name=_("Country"))
+    postal_code = models.CharField(max_length=12, blank=True, 
+                                    verbose_name=_("Postal Code"))
 
 
 class Telephone(ProfileUnits):
