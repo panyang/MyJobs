@@ -9,6 +9,6 @@
 {% endblock %}
 
 {% block footer %}
-    Sent to: {{digest.email}}  <a href="http://my.jobs{% url 'digest_unsubscribe' digest_id=digest.id %}">unsubscribe</a><br>
+    Sent to: {{digest.email}}  <a href="http://my.jobs{% url 'unsubscribe' search_id='digest' %}">unsubscribe</a><br>
     Sent as Digest: {{digest.is_active|readable_boolean}}<br>
 {% endblock %}

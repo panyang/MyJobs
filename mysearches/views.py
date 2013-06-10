@@ -17,10 +17,14 @@ from mysearches.helpers import *
 @user_passes_test(User.objects.is_active)
 @user_passes_test(User.objects.not_disabled)
 def delete_saved_search(request,search_id):
-    saved_search = SavedSearch.objects.get(id=search_id)
-    if request.user == saved_search.user:
-        saved_search.delete()
-    return  HttpResponseRedirect('/saved-search')
+    try:
+        search_id = int(search_id)
+        # a single search is being disabled
+        SavedSearch.objects.filter(id=search_id, user=request.user).delete()
+    except ValueError:
+        # all searches are being disabled
+        SavedSearch.objects.filter(user=request.user).delete()
+    return HttpResponseRedirect('/saved-search')
         
 @user_passes_test(User.objects.is_active)
 @user_passes_test(User.objects.not_disabled)
@@ -166,18 +170,30 @@ def save_edit_form(request):
 
 @user_passes_test(User.objects.is_active)
 @user_passes_test(User.objects.not_disabled)
-def search_unsubscribe(request, search_id):
-    search = SavedSearch.objects.get(id=search_id)
-    if request.user == search.user:
-        search.is_active = False;
-        search.save();
-    return HttpResponseRedirect(reverse('saved_search_main'))
-
-@user_passes_test(User.objects.is_active)
-@user_passes_test(User.objects.not_disabled)
-def digest_unsubscribe(request, digest_id):
-    digest = SavedSearchDigest.objects.get(id=digest_id)
-    if request.user == digest.user:
-        digest.is_active = False;
-        digest.save();
-    return HttpResponseRedirect(reverse('saved_search_main'))
+def unsubscribe(request, search_id):
+    try:
+        search_id = int(search_id)
+        # a single search is being deactivated
+        saved_search = SavedSearch.objects.filter(id=search_id,
+                                                  user=request.user,
+                                                  is_active=True)
+        # Updating the field that a queryset was filtered on seems to empty
+        # that queryset; Make a copy and then update the queryset
+        cache = list(saved_search)
+        saved_search.update(is_active=False)
+    except ValueError:
+        # a digest is being deactivated
+        digest = SavedSearchDigest.objects.get_or_create(user=request.user)[0]
+        if digest.is_active:
+            digest.is_active=False
+            digest.save()
+            saved_search = SavedSearch.objects.filter(user=request.user,
+                                                      is_active=True)
+            cache = list(saved_search)
+            saved_search.update(is_active=False)
+        else:
+            cache = []
+    return render_to_response('mysearches/saved_search_disable.html',
+                              {'search_id': search_id,
+                               'searches': cache},
+                              RequestContext(request))
