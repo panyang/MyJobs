@@ -57,6 +57,7 @@ a:hover{
     background-color: #FFF;
     opacity: 0.75;
     border: 1px solid #000;
+    z-index: 9999;
 }   
     
 /* bootstrap .table-striped class */
@@ -480,6 +481,10 @@ em.pendingText{
 	display: block;
 	text-align: left;
 }
+#ui-datepicker-div {
+    position: relative;
+    z-index: 9999 !important;
+}
 /*Firefox fix for homepage alignment issues*/
 @-moz-document url-prefix(){
     #title {
@@ -792,7 +797,13 @@ form input[type='checkbox']{
     }
     #saved-search-form label[for=id_is_active],
     #saved-search-form label[for=id_edit_is_active] {
-        margin-left: 20px;
+        margin-top:10px;
+        float: left;
+    }
+
+    #saved-search-form input[type=checkbox]{
+        display:inline-block;
+        margin-left: 35px;
     }
     div.actions button, div.actions a {
         float: none;
@@ -801,7 +812,8 @@ form input[type='checkbox']{
     }
     #saved-search-form label[for=id_url],
     #saved-search-form label[for=id_edit_url] {
-        padding-left: 1%;
+        padding-left: 3%;
+        margin-left:-10px;
         background-color: #ccc;
         border: 1px solid #bbb;
     }
@@ -1037,6 +1049,10 @@ table td, table th{
 .formBox.span7 {
     margin-top: 20px;
     float: none;
+}
+
+#saved-search-form input[type=checkbox]{
+    margin-top: 3px;
 }
 
 #saved-search-form label[for=id_day_of_month],

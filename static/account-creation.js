@@ -1,20 +1,14 @@
 var current_url = ""; //init current_url as global
 $(document).ready(function() {
-    // collect the csrf token on the page to pass into views with ajax
-    csrf_token_tag = document.getElementsByName('csrfmiddlewaretoken')[0];
-    var csrf_token = "";
-    if(typeof(csrf_token_tag)!='undefined'){
-        csrf_token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
-    }
-
     $(function() {
-        $( "input[id$='date']" ).datepicker({dateFormat: "yy-mm-dd"});
+        $( "input[id$='date']" ).datepicker({dateFormat: "mm/dd/yy",
+                                             constrainInput: false});
     });
     // perform display modifications for fields
     $("#id_name-primary").hide()
     $("label[for=id_name-primary]").hide()
     user_email = "";
-    current_url = window.location.pathname;    
+    current_url = '/'
 });
 
 /* When register button is clicked, this triggers an AJAX POST that sends the
@@ -23,13 +17,15 @@ $(document).ready(function() {
 */
 $(document).on("click", "button#register", function(e) {
     e.preventDefault();
+    csrf_token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
     var form = $('form#registration-form');
-    var json_data = form.serialize()+'&action=register';
+    var json_data = form.serialize()+'&action=register&csrfmiddlewaretoken='+csrf_token;
     user_email = $("#id_email").val();
     $.ajax({
         type: "POST",
         url: current_url,
         data: json_data,
+        global: false,
         success: function(data) {
             try {
                 var gravatar_url = jQuery.parseJSON(data).gravatar_url;
@@ -56,12 +52,14 @@ $(document).on("click", "button#register", function(e) {
 
 $(document).on("click", "button#login", function(e) {
     e.preventDefault();
+    csrf_token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
     var form = $('form#login-form');
-    var json_data = form.serialize()+'&action=login';    
+    var json_data = form.serialize()+'&action=login&csrfmiddlewaretoken='+csrf_token;
     $.ajax({
         type: "POST",
         url: current_url,
         data: json_data,
+        global: false,
         success: function(data) {
             if (data != 'valid') {
                 form.replaceWith(data);
@@ -75,16 +73,18 @@ $(document).on("click", "button#login", function(e) {
 
 $(document).on("click", "button#save", function(e) {            
     e.preventDefault();
+    csrf_token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
     setPrimaryName();
     var form = $('form#profile-form');
     // replace on and off with True and False to allow Django to validate 
     // boolean fields
     var json_data = form.serialize().replace('=on','=True')
-        .replace('=off','=False')+'&action=save_profile';        
+        .replace('=off','=False')+'&action=save_profile&csrfmiddlewaretoken='+csrf_token;        
     $.ajax({
         type: "POST",
         url: current_url,
         data: json_data,
+        global: false,
         success: function(data) {
             if (data != 'valid') {
                 form.replaceWith(data);

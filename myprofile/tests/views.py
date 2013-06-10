@@ -150,19 +150,6 @@ class MyProfileViewsTests(TestCase):
         self.assertEqual(resp.content, 'Deleted!')
         self.assertEqual(Name.objects.filter(id=self.name.id).count(), 0)
 
-    def test_add_section(self):
-        """
-        Invoking the add_section view generates an empty html
-        section to be appended to the main profile list
-        """
-
-        resp = self.client.get(reverse('add_section'),
-                               data = {'module': 'EmploymentHistory'})
-        soup = BeautifulSoup(resp.content)
-        self.assertTemplateUsed(resp, 'myprofile/profile_section.html')
-        self.assertEqual(soup.find('h4').text, 'Employment History')
-        self.assertIsNone(soup.find('div',{'class':'item-list'}))
-
     def test_add_duplicate_primary_email(self):
         """
         Attempting to add a secondary email with a value equal to the user's

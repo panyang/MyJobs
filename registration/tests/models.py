@@ -102,9 +102,9 @@ class RegistrationModelTests(TestCase):
         
         """
         new_user, created  = User.objects.create_inactive_user(**self.user_info)
-        new_user.date_joined -= datetime.timedelta(days=settings.ACCOUNT_ACTIVATION_DAYS + 1)
-        new_user.save()
         profile = ActivationProfile.objects.get(user=new_user)
+        profile.sent -= datetime.timedelta(days=settings.ACCOUNT_ACTIVATION_DAYS + 1)
+        profile.save()
         self.failUnless(profile.activation_key_expired())
 
     def test_valid_activation(self):
@@ -131,10 +131,10 @@ class RegistrationModelTests(TestCase):
         
         """
         new_user, created = User.objects.create_inactive_user(**self.user_info)
-        new_user.date_joined -= datetime.timedelta(days=settings.ACCOUNT_ACTIVATION_DAYS + 1)
-        new_user.save()
 
         profile = ActivationProfile.objects.get(user=new_user)
+        profile.sent -= datetime.timedelta(days=settings.ACCOUNT_ACTIVATION_DAYS + 1)
+        profile.save()
         activated = ActivationProfile.objects.activate_user(profile.activation_key)
 
         self.failIf(isinstance(activated, User))
@@ -186,8 +186,10 @@ class RegistrationModelTests(TestCase):
         new_user, created = User.objects.create_inactive_user(**self.user_info)
         expired_user, created  = User.objects.create_inactive_user(password1='secret',
                                                          email='bob@example.com')
-        expired_user.date_joined -= datetime.timedelta(days=settings.ACCOUNT_ACTIVATION_DAYS + 1)
-        expired_user.save()
+
+        profile = ActivationProfile.objects.get(user=expired_user)
+        profile.sent -= datetime.timedelta(days=settings.ACCOUNT_ACTIVATION_DAYS + 1)
+        profile.save()
 
         ActivationProfile.objects.delete_expired_users()
         self.assertEqual(ActivationProfile.objects.count(), 1)
@@ -208,15 +210,19 @@ class RegistrationModelTests(TestCase):
         self.assertNotEqual(profile.activation_key, 'ALREADY ACTIVATED')
 
     def test_reactivate_disabled_user(self):
-        new_user, created = User.objects.create_inactive_user(**self.user_info)
-        new_user.disable()
-        profile = ActivationProfile.objects.get(user=new_user)
-        activated = ActivationProfile.objects.activate_user(profile.activation_key)
+        for time in [datetime.timedelta(days=0),
+                     datetime.timedelta(days=settings.ACCOUNT_ACTIVATION_DAYS)]:
+            new_user, created = User.objects.create_inactive_user(**self.user_info)
+            new_user.date_joined -= time
+            new_user.disable()
+            profile = ActivationProfile.objects.get(user=new_user)
 
-        self.failUnless(isinstance(activated, User))
-        self.assertEqual(activated.id, new_user.id)
-        self.failUnless(activated.is_active)
+            activated = ActivationProfile.objects.activate_user(profile.activation_key)
 
-        profile = ActivationProfile.objects.get(user=new_user)
-        self.assertEqual(profile.activation_key, ActivationProfile.ACTIVATED)
-        
+            self.failUnless(isinstance(activated, User))
+            self.assertEqual(activated.id, new_user.id)
+            self.failUnless(activated.is_active)
+
+            profile = ActivationProfile.objects.get(user=new_user)
+            self.assertEqual(profile.activation_key, ActivationProfile.ACTIVATED)
+

@@ -1,12 +1,12 @@
 {% extends "base.html" %}
+{% load common_tags %}
 {% block site-title %}
     <title>{% if name_obj %}{{ name_obj }} on{% else %}&nbsp;{% endif %} My.jobs</title>
     <meta name="title" content="{% if name_obj %}{{ name_obj }} on{% else %}&nbsp;{% endif %} My.jobs">
 {% endblock %}
 {% load i18n %}
 {% block meta-extra %}
-<script src="{{ STATIC_URL }}account-creation.js"></script>
-<script src="{{ STATIC_URL }}profile.js"></script>
+<script src="{{ STATIC_URL }}profile.js{% cache_buster %}"></script>
 {% endblock %}
 
 {% block content %}
@@ -50,13 +50,11 @@
                 <h3>Add a New Section</h3>
                 <table class="table table-bordered tables-striped">
                 {% for module in profile_config %}
-                {% if not module.items %}
-                <tr class="profile-section"><td>
-                    <a class="" id="{{module.name}}-section" href="">
+                <tr class="profile-section" {% if module.items %}style="display:none;"{% endif %}><td>
+                    <a class="" id="{{module.name}}-new-section" href="">
                         {{ module.verbose }}
                     </a>
                 </td></tr>
-                {% endif %}
                 {% endfor %}
                 </table>
             </div>

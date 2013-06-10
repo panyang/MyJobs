@@ -1,9 +1,9 @@
-
 {% extends "base.html" %}
+{% load common_tags %}
 {% load i18n %}
 {% load humanize %}
 {% block meta-extra %}
-<script src="{{ STATIC_URL }}pager.js"></script>
+<script src="{{ STATIC_URL }}pager.js{% cache_buster %}"></script>
 {% endblock %}
 
 {% block content %}
@@ -27,4 +27,3 @@
     </div>
 </div>
 {% endblock content %}
-
