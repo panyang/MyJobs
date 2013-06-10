@@ -41,49 +41,38 @@ $(function() {
 
         save_form: function(e, options) {
             e.preventDefault();
-            if (typeof options === 'undefined') {
-                var options = [];
-            }
-            if (typeof options['success_callback'] !== 'function') {
-                options['success_callback'] = function() {
-                    window.location.reload(true);
-                }
-            }
 
-            var that = $(e.target).parents('#saved-search-form');
+            var form = $(e.target).parents('#saved-search-form');
             var action = $(e.target).attr('id');
-            var csrf_token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
-            var is_active = that.find('[id$="is_active"]').prop('checked')? 'True':'False';
-            var id = that.find('a.save').attr('href');
-            var url;
-            if (action == 'new_search') {
-                url = 'new'
-            } else {
-                url = 'save-edit'
+            var id = form.find('a.save').attr('href')
+            var first_instance = 1;
+            if ($('.table').length) {
+                first_instance = 0;
             }
+            data = form.serialize();
+            data += '&action='+action;
+            data += '&search_id='+id;
+            data += '&first_instance='+first_instance;
+            data = data.replace('=on','=True').replace('=off','=False');
+            data = data.replace('undefined', 'None');
             $.ajax({
-                data: { action: action,
-                        search_id: id,
-                        csrfmiddlewaretoken: csrf_token,
-                        feed: that.find('[id$="feed"]').val(),
-                        url: that.find('[id$="url"]').val(),
-                        label: that.find('[id$="label"]').val(),
-                        is_active: is_active,
-                        email: that.find('[id$="email"]').val(),
-                        notes: that.find('[id$="notes"]').val(),
-                        frequency: that.find('[id$="frequency"]').val(),
-                        day_of_week: that.find('[id$="day_of_week"]').val(),
-                        day_of_month: that.find('[id$="day_of_month"]').val()
-                },
+                data: data,
                 type: 'POST',
-                async: false,
-                url: url,
-                success: function(data) {
-                    if (data == 'success') {
-                        clearForm(that);
-                        options['success_callback']();
+                url: 'save',
+                success: function(response) {
+                    if (response.indexOf('<tr') > -1) {
+                        if (first_instance) {
+                            $('#saved-search-list p').remove();
+                            $('#saved-search-list').prepend(response);
+                        } else {
+                            $('#saved-search-'+id).remove();
+                            $('tbody').append(response);
+                        }
+                        $('[id$="modal"]').modal('hide');
+                        clearForm(form);
+                        response = '';
                     }
-                    add_errors(that, data);
+                    add_errors(form, response);
                 }
             });
         },

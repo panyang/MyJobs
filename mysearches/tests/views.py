@@ -27,6 +27,7 @@ class MySearchViewTests(TestCase):
             'email': self.user.email,
             'frequency': 'D',
             'is_active': 'True',
+            'action': 'save_search',
         }
         self.new_digest_data = {
             'is_active': 'True',
@@ -52,16 +53,18 @@ class MySearchViewTests(TestCase):
                         forms.SavedSearchForm));
 
     def test_save_new_search_form(self):
-        response = self.client.post('/saved-search/new',
+        self.new_form_data['action'] = 'new_search'
+        response = self.client.post('/saved-search/save',
                                     data = self.new_form_data,
                                     HTTP_X_REQUESTED_WITH = 'XMLHttpRequest')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.content, 'success')
+        self.assertTrue(self.new_form_data['label'] in response.content)
 
     def test_save_new_search_invalid(self):
         del self.new_form_data['feed']
         del self.new_form_data['frequency']
-        response = self.client.post('/saved-search/new',
+        self.new_form_data['action'] = 'new_search'
+        response = self.client.post('/saved-search/save',
                                     data = self.new_form_data,
                                     HTTP_X_REQUESTED_WITH = 'XMLHttpRequest')
         self.assertEqual(response.status_code, 200)
@@ -95,16 +98,15 @@ class MySearchViewTests(TestCase):
         self.new_form_data['day_of_week'] = 1
         self.new_form_data['search_id'] = search_id
 
-        response = self.client.post('/saved-search/save-edit',
+        response = self.client.post('/saved-search/save',
                                     data = self.new_form_data,
                                     HTTP_X_REQUESTED_WITH = 'XMLHttpRequest')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.content, 'success')
+        self.assertTrue(self.new_form_data['label'] in response.content)
 
         del self.new_form_data['frequency']
-        self.new_form_data['search_id'] = search_id
 
-        response = self.client.post('/saved-search/save-edit',
+        response = self.client.post('/saved-search/save',
                                     data = self.new_form_data,
                                     HTTP_X_REQUESTED_WITH = 'XMLHttpRequest')
         self.assertEqual(response.status_code, 200)
