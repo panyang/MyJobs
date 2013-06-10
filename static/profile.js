@@ -173,8 +173,6 @@ $(function() {
                         // remove current errors
                         $('[class*=required]').children().unwrap();
 
-
-                        console.log($('[class*=required]'));
                         for (var index in json.errors) {
                             var $error = $('[id$="-'+json.errors[index][0]+'"]');
                             var $labelOfError = $error.parent().prev();

@@ -294,16 +294,23 @@ function disable_fields(that) {
 }
 
 function add_errors(that, data) {
-    that.find('[class*=label-important]').remove();
+    // remove color from labels of current errors
+    $('[class*=required]').prev().children().css('color', '#000');
+
+    // remove current errors
+    $('[class*=required]').children().unwrap();
+
     if (data != 'success') {
         errors = jQuery.parseJSON(data)
         for (var key in errors) {
-            if (errors.hasOwnProperty(key)) {
-                if (key == 'day_of_week' || key == 'day_of_month') {
-                that.find('label[for$="frequency"]').before('<span class="label label-important">'+errors[key]+'</span>');
-                } else {
-                    that.find('label[for$="'+key+'"]').before('<span class="label label-important">'+errors[key]+'</span>');
-                }
+            if (key == 'day_of_week' || key == 'day_of_month') {
+                that.find('label[for$="frequency"]').parent().next().wrap('<span class="required" />');
+                that.find('label[for$="frequency"]').css('color', '#900');
+                that.find('label[for$="'+key+'"]').parent().next().wrap('<span class="required" />');
+            } else {
+                that.find('label[for$="'+key+'"]').parent().next().wrap('<span class="required" />');
+                that.find('label[for$="'+key+'"]').parent().next().children().attr("placeholder","Required Field");
+                that.find('label[for$="'+key+'"]').css('color', '#900');
             }
         }
     }
