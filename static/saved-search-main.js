@@ -11,6 +11,7 @@ $(function() {
             'cut input[id$="url"]': 'validate',
             'paste input[id$="url"]': 'validate',
             'click [id$="digest_submit"]': 'check_digest_options',
+            'click [class$="details"]': 'show_details',
         },
 
 
@@ -187,6 +188,13 @@ $(function() {
                 }
             }
         },
+
+
+        show_details: function(e) {
+            e.preventDefault();
+            id = $(e.target).attr('href')
+            $('#search_'+id).modal();
+        }
     });
 
     var Search = new SearchView;
