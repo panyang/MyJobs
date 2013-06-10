@@ -139,8 +139,8 @@ ul.ui-autocomplete{
 .formBox select {
     width: 216px;
 }
-#newAccountData select {
-    width: 266px;
+form select{
+    width: 264px;
 }
 #title{
     padding-top: 60px;

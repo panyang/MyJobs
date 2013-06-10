@@ -54,6 +54,7 @@ $(function() {
                     } else {
                         $('.form-status').html('');
                         $('div.account-settings').html(data);
+                        console.log(data);
                     }
                 }
             });
