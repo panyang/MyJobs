@@ -162,9 +162,10 @@ def unsubscribe(request, search_id):
         saved_search.update(is_active=False)
     except ValueError:
         # a digest is being deactivated
-        digest = SavedSearchDigest.objects.get_or_create(user=request.user)
+        digest = SavedSearchDigest.objects.get_or_create(user=request.user)[0]
         if digest.is_active:
-            digest.update(is_active=False)
+            digest.is_active=False
+            digest.save()
             saved_search = SavedSearch.objects.filter(user=request.user,
                                                       is_active=True)
             cache = list(saved_search)
