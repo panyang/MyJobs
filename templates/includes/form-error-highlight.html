@@ -44,20 +44,13 @@ form -- the rest of the form.
         		{{ field|attr:"placeholder:" }}
 
         	{% elif is_select %}
-        	    {% if field.html_name == "use_code" %}
-        	    <div class="input-prepend" id="{{field.name}}_prependLabel">
-          			<span class="add-on">
-            			{{ field.label_tag }}
-          			</span>
-          			{{field}}
-        		</div>
-        	    {% else %}
         	    <div class="span3 form-label pull-left initial">
                     {{ field.label_tag }}
-                </div>   		
-          			{{field}}
-        		{% endif %}
-        		
+                </div>  
+                <div class="profile-form-input">
+                    {{ field  }}
+                </div>
+                
         	{% elif is_boolean %}
         		{{field}}
         		<div class="span3 form-label pull-left checkbox-label">
@@ -77,16 +70,11 @@ form -- the rest of the form.
                     <div class="span3 form-label pull-left"><label for="{{field.id_for_label}}">Region</label><div class="clear"></div></div>
                     <input type="hidden" name="{{field.html_name}}" value="{{field.value|default_if_none:" "}}" id="{{field.id_for_label}}" />
         	{% else %}
-        		{% if '_dialing' in field.html_name or field.html_name == "telephone-number" or field.html_name == "telephone-extension" or field.html_name == "number" or field.html_name == "extension" %}
-        			<div class="input-prepend" data-for="{{field.id}}">
-         				<span class="add-on">
-            				{{ field.label_tag }}
-          				</span>
-          				{{field}}
-        			</div>
-        		{% else %}
-        			<div class="span3 form-label pull-left initial">{{ field.label_tag }}</div><div class="profile-form-input">{{ field  }}</div>
-        		{% endif %}
+        		
+        			
+        		
+        		<div class="span3 form-label pull-left initial">{{ field.label_tag }}</div><div class="profile-form-input">{{ field  }}</div>
+        		
 		{% endif %}
 
                 {% if field.errors %}

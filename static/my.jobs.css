@@ -136,6 +136,12 @@ ul.ui-autocomplete{
     color: #fff;
     font-size: .8em;
 }
+.formBox select {
+    width: 216px;
+}
+#newAccountData select {
+    width: 266px;
+}
 #title{
     padding-top: 60px;
     padding-bottom: 60px;
