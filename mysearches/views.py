@@ -154,21 +154,24 @@ def unsubscribe(request, search_id):
         search_id = int(search_id)
         # a single search is being deactivated
         saved_search = SavedSearch.objects.filter(id=search_id,
-                                                  user=request.user)
+                                                  user=request.user,
+                                                  is_active=True)
+        # Updating the field that a queryset was filtered on seems to empty
+        # that queryset; Make a copy and then update the queryset
+        cache = list(saved_search)
         saved_search.update(is_active=False)
     except ValueError:
         # a digest is being deactivated
-        digest = SavedSearchDigest.objects.filter(user=request.user,
-                                                  is_active=True)
-        if digest.count() == 1:
-            # the user's digest is active; deactivate their saved searches
+        digest = SavedSearchDigest.objects.get_or_create(user=request.user)
+        if digest.is_active:
             digest.update(is_active=False)
-            saved_search = SavedSearch.objects.filter(user=request.user)
+            saved_search = SavedSearch.objects.filter(user=request.user,
+                                                      is_active=True)
+            cache = list(saved_search)
             saved_search.update(is_active=False)
         else:
-            # the user's digest is inactive
-            saved_search = []
+            cache = []
     return render_to_response('mysearches/saved_search_disable.html',
                               {'search_id': search_id,
-                               'searches': saved_search},
+                               'searches': cache},
                               RequestContext(request))
