@@ -111,19 +111,17 @@ def save_digest_form(request):
 def save_search_form(request):
     if request.is_ajax():
         search_id = request.POST.get('search_id')
-        action = request.POST.get('action')
-        if not action:
-            action = 'new_search'
         first_instance = request.POST.get('first_instance')
         if first_instance:
             first_instance = int(first_instance)
-        if action == 'new_search':
-            form = SavedSearchForm(user=request.user, data=request.POST)
-        else:
+        try:
+            search_id = int(search_id)
             original = SavedSearch.objects.get(id=search_id)
             form = SavedSearchForm(user=request.user,
                                    data=request.POST,
                                    instance=original)
+        except:
+            form = SavedSearchForm(user=request.user, data=request.POST)
 
         if form.is_valid():
             form.save()

@@ -28,7 +28,6 @@ class MySearchViewTests(TestCase):
             'email': self.user.email,
             'frequency': 'D',
             'is_active': 'True',
-            'action': 'save_search',
         }
         self.new_digest_data = {
             'is_active': 'True',
@@ -54,7 +53,6 @@ class MySearchViewTests(TestCase):
                         forms.SavedSearchForm));
 
     def test_save_new_search_form(self):
-        self.new_form_data['action'] = 'new_search'
         response = self.client.post('/saved-search/save',
                                     data = self.new_form_data,
                                     HTTP_X_REQUESTED_WITH = 'XMLHttpRequest')
@@ -64,7 +62,6 @@ class MySearchViewTests(TestCase):
     def test_save_new_search_invalid(self):
         del self.new_form_data['feed']
         del self.new_form_data['frequency']
-        self.new_form_data['action'] = 'new_search'
         response = self.client.post('/saved-search/save',
                                     data = self.new_form_data,
                                     HTTP_X_REQUESTED_WITH = 'XMLHttpRequest')

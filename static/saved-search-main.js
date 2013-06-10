@@ -44,14 +44,12 @@ $(function() {
             e.preventDefault();
 
             var form = $(e.target).parents('#saved-search-form');
-            var action = $(e.target).attr('id');
             var id = form.find('a.save').attr('href')
             var first_instance = 1;
             if ($('.table').length) {
                 first_instance = 0;
             }
             data = form.serialize();
-            data += '&action='+action;
             data += '&search_id='+id;
             data += '&first_instance='+first_instance;
             data = data.replace('=on','=True').replace('=off','=False');
@@ -193,7 +191,7 @@ $(function() {
         show_details: function(e) {
             e.preventDefault();
             id = $(e.target).attr('href')
-            $('#search_'+id).modal();
+            $('[id^="search_'+id+'"]').modal();
         }
     });
 
@@ -292,15 +290,13 @@ function disable_fields(that) {
 
 function add_errors(that, data) {
     that.find('[class*=label-important]').remove();
-    if (data != 'success') {
-        errors = jQuery.parseJSON(data)
-        for (var key in errors) {
-            if (errors.hasOwnProperty(key)) {
-                if (key == 'day_of_week' || key == 'day_of_month') {
-                that.find('label[for$="frequency"]').before('<span class="label label-important">'+errors[key]+'</span>');
-                } else {
-                    that.find('label[for$="'+key+'"]').before('<span class="label label-important">'+errors[key]+'</span>');
-                }
+    errors = jQuery.parseJSON(data)
+    for (var key in errors) {
+        if (errors.hasOwnProperty(key)) {
+            if (key == 'day_of_week' || key == 'day_of_month') {
+            that.find('label[for$="frequency"]').before('<span class="label label-important">'+errors[key]+'</span>');
+            } else {
+                that.find('label[for$="'+key+'"]').before('<span class="label label-important">'+errors[key]+'</span>');
             }
         }
     }
