@@ -13,7 +13,7 @@
                 {% endblocktrans %}
             </h1>
         </div>
-    </div>{# row #}
+    </div>
     <div class="row">
         <div class="span8">
             {% if count %}
@@ -40,8 +40,8 @@
             </table>
             {% else %}
             <p>{% trans "No saved searches deactivated" %}.</p>
-            {% endif %}{# count #}
-        </div>{# span8 #}
+            {% endif %}
+        </div>
         <div class="span4">
             <div class="formBox" id="moduleBank">
                 <h2>{% trans "What now:" %}</h2>
@@ -65,6 +65,6 @@
                     </tr>
                 </table>
             </div>
-    </div>{# row #}
-    {% endwith %}{# count=searches.length #}
+    </div>
+    {% endwith %}
 {% endblock %}
