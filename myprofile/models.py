@@ -252,9 +252,9 @@ def delete_secondary_activation(sender, **kwargs):
 # Calls `delete_secondary_activation` after a secondary email is deleted.
 # dispatch_uid: arbitrary unique string that prevents this signal from
 # being connected to multiple times
-models.signals.post_delete.connect(delete_secondary_activation,
-                                   sender=SecondaryEmail,
-                                   dispatch_uid='delete_secondary_activation')
+models.signals.pre_delete.connect(delete_secondary_activation,
+                                  sender=SecondaryEmail,
+                                  dispatch_uid='delete_secondary_activation')
 
 
 class Profile(models.Model):

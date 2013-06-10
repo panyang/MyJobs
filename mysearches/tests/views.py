@@ -1,3 +1,4 @@
+from django.core.urlresolvers import reverse
 from django.utils.http import urlquote
 from django.test import TestCase
 import json
@@ -140,3 +141,88 @@ class MySearchViewTests(TestCase):
                                     HTTP_X_REQUESTED_WITH = 'XMLHttpRequest')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content, 'failure')
+
+    def test_unsubscribe_owned_search(self):
+        """
+        Unsubscribing an owned saved search should result in
+        that search being deactivated
+        """
+        search = SavedSearchFactory(user=self.user)
+        self.assertTrue(search.is_active)
+
+        response = self.client.get(reverse('unsubscribe',
+                                           kwargs={'search_id':search.id}))
+        search = models.SavedSearch.objects.get(id=search.id)
+        self.assertFalse(search.is_active)
+        self.assertTemplateUsed(response,
+                                'mysearches/saved_search_disable.html')
+
+    def test_unsubscribe_unowned_search(self):
+        """
+        Attempting to unsubscribe using a search that isn't yours
+        should result in nothing happening to the search
+        """
+        user = UserFactory(email='test@example.com')
+        search = SavedSearchFactory(user=user)
+
+        response = self.client.get(reverse('unsubscribe',
+                                           kwargs={'search_id':search.id}))
+        search = models.SavedSearch.objects.get(id=search.id)
+        self.assertTrue(search.is_active)
+
+    def test_unsubscribe_digest(self):
+        """
+        Unsubscribing a saved search digest should result in all
+        of the owner's saved searches being disabled
+        """
+        digest = SavedSearchDigestFactory(user=self.user)
+        searches = []
+        for url in ['jobs.jobs/search?q=python', 'jobs.jobs/search?q=django']:
+            searches.append(SavedSearchFactory(url=url, user=self.user))
+
+        for search in searches:
+            self.assertTrue(search.is_active)
+
+        response = self.client.get(reverse('unsubscribe',
+                                           kwargs={'search_id':'digest'}))
+        searches = list(models.SavedSearch.objects.all())
+        for search in searches:
+            self.assertFalse(search.is_active)
+        self.assertTemplateUsed(response,
+                                'mysearches/saved_search_disable.html')
+
+    def test_delete_owned_search(self):
+        search = SavedSearchFactory(user=self.user)
+        self.assertEqual(models.SavedSearch.objects.count(), 1)
+
+        response = self.client.get(reverse('delete_saved_search',
+                                           kwargs={'search_id':search.id}))
+        self.assertEqual(models.SavedSearch.objects.count(), 0)
+
+    def test_delete_unowned_search(self):
+        """
+        Attempting to delete a search that isn't yours should
+        result in nothing happening to the search
+        """
+        user = UserFactory(email='test@example.com')
+        search = SavedSearchFactory(user=user)
+
+        response = self.client.get(reverse('delete_saved_search',
+                                           kwargs={'search_id':search.id}))
+        self.assertEqual(models.SavedSearch.objects.count(), 1)
+
+    def test_delete_owned_searches_by_digest(self):
+        """
+        Deleting with a saved search digest should result in
+        all of the user's saved searches being deleted
+        """
+        digest = SavedSearchDigestFactory(user=self.user)
+        searches = []
+        for url in ['jobs.jobs/search?q=python', 'jobs.jobs/search?q=django']:
+            searches.append(SavedSearchFactory(url=url, user=self.user))
+
+        self.assertEqual(models.SavedSearch.objects.count(), 2)
+
+        response = self.client.get(reverse('delete_saved_search',
+                                           kwargs={'search_id':'digest'}))
+        self.assertEqual(models.SavedSearch.objects.count(), 0)
