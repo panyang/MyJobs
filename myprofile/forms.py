@@ -3,6 +3,7 @@ from django.forms import *
 from django.utils.translation import ugettext_lazy as _
 from myjobs.forms import BaseUserForm
 from myprofile.models import *
+from countries import COUNTRIES
 
 
 def generate_custom_widgets(model):
@@ -136,6 +137,7 @@ class InitialAddressForm(InitialForm):
         model = Address
         fields = ['address_line_one', 'address_line_two', 'city_name',
                   'country_sub_division_code', 'country_code', 'postal_code']
+        widgets = { 'country_code': Select(choices=COUNTRIES) }
 
 
 class InitialPhoneForm(InitialForm):
