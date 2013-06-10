@@ -52,13 +52,10 @@ form -- the rest of the form.
           			{{field}}
         		</div>
         	    {% else %}
-        	    <div class="span3 form-label pull-left initial">&nbsp;</div>
-        		<div class="input-prepend" id="{{field.name}}_prependLabel">
-          			<span class="add-on">
-            			{{ field.label_tag }}
-          			</span>
+        	    <div class="span3 form-label pull-left initial">
+                    {{ field.label_tag }}
+                </div>   		
           			{{field}}
-        		</div>
         		{% endif %}
         		
         	{% elif is_boolean %}
