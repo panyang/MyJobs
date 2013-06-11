@@ -12,6 +12,7 @@ $(function() {
             'paste input[id$="url"]': 'validate',
             'click [id$="digest_submit"]': 'check_digest_options',
             'click [class$="details"]': 'show_details',
+            'click #delete': 'delete_search',
         },
 
 
@@ -192,7 +193,28 @@ $(function() {
             e.preventDefault();
             id = $(e.target).attr('href')
             $('[id^="search_'+id+'"]').modal();
-        }
+        },
+
+
+        delete_search: function(e) {
+            e.preventDefault();
+
+            id = $(e.target).attr('href');
+
+            $.ajax({
+                url: '/saved-search/delete/'+id,
+                success: function(data) {
+                    $('#saved-search-'+id).remove();
+                    if ($('tr').length == 1) {
+                        $('table').remove()
+                        $('#saved-search-list p').remove();
+                        $('#saved-search-list').prepend(
+                            '<p>No Saved Searches!</p>');
+                    }
+                    $('[id$="modal"]').modal('hide');
+                }
+            });
+        },
     });
 
     var Search = new SearchView;
