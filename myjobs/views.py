@@ -186,10 +186,12 @@ def edit_basic(request):
 
     form = EditAccountForm(initial=initial_dict, user=request.user)        
     if request.method == "POST":
-        form = EditAccountForm(user=request.user, data=request.POST)
+        form = EditAccountForm(user=request.user, data=request.POST, auto_id=False)
         if form.is_valid():
             form.save(request.user)
             return HttpResponse('success')
+        else:
+            return HttpResponse(json.dumps({'errors': form.errors.items()}))
 
     ctx = {'form': form,
            'gravatar_100': request.user.get_gravatar_url(size=100),
@@ -229,6 +231,8 @@ def edit_password(request):
             request.user.save()
             form.save()
             return HttpResponse('success')
+        else:
+            return HttpResponse(json.dumps({'errors': form.errors.items()}))
 
     ctx = {'form':form,
            'section_name': 'password'}

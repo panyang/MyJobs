@@ -37,10 +37,32 @@ $(function() {
 
         saveForm: function(e) {
             e.preventDefault();
+            // id is formatted [module_type]-[item_id]-[event]
+            var module =  $(e.target).attr('id').split('-')[0];
+            var item_id = $(e.target).attr('id').split('-')[1];
+
+            var form = $(e.target).closest("form");
+
+            csrf_token_tag = document.getElementsByName('csrfmiddlewaretoken')[0];
+            var csrf_token = "";
+            if(typeof(csrf_token_tag)!='undefined'){
+                csrf_token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+            }
+            console.log(module);
+            console.log(item_id);
+            console.log(form);
+            console.log(csrf_token);
+
+            first_instance=0;
+
             var section_name = $(e.target).attr('id').split('-')[1];
+            var serialized_data = form.serialize();
+            serialized_data += '&module=' + module + '&id=' + item_id +
+                               '&first_instance=' + first_instance +
+                               '&csrfmiddlewaretoken=' + csrf_token;
             $.ajax({
                 type: "POST",
-                data: $(e.target).serialize(),
+                data: serialized_data,
                 url: "/edit/" + section_name,
                 success: function(data) {
                     if (data == "success") {
@@ -52,9 +74,50 @@ $(function() {
                                 .removeClass("password-required");
                             $('.form-status').html('<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Your information has been updated.</div>');                       }
                     } else {
-                        $('.form-status').html('');
-                        $('div.account-settings').html(data);
                         console.log(data);
+                        var json = jQuery.parseJSON(data);
+
+                        // remove color from labels of current errors
+                        $('[class*=required]').prev().css('color', '#000');
+
+                        // remove red border around past required fields
+                        $('[class*=required]').children().css('border', '1px solid #CCC')
+
+                        // remove current errors
+                        $('[class*=required]').children().unwrap();
+
+                        for (var index in json.errors) {
+                            console.log("test");
+                            console.log(json.errors[index][0])
+                            if(json.errors[index][0] == '__all__'){
+                                console.log("test2");
+                                var $error1 = $('#id_given_name');
+                                var $error2 = $('#id_family_name');
+
+                                $error1.wrap('<span class="required" />');
+                                $error2.wrap('<span class="required" />');
+
+                                $error1.attr("placeholder", json.errors[index][1]);
+                                $error2.attr("placeholder", json.errors[index][1]);
+
+                                $error1.css('border', '1px solid #900');
+                                $error2.css('border', '1px solid #900');
+
+                                $error1.parent().prev().children().css('color', '#900');
+                                $error2.parent().prev().children().css('color', '#900');
+                            }
+                            else
+                            {
+                                var $error = $('[id$="_'+json.errors[index][0]+'"]');
+                                console.log($error);
+                                var $labelOfError = $error.prev();
+                                // insert new errors after the relevant inputs
+                                $error.wrap('<span class="required" />');
+                                $error.attr("placeholder", json.errors[index][1]);
+                                $error.css('border', '1px solid #900');
+                                $labelOfError.css('color', '#900');
+                            }
+                        }
                     }
                 }
             });

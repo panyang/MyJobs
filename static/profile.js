@@ -132,6 +132,11 @@ $(function() {
                 csrf_token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
             }
 
+            console.log(module);
+            console.log(item_id);
+            console.log(form);
+            console.log(csrf_token);
+
             first_instance=0;
             if(typeof(table.attr("class"))=="undefined"){
                 first_instance = 1;
@@ -145,6 +150,7 @@ $(function() {
                 url: '/profile/form/',
                 data: serialized_data,
                 success: function(data) {
+                    console.log(data);
                     if (data.indexOf('<td') >= 0) {
                         // form was valid
                         if ($('#'+module+'_items').length < 1) {
@@ -178,7 +184,7 @@ $(function() {
                             var $labelOfError = $error.parent().prev();
                             // insert new errors after the relevant inputs
                             $error.wrap('<span class="required" />');
-                            $error.attr("placeholder","Required Field");
+                            $error.attr("placeholder",json.errors[index][1]);
                             $labelOfError.css('color', '#900');
 
                         }
