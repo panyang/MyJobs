@@ -16,7 +16,7 @@ def instantiate_profile_forms(request, form_classes, settings, post=False):
     :post:         a boolean for determining whether to include the request's
                    POST data in the fomr instance
     """
-    
+
     profile_instances = []
     for form_class in form_classes:
         settings['prefix'] = form_class.Meta.model.__name__.lower()

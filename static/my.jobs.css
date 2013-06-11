@@ -81,6 +81,37 @@ a:hover{
 #newAccountData .hasRegions {
     margin-left: -20px;  
     }
+#newAccountData li {
+    display: block;
+    width: 100%;
+}
+#newAccountData li label {
+    display: none;
+}
+#newAccountData li input, 
+#newAccountData li select {
+    width: 100%;
+}
+#newAccountData label[for="id_work-current_indicator"] {
+    display: inline;
+}
+#newAccountData #id_ph-area_dialing {
+    float: left;
+    width: 30%;
+}
+#newAccountData #id_ph-number {
+    float: right;
+    width: 67%;
+    clear: right;
+}
+#newAccountData #id_work-current_indicator {
+    width: 15%;
+}
+#newAccountData hr {
+    margin: 0px 0px 10px 0px;
+    border-top: 1px solid #a3aeb1;
+    border-bottom: none;
+}
 
 /* Form Styles */
 .form-label{

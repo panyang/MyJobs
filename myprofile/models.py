@@ -47,6 +47,7 @@ class ProfileUnits(models.Model):
 
 class Education(ProfileUnits):
     EDUCATION_LEVEL_CHOICES = (
+        ('', _('Education Level')),
         (3, _('High School')),
         (4, _('Non-Degree Education')),
         (5, _('Associate')),
@@ -77,7 +78,7 @@ class Education(ProfileUnits):
     degree_minor = models.CharField(max_length=255, blank=True, null=True,
                                     verbose_name=_('minor'))
 
-    
+
 class Address(ProfileUnits):
     label = models.CharField(max_length=60, blank=True, 
                             verbose_name=_('Address Label'))
@@ -88,7 +89,7 @@ class Address(ProfileUnits):
     city_name = models.CharField(max_length=255, blank=True, 
                                 verbose_name=_("City"))
     country_sub_division_code = models.CharField(max_length=5, blank=True,
-                                                 verbose_name=_("State/Region"))
+                                                 verbose_name=_("State/Region (abbrev.)"))
     country_code = models.CharField(max_length=3, blank=True, 
                                     verbose_name=_("Country"))
     postal_code = models.CharField(max_length=12, blank=True, 
@@ -96,13 +97,14 @@ class Address(ProfileUnits):
 
 
 class Telephone(ProfileUnits):
-    USE_CODE_CHOICES = ( 
-        ('Home', _('Home')),
-        ('Work', _('Work')),
-        ('Mobile', _('Mobile')),
-        ('Pager', _('Pager')),
-        ('Fax', _('Fax')),
-        ('Other', _('Other')),
+    USE_CODE_CHOICES = (
+        ('', 'Phone Type'),
+        ('Home', 'Home'),
+        ('Work', 'Work'),
+        ('Mobile', 'Mobile'),
+        ('Pager', 'Pager'),
+        ('Fax', 'Fax'),
+        ('Other', 'Other')
     )
     channel_code = models.CharField(max_length=30, editable=False, blank=True)
     country_dialing = models.CharField(max_length=3, blank=True,
