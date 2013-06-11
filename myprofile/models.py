@@ -104,14 +104,16 @@ class Telephone(ProfileUnits):
         ('Fax', _('Fax')),
         ('Other', _('Other')),
     )
-    channel_code = models.CharField(max_length=30, editable=False)
-    country_dialing = models.IntegerField(max_length=3, 
-                                          verbose_name=_("Country Code"),blank=True)
-    area_dialing = models.IntegerField(max_length=3, verbose_name=_("Area Code")) 
-    number = models.CharField(max_length=8, verbose_name=_("Local Number"))
-    extension = models.CharField(max_length=5, blank=True, null=True)
+    channel_code = models.CharField(max_length=30, editable=False, blank=True)
+    country_dialing = models.CharField(max_length=3, blank=True,
+                                       verbose_name=_("Country Code"),
+    area_dialing = models.CharField(max_length=5, blank=True,
+                                    verbose_name=_("Area Code")) 
+    number = models.CharField(max_length=10, blank=True,
+                              verbose_name=_("Local Number"))
+    extension = models.CharField(max_length=5, blank=True)
     use_code = models.CharField(max_length=30, choices=USE_CODE_CHOICES,
-                                verbose_name=_("Phone Type"))
+                                blank=True, verbose_name=_("Phone Type"))
 
     def save(self, *args, **kwargs):
         if self.use_code == "Home" or self.use_code == "Work" or self.use_code == "Other":
