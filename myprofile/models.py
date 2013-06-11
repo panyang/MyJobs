@@ -106,7 +106,7 @@ class Telephone(ProfileUnits):
     )
     channel_code = models.CharField(max_length=30, editable=False, blank=True)
     country_dialing = models.CharField(max_length=3, blank=True,
-                                       verbose_name=_("Country Code"),
+                                       verbose_name=_("Country Code"))
     area_dialing = models.CharField(max_length=5, blank=True,
                                     verbose_name=_("Area Code")) 
     number = models.CharField(max_length=10, blank=True,
