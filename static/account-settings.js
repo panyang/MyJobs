@@ -48,13 +48,7 @@ $(function() {
             if(typeof(csrf_token_tag)!='undefined'){
                 csrf_token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
             }
-            console.log(module);
-            console.log(item_id);
-            console.log(form);
-            console.log(csrf_token);
-
             first_instance=0;
-
             var section_name = $(e.target).attr('id').split('-')[1];
             var serialized_data = form.serialize();
             serialized_data += '&module=' + module + '&id=' + item_id +
@@ -74,7 +68,6 @@ $(function() {
                                 .removeClass("password-required");
                             $('.form-status').html('<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Your information has been updated.</div>');                       }
                     } else {
-                        console.log(data);
                         var json = jQuery.parseJSON(data);
 
                         // remove color from labels of current errors
@@ -87,10 +80,7 @@ $(function() {
                         $('[class*=required]').children().unwrap();
 
                         for (var index in json.errors) {
-                            console.log("test");
-                            console.log(json.errors[index][0])
                             if(json.errors[index][0] == '__all__'){
-                                console.log("test2");
                                 var $error1 = $('#id_given_name');
                                 var $error2 = $('#id_family_name');
 
@@ -109,7 +99,6 @@ $(function() {
                             else
                             {
                                 var $error = $('[id$="_'+json.errors[index][0]+'"]');
-                                console.log($error);
                                 var $labelOfError = $error.prev();
                                 // insert new errors after the relevant inputs
                                 $error.wrap('<span class="required" />');
