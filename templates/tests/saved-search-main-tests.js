@@ -161,3 +161,36 @@ test("save_digest_form", function() {
           "When #id_digest_active is checked and an email is provided, "+
           "return success");
 });
+test("delete_search", function() {
+    var fixture = $('#qunit-fixture');
+    fixture.append($('<table />', { id: 'search-table' }));
+    $('#search-table').append($('<tr />'));
+    $('#search-table').append($('<tr />', { id: 'saved-search-1' }));
+    $('#search-table').append($('<tr />', { id: 'saved-search-2' }));
+    fixture.append($('<div />', { id: 'edit_modal' }));
+    $('#edit_modal').append($('<a />', { id: 'delete' }));
+    var modal = $('#edit_modal');
+
+    $.ajax = function(params) {
+        params.success()
+    };
+
+    equal($('tr[id^="saved-search"]').length, 2,
+          "There should be two mock searches present");
+    equal($('#search-table').length, 1,
+          "There should be a table containing two searches");
+    $('#delete').attr('href', '1');
+    $('#delete').click();
+    equal($('tr[id^="saved-search"]').length, 1,
+          "After clicking delete, there should only be one mock search");
+
+    // edit_modal gets automatically deleted upon hide by our bootstrap
+    // implementation; re-add it to the document
+    fixture.append(modal);
+    $('#delete').attr('href', '2');
+    $('#delete').click();
+    equal($('tr[id^="saved-search"]').length, 0,
+          "After clicking delete again, there should be no more searches");
+    equal($('#search-table').length, 0,
+          "There should be no search table if there are no searches");
+});

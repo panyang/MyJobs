@@ -203,11 +203,10 @@ $(function() {
 
             $.ajax({
                 url: '/saved-search/delete/'+id,
-                success: function(data) {
+                success: function() {
                     $('#saved-search-'+id).remove();
                     if ($('tr').length == 1) {
                         $('table').remove()
-                        $('#saved-search-list p').remove();
                         $('#saved-search-list').prepend(
                             '<p>No Saved Searches!</p>');
                     }
