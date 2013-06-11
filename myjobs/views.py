@@ -106,8 +106,12 @@ def home(request):
             forms = [name_form, education_form, phone_form, work_form, 
                     address_form]
             valid_forms = [form for form in forms if form.is_valid()]
+            invalid_forms = []
+            for form in forms:
+                if form.changed_data and not form.is_valid():
+                    invalid_forms.append(form)
 
-            if valid_forms:
+            if not invalid_forms:
                 for form in valid_forms:
                     form.save(commit=False)
                     form.user = request.user
