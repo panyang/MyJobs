@@ -45,14 +45,20 @@ a:hover{
     }    
 
 /*Inbox styling*/
-.wrapper form {
-    position: absolute;
-    margin-left: 184px;
+#inbox-messages {
+    display: none;    
+    min-height: 500px; 
 }
+.wrapper form {
+    float: right;
+    margin-top: 10px;    
+}
+
 .messages {
     position: absolute;
     margin-left: 184px;
-    width: 55%;    
+    margin-top: 10px; 
+    width: 50%;        
 }
 .messages table {
     border-collapse:collapse;
@@ -74,8 +80,8 @@ a:hover{
 .messages tr:nth-child(odd) td {background-color: #FFF !important;}
 
 .subnavilist {
-    position: relative;
-    margin-top: -10px;
+    float: left;
+    margin-top: 0px;
     margin-left: -25px;
     width: 200px; 
     list-style: none;

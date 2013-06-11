@@ -25,6 +25,25 @@
         })();
     }
     </script>
+    
+    <script type="text/javascript">
+    $(function() {
+        if (window.location.href.indexOf("inbox") > -1) {
+            $('div#inbox-messages').css('display', 'block');
+        }
+        if (window.location.href.indexOf("compose") > -1) {
+            $('div#inbox-messages').css('display', 'block');
+        }
+        if (window.location.href.indexOf("outbox") > -1) {
+            $('div#inbox-messages').css('display', 'block');
+        }
+        if (window.location.href.indexOf("trash") > -1) {
+            $('div#inbox-messages').css('display', 'block');
+            $('.wrapper p, br').css('display', 'none');
+        }
+    });
+   
+    </script>
 </head>
 
 <body>
@@ -100,11 +119,14 @@
                 </div>                
                 <div class="wrapper">
                     {% block content %}{% endblock %}
-                    <div id="ajax-busy"></div>
+                    <div id="ajax-busy"></div>                    
                     {% block sidebar %}{% endblock sidebar %}
-                </div>                
+                    <div id="inbox-messages"></div>                     
+                </div>
+                               
             {% endblock %} 
         {% endblock %}
+        <div id="inbox-spacing"></div>
     </div></section>
     <footer><div id="footer">
         {% block footer %}
