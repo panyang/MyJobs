@@ -49,8 +49,7 @@ a:hover{
     display: none;    
     min-height: 500px; 
 }
-.wrapper form {
-    float: right;
+.wrapper form {    
     margin-top: 10px;    
 }
 
