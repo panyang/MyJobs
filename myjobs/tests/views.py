@@ -157,30 +157,29 @@ class MyJobsViewsTests(TestCase):
     def test_no_profile_duplicates(self):
         # Form with errors shouldn't save valid sections until entire form
         # is completely valid
-        # resp = self.client.post(reverse('home'),
-        #                         data={'name-given_name': 'Alice',
-        #                               'name-family_name': 'Smith',
-        #                               'name-primary':False,
-        #                               'education-degree_major': 'Basket Weaving',
-        #                               'action':'save_profile'}, follow=True)
+        resp = self.client.post(reverse('home'),
+                                data={'name-given_name': 'Alice',
+                                      'name-family_name': 'Smith',
+                                      'name-primary':False,
+                                      'education-degree_major': 'Basket Weaving',
+                                      'action':'save_profile'}, follow=True)
 
-        # self.assertEqual(Name.objects.count(), 1)
-        # self.assertEqual(Education.objects.count(), 0)
-        # resp = self.client.post(reverse('home'),
-        #                         data={'name-given_name': 'Alice',
-        #                               'name-family_name': 'Smith',
-        #                               'name-primary':False,
-        #                               'edu-organization_name': 'Stanford University',
-        #                               'edu-degree_date': '2012-01-01',
-        #                               'edu-education_level_code': 6,
-        #                               'edu-degree_major': 'Basket Weaving',
-        #                               'action':'save_profile'}, follow=True)
-        # self.assertEqual(Name.objects.count(), 2)
-        # self.assertEqual(Education.objects.count(), 1)
+        self.assertEqual(Name.objects.count(), 1)
+        self.assertEqual(Education.objects.count(), 0)
+        resp = self.client.post(reverse('home'),
+                                data={'name-given_name': 'Alice',
+                                      'name-family_name': 'Smith',
+                                      'name-primary':False,
+                                      'edu-organization_name': 'Stanford University',
+                                      'edu-degree_date': '2012-01-01',
+                                      'edu-education_level_code': 6,
+                                      'edu-degree_major': 'Basket Weaving',
+                                      'action':'save_profile'}, follow=True)
+        self.assertEqual(Name.objects.count(), 2)
+        self.assertEqual(Education.objects.count(), 1)
 
         # Commenting this out for the time being; will create a new ticket for
         # this. TODO - new ticket to ensure forms aren't saved multiple times.
-        pass
 
     def test_delete_account(self):
         """
