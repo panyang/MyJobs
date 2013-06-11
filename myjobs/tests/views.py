@@ -182,6 +182,7 @@ class MyJobsViewsTests(TestCase):
         # this. When tested manually, this works. This test however, doesn't. 
         # In the view we're checking for changed data, for some reason the
         # education form's changed_data attribute is still False.
+        pass
 
     def test_delete_account(self):
         """
