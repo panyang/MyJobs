@@ -97,10 +97,6 @@ $(function() {
 
                         $('#edit_modal').modal();
                         datepicker();
-
-                        $('[id$="-country_sub_division_code"]').hide();
-                        $('label[for$="-country_sub_division_code"]').hide();
-                        $('[id$="-country_code"]').change();
                     }
                 });            
             } else {
@@ -210,68 +206,6 @@ $(function() {
                     item.remove();
                     manageModuleDisplay(module);
                 }
-            });
-        },
-
-        /*
-        Gets a list of regions, if any, for a specific country
-        and formats them in a select menu.
-        */
-        getSelect: function() {
-
-            var country = $('[id$="-country_code"]').val();
-            var elem = $('[id$="-country_sub_division_code"]');
-            var id = elem.attr('id');
-            var name = elem.attr('name');
-            var old_val = elem.val();
-            if (!old_val) {
-                old_val = "";
-            }
-
-            var region_url = "http://js.nlx.org/myjobs/data/";
-            region_url += country.toLowerCase();
-            region_url += "_regions.jsonp";
-
-            // Hide region selector and its label in case we receive a 404
-            $("label[for='"+id+"']").hide();
-            elem.hide();
-
-            $.ajax({
-                url: region_url,
-                dataType: "jsonp",
-                data: {},
-                jsonpCallback: "returnRegionData",
-                success: function(data) {
-                    var opts = "";
-                    for (var i in data.regions) {
-                        item = data.regions[i]
-                        opts_attrs = "value='"+item.code+"'";
-                        if (item.code.toLowerCase() == old_val.toLowerCase() ||
-                            item.code.toLowerCase() == data.default_option.toLowerCase()) {
-                            // This is either the default for a new profile unit
-                            // or the value of a unit being edited
-                            opts_attrs += " SELECTED";
-                        }
-                        opts += "<option "+opts_attrs+">";
-                        opts += item.name+"</option>";
-                    }
-                    if (typeof(data.friendly_label) != "undefined") {
-                        label = data.friendly_label;
-                    } else {
-                        label = "Region";
-                    }
-                    if (opts != "") {
-                        select = $("<select />", {
-                            id: id,
-                            name: name,
-                        });
-                        select.html(opts);
-                        elem.after(select);
-                        elem.remove();
-                        $("label[for="+id+"]").html(label)
-                        $("label[for="+id+"]").show();
-                    }
-                },
             });
         },
 
