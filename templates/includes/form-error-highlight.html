@@ -75,10 +75,6 @@ form -- the rest of the form.
               {% country_select selected="USA" html_id=field.id_for_label  region_html_id=region_id input_name=field.html_name %}
             {% endwith %}
             </div>
-
-          {% elif 'country_sub_division_code' in field.html_name %}
-                    <div class="span3 form-label pull-left"><label for="{{field.id_for_label}}">Region</label><div class="clear"></div></div>
-                    <input name="{{field.html_name}}" value="{{field.value|default_if_none:" "}}" id="{{field.id_for_label}}" />
           {% else %}
             {% if '_dialing' in field.html_name or field.html_name == "ph-number" or field.html_name == "ph-extension" or field.html_name == "number" or field.html_name == "extension" %}
               <div class="input-prepend" data-for="{{field.id}}">
