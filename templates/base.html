@@ -27,6 +27,7 @@
         })();
     }
     </script>
+    
 </head>
 
 <body>
@@ -101,12 +102,16 @@
                     </div>
                 </div>                
                 <div class="wrapper">
-                    {% block content %}{% endblock %}
-                    <div id="ajax-busy"></div>
+                    <div class="row">
+                    {% block messages_header %}{% endblock messages_header %}
                     {% block sidebar %}{% endblock sidebar %}
-                </div>                
+                    {% block content %}{% endblock %}                    
+                    <div id="ajax-busy"></div>
+                    </div>
+                </div>                               
             {% endblock %} 
         {% endblock %}
+        <div id="inbox-spacing"></div>
     </div></section>
     <footer><div id="footer">
         {% block footer %}
