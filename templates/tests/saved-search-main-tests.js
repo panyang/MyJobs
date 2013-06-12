@@ -25,9 +25,8 @@ test("get_edit", function() {
     disable_fields = function(param1, param2) {
     };
     $('.edit').trigger('click');
-    equal($('#edit_modal').html(), 'query successful', "AJAX response should"+
-                                                       " be appended to #edit"+
-                                                       "_modal");
+    equal($('#edit_modal').html(), 'query successful',
+          "AJAX response should be appended to #edit_modal");
     $('#edit_modal').modal('hide');
 });
 test("save_form", function() {
@@ -39,37 +38,43 @@ test("save_form", function() {
     $('#saved-search-form').append($('<label />',
                                { 'for': 'id_url' }));
     $('#saved-search-form').append($('<input />',
-                               { id: 'id_url', type: 'text' }));
+                               { id: 'id_url',
+                                 type: 'text',
+                                 name: 'url' }));
     $('#saved-search-form').append($('<span />',
                                { id: 'id_refresh' }));
     $('#saved-search-form').append($('<input />',
-                               { id: 'id_is_active', type: 'checkbox' }));
+                               { id: 'id_is_active',
+                                 type: 'checkbox',
+                                 name: 'is_active' }));
     $('#saved-search-form').append($('<a />',
                                { id: 'new_search' }));
-    $('#id_is_active').checked = true;
+    $('#id_is_active').prop('checked', true);
     $.ajax = function(params) {
-        params.complete = function() {};
-        if (params.data.url == 'jobs.jobs/jobs') {
-            params.success('success');
+        if (params.data.indexOf('jobs.jobs%2Fjobs') >= 0 &&
+            params.data.indexOf('is_active=True') >= 0) {
+            params.success('<tr></tr>');
         } else {
             params.success('{"url":["This field is required."]}');
         }
     };
-    function success_callback() {};
-    equal($('#saved-search-form').children().length, 5, "Form should have"+
-                                                        " five children");
-    $('#new_search').trigger('click', { success_callback: success_callback });
-    equal($('[class="label label-important"]').length, 1, "Form should have an"+
-                                                          " error label added");
+
+    equal($('#saved-search-form').children().length, 5,
+          "Form should have five children");
+    $('#new_search').click();
+    equal($('#saved-search-form').children().length, 6,
+          "After clicking, form should have six children");
+    equal($('[class="label label-important"]').length, 1,
+          "Form should have an error label added");
 
     $('#id_url').val('jobs.jobs/jobs');
-    $('#new_search').trigger('click', { success_callback: success_callback });
-    equal($('#id_url').val(), '', "#id_url should be cleared after submitting"+
-                                  " a valid form");
-    equal($('#id_is_active').checked, undefined, "#id_is_active should be"+
-                                                 " cleared");
-    equal($('[class="label label-important"]').length, 0, "Error label should be"+
-                                                          " removed");
+    $('#new_search').click();
+    equal($('#id_url').val(), '',
+          "#id_url should be cleared after submitting a valid form");
+    equal($('#id_is_active').checked, undefined,
+          "#id_is_active should be cleared");
+    equal($('[class="label label-important"]').length, 0,
+          "Error label should be removed");
 });
 test("validate", function() {
     $('#qunit-fixture').append($('<div />',
@@ -88,36 +93,35 @@ test("validate", function() {
     $('#saved-search-form').append($('<div />', { id: 'validated' }));
     $.ajax = function(params) {
         if (params.data.url == 'jobs.jobs/jobs') {
-            params.success('{"url_status":"valid","feed_title":"foo","rss_url"'+
-                           ':"bar"}');
+            params.success(
+                '{"url_status":"valid","feed_title":"foo","rss_url":"bar"}');
         } else {
             params.success('{"url_status":"not valid"}');
         }
     }
     $('.refresh').click();
-    equal($('#validated').text(), 'not valid', "Running validate with no feed"+
-                                             " url returns 'not valid'");
+    equal($('#validated').text(), 'not valid',
+          "Running validate with no feed url returns 'not valid'");
     equal($('#id_feed').text(), '', "With no url, #id_feed should be empty");
     equal($('#id_label').text(), '', "With no url, #id_label should be empty");
 
     $('#id_url').val('google.com');
     $('.refresh').click();
-    equal($('#validated').text(), 'not valid', "Running validate with an"+
-                                               " invalid feed url returns"+
-                                               " 'not valid'");
-    equal($('#id_feed').text(), '', "With an invalid url, #id_feed should be"+
-                                    " empty");
-    equal($('#id_label').text(), '', "With an invalid url, #id_label should be"+
-                                     " empty");
+    equal($('#validated').text(), 'not valid',
+          "Running validate with an invalid feed url returns 'not valid'");
+    equal($('#id_feed').text(), '',
+          "With an invalid url, #id_feed should be empty");
+    equal($('#id_label').text(), '',
+          "With an invalid url, #id_label should be empty");
 
     $('#id_url').val('jobs.jobs/jobs');
     $('.refresh').click();
-    equal($('#validated').text(), 'valid', "Running validate with a valid"+
-                                           " url returns 'valid'");
-    equal($('#id_feed').val(), 'bar', "With a valid url, #id_feed should get"+
-                                      " set");
-    equal($('#id_label').val(), 'foo', "With a valid url, #id_label should"+
-                                       " get set");
+    equal($('#validated').text(), 'valid',
+          "Running validate with a valid url returns 'valid'");
+    equal($('#id_feed').val(), 'bar',
+          "With a valid url, #id_feed should get set");
+    equal($('#id_label').val(), 'foo',
+          "With a valid url, #id_label should get set");
 });
 test("save_digest_form", function() {
     $('#qunit-fixture').append($('<div />', { id: 'digest-option' }));
@@ -141,21 +145,52 @@ test("save_digest_form", function() {
         }
     }
     $('#digest_submit').click();
-    equal($('#saved').text(), 'Saved!', "When #id_digest_active is not"+
-                                        " checked, delete user's digest"+
-                                        " settings and return success");
+    equal($('#saved').text(), 'Saved!',
+          "When #id_digest_active is not checked, delete user's digest "+
+          "settings and return success");
 
     $('#id_digest_active').prop('checked', 'checked');
     $('#digest_submit').click();
-    equal($('#saved').text(), 'Something went wrong', "When #id_digest_active"+
-                                                      " is checked and no"+
-                                                      " email is provided,"+
-                                                      " return an error"+
-                                                      " condition");
+    equal($('#saved').text(), 'Something went wrong',
+          "When #id_digest_active is checked and no email is provided, "+
+          "return an error condition");
 
     $('#id_digest_email').val('foo@example.com');
     $('#digest_submit').click();
-    equal($('#saved').text(), 'Saved!', "When #id_digest_active is checked and"+
-                                        " an email is provided, return"+
-                                        " success");
+    equal($('#saved').text(), 'Saved!',
+          "When #id_digest_active is checked and an email is provided, "+
+          "return success");
+});
+test("delete_search", function() {
+    var fixture = $('#qunit-fixture');
+    fixture.append($('<table />', { id: 'search-table' }));
+    $('#search-table').append($('<tr />'));
+    $('#search-table').append($('<tr />', { id: 'saved-search-1' }));
+    $('#search-table').append($('<tr />', { id: 'saved-search-2' }));
+    fixture.append($('<div />', { id: 'edit_modal' }));
+    $('#edit_modal').append($('<a />', { id: 'delete' }));
+    var modal = $('#edit_modal');
+
+    $.ajax = function(params) {
+        params.success()
+    };
+
+    equal($('tr[id^="saved-search"]').length, 2,
+          "There should be two mock searches present");
+    equal($('#search-table').length, 1,
+          "There should be a table containing two searches");
+    $('#delete').attr('href', '1');
+    $('#delete').click();
+    equal($('tr[id^="saved-search"]').length, 1,
+          "After clicking delete, there should only be one mock search");
+
+    // edit_modal gets automatically deleted upon hide by our bootstrap
+    // implementation; re-add it to the document
+    fixture.append(modal);
+    $('#delete').attr('href', '2');
+    $('#delete').click();
+    equal($('tr[id^="saved-search"]').length, 0,
+          "After clicking delete again, there should be no more searches");
+    equal($('#search-table').length, 0,
+          "There should be no search table if there are no searches");
 });

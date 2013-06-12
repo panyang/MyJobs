@@ -1,0 +1,17 @@
+{% load i18n %}
+
+{% if saved_searches %}
+<table class="table table-striped table-bordered">
+  <thead>
+    <th class="list_width">{% trans "Search Name" %}</th>
+    <th class="mobile_hide">{% trans "Search URL" %}</th>
+    <th class="mobile_hide">{% trans "Frequency" %}</th>
+    <th></th>
+  </thead>
+  <tbody>
+    {% for search in saved_searches %}
+        {% include 'mysearches/saved_search_row.html' with search=search %}
+    {% endfor %}
+  </tbody>
+</table>
+{% endif %}

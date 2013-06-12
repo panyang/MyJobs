@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 {% load common_tags %}
-{% load humanize %}
 {% load i18n %}
 
 {% block site-title %}
@@ -23,78 +22,7 @@
     <div class="span12">
       <div id="saved-search-list">
         {% if saved_searches %}
-        <table class="table table-striped table-bordered">
-          <thead>
-            <th class="list_width">{% trans "Search Name" %}</th>
-            <th class="mobile_hide">{% trans "Search URL" %}</th>
-            <th class="mobile_hide">{% trans "Frequency" %}</th>
-            <th></th>
-          </thead>
-          <tbody>
-            {% for search in saved_searches %}
-            <tr>
-              <td class="view_search"><div>{{ search.label }}</div><div class="label label-{% if search.is_active %}success{% else %}default{% endif %}">{% if search.is_active %}Active{%else%}Inactive{%endif%}</div></td>
-              <td class="url mobile_hide {% if not search.is_active %}muted{% endif %}"><a href="{{ search.url }}" target="_blank">{{ search.url }}</a></td>
-              <td class="frequency mobile_hide {% if not search.is_active %}muted{% endif %}">
-                {% if search.frequency == "W" %}
-                Weekly:<br />
-                On {{ search.get_verbose_dow }}
-                {% elif  search.frequency == "M" %}
-                Monthly:<br />
-                On the {{ search.day_of_month|ordinal }}
-                {% else %}
-                Daily
-                {% endif %}
-                <div id="search_{{ search.id }}" class="modal hide fade">
-                    <div class="modal-header">
-                      <button type="button" class="close" data-dismiss="modal" aria-hidden="true">&times;</button>
-                      <h3>{{ search.label }} <small>Details</small></h3>
-                    </div>
-                    <div class="modal-body">
-                        <label class="form-label pull-left">Status:</label>
-                        <div class="label label-{% if search.is_active %}success{% else %}default{% endif %}">{% if search.is_active %}Active{% else %}Inactive{% endif %}</div>
-                        <div class="clear"></div>
-
-                        <label class="form-label pull-left">Search URL:</label>
-                        <a href="{{ search.url }}" target="_blank">{{ search.url }}</a>
-                        <div class="clear"></div>
-
-                        <label class="form-label pull-left">Frequency:</label>
-                        {% if search.frequency == "W" %}
-                        <strong>Weekly</strong>
-                        on {{ search.get_verbose_dow }}
-                        {% elif  search.frequency == "M" %}
-                        <strong>Monthly</strong>
-                        on the {{ search.day_of_month|ordinal }}
-                        {% else %}
-                        <strong>Daily</strong>
-                        {% endif %}
-                        <div class="clear"></div>
-
-                        <label class="form-label pull-left">Last Sent:</label>
-                        <div>{% if search.last_sent %}{{ search.last_sent }}{% else %}Never{% endif %}</div>
-                        <div class="clear"></div>
-                        <label class="form-label pull-left">Sent To:</label>
-                        <div>{{ search.email }}</div>
-                        <div class="clear"></div>
-                        <label class="form-label pull-left">Notes and Comments:</label>
-                        <div>{% if search.notes %}{{ search.notes }}{% else %}None{% endif %}</div>
-                    </div>
-                    <div class="modal-footer">
-                        <a class="btn" data-dismiss="modal">Close</a>
-                        <a href="{{ search.id }}" class="btn primary edit">Edit</a>
-                    </div>
-                </div>
-              </td>
-              <td class="buttons">
-                <a href="{% url 'view_full_feed' search_id=search.id %}" class="btn mobile_hide">View</a>
-                <a href="{{ search.id }}" class="btn edit">Edit</a>
-                <a href="{{ search.id }}" class="btn mobile_hide details">Details</a>
-            </td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+        {% include 'mysearches/saved_search_table.html'  with saved_searches=saved_searches %}
         {% else %}
         <p>No Saved Searches!</p>
         {% endif %}

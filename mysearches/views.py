@@ -24,7 +24,7 @@ def delete_saved_search(request,search_id):
     except ValueError:
         # all searches are being disabled
         SavedSearch.objects.filter(user=request.user).delete()
-    return HttpResponseRedirect('/saved-search')
+    return HttpResponse(status=200)
         
 @user_passes_test(User.objects.is_active)
 @user_passes_test(User.objects.not_disabled)
@@ -108,14 +108,33 @@ def save_digest_form(request):
 
 @user_passes_test(User.objects.is_active)
 @user_passes_test(User.objects.not_disabled)
-def save_new_search_form(request):
+def save_search_form(request):
     if request.is_ajax():
-        add_form = SavedSearchForm(user=request.user, data=request.POST)
-        if add_form.is_valid():
-            add_form.save()
-            return HttpResponse('success')
+        search_id = request.POST.get('search_id')
+        first_instance = request.POST.get('first_instance')
+        if first_instance:
+            first_instance = int(first_instance)
+        try:
+            search_id = int(search_id)
+            original = SavedSearch.objects.get(id=search_id)
+            form = SavedSearchForm(user=request.user,
+                                   data=request.POST,
+                                   instance=original)
+        except:
+            form = SavedSearchForm(user=request.user, data=request.POST)
+
+        if form.is_valid():
+            form.save()
+            if first_instance:
+                template = 'mysearches/saved_search_table.html'
+                data = {'saved_searches': [form.instance]}
+            else:
+                template = 'mysearches/saved_search_row.html'
+                data = {'search': form.instance}
+            return render_to_response(template, data,
+                                      RequestContext(request))
         else:
-            return HttpResponse(json.dumps(add_form.errors))
+            return HttpResponse(json.dumps(form.errors))
 
 @user_passes_test(User.objects.is_active)
 @user_passes_test(User.objects.not_disabled)
