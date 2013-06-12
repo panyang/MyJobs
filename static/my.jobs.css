@@ -50,6 +50,9 @@ a:hover{
     border-radius: 5px;
     padding: 5px;
 }
+#messaging-space-bottom {
+    height: 125px;   
+}
 .messaging-table {
     width: 95%;
 }
