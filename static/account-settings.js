@@ -41,8 +41,11 @@ $(function() {
             var module =  $(e.target).attr('id').split('-')[0];
             var item_id = $(e.target).attr('id').split('-')[1];
 
+            // grabs closest form to the button, good since 
+            // this function is used for different forms.
             var form = $(e.target).closest("form");
 
+            // protection from cross site requests
             csrf_token_tag = document.getElementsByName('csrfmiddlewaretoken')[0];
             var csrf_token = "";
             if(typeof(csrf_token_tag)!='undefined'){
@@ -80,13 +83,17 @@ $(function() {
                         $('[class*=required]').children().unwrap();
 
                         for (var index in json.errors) {
+                            // for edit-basic, json.error name is __all__(all fields)
                             if(json.errors[index][0] == '__all__'){
                                 var $error1 = $('#id_given_name');
                                 var $error2 = $('#id_family_name');
 
+                                // Wrap the error in a span (for easy css changes)
                                 $error1.wrap('<span class="required" />');
                                 $error2.wrap('<span class="required" />');
 
+                                // Edits placeholder to show error, errors 
+                                // thrown up by views.py
                                 $error1.attr("placeholder", json.errors[index][1]);
                                 $error2.attr("placeholder", json.errors[index][1]);
 

@@ -70,7 +70,7 @@ class EditAccountForm(Form):
 
         # Exclusive or. These fields must either both exist or not at all
         if bool(first) != bool(last):
-            raise ValidationError(_("You must enter both a first and last name."))
+            raise ValidationError(_("Both a first and last name required."))
         else:
             return self.cleaned_data
 

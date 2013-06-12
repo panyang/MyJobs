@@ -70,9 +70,6 @@ form -- the rest of the form.
                     <div class="span3 form-label pull-left"><label for="{{field.id_for_label}}">Region</label><div class="clear"></div></div>
                     <input type="hidden" name="{{field.html_name}}" value="{{field.value|default_if_none:" "}}" id="{{field.id_for_label}}" />
         	{% else %}
-        		
-        			
-        		
         		<div class="span3 form-label pull-left initial">{{ field.label_tag }}</div><div class="profile-form-input">{{ field  }}</div>
         		
 		{% endif %}
