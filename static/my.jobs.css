@@ -45,53 +45,53 @@ a:hover{
     }    
 
 /*Inbox styling*/
-#inbox-messages {
-    display: none;    
-    min-height: 500px; 
+#messaging-border {
+    border: 1px solid #ddd;
+    border-radius: 5px;
+    padding: 5px;
 }
-.wrapper form {    
-    margin-top: 10px;    
+.messaging-table {
+    width: 95%;
 }
-
-.messages {
-    position: absolute;
-    margin-left: 184px;
-    margin-top: 10px; 
-    width: 50%;        
+.messaging-table td {
+    padding-left: 5px;
+    text-align: right;
 }
-.messages table {
-    border-collapse:collapse;
-}
-.messages table, th, td {
-    border:1px solid #000;
-}
-.messages td {
+.messaging-table td:first-child {    
     text-align: left;
-    padding: .5em;
 }
-.messages th {
-    text-align: left;
-    background-color: #CCC;
-    padding-left: .5em; 
-}
-
-.messages tr:nth-child(even) td {background-color: #d2cfc7 !important;}
-.messages tr:nth-child(odd) td {background-color: #FFF !important;}
-
 .subnavilist {
-    float: left;
-    margin-top: 0px;
-    margin-left: -25px;
-    width: 200px; 
+    position: relative;
+    margin-top: -10px;
+    margin-left: -30px;
+    width: 175px; 
     list-style: none;
 }
 .subnavilist li {
-    border: 1px solid #000;
+    border: 1px solid #ddd;
     border-top: 0;
     padding: .5em;
 }
 .subnavilist li:first-child {
-    border-top: 1px solid #000;
+    border-top: 1px solid #ddd;
+    -webkit-border-top-left-radius: 5px;
+	-khtml-border-radius-topleft: 5px;	
+	-moz-border-radius-topleft: 5px;
+	border-top-left-radius: 5px;
+	-webkit-border-top-right-radius: 5px;
+	-khtml-border-radius-topright: 5px;	
+	-moz-border-radius-topright: 5px;
+	border-top-right-radius: 5px;
+}
+.subnavilist li:last-child {
+    -webkit-border-bottom-left-radius: 5px;
+	-khtml-border-radius-bottomleft: 5px;	
+	-moz-border-radius-bottomleft: 5px;
+	border-bottom-left-radius: 5px;
+	-webkit-border-bottom-right-radius: 5px;
+	-khtml-border-radius-bottomright: 5px;	
+	-moz-border-radius-bottomright: 5px;
+	border-bottom-right-radius: 5px;
 }
     
 /*Ajax Indicator*/

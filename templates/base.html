@@ -26,25 +26,6 @@
     }
     </script>
     
-    <script type="text/javascript">
-    $(function() {
-        if (window.location.href.indexOf("inbox") > -1) {
-            $('div#inbox-messages').css('display', 'block');
-        }
-        if (window.location.href.indexOf("compose") > -1) {
-            $('div#inbox-messages').css('display', 'block');
-            $('.wrapper form').css('float', 'right');            
-        }
-        if (window.location.href.indexOf("outbox") > -1) {
-            $('div#inbox-messages').css('display', 'block');
-        }
-        if (window.location.href.indexOf("trash") > -1) {
-            $('div#inbox-messages').css('display', 'block');
-            $('.wrapper p, br').css('display', 'none');
-        }
-    });
-   
-    </script>
 </head>
 
 <body>
@@ -119,12 +100,13 @@
                     </div>
                 </div>                
                 <div class="wrapper">
-                    {% block content %}{% endblock %}
-                    <div id="ajax-busy"></div>                    
+                    <div class="row">
+                    {% block messages_header %}{% endblock messages_header %}
                     {% block sidebar %}{% endblock sidebar %}
-                    <div id="inbox-messages"></div>                     
-                </div>
-                               
+                    {% block content %}{% endblock %}                    
+                    <div id="ajax-busy"></div>
+                    </div>
+                </div>                               
             {% endblock %} 
         {% endblock %}
         <div id="inbox-spacing"></div>
