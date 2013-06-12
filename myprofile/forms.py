@@ -3,6 +3,7 @@ from django.forms import *
 from django.utils.translation import ugettext_lazy as _
 from myjobs.forms import BaseUserForm
 from myprofile.models import *
+from countries import COUNTRIES
 
 
 def generate_custom_widgets(model):
@@ -44,10 +45,6 @@ class NameForm(BaseUserForm):
         model = Name
         widgets = generate_custom_widgets(model)
         
-
-class InitialNameForm(NameForm):
-    primary = BooleanField(widget=HiddenInput(), required=False, initial="off")
-
 
 class SecondaryEmailForm(BaseUserForm):
     class Meta:
@@ -117,3 +114,47 @@ class AddressForm(BaseUserForm):
         form_name = _("Address")
         model = Address
         widgets = generate_custom_widgets(model)
+
+class InitialForm(BaseUserForm):
+    def __init__(self, *args, **kwargs):
+        super(InitialForm, self).__init__(*args, **kwargs)
+        for key, field in self.fields.items():
+            if isinstance(field.widget, TextInput) or \
+                isinstance(field.widget, Textarea) or \
+                isinstance(field.widget, DateInput) or \
+                isinstance(field.widget, DateTimeInput) or \
+                isinstance(field.widget, TimeInput):
+                field.widget.attrs.update({'placeholder': field.label})
+
+class InitialNameForm(InitialForm):
+    class Meta:
+        model = Name
+        fields = ['given_name', 'family_name']
+
+
+class InitialAddressForm(InitialForm):
+    class Meta:
+        model = Address
+        fields = ['address_line_one', 'address_line_two', 'city_name',
+                  'country_sub_division_code', 'country_code', 'postal_code']
+        widgets = { 'country_code': Select(choices=COUNTRIES) }
+
+
+class InitialPhoneForm(InitialForm):
+    class Meta:
+        model = Telephone
+        fields = ['area_dialing', 'number', 'extension', 'use_code']
+
+
+class InitialWorkForm(InitialForm):
+    class Meta:
+        model = EmploymentHistory
+        fields = ['position_title', 'organization_name', 'start_date',
+                 'current_indicator']
+
+
+class InitialEducationForm(InitialForm):
+    class Meta:
+        model = Education
+        fields = ['organization_name', 'degree_date', 'education_level_code',
+                  'degree_name']

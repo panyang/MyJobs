@@ -47,6 +47,7 @@ class ProfileUnits(models.Model):
 
 class Education(ProfileUnits):
     EDUCATION_LEVEL_CHOICES = (
+        ('', _('Education Level')),
         (3, _('High School')),
         (4, _('Non-Degree Education')),
         (5, _('Associate')),
@@ -77,7 +78,7 @@ class Education(ProfileUnits):
     degree_minor = models.CharField(max_length=255, blank=True, null=True,
                                     verbose_name=_('minor'))
 
-    
+
 class Address(ProfileUnits):
     label = models.CharField(max_length=60, blank=True, 
                             verbose_name=_('Address Label'))
@@ -96,22 +97,25 @@ class Address(ProfileUnits):
 
 
 class Telephone(ProfileUnits):
-    USE_CODE_CHOICES = ( 
-        ('Home', _('Home')),
-        ('Work', _('Work')),
-        ('Mobile', _('Mobile')),
-        ('Pager', _('Pager')),
-        ('Fax', _('Fax')),
-        ('Other', _('Other')),
+    USE_CODE_CHOICES = (
+        ('', 'Phone Type'),
+        ('Home', 'Home'),
+        ('Work', 'Work'),
+        ('Mobile', 'Mobile'),
+        ('Pager', 'Pager'),
+        ('Fax', 'Fax'),
+        ('Other', 'Other')
     )
-    channel_code = models.CharField(max_length=30, editable=False)
-    country_dialing = models.IntegerField(max_length=3, 
-                                          verbose_name=_("Country Code"),blank=True)
-    area_dialing = models.IntegerField(max_length=3, verbose_name=_("Area Code")) 
-    number = models.CharField(max_length=8, verbose_name=_("Local Number"))
-    extension = models.CharField(max_length=5, blank=True, null=True)
+    channel_code = models.CharField(max_length=30, editable=False, blank=True)
+    country_dialing = models.CharField(max_length=3, blank=True,
+                                       verbose_name=_("Country Code"))
+    area_dialing = models.CharField(max_length=5, blank=True,
+                                    verbose_name=_("Area Code")) 
+    number = models.CharField(max_length=10, blank=True,
+                              verbose_name=_("Local Number"))
+    extension = models.CharField(max_length=5, blank=True)
     use_code = models.CharField(max_length=30, choices=USE_CODE_CHOICES,
-                                verbose_name=_("Phone Type"))
+                                blank=True, verbose_name=_("Phone Type"))
 
     def save(self, *args, **kwargs):
         if self.use_code == "Home" or self.use_code == "Work" or self.use_code == "Other":
