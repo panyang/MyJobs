@@ -112,6 +112,13 @@ a:hover{
     border-top: 1px solid #a3aeb1;
     border-bottom: none;
 }
+#newAccountData .errorlist {
+    margin: 0px;
+    padding: 0px;
+}
+#newAccountData .errorlist li {
+    color: #c44e34;
+}
 
 /* Form Styles */
 .form-label{
