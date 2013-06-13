@@ -64,22 +64,6 @@ class EditAccountForm(Form):
                                               choices=self.choices,
                                               initial=self.choices[0][0])
 
-    #def clean_given_name(self):
-    #    first = self.cleaned_data['given_name']
-    #    last = self.cleaned_data['family_name']
-    #    if bool(first):
-    #        raise ValidationError(_("Both a first and last name required."))
-    #    else:
-    #        return self.cleaned_data
-
-    #def clean_family_name(self):
-    #    last = self.cleaned_data['family_name']
-    #    if bool(last):
-    #        raise ValidationError(_("Both a first and last name required."))
-    #    else:
-    #        return self.cleaned_data
-
-
     def clean(self):
         cleaned_data = super(EditAccountForm, self).clean()
         first = cleaned_data.get("given_name")
