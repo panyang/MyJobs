@@ -107,7 +107,7 @@ class MyJobsViewsTests(TestCase):
                                           'new_password2': 'notNew'}, follow=True)
         self.failIf(resp.context['form'].is_valid())
         self.assertFormError(resp, 'form', field=None,
-                             errors=u"The two new password fields did not match.")
+                             errors=u"The new password fields did not match.")
 
     def test_partial_successful_profile_form(self):
         resp = self.client.post(reverse('home'),

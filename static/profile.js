@@ -174,6 +174,7 @@ $(function() {
                         $('[class*=required]').children().unwrap();
 
                         for (var index in json.errors) {
+                            console.log(json.errors[index][0]);
                             var $error = $('[id$="-'+json.errors[index][0]+'"]');
                             var $labelOfError = $error.parent().prev();
                             // insert new errors after the relevant inputs

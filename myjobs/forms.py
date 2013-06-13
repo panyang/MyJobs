@@ -64,15 +64,40 @@ class EditAccountForm(Form):
                                               choices=self.choices,
                                               initial=self.choices[0][0])
 
+    #def clean_given_name(self):
+    #    first = self.cleaned_data['given_name']
+    #    last = self.cleaned_data['family_name']
+    #    if bool(first):
+    #        raise ValidationError(_("Both a first and last name required."))
+    #    else:
+    #        return self.cleaned_data
+
+    #def clean_family_name(self):
+    #    last = self.cleaned_data['family_name']
+    #    if bool(last):
+    #        raise ValidationError(_("Both a first and last name required."))
+    #    else:
+    #        return self.cleaned_data
+
+
     def clean(self):
-        first = self.cleaned_data.get("given_name", None)
-        last = self.cleaned_data.get("family_name", None)
+        cleaned_data = super(EditAccountForm, self).clean()
+        first = cleaned_data.get("given_name")
+        last = cleaned_data.get("family_name")
 
         # Exclusive or. These fields must either both exist or not at all
         if bool(first) != bool(last):
-            raise ValidationError(_("Both a first and last name required."))
-        else:
-            return self.cleaned_data
+            error_msg = u"Both a first and last name required."
+            self._errors["given_name"] = self.error_class([error_msg])
+            self._errors["family_name"] = self.error_class([error_msg])
+
+            # These fields are no longer valid. Remove them from the
+            # cleaned data.
+            del cleaned_data["given_name"]
+            del cleaned_data["family_name"]
+        
+        return cleaned_data
+    
 
     def save(self, u):
         first = self.cleaned_data.get("given_name", None)
@@ -142,7 +167,15 @@ class ChangePasswordForm(Form):
         cleaned_data = super(ChangePasswordForm, self).clean()
         if 'new_password1' in self.cleaned_data and 'new_password2' in self.cleaned_data:
             if self.cleaned_data['new_password1'] != self.cleaned_data['new_password2']:
-                raise forms.ValidationError(_("The two new password fields did not match."))
+                error_msg = u"The new password fields did not match."
+                self._errors["new_password1"] = self.error_class([error_msg])
+                self._errors["new_password2"] = self.error_class([error_msg])
+
+                # These fields are no longer valid. Remove them from the
+                # cleaned data.
+                del cleaned_data["new_password1"]
+                del cleaned_data["new_password2"]
+                #raise forms.ValidationError(_("The two new password fields did not match."))
             else:
                 return self.cleaned_data
 
