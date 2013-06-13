@@ -68,7 +68,6 @@ $(function() {
                 data: serialized_data,
                 url: "/edit/" + section_name,
                 success: function(data) {
-                    console.log(data);
                     if (data == "success") {
                         // Remove all required field changes, if any
                         removeRequiredChanges();
