@@ -114,8 +114,13 @@ $(function() {
         :e: "Save" button within a modal
         */
         saveForm: function(e) {
-            e.preventDefault();
+            /*  
+            TODO: Some of the initializing can be refactored 
+            (i.e. module, item_id, csrf_token, and serialized_data)
+            among some .js files; account-settings and profile 
+            */
 
+            e.preventDefault();
             // id is formatted [module_type]-[item_id]-[event]
             var module =  $(e.target).attr('id').split('-')[0];
             var item_id = $(e.target).attr('id').split('-')[1];

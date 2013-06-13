@@ -36,6 +36,12 @@ $(function() {
         },
 
         saveForm: function(e) {
+            /*  
+            TODO: Some of the initializing can be refactored 
+            (i.e. module, item_id, csrf_token, and serialized_data)
+            among some .js files; account-settings and profile 
+            */
+
             e.preventDefault();
             // id is formatted [module_type]-[item_id]-[event]
             var module =  $(e.target).attr('id').split('-')[0];
@@ -44,7 +50,6 @@ $(function() {
             // grabs closest form to the button, good since 
             // this function is used for different forms.
             var form = $(e.target).closest("form");
-            console.log(form);
 
             // protection from cross site requests
             csrf_token_tag = document.getElementsByName('csrfmiddlewaretoken')[0];
@@ -65,6 +70,7 @@ $(function() {
                 success: function(data) {
                     console.log(data);
                     if (data == "success") {
+                        // Remove all required field changes, if any
                         removeRequiredChanges();
                         if (auto_user) {
                             window.location.href='/';
@@ -80,7 +86,7 @@ $(function() {
                         if ($('.form-status').children().length > 0){
                             $('.form-status').empty();
                         }
-
+                        // Remove all required field changes, if any
                         removeRequiredChanges();
                         for (var index in json.errors) {
                             var $error = $('[id$="_'+json.errors[index][0]+'"]');

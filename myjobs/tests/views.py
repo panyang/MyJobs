@@ -11,6 +11,7 @@ from django.core.urlresolvers import reverse
 from django.http import HttpRequest
 from django.test.client import Client
 from django.test import TestCase
+from django.utils import simplejson as json
 from django.utils.http import urlquote
 
 from myjobs.forms import *
@@ -105,9 +106,12 @@ class MyJobsViewsTests(TestCase):
                                     data={'password': 'secret',
                                           'new_password1': 'new',
                                           'new_password2': 'notNew'}, follow=True)
-        self.failIf(resp.context['form'].is_valid())
-        self.assertFormError(resp, 'form', field=None,
-                             errors=u"The new password fields did not match.")
+        
+        errors = [[u'new_password1', [u'The new password fields did not match.']],
+                  [u'new_password2', [u'The new password fields did not match.']]]
+
+        content = json.loads(resp.content)
+        self.assertItemsEqual(content['errors'], errors)
 
     def test_partial_successful_profile_form(self):
         resp = self.client.post(reverse('home'),

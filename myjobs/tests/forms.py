@@ -30,8 +30,8 @@ class AccountFormTests(TestCase):
         for item in invalid_data:
             form = ChangePasswordForm(user=self.user, data=item['data'])
             self.failIf(form.is_valid())
-            self.assertEqual(form.errors[item[u'errors'][0]],
-                             item[u'errors'][1])
+            self.assertEqual(form.errors[item[u'errors'][0][0]],
+                             item[u'errors'][0][1])
 
         form = ChangePasswordForm(user=self.user,data={'password': 'secret',
                                                        'new_password1': 'anothersecret',
