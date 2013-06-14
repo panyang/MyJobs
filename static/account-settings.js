@@ -92,13 +92,18 @@ $(function() {
                             var $labelOfError = $error.prev();
                             // insert new errors after the relevant inputs
                             $error.wrap('<span class="required" />');
-                            // if on password form
                             if(item_id == "password"){
                                 $error.val(''); 
                             }
                             $error.attr("placeholder", json.errors[index][1]);
                             $error.css('border', '1px solid #900');
                             $labelOfError.css('color', '#900');
+                            $labelOfError.children().css('font-size', 'larger');
+                        }
+                        if($.browser.msie){
+                            // TODO: Fix bug that breaks reset 
+                            // password form when failing twice
+                            ieFix();
                         }
                     }
                 }
@@ -119,10 +124,18 @@ $(function() {
         // remove color from labels of current errors
         $('[class*=required]').prev().css('color', '#000');
 
+        // Changes label text back to normal size
+        $('[class*=required]').prev().children().css('font-size', '');
+
         // remove red border around past required fields
         $('[class*=required]').children().css('border', '1px solid #CCC');
 
         // remove current errors
         $('[class*=required]').children().unwrap();
+    }
+
+    function ieFix(){
+        $('input, textarea').placeholder();
+        $('input, textarea').blur();
     }
 });
