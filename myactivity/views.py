@@ -37,8 +37,8 @@ def activity_search_feed(request):
     else:
         before = datetime.now()
 
-    # Prefetch the user (and its profileunits)
-    searches = SavedSearch.objects.select_related('user', 'user__profileunits_set')
+    # Prefetch the user
+    searches = SavedSearch.objects.select_related('user')
 
     # All searches saved from a given microsite
     searches = searches.filter(url__contains=microsite)

@@ -7,13 +7,9 @@ register=template.Library()
 
 @register.filter(name='get_distinct_users')
 def get_distinct_users(values):
-    print len(values)
     # Get list of users who have searches for a specific microsite
-    # Force queryset to execute
-    users = set(search.user for search in values)
     # Prepare structure for the addition of user names
-    users = dict((user, False) for user in users)
-    print len(users)
+    users = dict((search.user, False) for search in values)
 
     # Get list of primary names for the above users
     names = Name.objects.filter(user__in=users.keys(), primary=True)
