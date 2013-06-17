@@ -26,9 +26,6 @@ $(function() {
             // targets "Delete" button on confirmation modal
             "click [id$='delete']": "deleteItem",
 
-            // targets country select boxes
-            "change [id$='-country_code']": "getSelect",
-
             // targets delete buttons not on confirmation modal
             "click [id$='confirm']": "confirmDelete",
 

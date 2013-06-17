@@ -35,7 +35,6 @@ $(function() {
             });
             if($.browser.msie){
                 $('input, textarea').placeholder();
-                console.log("Ran")
             }
         },
 
