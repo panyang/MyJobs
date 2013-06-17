@@ -25,27 +25,29 @@ class MyActivityViewsTests(TestCase):
         self.client = TestClient()
         self.client.login_user(self.staff_user)
 
-        for i in range(50):
+        for i in range(10):
             # Create 50 new users
-            UserFactory(email='example%s@example.com'%i)
-        for i in range(50):
+            user = UserFactory(email='example%s@example.com'%i)
             for search in SEARCH_OPTS:
                 # Create 150 new searches and assign three per user
-                SavedSearchFactory(user=User.objects.all()[i],
+                SavedSearchFactory(user=user,
                                    url='indiana.jobs/search?q=%s'%search,
                                    label='%s Jobs'%search)
 
     def test_number_of_searches_and_users_is_correct(self):
         response = self.client.get(reverse('activity_search_feed'))
+        response = self.client.post(reverse('activity_search_feed'),
+                                    {'microsite':'indiana.jobs'})
         soup = BeautifulSoup(response.content)
-        self.assertEqual(len(soup.select('#search-table tr')), 150)
-        self.assertEqual(len(soup.select('#user-table tr')), 50)
+        self.assertEqual(len(soup.select('#search-table tr')), 30)
+        self.assertEqual(len(soup.select('#user-table tr')), 10)
 
         old_search = SavedSearch.objects.all()[0]
         old_search.created_on -= timedelta(days=8)
         old_search.save()
 
-        response = self.client.get(reverse('activity_search_feed'))
+        response = self.client.post(reverse('activity_search_feed'),
+                                    {'microsite':'indiana.jobs'})
         soup = BeautifulSoup(response.content)
-        self.assertEqual(len(soup.select('#search-table tr')), 149)
-        self.assertEqual(len(soup.select('#user-table tr')), 50)
+        self.assertEqual(len(soup.select('#search-table tr')), 29)
+        self.assertEqual(len(soup.select('#user-table tr')), 10)
