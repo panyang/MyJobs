@@ -45,8 +45,7 @@ a:hover{
     }
 #moduleBank {
     margin:0 0 10px; 
-    z-index:100; 
-    width: 260px;
+    z-index:100;  
 }
 
 /*Inbox styling*/
