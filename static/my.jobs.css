@@ -788,6 +788,10 @@ form input[type='checkbox']{
       
     .profile-mobile td:before { content: attr(data-title); }
     
+    #moduleBank {
+        margin-top: 20px;
+    }
+    
     /*Ajax Indicator*/
     #ajax-busy {
         margin: 0px 0px 0px -65px; /* left margin is half width of the div, to center it */
