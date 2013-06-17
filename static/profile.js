@@ -181,6 +181,10 @@ $(function() {
                         // remove current errors
                         $('[class*=required]').children().unwrap();
 
+                        if($.browser.msie){
+                            $('[class*=msieError]').remove();
+        }               }
+
                         for (var index in json.errors) {
                             var $error = $('[id$="-'+json.errors[index][0]+'"]');
                             var $labelOfError = $error.parent().prev();
@@ -188,6 +192,10 @@ $(function() {
                             $error.wrap('<span class="required" />');
                             if(!($.browser.msie)){
                                 $error.attr("placeholder",json.errors[index][1]);
+                            }else{
+                                field = $error.parent().parent().prev();
+                                field.before("<div class='msieError'><i>" + json.errors[index][1] + "</i></div>");
+                                //$('[class$=msieError]').css('margin-left', '45%')
                             }
                             $labelOfError.css('color', '#900');
                             $labelOfError.children().css('font-size', 'larger');

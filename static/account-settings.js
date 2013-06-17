@@ -101,8 +101,6 @@ $(function() {
                             }
                             $error.attr("placeholder", json.errors[index][1]);
                             if($.browser.msie){
-                                $error.focus();
-                                $error.blur();
                                 field = $error.parent().prev();
                                 field.before("<div class='msieError'><i>" + json.errors[index][1] + "</i></div>");
                             }
