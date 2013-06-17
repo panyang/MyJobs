@@ -17,6 +17,7 @@
     <input type="submit" value="View another microsite">
 </form>
 
+{% if searches %}
 <div class="row">
     <div class="span12">
         <div class="pull-left"><h2>{{site}}</h2> between {{after}} and {{before}}</div>
@@ -76,4 +77,5 @@
         </div>
     </div>
 </div>
+{% endif %}
 {% endblock %}
