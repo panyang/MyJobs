@@ -65,8 +65,8 @@ class ActivationProfile(models.Model):
     user = models.ForeignKey('myjobs.User', verbose_name="user")
     activation_key = models.CharField(_('activation_key'), max_length=40)
     email = models.EmailField(max_length=255)
-    
-    
+    sent = models.DateTimeField(auto_now_add=True, default=datetime_now)
+
     ACTIVATED = "ALREADY ACTIVATED"
     objects = RegistrationManager()
 
@@ -76,8 +76,7 @@ class ActivationProfile(models.Model):
     def activation_key_expired(self):
         expiration_date = datetime.timedelta(days=settings.ACCOUNT_ACTIVATION_DAYS)
         return self.activation_key == self.ACTIVATED or \
-               (self.user.date_joined + expiration_date <= datetime_now())
-    activation_key_expired.boolean = True
+               (self.sent + expiration_date <= datetime_now())
 
     def generate_key(self):        
         """
@@ -97,9 +96,12 @@ class ActivationProfile(models.Model):
         Used to reset activation key when user is disabled.
         """
         self.activation_key = self.generate_key()
+        self.sent = datetime_now()
         self.save()
 
     def send_activation_email(self, primary=True, password=None):
+        if self.activation_key_expired():
+            self.reset_activation()
         ctx_dict = {'activation_key': self.activation_key,
                     'expiration_days': settings.ACCOUNT_ACTIVATION_DAYS,
                     'password': password,

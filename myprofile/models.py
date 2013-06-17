@@ -47,6 +47,7 @@ class ProfileUnits(models.Model):
 
 class Education(ProfileUnits):
     EDUCATION_LEVEL_CHOICES = (
+        ('', _('Education Level')),
         (3, _('High School')),
         (4, _('Non-Degree Education')),
         (5, _('Associate')),
@@ -77,42 +78,44 @@ class Education(ProfileUnits):
     degree_minor = models.CharField(max_length=255, blank=True, null=True,
                                     verbose_name=_('minor'))
 
-    
+
 class Address(ProfileUnits):
-    label = models.CharField(max_length=60, verbose_name=_('Address Label'))
-    address_line_one = models.CharField(max_length=255,
-                                        verbose_name=_('Street Address'))
-    address_line_two = models.CharField(max_length=255, blank=True,null=True,
-                                        verbose_name=_('Street Address 2'))
-    unit = models.CharField(max_length=25, blank=True, null=True,
-                            verbose_name=_("Apartment/Unit Number"))
-    city_name = models.CharField(max_length=255, verbose_name=_("City"))
-    country_sub_division_code = models.CharField(max_length=5,
-                                                 blank=True,
+    label = models.CharField(max_length=60, blank=True, 
+                            verbose_name=_('Address Label'))
+    address_line_one = models.CharField(max_length=255, blank=True,
+                                        verbose_name=_('Address Line One'))
+    address_line_two = models.CharField(max_length=255, blank=True,
+                                        verbose_name=_('Address Line Two'))
+    city_name = models.CharField(max_length=255, blank=True, 
+                                verbose_name=_("City"))
+    country_sub_division_code = models.CharField(max_length=5, blank=True,
                                                  verbose_name=_("State/Region"))
-    country_code = models.CharField(max_length=3, verbose_name=_("Country"))
-    postal_code = models.CharField(max_length=12, verbose_name=_("Zip Code"))
-    post_office_box = models.CharField(max_length=60, blank=True, null=True,
-                                       verbose_name=_("PO Box Number"))
+    country_code = models.CharField(max_length=3, blank=True, 
+                                    verbose_name=_("Country"))
+    postal_code = models.CharField(max_length=12, blank=True, 
+                                    verbose_name=_("Postal Code"))
 
 
 class Telephone(ProfileUnits):
-    USE_CODE_CHOICES = ( 
-        ('Home', _('Home')),
-        ('Work', _('Work')),
-        ('Mobile', _('Mobile')),
-        ('Pager', _('Pager')),
-        ('Fax', _('Fax')),
-        ('Other', _('Other')),
+    USE_CODE_CHOICES = (
+        ('', 'Phone Type'),
+        ('Home', 'Home'),
+        ('Work', 'Work'),
+        ('Mobile', 'Mobile'),
+        ('Pager', 'Pager'),
+        ('Fax', 'Fax'),
+        ('Other', 'Other')
     )
-    channel_code = models.CharField(max_length=30, editable=False)
-    country_dialing = models.IntegerField(max_length=3, 
-                                          verbose_name=_("Country Code"),blank=True)
-    area_dialing = models.IntegerField(max_length=3, verbose_name=_("Area Code")) 
-    number = models.CharField(max_length=8, verbose_name=_("Local Number"))
-    extension = models.CharField(max_length=5, blank=True, null=True)
+    channel_code = models.CharField(max_length=30, editable=False, blank=True)
+    country_dialing = models.CharField(max_length=3, blank=True,
+                                       verbose_name=_("Country Code"))
+    area_dialing = models.CharField(max_length=5, blank=True,
+                                    verbose_name=_("Area Code")) 
+    number = models.CharField(max_length=10, blank=True,
+                              verbose_name=_("Local Number"))
+    extension = models.CharField(max_length=5, blank=True)
     use_code = models.CharField(max_length=30, choices=USE_CODE_CHOICES,
-                                verbose_name=_("Phone Type"))
+                                blank=True, verbose_name=_("Phone Type"))
 
     def save(self, *args, **kwargs):
         if self.use_code == "Home" or self.use_code == "Work" or self.use_code == "Other":
@@ -253,9 +256,9 @@ def delete_secondary_activation(sender, **kwargs):
 # Calls `delete_secondary_activation` after a secondary email is deleted.
 # dispatch_uid: arbitrary unique string that prevents this signal from
 # being connected to multiple times
-models.signals.post_delete.connect(delete_secondary_activation,
-                                   sender=SecondaryEmail,
-                                   dispatch_uid='delete_secondary_activation')
+models.signals.pre_delete.connect(delete_secondary_activation,
+                                  sender=SecondaryEmail,
+                                  dispatch_uid='delete_secondary_activation')
 
 
 class Profile(models.Model):
