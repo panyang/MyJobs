@@ -289,6 +289,7 @@ $(document).ready(function() {
          
                     // Change the CSS and put it back to its original position.
                     $('#moduleBank').css({
+                            'width': 'auto',
                             'top': '0px',
                             'position': 'relative'
                 });
