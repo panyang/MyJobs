@@ -10,4 +10,13 @@
 #titleRow .loginBox{
     margin-top: 80px;
 	}
+.msieError{
+	color:#900;
+	margin-left:38%;
+}
 
+@media screen and (max-width: 500px){  
+	.msieError{
+		margin-left: 0;
+	}
+}

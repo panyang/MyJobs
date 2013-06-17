@@ -49,9 +49,11 @@ class BaseUserForm(ModelForm):
     
 
 class EditAccountForm(Form):
-    given_name = CharField(label=_("First Name"), 
+    given_name = CharField(label=_("First Name"),
+                            widget=TextInput(attrs={'placeholder': 'First Name'}),
                                  max_length=40, required=False)
     family_name = CharField(label=_("Last Name"),
+                            widget=TextInput(attrs={'placeholder': 'Last Name'}),
                                 max_length=40, required=False)
 
     def __init__(self, *args, **kwargs):
@@ -129,12 +131,12 @@ class EditCommunicationForm(BaseUserForm):
 
 
 class ChangePasswordForm(Form):
-    password = CharField(label=_("Password"),
-                                widget=PasswordInput(attrs={'placeholder':_('Password')}))
-    new_password1 = CharField(label=_("New Password"),
-                                widget=PasswordInput(attrs={'placeholder':_('New Password')}))
-    new_password2 = CharField(label=_("New Password (again)"),
-                                   widget=PasswordInput(attrs={'placeholder':_('New Password (again)')}))
+    password = CharField(label="Password",
+                                widget=PasswordInput(attrs={'placeholder':'Password'}))
+    new_password1 = CharField(label="New Password",
+                                widget=PasswordInput(attrs={'placeholder':'New Password'}))
+    new_password2 = CharField(label="New Password (again)",
+                                widget=PasswordInput(attrs={'placeholder':'New Password (again)'}))
     
     def __init__(self,*args, **kwargs):
         self.user = kwargs.pop('user',None)

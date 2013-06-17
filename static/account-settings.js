@@ -33,6 +33,10 @@ $(function() {
                     $('div.account-settings').html(data);
                 }
             });
+            if($.browser.msie){
+                $('input, textarea').placeholder();
+                console.log("Ran")
+            }
         },
 
         saveForm: function(e) {
@@ -96,14 +100,15 @@ $(function() {
                                 $error.val(''); 
                             }
                             $error.attr("placeholder", json.errors[index][1]);
+                            if($.browser.msie){
+                                $error.focus();
+                                $error.blur();
+                                field = $error.parent().prev();
+                                field.before("<div class='msieError'><i>" + json.errors[index][1] + "</i></div>");
+                            }
                             $error.css('border', '1px solid #900');
                             $labelOfError.css('color', '#900');
                             $labelOfError.children().css('font-size', 'larger');
-                        }
-                        if($.browser.msie){
-                            // TODO: Fix bug that breaks reset 
-                            // password form when failing twice
-                            ieFix();
                         }
                     }
                 }
@@ -132,10 +137,9 @@ $(function() {
 
         // remove current errors
         $('[class*=required]').children().unwrap();
-    }
 
-    function ieFix(){
-        $('input, textarea').placeholder();
-        $('input, textarea').blur();
+        if($.browser.msie){
+            $('[class*=msieError]').remove();
+        }
     }
 });
