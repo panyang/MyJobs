@@ -34,7 +34,7 @@
                     <div class="accordion-inner">
                         <table class="table table-striped table-bordered">
                             {% for search in searches %}
-                            <tr><td>
+                            <tr id="search-{{search.id}}"><td>
                                 <ul style="list-style-type: none; margin-left: -10px;">
                                     <li>{% if search.label %}{{search.label}}{% else %}Unlabeled{% endif %}</li>
                                     <li>{{search.url}}</li>
@@ -60,7 +60,7 @@
                         <table class="table table-striped table-bordered">
                             {% with searches|get_distinct_users as users %}
                             {% for user, name in users.items %}
-                            <tr><td>
+                            <tr id="user-{{user.id}}"><td>
                                 <img src="{{user.get_gravatar_url}}&s=50" class="pull-left">
                                 <ul style="list-style-type: none;">
                                     <li>{% if name %}{{name}}{% else %}{% trans 'Name not provided' %}{% endif %}</li>

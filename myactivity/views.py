@@ -22,19 +22,21 @@ def activity_search_feed(request):
             url = '//' + url
         microsite = urlparse(url).netloc
     else:
-        microsite = 'jobs.jobs'
+        microsite = 'indiana.jobs'
 
-    # saved search was created after this date...
+    # Saved searches were created after this date...
     after = request.REQUEST.get('after')
     if after:
         after = datetime.strptime(after, '%Y-%m-%d')
     else:
-        after = datetime.strptime('01/01/2013', '%d/%m/%Y')
+        # Defaults to one week ago
+        after = datetime.now() - timedelta(days=7)
     # ... and before this one
     before = request.REQUEST.get('before')
     if before:
         before = datetime.strptime(before, '%Y-%m-%d')
     else:
+        # Defaults to the date and time that the page is accessed
         before = datetime.now()
 
     # Prefetch the user
@@ -45,6 +47,9 @@ def activity_search_feed(request):
 
     # Specific microsite searches saved between two dates
     searches = searches.filter(created_on__range=[after, before])
-    data = {'searches': searches, 'site': microsite, 'after': after, 'before': before}
+    data = {'searches': searches,
+            'site': microsite,
+            'after': after,
+            'before': before}
     return render_to_response('myactivity/activity_feed.html', data,
                               RequestContext(request))
