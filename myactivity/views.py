@@ -24,17 +24,17 @@ def activity_search_feed(request):
     # saved search was created after this date...
     after = request.REQUEST.get('after')
     if after:
-        after = datetime.fromtimestamp(float(after))
+        after = datetime.strptime(after, '%Y-%m-%d')
     else:
-        after = datetime.fromtimestamp(time.mktime((datetime.now()-timedelta(days=7)).timetuple()))
+        after = datetime.strptime('01/01/2013', '%d/%m/%Y')
     # ... and before this one
     before = request.REQUEST.get('before')
     if before:
-        before = datetime.fromtimestamp(float(before))
+        before = datetime.strptime(before, '%Y-%m-%d')
     else:
         before = datetime.now()
 
-    # Prefetch the user (and its profileunits_set attribute?)
+    # Prefetch the user (and its profileunits)
     searches = SavedSearch.objects.select_related('user', 'user__profileunits_set')
 
     # All searches saved from a given microsite
