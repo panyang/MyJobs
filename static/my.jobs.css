@@ -43,8 +43,7 @@ a:hover{
 .profile-form-input input {
     width: 40%;
     }
-#moduleBank {
-    margin:0 0 10px; 
+#moduleBank {    
     z-index:100;  
 }
 
