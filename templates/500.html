@@ -1,9 +1,12 @@
-{% extends base %}
+{% extends "base.html" %}
+{% load i18n %}
 {% block header-content %}
     <h1>500 Error </h1><small>something has went wrong.</small>
 {% endblock header-content %}
 {% block content %}
-    <p>Just hit back and try again.</p>
+    <div class = "formBox span8" offset = "2">
+    	Just hit back and try again.
+    </div>
 {% endblock content %}
 {% block focusbox-content %}
 {% endblock focusbox-content %}
