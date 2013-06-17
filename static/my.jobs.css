@@ -42,7 +42,12 @@ a:hover{
     }
 .profile-form-input input {
     width: 40%;
-    }    
+    }
+#moduleBank {
+    margin:0 0 10px; 
+    z-index:100; 
+    width: 260px;
+}
 
 /*Inbox styling*/
 #messaging-border {
