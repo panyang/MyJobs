@@ -54,34 +54,6 @@ $(document).ready(function(){
     });
 });
 
-function deselect() {
-    $(".pop").slideFadeToggle(function() { 
-        $("#inbox_link").removeClass("selected");
-    });    
-}
-
-$(function() {
-    $("#inbox_link").live('click', function() {
-        if($(this).hasClass("selected")) {
-            deselect();               
-        } else {
-            $(this).addClass("selected");
-            $(".pop").slideFadeToggle(function() { 
-                $("#email").focus();
-            });
-        }
-        return false;
-    });
-
-    $(".close").live('click', function() {
-        deselect();
-        return false;
-    });
-});
-
-$.fn.slideFadeToggle = function(easing, callback) {
-    return this.animate({ opacity: 'toggle', height: 'toggle' }, "fast", easing, callback);
-};
              
 function clearForm(form) {
     // clear the inputted form of existing data
