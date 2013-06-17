@@ -44,6 +44,14 @@ a:hover{
     width: 40%;
     }    
 
+/*Inbox notification*/
+.inbox-alert {
+    padding-top: 4px;
+}
+.inbox-alert a {
+    color: #FFF;
+}
+
 /*Inbox styling*/
 #messaging-border {
     border: 1px solid #ddd;
@@ -804,6 +812,10 @@ form input[type='checkbox']{
     }
     .profile-form-input input {
         width: 65%;
+    }
+    
+    .inbox-alert {
+        display: none;        
     }
     
     #titleRow{
