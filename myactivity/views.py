@@ -17,9 +17,12 @@ def activity_search_feed(request):
     between the given (optional) dates
     """
     url = request.REQUEST.get('microsite')
-    if url.find('//') == -1:
-        url = '//' + url
-    microsite = urlparse(url).netloc
+    if url:
+        if url.find('//') == -1:
+            url = '//' + url
+        microsite = urlparse(url).netloc
+    else:
+        microsite = 'jobs.jobs'
 
     # saved search was created after this date...
     after = request.REQUEST.get('after')
@@ -42,6 +45,6 @@ def activity_search_feed(request):
 
     # Specific microsite searches saved between two dates
     searches = searches.filter(created_on__range=[after, before])
-    data = {'searches': searches, 'site': microsite}
+    data = {'searches': searches, 'site': microsite, 'after': after, 'before': before}
     return render_to_response('myactivity/activity_feed.html', data,
                               RequestContext(request))
