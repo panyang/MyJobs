@@ -812,7 +812,11 @@ form input[type='checkbox']{
     }
     .profile-form-input input {
         width: 65%;
-    }    
+    }
+    
+    .inbox-alert {
+        display: none;        
+    }
     
     #titleRow{
         margin-top: 0px;
