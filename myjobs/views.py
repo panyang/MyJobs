@@ -93,9 +93,10 @@ def home(request):
                 login(request, loginform.get_user())
                 return HttpResponse('valid')
             else:
-                return render_to_response('includes/widget-login-username.html',
-                                          {'form': loginform},
-                                          context_instance=RequestContext(request))
+                return HttpResponse(json.dumps({'errors': loginform.errors.items()}))
+                #return render_to_response('includes/widget-login-username.html',
+                #                          {'form': loginform},
+                #                          context_instance=RequestContext(request))
         elif request.POST['action'] == "save_profile":
             name_form = InitialNameForm(request.POST, prefix="name", user=request.user)
             education_form = InitialEducationForm(request.POST, prefix="edu", user=request.user)

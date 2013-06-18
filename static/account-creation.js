@@ -62,7 +62,27 @@ $(document).on("click", "button#login", function(e) {
         global: false,
         success: function(data) {
             if (data != 'valid') {
-                form.replaceWith(data);
+                // form was a json-encoded list of errors and error messages
+                var json = jQuery.parseJSON(data);
+
+                // Remove all required field changes, if any
+                removeRequiredChanges();
+
+                for (var index in json.errors) {
+                    var $error = $('[id$="_'+json.errors[index][0]+'"]');
+                    var $labelOfError = $error.parent().prev();
+                    // insert new errors after the relevant inputs
+                    $error.wrap('<span class="required" />');
+                    if($.browser.msie){
+                        field = $error.parent().parent().prev();
+                        field.before("<div class='msieError'><i>" + json.errors[index][1] + "</i></div>");
+                    }else{
+                        $error.val('');
+                        $error.attr("placeholder",json.errors[index][1]);
+                    }
+                    $error.css('border', '1px solid #D00')
+                }
+                $('[id$=login-form]').prev().css('color', '#D00');
             } else {
                 window.location = '/profile';
             }
@@ -121,5 +141,17 @@ function setPrimaryName(){
         $("#id_name-primary").attr("checked","checked");
     }else{
         $("#id_name-primary").attr("checked",false);
+    }
+}
+
+function removeRequiredChanges(){
+    // remove red border around past required fields
+    $('[class*=required]').children().css('border', '1px solid #CCC');
+
+    // remove current errors
+    $('[class*=required]').children().unwrap();
+
+    if($.browser.msie){
+        $('[class*=msieError]').remove();
     }
 }

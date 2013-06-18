@@ -14,15 +14,17 @@ class CustomAuthForm(AuthenticationForm):
     view for users that haven't activated yet.
     
     """
-    username = forms.CharField(label=_("Email"), required=True,
+    username = forms.CharField(error_messages={'required':'Email is required.'},
+                               label=_("Email"), required=True,
                                widget=forms.TextInput(
                                    attrs={'placeholder': _('Email'),
-                                          'id':'id_email'}))
-    password = forms.CharField(label=_("Password"), required=True,
+                                          'id':'id_username'}))
+    password = forms.CharField(error_messages={'required':'Password is required.'},
+                               label=_("Password"), required=True,
                                widget=forms.PasswordInput(
                                    attrs={'placeholder':_('Password'),
-                                          'id':'id_password1'},
-                                   render_value=False))
+                                          'id':'id_password'},
+                                   render_value=False,))
 
     def __init__(self, request=None, *args, **kwargs):
         super(CustomAuthForm, self).__init__(request, *args, **kwargs)
@@ -34,11 +36,17 @@ class CustomAuthForm(AuthenticationForm):
         if username and password:
             self.user_cache = authenticate(username=username, password=password)
             if self.user_cache is None:
-                message = "Please enter a correct username and password. " \
-                    "Note that password is case-sensitive but email is not."
-                raise forms.ValidationError(_(message))
-                                              
-                                              
+                error_msg = [u"Please enter a correct email.",
+                             u"Please enter a correct password.",]
+
+                self._errors['username'] = self.error_class([error_msg[0]])
+                self._errors['password'] = self.error_class([error_msg[1]])
+
+                # These fields are no longer valid. Remove them from the
+                # cleaned data
+                del self.cleaned_data['username']
+                del self.cleaned_data['password']  
+
         self.check_for_test_cookie()
         return self.cleaned_data
 
