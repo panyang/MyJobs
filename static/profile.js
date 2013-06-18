@@ -264,7 +264,7 @@ function datepicker() {
 };
 
 $(document).ready(function() {
-    if($(window).width() >= 1024) {
+    if($(window).width() >= 501) {
         // This function will be executed when the user scrolls the page.
         $(window).scroll(function(e) {
                 // Get the position of the location where the scroller starts.
