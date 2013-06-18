@@ -205,7 +205,7 @@ $(function() {
                 url: '/saved-search/delete/'+id,
                 success: function() {
                     $('#saved-search-'+id).remove();
-                    if ($('tr').length == 1) {
+                    if ($('tr[id^="saved-search-"]').length == 0) {
                         $('table').remove()
                         $('#saved-search-list').prepend(
                             '<p>No Saved Searches!</p>');
