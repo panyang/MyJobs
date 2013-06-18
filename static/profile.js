@@ -34,6 +34,23 @@ $(function() {
 
             // targets "View" button for each item
             "click [id$='view']": "viewDetails",
+
+            // targets "I still work here" checkbox in Employment History
+            "click [id$='id_employmenthistory-current_indicator']": "hideEndDate",
+        },
+
+        /*
+        Hides the end date if the "I still work here" checkbox is checked
+        */
+        hideEndDate: function() {
+            if(($("[id$='id_employmenthistory-current_indicator']").is(":checked"))) {
+                $("[id$='id_employmenthistory-end_date']").hide();
+                $("[for$='id_employmenthistory-end_date']").hide();
+            }
+            else {
+                $("[id$='id_employmenthistory-end_date']").show();
+                $("[for$='id_employmenthistory-end_date']").show();
+            }
         },
 
         /*
