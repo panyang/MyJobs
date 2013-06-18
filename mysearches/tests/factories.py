@@ -9,7 +9,7 @@ class SavedSearchFactory(factory.Factory):
 
     url = "http://jobs.jobs/jobs"
     label = "All Jobs"
-    feed = "http://jobs.jobs/jobs/feed/rss?"
+    feed = "http://jobs.jobs/jobs/feed/rss"
     is_active = True
     email = "alice@example.com"
     frequency = "W"
