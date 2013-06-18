@@ -105,7 +105,6 @@ $(function() {
                             }
                             $error.css('border', '1px solid #900');
                             $labelOfError.css('color', '#900');
-                            $labelOfError.children().css('font-size', 'larger');
                         }
                     }
                 }
@@ -125,9 +124,6 @@ $(function() {
     function removeRequiredChanges(){
         // remove color from labels of current errors
         $('[class*=required]').prev().css('color', '#000');
-
-        // Changes label text back to normal size
-        $('[class*=required]').prev().children().css('font-size', '');
 
         // remove red border around past required fields
         $('[class*=required]').children().css('border', '1px solid #CCC');

@@ -169,9 +169,6 @@ $(function() {
                         // remove color from labels of current errors
                         $('[class*=required]').parent().prev().css('color', '#000');
 
-                        // Changes label text back to normal size
-                        $('[class*=required]').parent().prev().children().css('font-size', '');
-
                         // remove current errors
                         $('[class*=required]').children().unwrap();
 
@@ -191,7 +188,6 @@ $(function() {
                                 field.before("<div class='msieError'><i>" + json.errors[index][1] + "</i></div>");
                             }
                             $labelOfError.css('color', '#900');
-                            $labelOfError.children().css('font-size', 'larger');
                         }
                     }
                 }
