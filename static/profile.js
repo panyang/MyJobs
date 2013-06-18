@@ -36,20 +36,20 @@ $(function() {
             "click [id$='view']": "viewDetails",
 
             // targets "I still work here" checkbox in Employment History
-            "click [id$='id_employmenthistory-current_indicator']": "hideEndDate",
+            "click [id='id_employmenthistory-current_indicator']": "hideEndDate",
         },
 
         /*
         Hides the end date if the "I still work here" checkbox is checked
         */
         hideEndDate: function() {
-            if(($("[id$='id_employmenthistory-current_indicator']").is(":checked"))) {
-                $("[id$='id_employmenthistory-end_date']").hide();
-                $("[for$='id_employmenthistory-end_date']").hide();
+            if(($("[id='id_employmenthistory-current_indicator']").is(":checked"))) {
+                $("[id='id_employmenthistory-end_date']").hide();
+                $("[for='id_employmenthistory-end_date']").hide();
             }
             else {
-                $("[id$='id_employmenthistory-end_date']").show();
-                $("[for$='id_employmenthistory-end_date']").show();
+                $("[id='id_employmenthistory-end_date']").show();
+                $("[for='id_employmenthistory-end_date']").show();
             }
         },
 
@@ -112,9 +112,9 @@ $(function() {
                     success: function(data) {
                         $('#moduleColumn').append(data);
                         // Prevents end date from showing up if "I still work here" is checked
-                        if(($("[id$='id_employmenthistory-current_indicator']").is(":checked"))) {
-                            $("[id$='id_employmenthistory-end_date']").hide();
-                            $("[for$='id_employmenthistory-end_date']").hide();
+                        if(($("[id='id_employmenthistory-current_indicator']").is(":checked"))) {
+                            $("[id='id_employmenthistory-end_date']").hide();
+                            $("[for='id_employmenthistory-end_date']").hide();
                         }
                         $('#edit_modal').modal();
                         datepicker();
