@@ -72,7 +72,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
     'django.contrib.redirects.middleware.RedirectFallbackMiddleware',
-    'middleware.PasswordChangeMiddleware',
+    'middleware.RedirectMiddleware',
     'middleware.XsSharing'
 )
 
