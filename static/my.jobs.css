@@ -42,7 +42,10 @@ a:hover{
     }
 .profile-form-input input {
     width: 40%;
-    }    
+    }
+#moduleBank {    
+    z-index:100;  
+}
 
 /*Inbox notification*/
 .inbox-alert {
@@ -792,6 +795,10 @@ form input[type='checkbox']{
     .table-striped tbody tr:nth-child(odd) td {background-color: #FFF !important;} 
       
     .profile-mobile td:before { content: attr(data-title); }
+    
+    #moduleBank {
+        margin-top: 20px;
+    }
     
     /*Ajax Indicator*/
     #ajax-busy {
