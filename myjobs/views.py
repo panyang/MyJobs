@@ -22,14 +22,15 @@ from myjobs.helpers import *
 from myprofile.forms import *
 from registration.forms import *
 
-
 logger = logging.getLogger('__name__')
 
 class About(TemplateView):
     template_name = "about.html"
 
+
 class Privacy(TemplateView):
     template_name = "privacy-policy.html"
+
 
 class Terms(TemplateView):
     template_name = "terms.html"
@@ -47,24 +48,15 @@ def home(request):
 
     """
 
+    # TODO - rename using snake case
     registrationform = RegistrationForm(auto_id=False)
     loginform = CustomAuthForm(auto_id=False)
 
-    
-    # Parameters passed into the form class. See forms.py in myprofile
-    # for more detailed docs
-    settings = {'auto_id':False, 'empty_permitted':True, 'only_show_required':True,
-                'user': request.user}
-    settings_show_all = {'auto_id':False, 'empty_permitted':True,
-                         'only_show_required':False, 'user': request.user}
-    
-    name_form = instantiate_profile_forms(request,[NameForm],settings)[0]
-    education_form = instantiate_profile_forms(request,[EducationForm],
-                                               settings)[0]
-    phone_form = instantiate_profile_forms(request,[TelephoneForm],settings)[0]
-    work_form = instantiate_profile_forms(request,[EmploymentHistoryForm],settings)[0]
-    address_form = instantiate_profile_forms(request,[AddressForm],settings)[0]
-
+    name_form = InitialNameForm(prefix="name")
+    education_form = InitialEducationForm(prefix="edu")
+    phone_form = InitialPhoneForm(prefix="ph")
+    work_form = InitialWorkForm(prefix="work")
+    address_form = InitialAddressForm(prefix="addr")
         
     data_dict = {'registrationform':registrationform,
                  'loginform': loginform,
@@ -87,7 +79,7 @@ def home(request):
                                           cleaned_data['password1'])
                 login(request, user_cache)
                 # pass in gravatar url once user is logged in. Image generated
-                # in AJAX success
+                # on AJAX success
                 data={'gravatar_url': new_user.get_gravatar_url(size=100)}
                 return HttpResponse(json.dumps(data))
             else:
@@ -105,33 +97,25 @@ def home(request):
                                           {'form': loginform},
                                           context_instance=RequestContext(request))
         elif request.POST['action'] == "save_profile":
-            # rebuild the form object with the post parameter = True            
-            name_form = instantiate_profile_forms(request,[NameForm],
-                                                  settings,post=True)[0]
-            education_form = instantiate_profile_forms(request,[EducationForm],
-                                                  settings,post=True)[0]
-            phone_form = instantiate_profile_forms(request,[TelephoneForm],
-                                                  settings,post=True)[0]
-            work_form = instantiate_profile_forms(request,[EmploymentHistoryForm],
-                                                  settings,post=True)[0]
-            address_form = instantiate_profile_forms(request,[AddressForm],
-                                                  settings_show_all,post=True)[0]
-            #required_forms = [name_form,phone_form]
-            form_list = []
-            form_list.append(name_form)
-            form_list.append(education_form)
-            form_list.append(phone_form)
-            form_list.append(work_form)
-            form_list.append(address_form)
-            all_valid = True
-            for form in form_list:
-                if not form.is_valid():
-                    all_valid = False
+            name_form = InitialNameForm(request.POST, prefix="name", user=request.user)
+            education_form = InitialEducationForm(request.POST, prefix="edu", user=request.user)
+            phone_form = InitialPhoneForm(request.POST, prefix="ph", user=request.user)
+            work_form = InitialWorkForm(request.POST, prefix="work", user=request.user)
+            address_form = InitialAddressForm(request.POST, prefix="addr", user=request.user)
 
-            if all_valid:
-                for form in form_list:
-                    if form.cleaned_data:
-                        form.save()
+            forms = [name_form, education_form, phone_form, work_form, 
+                    address_form]
+            valid_forms = [form for form in forms if form.is_valid()]
+            invalid_forms = []
+            for form in forms:
+                if form.changed_data and not form.is_valid():
+                    invalid_forms.append(form)
+
+            if not invalid_forms:
+                for form in valid_forms:
+                    form.save(commit=False)
+                    form.user = request.user
+                    form.save_m2m()
                 return HttpResponse('valid')
             else:
                 return render_to_response('includes/initial-profile-form.html',
