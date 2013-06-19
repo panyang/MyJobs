@@ -30,7 +30,7 @@ $(document).on("click", "button#register", function(e) {
             /*
             The output in this data is a little different than the rest.
             This one outputs errors, when there are errors. But on success,
-            outputs a gravatar url, instead of 'valid'.
+            outputs a gravatar url, instead of 'valid' or 'success'.
             */
             var json = jQuery.parseJSON(data);
             // Check to see if json.gravatar_url is present, in this case, success.

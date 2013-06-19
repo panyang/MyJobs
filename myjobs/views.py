@@ -84,9 +84,6 @@ def home(request):
                 return HttpResponse(json.dumps(data))
             else:
                 return HttpResponse(json.dumps({'errors': registrationform.errors.items()}))
-                #return render_to_response('includes/widget-user-registration.html',
-                #                          {'form': registrationform},
-                #                          context_instance=RequestContext(request))
 
         elif request.POST['action'] == "login":
             loginform = CustomAuthForm(data=request.POST)
