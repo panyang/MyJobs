@@ -16,17 +16,22 @@ class AccountFormTests(TestCase):
             { 'data': {'password': 'cats',
                        'new_password1': 'newpassword',
                        'new_password2': 'newpassword'},
-              'error': ('password', [u"Wrong password."])},
+              u'errors': [['password', [u"Wrong password."]]]},
             { 'data': {'password': 'secret',
                        'new_password1': 'newpassword',
                        'new_password2': 'notnewpassword'},
-              'error': ('__all__', [u"The two new password fields did not match."])}]
+                u'errors':
+                    [[u'new_password2', [u'The new password fields did not match.']],
+                    [u'new_password1', [u'The new password fields did not match.']]],
+            
+            },
+        ]
 
         for item in invalid_data:
             form = ChangePasswordForm(user=self.user, data=item['data'])
             self.failIf(form.is_valid())
-            self.assertEqual(form.errors[item['error'][0]],
-                             item['error'][1])
+            self.assertEqual(form.errors[item[u'errors'][0][0]],
+                             item[u'errors'][0][1])
 
         form = ChangePasswordForm(user=self.user,data={'password': 'secret',
                                                        'new_password1': 'anothersecret',
@@ -65,5 +70,5 @@ class AccountFormTests(TestCase):
                 "user": self.user}
         form = EditAccountForm(data, **{'user':self.user})
         self.assertFalse(form.is_valid())
-        self.assertEqual(form.non_field_errors()[0],
-                         "You must enter both a first and last name.")
+        self.assertEqual(form.errors['family_name'][0],
+                         "Both a first and last name required.")

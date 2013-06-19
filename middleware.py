@@ -5,24 +5,32 @@ from django.utils.cache import patch_vary_headers
 
 from django import http
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect
 
 
-class PasswordChangeMiddleware:
+class RedirectMiddleware:
     """
-    If a user is logged in, their password_change flag is set, and they
-    are not trying to log out, change their password, or activate their
-    account, redirect them to the change password form.
+    Redirects a user to the password change form if several conditions are met:
+    - A user is logged in
+    - That user's password_change flag is set to True
+    - The user is not trying to log out,
+        change passwords, or activate an account
+
+    Returns a 403 status code if the request is ajax and the request dict
+    contains the 'next' key (i.e. no user is logged in, a privileged
+    page was left open, and an unauthorized user tries to access something
+    that they shouldn't)
     """
     def process_request(self, request):
-        if (request.user.is_authenticated() and
-            not re.match(reverse('edit_account'), request.path) and
-            not re.match(reverse('edit_password'), request.path) and
-            not re.match(reverse('auth_logout'), request.path) and
-            not re.match(reverse('registration_activate', args=['a'])[0:-2],
-                                 request.path) and
-            request.user.password_change):
-            return HttpResponseRedirect(reverse('edit_account'))
+        if request.user.is_authenticated():
+            if (not re.match(reverse('edit_account'), request.path) and
+                not re.match(reverse('edit_password'), request.path) and
+                not re.match(reverse('auth_logout'), request.path) and
+                not re.match(reverse('registration_activate', args=['a'])[0:-2],
+                                     request.path) and
+                request.user.password_change):
+                return http.HttpResponseRedirect(reverse('edit_account'))
+        elif request.is_ajax() and bool(request.REQUEST.get('next')):
+            return http.HttpResponse(status=403)
 
 
 
