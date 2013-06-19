@@ -83,19 +83,22 @@ class CustomPasswordResetForm(PasswordResetForm):
         
         
 class RegistrationForm(forms.Form):
-    email = forms.EmailField(label=_("Email"), required=True,
+    email = forms.EmailField(error_messages={'required':'Email is required.'},
+                             label=_("Email"), required=True,
                              widget=forms.TextInput(attrs={
                                  'placeholder': _('Email'), 
                                  'id':'id_email',
                                  'autocomplete':'off'}),
                              max_length=255)
-    password1 = forms.CharField(label=_("Password"), required=True,
+    password1 = forms.CharField(error_messages={'required':'Password is required.'},
+                                label=_("Password"), required=True,
                                 widget=forms.PasswordInput(attrs={
                                     'placeholder':_('Password'),
                                     'id':'id_password1',
                                     'autocomplete':'off'},
                                     render_value=False))
-    password2 = forms.CharField(label=_("Password (again)"), required=True,
+    password2 = forms.CharField(error_messages={'required':'Password (again) is required.'},
+                                label=_("Password (again)"), required=True,
                                 widget=forms.PasswordInput(attrs={
                                     'placeholder': _('Password (again)'),
                                     'id': 'id_password2',
@@ -121,6 +124,14 @@ class RegistrationForm(forms.Form):
         """
         if 'password1' in self.cleaned_data and 'password2' in self.cleaned_data:
             if self.cleaned_data['password1'] != self.cleaned_data['password2']:
-                raise forms.ValidationError(_("The two password fields didn't match."))
+                error_msg = u"The new password fields did not match."
+                self._errors["password1"] = self.error_class([error_msg])
+                self._errors["password2"] = self.error_class([error_msg])
+
+                # These fields are no longer valid. Remove them from the
+                # cleaned data.
+                del self.cleaned_data["password1"]
+                del self.cleaned_data["password2"]
+
             else:
                 return self.cleaned_data
