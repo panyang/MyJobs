@@ -53,7 +53,6 @@ $(document).ready(function(){
         $('input, textarea').placeholder();
     });
 });
-
              
 function clearForm(form) {
     // clear the inputted form of existing data

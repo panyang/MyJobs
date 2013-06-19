@@ -1,20 +1,42 @@
 {% extends "base.html" %}
 {% load i18n %}
-{% comment %}
-404.html -- default 404 error template.
-{% endcomment %}
 {% block header-content %}
-<h1>{% trans "404 Not Found Error"%}</h1>
-<small>{% trans "We can't find the page you are looking for"</small>
+<h1>{% trans "Error 404"%}</h1>
+<small>{% trans "Page not found" %}</small>
 {% endblock header-content %}
 {% block content %}
-{# we should probably do something better than the corgi but for now...#}
-<p>
-    We could not find the page you were looking for, but we did find this
-    cute picture of a corgi in a hot dog costume.<br>
-    <br>
-    <img src="http://mrg.bz/QqfKI8">
-</p>
+
+<div class="row">
+    <div class="span12">
+        <h1>{% trans "Error 404 " %}<small>{% trans "Page not found" %}</small></h1>
+    </div>
+</div>
+
+<div class="row">
+    <div class="span8">        
+    	<p> The page you have requested could not be found or has been removed. 
+    		You can either return to the <a href = "/">home page</a> or use the links 
+    		to the right.
+    	</p>
+    </div>
+    <div class="span4">
+        <div class="formBox" id="moduleBank"> 
+            <h2>Quick Links:</h2>
+            <table class="table table-bordered tables-striped">
+                <tr class="profile-section">
+                    <td><a href="{% url 'view_profile' %}">Profile</a></td>
+                </tr>
+                <tr class="profile-section">
+                    <td><a href="{% url 'saved_search_main' %}">Saved Search</a></td>
+                </tr>
+                <tr class="profile-section">
+                    <td><a href="/">Home</a></td>
+                </tr>
+            </table>
+        </div>
+    </div>
+</div>
+
 {% endblock content %}
 {% block focusbox-content %}
 {% endblock focusbox-content %}
