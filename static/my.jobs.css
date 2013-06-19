@@ -177,6 +177,12 @@ ul.ui-autocomplete{
     color: #fff;
     font-size: .8em;
 }
+.formBox select {
+    width: 216px;
+}
+form select{
+    width: 264px;
+}
 #title{
     padding-top: 60px;
     padding-bottom: 60px;
@@ -1127,4 +1133,9 @@ body.modal-open {
 
 #captcha_modal .modal-body {
     overflow: hidden !important;
+}
+
+.required input[type=text],
+.required select {
+    border: 1px solid #900;
 }

@@ -26,9 +26,6 @@ $(function() {
             // targets "Delete" button on confirmation modal
             "click [id$='delete']": "deleteItem",
 
-            // targets country select boxes
-            "change [id$='-country_code']": "getSelect",
-
             // targets delete buttons not on confirmation modal
             "click [id$='confirm']": "confirmDelete",
 
@@ -131,6 +128,12 @@ $(function() {
         :e: "Save" button within a modal
         */
         saveForm: function(e) {
+            /*  
+            TODO: Some of the initializing can be refactored 
+            (i.e. module, item_id, csrf_token, and serialized_data)
+            among some .js files; account-settings and profile 
+            */
+
             e.preventDefault();
 
             // id is formatted [module_type]-[item_id]-[event]
@@ -184,13 +187,28 @@ $(function() {
                         // form was a json-encoded list of errors and error messages
                         var json = jQuery.parseJSON(data);
 
+                        // remove color from labels of current errors
+                        $('[class*=required]').parent().prev().css('color', '#000');
+
                         // remove current errors
-                        $('[class*=label-important]').remove();
+                        $('[class*=required]').children().unwrap();
+
+                        if($.browser.msie){
+                            $('[class*=msieError]').remove()
+                        }
+
                         for (var index in json.errors) {
+                            var $error = $('[id$="-'+json.errors[index][0]+'"]');
+                            var $labelOfError = $error.parent().prev();
                             // insert new errors after the relevant inputs
-                            $('[id$="-'+json.errors[index][0]+'"]').after(
-                                '<span class="label label-important">'+
-                                json.errors[index][1]+'</span>');
+                            $error.wrap('<span class="required" />');
+                            if(!($.browser.msie)){
+                                $error.attr("placeholder",json.errors[index][1]);
+                            }else{
+                                field = $error.parent().parent().prev();
+                                field.before("<div class='msieError'><i>" + json.errors[index][1] + "</i></div>");
+                            }
+                            $labelOfError.css('color', '#900');
                         }
                     }
                 }
