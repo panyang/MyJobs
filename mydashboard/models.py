@@ -14,14 +14,13 @@ class Company(models.Model):
     # model the id is the same to ease the transition to a single model down the
     # line.
     id = models.IntegerField(primary_key=True, unique=True)
-    name = models.CharField()
+    name = models.CharField(max_length=255)
     admins = models.ManyToManyField(User, through='Administrators')
 
 class DashboardModule(models.Model):
     company = models.ForeignKey(Company)
 
 class Administrators(models.Model):
-    user = models.ForeignKey(User)
+    admin = models.ForeignKey(User)
     company = models.ForeignKey(Company)
     date_added = models.DateTimeField(auto_now=True)
-    added_by = models.ForeignKey(User)
