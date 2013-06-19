@@ -1,6 +1,4 @@
 {% load i18n %}
-{% load inbox %}
-{% load url from future %}
 {% load common_tags %}
 <!DOCTYPE html>
 <html lang="en">
@@ -47,8 +45,7 @@
                     <div class="pull-right">
                     <div class="inline-inputs">
                         {% if user.is_authenticated %}                                               
-                        <div class="span5">&nbsp;</div>
-                        <div class="pagination-right span1 inbox-alert"><a href="{% url 'messages_inbox' %}">{% inbox_count %}</a> &nbsp;<a href="{% url 'messages_inbox' %}"><img src="{{ STATIC_URL }}images/rsz_1envelope4.jpg" border="0" alt="Inbox" /></a></div>                        
+                        <div class="span5">&nbsp;</div>                                                
                         <div class="menu-bar span4 pagination-right pull-right">                            
                             <ul id="nav">
                                 <li><a href="" class="main-nav">
@@ -105,9 +102,7 @@
                     </div>
                 </div>                
                 <div class="wrapper">
-                    <div class="row">
-                    {% block messages_header %}{% endblock messages_header %}
-                    {% block sidebar %}{% endblock sidebar %}
+                    <div class="row">                    
                     {% block content %}{% endblock %}                    
                     <div id="ajax-busy"></div>
                     </div>
