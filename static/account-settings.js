@@ -33,18 +33,47 @@ $(function() {
                     $('div.account-settings').html(data);
                 }
             });
+            if($.browser.msie){
+                $('input, textarea').placeholder();
+            }
         },
 
         saveForm: function(e) {
+            /*  
+            TODO: Some of the initializing can be refactored 
+            (i.e. module, item_id, csrf_token, and serialized_data)
+            among some .js files; account-settings and profile 
+            */
+
             e.preventDefault();
+            // id is formatted [module_type]-[item_id]-[event]
+            var module =  $(e.target).attr('id').split('-')[0];
+            var item_id = $(e.target).attr('id').split('-')[1];
+
+            // grabs closest form to the button, good since 
+            // this function is used for different forms.
+            var form = $(e.target).closest("form");
+
+            // protection from cross site requests
+            csrf_token_tag = document.getElementsByName('csrfmiddlewaretoken')[0];
+            var csrf_token = "";
+            if(typeof(csrf_token_tag)!='undefined'){
+                csrf_token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+            }
+            first_instance=0;
             var section_name = $(e.target).attr('id').split('-')[1];
+            var serialized_data = form.serialize();
+            serialized_data += '&module=' + module + '&id=' + item_id +
+                               '&first_instance=' + first_instance +
+                               '&csrfmiddlewaretoken=' + csrf_token;
             $.ajax({
                 type: "POST",
-                data: $(e.target).serialize(),
+                data: serialized_data,
                 url: "/edit/" + section_name,
                 success: function(data) {
                     if (data == "success") {
-                        $('ul.errorlist').remove();
+                        // Remove all required field changes, if any
+                        removeRequiredChanges();
                         if (auto_user) {
                             window.location.href='/';
                         } else {
@@ -52,8 +81,31 @@ $(function() {
                                 .removeClass("password-required");
                             $('.form-status').html('<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Your information has been updated.</div>');                       }
                     } else {
-                        $('.form-status').html('');
-                        $('div.account-settings').html(data);
+                        var json = jQuery.parseJSON(data);
+
+                        // if there is a previous alert-success present
+                        // remove alert-success
+                        if ($('.form-status').children().length > 0){
+                            $('.form-status').empty();
+                        }
+                        // Remove all required field changes, if any
+                        removeRequiredChanges();
+                        for (var index in json.errors) {
+                            var $error = $('[id$="_'+json.errors[index][0]+'"]');
+                            var $labelOfError = $error.prev();
+                            // insert new errors after the relevant inputs
+                            $error.wrap('<span class="required" />');
+                            if(item_id == "password"){
+                                $error.val(''); 
+                            }
+                            $error.attr("placeholder", json.errors[index][1]);
+                            if($.browser.msie){
+                                field = $error.parent().prev();
+                                field.before("<div class='msieError'><i>" + json.errors[index][1] + "</i></div>");
+                            }
+                            $error.css('border', '1px solid #900');
+                            $labelOfError.css('color', '#900');
+                        }
                     }
                 }
             });
@@ -68,4 +120,19 @@ $(function() {
     });
 
     var App = new AppView;
+
+    function removeRequiredChanges(){
+        // remove color from labels of current errors
+        $('[class*=required]').prev().css('color', '#000');
+
+        // remove red border around past required fields
+        $('[class*=required]').children().css('border', '1px solid #CCC');
+
+        // remove current errors
+        $('[class*=required]').children().unwrap();
+
+        if($.browser.msie){
+            $('[class*=msieError]').remove();
+        }
+    }
 });

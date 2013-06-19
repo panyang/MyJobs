@@ -49,9 +49,11 @@ class BaseUserForm(ModelForm):
     
 
 class EditAccountForm(Form):
-    given_name = CharField(label=_("First Name"), 
+    given_name = CharField(label=_("First Name"),
+                            widget=TextInput(attrs={'placeholder': 'First Name'}),
                                  max_length=40, required=False)
     family_name = CharField(label=_("Last Name"),
+                            widget=TextInput(attrs={'placeholder': 'Last Name'}),
                                 max_length=40, required=False)
 
     def __init__(self, *args, **kwargs):
@@ -65,14 +67,23 @@ class EditAccountForm(Form):
                                               initial=self.choices[0][0])
 
     def clean(self):
-        first = self.cleaned_data.get("given_name", None)
-        last = self.cleaned_data.get("family_name", None)
+        cleaned_data = super(EditAccountForm, self).clean()
+        first = cleaned_data.get("given_name")
+        last = cleaned_data.get("family_name")
 
         # Exclusive or. These fields must either both exist or not at all
         if bool(first) != bool(last):
-            raise ValidationError(_("You must enter both a first and last name."))
-        else:
-            return self.cleaned_data
+            error_msg = u"Both a first and last name required."
+            self._errors["given_name"] = self.error_class([error_msg])
+            self._errors["family_name"] = self.error_class([error_msg])
+
+            # These fields are no longer valid. Remove them from the
+            # cleaned data.
+            del cleaned_data["given_name"]
+            del cleaned_data["family_name"]
+        
+        return cleaned_data
+    
 
     def save(self, u):
         first = self.cleaned_data.get("given_name", None)
@@ -120,12 +131,12 @@ class EditCommunicationForm(BaseUserForm):
 
 
 class ChangePasswordForm(Form):
-    password = CharField(label=_("Password"),
-                                widget=PasswordInput(attrs={'placeholder':_('Password')}))
-    new_password1 = CharField(label=_("New Password"),
-                                widget=PasswordInput(attrs={'placeholder':_('New Password')}))
-    new_password2 = CharField(label=_("New Password (again)"),
-                                   widget=PasswordInput(attrs={'placeholder':_('New Password (again)')}))
+    password = CharField(label="Password",
+                                widget=PasswordInput(attrs={'placeholder':'Password'}))
+    new_password1 = CharField(label="New Password",
+                                widget=PasswordInput(attrs={'placeholder':'New Password'}))
+    new_password2 = CharField(label="New Password (again)",
+                                widget=PasswordInput(attrs={'placeholder':'New Password (again)'}))
     
     def __init__(self,*args, **kwargs):
         self.user = kwargs.pop('user',None)
@@ -142,7 +153,15 @@ class ChangePasswordForm(Form):
         cleaned_data = super(ChangePasswordForm, self).clean()
         if 'new_password1' in self.cleaned_data and 'new_password2' in self.cleaned_data:
             if self.cleaned_data['new_password1'] != self.cleaned_data['new_password2']:
-                raise forms.ValidationError(_("The two new password fields did not match."))
+                error_msg = u"The new password fields did not match."
+                self._errors["new_password1"] = self.error_class([error_msg])
+                self._errors["new_password2"] = self.error_class([error_msg])
+
+                # These fields are no longer valid. Remove them from the
+                # cleaned data.
+                del cleaned_data["new_password1"]
+                del cleaned_data["new_password2"]
+                #raise forms.ValidationError(_("The two new password fields did not match."))
             else:
                 return self.cleaned_data
 

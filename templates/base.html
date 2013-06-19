@@ -45,8 +45,8 @@
                     <div class="pull-right">
                     <div class="inline-inputs">
                         {% if user.is_authenticated %}                                               
-                        <div class="span6">&nbsp;</div>                       
-                        <div class="menu-bar span4 pagination-right pull-right">
+                        <div class="span5">&nbsp;</div>                                                
+                        <div class="menu-bar span4 pagination-right pull-right">                            
                             <ul id="nav">
                                 <li><a href="" class="main-nav">
                                     <img src="{{user.get_gravatar_url}}">
@@ -66,7 +66,7 @@
                                             {% if user.is_active %}
                                             <li><a id="savedsearch_link" href="{% url 'saved_search_main' %}">{% trans "Saved Searches" %}</a></li>
                                             {% endif %}
-                                            <li><a id="account_link" href="{% url 'edit_account' %}">{% trans "Account Settings" %}</a></li>
+                                            <li><a id="account_link" href="{% url 'edit_account' %}">{% trans "Account Settings" %}</a></li>                                            
                                         {% endif %}
                                         <li><a id="logout_link" href="{% url 'auth_logout' %}">Log Out</a></li>
                                     </ul>
@@ -102,9 +102,7 @@
                     </div>
                 </div>                
                 <div class="wrapper">
-                    <div class="row">
-                    {% block messages_header %}{% endblock messages_header %}
-                    {% block sidebar %}{% endblock sidebar %}
+                    <div class="row">                    
                     {% block content %}{% endblock %}                    
                     <div id="ajax-busy"></div>
                     </div>
