@@ -22,7 +22,13 @@ $(document).ready(function(){
         // Hide ajax processing indicator
         $("#ajax-busy").hide();
         $(this).dialog("close");
-    });    
+    });
+    $(this).ajaxError(function (e, xhr) {
+        if (xhr.status == 403) {
+            // redirect to the home page on 403
+            window.location = '/';
+        }
+    });
     
     /*Explicit control of main menu, primarily for mobile but also provides
     non hover and cover option if that becomes an issue.*/
@@ -67,3 +73,4 @@ function clearForm(form) {
             this.selectedIndex = -1;
     });
 };
+
