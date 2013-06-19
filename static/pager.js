@@ -11,7 +11,7 @@ $(document).ready(function() {
                         'feed': feed
                       },
                 success: function(data) {
-                    $('.feed-page').append(data);
+                    $('#saved-search-listing-table tbody').append(data);
                 }
             });
         }

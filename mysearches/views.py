@@ -51,12 +51,7 @@ def view_full_feed(request, search_id):
         date = datetime.date.today()
         label = saved_search.label
         return render_to_response('mysearches/view_full_feed.html',
-                                  {'label': label,
-                                   'feed': saved_search.feed,
-                                   'frequency': saved_search.frequency,
-                                   'verbose_frequency':
-                                     saved_search.get_verbose_frequency(),
-                                   'link': saved_search.url,
+                                  {'search': saved_search,
                                    'items': items},
                                   RequestContext(request))
     else:
@@ -140,7 +135,7 @@ def save_search_form(request):
 @user_passes_test(User.objects.not_disabled)
 def get_edit_template(request):
     if request.is_ajax():
-        search_id = request.POST.get('search_id')
+        search_id = request.GET.get('search_id')
         try:
             saved_search = SavedSearch.objects.get(id=search_id)
         except SavedSearch.DoesNotExist:

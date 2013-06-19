@@ -17,7 +17,7 @@ test("get_edit", function() {
     fixture.append($('<a />', {'class': 'edit', href: '1'}));
 
     $.ajax = function(params) {
-        if (params.url == 'edit' && params.data.csrfmiddlewaretoken == 'foo') {
+        if (params.url == '/saved-search/edit' && params.data.csrfmiddlewaretoken == 'foo') {
             params.success('query successful');
         }
     };

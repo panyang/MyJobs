@@ -26,8 +26,7 @@ $(function() {
                 data: { csrfmiddlewaretoken: csrf_token,
                         action: 'get_edit',
                         search_id: id },
-                type: 'POST',
-                url: 'edit',
+                url: '/saved-search/edit',
                 success: function(data) {
                     $('#edit_modal').append(data);
                     add_valid_label(that);
@@ -58,7 +57,7 @@ $(function() {
             $.ajax({
                 data: data,
                 type: 'POST',
-                url: 'save',
+                url: '/saved-search/save',
                 success: function(response) {
                     if (response.indexOf('<tr') > -1) {
                         if (first_instance) {
@@ -98,7 +97,7 @@ $(function() {
                 validation_status('validating...', that)
                 $.ajax({
                     type: "POST",
-                    url: "validate-url",
+                    url: "/saved-search/validate-url",
                     data: { csrfmiddlewaretoken: csrf_token,
                             action: "validate",
                             url: url},

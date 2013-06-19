@@ -5,6 +5,22 @@ body{
     font-family: Arial, Helvetica, sans-serif;
     }
 
+.table-outline {
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-collapse: separate;
+    border-spacing: 0;
+}
+.table-outline td {
+    border-top: none;
+    border-bottom: none;
+}
+.table-outline th {
+    border-bottom: 1px solid #ddd;
+}
+
 #main {
     padding: 50px;
 }
@@ -1141,6 +1157,22 @@ table td, table th{
     margin-left: 5px;
     margin-right: 5px;
     margin-top: 5px;
+}
+
+#saved-search-listing-table a {
+    text-decoration: none;
+}
+
+[id^="saved-search-listing"] ul {
+    list-style-type: none;
+    margin: 0px;
+}
+
+[id^="saved-search-listing"] h2 {
+    display: inline;
+}
+
+[id^="saved-search-listing"].table-outline {
 }
 
 [class^="icon-"], [class*=" icon-"] {
