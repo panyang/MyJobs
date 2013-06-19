@@ -20,6 +20,10 @@ class Company(models.Model):
 class DashboardModule(models.Model):
     company = models.ForeignKey(Company)
 
+class Microsite(models.Model):
+    url = models.URLField(max_length=300)
+    company = models.ForeignKey(Company)
+
 class Administrators(models.Model):
     admin = models.ForeignKey(User)
     company = models.ForeignKey(Company)
