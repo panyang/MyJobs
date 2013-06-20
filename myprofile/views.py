@@ -125,6 +125,10 @@ def handle_form(request):
             form_instance = form(instance=obj, auto_id=False)
             data_dict['item_id'] = item_id
 
+        #Used to determine whether or not to display resend activation email link
+        if data_dict['module'] == SecondaryEmail:
+            data_dict['verified'] = obj.verified
+            
         data_dict['verbose'] = verbose
         data_dict['form'] = form_instance
         return render_to_response('myprofile/profile_form.html', 
