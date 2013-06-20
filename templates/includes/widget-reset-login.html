@@ -1,8 +1,10 @@
 {% load i18n %}<ul id="nav" class="hide-desktop"><li><a class="main-nav" href=""></a></li></ul>
 <form action="" method="post" id="login-form">
-    <fieldset>                        
-        <input class="text" id="id_username" type="text" name="username" placeholder="Email">
-        <input class="text" type="password" name="password" id="id_password" placeholder="Password">
+    <fieldset>
+    	<div class="reset-form-input">                        
+        	<input class="text" id="id_username" type="text" name="username" placeholder="Email">
+        	<input class="text" type="password" name="password" id="id_password" placeholder="Password">
+    	</div>
         {% csrf_token %}
         <button type="submit" class="btn primary pull-right" name="login" value="submit" id="login">Login</button>
     </fieldset>
