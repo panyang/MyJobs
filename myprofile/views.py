@@ -95,7 +95,7 @@ def handle_form(request):
         #Handles requests to resend activation email
         if request.POST.get("action") == "updateEmail":
             obj = model.objects.get(id=item_id)
-            activation = ActivationProfile.objects.get(email=obj)
+            activation = ActivationProfile.objects.get(email=obj.email)
             activation.send_activation_email(primary=False)
             return render_to_response('myprofile/profile_item.html', data_dict,
                                       RequestContext(request))
