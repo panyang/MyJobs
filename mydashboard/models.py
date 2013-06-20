@@ -44,17 +44,6 @@ class Administrators(models.Model):
     def __unicode__(self):
         return 'Admin %s for %s' % (self.admin.email, self.company.name)
 
-    def clean(self):
-        """
-        Each user:company mapping is unique; Attempting to add a user as an
-        admin for the same company multiple times is bad.
-        """
-        if Administrators.objects.filter(admin=self.admin,
-                                         company=self.company).exists():
-            validation_str = 'Admin with email "%s" already exists for %s' % \
-                                 (self.admin.email, self.company.name)
-            raise ValidationError(validation_str)
-        super(Administrators, self).clean()
 
     def save(self, *args, **kwargs):
         """
@@ -69,6 +58,7 @@ class Administrators(models.Model):
 
     class Meta:
         verbose_name = 'administrator'
+        unique_together = ('admin', 'company')
 
 def remove_from_staff_group(sender, **kwargs):
     """
