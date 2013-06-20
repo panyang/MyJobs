@@ -1,0 +1,36 @@
+{% extends "base.html" %}
+{% load i18n %}
+{% comment %}
+  password_reset_form.html -- first page in password reset process.
+{% endcomment %}
+{% block topbarlogin %}{% endblock topbarlogin %}
+{% block header-content %}
+  <h1>{% trans "Password reset" %}</h1>
+{% endblock header-content %}
+
+{% block content %}
+<div class="wrapper">    
+    <div class="row">
+        <div class="span5 offset1">
+        <h1>{% trans "Reset" %} <small>{% trans "your My.jobs password" %}</small></h1>
+            <p>{% trans "Enter your email address and we will email instructions for accessing your account." %}</p>
+            <p>Don't have a my.jobs account?
+                  <a href="{% url 'home' %}">{% trans "Create a free account" %}</a></p>
+            </div>
+        <div class="span4">
+            <div class="loginBox">
+            <form action="" method="post">
+              {% include 'includes/form-error-highlight.html' %}
+              {% csrf_token %}
+                <button type="submit" class="btn primary pull-right" >{% trans 'Reset my password' %}</button>
+                <div class="clear"></div>
+            </form>
+            </div>
+            <div class="loginBox">
+                {% trans "Did you remember you password? Login here:" %}
+                {% include "includes/widget-reset-login.html" with form=loginform %}
+            </div>
+        </div>
+    </div>
+</div>
+{% endblock content%}
