@@ -55,10 +55,6 @@ $(document).on("click", "button#register", function(e) {
                 for (var index in json.errors) {
                     jsonErrors(index, json.errors);
                 }
-                // White looks better for IE than red, due to different visuals
-                if(!($.browser.msie)){
-                    $('[id$=registration-form]').prev().css('color', '#D00');
-                }
             }
         }
     });
@@ -85,10 +81,6 @@ $(document).on("click", "button#login", function(e) {
                 // For every error passed by json, run jsonError function
                 for (var index in json.errors) {
                     jsonErrors(index, json.errors);
-                }
-                // White looks better for IE than red, due to different visuals
-                if(!($.browser.msie)){
-                    $('[id$=login-form]').prev().css('color', '#D00');
                 }
             } else {
                 window.location = '/profile';
