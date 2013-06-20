@@ -28,9 +28,9 @@ class AdministratorsTests(TestCase):
 
         admin_form = AdministratorsForm(data=self.data)
         self.assertFalse(admin_form.is_valid())
-        error_string = 'Admin with email "%s" already exists for %s' % \
-                           (self.user.email, self.company.name)
-        self.assertEqual(admin_form.errors['__all__'][0], error_string)
+
+        self.assertEqual(admin_form.errors['__all__'][0],
+                         'Administrator with this Admin and Company already exists.')
 
     def test_add_admin_multiple_companies(self):
         """
