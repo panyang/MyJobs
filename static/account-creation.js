@@ -1,8 +1,7 @@
 var current_url = ""; //init current_url as global
-
 $(document).ready(function() {
     $("#id_email").attr("style", "width:100%");
-    $("#id_email").attr("placeholder", "Email")
+    $("#id_email").attr("placeholder", "Email");
     $(function() {
         $( "input[id$='date']" ).datepicker({dateFormat: "mm/dd/yy",
                                              constrainInput: false});
@@ -11,7 +10,7 @@ $(document).ready(function() {
     $("#id_name-primary").hide()
     $("label[for=id_name-primary]").hide()
     user_email = "";
-    current_url = '/' 
+    current_url = '/'
 });
 
 /* When register button is clicked, this triggers an AJAX POST that sends the
