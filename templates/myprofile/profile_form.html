@@ -7,7 +7,7 @@
     </div>
     <div class="modal-body">
         <form action="" method="post" id="{{module}}-{{item_id}}-form">
-            <div class="formBox">{{verified}}
+            <div class="formBox">
                 {% if item_id != "new" and module == "SecondaryEmail" and not verified %}
                     <p>This email address has not been activated! Please activate it using the activation link sent to your email. <a id="{{module}}-{{item_id}}-updateEmail" value="updateEmail">Resend my activation email. </a></p>
                 {% endif %}
