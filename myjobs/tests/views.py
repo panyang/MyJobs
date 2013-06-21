@@ -130,7 +130,7 @@ class MyJobsViewsTests(TestCase):
                                       'name-family_name': 'Smith',
                                       'edu-organization_name': 'Stanford University',
                                       'edu-degree_date': '2012-01-01',
-                                      'edu-education_level_code': '6',
+                                      'edu-education_level': 'Bachelor',
                                       'edu-degree_major': 'Basket Weaving',
                                       'work-position_title': 'Rocket Scientist',
                                       'work-organization_name': 'Blamco Inc.',

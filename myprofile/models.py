@@ -48,12 +48,12 @@ class ProfileUnits(models.Model):
 class Education(ProfileUnits):
     EDUCATION_LEVEL_CHOICES = (
         ('', _('Education Level')),
-        (3, _('High School')),
-        (4, _('Non-Degree Education')),
-        (5, _('Associate')),
-        (6, _('Bachelor')),
-        (7, _('Master')),
-        (8, _('Doctoral')),
+        ('High School', _('High School')),
+        ('Non-Degree Education', _('Non-Degree Education')),
+        ('Associate', _('Associate')),
+        ('Bachelor', _('Bachelor')),
+        ('Master', _('Master')),
+        ('Doctoral', _('Doctoral')),
     )
     organization_name = models.CharField(max_length=255,
                                          verbose_name=_('institution'))
@@ -65,9 +65,8 @@ class Education(ProfileUnits):
                                                  verbose_name=_("State/Region")) 
     country_code = models.CharField(max_length=3, blank=True,
                                     verbose_name=_("country")) # ISO 3166-1
-    # ISCED-2011 Can be [0-8]
-    education_level_code = models.IntegerField(choices=EDUCATION_LEVEL_CHOICES,
-                                               verbose_name=_("education level"))
+    education_level = models.CharField(choices=EDUCATION_LEVEL_CHOICES,
+                                            max_length=255, verbose_name=_("education level"))
     start_date = models.DateField(blank=True, null=True)
     end_date = models.DateField(blank=True, null=True)
     education_score = models.CharField(max_length=255, blank=True,null=True,

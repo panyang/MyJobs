@@ -7,8 +7,9 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 
 from myjobs.models import User
-from myprofile.forms import *
 from mysearches.models import SavedSearch
+
+from myprofile.forms import *
 
 
 @user_passes_test(lambda u: User.objects.is_group_member(u, 'Staff'))

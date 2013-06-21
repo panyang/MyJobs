@@ -1139,3 +1139,28 @@ body.modal-open {
 .required select {
     border: 1px solid #900;
 }
+#details-smallList{
+    list-style-type: none;
+    margin-left: -5px;
+    margin-bottom: 0px;
+    margin-top: 0px;
+    padding: 0;
+}
+#details-smallList li{
+    margin:0;
+    font-size: 0.9em;
+    line-height: 13px;
+}
+#candidate-details .accordion{
+    margin-bottom: 0px;
+}
+#candidate-details .accordion-group{
+    border: 0px;
+}
+#candidate-details .table td{
+    border: 1px solid #ddd;
+}
+#candidate-details .accordion-heading,
+#candidate-details .accordion-toggle,{
+    padding: 8px, 0px;
+}
