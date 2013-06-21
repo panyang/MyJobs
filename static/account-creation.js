@@ -1,6 +1,5 @@
 var current_url = ""; //init current_url as global
 $(document).ready(function() {
-    $("#id_email").attr("style", "width:100%");
     $("#id_email").attr("placeholder", "Email");
     $(function() {
         $( "input[id$='date']" ).datepicker({dateFormat: "mm/dd/yy",
