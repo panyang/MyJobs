@@ -14,7 +14,7 @@ class Company(models.Model):
     # To keep the my.jobs Company model in sync with the microsites Company
     # model the id is the same to ease the transition to a single model down the
     # line.
-    id = models.IntegerField(primary_key=True, unique=True)
+    id = models.IntegerField(primary_key=True, unique=True, editable=False)
     name = models.CharField(max_length=255)
     admins = models.ManyToManyField(User, through='Administrators')
 
