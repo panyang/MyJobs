@@ -142,7 +142,7 @@ def save_search_form(request):
 @user_passes_test(User.objects.not_disabled)
 def get_edit_template(request):
     if request.is_ajax():
-        search_id = request.GET.get(u'search_id')
+        search_id = request.GET.get('search_id')
         try:
             saved_search = SavedSearch.objects.get(id=search_id)
         except SavedSearch.DoesNotExist:

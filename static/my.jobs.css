@@ -1108,16 +1108,15 @@ table td, table th{
     text-decoration: none;
 }
 
-[id^="saved-search-listing"] ul {
+#saved-search-listing-table ul {
     list-style-type: none;
     margin: 0px;
 }
 
-[id^="saved-search-listing"] h2 {
+[id^="saved-search-listing"] p {
     display: inline;
-}
-
-[id^="saved-search-listing"].table-outline {
+    font-size: 1.7em;
+    font-weight: bold;
 }
 
 [class^="icon-"], [class*=" icon-"] {

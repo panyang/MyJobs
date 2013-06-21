@@ -22,7 +22,7 @@
             <thead>
                 <tr>
                     <th>
-                        <h2>{% trans 'Details' %}</h2>{{search.is_active|make_active_label:"pull-right"}}
+                        <p>{% trans 'Details' %}</p>{{search.is_active|make_active_label:"pull-right"}}
                     </th>
                 </tr>
             </thead>
@@ -77,7 +77,7 @@
         </script>
         <table class="table table-striped table-bordered" id="saved-search-listing-table">
             <thead>
-                <tr><th><h2>Results</h2></th></tr>
+                <tr><th><p>Results</p></th></tr>
             </thead>
             <tbody>
                 {% if items %}
