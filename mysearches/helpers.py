@@ -135,6 +135,9 @@ def url_sort_options(feed_url, sort_by):
     feed_url = feed_url.replace("&date_sort=False", "")
 
     if sort_by == "Relevance":
-        feed_url += "?&date_sort=False"
+        if not "?" in feed_url:
+            feed_url += "?&date_sort=False"
+        else:
+            feed_url += "&date_sort=False"
 
     return feed_url
