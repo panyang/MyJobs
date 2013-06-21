@@ -18,57 +18,45 @@
 </div>
 <div class="row">
     <div class="span4">
-        <table class="table table-outline" id="saved-search-listing-details">
-            <thead>
-                <tr>
-                    <th>
-                        <p>{% trans 'Details' %}</p>{{search.is_active|make_active_label:"pull-right"}}
-                    </th>
-                </tr>
-            </thead>
-            <tbody>
-                <tr>
-                    <td>
-                        <b>{% trans 'Search URL:' %}</b>
-                        <div class="clear"></div>
-                        <a href="{{search.url}}" target="_blank">{{search.url}}</a>
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <b>{% trans 'Frequency:' %}</b>
-                        <div class="clear"></div>
-                        {% if search.frequency == 'D' %}
-                            <b>Daily</b>
-                        {% elif search.frequency == 'W' %}
-                            <b>Weekly</b> on {{search.get_verbose_dow}}
-                        {% else %}
-                            <b>Monthly</b> on the {{search.day_of_month|ordinal}}
-                        {% endif %}
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <b>{% trans 'Last Sent:' %}</b>
-                        <div class="clear"></div>
-                        {% if search.last_sent %}{{search.last_sent}}{% else %}Never{% endif %}
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <b>{% trans 'Sent To:' %}</b>
-                        <div class="clear"></div>
-                        {{search.email}}
-                    </td>
-                </tr>
-                <tr>
-                    <td>
-                        <a onclick="history.go(-1); return true;" class="btn pull-right">Back</a>
-                        <a href="{{ search.id }}" class="btn pull-right edit">Edit</a>
-                    </td>
-                </tr>
-            </tbody>
-        </table>
+        <div class="formBox" id="saved-search-listing-details">
+            <h2>{% trans 'Details' %} {% make_label search.is_active "pull-right"%}</h2>
+
+            <div>
+                <b>{% trans 'Search URL:' %}</b>
+                <div class="clear"></div>
+                <a href="{{search.url}}" target="_blank">{{search.url|truncatechars:40}}</a>
+            </div>
+
+            <div>
+                <b>{% trans 'Frequency:' %}</b>
+                <div class="clear"></div>
+                {% if search.frequency == 'D' %}
+                    <b>Daily</b>
+                {% elif search.frequency == 'W' %}
+                    <b>Weekly</b> on {{search.get_verbose_dow}}
+                {% else %}
+                    <b>Monthly</b> on the {{search.day_of_month|ordinal}}
+                {% endif %}
+            </div>
+
+            <div>
+                <b>{% trans 'Last Sent:' %}</b>
+                <div class="clear"></div>
+                {% if search.last_sent %}{{search.last_sent}}{% else %}Never{% endif %}
+            </div>
+
+            <div>
+                <b>{% trans 'Sent To:' %}</b>
+                <div class="clear"></div>
+                {{search.email}}
+            </div>
+
+            <div class="pull-right">
+                <a href="{{ search.id }}" class="btn edit">Edit</a>
+                <a onclick="history.go(-1); return true;" class="btn">Back</a>
+            </div>
+            <div class="clear"></div>
+        </div>
     </div>
     <div class="span8 feed-page">
         <script type="text/javascript">
