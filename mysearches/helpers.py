@@ -130,8 +130,11 @@ def url_sort_options(feed_url, sort_by):
     :feed_url:      URL updated with sorting options. 'Date' has no additions to
                     the URL and  'Relevance' should has '&date_sort=False' added
     """
-    feed_url.replace("&date_sort=False", "")
+    
+    feed_url = feed_url.replace("?&date_sort=False", "")
+    feed_url = feed_url.replace("&date_sort=False", "")
+
     if sort_by == "Relevance":
-        feed_url += "&date_sort=False"
+        feed_url += "?&date_sort=False"
 
     return feed_url

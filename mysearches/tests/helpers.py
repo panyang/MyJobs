@@ -64,3 +64,18 @@ class SavedSearchHelperTests(TestCase):
         feed_url = 'http://jobs.jobs/feed/rss'
         items = parse_rss(feed_url)
         self.assertTrue(len(items) <= 20)
+
+    def test_url_sort_options(self):
+        feed_url = 'http://jobs.jobs/jobs/feed/rss?&date_sort=False'
+
+        # Test to make sure sort by "Relevance" has '&date_sort=False' added
+        # a single time
+        feed_url = url_sort_options(feed_url, "Relevance")
+        self.assertTrue(feed_url == "http://jobs.jobs/jobs/feed/rss?&date_sort=False")
+
+        # Test to make sure sort by "Date" doesn't have anything added
+        feed_url = url_sort_options(feed_url, "Date")
+        self.assertTrue(feed_url == "http://jobs.jobs/jobs/feed/rss")
+
+        
+
