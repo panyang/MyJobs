@@ -221,6 +221,8 @@ $(function() {
 
 
 function enable_fields(that) {
+    that.find('[id^="id_sort_by_"]').removeAttr("disabled");
+    that.find('[id^="id_sort_by_"]').show();
     that.find('[id$="label"]').removeAttr("disabled");
     that.find('[id$="label"]').show();
     that.find('[id$="is_active"]').removeAttr("disabled");
@@ -235,6 +237,7 @@ function enable_fields(that) {
     that.find('[id$="day_of_week"]').show();
     that.find('[id$="day_of_month"]').removeAttr("disabled");
     that.find('[id$="day_of_month"]').show();
+    that.find('label[for^="id_sort_by_"]').show();
     that.find('label[for$="frequency"]').show();
     that.find('label[for$="label"]').show();
     that.find('label[for$="email"]').show();
@@ -284,6 +287,8 @@ function add_valid_label(that) {
 function disable_fields(that) {
     // Disable/hide fields until valid URL is entered
     if (that.find('[id$="url"]').val() == '') {
+        that.find('[id^="id_sort_by_"]').attr("disabled", "disabled");
+        that.find('[id^="id_sort_by_"]').hide();
         that.find('[id$="label"]').attr("disabled", "disabled");
         that.find('[id$="label"]').hide();
         that.find('[id$="is_active"]').attr("disabled", "disabled");
@@ -298,6 +303,7 @@ function disable_fields(that) {
         that.find('[id$="day_of_week"]').hide();
         that.find('[id$="day_of_month"]').attr("disabled", "disabled");
         that.find('[id$="day_of_month"]').hide();
+        that.find('label[for^="id_sort_by_"]').hide();
         that.find('label[for$="frequency"]').hide();
         that.find('label[for$="email"]').hide();
         that.find('label[for$="is_active"]').hide();

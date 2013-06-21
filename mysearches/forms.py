@@ -11,7 +11,7 @@ class HorizontalRadioRenderer(RadioSelect.renderer):
     """
     Overrides the original RadioSelect renderer. The original displayed the radio
     buttons as an unordered list. This removes the unordered list, displaying just
-    the input fields.
+    the radio button fields.
     """
     def render(self):
             return mark_safe(u'\n'.join([u'%s\n' % w for w in self]))
