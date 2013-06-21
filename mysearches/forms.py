@@ -1,11 +1,20 @@
 from django.forms import *
 from django.utils.translation import ugettext_lazy as _
+from django.utils.safestring import mark_safe
 
 from myjobs.forms import BaseUserForm, make_choices
 from mysearches.helpers import *
 from mysearches.models import SavedSearch, SavedSearchDigest
 from myprofile.models import SecondaryEmail
 
+class HorizontalRadioRenderer(RadioSelect.renderer):
+    """
+    Overrides the original RadioSelect renderer. The original displayed the radio
+    buttons as an unordered list. This removes the unordered list, displaying just
+    the input fields.
+    """
+    def render(self):
+            return mark_safe(u'\n'.join([u'%s\n' % w for w in self]))
 
 class SavedSearchForm(BaseUserForm):
     def __init__(self, *args, **kwargs):
@@ -50,7 +59,7 @@ class SavedSearchForm(BaseUserForm):
         model = SavedSearch
         widgets = {
             'notes': Textarea(attrs={'rows':5, 'cols':24}),
-            'sort_by': RadioSelect
+            'sort_by': RadioSelect(renderer=HorizontalRadioRenderer)
         }
 
 
