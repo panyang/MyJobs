@@ -1,0 +1,66 @@
+{% extends "base.html" %}
+{% load common_tags %}
+{% block site-title %}
+    <title>{% if name_obj %}{{ name_obj }} on{% else %}&nbsp;{% endif %} My.jobs</title>
+    <meta name="title" content="{% if name_obj %}{{ name_obj }} on{% else %}&nbsp;{% endif %} My.jobs">
+{% endblock %}
+{% load i18n %}
+{% block meta-extra %}
+<script src="{{ STATIC_URL }}profile.js{% cache_buster %}"></script>
+{% endblock %}
+
+{% block content %}
+<style>
+#profileTitleRow{
+    margin-bottom: 20px;
+}
+#profileTitleRow img{
+    border-radius:5px;
+    border: 2px solid #b34529;
+}
+#profileTitleBar{
+    border-bottom: 2px solid #b34529;
+}
+#profileSubtitleBar{}
+</style>
+<div class="wrapper"> 
+    <div class="row" id="profileTitleRow">        
+        <div class="span12" id="profileTitleBar">
+            <h1>Company Name</h1>
+            <a href="{% url 'profile' %}">{% trans "Profile" %}</a><br>  
+            <a href="{% url 'searches' %}">{% trans "Searches" %}</a><br>
+            <a href="{% url 'jobs' %}">{% trans "Jobs" %}</a><br>
+            <a href="{% url 'microsites' %}">{% trans "Microsites" %}</a><br>
+        </div>
+        <div class="span12" id="profileSubtitleBar">
+            &nbsp;
+        </div>
+    </div>
+    <div class="row">
+        <div class="span8" id="moduleColumn">
+            <div class="formBox">
+                <h3>Candidate Activity</h3>
+                
+            </div>
+            
+            <div class="formBox">
+                
+                <h3>Microsites</h3>
+                
+            </div>
+        </div>
+        <div class="span4">
+            <div class="formBox">
+                <h3>Company Information</h3>
+                
+            </div>
+            
+            <div class="formBox">
+                <h3>Add a new section</h3>
+                
+            </div>
+        </div>
+    </div>
+</div>
+
+{% endblock %}
