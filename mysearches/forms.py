@@ -50,6 +50,7 @@ class SavedSearchForm(BaseUserForm):
         model = SavedSearch
         widgets = {
             'notes': Textarea(attrs={'rows':5, 'cols':24}),
+            'sort_by': RadioSelect
         }
 
 
