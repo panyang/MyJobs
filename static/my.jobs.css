@@ -697,6 +697,10 @@ form input[type='checkbox']{
     #saved-search-form label[for=id_edit_label] {
         margin-top: 10px;
     }
+    #saved-search-form label[for^='id_sort_by'], label[for^='id_edit_sort_by'] {
+    display: inline;
+    margin: 5px;
+    }
     #saved-search-form input,
     #saved-search-form textarea,
     #saved-search-form select {
