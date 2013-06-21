@@ -118,7 +118,20 @@ def parse_rss(feed_url, frequency='W', num_items=20, offset=0):
 def date_in_range(start, end, x):
     return start <= x <= end
 
-def url_sort_options(url, sort_by):
-    url.replace("&date_sort=False", "")
+def url_sort_options(feed_url, sort_by):
+    """
+    Updates urls based on sort by option. 
+
+    Inputs:
+    :feed_url:      URL of an RSS feed 
+    :sort_by:       What the feed should be sorted by ('Relevance' or 'Date')
+
+    Output:
+    :feed_url:      URL updated with sorting options. 'Date' has no additions to
+                    the URL and  'Relevance' should has '&date_sort=False' added
+    """
+    feed_url.replace("&date_sort=False", "")
     if sort_by == "Relevance":
-        url += "&date_sort=False"
+        feed_url += "&date_sort=False"
+
+    return feed_url
