@@ -307,7 +307,12 @@ $(document).ready(function() {
         // This function will be executed when the user scrolls the page.
         $(window).scroll(function(e) {
                 // Get the position of the location where the scroller starts.
-                var scroller_anchor = $(".scroller_anchor").offset().top;
+                var scroller_anchor;
+                try {
+                    scroller_anchor = $(".scroller_anchor").offset().top;
+                } catch(e) {
+                    scroller_anchor = 0;
+                }
      
                 // Check if the user has scrolled and the current position is after the scroller start location and if its not already fixed at the top 
                 if ($(this).scrollTop() >= scroller_anchor && $('#moduleBank').css('position') != 'fixed') 

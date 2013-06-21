@@ -35,40 +35,46 @@ test("save_form", function() {
                                  'class': 'row' }));
     $('#save_test').append($('<form />',
                                { id: 'saved-search-form' }));
-    $('#saved-search-form').append($('<label />',
-                               { 'for': 'id_url' }));
-    $('#saved-search-form').append($('<input />',
-                               { id: 'id_url',
-                                 type: 'text',
-                                 name: 'url' }));
-    $('#saved-search-form').append($('<span />',
-                               { id: 'id_refresh' }));
-    $('#saved-search-form').append($('<input />',
-                               { id: 'id_is_active',
-                                 type: 'checkbox',
-                                 name: 'is_active' }));
-    $('#saved-search-form').append($('<a />',
-                               { id: 'new_search' }));
+    var form = $('#saved-search-form')
+    form.append($('<div />', { id: 'label-container' }));
+    $('#label-container').append($('<label />',
+                                     { 'for': 'id_url' }));
+    form.append($('<input />',
+                    { id: 'id_url',
+                      type: 'text',
+                      name: 'url' }));
+    form.append($('<span />',
+                    { id: 'id_refresh' }));
+    form.append($('<input />',
+                    { id: 'id_is_active',
+                      type: 'checkbox',
+                      name: 'is_active' }));
+    form.append($('<a />',
+                    { id: 'new_search',
+                      'class': 'save',
+                      'href': 'new' }));
     $('#id_is_active').prop('checked', true);
     $.ajax = function(params) {
         if (params.data.indexOf('jobs.jobs%2Fjobs') >= 0 &&
-            params.data.indexOf('is_active=True') >= 0) {
-            params.success('<tr></tr>');
+            params.data.indexOf('is_active=True') >= 0 &&
+            params.data.indexOf('id=new') >= 0) {
+            params.success('<td></td>');
         } else {
             params.success('{"url":["This field is required."]}');
         }
     };
 
-    equal($('#saved-search-form').children().length, 5,
-          "Form should have five children");
+console.log($('#saved-search-form')[0])
+    equal($('#id_url').parent().attr('id'), 'saved-search-form',
+          "Before clicking, #id_url's parent should be the saved search form");
     $('#new_search').click();
-    equal($('#saved-search-form').children().length, 6,
-          "After clicking, form should have six children");
-    equal($('[class="label label-important"]').length, 1,
-          "Form should have an error label added");
+    equal($('#id_url').parent().attr('class'), 'required',
+          "After clicking, #id_url's parent should be a required field indicator");
+console.log($('#saved-search-form')[0])
 
     $('#id_url').val('jobs.jobs/jobs');
     $('#new_search').click();
+console.log($('#saved-search-form')[0])
     equal($('#id_url').val(), '',
           "#id_url should be cleared after submitting a valid form");
     equal($('#id_is_active').checked, undefined,

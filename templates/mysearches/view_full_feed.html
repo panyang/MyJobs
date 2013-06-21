@@ -31,7 +31,7 @@
                     <td>
                         <b>{% trans 'Search URL:' %}</b>
                         <div class="clear"></div>
-                        <a href="{{search.url}}">{{search.url}}</a>
+                        <a href="{{search.url}}" target="_blank">{{search.url}}</a>
                     </td>
                 </tr>
                 <tr>
@@ -99,7 +99,6 @@
                 {% endif %}
             </tbody>
         </table>
-        <a href="{{ link }}" target="_blank">View on original site</a>
     </div>
 </div>
 {% csrf_token %}
