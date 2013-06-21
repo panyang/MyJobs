@@ -27,8 +27,15 @@ $(document).on("click", "button#register", function(e) {
         data: json_data,
         global: false,
         success: function(data) {
-            try {
-                var gravatar_url = jQuery.parseJSON(data).gravatar_url;
+            /*
+            The output in this data is a little different than the rest.
+            This one outputs errors, when there are errors. But on success,
+            outputs a gravatar url, instead of 'valid' or 'success'.
+            */
+            var json = jQuery.parseJSON(data);
+            // Check to see if json.gravatar_url is present, in this case, success.
+            if (Boolean(json.gravatar_url)){
+                var gravatar_url = json.gravatar_url;
                 // perform the visual transition to page 2
                 $("#id_name-primary").hide()
                 $("label[for=id_name-primary]").hide()
@@ -38,13 +45,16 @@ $(document).on("click", "button#register", function(e) {
                     $("#account-page-2").show('slide',{direction: 'right'},250);
                 }, 250);
                 $("#gravatar").attr("src",gravatar_url);
-                buttons();
                 clearForm("form#registration-form");
-                $(".newUserEmail").html(user_email);                    
-            } catch(e) {
-                // If there are errors, the view returns an updated form with errors
-                // to replace the current one with and we reinitialize the functions
-                form.replaceWith(data);
+                $(".newUserEmail").html(user_email); 
+            }else{
+                // Remove all required field changes, if any
+                removeRequiredChanges();
+
+                // For every error passed by json, run jsonError function
+                for (var index in json.errors) {
+                    jsonErrors(index, json.errors);
+                }
             }
         }
     });
@@ -62,7 +72,16 @@ $(document).on("click", "button#login", function(e) {
         global: false,
         success: function(data) {
             if (data != 'valid') {
-                form.replaceWith(data);
+                // form was a json-encoded list of errors and error messages
+                var json = jQuery.parseJSON(data);
+
+                // Remove all required field changes, if any
+                removeRequiredChanges();
+
+                // For every error passed by json, run jsonError function
+                for (var index in json.errors) {
+                    jsonErrors(index, json.errors);
+                }
             } else {
                 window.location = '/profile';
             }
@@ -122,4 +141,44 @@ function setPrimaryName(){
     }else{
         $("#id_name-primary").attr("checked",false);
     }
+}
+
+function removeRequiredChanges(){
+    // remove red border around past required fields
+    $('[class*=required]').children().css('border', '1px solid #CCC');
+
+    // remove current errors
+    $('[class*=required]').children().unwrap();
+
+    // remove IE specific errors, if IE
+    if($.browser.msie){
+        $('[class*=msieError]').remove();
+    }
+}
+
+function jsonErrors(index, errors){
+    /*
+    Gets errors and adds front-end attributes and styling to show the user
+    what went wrong with their form. Shows error messages in placeholders for
+    bowsers with the exception of IE. IE messages are displayed above the field
+    that has the error.
+
+    This function in most cases will be ran in conjunction with a for loop.
+
+    :index:     Is an integer, comes from the iterated value from a for loop.
+    :errors:    Parsed json that has the label "errors". Errors is a 
+                'multidimensional array' {errors:[key][value]}
+    */
+    var $error = $('[id$="_'+errors[index][0]+'"]');
+    var $labelOfError = $error.parent().prev();
+    // insert new errors after the relevant inputs
+    if($.browser.msie){
+        field = $error.parent().prev();
+        field.before("<div class='msieError'><i>" + errors[index][1] + "</i></div>");
+    }else{
+        $error.wrap('<span class="required" />');
+        $error.val('');
+        $error.attr("placeholder",errors[index][1]);
+    }
+    $error.css('border', '1px solid #D00')
 }

@@ -83,9 +83,7 @@ def home(request):
                 data={'gravatar_url': new_user.get_gravatar_url(size=100)}
                 return HttpResponse(json.dumps(data))
             else:
-                return render_to_response('includes/widget-user-registration.html',
-                                          {'form': registrationform},
-                                          context_instance=RequestContext(request))
+                return HttpResponse(json.dumps({'errors': registrationform.errors.items()}))
 
         elif request.POST['action'] == "login":
             loginform = CustomAuthForm(data=request.POST)
@@ -93,9 +91,8 @@ def home(request):
                 login(request, loginform.get_user())
                 return HttpResponse('valid')
             else:
-                return render_to_response('includes/widget-login-username.html',
-                                          {'form': loginform},
-                                          context_instance=RequestContext(request))
+                return HttpResponse(json.dumps({'errors': loginform.errors.items()}))
+
         elif request.POST['action'] == "save_profile":
             name_form = InitialNameForm(request.POST, prefix="name", user=request.user)
             education_form = InitialEducationForm(request.POST, prefix="edu", user=request.user)

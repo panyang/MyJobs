@@ -225,14 +225,7 @@ form select{
     border: 2px solid #574E44;
     border-radius: 5px;
     }
-.loginBox{    
-    background-color: #574e44;
-    padding: 10px;
-    padding-bottom: 30px;
-    border: 2px solid #574E44;
-    border-radius: 5px;
-    }
-.formBox{    
+.formBox, .loginBox{    
     background-color: #f4f1ea;
     padding: 10px;
     padding-bottom: 30px;
@@ -247,7 +240,7 @@ form select{
     }
 .formBox + .formBox{
     margin-top: 20px;
-}
+    }
 .account-box{    
     background-color: #FFF;
     padding: 10px;
@@ -255,17 +248,17 @@ form select{
     border-radius: 5px;
     margin-top: 105px;   
     }
-.loginBox, .formBox, .account-box h3 {
+.formBox, .account-box h3 {
     color: #FFF;    
     }
-.formBox, .account-box h3 {
+.formBox, .loginBox, .account-box h3 {
     color: #000;    
     }
 .loginBox a{
-    color: #FFF;
+    color: #333;
     }
 .loginBox a:hover{
-    color: #FFF;
+    color: #333;
     }
 #account-page-2 .loginBox, #account-page-2 .profileBox{
     padding-left: 0px;
@@ -386,7 +379,9 @@ form select{
     font-size: 1.1em;
     color: #fff
     }
-
+    .btn.primary:hover{
+    color: #FFF;
+    }
 .alert-message ul{
     list-style: none;
     padding: 0;
