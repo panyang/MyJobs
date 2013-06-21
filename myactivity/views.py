@@ -7,6 +7,7 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 
 from myjobs.models import User
+from myprofile.forms import *
 from mysearches.models import SavedSearch
 
 
@@ -55,3 +56,37 @@ def activity_search_feed(request):
         data['searches'] = searches
     return render_to_response('myactivity/activity_feed.html', data,
                               RequestContext(request))
+
+@user_passes_test(lambda u: User.objects.is_group_member(u, 'Staff'))
+def candidate_information(request):
+    data_dict = {}
+    units = request.user.profileunits_set
+    module_list = ['Name', 'Education', 'EmploymentHistory', 'SecondaryEmail',
+                   'Telephone', 'Address']
+    profile_config = []
+    if request.method == 'POST':
+        theUser = request.REQUEST.get('user')
+        if theUser:
+            user = User.objects.get(email=theUser)
+        units = user.profileunits_set
+        for module in module_list:
+            model = globals()[module]
+            verbose = model._meta.verbose_name
+            
+            x= []
+            module_config = {}
+            module_units = units.filter(content_type__name=verbose)
+
+            module_config['verbose'] = verbose.title()
+            module_config['name'] = module
+            for unit in module_units:
+                if hasattr(unit, module.lower()):
+                    x.append(getattr(unit, module.lower()))
+                    
+            module_config['items'] = x
+
+            profile_config.append(module_config)
+        data_dict = {'userInfo': profile_config,
+                     'theUser': user}
+    return render_to_response('myactivity/candidate_information.html', data_dict,
+                            RequestContext(request))
