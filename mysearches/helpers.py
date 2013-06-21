@@ -117,3 +117,8 @@ def parse_rss(feed_url, frequency='W', num_items=20, offset=0):
 
 def date_in_range(start, end, x):
     return start <= x <= end
+
+def url_sort_options(url, sort_by):
+    url.replace("&date_sort=False", "")
+    if sort_by == "Relevance":
+        url += "&date_sort=False"
