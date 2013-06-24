@@ -1,8 +1,7 @@
 from django.contrib.auth.models import Group
 from django.db import models
 
-from myjobs.models import *
-from myprofile.models import *
+from myjobs.models import User
 
 
 class Company(models.Model):
@@ -58,25 +57,3 @@ class CompanyUser(models.Model):
 
     class Meta:
         unique_together = ('user', 'company')
-
-def remove_from_staff_group(sender, **kwargs):
-    """
-    When a CompanyUser instance is deleted, remove the user from the Employer
-    group if that user is not also a company user for a different company
-
-    Inputs:
-    :sender: Model that sent this signal
-    :instance: instance of :sender:
-    """
-    instance = kwargs.get('instance')
-    if CompanyUser.objects.filter(user=instance.user).count() == 1:
-        # If the last CompanyUser instance is being deleted for a particular
-        # user, also remove that user from the Employer group
-        instance.user.groups.remove(instance.GROUP)
-
-# Calls `remove_from_staff_group` after a CompanyUser instance is deleted.
-# dispatch_uid: unique string that prevents the signal from being connected
-# to multiple times
-models.signals.pre_delete.connect(remove_from_staff_group,
-                                  sender=CompanyUser,
-                                  dispatch_uid='remove_from_staff_group')
