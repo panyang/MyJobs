@@ -13,7 +13,7 @@
 </form>
 <div id="captcha_modal" class="modal hide fade row">
   <div class="modal-header">
-    <button class="close mobile_hide" aria-hidden="true" data-dismiss="modal" type="button">×</button>
+    <button class="close" aria-hidden="true" data-dismiss="modal" type="button">×</button>
     <h1>{% trans "Delete <small>Your Account</small>" %}</h1>
   </div>
   <div class="modal-body">
@@ -29,7 +29,7 @@
       </ul>
       <p>{% trans "This cannot be reversed." %}</p>
       <p>{% trans "If you want to preserve your account for use later, then you should" %}
-        <a href="{">{% trans "disable your account" %}</a> {% trans "instead." %}</p>
+        <a href="{% url 'disable_account' %}">{% trans "disable your account" %}</a> {% trans "instead." %}</p>
     </div>
   </div>
   <div class="modal-footer">
