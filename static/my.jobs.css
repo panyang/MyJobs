@@ -1149,10 +1149,9 @@ body.modal-open {
 #user-buttons input[type="button"]{
     margin-left: 20px;
     width: 180px;
-    height: 40px;
+    height: 45px;
 }
-#user-buttons #book{margin-bottom:18px;}
-#user-buttons #message{margin-top:18px;}
+#user-buttons #book{margin-bottom:10px;}
 #details-smallList{
     list-style-type: none;
     margin-left: 0px;
@@ -1175,6 +1174,7 @@ body.modal-open {
 }
 .details-heading a:hover{
     color: #333;
+    text-decoration: none;
 }
 .details-heading{
     background-color: rgb(252, 252, 252);

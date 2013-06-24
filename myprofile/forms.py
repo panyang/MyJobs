@@ -156,5 +156,5 @@ class InitialWorkForm(InitialForm):
 class InitialEducationForm(InitialForm):
     class Meta:
         model = Education
-        fields = ['organization_name', 'degree_date', 'education_level',
+        fields = ['organization_name', 'degree_date', 'education_level_code',
                   'degree_name']

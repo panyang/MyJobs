@@ -25,7 +25,7 @@
     </div>
     <div class="row">
     	<span class="span6">
-    		<input type="button" class="btn" value="Back to Company Dashboard" />
+    		<input type="button" class="btn" style="height:45px;" value="Back to Company Dashboard" />
     	</span>
     </div>
     <div class="clear"></div>
@@ -75,7 +75,7 @@
                             								<td>
                             									<ul id="details-smallList">
                                 									{% if item.content_type.name == 'education' %}
-                                										<li><b>{{item.education_level}} in {{item.degree_major}}</b></li>
+                                										<li><b>{{item.degree_major}}</b></li>
                                 										<li>{{item.organization_name}}</li>
                                 										<li>{{item.degree_date}}</li>
                                 									{% elif item.content_type.name == "employment history" %}
