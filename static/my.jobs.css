@@ -43,6 +43,11 @@ a:hover{
 .profile-form-input input {
     width: 40%;
     }
+
+.reset-form-input input[type="text"], .reset-form-input input[type="password"] {
+    width: 100%;
+}
+
 #moduleBank {    
     z-index:100;  
 }
@@ -987,7 +992,7 @@ form input[type='checkbox']{
     text-decoration: none;
 }
 
-.account-settings input[type="text"], input[type="password"] {
+.account-settings input[type="text"], .account-settings input[type="password"] {
     width: 250px;
 }
 
