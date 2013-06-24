@@ -2,35 +2,35 @@ from django.test import TestCase
 
 from mydashboard.models import *
 from mydashboard.tests.factories import CompanyFactory
-from mydashboard.tests.test_forms import AdministratorsForm
+from mydashboard.tests.test_forms import CompanyUserForm
 from myjobs.models import User
 from myjobs.tests.factories import UserFactory
 
-class AdministratorsTests(TestCase):
+class CompanyUserTests(TestCase):
     def setUp(self):
         self.user = UserFactory()
         self.company = CompanyFactory()
-        self.data = {'admin': self.user.id,
+        self.data = {'user': self.user.id,
                      'company': self.company.id}
 
     def test_add_admin(self):
         """
-        Adding a user as an administrator results in that user being added to
-        the Employer group. Attempting to add that user as an administrator to the
+        Adding a user as an admin results in that user being added to
+        the Employer group. Attempting to add that user as an admin to the
         same company again results in the form being invalidated.
         """
-        admin_form = AdministratorsForm(data=self.data)
-        self.assertTrue(admin_form.is_valid())
-        admin_form.save()
+        company_user_form = CompanyUserForm(data=self.data)
+        self.assertTrue(company_user_form.is_valid())
+        company_user_form.save()
 
         self.user = User.objects.get(email=self.user.email)
-        self.assertTrue(Administrators.ADMIN_GROUP in self.user.groups.all())
+        self.assertTrue(CompanyUser.GROUP in self.user.groups.all())
 
-        admin_form = AdministratorsForm(data=self.data)
-        self.assertFalse(admin_form.is_valid())
+        company_user_form = CompanyUserForm(data=self.data)
+        self.assertFalse(company_user_form.is_valid())
 
-        self.assertEqual(admin_form.errors['__all__'][0],
-                         'Administrator with this Admin and Company already exists.')
+        self.assertEqual(company_user_form.errors['__all__'][0],
+                         'Company user with this User and Company already exists.')
 
     def test_add_admin_multiple_companies(self):
         """
@@ -40,15 +40,15 @@ class AdministratorsTests(TestCase):
         """
         company2 = CompanyFactory(id=2)
 
-        admin = Administrators.objects.create(admin=self.user,
+        company_user = CompanyUser.objects.create(user=self.user,
                                       company=self.company)
-        admin2 = Administrators.objects.create(admin=self.user,
+        company_user_2 = CompanyUser.objects.create(user=self.user,
                                               company=company2)
 
-        self.assertTrue(Administrators.ADMIN_GROUP in self.user.groups.all())
+        self.assertTrue(CompanyUser.GROUP in self.user.groups.all())
 
-        admin.delete()
-        self.assertTrue(Administrators.ADMIN_GROUP in self.user.groups.all())
+        company_user.delete()
+        self.assertTrue(CompanyUser.GROUP in self.user.groups.all())
 
-        admin2.delete()
-        self.assertTrue(Administrators.ADMIN_GROUP not in self.user.groups.all())
+        company_user_2.delete()
+        self.assertTrue(CompanyUser.GROUP not in self.user.groups.all())

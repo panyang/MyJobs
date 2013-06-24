@@ -5,36 +5,44 @@ from mydashboard.models import (
     Company,
     DashboardModule,
     Microsite,
-    Administrators
+    CompanyUser
 )
 from myjobs.models import User
 
 
 class CompanyForm(forms.ModelForm): 
+    """
+    Django needs help to do m2m relations in the admin interface.
+
+    What this does is add a multiple choice box to allow the addition and
+    deletion of multiple CompanyUser instances at once. When the form is saved,
+    those instances are manually created/deleted and then they are removed from
+    the cleaned_data dict to make the form valid again.
+    """
     admins = forms.ModelMultipleChoiceField(
         queryset=User.objects.all(), required=False,
         widget=admin.widgets.FilteredSelectMultiple('admins', False))
 
     def save(self, commit=True):
-        added_admins = set()
+        added_users = set()
         company = forms.ModelForm.save(self, commit)
-        for admin in self.cleaned_data['admins']:
-            added_admins.add(admin)
+        for user in self.cleaned_data['admins']:
+            added_users.add(user)
 
         del self.cleaned_data['admins']
         super(CompanyForm, self).save()
 
         if company.pk:
-            old_users = set(company.admins.all())
-            add = [user for user in added_admins if user not in old_users]
-            remove = [user for user in old_users if user not in added_admins]
+            old_users = company.admins.all()
+            add = [user for user in added_users if user not in old_users]
+            remove = [user for user in old_users if user not in added_users]
             for user in add:
-                Administrators(admin=user, company=company).save()
+                CompanyUser(user=user, company=company).save()
             for user in remove:
-                Administrators.objects.get(admin=user, company=company).delete()
+                CompanyUser.objects.get(user=user, company=company).delete()
         else:
             company.save()
-            company.admins = added_admins
+            company.admins = added_users
         return company
          
     class Meta: 

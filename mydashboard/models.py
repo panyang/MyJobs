@@ -14,9 +14,9 @@ class Company(models.Model):
     # To keep the my.jobs Company model in sync with the microsites Company
     # model the id is the same to ease the transition to a single model down the
     # line.
-    id = models.IntegerField(primary_key=True, unique=True, editable=False)
+    id = models.IntegerField(primary_key=True, unique=True)
     name = models.CharField(max_length=255)
-    admins = models.ManyToManyField(User, through='Administrators')
+    admins = models.ManyToManyField(User, through='CompanyUser')
 
     def __unicode__(self):
         return self.name
@@ -34,15 +34,15 @@ class Microsite(models.Model):
     def __unicode__(self):
         return 'Microsite %s for %s' % (self.url, self.company.name)
 
-class Administrators(models.Model):
-    ADMIN_GROUP = Group.objects.get(name='Employer')
+class CompanyUser(models.Model):
+    GROUP = Group.objects.get(name='Employer')
 
-    admin = models.ForeignKey(User)
+    user = models.ForeignKey(User)
     company = models.ForeignKey(Company)
     date_added = models.DateTimeField(auto_now=True)
 
     def __unicode__(self):
-        return 'Admin %s for %s' % (self.admin.email, self.company.name)
+        return 'Admin %s for %s' % (self.user.email, self.company.name)
 
 
     def save(self, *args, **kwargs):
@@ -52,32 +52,31 @@ class Administrators(models.Model):
         If the user is already a member of the Employer group, the Group app
         is smart enough to not add it a second time.
         """
-        self.admin.groups.add(self.ADMIN_GROUP)
+        self.user.groups.add(self.GROUP)
 
-        super(Administrators,self).save(*args, **kwargs)
+        super(CompanyUser,self).save(*args, **kwargs)
 
     class Meta:
-        verbose_name = 'administrator'
-        unique_together = ('admin', 'company')
+        unique_together = ('user', 'company')
 
 def remove_from_staff_group(sender, **kwargs):
     """
-    When an dministrator instance is deleted, remove the user from the Employer
-    group if that user is not also an administrator for a different company
+    When a CompanyUser instance is deleted, remove the user from the Employer
+    group if that user is not also a company user for a different company
 
     Inputs:
     :sender: Model that sent this signal
     :instance: instance of :sender:
     """
     instance = kwargs.get('instance')
-    if Administrators.objects.filter(admin=instance.admin).count() == 1:
-        # If the last Administrators instance is being deleted for a particular
-        # user, also remove that user from the Staff group
-        instance.admin.groups.remove(instance.ADMIN_GROUP)
+    if CompanyUser.objects.filter(user=instance.user).count() == 1:
+        # If the last CompanyUser instance is being deleted for a particular
+        # user, also remove that user from the Employer group
+        instance.user.groups.remove(instance.GROUP)
 
-# Calls `remove_from_staff_group` after an Administrator instance is deleted.
+# Calls `remove_from_staff_group` after a CompanyUser instance is deleted.
 # dispatch_uid: unique string that prevents the signal from being connected
 # to multiple times
 models.signals.pre_delete.connect(remove_from_staff_group,
-                                  sender=Administrators,
+                                  sender=CompanyUser,
                                   dispatch_uid='remove_from_staff_group')
