@@ -87,13 +87,13 @@
                                 											<li>{{item.start_date}} - {{item.end_date}}</li>
                                 										{%endif%}
                                 									{% elif item.content_type.name == "telephone" %}
+                                                                        <li><b>{{item.use_code}}</b></li>
                                 										<li>({{item.area_dialing}}) {{item.number}} {% if item.extension %}Ext: {{item.extension}} {%endif%}</li>
-                                										<li>{{item.use_code}}</li>
                                 									{% elif item.content_type.name == "secondary email" %}
-                                										<li>{{item.label}}</li>
+                                										<li><b>{{item.label}}</b></li>
                                 										<li>{{item.email}}</li>
                                 									{% else %}
-                                										<li>{{item.label}}</li>
+                                										<li><b>{{item.label}}</b></li>
                                 										<li>{{item.address_line_one}}, {{item.address_line_two}}</li>
                                 										<li>{{item.city_name}}, {%if item.country_sub_division_code%}{{item.country_sub_division_code}}{%else%}{{item.country_code}}{%endif%} {{item.postal_code}}</li>
                                 									{% endif %}

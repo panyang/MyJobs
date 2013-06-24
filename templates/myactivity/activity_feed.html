@@ -63,11 +63,13 @@
                             {% for user, name in users.items %}
                             
                                 <tr id="user-{{user.id}}"><td>
+                                <a href="{{user.id}}">
                                 <img src="{{user.get_gravatar_url}}&s=50" class="pull-left">
                                 <ul style="list-style-type: none;">
                                     <li>{% if name %}{{name}}{% else %}{% trans 'Name not provided' %}{% endif %}</li>
                                     <li>{{user.email}}</li>
                                 </ul>
+                                </a>
                                 </td></tr>
                             
                             {% endfor %}

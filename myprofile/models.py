@@ -65,6 +65,7 @@ class Education(ProfileUnits):
                                                  verbose_name=_("State/Region")) 
     country_code = models.CharField(max_length=3, blank=True,
                                     verbose_name=_("country")) # ISO 3166-1
+    # ISCED-2011 Can be [0-8]
     education_level_code = models.IntegerField(choices=EDUCATION_LEVEL_CHOICES,
                                                verbose_name=_("education level"))
     start_date = models.DateField(blank=True, null=True)
