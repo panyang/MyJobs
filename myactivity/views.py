@@ -1,16 +1,13 @@
-from datetime import datetime, timedelta
 import time
 from urlparse import urlparse
 
 from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from django.db import models
 
-from myjobs.models import User
 from mysearches.models import SavedSearch
-
-from myprofile.forms import *
-
+from myprofile.models import *
 
 @user_passes_test(lambda u: User.objects.is_group_member(u, 'Staff'))
 def activity_search_feed(request):
@@ -32,17 +29,17 @@ def activity_search_feed(request):
         # Saved searches were created after this date...
         after = request.REQUEST.get('after')
         if after:
-            after = datetime.strptime(after, '%Y-%m-%d')
+            after = datetime.datetime.strptime(after, '%Y-%m-%d')
         else:
             # Defaults to one week ago
-            after = datetime.now() - timedelta(days=7)
+            after = datetime.datetime.now() - datetime.timedelta(days=7)
         # ... and before this one
         before = request.REQUEST.get('before')
         if before:
-            before = datetime.strptime(before, '%Y-%m-%d')
+            before = datetime.datetime.strptime(before, '%Y-%m-%d')
         else:
             # Defaults to the date and time that the page is accessed
-            before = datetime.now()
+            before = datetime.datetime.now()
         data['after'] = after
         data['before'] = before
 
