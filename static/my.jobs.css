@@ -241,7 +241,8 @@ form select{
     background-color: #FFF;
     border-bottom: 1px solid #d5d4d0;
     border-top: 1px solid #d5d4d0;
-    border-radius: 5px;
+    border-top-right-radius: 5px;
+    border-top-left-radius:5px;
     padding: 5px 20px;
     }
 .formBox h3 {
