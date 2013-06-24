@@ -1139,9 +1139,23 @@ body.modal-open {
 .required select {
     border: 1px solid #900;
 }
+#candidate-flag{
+    float:left;
+    margin-left: 10px;
+    margin-top: 26px;
+    font-size: 1.4em;
+    font-weight: bold;
+}
+#user-buttons input[type="button"]{
+    margin-left: 20px;
+    width: 180px;
+    height: 40px;
+}
+#user-buttons #book{margin-bottom:18px;}
+#user-buttons #message{margin-top:18px;}
 #details-smallList{
     list-style-type: none;
-    margin-left: -5px;
+    margin-left: 0px;
     margin-bottom: 0px;
     margin-top: 0px;
     padding: 0;
@@ -1151,16 +1165,40 @@ body.modal-open {
     font-size: 0.9em;
     line-height: 13px;
 }
-#candidate-details .accordion{
+.details-heading,
+.table-heading{
+    font-size: 1.3em;
+    font-weight: bold;
+}
+.details-heading a{
+    color: #333;
+}
+.details-heading a:hover{
+    color: #333;
+}
+.details-heading{
+    background-color: rgb(252, 252, 252);
+}
+#candidate-details .accordion,
+.details-inner{
     margin-bottom: 0px;
 }
 #candidate-details .accordion-group{
     border: 0px;
+    margin-bottom: 0px;
 }
-#candidate-details .table td{
+#candidate-details{
     border: 1px solid #ddd;
+    width: 100%;
+}
+#candidate-details td{
+    border-left: 0px;
 }
 #candidate-details .accordion-heading,
-#candidate-details .accordion-toggle,{
-    padding: 8px, 0px;
+#candidate-details .accordion-toggle{
+    padding: 4px;
+}
+#candidate-details .accordion-inner,
+#candidate-details .no-side-padding{
+    padding: 0px;
 }
