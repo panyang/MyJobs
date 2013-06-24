@@ -6,7 +6,8 @@ register = template.Library()
 @register.simple_tag(name='make_label')
 def make_label(active, extra_classes='', **kwargs):
     """
-    Creates a Bootstrap label in green or gray
+    Creates a Bootstrap label in one of two colors optionally
+    provided by the user (defaults: green, gray)
 
     Inputs:
     :active: flag; True: success color; False: fail color
