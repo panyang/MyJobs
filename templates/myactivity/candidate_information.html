@@ -9,12 +9,6 @@
 {% endblock %}
 
 {% block content %}
-<form action='/activity/candidate-info/' method='POST'>
-	{% csrf_token %}
-	Get User: <input name="user" required type="text" /><br />
-	<input type="submit" value="Look at Candidate">
-</form>
-<br />
 <div class="wrapper"> 
 	{% if userInfo %}
 	<div class="row" id="profileTitleRow">
@@ -44,7 +38,7 @@
             </div>
             <br />
             <div class="pull-left">
-        		<img style="height:45px; width:60px;">
+        		
                 <span style="margin-left:20px;">{{theUser.email}}</span>
             </div>
         	
@@ -114,9 +108,9 @@
         	</table>
         </div>
         <div class="span4">
-        	<table class="table">
+        	<table class="table table-bordered">
         		<tr id="theUser-{{user.id}}-activity">
-        			<td>
+        			<td class="table-heading">
         				Activity
         			</td>
         		</tr>
