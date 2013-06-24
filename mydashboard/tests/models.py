@@ -16,7 +16,7 @@ class AdministratorsTests(TestCase):
     def test_add_admin(self):
         """
         Adding a user as an administrator results in that user being added to
-        the Staff group. Attempting to add that user as an administrator to the
+        the Employer group. Attempting to add that user as an administrator to the
         same company again results in the form being invalidated.
         """
         admin_form = AdministratorsForm(data=self.data)
@@ -34,7 +34,7 @@ class AdministratorsTests(TestCase):
 
     def test_add_admin_multiple_companies(self):
         """
-        If a user is an admin for multiple companies, the user's Staff group
+        If a user is an admin for multiple companies, the user's Employer group
         membership will not be revoked until that user's admin status has been
         revoked for all of those companies.
         """
