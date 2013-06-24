@@ -24,7 +24,7 @@ class AdministratorsTests(TestCase):
         admin_form.save()
 
         self.user = User.objects.get(email=self.user.email)
-        self.assertTrue(Administrators.STAFF_GROUP in self.user.groups.all())
+        self.assertTrue(Administrators.ADMIN_GROUP in self.user.groups.all())
 
         admin_form = AdministratorsForm(data=self.data)
         self.assertFalse(admin_form.is_valid())
@@ -45,10 +45,10 @@ class AdministratorsTests(TestCase):
         admin2 = Administrators.objects.create(admin=self.user,
                                               company=company2)
 
-        self.assertTrue(Administrators.STAFF_GROUP in self.user.groups.all())
+        self.assertTrue(Administrators.ADMIN_GROUP in self.user.groups.all())
 
         admin.delete()
-        self.assertTrue(Administrators.STAFF_GROUP in self.user.groups.all())
+        self.assertTrue(Administrators.ADMIN_GROUP in self.user.groups.all())
 
         admin2.delete()
-        self.assertTrue(Administrators.STAFF_GROUP not in self.user.groups.all())
+        self.assertTrue(Administrators.ADMIN_GROUP not in self.user.groups.all())

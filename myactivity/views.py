@@ -10,7 +10,7 @@ from myjobs.models import User
 from mysearches.models import SavedSearch
 
 
-@user_passes_test(lambda u: User.objects.is_group_member(u, 'Staff'))
+@user_passes_test(lambda u: User.objects.is_group_member(u, 'Employer'))
 def activity_search_feed(request):
     """
     Returns a list of users who created a saved search on the given microsite

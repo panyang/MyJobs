@@ -35,7 +35,7 @@ class Microsite(models.Model):
         return 'Microsite %s for %s' % (self.url, self.company.name)
 
 class Administrators(models.Model):
-    STAFF_GROUP = Group.objects.get(name='Staff')
+    ADMIN_GROUP = Group.objects.get(name='Employer')
 
     admin = models.ForeignKey(User)
     company = models.ForeignKey(Company)
@@ -47,12 +47,12 @@ class Administrators(models.Model):
 
     def save(self, *args, **kwargs):
         """
-        Adds the user to the Staff group if it wasn't already a member.
+        Adds the user to the Employer group if it wasn't already a member.
 
-        If the user is already a member of the Staff group, the Group app
+        If the user is already a member of the Employer group, the Group app
         is smart enough to not add it a second time.
         """
-        self.admin.groups.add(self.STAFF_GROUP)
+        self.admin.groups.add(self.ADMIN_GROUP)
 
         super(Administrators,self).save(*args, **kwargs)
 
@@ -62,7 +62,7 @@ class Administrators(models.Model):
 
 def remove_from_staff_group(sender, **kwargs):
     """
-    When an dministrator instance is deleted, remove the user from the staff
+    When an dministrator instance is deleted, remove the user from the Employer
     group if that user is not also an administrator for a different company
 
     Inputs:
@@ -73,7 +73,7 @@ def remove_from_staff_group(sender, **kwargs):
     if Administrators.objects.filter(admin=instance.admin).count() == 1:
         # If the last Administrators instance is being deleted for a particular
         # user, also remove that user from the Staff group
-        instance.admin.groups.remove(instance.STAFF_GROUP)
+        instance.admin.groups.remove(instance.ADMIN_GROUP)
 
 # Calls `remove_from_staff_group` after an Administrator instance is deleted.
 # dispatch_uid: unique string that prevents the signal from being connected
