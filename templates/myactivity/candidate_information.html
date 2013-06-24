@@ -59,9 +59,10 @@
         						<div class="accordion" id="details-{{module.name}}-collapse">
             						<div class="accordion-group">
                 						<div class="accordion-heading details-heading">
-                    						<a class="accordion-toggle" data-toggle="collapse" data-parent="#details-{{module.name}}-collapse" href="#details-{{module.name}}-table">{{module.verbose}} (Collapse)</a>
+                    						<a class="accordion-toggle" data-toggle="collapse" data-parent="#details-{{module.name}}-collapse" 
+                                                href="#{{module.name}}-details-table">{{module.verbose}}<span class="pull-right"><i class="icon icon-plus"></i></span></a>
                 						</div>
-                						<div id="details-{{module.name}}-table" class="accordion-body collapse">
+                						<div id="{{module.name}}-details-table" class="accordion-body collapse">
                     						<div class="accordion-inner">
                         						<table class="table details-inner">
                             						{% for item in module.items %}
