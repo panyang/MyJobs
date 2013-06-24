@@ -26,7 +26,7 @@
 <div class="wrapper"> 
     <div class="row" id="profileTitleRow">        
         <div class="span12" id="profileTitleBar">
-            <h1>Company Name</h1>
+            <h1>{{company_name}} {{company_microsites}}</h1>
             <a href="{% url 'profile' %}">{% trans "Profile" %}</a><br>  
             <a href="{% url 'searches' %}">{% trans "Searches" %}</a><br>
             <a href="{% url 'jobs' %}">{% trans "Jobs" %}</a><br>
@@ -43,17 +43,12 @@
                 
             </div>
             
-            <div class="formBox">
-                
-                <h3>Microsites</h3>
-                
-            </div>
+            {% include "mydashboard/microsites.html" %}
+            
         </div>
         <div class="span4">
-            <div class="formBox">
-                <h3>Company Information</h3>
-                
-            </div>
+            
+            {% include "mydashboard/profile.html" %}
             
             <div class="formBox">
                 <h3>Add a new section</h3>
