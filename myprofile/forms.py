@@ -32,6 +32,10 @@ def generate_custom_widgets(model):
             elif internal_type == 'BooleanField':
                 attrs['label_class'] = 'checkbox'
                 widgets[field.attname] = CheckboxInput(attrs=attrs)
+            elif internal_type == 'DateField':
+                widgets[field.attname] = DateInput(
+                                            format=settings.FORM_DATE_FORMAT,
+                                            attrs=attrs)
             else:
                 widgets[field.attname] = TextInput(attrs=attrs)
 

@@ -30,9 +30,23 @@ PROJECT_NAME = basename(ROOT_PATH)
 
 TIME_ZONE = 'America/New_York'
 LANGUAGE_CODE = 'en-us'
+
 # Support for Django Sites framework
 SITE_ID = 1
 USE_TZ = True
+DATE_FORMAT = 'd-M-Y'
+# Not a default Django setting, but form formatting differs from model
+# formatting. Both are included for potential future l10n changes
+# d-M-Y (model) == %d-%b-%Y (form)
+FORM_DATE_FORMAT = '%d-%b-%Y'
+
+# Dates of the format "25-Jun-2013" are not in the default list of allowed
+# formats.
+DATE_INPUT_FORMATS = (
+    '%Y-%m-%d', '%m/%d/%Y', '%m/%d/%y', '%b %d %Y', '%b %d, %Y',
+    '%d %b %Y', '%d %b, %Y', '%B %d %Y', '%B %d, %Y', '%d %B %Y',
+    '%d %B, %Y', '%d-%b-%Y',
+)
 
 USE_I18N = True
 USE_L10N = True
@@ -73,7 +87,8 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
     'django.contrib.redirects.middleware.RedirectFallbackMiddleware',
     'middleware.RedirectMiddleware',
-    'middleware.XsSharing'
+    'middleware.XsSharing',
+    'django.middleware.locale.LocaleMiddleware',
 )
 
 AUTHENTICATION_BACKENDS = (
