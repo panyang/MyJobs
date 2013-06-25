@@ -30,7 +30,6 @@ PROJECT_NAME = basename(ROOT_PATH)
 
 TIME_ZONE = 'America/New_York'
 LANGUAGE_CODE = 'en-us'
-
 # Support for Django Sites framework
 SITE_ID = 1
 USE_TZ = True
@@ -45,8 +44,10 @@ FORM_DATE_FORMAT = '%d-%b-%Y'
 DATE_INPUT_FORMATS = (
     '%Y-%m-%d', '%m/%d/%Y', '%m/%d/%y', '%b %d %Y', '%b %d, %Y',
     '%d %b %Y', '%d %b, %Y', '%B %d %Y', '%B %d, %Y', '%d %B %Y',
-    '%d %B, %Y', '%d-%b-%Y',
+    '%d %B, %Y',
 )
+
+DATE_INPUT_FORMATS += (FORM_DATE_FORMAT,)
 
 USE_I18N = True
 USE_L10N = True
