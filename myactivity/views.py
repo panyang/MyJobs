@@ -55,7 +55,7 @@ def activity_search_feed(request):
     return render_to_response('myactivity/activity_feed.html', data,
                               RequestContext(request))
 
-@user_passes_test(lambda u: User.objects.is_group_member(u, 'Staff'))
+@user_passes_test(lambda u: User.objects.is_group_member(u, 'Employer'))
 def candidate_information(request, user_id):
     # gets returned with response to request
     data_dict = {}
