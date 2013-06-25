@@ -13,13 +13,13 @@ from mysearches.models import SavedSearch
 from mysearches.tests.factories import SavedSearchFactory
 from myprofile.tests.factories import PrimaryNameFactory
 
-STAFF = Group.objects.get(name='Staff')
+EMPLOYER = Group.objects.get(name='Employer')
 SEARCH_OPTS = ['django', 'python', 'programming']
 
 class MyActivityViewsTests(TestCase):
     def setUp(self):
         self.staff_user = UserFactory()
-        self.staff_user.groups.add(STAFF)
+        self.staff_user.groups.add(EMPLOYER)
         self.staff_user.save()
 
         self.client = TestClient()
