@@ -33,8 +33,7 @@ def register(request):
     return HttpResponse(json.dumps({'errors': form.errors.items()}))
 
 def resend_activation(request):
-    user = request.user
-    activation = ActivationProfile.objects.get(user=user, email__iexact=user.email)
+    activation = ActivationProfile.objects.get_or_create(user=request.user, email=request.user.email)[0]
     activation.send_activation_email()
     return render_to_response('registration/resend_activation.html',
                               context_instance=RequestContext(request))

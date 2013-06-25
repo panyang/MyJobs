@@ -8,8 +8,13 @@
     <div class="modal-body">
         <form action="" method="post" id="{{module}}-{{item_id}}-form">
             <div class="formBox">
+                {% if module == "SecondaryEmail" and emailSent %}
+                    <div class="alert alert-success">
+                        Activation email resent to {{form.email.value}}.
+                    </div>
+                {% endif %}
                 {% if item_id != "new" and module == "SecondaryEmail" and not verified %}
-                    <p>This email address has not been activated! Please activate it using the activation link sent to your email. <a id="{{module}}-{{item_id}}-updateEmail" value="updateEmail">Resend my activation email. </a></p>
+                    <p id="activation_notification">This email address has not been activated! Please activate it using the activation link sent to your email. <a href="" id="{{module}}-{{item_id}}-updateEmail" value="updateEmail">Resend my activation email. </a></p>
                 {% endif %}
                 {% include "includes/form-error-highlight.html" %}
                 {% csrf_token %}

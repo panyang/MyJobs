@@ -161,7 +161,10 @@ $(function() {
             $.ajax({
                 type: 'POST',
                 url: '/profile/form/',
-                data: serialized_data
+                data: serialized_data,
+                success: function(data) {
+                     $(".modal-body").prepend("<div class='alert alert-success'>Activation email resent to " + $("[name='email']").val() + "</div>");
+                }
             });
         },
 
