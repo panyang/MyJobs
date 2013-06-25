@@ -23,6 +23,9 @@ $(function() {
             // targets "Save" button  in the modal window
             "click [id$='save']": "saveForm",
 
+            // targets email reactivation link in SecondaryEmail window
+            "click [id$='updateEmail']": "updateEmail",
+
             // targets "Delete" button on confirmation modal
             "click [id$='delete']": "deleteItem",
 
@@ -121,6 +124,46 @@ $(function() {
                 $('#edit_modal').modal();
             }
         },
+
+        /*
+        Resends activation link
+
+        :e: "Resend my activation email" link within SecondaryEmail modal
+        */
+        updateEmail: function(e) {
+            e.preventDefault();
+
+            // id is formatted [module_type]-[item_id]-[event]
+            var module =  $(e.target).attr('id').split('-')[0];
+            var item_id = $(e.target).attr('id').split('-')[1];
+
+            // targets the form contained in the modal window
+            var form = $('#edit_modal form');
+
+            // targets the item table in the current module section
+            var table = $('#'+module+'_items').children('table')
+
+            csrf_token_tag = document.getElementsByName('csrfmiddlewaretoken')[0];
+            var csrf_token = "";
+            if(typeof(csrf_token_tag)!='undefined'){
+                csrf_token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+            }
+
+            first_instance=0;
+            if(typeof(table.attr("class"))=="undefined"){
+                first_instance = 1;
+            }
+            var serialized_data = form.serialize();
+            serialized_data += '&module=' + module + '&id=' + item_id +
+                               '&first_instance=' + first_instance +
+                               '&csrfmiddlewaretoken=' + csrf_token + '&action=updateEmail';
+            $.ajax({
+                type: 'POST',
+                url: '/profile/form/',
+                data: serialized_data
+            });
+        },
+
 
         /*
         Saves both new and edited modules

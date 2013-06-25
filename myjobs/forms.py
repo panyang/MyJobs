@@ -114,6 +114,7 @@ class EditCommunicationForm(BaseUserForm):
                                            'id':'id_digest_email'}),
                                            choices=choices,
                                            initial=choices[0][0])
+        self.fields["email"].label = "Primary Email:"
 
     def save(self):
         if self.cleaned_data['email'] != self.user.email:

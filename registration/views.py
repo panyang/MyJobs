@@ -30,9 +30,7 @@ def register(request):
             user = authenticate(username=username, password=password)
             login(request, user)
             return HttpResponseRedirect('/accounts/register/complete/')
-    return render_to_response('registration/registration_form.html',
-                              {'form':form},
-                              context_instance=RequestContext(request))
+    return HttpResponse(json.dumps({'errors': form.errors.items()}))
 
 def resend_activation(request):
     user = request.user
