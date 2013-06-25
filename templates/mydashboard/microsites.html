@@ -1,7 +1,18 @@
             <div class="formBox">
                 
-                <h3>Microsites</h3>
+                <table id="microsites">
+                    <tr>
+                        <th><h3>Microsites</h3></th>
+                    </tr>
+                
                 {% for url in company_microsites %}
-                    <a href="{{url.url}}">{{url.url}}</a><br>
+                   <tr>
+                        <td>
+                        <a href="{{url.url}}">{{url.url}}</a>
+                        </td>
+                   </tr>
                 {% endfor %}
+                
+                </table>
+                
             </div>

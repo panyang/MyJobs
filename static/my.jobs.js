@@ -30,6 +30,13 @@ $(document).ready(function(){
         }
     });
     
+    $('#microsites tr').click(function() {
+        var href = $(this).find("a").attr("href");
+        if(href) {
+            window.location = href;
+        }
+    });
+    
     /*Explicit control of main menu, primarily for mobile but also provides
     non hover and cover option if that becomes an issue.*/
     $("#nav .main-nav").click(function(){
@@ -73,4 +80,6 @@ function clearForm(form) {
             this.selectedIndex = -1;
     });
 };
+
+
 

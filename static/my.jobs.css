@@ -47,6 +47,32 @@ a:hover{
     z-index:100;  
 }
 
+table#microsites {
+    border-collapse: collapse;   
+}
+#microsites tr {
+    background-color: #eae6de;
+    
+}
+#microsites tr:hover {
+    background-color: #d2cfc7;
+}
+#microsites th {
+    background-color: #f4f1ea;
+    text-align: left;
+    border-top: none;
+}
+#microsites th, #microsites td {
+    padding: 2px;
+}
+#microsites td:hover {
+    cursor: pointer;
+}
+#microsites td {
+    padding: 5px;
+    border: 1px solid #fff;
+}
+
 /*Ajax Indicator*/
 #ajax-busy {
     display: none;    
