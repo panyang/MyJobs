@@ -57,9 +57,14 @@ def activity_search_feed(request):
 
 @user_passes_test(lambda u: User.objects.is_group_member(u, 'Staff'))
 def candidate_information(request, user_id):
+    # gets returned with response to request
     data_dict = {}
+
+    # user gets pulled out from id
     user = User.objects.get(id=user_id)
     units = request.user.profileunits_set
+
+    # if there is a new profile module please add here
     module_list = ['Name', 'Education', 'EmploymentHistory', 'SecondaryEmail',
                    'Telephone', 'Address']
     profile_config = []
@@ -68,11 +73,16 @@ def candidate_information(request, user_id):
         model = globals()[module]
         verbose = model._meta.verbose_name
             
+        # holder list
         x= []
+
         module_config = {}
         module_units = units.filter(content_type__name=verbose)
 
+        # Verbose is used nicely for headings or titles on front-end
         module_config['verbose'] = verbose.title()
+
+        # Name can be used for id names in html due to no whitespace
         module_config['name'] = module
         for unit in module_units:
             if hasattr(unit, module.lower()):

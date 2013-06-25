@@ -3,7 +3,10 @@ $(document).ready(function(){
 	$('[class*=details-heading]').click(function(){
 			var icon = $(this).children('a').children('span').children('i');
 			var item = $(this).next();
-			// in gets appened after this function is ran so logic has to be backwards
+			/*
+				This function is ran before 'in' gets placed so logic 
+				has to be backwards.
+			*/
 			if(item.hasClass('in')){
 				if(icon.hasClass('icon-minus')){
 					icon.removeClass('icon-minus');
