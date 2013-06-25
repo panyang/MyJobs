@@ -43,6 +43,11 @@ a:hover{
 .profile-form-input input {
     width: 40%;
     }
+
+.reset-form-input input[type="text"], .reset-form-input input[type="password"] {
+    width: 100%;
+}
+
 #moduleBank {    
     z-index:100;  
 }
@@ -51,7 +56,7 @@ table#microsites {
     border-collapse: collapse;   
 }
 #microsites tr {
-    background-color: #eae6de;
+    background-color: #FFF;
     
 }
 #microsites tr:hover {
@@ -70,7 +75,7 @@ table#microsites {
 }
 #microsites td {
     padding: 5px;
-    border: 1px solid #fff;
+    border: 1px solid #eae6de;
 }
 
 /*Ajax Indicator*/
@@ -235,19 +240,39 @@ form select{
     border: 2px solid #574E44;
     border-radius: 5px;
     }
-.loginBox{    
-    background-color: #574e44;
-    padding: 10px;
-    padding-bottom: 30px;
-    border: 2px solid #574E44;
-    border-radius: 5px;
-    }
 .formBox{    
+    background-color: #e4e0d5;
+    padding: 5px;
+    padding-bottom: 30px;
+    border-left: 1px solid #d5d4d0;
+    border-right: 1px solid #d5d4d0;
+    border-bottom: 1px solid #d5d4d0;
+    border-radius: 5px;    
+    }
+ .loginBox{    
     background-color: #f4f1ea;
     padding: 10px;
     padding-bottom: 30px;
     border: 2px solid #a3aeb1;
     border-radius: 5px;    
+    }
+.formBox h2, 
+.formBox h3, 
+.formBox h4, 
+.formBox h5, 
+.formBox h6 {
+    margin-left: -5px;
+    margin-right: -5px;
+    margin-top: -5px;
+    background-color: #FFF;
+    border-bottom: 1px solid #d5d4d0;
+    border-top: 1px solid #d5d4d0;
+    border-top-right-radius: 5px;
+    border-top-left-radius:5px;
+    padding: 5px 20px;
+    }
+.formBox h3 {
+    padding-bottom: 0px;
     }
 .formBox table{
     width: 100%;    
@@ -257,7 +282,7 @@ form select{
     }
 .formBox + .formBox{
     margin-top: 20px;
-}
+    }
 .account-box{    
     background-color: #FFF;
     padding: 10px;
@@ -265,17 +290,17 @@ form select{
     border-radius: 5px;
     margin-top: 105px;   
     }
-.loginBox, .formBox, .account-box h3 {
+.formBox, .account-box h3 {
     color: #FFF;    
     }
-.formBox, .account-box h3 {
+.formBox, .loginBox, .account-box h3 {
     color: #000;    
     }
 .loginBox a{
-    color: #FFF;
+    color: #333;
     }
 .loginBox a:hover{
-    color: #FFF;
+    color: #333;
     }
 #account-page-2 .loginBox, #account-page-2 .profileBox{
     padding-left: 0px;
@@ -396,7 +421,9 @@ form select{
     font-size: 1.1em;
     color: #fff
     }
-
+    .btn.primary:hover{
+    color: #FFF;
+    }
 .alert-message ul{
     list-style: none;
     padding: 0;
@@ -1018,7 +1045,7 @@ form input[type='checkbox']{
     text-decoration: none;
 }
 
-.account-settings input[type="text"], input[type="password"] {
+.account-settings input[type="text"], .account-settings input[type="password"] {
     width: 250px;
 }
 

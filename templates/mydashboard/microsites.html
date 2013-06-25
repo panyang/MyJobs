@@ -1,13 +1,13 @@
             <div class="formBox">
                 
-                <table id="microsites">
-                    <tr>
-                        <th><h3>Microsites</h3></th>
-                    </tr>
+                <h3>Microsites</h3>
                 
+                <table id="microsites">
+                                    
                 {% for url in company_microsites %}
                    <tr>
                         <td>
+                        <strong>{{ url.url|cut:"http://" }}</strong><br>
                         <a href="{{url.url}}">{{url.url}}</a>
                         </td>
                    </tr>
