@@ -91,31 +91,40 @@ def handle_form(request):
 
     if request.method == "POST":
         data_dict['name'] = module_type
-        if item_id == 'new':
-            form_instance = form(user=request.user, data=request.POST,
-                                 auto_id=False)
-            if first_instance:
-                template = 'myprofile/profile_section.html'
-                data_dict['verbose'] = verbose
-            else:
-                template = 'myprofile/profile_item.html'
-        else:
-            obj = model.objects.get(id=item_id)
-            form_instance = form(instance=obj, user=request.user, data=request.POST,
-                                 auto_id=False)
-            template = 'myprofile/profile_item.html'
 
-        if form_instance.is_valid():
-            form_instance.save()
-            if first_instance:
-                data_dict['items'] = [form_instance.instance]
-                data_dict = {'module': data_dict}
-            else:
-                data_dict['item'] = form_instance.instance
-            return render_to_response(template, data_dict,
+        #Handles requests to resend activation email
+        if request.POST.get("action") == "updateEmail":
+            obj = model.objects.get(id=item_id)
+            activation = ActivationProfile.objects.get(email=obj.email)
+            activation.send_activation_email(primary=False)
+            return render_to_response('myprofile/profile_item.html', data_dict,
                                       RequestContext(request))
         else:
-            return HttpResponse(json.dumps({'errors': form_instance.errors.items()}))
+            if item_id == 'new':
+                form_instance = form(user=request.user, data=request.POST,
+                                     auto_id=False)
+                if first_instance:
+                    template = 'myprofile/profile_section.html'
+                    data_dict['verbose'] = verbose
+                else:
+                    template = 'myprofile/profile_item.html'
+            else:
+                obj = model.objects.get(id=item_id)
+                form_instance = form(instance=obj, user=request.user, data=request.POST,
+                                     auto_id=False)
+                template = 'myprofile/profile_item.html'
+
+            if form_instance.is_valid():
+                form_instance.save()
+                if first_instance:
+                    data_dict['items'] = [form_instance.instance]
+                    data_dict = {'module': data_dict}
+                else:
+                    data_dict['item'] = form_instance.instance
+                return render_to_response(template, data_dict,
+                                          RequestContext(request))
+            else:
+                return HttpResponse(json.dumps({'errors': form_instance.errors.items()}))
     else:
         if not item_id or item_id == 'new':
             form_instance = form(auto_id=False)
@@ -124,6 +133,10 @@ def handle_form(request):
             obj = model.objects.get(id=item_id)
             form_instance = form(instance=obj, auto_id=False)
             data_dict['item_id'] = item_id
+            
+            #Used to determine whether or not to display resend activation email link
+            if data_dict['module'] == "SecondaryEmail":
+                data_dict['verified'] = obj.verified
 
         data_dict['verbose'] = verbose
         data_dict['form'] = form_instance

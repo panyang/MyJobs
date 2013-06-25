@@ -7,7 +7,7 @@
   {% csrf_token %}
   <div class="actions">
     <a href="" class="btn pull-right">{% trans 'Cancel' %}</a>
-    <button type="button" class="btn primary pull-left" id="show-captcha-modal-disable">{% trans "Disable Account" %}</a>
+    <button type="button" class="btn primary pull-left" id="show-captcha-modal-disable">{% trans "Disable Account" %}</button>
     <div class="clear"></div>
   </div>
 </form>
@@ -18,7 +18,7 @@
     <h1>{% trans "Disable <small>Your Account</small>" %}</h1>
   </div>
   <div class="modal-body">
-    <div class="gravatar-warning pull-left"><img src="{{gravatar_150}}"><br><img class="warning-badge" src="{{STATIC_URL}}images/caution-badge.png"></div>
+    <div class="gravatar-warning pull-left"><img src="{{gravatar_150}}" /><br><img class="warning-badge" src="{{STATIC_URL}}images/caution-badge.png" /></div>
     <div class="account-warning pull-right">
       <p>{% trans "Are you sure you want to disable your account?" %}</p>
       <p>{% trans "This will do the following:" %}</p>
