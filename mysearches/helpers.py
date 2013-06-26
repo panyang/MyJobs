@@ -135,13 +135,11 @@ def url_sort_options(feed_url, sort_by):
     unparsed_feed = urlparse(feed_url)
     query = parse_qs(unparsed_feed.query)
     query.pop('date_sort', None)
-    unparsed_feed = unparsed_feed._replace(query = urlencode(query, True))
-    feed_url = urlunparse(unparsed_feed)
 
     if sort_by == "Relevance":
-        if not "?" in feed_url:
-            feed_url += "?date_sort=False"
-        else:
-            feed_url += "&date_sort=False"
+        query.update({'date_sort': 'False'})
+
+    unparsed_feed = unparsed_feed._replace(query = urlencode(query, True))
+    feed_url = urlunparse(unparsed_feed)
 
     return feed_url

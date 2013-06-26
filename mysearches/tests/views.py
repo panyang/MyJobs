@@ -28,7 +28,7 @@ class MySearchViewTests(TestCase):
             'email': self.user.email,
             'frequency': 'D',
             'is_active': 'True',
-            'sort_by': 'Relevance'
+            'sort_by': 'Relevance',
             'render': 'True',
         }
         self.new_digest_data = {
