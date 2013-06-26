@@ -256,7 +256,7 @@ form select{
     }
 .formBox + .formBox{
     margin-top: 20px;
-    }
+}
 .account-box{    
     background-color: #FFF;
     padding: 10px;
@@ -264,17 +264,17 @@ form select{
     border-radius: 5px;
     margin-top: 105px;   
     }
-.formBox, .account-box h3 {
+.loginBox, .formBox, .account-box h3 {
     color: #FFF;    
     }
-.formBox, .loginBox, .account-box h3 {
+.formBox, .account-box h3 {
     color: #000;    
     }
 .loginBox a{
-    color: #333;
+    color: #FFF;
     }
 .loginBox a:hover{
-    color: #333;
+    color: #FFF;
     }
 #account-page-2 .loginBox, #account-page-2 .profileBox{
     padding-left: 0px;
@@ -395,9 +395,7 @@ form select{
     font-size: 1.1em;
     color: #fff
     }
-    .btn.primary:hover{
-    color: #FFF;
-    }
+
 .alert-message ul{
     list-style: none;
     padding: 0;
@@ -846,6 +844,9 @@ form input[type='checkbox']{
     ul.ui-autocomplete{
         display: none !important;
     }
+
+    /* Mobile Saved Search */
+
     #saved-search-form label[for=id_is_active],
     #saved-search-form label[for=id_edit_is_active] {
         margin-top:10px;
@@ -891,6 +892,13 @@ form input[type='checkbox']{
     #id_label {
         margin-top: 0px !important;
     }
+
+    /* Mobile Saved Search Listing */
+
+    #saved-search-listing-details {
+        margin-bottom: 15px;
+    }
+
     .section.subpage {
         background-color: #fff;
     }
@@ -1113,6 +1121,37 @@ table td, table th{
     margin-left: 5px;
     margin-right: 5px;
     margin-top: 5px;
+}
+
+/* Saved Search Listing */
+
+#saved-search-listing-table a {
+    text-decoration: none;
+}
+
+#saved-search-listing-table ul {
+    list-style-type: none;
+    margin: 0px;
+}
+
+#saved-search-listing-table p {
+    display: inline;
+    font-size: 1.7em;
+    font-weight: bold;
+}
+
+#saved-search-listing-details > div,
+#saved-search-listing-details > h2 {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+#saved-search-listing-details > div {
+    padding-top: 10px;
+}
+
+#saved-search-listing-details {
+    padding-bottom: 0px;
 }
 
 [class^="icon-"], [class*=" icon-"] {

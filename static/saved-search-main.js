@@ -26,8 +26,7 @@ $(function() {
                 data: { csrfmiddlewaretoken: csrf_token,
                         action: 'get_edit',
                         search_id: id },
-                type: 'POST',
-                url: 'edit',
+                url: '/saved-search/edit',
                 success: function(data) {
                     $('#edit_modal').append(data);
                     add_valid_label(that);
@@ -50,17 +49,29 @@ $(function() {
             if ($('.table').length) {
                 first_instance = 0;
             }
+            
+            var view_feed = $('#saved-search-listing-table').length;
+            var render = '';
+            if (view_feed) {
+                render = 'False';
+            } else {
+                render = 'True';
+            }
+
             data = form.serialize();
             data += '&search_id='+id;
             data += '&first_instance='+first_instance;
+            data += '&render='+render;
             data = data.replace('=on','=True').replace('=off','=False');
             data = data.replace('undefined', 'None');
             $.ajax({
                 data: data,
                 type: 'POST',
-                url: 'save',
+                url: '/saved-search/save',
                 success: function(response) {
-                    if (response.indexOf('<tr') > -1) {
+                    if (response == '') {
+                        window.location = window.location;
+                    } else if (response.indexOf('<td') > -1) {
                         if (first_instance) {
                             $('#saved-search-list p').remove();
                             $('#saved-search-list').prepend(response);
@@ -98,7 +109,7 @@ $(function() {
                 validation_status('validating...', that)
                 $.ajax({
                     type: "POST",
-                    url: "validate-url",
+                    url: "/saved-search/validate-url",
                     data: { csrfmiddlewaretoken: csrf_token,
                             action: "validate",
                             url: url},
@@ -310,7 +321,8 @@ function disable_fields(that) {
 }
 
 function add_errors(that, data) {
-       // remove color from labels of current errors
+    console.log(data)
+    // remove color from labels of current errors
     $('[class*=required]').prev().children().css('color', '#000');
 
     // remove current errors
@@ -318,16 +330,16 @@ function add_errors(that, data) {
 
     errors = jQuery.parseJSON(data)
     for (var key in errors) {
-        if (errors.hasOwnProperty(key)) {
-            if (key == 'day_of_week' || key == 'day_of_month') {
-            	that.find('label[for$="frequency"]').parent().next().wrap('<span class="required" />');
-                that.find('label[for$="frequency"]').css('color', '#900');
-                that.find('label[for$="'+key+'"]').parent().next().wrap('<span class="required" />');
-            } else {
-                that.find('label[for$="'+key+'"]').parent().next().wrap('<span class="required" />');
-                that.find('label[for$="'+key+'"]').parent().next().children().attr("placeholder","Required Field");
-                that.find('label[for$="'+key+'"]').css('color', '#900');
-            }
+        if (key == 'day_of_week' || key == 'day_of_month') {
+            that.find('label[for$="frequency"]').parent().next().wrap('<span class="required" />');
+            that.find('label[for$="frequency"]').css('color', '#900');
+            that.find('label[for$="'+key+'"]').parent().next().wrap('<span class="required" />');
+        } else {
+            console.log(that.find('label[for$="'+key+'"]').parent().next())
+            that.find('label[for$="'+key+'"]').parent().next().wrap('<span class="required" />');
+            console.log(that.find('label[for$="'+key+'"]').parent().next())
+            that.find('label[for$="'+key+'"]').parent().next().children().attr("placeholder","Required Field");
+            that.find('label[for$="'+key+'"]').css('color', '#900');
         }
     }
 }
