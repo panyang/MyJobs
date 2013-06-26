@@ -1,3 +1,4 @@
+from datetime import datetime, timedelta
 import time
 from urlparse import urlparse
 
@@ -6,8 +7,9 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.db import models
 
+from myjobs.models import User
 from mysearches.models import SavedSearch
-from myprofile.models import *
+from myprofile.models import ProfileUnits, Name, Education, Address, Telephone, EmploymentHistory, SecondaryEmail
 
 @user_passes_test(lambda u: User.objects.is_group_member(u, 'Employer'))
 def activity_search_feed(request):
@@ -29,17 +31,17 @@ def activity_search_feed(request):
         # Saved searches were created after this date...
         after = request.REQUEST.get('after')
         if after:
-            after = datetime.datetime.strptime(after, '%Y-%m-%d')
+            after = datetime.strptime(after, '%Y-%m-%d')
         else:
             # Defaults to one week ago
-            after = datetime.datetime.now() - datetime.timedelta(days=7)
+            after = datetime.now() - timedelta(days=7)
         # ... and before this one
         before = request.REQUEST.get('before')
         if before:
-            before = datetime.datetime.strptime(before, '%Y-%m-%d')
+            before = datetime.strptime(before, '%Y-%m-%d')
         else:
             # Defaults to the date and time that the page is accessed
-            before = datetime.datetime.now()
+            before = datetime.now()
         data['after'] = after
         data['before'] = before
 
@@ -91,7 +93,11 @@ def candidate_information(request, user_id):
         module_config['items'] = x
 
         profile_config.append(module_config)
+
+    searches = SavedSearch.objects.select_related('user')
+
     data_dict = {'userInfo': profile_config,
-                     'theUser': user}
+                 'theUser': user,
+                 'searches': searches}
     return render_to_response('myactivity/candidate_information.html', data_dict,
                             RequestContext(request))
