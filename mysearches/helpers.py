@@ -1,7 +1,8 @@
 import json
 import urllib2
 from bs4 import BeautifulSoup
-from urlparse import urlparse
+from urlparse import urlparse, urlunparse, parse_qs
+from urllib import urlencode
 from dateutil import parser as dateparser
 import datetime
 
@@ -130,10 +131,12 @@ def url_sort_options(feed_url, sort_by):
     :feed_url:      URL updated with sorting options. 'Date' has no additions to
                     the URL and  'Relevance' should has '&date_sort=False' added
     """
-    
-    feed_url = feed_url.replace("?&date_sort=False", "")
-    feed_url = feed_url.replace("?date_sort=False", "")
-    feed_url = feed_url.replace("&date_sort=False", "")
+
+    unparsed_feed = urlparse(feed_url)
+    query = parse_qs(unparsed_feed.query)
+    query.pop('date_sort', None)
+    unparsed_feed = unparsed_feed._replace(query = urlencode(query, True))
+    feed_url = urlunparse(unparsed_feed)
 
     if sort_by == "Relevance":
         if not "?" in feed_url:
