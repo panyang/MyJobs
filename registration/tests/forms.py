@@ -26,19 +26,21 @@ class RegistrationFormTests(TestCase):
             {'data': {'email': 'alice@example.com',
                       'password1': 'secret',
                       'password2': 'secret'},
-            'error': ('email', [u"A user with that email already exists."])},
+            'error': [['email', [u"A user with that email already exists."]]]},
             # Mismatched passwords.
             {'data': {'email': 'foo@example.com',
                       'password1': 'foo',
                       'password2': 'bar'},
-            'error': ('__all__', [u"The two password fields didn't match."])},
+            'error': [['password1', [u"The new password fields did not match."]],
+                     ['password2', [u"The new password fields did not match."]]]},
             ]
 
         for invalid_dict in invalid_data_dicts:
             form = RegistrationForm(data=invalid_dict['data'])
             self.failIf(form.is_valid())
-            self.assertEqual(form.errors[invalid_dict['error'][0]],
-                             invalid_dict['error'][1])
+
+            self.assertEqual(form.errors[invalid_dict['error'][0][0]],
+                             invalid_dict['error'][0][1])
 
         form = RegistrationForm(data={'email': 'foo@example.com',
                                       'password1': 'foo',
