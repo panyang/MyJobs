@@ -5,26 +5,11 @@
     <meta name="title" content="{% if name_obj %}{{ name_obj }} on{% else %}&nbsp;{% endif %} My.jobs">
 {% endblock %}
 {% load i18n %}
+{% load user_ops %}
 {% block meta-extra %}
 <script src="{{ STATIC_URL }}profile.js{% cache_buster %}"></script>
-<script>
-$(document).ready(function()
-{
-   $('#movies tr').each(function(i,e)
-   {
-      $(e).children('td:not(:last)').click(function()
-      {
-         //here we are working on a td element, that's why we need
-         //to refer to its parent (tr) in order to find the <a> element
-         var href = $(this).closest("tr").find("a").attr("href");
-         if(href)
-         {
-            window.location = href;
-         }              
-      });
-   });
-});
-</script>
+<script src="http://js.nlx.org/framework/v2/js/def.ui.bootstrap.tabs.js" type="text/javascript"></script>
+<script src="http://js.nlx.org/framework/v2/js/code/bootstrap-collapse.js" type="text/javascript"></script>
 {% endblock %}
 
 {% block content %}
@@ -52,10 +37,53 @@ $(document).ready(function()
     </div>
     <div class="row">
         <div class="span8" id="moduleColumn">
+            
             <div class="formBox">
-                <h3>Candidate Activity</h3>
-                
-            </div>
+            <h3>Candidate Activity</h3>
+            
+                <div class="pull-left">Between {{after}} and {{before}}</div><br>
+                   
+                 <table id="row-link-table">                            
+                    {% for candidate in candidates %}
+                    <tr>                            
+                        <td>
+                        <ul style="list-style-type: none; margin-left: -10px;">
+                            <li><strong>{% if candidate.label %}{{candidate.label}}{% else %}Unlabeled{% endif %}</strong></li>
+                            <li><a href="{{candidate.url}}">{{candidate.url}}</a></li>
+                            <li>{{candidate.created_on}}</li>
+                            <li>{{candidate.user}}</li>
+                        </ul>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    
+                 </table>
+                 
+                 <table id="pagination">
+                 <tr>
+                 <td>
+                    
+                    {% if candidates.has_previous %}
+                        <div class="pull-left"><a href="?page={{ candidates.previous_page_number }}">previous</a></div>
+                    {% else %}
+                        &nbsp;
+                    {% endif %}
+                  </td>
+                  
+                  <td>  
+                    Page {{ candidates.number }} of {{ candidates.paginator.num_pages }}
+                   </td>
+                  
+                  <td>  
+
+                    {% if candidates.has_next %}
+                        <div class="pull-right"><a href="?page={{ candidates.next_page_number }}">next</a></div>
+                    {% endif %}
+                  </td>
+                  </tr>
+                  </table>
+                  
+             </div>
             
             {% include "mydashboard/microsites.html" %}
             

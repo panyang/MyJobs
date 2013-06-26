@@ -30,7 +30,8 @@ $(document).ready(function(){
         }
     });
     
-    $('#microsites tr').click(function() {
+    /*Makes entire row a clickable hyperlink.*/
+    $('#row-link-table tr').click(function() {
         var href = $(this).find("a").attr("href");
         if(href) {
             window.location = href;

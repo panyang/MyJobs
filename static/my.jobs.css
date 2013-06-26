@@ -52,30 +52,39 @@ a:hover{
     z-index:100;  
 }
 
-table#microsites {
+table#row-link-table {
     border-collapse: collapse;   
 }
-#microsites tr {
+#row-link-table tr {
     background-color: #FFF;
     
 }
-#microsites tr:hover {
+#row-link-table tr:hover {
     background-color: #d2cfc7;
 }
-#microsites th {
+#row-link-table th {
     background-color: #f4f1ea;
     text-align: left;
     border-top: none;
 }
-#microsites th, #microsites td {
+#row-link-table th, #microsites td {
     padding: 2px;
 }
-#microsites td:hover {
+#row-link-table td:hover {
     cursor: pointer;
 }
-#microsites td {
+#row-link-table td {
     padding: 5px;
     border: 1px solid #eae6de;
+}
+
+#pagination table {    
+    background-color: #FFF;    
+    border: 1px solid #eae6de;
+}
+#pagination td {
+    width: 33%;
+    padding: 10px;
 }
 
 /*Ajax Indicator*/
