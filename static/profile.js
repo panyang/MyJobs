@@ -117,7 +117,8 @@ $(function() {
                             $("[for='id_employmenthistory-end_date']").hide();
                         }
                         $('#edit_modal').modal();
-                        datepicker();
+                        $('input[id$="date"]').datepicker({dateFormat: window.dateFormat,
+                                                           constrainInput: false});
                     }
                 });            
             } else {

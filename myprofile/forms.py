@@ -32,6 +32,10 @@ def generate_custom_widgets(model):
             elif internal_type == 'BooleanField':
                 attrs['label_class'] = 'checkbox'
                 widgets[field.attname] = CheckboxInput(attrs=attrs)
+            elif internal_type == 'DateField':
+                widgets[field.attname] = DateInput(
+                                            format=settings.FORM_DATE_FORMAT,
+                                            attrs=attrs)
             else:
                 widgets[field.attname] = TextInput(attrs=attrs)
 
@@ -63,7 +67,9 @@ class SecondaryEmailForm(BaseUserForm):
 class EducationForm(BaseUserForm):
     def __init__(self, *args, **kwargs):
         super(EducationForm, self).__init__(*args, **kwargs)
-        self.fields['degree_date'].input_formats = settings.DATE_INPUT_FORMATS  
+        self.fields['degree_date'].input_formats = settings.DATE_INPUT_FORMATS
+        self.fields['start_date'].input_formats = settings.DATE_INPUT_FORMATS
+        self.fields['end_date'].input_formats = settings.DATE_INPUT_FORMATS
 
     class Meta:
         form_name = _("Education")
