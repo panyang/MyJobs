@@ -61,6 +61,8 @@ def activity_search_feed(request):
 def candidate_information(request, user_id):
     # gets returned with response to request
     data_dict = {}
+    profile_config = []
+
 
     # user gets pulled out from id
     user = User.objects.get(id=user_id)
@@ -69,7 +71,7 @@ def candidate_information(request, user_id):
     # if there is a new profile module please add here
     module_list = ['Name', 'Education', 'EmploymentHistory', 'SecondaryEmail',
                    'Telephone', 'Address']
-    profile_config = []
+    
     units = user.profileunits_set
     for module in module_list:
         model = globals()[module]
@@ -94,10 +96,7 @@ def candidate_information(request, user_id):
 
         profile_config.append(module_config)
 
-    searches = SavedSearch.objects.select_related('user')
-
     data_dict = {'userInfo': profile_config,
-                 'theUser': user,
-                 'searches': searches}
+                 'theUser': user}
     return render_to_response('myactivity/candidate_information.html', data_dict,
                             RequestContext(request))
