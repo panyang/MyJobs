@@ -12,7 +12,7 @@ $(document).ready(function() {
                         'sort_by': sort_by
                       },
                 success: function(data) {
-                    $('.feed-page').append(data);
+                    $('#saved-search-listing-table tbody').append(data);
                 }
             });
         }

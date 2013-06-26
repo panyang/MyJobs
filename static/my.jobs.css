@@ -48,6 +48,11 @@ label[for^='id_sort_by'], label[for^='id_edit_sort_by'] {
 .profile-form-input input {
     width: 40%;
     }
+
+.reset-form-input input[type="text"], .reset-form-input input[type="password"] {
+    width: 100%;
+}
+
 #moduleBank {    
     z-index:100;  
 }
@@ -214,19 +219,39 @@ form select{
     border: 2px solid #574E44;
     border-radius: 5px;
     }
-.loginBox{    
-    background-color: #574e44;
-    padding: 10px;
-    padding-bottom: 30px;
-    border: 2px solid #574E44;
-    border-radius: 5px;
-    }
 .formBox{    
+    background-color: #e4e0d5;
+    padding: 5px;
+    padding-bottom: 30px;
+    border-left: 1px solid #d5d4d0;
+    border-right: 1px solid #d5d4d0;
+    border-bottom: 1px solid #d5d4d0;
+    border-radius: 5px;    
+    }
+ .loginBox{    
     background-color: #f4f1ea;
     padding: 10px;
     padding-bottom: 30px;
     border: 2px solid #a3aeb1;
     border-radius: 5px;    
+    }
+.formBox h2, 
+.formBox h3, 
+.formBox h4, 
+.formBox h5, 
+.formBox h6 {
+    margin-left: -5px;
+    margin-right: -5px;
+    margin-top: -5px;
+    background-color: #FFF;
+    border-bottom: 1px solid #d5d4d0;
+    border-top: 1px solid #d5d4d0;
+    border-top-right-radius: 5px;
+    border-top-left-radius:5px;
+    padding: 5px 20px;
+    }
+.formBox h3 {
+    padding-bottom: 0px;
     }
 .formBox table{
     width: 100%;    
@@ -828,6 +853,9 @@ form input[type='checkbox']{
     ul.ui-autocomplete{
         display: none !important;
     }
+
+    /* Mobile Saved Search */
+
     #saved-search-form label[for=id_is_active],
     #saved-search-form label[for=id_edit_is_active] {
         margin-top:10px;
@@ -873,6 +901,13 @@ form input[type='checkbox']{
     #id_label {
         margin-top: 0px !important;
     }
+
+    /* Mobile Saved Search Listing */
+
+    #saved-search-listing-details {
+        margin-bottom: 15px;
+    }
+
     .section.subpage {
         background-color: #fff;
     }
@@ -1001,7 +1036,7 @@ form input[type='checkbox']{
     text-decoration: none;
 }
 
-.account-settings input[type="text"], input[type="password"] {
+.account-settings input[type="text"], .account-settings input[type="password"] {
     width: 250px;
 }
 
@@ -1095,6 +1130,37 @@ table td, table th{
     margin-left: 5px;
     margin-right: 5px;
     margin-top: 5px;
+}
+
+/* Saved Search Listing */
+
+#saved-search-listing-table a {
+    text-decoration: none;
+}
+
+#saved-search-listing-table ul {
+    list-style-type: none;
+    margin: 0px;
+}
+
+#saved-search-listing-table p {
+    display: inline;
+    font-size: 1.7em;
+    font-weight: bold;
+}
+
+#saved-search-listing-details > div,
+#saved-search-listing-details > h2 {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+#saved-search-listing-details > div {
+    padding-top: 10px;
+}
+
+#saved-search-listing-details {
+    padding-bottom: 0px;
 }
 
 [class^="icon-"], [class*=" icon-"] {

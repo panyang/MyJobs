@@ -29,6 +29,7 @@ class MySearchViewTests(TestCase):
             'frequency': 'D',
             'is_active': 'True',
             'sort_by': 'Relevance'
+            'render': 'True',
         }
         self.new_digest_data = {
             'is_active': 'True',
@@ -73,17 +74,18 @@ class MySearchViewTests(TestCase):
     def test_get_edit_template(self):
         self.new_form.save()
         search_id = self.new_form.instance.id
-        response = self.client.post('/saved-search/edit',
-                                    data = {'search_id': search_id,},
+        response = self.client.get('/saved-search/edit',
+                                    data = {'search_id': search_id},
                                     HTTP_X_REQUESTED_WITH = 'XMLHttpRequest')
         self.assertEqual(response.status_code, 200)
+        
         self.assertEqual(self.new_form.instance,
                          response.context['form'].instance)
         self.assertTemplateUsed(response, 'mysearches/saved_search_edit.html')
 
         search_id += 1
-        response = self.client.post('/saved-search/edit',
-                                    data = {'search_id': search_id,},
+        response = self.client.get('/saved-search/edit',
+                                    data = {'search_id': search_id},
                                     HTTP_X_REQUESTED_WITH = 'XMLHttpRequest')
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'mysearches/saved_search_edit.html')
@@ -95,12 +97,16 @@ class MySearchViewTests(TestCase):
 
         self.new_form_data['frequency'] = 'W'
         self.new_form_data['day_of_week'] = 1
+        self.new_form_data['url'] = 'jobs.jobs/search?'
         self.new_form_data['search_id'] = search_id
 
+        new_form = forms.SavedSearchForm(user=self.user,
+                                         data=self.new_form_data)
         response = self.client.post('/saved-search/save',
                                     data = self.new_form_data,
                                     HTTP_X_REQUESTED_WITH = 'XMLHttpRequest')
         self.assertEqual(response.status_code, 200)
+
         self.assertTrue(self.new_form_data['label'] in response.content)
 
         del self.new_form_data['frequency']

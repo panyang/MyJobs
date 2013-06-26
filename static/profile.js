@@ -23,6 +23,9 @@ $(function() {
             // targets "Save" button  in the modal window
             "click [id$='save']": "saveForm",
 
+            // targets email reactivation link in SecondaryEmail window
+            "click [id$='updateEmail']": "updateEmail",
+
             // targets "Delete" button on confirmation modal
             "click [id$='delete']": "deleteItem",
 
@@ -114,13 +117,57 @@ $(function() {
                             $("[for='id_employmenthistory-end_date']").hide();
                         }
                         $('#edit_modal').modal();
-                        datepicker();
+                        $('input[id$="date"]').datepicker({dateFormat: window.dateFormat,
+                                                           constrainInput: false});
                     }
                 });            
             } else {
                 $('#edit_modal').modal();
             }
         },
+
+        /*
+        Resends activation link
+
+        :e: "Resend my activation email" link within SecondaryEmail modal
+        */
+        updateEmail: function(e) {
+            e.preventDefault();
+
+            // id is formatted [module_type]-[item_id]-[event]
+            var module =  $(e.target).attr('id').split('-')[0];
+            var item_id = $(e.target).attr('id').split('-')[1];
+
+            // targets the form contained in the modal window
+            var form = $('#edit_modal form');
+
+            // targets the item table in the current module section
+            var table = $('#'+module+'_items').children('table')
+
+            csrf_token_tag = document.getElementsByName('csrfmiddlewaretoken')[0];
+            var csrf_token = "";
+            if(typeof(csrf_token_tag)!='undefined'){
+                csrf_token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+            }
+
+            first_instance=0;
+            if(typeof(table.attr("class"))=="undefined"){
+                first_instance = 1;
+            }
+            var serialized_data = form.serialize();
+            serialized_data += '&module=' + module + '&id=' + item_id +
+                               '&first_instance=' + first_instance +
+                               '&csrfmiddlewaretoken=' + csrf_token + '&action=updateEmail';
+            $.ajax({
+                type: 'POST',
+                url: '/profile/form/',
+                data: serialized_data,
+                success: function(data) {
+                     $(".modal-body").prepend("<div class='alert alert-success'>Activation email resent to " + $("[name='email']").val() + "</div>");
+                }
+            });
+        },
+
 
         /*
         Saves both new and edited modules
@@ -307,7 +354,12 @@ $(document).ready(function() {
         // This function will be executed when the user scrolls the page.
         $(window).scroll(function(e) {
                 // Get the position of the location where the scroller starts.
-                var scroller_anchor = $(".scroller_anchor").offset().top;
+                var scroller_anchor;
+                try {
+                    scroller_anchor = $(".scroller_anchor").offset().top;
+                } catch(e) {
+                    scroller_anchor = 0;
+                }
      
                 // Check if the user has scrolled and the current position is after the scroller start location and if its not already fixed at the top 
                 if ($(this).scrollTop() >= scroller_anchor && $('#moduleBank').css('position') != 'fixed') 
