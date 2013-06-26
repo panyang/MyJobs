@@ -63,7 +63,6 @@ def candidate_information(request, user_id):
     data_dict = {}
     profile_config = []
 
-
     # user gets pulled out from id
     user = User.objects.get(id=user_id)
     units = request.user.profileunits_set
@@ -96,7 +95,10 @@ def candidate_information(request, user_id):
 
         profile_config.append(module_config)
 
+    searches = SavedSearch.objects.filter(user=user)
+    
     data_dict = {'userInfo': profile_config,
-                 'theUser': user}
+                 'theUser': user,
+                 'searches': searches}
     return render_to_response('myactivity/candidate_information.html', data_dict,
                             RequestContext(request))

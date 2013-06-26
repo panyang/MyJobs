@@ -46,7 +46,7 @@
         </div>
         <div class="span4 pull-left">
         	<table class="table table-bordered" id="candidate-details">
-        		<tr id="theUser-{{user.id}}-details">
+        		<tr id="{{theUser.id}}-details">
         			<td class="table-heading">
         				Details
         			</td>
@@ -110,12 +110,43 @@
         	</table>
         </div>
         <div class="span4">
-        	<table class="table table-bordered">
-        		<tr id="theUser-{{user.id}}-activity">
+        	<table class="table table-bordered" id="candidate-details">
+        		<tr id="{{theUser.id}}-activity">
         			<td class="table-heading">
         				Activity
         			</td>
         		</tr>
+                {% if searches %}
+                <tr>
+                    <td class="no-side-padding">
+                        <div class="accordion" id="details-searches-collapse">
+                            <div class="accordion-group">
+                                <div class="accordion-heading details-heading">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#details-searches-collapse" 
+                                        href="#searches-details-table">Saved Searches<span class="pull-right"><i class="icon icon-plus"></i></span></a>
+                                </div>
+                                <div id="searches-details-table" class="accordion-body collapse">
+                                    <div class="accordion-inner">
+                                        <table class="table details-inner">
+                                            {% for search in searches %}
+                                                <tr id="details-searches">
+                                                    <td>
+                                                        <ul id="details-smallList">
+                                                            <li>{% if search.label %}{{search.label}}{% else %}Unlabeled{% endif %}</li>
+                                                            <li>{{search.url}}</li>
+                                                            <li>{{search.created_on}}</li>
+                                                        </ul>
+                                                    </td>
+                                                </tr>
+                                            {% endfor %}
+                                        </table>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </td>
+                </tr>
+                {% endif %}
         	</table>
         </div>
     </div>
