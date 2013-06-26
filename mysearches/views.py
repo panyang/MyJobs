@@ -53,6 +53,7 @@ def view_full_feed(request, search_id):
         label = saved_search.label
         return render_to_response('mysearches/view_full_feed.html',
                                   {'label': label,
+                                   'sort_by': saved_search.sort_by,
                                    'feed': saved_search.feed,
                                    'frequency': saved_search.frequency,
                                    'verbose_frequency':
