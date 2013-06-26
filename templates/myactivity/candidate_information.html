@@ -90,8 +90,8 @@
                                 										<li>{{item.email}}</li>
                                 									{% else %}
                                 										<li><b>{{item.label}}</b></li>
-                                										<li>{{item.address_line_one}}, {{item.address_line_two}}</li>
-                                										<li>{{item.city_name}},{%if item.country_sub_division_code%}{{item.country_sub_division_code}}{%else%}{{item.country_code}}{%endif%} {{item.postal_code}}</li>
+                                										<li>{%if item.address_line_one%}{{item.address_line_one}},{%endif%} {{item.address_line_two}}</li>
+                                										<li>{%if item.city_name%}{{item.city_name}},{%endif%}{%if item.country_sub_division_code%}{{item.country_sub_division_code}}{%else%}{{item.country_code}}{%endif%} {{item.postal_code}}</li>
                                 									{% endif %}
                                 								</ul>
                                 							</td>
@@ -132,7 +132,7 @@
                                                 <tr id="details-searches">
                                                     <td>
                                                         <ul id="details-smallList">
-                                                            <li>{% if search.label %}{{search.label}}{% else %}Unlabeled{% endif %}</li>
+                                                            <li><b>{% if search.label %}{{search.label}}{% else %}Unlabeled{% endif %}</b></li>
                                                             <li>{{search.url}}</li>
                                                             <li>{{search.created_on}}</li>
                                                         </ul>
