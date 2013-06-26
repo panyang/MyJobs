@@ -2,7 +2,7 @@ var current_url = ""; //init current_url as global
 $(document).ready(function() {
     $("#id_email").attr("placeholder", "Email");
     $(function() {
-        $( "input[id$='date']" ).datepicker({dateFormat: "mm/dd/yy",
+        $( "input[id$='date']" ).datepicker({dateFormat: window.dateFormat,
                                              constrainInput: false});
     });
     // perform display modifications for fields

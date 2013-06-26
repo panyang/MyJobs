@@ -74,3 +74,4 @@ function clearForm(form) {
     });
 };
 
+window.dateFormat = 'dd-M-yy';
