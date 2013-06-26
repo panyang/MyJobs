@@ -157,12 +157,12 @@ class SavedSearchResource(ModelResource):
             if bundle.request:
                 url = bundle.data.get('url')
                 if url.find('//') == -1:
-                    url = '//' + url
+                    url = 'http://' + url
                 netloc = urlparse(url).netloc
                 notes += ' from ' + netloc
             bundle.data['notes'] = notes
 
-        search_args = {'url': bundle.data.get('url'),
+        search_args = {'url': url,
                        'label': bundle.data.get('label'),
                        'feed': bundle.data.get('feed'),
                        'user': user,
@@ -171,11 +171,20 @@ class SavedSearchResource(ModelResource):
                        'day_of_week': bundle.data.get('day_of_week'),
                        'day_of_month': bundle.data.get('day_of_month'),
                        'notes': notes}
-        search, new_search_flag = SavedSearch.objects.get_or_create(**search_args)
+
+        new_search = False
+        try:
+            search = SavedSearch.objects.get(user=search_args['user'],
+                                             email__iexact=search_args['email'],
+                                             url=search_args['url'])
+        except SavedSearch.DoesNotExist:
+            search = SavedSearch(**search_args)
+            search.save()
+            new_search = True
 
         bundle.obj = search
         bundle.data = {'email': bundle.data.get('email'),
                        'frequency': bundle.data.get('frequency', 'D'),
-                       'new_search': new_search_flag}
+                       'new_search': new_search}
         return bundle
 
