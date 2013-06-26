@@ -40,22 +40,52 @@ def mydashboard(request):
     admins = CompanyUser.objects.filter(company=company.company)
     microsites = Microsite.objects.filter(company=company.company)
     
+    #micrositestest = list(Microsite.objects.filter(company=company.company))
+    
     microsite = 'jobs.jobs'
-    #data['site'] = microsite
-
+    #searchescandidates = []
+    #default dates
     after = datetime.now() - timedelta(days=25)
     before = datetime.now()
-    #data['after'] = after
-    #data['before'] = before
+    
+    #searches = SavedSearch.objects.select_related('user')        
+    
+    #settings = {'user': request.user}
+    #module_list = ['Name', 'Education', 'EmploymentHistory', 'SecondaryEmail',
+    #               'Telephone', 'Address']
+    #units = request.user.profileunits_set
+    #profile_config = []
+    #site_list = []
+    
+    #for microsite in Microsite.objects.filter(company=company.company):
+        #site_list.append(microsite.url)
 
-    searches = SavedSearch.objects.select_related('user')        
-    searches = searches.filter(url__contains=microsite)        
-    searches = searches.filter(created_on__range=[after, before])
+        #x= []
+        #module_config = {}
+        #module_units = units.filter(content_type__name=verbose)
+
+        #module_config['verbose'] = verbose.title()
+        #module_config['name'] = module
     
-    searchescandidates = SavedSearch.objects.filter(url__contains=microsite) 
+    #searchescandidates = SavedSearch.objects.filter()
+    #for microsite in microsites:
+        #searchescandidates = searchescandidates.filter(url__contains=microsite.url)
+        #searchescandidates = SavedSearch.objects.filter(url__contains=microsite.url)
+        
+    #for microsite in microsites:
+        #searches = searches.filter(url__contains=microsite)        
+        #searches = searches.filter(created_on__range=[after, before])
     
-    #contact_list = Contacts.objects.all()
-    paginator = Paginator(searchescandidates, 5) # Show 5 candidates per page
+        #searches = SavedSearch.objects.filter(url__contains=microsite)
+        
+        #searchescandidates.append(searches)
+    
+    #searches = searches.filter(url__contains=microsite)        
+    #searches = searches.filter(created_on__range=[after, before])
+    
+    searchescandidates = SavedSearch.objects.filter(url__contains=microsite)        
+    
+    paginator = Paginator(searchescandidates, 3) # Show 5 candidates per page
 
     page = request.GET.get('page')
     try:
