@@ -8,7 +8,8 @@ $(document).ready(function() {
                 url: "/saved-search/more-results",
                 data: { 'offset': offset,
                         'frequency': frequency,
-                        'feed': feed
+                        'feed': feed,
+                        'sort_by': sort_by
                       },
                 success: function(data) {
                     $('#saved-search-listing-table tbody').append(data);

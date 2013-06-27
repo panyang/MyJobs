@@ -6,7 +6,7 @@ from django.core.exceptions import ValidationError
 from django.core.mail import send_mail,EmailMultiAlternatives,EmailMessage
 from django.utils.translation import ugettext_lazy as _
 from django.template.loader import render_to_string
-from mysearches.helpers import parse_rss
+from mysearches.helpers import parse_rss, url_sort_options
 
 class SavedSearch(models.Model):
 
@@ -23,11 +23,15 @@ class SavedSearch(models.Model):
                    ('5', _('Friday')),
                    ('6', _('Saturday')),
                    ('7', _('Sunday')))
+    SORT_CHOICES = (('Relevance', _('Relevance')),
+                    (('Date'), _('Date')))
 
     user = models.ForeignKey('myjobs.User',editable=False)
     created_on = models.DateTimeField(auto_now_add=True)
     url = models.URLField(max_length=300,
                           verbose_name=_("URL of Search Results:"))
+    sort_by = models.CharField(max_length=9, choices=SORT_CHOICES,
+                               default='Relevance', verbose_name=_("Sort by:"))
     label = models.CharField(max_length=60, verbose_name=_("Search Name:"))
     feed = models.URLField(max_length=300)
     is_active = models.BooleanField(default=True,
@@ -58,7 +62,8 @@ class SavedSearch(models.Model):
                 return choice[1]
 
     def get_feed_items(self, num_items=5):
-        return parse_rss(self.feed, self.frequency, num_items=num_items)
+        url_of_feed = url_sort_options(self.feed, self.sort_by)
+        return parse_rss(url_of_feed, self.frequency, num_items=num_items)
 
     def send_email(self):
         context_dict = {'saved_searches': [self]}
