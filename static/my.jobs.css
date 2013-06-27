@@ -604,12 +604,9 @@ input[type='checkbox'] + .help-block{
 form input[type='checkbox']{
     margin-top: -1px;
 }
-#candidate-flag{
-    float:left;
-    margin-left: 10px;
-    margin-top: 26px;
-    font-size: 1.4em;
-    font-weight: bold;
+#profileTitleBar #candidate-flag{
+    font-size: 0.6em;
+    color: #333;
 }
 #user-buttons input[type="button"]{
     margin-left: 20px;
@@ -631,21 +628,6 @@ form input[type='checkbox']{
     font-size: 0.9em;
     line-height: 13px;
 }
-.details-heading,
-.table-heading{
-    font-size: 1.3em;
-    font-weight: bold;
-}
-.details-heading a{
-    color: #333;
-}
-.details-heading a:hover{
-    color: #333;
-    text-decoration: none;
-}
-.details-heading{
-    background-color: rgb(252, 252, 252);
-}
 .candidate-details .accordion,
 .details-inner{
     margin-bottom: 0px;
@@ -657,7 +639,6 @@ form input[type='checkbox']{
 }
 .candidate-details{
     border: 1px solid #ddd;
-    width: 100%;
 }
 .candidate-details td{
     border-left: 0px;
@@ -678,8 +659,22 @@ form input[type='checkbox']{
     padding: 5px 10px;
     border-top:0px;
 }
-.candidate-details .info-row{
-    background-color: rgb(254, 254, 254);
+.details-heading{
+    background-color: #d2cfc7;
+    font-size: 1.3em;
+    font-weight: bold;
+}
+.details-heading a{
+    color: #333;
+}
+.details-heading a:hover{
+    color: #333;
+    text-decoration: none;
+}
+.info-row{
+    background-color: rgb(250, 250, 250);
+    padding: 6px 8px;
+    border-bottom: 1px solid #ddd;
 }
 
 @media screen and (max-width: 1024px){

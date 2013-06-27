@@ -65,26 +65,27 @@ def candidate_information(request, user_id):
 
     # user gets pulled out from id
     user = User.objects.get(id=user_id)
-    units = ProfileUnits.objects.filter(user=user)
+    if user.opt_in_employers:
+        units = ProfileUnits.objects.filter(user=user)
 
-    for unit in units:
-        models.setdefault(unit.get_model_name(), []).append(
-            unit.__getattribute__(unit.get_model_name()))
+        for unit in units:
+            if unit.__getattribute__(unit.get_model_name()).is_displayed():
+                models.setdefault(unit.get_model_name(), []).append(
+                unit.__getattribute__(unit.get_model_name()))
 
-    # Only need primary name for candidate profile
-    if models['name']:
-        for profile_unit in models['name']:
-            if profile_unit.primary:
-                name = profile_unit
-        # After primary name is found delete name in dict. 
-        # Saves a recursion in template.
-        del models['name']
+        # if Name ProfileUnit exsists
+        if models['name']:
+            name=models['name'][0]
+            del models['name']
 
-    searches = SavedSearch.objects.filter(user=user)
+        searches = SavedSearch.objects.filter(user=user)
     
-    data_dict = {'user_info': models,
-                 'primary_name': name,
-                 'the_user': user,
-                 'searches': searches}
+        data_dict = {'user_info': models,
+                     'primary_name': name,
+                     'the_user': user,
+                     'searches': searches}
+    else:
+        not_opt_in = u"This user has opted out of having employers view their profile."
+        data_dict = {'message':not_opt_in}
     return render_to_response('myactivity/candidate_information.html', data_dict,
                             RequestContext(request))

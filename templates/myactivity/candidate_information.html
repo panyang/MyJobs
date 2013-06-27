@@ -14,26 +14,26 @@
 	{% if user_info %}
 	<div class="row" id="profileTitleRow">
         <div class="span10" id="profileTitleBar">
-            <h1 class="pull-left">{% if primary_name %}{{primary_name}}{%else%}Name not given{%endif%}</h1>
+            <h1>{% if primary_name %}{{primary_name}}{%else%}Name not given{%endif%}
             <span id="candidate-flag">Candidate Information</span>
+            </h1>
         </div>
     </div>
     <div class="row">
     	<span class="span6">
-    		<input type="button" class="btn" style="height:45px;" value="Back to Company Dashboard" />
+    		<input type="button" class="btn primary" value="Back to Company Dashboard" />
     	</span>
     </div>
     <div class="clear"></div>
     {% if the_user %}
     <br />
     <div class="row">
-        <div class="span4 pull-left">
+        <div class="span4">
 			<img src="{{the_user.get_gravatar_url}}&s=100" class="pull-left">
             <br />
-            <div class="pull-left">
-        		
-                <span style="margin-left:20px;">{{the_user.email}}</span>
-            </div>
+            <p>
+                <span style="margin-top:5px;">{{the_user.email}}</span>
+            </p>
         	
         </div>
         <div class="span4 pull-left">
@@ -49,13 +49,11 @@
                                 </div>
                                 <div id="{{model.0.get_model_name}}-details-table" class="accordion-body collapse">
                                     <div class="accordion-inner">
-                                        <table class="table table-boardered">
                                         {% for item in model %}
-                                            <tr class="info-row">
-                                                <td>
+                                            <div class="info-row">
                                                 <ul id="details-smallList">
                                                     {% if item.content_type.name == 'education' %}
-                                                        <li><b>{{item.degree_major}}</b></li>
+                                                        <li><b>{{item.get_education_level_code_display}} in {{item.degree_major}}</b></li>
                                                         <li>{{item.organization_name}}</li>
                                                         <li>{{item.degree_date}}</li>
                                                     {% elif item.content_type.name == "employment history" %}
@@ -78,10 +76,8 @@
                                                         <li>{%if item.city_name%}{{item.city_name}},{%endif%}{%if item.country_sub_division_code%}{{item.country_sub_division_code}}{%else%}{{item.country_code}}{%endif%} {{item.postal_code}}</li>
                                                     {% endif %}
                                                 </ul>
-                                                </td>
-                                            </tr>
+                                            </div>
                                         {% endfor %}
-                                        </table>
                                     </div>
                                 </div>
                             </div>
@@ -91,47 +87,41 @@
             </div>
         </div>
         <div class="span4">
-        	<table class="table table-bordered candidate-details">
-        		<tr id="{{the_user.id}}-activity">
-        			<td class="table-heading">
-        				Activity
-        			</td>
-        		</tr>
+        	<div class="formBox candidate-details">
+        		<h3>Activity</h3>
                 {% if searches %}
-                <tr>
-                    <td class="no-side-padding">
-                        <div class="accordion" id="details-searches-collapse">
-                            <div class="accordion-group">
-                                <div class="accordion-heading details-heading">
-                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#details-searches-collapse" 
-                                        href="#searches-details-table">Saved Searches<span class="pull-right"><i class="icon icon-plus"></i></span></a>
-                                </div>
-                                <div id="searches-details-table" class="accordion-body collapse">
-                                    <div class="accordion-inner">
-                                        <table class="table details-inner">
-                                            {% for search in searches %}
-                                                <tr id="details-searches">
-                                                    <td>
-                                                        <ul id="details-smallList">
-                                                            <li><b>{% if search.label %}{{search.label}}{% else %}Unlabeled{% endif %}</b></li>
-                                                            <li>{{search.url}}</li>
-                                                            <li>{{search.created_on}}</li>
-                                                        </ul>
-                                                    </td>
-                                                </tr>
-                                            {% endfor %}
-                                        </table>
-                                    </div>
+                    <div class="accordion" id="details-searches-collapse">
+                        <div class="accordion-group">
+                            <div class="accordion-heading details-heading">
+                                <a class="accordion-toggle" data-toggle="collapse" data-parent="#details-searches-collapse" 
+                                    href="#searches-details-table">Saved Searches<span class="pull-right"><i class="icon icon-plus"></i></span></a>
+                            </div>
+                            <div id="searches-details-table" class="accordion-body collapse">
+                                <div class="accordion-inner">
+                                    {% for search in searches %}
+                                        <div class="info-row">
+                                            <ul id="details-smallList">
+                                                <li><b>{% if search.label %}{{search.label}}{% else %}Unlabeled{% endif %}</b></li>
+                                                <li>{{search.url}}</li>
+                                                <li>{{search.created_on}}</li>
+                                            </ul>
+                                        </div>
+                                    {% endfor %}
                                 </div>
                             </div>
                         </div>
-                    </td>
-                </tr>
+                    </div>
                 {% endif %}
-        	</table>
+            </div>
         </div>
-    </div>
     {% endif %}
 </div>
+    {% else %}
+        {% if message %}
+        <div class="span6">
+            {{message}}
+            <input type="button" class="btn primary" value="Back to Company Dashboard" />
+        </div>
+        {% endif %}
 	{% endif %}
 {% endblock %}
