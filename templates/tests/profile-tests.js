@@ -271,33 +271,6 @@ module("profile.js Tests - getSelect", {
         $.ajax = ajax;
     }
 });
-test("selected country has regions", function() {
-    expect(3);
-
-    // foo-country_sub_division_code should not have a value unless
-    // foo-country_code has triggered the change event and has as a
-    // value a country that contains subdivisions (states, etc)
-    equal($('[id$="-country_sub_division_code"]').val(), '',
-          'nothing should be selected');
-    $('[id$="-country_code"]').trigger('change');
-    equal($('[id$="-country_sub_division_code"]').val(), 'AZ',
-          'AZ should be selected');
-    equal($('[id$="-country_sub_division_code"]:visible').length, 1,
-          'country_sub_division_code should be visible');
-});
-test("selected country does not have regions", function() {
-    $('#foo-country_code').val('GBR');
-
-    expect(3);
-
-    equal($('[id$="-country_sub_division_code"]').val(), '',
-          'nothing should be selected');
-    $('[id$="-country_code"]').trigger('change');
-    equal($('[id$="-country_sub_division_code"]').val(), '',
-          'nothing should still be selected');
-    equal($('[id$="-country_sub_division_code"]:visible').length, 0,
-          'country_sub_division_code should not be visible');
-});
 
 module("profile.js Tests - confirmDelete", {
     setup: function() {
