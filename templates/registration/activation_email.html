@@ -17,6 +17,7 @@ following context:
     The user's auto-generated password, if any
 
 {% endcomment %}
+<p>
 {% if primary %}
 {% blocktrans %}
 You have created an account for My Jobs, which has to
@@ -29,24 +30,29 @@ account, which has to be activated. To do this, please follow
 the following link:
 {% endblocktrans %}
 {% endif %}
+</p>
 
-http://my.jobs/accounts/activate/{{ activation_key }}
+{% with "http://my.jobs/accounts/activate/"|add:activation_key as url %}
+<a href="{{url}}">{{url}}</a>
+{% endwith %}
 
 
 {% if password %}
 {% blocktrans %}
 
-Your temporary password is {{password}}
+<p>Your temporary password is {{password}}</p>
 
-It must be changed upon logging in.
+<p>It must be changed upon logging in.</p>
 
 {% endblocktrans %}
 {% endif %}
 
 {% blocktrans %}
 
-Please note that if your activation does not succeed
+<p>Please note that if your activation does not succeed
 within {{ expiration_days }} days, you will have to restart
-the verification process.
+the verification process.</p>
 
 {% endblocktrans %}
+
+<p><a href="http://my.jobs/terms">Terms</a> <a href="http://my.jobs/privacy">Privacy</a></p>

@@ -2,7 +2,7 @@ import datetime
 import urllib, hashlib
 
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, _user_has_perm, Group
-from django.core.mail import send_mail
+from django.core.mail import EmailMessage
 from django.db import models
 from django.db.models.signals import post_save
 from django.utils.translation import ugettext_lazy as _
@@ -200,7 +200,9 @@ class User(AbstractBaseUser):
         return self.email
 
     def email_user(self, subject, message, from_email):
-        send_mail(subject, message, from_email, [self.email])
+        msg = EmailMessage(subject, message, from_email, [self.email])
+        msg.content_subtype='html'
+        msg.send()
 
     def has_perm(self, perm, obj=None):
         """

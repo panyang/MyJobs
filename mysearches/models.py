@@ -3,7 +3,7 @@ from datetime import datetime
 from django.conf import settings
 from django.db import models
 from django.core.exceptions import ValidationError
-from django.core.mail import send_mail,EmailMultiAlternatives,EmailMessage
+from django.core.mail import EmailMessage
 from django.utils.translation import ugettext_lazy as _
 from django.template.loader import render_to_string
 from mysearches.helpers import parse_rss
