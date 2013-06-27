@@ -189,7 +189,7 @@ test("name values are missing", function() {
     $('a[id$="save"]').click();
     equal($('#Name_items table tr').length, 0,
           'after clicking, there should still be no rows');
-    equal($('[class*="label-important"]').length, 2,
+    equal($('[class*="required"]').length, 2,
           'errors should have been added');
 });
 
