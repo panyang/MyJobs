@@ -44,6 +44,11 @@ class ProfileUnits(models.Model):
     def __unicode__(self):
         return self.content_type.name
 
+    def get_model_name(self):
+        return self.content_type.model
+
+    def get_verbose(self):
+        return self.content_type.name.title()
 
 class Education(ProfileUnits):
     EDUCATION_LEVEL_CHOICES = (

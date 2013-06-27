@@ -61,44 +61,27 @@ def activity_search_feed(request):
 def candidate_information(request, user_id):
     # gets returned with response to request
     data_dict = {}
-    profile_config = []
+    models = {}
 
     # user gets pulled out from id
     user = User.objects.get(id=user_id)
-    units = request.user.profileunits_set
+    units = ProfileUnits.objects.filter(user=user)
 
-    # if there is a new profile module please add here
-    module_list = ['Name', 'Education', 'EmploymentHistory', 'SecondaryEmail',
-                   'Telephone', 'Address']
-    
-    units = user.profileunits_set
-    for module in module_list:
-        model = globals()[module]
-        verbose = model._meta.verbose_name
-            
-        # holder list
-        x= []
+    for unit in units:
+        models.setdefault(unit.get_model_name(), []).append(unit.__getattribute__(unit.get_model_name()))
 
-        module_config = {}
-        module_units = units.filter(content_type__name=verbose)
-
-        # Verbose is used nicely for headings or titles on front-end
-        module_config['verbose'] = verbose.title()
-
-        # Name can be used for id names in html due to no whitespace
-        module_config['name'] = module
-        for unit in module_units:
-            if hasattr(unit, module.lower()):
-                x.append(getattr(unit, module.lower()))
-                    
-        module_config['items'] = x
-
-        profile_config.append(module_config)
+    # Only need primary name for candidate profile
+    for profile_unit in models['name']:
+        if profile_unit.primary:
+            name = profile_unit
+    # After primary name is found delete name in dict. Saves a recursion in template
+    del models['name']
 
     searches = SavedSearch.objects.filter(user=user)
     
-    data_dict = {'userInfo': profile_config,
-                 'theUser': user,
+    data_dict = {'user_info': models,
+                 'primary_name': name,
+                 'the_user': user,
                  'searches': searches}
     return render_to_response('myactivity/candidate_information.html', data_dict,
                             RequestContext(request))
