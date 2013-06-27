@@ -9,7 +9,7 @@ from django.db import models
 
 from myjobs.models import User
 from mysearches.models import SavedSearch
-from myprofile.models import ProfileUnits, Name, Education, Address, Telephone, EmploymentHistory, SecondaryEmail
+from myprofile.models import ProfileUnits
 
 @user_passes_test(lambda u: User.objects.is_group_member(u, 'Employer'))
 def activity_search_feed(request):
@@ -68,14 +68,17 @@ def candidate_information(request, user_id):
     units = ProfileUnits.objects.filter(user=user)
 
     for unit in units:
-        models.setdefault(unit.get_model_name(), []).append(unit.__getattribute__(unit.get_model_name()))
+        models.setdefault(unit.get_model_name(), []).append(
+            unit.__getattribute__(unit.get_model_name()))
 
     # Only need primary name for candidate profile
-    for profile_unit in models['name']:
-        if profile_unit.primary:
-            name = profile_unit
-    # After primary name is found delete name in dict. Saves a recursion in template
-    del models['name']
+    if models['name']:
+        for profile_unit in models['name']:
+            if profile_unit.primary:
+                name = profile_unit
+        # After primary name is found delete name in dict. 
+        # Saves a recursion in template.
+        del models['name']
 
     searches = SavedSearch.objects.filter(user=user)
     
