@@ -276,6 +276,9 @@ form select{
 .loginBox a:hover{
     color: #333;
     }
+.loginBox .btn:hover{
+    color: #FFF;
+}
 #account-page-2 .loginBox, #account-page-2 .profileBox{
     padding-left: 0px;
     padding-right: 0px;
