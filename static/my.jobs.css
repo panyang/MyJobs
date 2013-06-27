@@ -264,18 +264,21 @@ form select{
     border-radius: 5px;
     margin-top: 105px;   
     }
-.loginBox, .formBox, .account-box h3 {
+.formBox, .account-box h3 {
     color: #FFF;    
     }
 .formBox, .account-box h3 {
     color: #000;    
     }
 .loginBox a{
-    color: #FFF;
+    color: #333;
     }
 .loginBox a:hover{
-    color: #FFF;
+    color: #333;
     }
+.loginBox .btn:hover{
+    color: #FFF;
+}
 #account-page-2 .loginBox, #account-page-2 .profileBox{
     padding-left: 0px;
     padding-right: 0px;
