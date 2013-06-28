@@ -6,6 +6,7 @@ from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.db import models
+from django.http import Http404
 
 from myjobs.models import User
 from mysearches.models import SavedSearch
@@ -85,7 +86,6 @@ def candidate_information(request, user_id):
                      'the_user': user,
                      'searches': searches}
     else:
-        not_opt_in = u"This user has opted out of having employers view their profile."
-        data_dict = {'message':not_opt_in}
+        raise Http404
     return render_to_response('myactivity/candidate_information.html', data_dict,
                             RequestContext(request))
