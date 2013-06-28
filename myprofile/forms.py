@@ -160,6 +160,10 @@ class InitialWorkForm(InitialForm):
 
 
 class InitialEducationForm(InitialForm):
+    def __init__(self, *args, **kwargs):
+        super(InitialEducationForm, self).__init__(*args, **kwargs)
+        self.fields['degree_date'].input_formats = settings.DATE_INPUT_FORMATS
+
     class Meta:
         model = Education
         fields = ['organization_name', 'degree_date', 'education_level_code',
