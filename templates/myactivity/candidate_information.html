@@ -36,9 +36,13 @@
             </p>
         	
         </div>
+        <div id="candidate-page-mobile-view">
+        <div id="candidate-page-mobile-toggle">
+            <span class="toggle-text" id="detail-toggle">&nbsp;Details</span><span class="toggle-text" id="activity-toggle">&nbsp;Activity</span>
+        </div>
         <div class="span4 pull-left">
             <div class="formBox candidate-details">
-                <h3>Details</h3>
+                <h3 class="form-box-title">Details</h3>
                 {% for model in user_info.values %}
                     {% if model %}
                         <div class="accordion" id="details-{{model.0.get_model_name}}-collapse">
@@ -88,7 +92,7 @@
         </div>
         <div class="span4">
         	<div class="formBox candidate-details">
-        		<h3>Activity</h3>
+        		<h3 class="form-box-title">Activity</h3>
                 {% if searches %}
                     <div class="accordion" id="details-searches-collapse">
                         <div class="accordion-group">
@@ -113,6 +117,7 @@
                     </div>
                 {% endif %}
             </div>
+        </div>
         </div>
     {% endif %}
 	{% endif %}
