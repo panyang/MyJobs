@@ -17,7 +17,8 @@ class SavedSearchFormTests(TestCase):
                      'feed': 'http://jobs.jobs/jobs/feed/rss?',
                      'email': 'alice@example.com',
                      'frequency': 'D',
-                     'label': 'All jobs from jobs.jobs'}
+                     'label': 'All jobs from jobs.jobs',
+                     'sort_by': 'Relevance'}
 
         self.r = Replacer()
         self.r.replace('urllib2.urlopen', return_file)

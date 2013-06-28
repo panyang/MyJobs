@@ -83,7 +83,9 @@ def mydashboard(request):
     #searches = searches.filter(url__contains=microsite)        
     #searches = searches.filter(created_on__range=[after, before])
     
-    searchescandidates = SavedSearch.objects.filter(url__contains=microsite)        
+    creators_list = ['jobs.jobs', 'veteran.jobs']
+    
+    searchescandidates = SavedSearch.objects.filter(url__contains=company.company)        
     
     paginator = Paginator(searchescandidates, 3) # Show 5 candidates per page
 
