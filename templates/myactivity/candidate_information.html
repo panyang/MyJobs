@@ -1,0 +1,120 @@
+{% extends 'base.html' %}
+
+{% load i18n %}
+{% load user_ops %}
+
+{% block meta-extra %}
+<script src="http://js.nlx.org/framework/v2/js/def.ui.bootstrap.tabs.js" type="text/javascript"></script>
+<script src="http://js.nlx.org/framework/v2/js/code/bootstrap-collapse.js" type="text/javascript"></script>
+<script src="{{ STATIC_URL }}activity.js" type="text/javascript"></script>
+{% endblock %}
+
+{% block content %}
+<div class="wrapper"> 
+	{% if user_info %}
+	<div class="row" id="profileTitleRow">
+        <div class="span10" id="profileTitleBar">
+            <h1>{{primary_name}}
+            <span id="candidate-flag">Candidate Information</span>
+            </h1>
+        </div>
+    </div>
+    <div class="row">
+    	<span class="span6">
+    		<input type="button" class="btn primary" value="Back to Company Dashboard" />
+    	</span>
+    </div>
+    <div class="clear"></div>
+    {% if the_user %}
+    <br />
+    <div class="row">
+        <div class="span4">
+			<img src="{{the_user.get_gravatar_url}}&s=100">
+            <br />
+            <p>
+                <a href="mailto:{{the_user.email}}"><img src="{{STATIC_URL}}images/rsz_1envelope4.jpg" /><span style="margin-top:5px; margin-left:5px;">{{the_user.email}}</span></a>
+            </p>
+        	
+        </div>
+        <div class="span4 pull-left">
+            <div class="formBox candidate-details">
+                <h3>Details</h3>
+                {% for model in user_info.values %}
+                    {% if model %}
+                        <div class="accordion" id="details-{{model.0.get_model_name}}-collapse">
+                            <div class="accordion-group">
+                                <div class="accordion-heading details-heading">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#details-{{model.0.get_model_name}}-collapse" 
+                                            href="#{{model.0.get_model_name}}-details-table">{{model.0.get_verbose}}<span class="pull-right"><i class="icon icon-plus"></i></span></a>
+                                </div>
+                                <div id="{{model.0.get_model_name}}-details-table" class="accordion-body collapse">
+                                    <div class="accordion-inner">
+                                        {% for item in model %}
+                                            <div class="info-row">
+                                                <ul id="details-smallList">
+                                                    {% if item.content_type.name == 'education' %}
+                                                        <li><b>{{item.get_education_level_code_display}} in {{item.degree_major}}</b></li>
+                                                        <li>{{item.organization_name}}</li>
+                                                        <li>{{item.degree_date}}</li>
+                                                    {% elif item.content_type.name == "employment history" %}
+                                                        <li><b>{{item.position_title}}</b></li>
+                                                        <li>{{item.organization_name}}</li>
+                                                        {% if item.current_indicator == True %}
+                                                            <li>{{item.start_date}} - Current</li>
+                                                        {%else%}
+                                                            <li>{{item.start_date}} - {{item.end_date}}</li>
+                                                        {%endif%}
+                                                    {% elif item.content_type.name == "telephone" %}
+                                                        <li><b>{{item.use_code}}</b></li>
+                                                        <li>({{item.area_dialing}}) {{item.number}} {% if item.extension %}Ext: {{item.extension}} {%endif%}</li>
+                                                    {% elif item.content_type.name == "secondary email" %}
+                                                        <li><b>{{item.label}}</b></li>
+                                                        <li>{{item.email}}</li>
+                                                    {% else %}
+                                                        <li><b>{{item.label}}</b></li>
+                                                        <li>{%if item.address_line_one%}{{item.address_line_one}},{%endif%} {{item.address_line_two}}</li>
+                                                        <li>{%if item.city_name%}{{item.city_name}},{%endif%}{%if item.country_sub_division_code%}{{item.country_sub_division_code}}{%else%}{{item.country_code}}{%endif%} {{item.postal_code}}</li>
+                                                    {% endif %}
+                                                </ul>
+                                            </div>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+        <div class="span4">
+        	<div class="formBox candidate-details">
+        		<h3>Activity</h3>
+                {% if searches %}
+                    <div class="accordion" id="details-searches-collapse">
+                        <div class="accordion-group">
+                            <div class="accordion-heading details-heading">
+                                <a class="accordion-toggle" data-toggle="collapse" data-parent="#details-searches-collapse" 
+                                    href="#searches-details-table">Saved Searches<span class="pull-right"><i class="icon icon-plus"></i></span></a>
+                            </div>
+                            <div id="searches-details-table" class="accordion-body collapse">
+                                <div class="accordion-inner">
+                                    {% for search in searches %}
+                                        <div class="info-row">
+                                            <ul id="details-smallList">
+                                                <li><b>{% if search.label %}{{search.label}}{% else %}Unlabeled{% endif %}</b></li>
+                                                <li>{{search.url}}</li>
+                                                <li>{{search.created_on}}</li>
+                                            </ul>
+                                        </div>
+                                    {% endfor %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    {% endif %}
+	{% endif %}
+</div>
+{% endblock %}
