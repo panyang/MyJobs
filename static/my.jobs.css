@@ -481,6 +481,10 @@ em.pendingText{
 /* Topbar Dropdown Styles*/
 .topbar ul{
     list-style: none;
+    position: relative;
+    }
+#nav {
+    width: 15%;
     }
 #nav:hover{
     background: #222;
@@ -507,6 +511,7 @@ em.pendingText{
     corner-bottom-left-radius: 4px;
     corner-bottom-right-radius: 4px;
     width: 275px;
+    right: 0px;
     }
 .topbar #nav .arrow{
     float: right;
