@@ -42,25 +42,32 @@
                         </a>
                         <span id="alpha-flag">beta</span>
                     </div>
-                    <div class="pull-right">
                     <div class="inline-inputs">
                         {% if user.is_authenticated %}                                               
-                        <div class="span5">&nbsp;</div>                                                
-                        <div class="menu-bar span4 pagination-right pull-right">                            
+                        <div class="span5">
+                            <span class="menu-tabs pull-left">
+                                <a href="{% url 'saved_search_main' %}">{% trans "Saved Searches" %}</a>
+                                <a href="{% url 'view_profile' %}">{% trans "My Profile" %}</a>
+                            </span>
+                        </div>
+                        <div class="pull-right">                                               
+                        <div class="menu-bar span4 pagination-right">                            
                             <ul id="nav">
                                 <li><a href="" class="main-nav">
-                                    <img src="{{user.get_gravatar_url}}">
-                                        {% trans "Logged in as " %} 
-                                        <b>
-                                            {% if name_obj %}
-                                                {{name_obj}}
-                                            {% else %}
-                                                {{user.email|truncatechars:20}}
-                                            {% endif %} 
-                                        </b>
+                                        <img src="{{user.get_gravatar_url}}">
                                         <span class="arrow"></span>
                                     </a>
                                     <ul class="span4" id="pop-menu">
+                                        <li>
+                                            {% trans "Logged in as " %} 
+                                            <b>
+                                                {% if name_obj %}
+                                                    {{name_obj}}
+                                                {% else %}
+                                                    {{user.email|truncatechars:20}}
+                                                {% endif %} 
+                                            </b>
+                                        </li>
                                         {% if not user.is_disabled %}
                                             <li><a id="profile_link" href="{% url 'view_profile' %}">{% trans "My Profile" %}</a></li> 
                                             {% if user.is_active %}

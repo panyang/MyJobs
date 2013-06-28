@@ -169,7 +169,7 @@ ul.ui-autocomplete{
     width: 90px;
     background: transparent url(/files/static/images/myjobs_logo.png) center left no-repeat;
     text-indent: -9000px;
-}
+    }
 .topbar input{
     width: 100px;
     margin-right: 10px;  
@@ -186,13 +186,23 @@ ul.ui-autocomplete{
     float-left;
     color: #fff;
     font-size: .8em;
-}
+    }
+.topbar .menu-tabs a{
+    color: #FFF;
+    font-weight: bold;
+    text-decoration: none;
+    line-height: 30px;
+    padding: 8px 10px;
+    }
+.topbar .menu-tabs a:hover{
+    background-color: #b34529;
+    }
 .formBox select {
     width: 216px;
-}
+    }
 form select{
     width: 264px;
-}
+    }
 #title{
     padding-top: 60px;
     padding-bottom: 60px;
@@ -471,7 +481,6 @@ em.pendingText{
 /* Topbar Dropdown Styles*/
 .topbar ul{
     list-style: none;
-    text-align: left;
     }
 #nav:hover{
     background: #222;
@@ -507,6 +516,7 @@ em.pendingText{
     border-right: 6px solid #999;
     border-left: 0px;
     margin-top: 6px;
+    margin-left: 4px;
     }
 .topbar #nav:hover .arrow{
     border: 4px solid transparent;
@@ -519,21 +529,22 @@ em.pendingText{
 #pop-menu li{
     margin: 0px;
     padding: 0px;
-}
+    color: #FFF;
+    }
 #pop-menu a{
 	display: block;
 	padding: 4px;
 	background: #666;
 	border-top: 1px solid #333;
-}
+    }
 #nav.active li ul#pop-menu{ 
 	display: block;
 	text-align: left;
-}
+    }
 #ui-datepicker-div {
     position: relative;
     z-index: 9999 !important;
-}
+    }
 /*Firefox fix for homepage alignment issues*/
 @-moz-document url-prefix(){
     #title {
