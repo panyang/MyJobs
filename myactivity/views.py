@@ -63,9 +63,14 @@ def candidate_information(request, user_id):
     # gets returned with response to request
     data_dict = {}
     models = {}
+    name = "Name not given"
 
     # user gets pulled out from id
-    user = User.objects.get(id=user_id)
+    try:
+        user = User.objects.get(id=user_id)
+    except User.DoesNotExist:
+        raise Http404
+
     if user.opt_in_employers:
         units = ProfileUnits.objects.filter(user=user)
 
@@ -75,7 +80,7 @@ def candidate_information(request, user_id):
                 unit.__getattribute__(unit.get_model_name()))
 
         # if Name ProfileUnit exsists
-        if models['name']:
+        if models.get('name'):
             name=models['name'][0]
             del models['name']
 

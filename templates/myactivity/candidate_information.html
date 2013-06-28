@@ -14,7 +14,7 @@
 	{% if user_info %}
 	<div class="row" id="profileTitleRow">
         <div class="span10" id="profileTitleBar">
-            <h1>{% if primary_name %}{{primary_name}}{%else%}Name not given{%endif%}
+            <h1>{{primary_name}}
             <span id="candidate-flag">Candidate Information</span>
             </h1>
         </div>
@@ -32,7 +32,7 @@
 			<img src="{{the_user.get_gravatar_url}}&s=100">
             <br />
             <p>
-                <span style="margin-top:5px;">{{the_user.email}}</span>
+                <a href="mailto:{{the_user.email}}"><img src="{{STATIC_URL}}images/rsz_1envelope4.jpg" /><span style="margin-top:5px; margin-left:5px;">{{the_user.email}}</span></a>
             </p>
         	
         </div>
