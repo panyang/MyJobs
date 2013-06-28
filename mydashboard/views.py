@@ -38,55 +38,53 @@ def mydashboard(request):
         
     company = CompanyUser.objects.get(user=request.user)
     admins = CompanyUser.objects.filter(company=company.company)
-    microsites = Microsite.objects.filter(company=company.company)
+    microsites = Microsite.objects.filter(company=company.company)    
     
-    #micrositestest = list(Microsite.objects.filter(company=company.company))
-    
-    microsite = 'jobs.jobs'
-    #searchescandidates = []
-    #default dates
-    after = datetime.now() - timedelta(days=25)
-    before = datetime.now()
-    
-    #searches = SavedSearch.objects.select_related('user')        
-    
-    #settings = {'user': request.user}
-    #module_list = ['Name', 'Education', 'EmploymentHistory', 'SecondaryEmail',
-    #               'Telephone', 'Address']
-    #units = request.user.profileunits_set
-    #profile_config = []
-    #site_list = []
-    
-    #for microsite in Microsite.objects.filter(company=company.company):
-        #site_list.append(microsite.url)
+    #data = {}
+    if request.method == 'POST':
+        url = request.REQUEST.get('microsite')
+        if url:
+            if url.find('//') == -1:
+                url = '//' + url
+            microsite = urlparse(url).netloc
+        else:
+            microsite = 'indiana.jobs'
+        #data['site'] = microsite
 
-        #x= []
-        #module_config = {}
-        #module_units = units.filter(content_type__name=verbose)
+        # Saved searches were created after this date...
+        after = request.REQUEST.get('after')
+        if after:
+            after = datetime.strptime(after, '%Y-%m-%d')
+        else:
+            # Defaults to one week ago
+            after = datetime.now() - timedelta(days=7)
+        # ... and before this one
+        before = request.REQUEST.get('before')
+        if before:
+            before = datetime.strptime(before, '%Y-%m-%d')
+        else:
+            # Defaults to the date and time that the page is accessed
+            before = datetime.now()
+        #data['after'] = after
+        #data['before'] = before
 
-        #module_config['verbose'] = verbose.title()
-        #module_config['name'] = module
-    
-    #searchescandidates = SavedSearch.objects.filter()
-    #for microsite in microsites:
-        #searchescandidates = searchescandidates.filter(url__contains=microsite.url)
-        #searchescandidates = SavedSearch.objects.filter(url__contains=microsite.url)
+        # Prefetch the user
+        searchescandidates = SavedSearch.objects.select_related('user')
+
+        # All searches saved from a given microsite
+        searchescandidates = searchescandidates.filter(url__contains=microsite)
+
+        # Specific microsite searches saved between two dates
+        searchescandidates = searchescandidates.filter(created_on__range=[after, before])
+        #data['searches'] = searches
+    else:
+        #default dates
+        after = datetime.now() - timedelta(days=25)
+        before = datetime.now()
         
-    #for microsite in microsites:
-        #searches = searches.filter(url__contains=microsite)        
-        #searches = searches.filter(created_on__range=[after, before])
-    
-        #searches = SavedSearch.objects.filter(url__contains=microsite)
+        searchescandidates = SavedSearch.objects.filter(url__contains=company.company)        
+        #searches = searchescandidates.filter(created_on__range=[after, before])
         
-        #searchescandidates.append(searches)
-    
-    #searches = searches.filter(url__contains=microsite)        
-    #searches = searches.filter(created_on__range=[after, before])
-    
-    creators_list = ['jobs.jobs', 'veteran.jobs']
-    
-    searchescandidates = SavedSearch.objects.filter(url__contains=company.company)        
-    
     paginator = Paginator(searchescandidates, 3) # Show 5 candidates per page
 
     page = request.GET.get('page')
@@ -101,11 +99,9 @@ def mydashboard(request):
     
     data_dict = {'company_name': company.company,
                  'company_microsites': microsites,
-                 'company_admins': admins,
-                 'site': microsite,
+                 'company_admins': admins,                 
                  'after': after,
-                 'before': before,
-                 'searches': searches,
+                 'before': before,                 
                  'candidates': candidates,}
     
     return render_to_response('mydashboard/mydashboard.html', data_dict,

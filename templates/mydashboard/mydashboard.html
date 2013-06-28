@@ -41,7 +41,13 @@
             <div class="formBox">
             <h3>Candidate Activity</h3>
                 
-                
+                <form action='/mydashboard/' method='POST'>
+                    {% csrf_token %}
+                    Microsite: <input name="microsite" type="text"></br>
+                    After this date: <input name="after" type="date"></br>
+                    Before this date: <input name="before" type="date"></br>
+                    <input type="submit" value="View">
+                </form>
                 
                 <div class="pull-left">Between {{after}} and {{before}}</div><br>
                    
