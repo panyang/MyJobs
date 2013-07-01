@@ -679,6 +679,9 @@ form input[type='checkbox']{
 #candidate-page-mobile-view #candidate-page-mobile-toggle{
     display: none;
 }
+.mobile-heading-candidate-view{
+    display:none;
+}
 
 @media screen and (max-width: 1024px){
     .topbar-inner {
@@ -1095,6 +1098,39 @@ form input[type='checkbox']{
     .toggle-text:hover{
         background-color: rgb(194, 187, 169) !important;
         cursor: pointer;
+    }
+    .default-heading-candidate-view{
+        display: none;
+    }
+    .mobile-heading-candidate-view{
+        display: block;
+    }
+    .mobile-heading-candidate-view .btn.primary{
+        width:100%;
+        margin-top: 10px;
+    }
+    #mobile-name-heading{
+        float:left;
+        padding: 5px 5px;
+    }
+    #name-flag, #candidate-flag{
+        float: left;
+    }
+    #name-flag{
+        font-size: 1.7em;
+        font-weight: bold;
+        color: #900;
+    }
+    #candidate-flag{
+        font-size: 1.2em;
+    }
+    .mobile-heading-candidate-view a{
+        padding: 0px;
+        border: 0px;
+    }
+    .mobile-heading-candidate-view #email-img{
+        width: 30px;
+        height: 20px;
     }
 }
 

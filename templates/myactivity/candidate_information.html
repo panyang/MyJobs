@@ -12,29 +12,41 @@
 {% block content %}
 <div class="wrapper"> 
 	{% if user_info %}
-	<div class="row" id="profileTitleRow">
+	<div class="row default-heading-candidate-view" id="profileTitleRow">
         <div class="span10" id="profileTitleBar">
             <h1>{{primary_name}}
             <span id="candidate-flag">Candidate Information</span>
             </h1>
         </div>
     </div>
-    <div class="row">
+    <div class="row default-heading-candidate-view">
     	<span class="span6">
     		<input type="button" class="btn primary" value="Back to Company Dashboard" />
     	</span>
     </div>
-    <div class="clear"></div>
     {% if the_user %}
+    <div class="span4 mobile-heading-candidate-view">
+        <img class="pull-left" src="{{the_user.get_gravatar_url}}&s=75">
+        <div id="mobile-name-heading">
+            <span id="name-flag">{{primary_name}}</span>
+            <br />
+            <span id="candidate-flag">Candidate Information</span>
+            <br />
+            <a href="mailto:{{the_user.email}}"><img id="email-img" src="{{STATIC_URL}}images/rsz_1envelope4.jpg" /></a>
+        </div>
+        <div class="clear"></div>
+        <input type="button" class="btn primary" value="Back to Company Dashboard" />
+        <div class="clear"></div>
+    </div>
+    <div class="clear"></div>
     <br />
     <div class="row">
-        <div class="span4">
+        <div class="span4 default-heading-candidate-view">
 			<img src="{{the_user.get_gravatar_url}}&s=100">
             <br />
             <p>
                 <a href="mailto:{{the_user.email}}"><img src="{{STATIC_URL}}images/rsz_1envelope4.jpg" /><span style="margin-top:5px; margin-left:5px;">{{the_user.email}}</span></a>
             </p>
-        	
         </div>
         <div id="candidate-page-mobile-view">
         <div id="candidate-page-mobile-toggle">

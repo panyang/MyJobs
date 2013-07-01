@@ -18,6 +18,15 @@ $(document).ready(function(){
 			icon.addClass('icon-minus');
 		}
 	});
+	$('#candidate-page-mobile-view').each(function(){
+		if (this.id && localStorage[this.id] === "true"){
+			$(this).addClass('show-activity');
+			$(this).removeClass('show-details');
+		}else{
+			$(this).addClass('show-details');
+			$(this).removeClass('show-activity');
+		}
+	});
 	//when heading get clicked. Looks bootstrap collasping classes and changes icon to + or -
 	$('[class*=details-heading]').click(function(){
 		var icon = $(this).children('a').children('span').children('i');
