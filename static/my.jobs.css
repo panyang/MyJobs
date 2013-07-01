@@ -541,6 +541,9 @@ em.pendingText{
 	display: block;
 	text-align: left;
 }
+#logged_in_li {
+    padding: 4px !important;
+}
 #ui-datepicker-div {
     position: relative;
     z-index: 9999 !important;
