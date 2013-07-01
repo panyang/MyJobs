@@ -29,6 +29,7 @@
     </script>
     
 </head>
+
 <body>
     {% block topbar %}
         <div class="topbar" data-dropdown="dropdown">
@@ -41,6 +42,7 @@
                         </a>
                         <span id="alpha-flag">beta</span>
                     </div>
+                    <div class="pull-right">
                     <div class="inline-inputs">
                         {% if user.is_authenticated %}                                               
                         <div class="span5">
@@ -67,13 +69,9 @@
                                     <ul class="span4" id="pop-menu">
                                         <li id="logged_in_li">
                                             {% trans "Logged in as " %} 
-                                            <b>
-                                                {% if name_obj %}
-                                                    {{name_obj}}
-                                                {% else %}
-                                                    {{user.email|truncatechars:20}}
-                                                {% endif %} 
-                                            </b>
+                                        <b>
+                                            {{ user|get_name_obj_or_email|truncatechars:"20" }}
+                                        </b>
                                         </li>
                                         {% if not user.is_disabled %}
                                             <li><a id="profile_link" href="{% url 'view_profile' %}">{% trans "My Profile" %}</a></li> 
