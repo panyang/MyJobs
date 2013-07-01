@@ -34,11 +34,16 @@ class ProfileUnits(models.Model):
         super(ProfileUnits, self).save(*args, **kwargs)
 
     def get_fields(self):
+        """
+        Returns the module type, value, and field type for all
+        fields on a specific model
+        """
         field_list = []
         for field in self._meta.local_fields:
             if not field.primary_key:
-                field_list.append((field.verbose_name.title,
-                                   field.value_to_string(self)))
+                field_list.append([field.verbose_name.title(),
+                                   self.__getattribute__(field.name),
+                                   field.get_internal_type()])
         return field_list
 
     def __unicode__(self):

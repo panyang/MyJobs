@@ -1,5 +1,5 @@
 {% load i18n %}
-{% load form_tags %}
+{% load model_fields %}
 <div class="modal hide fade" id="detail_modal">
     <div class="modal-header">
         <button id="modal-header-cancel" class="close mobile_hide" aria-hidden="true" data-dismiss="modal" type="button">×</button>
@@ -8,12 +8,14 @@
     <div class="modal-body">
         <div class="formBox">
             <table class="table table-bordered table-striped">
-                {% for label, value in module.item.get_fields %}
+                {% with module.item|process_field_types as fields %}
+                {% for label, value, type in fields|slice:":3" %}
                     <tr class="row">
                         <td class="span3">{{ label }}</td>
-                        <td class="span9">{{ value|readable_boolean }}</td>
+                        <td class="span9">{{ value }}</td>
                     </tr>
                 {% endfor %}
+                {% endwith %}
             </table>
         </div>
     </div>

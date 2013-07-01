@@ -13,7 +13,7 @@ def is_select_field(field):
     return type(field.field) == TypedChoiceField
     
 @register.filter(name='readable_boolean')
-def get_value(value):
+def readable_boolean(value):
     value_lookup = {
         "True": "Yes",
         "False": "No"
