@@ -187,12 +187,15 @@ ul.ui-autocomplete{
     color: #fff;
     font-size: .8em;
 }
+.menu-tabs {
+    border-bottom: 0px solid #333;
+}
 .topbar .menu-tabs a{
+    border: 1px solid #333 !important;
     background-color: #333;
     color: #FFF;
     font-weight: bold;
     text-decoration: none;
-    line-height: 20px;
     padding-top: 4px !important;
     padding-bottom: 5px !important;
     }
