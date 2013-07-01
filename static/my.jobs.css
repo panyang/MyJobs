@@ -651,6 +651,11 @@ form input[type='checkbox']{
 .candidate-details .no-side-padding{
     padding: 0px;
 }
+.candidate-details .accordion-body{
+    max-height: 200px;
+    overflow: auto;
+    overflow-x: hidden;
+}
 .candidate-details .table{
     margin-top:-1px;
     margin-bottom: 0px;
