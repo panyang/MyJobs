@@ -188,21 +188,27 @@ ul.ui-autocomplete{
     font-size: .8em;
 }
 .topbar .menu-tabs a{
+    background-color: #333;
     color: #FFF;
     font-weight: bold;
     text-decoration: none;
-    line-height: 30px;
-    padding: 8px 10px;
+    line-height: 20px;
+    padding-top: 4px !important;
+    padding-bottom: 5px !important;
     }
 .topbar .menu-tabs a:hover{
+    color: #FFF;
     background-color: #b34529;
+    }
+.menu-tabs .active a {
+    background-color: #b34529 !important;
     }
 .formBox select {
     width: 216px;
-}
+    }
 form select{
     width: 264px;
-}
+    }
 #title{
     padding-top: 60px;
     padding-bottom: 60px;

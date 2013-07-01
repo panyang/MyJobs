@@ -29,7 +29,6 @@
     </script>
     
 </head>
-
 <body>
     {% block topbar %}
         <div class="topbar" data-dropdown="dropdown">
@@ -45,10 +44,18 @@
                     <div class="inline-inputs">
                         {% if user.is_authenticated %}                                               
                         <div class="span5">
-                            <span class="menu-tabs pull-left">
-                                <a href="{% url 'saved_search_main' %}">{% trans "Saved Searches" %}</a>
-                                <a href="{% url 'view_profile' %}">{% trans "My Profile" %}</a>
-                            </span>
+                            <ul class="nav nav-tabs pull-left menu-tabs">
+                                {% if view_name == 'Saved Searches' %}
+                                    <li class="active"> <a href="{% url 'saved_search_main' %}">{% trans "Saved Searches" %}</a></li>
+                                    <li class=""><a href="{% url 'view_profile' %}">{% trans "My Profile" %}</a></li>
+                                {% elif view_name == 'My Profile' %}
+                                   <li class=""> <a href="{% url 'saved_search_main' %}">{% trans "Saved Searches" %}</a></li>
+                                    <li class="active"><a href="{% url 'view_profile' %}">{% trans "My Profile" %}</a></li>
+                                {% else %}
+                                   <li class=""> <a href="{% url 'saved_search_main' %}">{% trans "Saved Searches" %}</a></li>
+                                    <li class=""><a href="{% url 'view_profile' %}">{% trans "My Profile" %}</a></li>
+                                {% endif %}
+                            </span></ul>
                         </div>
                         <div class="pull-right">                                               
                         <div class="menu-bar span4 pagination-right">                            
