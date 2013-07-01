@@ -52,11 +52,7 @@
                                     <img src="{{user.get_gravatar_url}}">
                                         {% trans "Logged in as " %} 
                                         <b>
-                                            {% if name_obj %}
-                                                {{name_obj}}
-                                            {% else %}
-                                                {{user.email|truncatechars:20}}
-                                            {% endif %} 
+                                            {{ user|get_name_obj_or_email|truncatechars:"20" }}
                                         </b>
                                         <span class="arrow"></span>
                                     </a>
