@@ -18,15 +18,6 @@ $(document).ready(function(){
 			icon.addClass('icon-minus');
 		}
 	});
-	$('#candidate-page-mobile-view').each(function(){
-		if (this.id && localStorage[this.id] === "true"){
-			$(this).addClass('show-activity');
-			$(this).removeClass('show-details');
-		}else{
-			$(this).addClass('show-details');
-			$(this).removeClass('show-activity');
-		}
-	});
 	//when heading get clicked. Looks bootstrap collasping classes and changes icon to + or -
 	$('[class*=details-heading]').click(function(){
 		var icon = $(this).children('a').children('span').children('i');
@@ -43,10 +34,22 @@ $(document).ready(function(){
 		container = $(this).parent().parent();
 		container.removeClass('show-activity');
 		container.addClass('show-details');
+		mobileToggleAccordian();
 	});
 	$('[id$=activity-toggle]').click(function(){
 		container = $(this).parent().parent();
 		container.removeClass('show-details');
 		container.addClass('show-activity');
+		mobileToggleAccordian();
 	});
 });
+
+function mobileToggleAccordian(){
+	$('.collapse').each(function(){
+		if($(this).hasClass('in')) {
+			$(this).collapse('show');
+		}else{
+			$(this).collapse('hide');
+		};
+	});
+}

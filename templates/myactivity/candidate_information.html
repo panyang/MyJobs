@@ -11,7 +11,7 @@
 
 {% block content %}
 <div class="wrapper"> 
-	{% if user_info %}
+    {% if the_user %}
 	<div class="row default-heading-candidate-view" id="profileTitleRow">
         <div class="span10" id="profileTitleBar">
             <h1>{{primary_name}}
@@ -24,7 +24,6 @@
     		<input type="button" class="btn primary" value="Back to Company Dashboard" />
     	</span>
     </div>
-    {% if the_user %}
     <div class="span4 mobile-heading-candidate-view">
         <img class="pull-left" src="{{the_user.get_gravatar_url}}&s=75">
         <div id="mobile-name-heading">
@@ -40,6 +39,7 @@
     </div>
     <div class="clear"></div>
     <br />
+    
     <div class="row">
         <div class="span4 default-heading-candidate-view">
 			<img src="{{the_user.get_gravatar_url}}&s=100">
@@ -48,6 +48,8 @@
                 <a href="mailto:{{the_user.email}}"><img src="{{STATIC_URL}}images/rsz_1envelope4.jpg" /><span style="margin-top:5px; margin-left:5px;">{{the_user.email}}</span></a>
             </p>
         </div>
+    {% endif %}
+    {% if user_info %}
         <div id="candidate-page-mobile-view">
         <div id="candidate-page-mobile-toggle">
             <span class="toggle-text" id="detail-toggle">&nbsp;Details</span><span class="toggle-text" id="activity-toggle">&nbsp;Activity</span>
@@ -103,7 +105,7 @@
             </div>
         </div>
         <div class="span4">
-        	<div class="formBox candidate-details">
+        	<div class="formBox candidate-details candidate-activity-box">
         		<h3 class="form-box-title">Activity</h3>
                 {% if searches %}
                     <div class="accordion" id="details-searches-collapse">
@@ -131,7 +133,8 @@
             </div>
         </div>
         </div>
-    {% endif %}
+    {% else %}
+        This user has not filled out their profile.
 	{% endif %}
 </div>
 {% endblock %}
