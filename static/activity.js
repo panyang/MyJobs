@@ -44,7 +44,7 @@ $(document).ready(function(){
 	});
 });
 
-function mobileToggleAccordian(){
+function mobileToggleAccordion(){
 	$('.collapse').each(function(){
 		if($(this).hasClass('in')) {
 			$(this).collapse('show');
