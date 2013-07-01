@@ -39,7 +39,7 @@ def saved_search_main(request):
     add_form = SavedSearchForm(user=request.user)
     return render_to_response('mysearches/saved_search_main.html',
                               {'saved_searches': saved_searches,
-                               'form':form, 'add_form': add_form},
+                               'form': form, 'add_form': add_form},
                               RequestContext(request))
 
 @user_passes_test(User.objects.is_active)
