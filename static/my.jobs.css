@@ -169,7 +169,7 @@ ul.ui-autocomplete{
     width: 90px;
     background: transparent url(/files/static/images/myjobs_logo.png) center left no-repeat;
     text-indent: -9000px;
-    }
+}
 .topbar input{
     width: 100px;
     margin-right: 10px;  
@@ -186,7 +186,7 @@ ul.ui-autocomplete{
     float-left;
     color: #fff;
     font-size: .8em;
-    }
+}
 .topbar .menu-tabs a{
     color: #FFF;
     font-weight: bold;
@@ -199,10 +199,10 @@ ul.ui-autocomplete{
     }
 .formBox select {
     width: 216px;
-    }
+}
 form select{
     width: 264px;
-    }
+}
 #title{
     padding-top: 60px;
     padding-bottom: 60px;
@@ -481,10 +481,7 @@ em.pendingText{
 /* Topbar Dropdown Styles*/
 .topbar ul{
     list-style: none;
-    position: relative;
-    }
-#nav {
-    width: 15%;
+    text-align: left;
     }
 #nav:hover{
     background: #222;
@@ -511,7 +508,6 @@ em.pendingText{
     corner-bottom-left-radius: 4px;
     corner-bottom-right-radius: 4px;
     width: 275px;
-    right: 0px;
     }
 .topbar #nav .arrow{
     float: right;
@@ -521,7 +517,6 @@ em.pendingText{
     border-right: 6px solid #999;
     border-left: 0px;
     margin-top: 6px;
-    margin-left: 4px;
     }
 .topbar #nav:hover .arrow{
     border: 4px solid transparent;
@@ -535,21 +530,21 @@ em.pendingText{
     margin: 0px;
     padding: 0px;
     color: #FFF;
-    }
+}
 #pop-menu a{
 	display: block;
 	padding: 4px;
 	background: #666;
 	border-top: 1px solid #333;
-    }
+}
 #nav.active li ul#pop-menu{ 
 	display: block;
 	text-align: left;
-    }
+}
 #ui-datepicker-div {
     position: relative;
     z-index: 9999 !important;
-    }
+}
 /*Firefox fix for homepage alignment issues*/
 @-moz-document url-prefix(){
     #title {
@@ -560,6 +555,18 @@ em.pendingText{
     }
 }
 @media screen and (min-width: 1025px){
+    #nav {
+        width: 15%;
+    }
+    #nav ul#pop-menu {
+        right: 1px;
+    }
+    #profile_link, #savedsearch_link {
+        display: none !important;
+    }
+    .topbar ul {
+        position: relative;
+    }
     #nav li:hover ul#pop-menu{ 
         display: block;
         text-align: left;
@@ -632,10 +639,23 @@ form input[type='checkbox']{
         height: 50px;        
         border-bottom: 20px solid #c44e34;
     }
+    #logged_in_li {
+        display: block;
+        font-size: 2em;
+        height: 25px;
+        line-height: 20px;
+        padding: 10px !important;        
+        }
     #logo-block{
         margin-top: 10px;
     }
+    .topbar .menu-tabs {
+        display: none;
+    }
     .topbar #nav .arrow{
+        display: none;
+    }
+    .topbar #nav img {
         display: none;
     }
     #nav .main-nav{
@@ -850,7 +870,9 @@ form input[type='checkbox']{
         clear: both;
         display: block;
     }
-
+    #logged_in_li {
+        display: none !important;
+    }
     form .pull-left{
         float: none;
     }
