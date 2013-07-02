@@ -11,7 +11,10 @@ from myjobs.tests.views import TestClient
 from myjobs.tests.factories import UserFactory
 from mysearches.models import SavedSearch
 from mysearches.tests.factories import SavedSearchFactory
-from myprofile.tests.factories import PrimaryNameFactory
+from myprofile.models import ProfileUnits
+from myprofile.tests.factories import PrimaryNameFactory, SecondaryEmailFactory, EducationFactory
+from myprofile.tests.factories import AddressFactory, TelephoneFactory, EmploymentHistoryFactory
+
 
 EMPLOYER = Group.objects.get(name='Employer')
 SEARCH_OPTS = ['django', 'python', 'programming']
@@ -55,6 +58,8 @@ class MyActivityViewsTests(TestCase):
         self.assertEqual(len(soup.select('#search-table tr')), 29)
         self.assertEqual(len(soup.select('#user-table tr')), 10)
 
+    # Eventually these opted-in/out will be changed to 
+    # track if user is part of company's activity feed
     def test_candidate_has_opted_in(self):
         response = self.client.post(reverse('candidate_information', kwargs={'user_id':'2'}))
 
@@ -64,7 +69,38 @@ class MyActivityViewsTests(TestCase):
         self.candidate_user.opt_in_employers = False
         self.candidate_user.save()
 
-        try:
-            response = self.client.post(reverse('candidate_information', kwargs={'user_id':'2'}))
-        except DoesNotExist:
-            self.assertEqual(response.status_code, 404)
+        response = self.client.post(reverse('candidate_information', kwargs={'user_id':'2'}))
+        self.assertEqual(response.status_code, 404)
+
+    def test_candidate_page_load_with_profileunits(self):
+        # Building User with ProfileUnits
+        self.name = PrimaryNameFactory(user = self.candidate_user)
+        self.second_email = SecondaryEmailFactory(user = self.candidate_user)
+        self.education = EducationFactory(user = self.candidate_user)
+        self.address = AddressFactory(user = self.candidate_user)
+        self.telephone = TelephoneFactory(user = self.candidate_user)
+        self.employment = EmploymentHistoryFactory(user = self.candidate_user)
+        self.candidate_user.save()
+
+        response = self.client.get(reverse('candidate_information', kwargs={'user_id':'2'}))
+        response = self.client.post(reverse('candidate_information', kwargs={'user_id':'2'}))
+
+        soup = BeautifulSoup(response.content)
+        titles = soup.findAll('a', {'class':'accordion-toggle'})
+        info = soup.findAll('li')
+
+        self.assertEqual(len(titles), 5)
+        self.assertEqual(len(info), 18)
+        self.assertEqual(response.status_code, 200)
+
+    def test_candidate_page_load_without_profileunits(self):
+        response = self.client.get(reverse('candidate_information', kwargs={'user_id':'2'}))
+        response = self.client.post(reverse('candidate_information', kwargs={'user_id':'2'}))
+
+        soup = BeautifulSoup(response.content)
+        titles = soup.findAll('a', {'class':'accordion-toggle'})
+        info = soup.findAll('li')
+
+        self.assertEqual(len(titles), 0)
+        self.assertEqual(len(info), 5)
+        self.assertEqual(response.status_code, 200)
