@@ -25,6 +25,9 @@ class MyActivityViewsTests(TestCase):
         self.client = TestClient()
         self.client.login_user(self.staff_user)
 
+        self.candidate_user = UserFactory(email="example@example.com")
+        self.candidate_user.save()
+
         for i in range(10):
             # Create 50 new users
             user = UserFactory(email='example%s@example.com'%i)
@@ -51,3 +54,17 @@ class MyActivityViewsTests(TestCase):
         soup = BeautifulSoup(response.content)
         self.assertEqual(len(soup.select('#search-table tr')), 29)
         self.assertEqual(len(soup.select('#user-table tr')), 10)
+
+    def test_candidate_has_opted_in(self):
+        response = self.client.post(reverse('candidate_information', kwargs={'user_id':'2'}))
+
+        self.assertEqual(response.status_code, 200)
+
+    def test_candidate_has_opted_out(self):
+        self.candidate_user.opt_in_employers = False
+        self.candidate_user.save()
+
+        try:
+            response = self.client.post(reverse('candidate_information', kwargs={'user_id':'2'}))
+        except DoesNotExist:
+            self.assertEqual(response.status_code, 404)
