@@ -1,4 +1,5 @@
 import re
+import newrelic.agent
 
 from django.utils.text import compress_string
 from django.utils.cache import patch_vary_headers
@@ -28,7 +29,7 @@ class RedirectMiddleware:
                 not re.match(reverse('registration_activate', args=['a'])[0:-2],
                                      request.path) and
                 request.user.password_change):
-                return http.HttpResponseRedirect(reverse('edit_account'))
+                return htftp.HttpResponseRedirect(reverse('edit_account'))
         elif request.is_ajax() and bool(request.REQUEST.get('next')):
             return http.HttpResponse(status=403)
 
@@ -70,3 +71,13 @@ class XsSharing(object):
         response['Access-Control-Allow-Methods'] = ",".join( XS_SHARING_ALLOWED_METHODS )
 
         return response 
+
+class NewRelic(object):
+    """
+    Manages New Relic tracking.
+
+    """
+    def process_response(self, request, response):
+        newrelic.agent.add_custom_parameter('user_id', request.user.id)
+        return response
+
