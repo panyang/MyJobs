@@ -29,6 +29,8 @@ def edit_profile(request):
                      verbose - the displayable title of the module
                      name - the module name as it's named in the models.
                      items - all the instances in that module for the user
+
+    :name_obj:       The name of the user or, if not provided, the user's email
     """
 
     settings = {'user': request.user}
@@ -54,7 +56,8 @@ def edit_profile(request):
         
         profile_config.append(module_config)
 
-    data_dict = {'profile_config': profile_config}
+    data_dict = {'profile_config': profile_config,
+				 'view_name': 'My Profile'}
     
     return render_to_response('myprofile/edit_profile.html', data_dict,
                               RequestContext(request))

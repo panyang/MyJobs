@@ -39,7 +39,7 @@ def saved_search_main(request):
     add_form = SavedSearchForm(user=request.user)
     return render_to_response('mysearches/saved_search_main.html',
                               {'saved_searches': saved_searches,
-                               'form': form, 'add_form': add_form},
+                               'form':form, 'add_form': add_form, 'view_name': 'Saved Searches'},
                               RequestContext(request))
 
 @user_passes_test(User.objects.is_active)
@@ -53,7 +53,8 @@ def view_full_feed(request, search_id):
         label = saved_search.label
         return render_to_response('mysearches/view_full_feed.html',
                                   {'search': saved_search,
-                                   'items': items},
+                                   'items': items, 
+                                   'view_name': 'Saved Searches'},
                                   RequestContext(request))
     else:
         return HttpResponseRedirect('/saved-search')
