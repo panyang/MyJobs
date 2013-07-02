@@ -222,12 +222,31 @@ ul.ui-autocomplete{
     color: #fff;
     font-size: .8em;
 }
+.menu-tabs {
+    border-bottom: 0px solid #333;
+}
+.topbar .menu-tabs a{
+    border: 1px solid #333 !important;
+    background-color: #333;
+    color: #FFF;
+    font-weight: bold;
+    text-decoration: none;
+    padding-top: 4px !important;
+    padding-bottom: 5px !important;
+    }
+.topbar .menu-tabs a:hover{
+    color: #FFF;
+    background-color: #b34529;
+    }
+.menu-tabs .active a {
+    background-color: #b34529 !important;
+    }
 .formBox select {
     width: 216px;
-}
+    }
 form select{
     width: 264px;
-}
+    }
 #title{
     padding-top: 60px;
     padding-bottom: 60px;
@@ -554,6 +573,7 @@ em.pendingText{
 #pop-menu li{
     margin: 0px;
     padding: 0px;
+    color: #FFF;
 }
 #pop-menu a{
 	display: block;
@@ -564,6 +584,9 @@ em.pendingText{
 #nav.active li ul#pop-menu{ 
 	display: block;
 	text-align: left;
+}
+#logged_in_li {
+    padding: 4px !important;
 }
 #ui-datepicker-div {
     position: relative;
@@ -579,6 +602,18 @@ em.pendingText{
     }
 }
 @media screen and (min-width: 1025px){
+    #nav {
+        width: 15%;
+    }
+    #nav ul#pop-menu {
+        right: 1px;
+    }
+    #profile_link, #savedsearch_link {
+        display: none !important;
+    }
+    .topbar ul {
+        position: relative;
+    }
     #nav li:hover ul#pop-menu{ 
         display: block;
         text-align: left;
@@ -651,10 +686,23 @@ form input[type='checkbox']{
         height: 50px;        
         border-bottom: 20px solid #c44e34;
     }
+    #logged_in_li {
+        display: block;
+        font-size: 2em;
+        height: 25px;
+        line-height: 20px;
+        padding: 10px !important;        
+        }
     #logo-block{
         margin-top: 10px;
     }
+    .topbar .menu-tabs {
+        display: none;
+    }
     .topbar #nav .arrow{
+        display: none;
+    }
+    .topbar #nav img {
         display: none;
     }
     #nav .main-nav{
@@ -869,7 +917,9 @@ form input[type='checkbox']{
         clear: both;
         display: block;
     }
-
+    #logged_in_li {
+        display: none !important;
+    }
     form .pull-left{
         float: none;
     }
