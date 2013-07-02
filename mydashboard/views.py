@@ -29,7 +29,7 @@ from registration.forms import *
 from myactivity.views import *
    
 @user_passes_test(User.objects.not_disabled)
-def mydashboard(request):
+def dashboard(request):
     """
     Notes
     """
@@ -39,6 +39,101 @@ def mydashboard(request):
     company = CompanyUser.objects.get(user=request.user)
     admins = CompanyUser.objects.filter(company=company.company)
     microsites = Microsite.objects.filter(company=company.company)    
+    
+    #search_microsite = request.POST.get("microsite", "")    
+    var1 = request.GET.get('microsite', False)
+    
+    #data = {}
+    if request.method == 'POST':
+        url = request.REQUEST.get('microsite')
+        if url:
+            if url.find('//') == -1:
+                url = '//' + url
+            microsite = urlparse(url).netloc
+        else:
+            microsite = 'indiana.jobs'
+        #data['site'] = microsite
+
+        # Saved searches were created after this date...
+        after = request.REQUEST.get('after')
+        if after:
+            after = datetime.strptime(after, '%Y-%m-%d')
+        else:
+            # Defaults to one week ago
+            after = datetime.now() - timedelta(days=7)
+        # ... and before this one
+        before = request.REQUEST.get('before')
+        if before:
+            before = datetime.strptime(before, '%Y-%m-%d')
+        else:
+            # Defaults to the date and time that the page is accessed
+            before = datetime.now()
+        #data['after'] = after
+        #data['before'] = before
+
+        # Prefetch the user
+        searchescandidates = SavedSearch.objects.select_related('user')
+
+        # All searches saved from a given microsite
+        searchescandidates = searchescandidates.filter(url__contains=microsite)
+
+        # Specific microsite searches saved between two dates
+        searchescandidates = searchescandidates.filter(created_on__range=[after, before])
+        #data['searches'] = searches        
+        
+    else:        
+        
+        #default dates and search
+        after = datetime.now() - timedelta(days=40)
+        before = datetime.now()
+        #var1 = request.session.get('microsite', False)
+        if var1:
+            microsite=var1
+        else:
+            microsite='jobs.jobs'
+        
+        searchescandidates = SavedSearch.objects.filter(url__contains=microsite)        
+        searchescandidates = searchescandidates.filter(created_on__range=[after, before])
+    
+    paginator = Paginator(searchescandidates, 1) # Show 5 candidates per page
+    page = request.GET.get('page')
+    
+    try:
+        candidates = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        candidates = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        candidates = paginator.page(paginator.num_pages)
+    
+    data_dict = {'company_name': company.company,
+                 'company_microsites': microsites,
+                 'company_admins': admins,                 
+                 'after': after,
+                 'before': before,                 
+                 'candidates': candidates,
+                 'microsite': microsite,}
+    
+    return render_to_response('mydashboard/mydashboard.html', data_dict,
+                              context_instance=RequestContext(request))
+    
+
+@user_passes_test(lambda u: User.objects.is_group_member(u, 'Employer'))
+def activity_search(request):
+    """
+    Notes
+    """
+    
+    settings = {'user': request.user}
+        
+    company = CompanyUser.objects.get(user=request.user)
+    admins = CompanyUser.objects.filter(company=company.company)
+    microsites = Microsite.objects.filter(company=company.company)    
+    
+    #microsite=company.company
+    
+    test = request.POST.get("microsite", "")
     
     #data = {}
     if request.method == 'POST':
@@ -77,17 +172,19 @@ def mydashboard(request):
         # Specific microsite searches saved between two dates
         searchescandidates = searchescandidates.filter(created_on__range=[after, before])
         #data['searches'] = searches
+    
     else:
         #default dates
         after = datetime.now() - timedelta(days=25)
         before = datetime.now()
         
         searchescandidates = SavedSearch.objects.filter(url__contains=company.company)        
-        #searches = searchescandidates.filter(created_on__range=[after, before])
+        searchescandidates = searchescandidates.filter(created_on__range=[after, before])
+        page = request.GET.get('page') 
         
     paginator = Paginator(searchescandidates, 3) # Show 5 candidates per page
-
     page = request.GET.get('page')
+    
     try:
         candidates = paginator.page(page)
     except PageNotAnInteger:
@@ -102,57 +199,11 @@ def mydashboard(request):
                  'company_admins': admins,                 
                  'after': after,
                  'before': before,                 
-                 'candidates': candidates,}
+                 'candidates': candidates,
+                 'microsite': microsite,}
     
-    return render_to_response('mydashboard/mydashboard.html', data_dict,
+    return render_to_response('mydashboard/candidate_activity.html', data_dict,
                               context_instance=RequestContext(request))
-    
-
-@user_passes_test(lambda u: User.objects.is_group_member(u, 'Staff'))
-def activity_search_feed(request):
-    """
-    Returns a list of users who created a saved search on the given microsite
-    between the given (optional) dates
-    """
-    data = {}
-    if request.method == 'POST':
-        url = request.REQUEST.get('microsite')
-        if url:
-            if url.find('//') == -1:
-                url = '//' + url
-            microsite = urlparse(url).netloc
-        else:
-            microsite = 'indiana.jobs'
-        data['site'] = microsite
-
-        # Saved searches were created after this date...
-        after = request.REQUEST.get('after')
-        if after:
-            after = datetime.strptime(after, '%Y-%m-%d')
-        else:
-            # Defaults to one week ago
-            after = datetime.now() - timedelta(days=7)
-        # ... and before this one
-        before = request.REQUEST.get('before')
-        if before:
-            before = datetime.strptime(before, '%Y-%m-%d')
-        else:
-            # Defaults to the date and time that the page is accessed
-            before = datetime.now()
-        data['after'] = after
-        data['before'] = before
-
-        # Prefetch the user
-        searches = SavedSearch.objects.select_related('user')
-
-        # All searches saved from a given microsite
-        searches = searches.filter(url__contains=microsite)
-
-        # Specific microsite searches saved between two dates
-        searches = searches.filter(created_on__range=[after, before])
-        data['searches'] = searches
-    return render_to_response('mydashboard/candidate_activity.html', data,
-                              RequestContext(request))
 
 @user_passes_test(User.objects.not_disabled)    
 def profile(request):

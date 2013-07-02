@@ -36,14 +36,19 @@
         </div>
     </div>
     <div class="row">
-        <div class="span8" id="moduleColumn">
-            
+        <div class="span8" id="moduleColumn">            
+        
             <div class="formBox">
-            <h3>Candidate Activity</h3>
+            <h3>Candidate Activity {{microsite}}</h3>
                 
-                <form action='/mydashboard/' method='POST'>
+                <form action='/dashboard/' method='POST'>
                     {% csrf_token %}
-                    Microsite: <input name="microsite" type="text"></br>
+                    Microsite: 
+                    <select name="microsite">
+                        {% for url in company_microsites %}
+                        <option value="{{ url.url|cut:"http://" }}">{{ url.url|cut:"http://" }}</option>
+                        {% endfor %}
+                    </select>
                     After this date: <input name="after" type="date"></br>
                     Before this date: <input name="before" type="date"></br>
                     <input type="submit" value="View">
@@ -72,7 +77,7 @@
                  <td>
                     
                     {% if candidates.has_previous %}
-                        <div class="pull-left"><a href="?page={{ candidates.previous_page_number }}">previous</a></div>
+                        <div class="pull-left"><a href="?page={{ candidates.previous_page_number }}&microsite={{microsite}}">previous</a></div>
                     {% else %}
                         &nbsp;
                     {% endif %}
@@ -85,7 +90,7 @@
                   <td>  
 
                     {% if candidates.has_next %}
-                        <div class="pull-right"><a href="?page={{ candidates.next_page_number }}">next</a></div>
+                        <div class="pull-right"><a href="?page={{ candidates.next_page_number }}&microsite={{microsite}}">next</a></div>
                     {% endif %}
                   </td>
                   </tr>
