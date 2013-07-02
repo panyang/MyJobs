@@ -29,7 +29,7 @@ class RedirectMiddleware:
                 not re.match(reverse('registration_activate', args=['a'])[0:-2],
                                      request.path) and
                 request.user.password_change):
-                return htftp.HttpResponseRedirect(reverse('edit_account'))
+                return http.HttpResponseRedirect(reverse('edit_account'))
         elif request.is_ajax() and bool(request.REQUEST.get('next')):
             return http.HttpResponse(status=403)
 
@@ -81,3 +81,5 @@ class NewRelic(object):
         newrelic.agent.add_custom_parameter('user_id', request.user.id)
         return response
 
+    def process_request(self, request):
+        newrelic.agent.add_custom_parameter('user_id', request.user.id)
