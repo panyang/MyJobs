@@ -78,7 +78,7 @@ def dashboard(request):
         searchescandidates = searchescandidates.filter(url__contains=microsite)
 
         # Specific microsite searches saved between two dates
-        searchescandidates = searchescandidates.filter(created_on__range=[after, before])
+        searchescandidates = searchescandidates.filter(created_on__range=[after, before]).order_by('-created_on')
         #data['searches'] = searches        
         
     else:        
@@ -90,12 +90,12 @@ def dashboard(request):
         if var1:
             microsite=var1
         else:
-            microsite='jobs.jobs'
+            microsite=company.company
         
         searchescandidates = SavedSearch.objects.filter(url__contains=microsite)        
-        searchescandidates = searchescandidates.filter(created_on__range=[after, before])
+        searchescandidates = searchescandidates.filter(created_on__range=[after, before]).order_by('-created_on')
     
-    paginator = Paginator(searchescandidates, 1) # Show 5 candidates per page
+    paginator = Paginator(searchescandidates, 5) # Show 5 candidates per page
     page = request.GET.get('page')
     
     try:

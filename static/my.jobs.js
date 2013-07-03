@@ -38,6 +38,10 @@ $(document).ready(function(){
         }
     });
     
+    $(function() {
+        $( ".datepicker" ).datepicker();
+    });
+    
     /*Explicit control of main menu, primarily for mobile but also provides
     non hover and cover option if that becomes an issue.*/
     $("#nav .main-nav").click(function(){

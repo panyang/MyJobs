@@ -10,6 +10,11 @@
 <script src="{{ STATIC_URL }}profile.js{% cache_buster %}"></script>
 <script src="http://js.nlx.org/framework/v2/js/def.ui.bootstrap.tabs.js" type="text/javascript"></script>
 <script src="http://js.nlx.org/framework/v2/js/code/bootstrap-collapse.js" type="text/javascript"></script>
+<script>
+  $(function() {
+    $( ".datepicker" ).datepicker();
+  });
+</script>
 {% endblock %}
 
 {% block content %}
@@ -39,33 +44,32 @@
         <div class="span8" id="moduleColumn">            
         
             <div class="formBox">
-            <h3>Candidate Activity {{microsite}}</h3>
+            <h3>Candidate Activity</h3>
                 
                 <form action='/dashboard/' method='POST'>
                     {% csrf_token %}
-                    Microsite: 
+                    <div class="span2">Date Range:</div> <input name="after" type="text" placeholder="After this date" class="datepicker"> to <input name="before" type="text" placeholder="Before this date" class="datepicker"></br>
+                    <div class="span2">Filter by site:</div> 
                     <select name="microsite">
                         {% for url in company_microsites %}
                         <option value="{{ url.url|cut:"http://" }}">{{ url.url|cut:"http://" }}</option>
                         {% endfor %}
                     </select>
-                    After this date: <input name="after" type="date"></br>
-                    Before this date: <input name="before" type="date"></br>
-                    <input type="submit" value="View">
+                    <br>
+                    <div class="span2"><input type="submit" value="View"></div>
                 </form>
-                
-                <div class="pull-left">Between {{after}} and {{before}}</div><br>
-                   
+                <br>
+                <hr>
+                <div class="pull-left"><strong>Acticty between {{after}} and {{before}} for {{ microsite }}</strong></div><br>
+                  
                  <table id="row-link-table">                            
                     {% for candidate in candidates %}
                     <tr>                            
                         <td>
-                        <ul style="list-style-type: none; margin-left: -10px;">
-                            <li><strong>{% if candidate.label %}{{candidate.label}}{% else %}Unlabeled{% endif %}</strong></li>
-                            <li><a href="{{candidate.url}}">{{candidate.url}}</a></li>
-                            <li>{{candidate.created_on}}</li>
-                            <li>{{candidate.user}}</li>
-                        </ul>
+                        <strong>{% if candidate.label %}{{candidate.label}}{% else %}Unlabeled{% endif %}</strong><br>
+                        <a href="{{candidate.url}}">{{candidate.url}}</a><br>
+                        {{candidate.created_on}}<br>
+                        {{candidate.user}}
                         </td>
                     </tr>
                     {% endfor %}
@@ -73,27 +77,27 @@
                  </table>
                  
                  <table id="pagination">
-                 <tr>
-                 <td>
+                    <tr>
+                        <td>
                     
-                    {% if candidates.has_previous %}
-                        <div class="pull-left"><a href="?page={{ candidates.previous_page_number }}&microsite={{microsite}}">previous</a></div>
-                    {% else %}
-                        &nbsp;
-                    {% endif %}
-                  </td>
+                        {% if candidates.has_previous %}
+                            <div class="pull-left"><a href="?page={{ candidates.previous_page_number }}&microsite={{microsite}}">previous</a></div>
+                        {% else %}
+                            &nbsp;
+                        {% endif %}
+                        </td>
                   
-                  <td>  
-                    Page {{ candidates.number }} of {{ candidates.paginator.num_pages }}
-                   </td>
+                        <td>  
+                        Page {{ candidates.number }} of {{ candidates.paginator.num_pages }}
+                        </td>
                   
-                  <td>  
+                        <td>  
 
-                    {% if candidates.has_next %}
-                        <div class="pull-right"><a href="?page={{ candidates.next_page_number }}&microsite={{microsite}}">next</a></div>
-                    {% endif %}
-                  </td>
-                  </tr>
+                        {% if candidates.has_next %}
+                            <div class="pull-right"><a href="?page={{ candidates.next_page_number }}&microsite={{microsite}}">next</a></div>
+                        {% endif %}
+                        </td>
+                     </tr>
                   </table>
                   
              </div>

@@ -61,33 +61,37 @@ table#row-link-table {
     border-collapse: collapse;   
 }
 #row-link-table tr {
-    background-color: #FFF;
+    background-color: rgb(250, 250, 250);
     
 }
 #row-link-table tr:hover {
     background-color: #d2cfc7;
 }
 #row-link-table th {
-    background-color: #f4f1ea;
+    background-color: rgb(250, 250, 250);
     text-align: left;
     border-top: none;
 }
-#row-link-table th, #microsites td {
+#row-link-table th, #row-link-table td {
     padding: 2px;
 }
 #row-link-table td:hover {
     cursor: pointer;
 }
 #row-link-table td {
-    padding: 5px;
+    padding: 5px;    
     border: 1px solid #eae6de;
 }
+#row-link-table ul {
+    list-style-type: none;
+    margin-left: -10px;
+}
 
-#pagination table {    
-    background-color: #FFF;    
+#pagination table {     
     border: 1px solid #eae6de;
 }
 #pagination td {
+    background-color: rgb(250, 250, 250);  
     width: 33%;
     padding: 10px;
 }
