@@ -680,6 +680,84 @@ input[type='checkbox'] + .help-block{
 form input[type='checkbox']{
     margin-top: -1px;
 }
+#profileTitleBar #candidate-flag{
+    font-size: 0.6em;
+    color: #333;
+}
+#user-buttons input[type="button"]{
+    margin-left: 20px;
+    width: 180px;
+    height: 45px;
+}
+#user-buttons #book{
+    margin-bottom:10px;
+}
+#details-smallList{
+    list-style-type: none;
+    margin-left: 0px;
+    margin-bottom: 0px;
+    margin-top: 0px;
+    padding: 0;
+}
+#details-smallList li{
+    margin:0;
+    font-size: 0.9em;
+    line-height: 13px;
+}
+.candidate-details .accordion,
+.details-inner{
+    margin-bottom: 0px;
+}
+.candidate-details .accordion-group{
+    border: 0px;
+    border-bottom: 1px solid #ddd;
+    margin-bottom: 0px;
+}
+.candidate-details{
+    border: 1px solid #ddd;
+}
+.candidate-details td{
+    border-left: 0px;
+}
+.candidate-details .accordion-heading,
+.candidate-details .accordion-toggle{
+    padding: 4px;
+}
+.candidate-details .accordion-inner,
+.candidate-details .no-side-padding{
+    padding: 0px;
+}
+.candidate-details .table{
+    margin-top:-1px;
+    margin-bottom: 0px;
+}
+.candidate-details h3{
+    padding: 5px 10px;
+    border-top:0px;
+}
+.details-heading{
+    background-color: #d2cfc7;
+    font-size: 1.3em;
+    font-weight: bold;
+}
+.details-heading a{
+    color: #333;
+}
+.details-heading a:hover{
+    color: #333;
+    text-decoration: none;
+}
+.info-row{
+    background-color: rgb(250, 250, 250);
+    padding: 6px 8px;
+    border-bottom: 1px solid #ddd;
+}
+#candidate-page-mobile-view #candidate-page-mobile-toggle{
+    display: none;
+}
+.mobile-heading-candidate-view{
+    display:none;
+}
 
 @media screen and (max-width: 1024px){
     .topbar-inner {
@@ -1072,6 +1150,92 @@ form input[type='checkbox']{
     }
     form input[type='checkbox']{
         margin-top: 3px;
+    }
+    #candidate-page-mobile-view{
+        position:relative;
+    }
+    #candidate-page-mobile-view .formBox{
+        border-top-right-radius: 0px;
+        border-top-left-radius: 0px;
+    }
+    #candidate-page-mobile-view .span4 h3{
+        display: none;
+    }
+    .show-details#candidate-page-mobile-view .span4{
+        display: block;
+    }
+    #candidate-page-mobile-view .span4 + .span4,
+    .show-details#candidate-page-mobile-view .span4 + .span4{
+        display:none;
+    }    
+    .show-details#candidate-page-mobile-view #detail-toggle,
+    #candidate-page-mobile-view #detail-toggle{
+        background-color: rgb(194, 187, 169);
+    }
+    .show-activity#candidate-page-mobile-view .span4 + .span4{
+        display: block;
+    }
+    .show-activity#candidate-page-mobile-view .span4{
+        display: none;
+    }
+    .show-activity#candidate-page-mobile-view #activity-toggle{
+        background-color: rgb(194, 187, 169);
+    }
+    .show-activity#candidate-page-mobile-view #detail-toggle{
+        background-color: #FFF;
+    }
+    #candidate-page-mobile-view #candidate-page-mobile-toggle{
+        width: auto;
+        margin: 0 10px;
+        display: block;
+        float: none;
+        border: 1px solid #ddd;
+        border-top-right-radius: 5px;
+        border-top-left-radius: 5px;
+    }
+    #candidate-page-mobile-toggle .toggle-text{
+        display: inline-block;
+        min-width: 50%;
+        font-size: 24.5px;
+        line-height: 40px;
+        font-weight: bold;
+    }
+    .toggle-text:hover{
+        background-color: rgb(194, 187, 169) !important;
+        cursor: pointer;
+    }
+    .default-heading-candidate-view{
+        display: none;
+    }
+    .mobile-heading-candidate-view{
+        display: block;
+    }
+    .mobile-heading-candidate-view .btn.primary{
+        width:100%;
+        margin-top: 10px;
+    }
+    #mobile-name-heading{
+        float:left;
+        padding: 5px 5px;
+    }
+    #name-flag, #candidate-flag{
+        float: left;
+    }
+    #name-flag{
+        font-size: 1.7em;
+        font-weight: bold;
+        color: #900;
+    }
+    #candidate-flag{
+        font-size: 1.2em;
+    }
+    .mobile-heading-candidate-view a{
+        padding: 0px;
+        border: 0px;
+    }
+    .mobile-heading-candidate-view #email-img{
+        width: 30px;
+        height: 20px;
     }
 }
 

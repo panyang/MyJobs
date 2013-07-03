@@ -5,10 +5,12 @@ from urlparse import urlparse
 from django.contrib.auth.decorators import user_passes_test
 from django.shortcuts import render_to_response
 from django.template import RequestContext
+from django.db import models
+from django.http import Http404
 
 from myjobs.models import User
 from mysearches.models import SavedSearch
-
+from myprofile.models import ProfileUnits
 
 @user_passes_test(lambda u: User.objects.is_group_member(u, 'Employer'))
 def activity_search_feed(request):
@@ -55,3 +57,40 @@ def activity_search_feed(request):
         data['searches'] = searches
     return render_to_response('myactivity/activity_feed.html', data,
                               RequestContext(request))
+
+@user_passes_test(lambda u: User.objects.is_group_member(u, 'Employer'))
+def candidate_information(request, user_id):
+    # gets returned with response to request
+    data_dict = {}
+    models = {}
+    name = "Name not given"
+
+    # user gets pulled out from id
+    try:
+        user = User.objects.get(id=user_id)
+    except User.DoesNotExist:
+        raise Http404
+
+    if user.opt_in_employers:
+        units = ProfileUnits.objects.filter(user=user)
+
+        for unit in units:
+            if unit.__getattribute__(unit.get_model_name()).is_displayed():
+                models.setdefault(unit.get_model_name(), []).append(
+                unit.__getattribute__(unit.get_model_name()))
+
+        # if Name ProfileUnit exsists
+        if models.get('name'):
+            name=models['name'][0]
+            del models['name']
+
+        searches = SavedSearch.objects.filter(user=user)
+    
+        data_dict = {'user_info': models,
+                     'primary_name': name,
+                     'the_user': user,
+                     'searches': searches}
+    else:
+        raise Http404
+    return render_to_response('myactivity/candidate_information.html', data_dict,
+                            RequestContext(request))

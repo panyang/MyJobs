@@ -49,6 +49,14 @@ class ProfileUnits(models.Model):
     def __unicode__(self):
         return self.content_type.name
 
+    def get_model_name(self):
+        return self.content_type.model
+
+    def get_verbose(self):
+        return self.content_type.name.title()
+
+    def is_displayed(self):
+        return True
 
 class Education(ProfileUnits):
     EDUCATION_LEVEL_CHOICES = (
@@ -194,6 +202,9 @@ class Name(ProfileUnits):
 
     def __unicode__(self):
         return self.get_full_name()
+
+    def is_displayed(self):
+        return self.primary
 
 
 class SecondaryEmail(ProfileUnits):
