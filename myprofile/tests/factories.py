@@ -3,6 +3,7 @@ import datetime
 from myjobs.tests.factories import UserFactory
 from myprofile.models import *
 
+
 class SecondaryEmailFactory(factory.Factory):
     FACTORY_FOR = SecondaryEmail
 
