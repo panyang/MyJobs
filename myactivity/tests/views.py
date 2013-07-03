@@ -61,7 +61,7 @@ class MyActivityViewsTests(TestCase):
     # Eventually these opted-in/out will be changed to 
     # track if user is part of company's activity feed
     def test_candidate_has_opted_in(self):
-        response = self.client.post(reverse('candidate_information', kwargs={'user_id':'2'}))
+        response = self.client.post(reverse('candidate_information', kwargs={'user_id':self.candidate_user.id}))
 
         self.assertEqual(response.status_code, 200)
 
@@ -69,7 +69,7 @@ class MyActivityViewsTests(TestCase):
         self.candidate_user.opt_in_employers = False
         self.candidate_user.save()
 
-        response = self.client.post(reverse('candidate_information', kwargs={'user_id':'2'}))
+        response = self.client.post(reverse('candidate_information', kwargs={'user_id':self.candidate_user.id}))
         self.assertEqual(response.status_code, 404)
 
     def test_candidate_page_load_with_profileunits(self):
@@ -82,8 +82,8 @@ class MyActivityViewsTests(TestCase):
         self.employment = EmploymentHistoryFactory(user = self.candidate_user)
         self.candidate_user.save()
 
-        response = self.client.get(reverse('candidate_information', kwargs={'user_id':'2'}))
-        response = self.client.post(reverse('candidate_information', kwargs={'user_id':'2'}))
+        response = self.client.get(reverse('candidate_information', kwargs={'user_id':self.candidate_user.id}))
+        response = self.client.post(reverse('candidate_information', kwargs={'user_id':self.candidate_user.id}))
 
         soup = BeautifulSoup(response.content)
         titles = soup.findAll('a', {'class':'accordion-toggle'})
@@ -94,8 +94,8 @@ class MyActivityViewsTests(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_candidate_page_load_without_profileunits(self):
-        response = self.client.get(reverse('candidate_information', kwargs={'user_id':'2'}))
-        response = self.client.post(reverse('candidate_information', kwargs={'user_id':'2'}))
+        response = self.client.get(reverse('candidate_information', kwargs={'user_id':self.candidate_user.id}))
+        response = self.client.post(reverse('candidate_information', kwargs={'user_id':self.candidate_user.id}))
 
         soup = BeautifulSoup(response.content)
         titles = soup.findAll('a', {'class':'accordion-toggle'})
