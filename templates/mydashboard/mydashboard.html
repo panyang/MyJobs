@@ -69,6 +69,7 @@ $(document).ready(function()
                     <div class="span2">Date Range:</div> <input name="after" type="text" placeholder="After this date" class="datepicker"> to <input name="before" type="text" placeholder="Before this date" class="datepicker"></br>
                     <div class="span2">Filter by site:</div> 
                     <select name="microsite">
+                        <option value="{{ company_name }}">All</option>
                         {% for url in company_microsites %}
                         <option value="{{ url.url|cut:'http://' }}">{{ url.url|cut:"http://" }}</option>
                         {% endfor %}
@@ -85,9 +86,9 @@ $(document).ready(function()
                     <tr>                            
                         <td>
                         <strong>{% if candidate.label %}{{candidate.label}}{% else %}Unlabeled{% endif %}</strong><br>
-                        <a href="http://my.jobs:8000/activity/{{ candidate.user|get_userid }}">{{candidate.url}}</a><br>
+                        {{candidate.url}}<br>
                         {{candidate.created_on}}<br>
-                        {{candidate.user}}
+                        <a href="http://my.jobs:8000/activity/{{ candidate.user|get_userid }}">{{candidate.user}}</a>
                         </td>
                     </tr>
                     {% endfor %}
@@ -125,12 +126,8 @@ $(document).ready(function()
         </div>
         <div class="span4">
             
-            {% include "mydashboard/profile.html" %}
+            {% include "mydashboard/profile.html" %}            
             
-            <div class="formBox">
-                <h3>Add a new section</h3>
-                
-            </div>
         </div>
     </div>
 </div>
