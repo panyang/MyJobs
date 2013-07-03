@@ -38,10 +38,9 @@ def dashboard(request):
         
     company = CompanyUser.objects.get(user=request.user)
     admins = CompanyUser.objects.filter(company=company.company)
-    microsites = Microsite.objects.filter(company=company.company)    
-    
-    #search_microsite = request.POST.get("microsite", "")    
-    var1 = request.GET.get('microsite', False)
+    microsites = Microsite.objects.filter(company=company.company)   
+    candidate_link = 'activity/'  
+    search_microsite = request.GET.get('microsite', False)
     
     #data = {}
     if request.method == 'POST':
@@ -57,14 +56,14 @@ def dashboard(request):
         # Saved searches were created after this date...
         after = request.REQUEST.get('after')
         if after:
-            after = datetime.strptime(after, '%Y-%m-%d')
+            after = datetime.strptime(after, '%m/%d/%Y')
         else:
             # Defaults to one week ago
             after = datetime.now() - timedelta(days=7)
         # ... and before this one
         before = request.REQUEST.get('before')
         if before:
-            before = datetime.strptime(before, '%Y-%m-%d')
+            before = datetime.strptime(before, '%m/%d/%Y')
         else:
             # Defaults to the date and time that the page is accessed
             before = datetime.now()
@@ -87,8 +86,8 @@ def dashboard(request):
         after = datetime.now() - timedelta(days=40)
         before = datetime.now()
         #var1 = request.session.get('microsite', False)
-        if var1:
-            microsite=var1
+        if search_microsite:
+            microsite=search_microsite
         else:
             microsite=company.company
         
@@ -113,7 +112,8 @@ def dashboard(request):
                  'after': after,
                  'before': before,                 
                  'candidates': candidates,
-                 'microsite': microsite,}
+                 'microsite': microsite,
+                 'candidate_link': candidate_link,}
     
     return render_to_response('mydashboard/mydashboard.html', data_dict,
                               context_instance=RequestContext(request))

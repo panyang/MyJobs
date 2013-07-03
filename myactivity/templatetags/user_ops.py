@@ -18,3 +18,10 @@ def get_distinct_users(values):
         users[name.user] = name.get_full_name()
 
     return users
+    
+@register.filter(name='get_userid')
+def get_userid(value):
+    
+    user = User.objects.get(email=value)
+    user_id = user.id
+    return user_id

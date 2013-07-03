@@ -30,18 +30,6 @@ $(document).ready(function(){
         }
     });
     
-    /*Makes entire row a clickable hyperlink.*/
-    $('#row-link-table tr').click(function() {
-        var href = $(this).find("a").attr("href");
-        if(href) {
-            window.location = href;
-        }
-    });
-    
-    $(function() {
-        $( ".datepicker" ).datepicker();
-    });
-    
     /*Explicit control of main menu, primarily for mobile but also provides
     non hover and cover option if that becomes an issue.*/
     $("#nav .main-nav").click(function(){

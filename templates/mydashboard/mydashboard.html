@@ -15,6 +15,24 @@
     $( ".datepicker" ).datepicker();
   });
 </script>
+<script>
+$(document).ready(function()
+{
+   $('#row-link-table tr').each(function(i,e)
+   {
+      $(e).children('td').click(function()
+      {
+         //here we are working on a td element, that's why we need
+         //to refer to its parent (tr) in order to find the <a> element
+         var href = $(this).closest("tr").find("a").attr("href");
+         if(href)
+         {
+            window.location = href;
+         }              
+      });
+   });
+});
+</script>
 {% endblock %}
 
 {% block content %}
@@ -52,7 +70,7 @@
                     <div class="span2">Filter by site:</div> 
                     <select name="microsite">
                         {% for url in company_microsites %}
-                        <option value="{{ url.url|cut:"http://" }}">{{ url.url|cut:"http://" }}</option>
+                        <option value="{{ url.url|cut:'http://' }}">{{ url.url|cut:"http://" }}</option>
                         {% endfor %}
                     </select>
                     <br>
@@ -67,7 +85,7 @@
                     <tr>                            
                         <td>
                         <strong>{% if candidate.label %}{{candidate.label}}{% else %}Unlabeled{% endif %}</strong><br>
-                        <a href="{{candidate.url}}">{{candidate.url}}</a><br>
+                        <a href="http://my.jobs:8000/activity/{{ candidate.user|get_userid }}">{{candidate.url}}</a><br>
                         {{candidate.created_on}}<br>
                         {{candidate.user}}
                         </td>
