@@ -82,7 +82,6 @@ class MyActivityViewsTests(TestCase):
         self.employment = EmploymentHistoryFactory(user = self.candidate_user)
         self.candidate_user.save()
 
-        response = self.client.get(reverse('candidate_information', kwargs={'user_id':self.candidate_user.id}))
         response = self.client.post(reverse('candidate_information', kwargs={'user_id':self.candidate_user.id}))
 
         soup = BeautifulSoup(response.content)
@@ -94,7 +93,6 @@ class MyActivityViewsTests(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_candidate_page_load_without_profileunits(self):
-        response = self.client.get(reverse('candidate_information', kwargs={'user_id':self.candidate_user.id}))
         response = self.client.post(reverse('candidate_information', kwargs={'user_id':self.candidate_user.id}))
 
         soup = BeautifulSoup(response.content)
