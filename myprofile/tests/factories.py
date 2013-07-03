@@ -10,6 +10,7 @@ class SecondaryEmailFactory(factory.Factory):
     email = "alicia.smith@foo.com"
     label = "Personal"
 
+
 class PrimaryNameFactory(factory.Factory):
     FACTORY_FOR = Name
 
@@ -18,6 +19,7 @@ class PrimaryNameFactory(factory.Factory):
     primary = True
     user = factory.SubFactory(UserFactory)
 
+
 class NewPrimaryNameFactory(factory.Factory):
     FACTORY_FOR = Name
 
@@ -25,6 +27,7 @@ class NewPrimaryNameFactory(factory.Factory):
     family_name = "Smith"
     primary = True
     user = factory.SubFactory(UserFactory)
+
 
 class EducationFactory(factory.Factory):
     FACTORY_FOR = Education
@@ -40,6 +43,7 @@ class EducationFactory(factory.Factory):
     degree_minor = "English"
     user = factory.SubFactory(UserFactory)
 
+
 class AddressFactory(factory.Factory):
     FACTORY_FOR = Address
 
@@ -51,6 +55,7 @@ class AddressFactory(factory.Factory):
     postal_code = "12345"
     user = factory.SubFactory(UserFactory)
 
+
 class TelephoneFactory(factory.Factory):
     FACTORY_FOR = Telephone
 
@@ -58,6 +63,7 @@ class TelephoneFactory(factory.Factory):
     area_dialing = "(123)"
     number = "456-7890"
     user = factory.SubFactory(UserFactory)
+
 
 class EmploymentHistoryFactory(factory.Factory):
     FACTORY_FOR = EmploymentHistory
@@ -67,4 +73,3 @@ class EmploymentHistoryFactory(factory.Factory):
     start_date = datetime.date(2005, 3, 4)
     current_indicator = True
     user = factory.SubFactory(UserFactory)
-    
