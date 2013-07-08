@@ -731,6 +731,9 @@ form input[type='checkbox']{
 .candidate-details .no-side-padding{
     padding: 0px;
 }
+.accordion-inner {
+    background-color: #FFF;   
+}
 .candidate-details .table{
     margin-top:-1px;
     margin-bottom: 0px;

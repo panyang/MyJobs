@@ -6,19 +6,15 @@
                 						<div class="accordion-heading details-heading">
                     						<a class="accordion-toggle" data-toggle="collapse" data-parent="#details-collapse" href="#details-table">User List</a>
                 						</div>
-                						<div id="details-table" class="accordion-body collapse">
+                						<div id="details-table" class="accordion-body">
                     						<div class="accordion-inner">
-                        						<table class="table details-inner">                            						
-                            							<tr id="details">
-                            								<td>
-                            									<ul id="details-smallList">
+                        						
+                            									
                                 								    {% for admin in company_admins %}	
-                                										<li>{{admin.user}}</li>
+                                										{{admin.user}}<br>
                                 									{% endfor %}
-                                								</ul>
-                                							</td>
-                                						</tr>
-                            					</table>
+                                								
+                                							
                             				</div>
                             			</div>
             						</div>
