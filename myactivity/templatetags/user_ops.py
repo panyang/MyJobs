@@ -31,17 +31,5 @@ def get_gravatar(value):
     user_gravatar = user.gravatar
     return user_gravatar
     
-@register.filter(name='get_name')
-def get_name(value):   
-    
-    try:    
-        user_id = Name.objects.get(user=value)
-        user_name = user_id.given_name + " " + user_id.family_name
-        
-        
-    except Name.DoesNotExist:
-        user_name = "Name not Given"    
-        
-    
-    return user_name
+
     
