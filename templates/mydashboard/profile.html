@@ -2,23 +2,21 @@
                 <h3>Company Information</h3>
                 
                 <div class="accordion" id="details-company-information-collapse">
-            						<div class="accordion-group">
-                						<div class="accordion-heading details-heading">
-                    						<a class="accordion-toggle" data-toggle="collapse" data-parent="#details-collapse" href="#details-table">User List</a>
-                						</div>
-                						<div id="details-table" class="accordion-body">
-                    						<div class="accordion-inner">
-                        						
-                            									
-                                								    {% for admin in company_admins %}	
-                                										{{admin.user}}<br>
-                                									{% endfor %}
+                    <div class="accordion-group">
+                        <div class="accordion-heading details-heading">
+                    	   <a class="accordion-toggle" data-toggle="collapse" data-parent="#details-collapse" href="#details-table">User List</a>
+                    	</div>
+                		<div id="details-table" class="accordion-body">
+                    	   <div class="accordion-inner">
+                            {% for admin in company_admins %}	
+                                {{admin.user}}<br>
+                            {% endfor %}
                                 								
                                 							
-                            				</div>
-                            			</div>
-            						</div>
-       			 				</div>
+                           </div>
+                        </div>
+            		</div>
+       			 </div>
                 
             </div>
             
