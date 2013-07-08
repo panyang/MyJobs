@@ -2,7 +2,7 @@
 {% load humanize %}
 
 <tr id="saved-search-{{search.id}}">
-  <td class="view_search"><div>{{ search.label }}</div>{% make_label search.is_active %}</td>
+  <td class="view_search"><div class="pull-left">{{ search.label }}</div>{% make_label search.is_active "pull-right" %}</td>
   <td class="url mobile_hide {% if not search.is_active %}muted{% endif %}"><a href="{{ search.url }}" target="_blank">{{ search.url }}</a></td>
   <td class="frequency mobile_hide {% if not search.is_active %}muted{% endif %}">
     {% if search.frequency == "W" %}
