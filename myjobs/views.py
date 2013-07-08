@@ -64,8 +64,7 @@ def home(request):
                  'phone_form': phone_form,
                  'address_form': address_form,
                  'work_form': work_form,
-                 'education_form': education_form,
-                 'name_obj': get_name_obj(request)}
+                 'education_form': education_form}
 
     if request.method == "POST":
         if request.POST['action'] == "register":
@@ -128,19 +127,14 @@ def home(request):
     
 @login_required
 def view_account(request):
-    ctx = {'name_obj': get_name_obj(request)}
-    return render_to_response('done.html', ctx, RequestContext(request))
+    return render_to_response('done.html', RequestContext(request))
 
 @user_passes_test(User.objects.not_disabled)
 def edit_account(request):
     initial_dict = model_to_dict(request.user)
-    name_obj = get_name_obj(request)
-    if name_obj:
-        initial_dict.update(model_to_dict(name_obj))
 
     ctx = {'user': request.user,
-           'gravatar_100': request.user.get_gravatar_url(size=100),
-           'name_obj': name_obj}
+           'gravatar_100': request.user.get_gravatar_url(size=100)}
 
     if request.user.password_change:
         resp = edit_password(request)
@@ -161,9 +155,6 @@ def edit_account(request):
 @user_passes_test(User.objects.not_disabled)
 def edit_basic(request):
     initial_dict = model_to_dict(request.user)
-    name_obj = get_name_obj(request)
-    if name_obj:
-        initial_dict.update(model_to_dict(name_obj))
 
     form = EditAccountForm(initial=initial_dict, user=request.user)        
     if request.method == "POST":
@@ -222,15 +213,13 @@ def edit_password(request):
 
 @user_passes_test(User.objects.not_disabled)
 def edit_delete(request):
-    ctx = {'gravatar_150': request.user.get_gravatar_url(size=150),
-           'name_obj': get_name_obj(request)}
+    ctx = {'gravatar_150': request.user.get_gravatar_url(size=150)}
     return render_to_response('myjobs/edit-delete.html', ctx,
                               RequestContext(request))
 
 @user_passes_test(User.objects.not_disabled)
 def edit_disable(request):
-    ctx = {'gravatar_150': request.user.get_gravatar_url(size=150),
-           'name_obj': get_name_obj(request)}
+    ctx = {'gravatar_150': request.user.get_gravatar_url(size=150)}
     return render_to_response('myjobs/edit-disable.html', ctx,
                               RequestContext(request))
 
@@ -239,7 +228,7 @@ def edit_disable(request):
 def delete_account(request):
     email = request.user.email
     request.user.delete()
-    ctx = {'name_obj': get_name_obj(request),'email': email}
+    ctx = {'email': email}
     return render_to_response('myjobs/delete-account-confirmation.html', ctx,
                               RequestContext(request))
 
@@ -249,7 +238,7 @@ def disable_account(request):
     email = user.email
     user.disable()
     logout(request)
-    ctx = {'email': email,'name_obj': get_name_obj(request)}
+    ctx = {'email': email}
     return render_to_response('myjobs/disable-account-confirmation.html', ctx,
                               RequestContext(request))
 
@@ -257,7 +246,6 @@ def error(request):
     """Error view"""
     messages = get_messages(request)
     ctx = {
-        'name_obj': get_name_object(request),
         'version': version,
         'messages': messages
         }
