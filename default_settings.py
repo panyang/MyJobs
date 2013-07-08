@@ -89,6 +89,7 @@ MIDDLEWARE_CLASSES = (
     'django.contrib.redirects.middleware.RedirectFallbackMiddleware',
     'middleware.RedirectMiddleware',
     'middleware.XsSharing',
+    'middleware.NewRelic',
     'django.middleware.locale.LocaleMiddleware',
 )
 

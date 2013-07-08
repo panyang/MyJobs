@@ -1,4 +1,5 @@
 import re
+import newrelic.agent
 
 from django.utils.text import compress_string
 from django.utils.cache import patch_vary_headers
@@ -70,3 +71,15 @@ class XsSharing(object):
         response['Access-Control-Allow-Methods'] = ",".join( XS_SHARING_ALLOWED_METHODS )
 
         return response 
+
+class NewRelic(object):
+    """
+    Manages New Relic tracking.
+
+    """
+    def process_response(self, request, response):
+        newrelic.agent.add_custom_parameter('user_id', request.user.id)
+        return response
+
+    def process_request(self, request):
+        newrelic.agent.add_custom_parameter('user_id', request.user.id)
