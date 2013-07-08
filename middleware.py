@@ -78,8 +78,14 @@ class NewRelic(object):
 
     """
     def process_response(self, request, response):
-        newrelic.agent.add_custom_parameter('user_id', request.user.id)
+        if hasattr(request, 'user'):
+            newrelic.agent.add_custom_parameter('user_id', request.user.id)
+        else:
+            newrelic.agent.add_custom_parameter('user_id', 'anonymous')
         return response
 
     def process_request(self, request):
-        newrelic.agent.add_custom_parameter('user_id', request.user.id)
+        if hasattr(request, 'user'):
+            newrelic.agent.add_custom_parameter('user_id', request.user.id)
+        else:
+            newrelic.agent.add_custom_parameter('user_id', 'anonymous')
