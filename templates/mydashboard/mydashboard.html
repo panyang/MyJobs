@@ -66,7 +66,7 @@ $(document).ready(function()
                 
                 <form action='/dashboard/' method='POST'>
                     {% csrf_token %}
-                    <div class="span2">Date Range:</div> <input name="after" type="text" placeholder="After this date" class="datepicker"> to <input name="before" type="text" placeholder="Before this date" class="datepicker"></br>
+                    <div class="span2">Date Range:</div><input name="after" type="text" placeholder="After this date" class="datepicker"> to <input name="before" type="text" placeholder="Before this date" class="datepicker"></br>
                     <div class="span2">Filter by site:</div> 
                     <select name="microsite">
                         <option value="{{ company_name }}">All</option>

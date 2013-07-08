@@ -31,7 +31,9 @@ from myactivity.views import *
 @user_passes_test(lambda u: User.objects.is_group_member(u, 'Employer'))
 def dashboard(request):
     """
-    Notes
+    Returns a list of candidates who created a saved search for one of the microsites within the
+    company microsite list or with the company name like jobs.jobs/company_name/careers for example
+    between the given (optional) dates
     """
     
     settings = {'user': request.user}
@@ -49,7 +51,7 @@ def dashboard(request):
                 url = '//' + url
             microsite = urlparse(url).netloc
         else:
-            microsite = 'indiana.jobs'
+            microsite = company.company
         
         # Saved searches were created after this date...
         after = request.REQUEST.get('after')
@@ -77,7 +79,7 @@ def dashboard(request):
     else:        
         
         #default dates and search
-        after = datetime.now() - timedelta(days=40)
+        after = datetime.now() - timedelta(days=30)
         before = datetime.now()
         
         if search_microsite:
