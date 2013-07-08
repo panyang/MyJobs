@@ -20,8 +20,28 @@ def get_distinct_users(values):
     return users
     
 @register.filter(name='get_userid')
-def get_userid(value):
-    
+def get_userid(value):    
     user = User.objects.get(email=value)
     user_id = user.id
     return user_id
+    
+@register.filter(name='get_gravatar')
+def get_gravatar(value):    
+    user = User.objects.get(email=value)
+    user_gravatar = user.gravatar
+    return user_gravatar
+    
+@register.filter(name='get_candidate_name')
+def get_candidate_name(value):   
+    
+    try:    
+        user_id = Name.objects.get(user=value)
+        user_name = user_id.given_name + " " + user_id.family_name
+        
+        
+    except Name.DoesNotExist:
+        user_name = "Name not Given"    
+        
+    
+    return user_name
+    
