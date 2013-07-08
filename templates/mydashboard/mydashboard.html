@@ -88,7 +88,7 @@ $(document).ready(function()
                         <strong>{% if candidate.label %}{{candidate.label}}{% else %}Unlabeled{% endif %}</strong><br>
                         {{candidate.url}}<br>
                         {{candidate.created_on}}<br>
-                        <a href="http://my.jobs:8000/activity/{{ candidate.user|get_userid }}">{{candidate.user}}</a>
+                        <a href="{{ candidate.user|get_userid }}">{{candidate.user}}</a>
                         </td>
                     </tr>
                     {% endfor %}
