@@ -74,9 +74,3 @@ function clearForm(form) {
     });
 };
 
-<<<<<<< HEAD
-
-
-=======
-window.dateFormat = 'dd-M-yy';
->>>>>>> 6329c2f7e89a892deb61d84d87d16677224b26b1
