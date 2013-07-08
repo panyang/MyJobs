@@ -31,8 +31,8 @@ def get_gravatar(value):
     user_gravatar = user.gravatar
     return user_gravatar
     
-@register.filter(name='get_candidate_name')
-def get_candidate_name(value):   
+@register.filter(name='get_name')
+def get_name(value):   
     
     try:    
         user_id = Name.objects.get(user=value)
