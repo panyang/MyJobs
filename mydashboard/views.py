@@ -28,7 +28,7 @@ from registration.forms import *
 
 from myactivity.views import *
    
-@user_passes_test(User.objects.not_disabled)
+@user_passes_test(lambda u: User.objects.is_group_member(u, 'Employer'))
 def dashboard(request):
     """
     Notes
@@ -40,9 +40,8 @@ def dashboard(request):
     admins = CompanyUser.objects.filter(company=company.company)
     microsites = Microsite.objects.filter(company=company.company)   
     candidate_link = 'activity/'  
-    search_microsite = request.GET.get('microsite', False)
+    search_microsite = request.GET.get('microsite', False)    
     
-    #data = {}
     if request.method == 'POST':
         url = request.REQUEST.get('microsite')
         if url:
@@ -51,8 +50,7 @@ def dashboard(request):
             microsite = urlparse(url).netloc
         else:
             microsite = 'indiana.jobs'
-        #data['site'] = microsite
-
+        
         # Saved searches were created after this date...
         after = request.REQUEST.get('after')
         if after:
@@ -60,32 +58,28 @@ def dashboard(request):
         else:
             # Defaults to one week ago
             after = datetime.now() - timedelta(days=7)
-        # ... and before this one
+        
         before = request.REQUEST.get('before')
         if before:
             before = datetime.strptime(before, '%m/%d/%Y')
         else:
             # Defaults to the date and time that the page is accessed
-            before = datetime.now()
-        #data['after'] = after
-        #data['before'] = before
-
-        # Prefetch the user
+            before = datetime.now()        
+        
         searchescandidates = SavedSearch.objects.select_related('user')
 
         # All searches saved from a given microsite
         searchescandidates = searchescandidates.filter(url__contains=microsite)
 
         # Specific microsite searches saved between two dates
-        searchescandidates = searchescandidates.filter(created_on__range=[after, before]).order_by('-created_on')
-        #data['searches'] = searches        
+        searchescandidates = searchescandidates.filter(created_on__range=[after, before]).order_by('-created_on')           
         
     else:        
         
         #default dates and search
         after = datetime.now() - timedelta(days=40)
         before = datetime.now()
-        #var1 = request.session.get('microsite', False)
+        
         if search_microsite:
             microsite=search_microsite
         else:
@@ -119,4 +113,39 @@ def dashboard(request):
                               context_instance=RequestContext(request))
     
 
+@user_passes_test(lambda u: User.objects.is_group_member(u, 'Employer'))
+def candidate_information(request, user_id):
+    # gets returned with response to request
+    data_dict = {}
+    models = {}
+    name = "Name not given"
 
+    # user gets pulled out from id
+    try:
+        user = User.objects.get(id=user_id)
+    except User.DoesNotExist:
+        raise Http404
+
+    if user.opt_in_employers:
+        units = ProfileUnits.objects.filter(user=user)
+
+        for unit in units:
+            if unit.__getattribute__(unit.get_model_name()).is_displayed():
+                models.setdefault(unit.get_model_name(), []).append(
+                unit.__getattribute__(unit.get_model_name()))
+
+        # if Name ProfileUnit exsists
+        if models.get('name'):
+            name=models['name'][0]
+            del models['name']
+
+        searches = SavedSearch.objects.filter(user=user)
+    
+        data_dict = {'user_info': models,
+                     'primary_name': name,
+                     'the_user': user,
+                     'searches': searches}
+    else:
+        raise Http404
+    return render_to_response('myactivity/candidate_information.html', data_dict,
+                            RequestContext(request))
