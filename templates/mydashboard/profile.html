@@ -1,4 +1,6 @@
-            <div class="formBox">
+{% load user_ops %}
+
+        <div class="formBox">
                 <h3>Company Information</h3>
                 
                 <div class="accordion" id="details-company-information-collapse">
@@ -8,11 +10,16 @@
                     	</div>
                 		<div id="details-table" class="accordion-body">
                     	   <div class="accordion-inner">
-                            {% for admin in company_admins %}	
-                                {{admin.user}}<br>
-                            {% endfor %}
-                                								
-                                							
+                           <table id="row-link-table">                            
+                           {% for admin in company_admins %}
+                           <tr>
+                            <td>
+                                <img src="{{admin.user.get_gravatar_url}}&s=35" class="gravatar pull-left">                        
+                                <a href="{{ admin.user|get_userid }}">{{admin.user|get_candidate_name}}</a>
+                            </td>
+                           </tr>
+                           {% endfor %}
+                           </table>                       							
                            </div>
                         </div>
             		</div>
