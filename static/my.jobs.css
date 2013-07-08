@@ -1032,6 +1032,9 @@ form input[type='checkbox']{
     #id_label {
         margin-top: 0px !important;
     }
+    #saved-search-list .view_search {
+        cursor: pointer;
+    }
 
     /* Mobile Saved Search Listing */
 
