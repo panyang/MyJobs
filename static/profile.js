@@ -359,13 +359,6 @@ function manageModuleDisplay(module) {
         $('#'+module+'-new-section').parents('.profile-section').show();
         $("#moduleBank").show();
     }
-}
-
-function datepickerFunction() {
-    $(function() {
-        $( "input[id$='date']" ).datepicker({dateFormat: "yy-mm-dd",
-                                             constrainInput: false});
-    });
 };
 
 /*
