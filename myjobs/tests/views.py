@@ -232,7 +232,6 @@ class MyJobsViewsTests(TestCase):
         being created per message and no emails being sent
         """
 
-        self.client = TestClient()
         # Create activation profile for user; Used when disabling an account
         custom_signals.create_activation_profile(sender=self,
                                                  user=self.user,
@@ -256,13 +255,12 @@ class MyJobsViewsTests(TestCase):
         for log in EmailLog.objects.all():
             self.assertTrue(log.event in self.events)
 
-    def test_batch_one_month_old_message_digest(self):
+    def test_batch_month_old_message_digest_with_searhes(self):
         """
         Posting data created a month ago should result in one EmailLog instance
         being created per message and one email being sent per user
         """
 
-        self.client = TestClient()
         # Create activation profile for user; Used when disabling an account
         custom_signals.create_activation_profile(sender=self,
                                                  user=self.user,
@@ -296,6 +294,38 @@ class MyJobsViewsTests(TestCase):
         user = User.objects.get(pk=self.user.pk)
         self.assertEqual(user.last_response, month_ago)
 
+    def test_batch_month_old_message_digest_no_searches(self):
+        """
+        Posting data created a month ago should result in no emails being sent
+        if the user has no saved searches
+        """
+
+        # Create activation profile for user
+        custom_signals.create_activation_profile(sender=self,
+                                                 user=self.user,
+                                                 email=self.user.email)
+
+        month_ago = date.today() - timedelta(days=30)
+        self.user.last_response = month_ago - timedelta(days=1)
+        self.user.save()
+
+        messages = self.make_messages(month_ago)
+        response = self.client.post(reverse('batch_message_digest'),
+                                    data=messages,
+                                    content_type="text/json",
+                                    HTTP_AUTHORIZATION='BASIC %s'%
+                                        base64.b64encode(
+                                            'accounts%40my.jobs:secret'))
+        self.assertTrue(response.status_code, 200)
+        self.assertEqual(EmailLog.objects.count(), 3)
+        self.assertEqual(
+            EmailLog.objects.filter(
+                received=month_ago
+            ).count(), 3
+        )
+        process_batch_events()
+        self.assertEqual(len(mail.outbox), 0)
+
     def test_batch_month_and_week_old_message_digest(self):
         """
         Posting data created a month and a week ago should result in one
@@ -303,7 +333,6 @@ class MyJobsViewsTests(TestCase):
         and the user's opt-in status being set to False
         """
 
-        self.client = TestClient()
         # Create activation profile for user; Used when disabling an account
         custom_signals.create_activation_profile(sender=self,
                                                  user=self.user,
