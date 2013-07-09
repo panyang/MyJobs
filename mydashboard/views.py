@@ -41,7 +41,10 @@ def dashboard(request):
     company = Company.objects.get(admins=request.user)
     admins = CompanyUser.objects.filter(company=company.id)
     microsites = Microsite.objects.filter(company=company.id)   
-     
+    
+    #Removes main user from admin list to display other admins
+    admins = admins.exclude(user=request.user) 
+    
     search_microsite = request.GET.get('microsite', False)    
     
     if request.method == 'POST':
@@ -113,13 +116,16 @@ def dashboard(request):
         # If page is out of range (e.g. 9999), deliver last page of results.
         candidates = paginator.page(paginator.num_pages)    
     
+    admin_you = request.user
+    
     data_dict = {'company_name': company.name,
                  'company_microsites': microsites,
                  'company_admins': admins,                 
                  'after': after,
                  'before': before,                 
                  'candidates': candidates,
-                 'microsite': microsite,}
+                 'microsite': microsite,
+                 'admin_you': admin_you,}
     
     return render_to_response('mydashboard/mydashboard.html', data_dict,
                               context_instance=RequestContext(request))

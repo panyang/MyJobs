@@ -66,10 +66,10 @@ $(document).ready(function()
                 
                 <form action='/dashboard/' method='POST' class="move-left">
                     {% csrf_token %}
-                    <div class="span2 form-label">Date Range:</div><input name="after" type="text" placeholder="After this date" class="datepicker"> to <input name="before" type="text" placeholder="Before this date" class="datepicker"></br>
+                    <div class="span2 form-label"><strong>Date Range:</strong></div><input name="after" type="text" placeholder="After this date" class="datepicker"> to <input name="before" type="text" placeholder="Before this date" class="datepicker"></br>
                     <div class="span2 form-label">&nbsp;</div><input class="btn" type="submit" name="today" value="Today">&nbsp;<input class="btn" type="submit" name="seven" value="7 Days">&nbsp;<input class="btn" type="submit" name="thirty" value="30 days">
                     <br><br>
-                    <div class="span3 form-label">Filter by site:</div> 
+                    <div class="span3 form-label"><strong>Filter by site:</strong></div> 
                     <select name="microsite">
                         <option value="{{ company_name }}">All</option>
                         {% for url in company_microsites %}

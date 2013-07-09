@@ -8,13 +8,12 @@
                         <div class="accordion-heading details-heading">
                     	   <a class="accordion-toggle" data-toggle="collapse" data-parent="#details-collapse" href="#details-table">User List</a>
                     	</div>
-                		<div id="details-table" class="accordion-body">
+                		<div id="details-table" class="accordion-body collapse">
                     	   <div class="accordion-inner">
-                    	   
+                    	   {{ admin_you|get_name_obj_or_email }} (You)<br>
                            {% for admin in company_admins %}                                                  
-                                {{admin.user|get_name_obj_or_email}}<br>
-                           {% endfor %}
-                           
+                                {{admin.user|get_name_obj_or_email}}<br>                                
+                           {% endfor %}                           
                            </div>
                         </div>
             		</div>
