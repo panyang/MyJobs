@@ -22,21 +22,21 @@
                     {% else %}
                         <center><p>Welcome <b> 
                         {% with name_obj=user|get_name_obj %}
-                        {% if name_obj %}
-                            {{name_obj}}
-                        {% else %}
-                            {{user.email|truncatechars:23}}
-                        {% endif %}
+                            {% if name_obj %}
+                                {{name_obj}}
+                            {% else %}
+                                {{user.email|truncatechars:23}}
+                            {% endif %}
                         {% endwith %}!</b></p>
                     
                         <p><a href="{% url 'view_profile' %}">View Your Profile</a></p>
-                        {% endif %}
-                        {% if not user.is_active %}
-                        <div class="alert-message info">
-                          <p>{% trans "Your account doesn't have full access to MyJobs features! Please activate it using the activation link sent to your email. "%} <a href="{% url 'resend_activation' %}">{% trans "Resend my activation email." %}</a></p>
-                        </div>
-                        {% endif %}
-                        <a class="btn primary" href="{% url 'auth_logout' %}">Log Out</a></center>
+                    {% endif %}
+                    {% if not user.is_active %}
+                    <div class="alert-message info">
+                      <p>{% trans "Your account doesn't have full access to MyJobs features! Please activate it using the activation link sent to your email. "%} <a href="{% url 'resend_activation' %}">{% trans "Resend my activation email." %}</a></p>
+                    </div>
+                    {% endif %}
+                    <a class="btn primary" href="{% url 'auth_logout' %}">Log Out</a></center>
                 
                 {% else %}
                     <h3>Sign Up</h3>

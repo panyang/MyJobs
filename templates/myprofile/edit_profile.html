@@ -32,7 +32,7 @@
         </div>
         <div class="span10" id="profileTitleBar">
             {% with name_obj=user|get_name_obj %}
-            <h1>{% if name_obj %}{{name_obj}}{%else%}&nbsp;{%endif%}</h1>
+                <h1>{% if name_obj %}{{name_obj}}{%else%}&nbsp;{%endif%}</h1>
             {% endwith %}
             <h3>{{user.email}}</h3>
         </div>
