@@ -60,6 +60,7 @@ $(function() {
         Shows the datepicker that is already connected DateField in profile modals
         */
         datepickerButton: function(e) {
+            e.stopPropagation();    
             e.preventDefault();
             that = $(e.target).parents('.input-append');
             if ($('#ui-datepicker-div').css("display") == "block") {
