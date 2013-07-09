@@ -101,29 +101,23 @@ $(document).ready(function()
                     
                  </table>
                  
-                 <table id="pagination">
-                    <tr>
-                        <td>
-                    
-                        {% if candidates.has_previous %}
-                            <div class="pull-left"><a href="?page={{ candidates.previous_page_number }}&microsite={{microsite}}">previous</a></div>
-                        {% else %}
-                            &nbsp;
-                        {% endif %}
-                        </td>
-                  
-                        <td>  
-                        Page {{ candidates.number }} of {{ candidates.paginator.num_pages }}
-                        </td>
-                  
-                        <td>  
-
-                        {% if candidates.has_next %}
-                            <div class="pull-right"><a href="?page={{ candidates.next_page_number }}&microsite={{microsite}}">next</a></div>
-                        {% endif %}
-                        </td>
-                     </tr>
-                  </table>
+                 <div class="pull-left span3">
+                 {% if candidates.has_previous %}
+                    <a href="?page={{ candidates.previous_page_number }}&microsite={{microsite}}">previous</a>
+                 {% else %}
+                    &nbsp;
+                 {% endif %}
+                 </div>
+                 <div class="pull-left span2">
+                 Page {{ candidates.number }} of {{ candidates.paginator.num_pages }}
+                 </div>
+                 <div class="pull-left span2">
+                 {% if candidates.has_next %}
+                    <div class="pull-right"><a href="?page={{ candidates.next_page_number }}&microsite={{microsite}}">next</a></div>
+                 {% endif %}
+                 </div>
+                 
+                 
                   
              </div>
             
