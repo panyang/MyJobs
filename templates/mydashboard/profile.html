@@ -10,16 +10,11 @@
                     	</div>
                 		<div id="details-table" class="accordion-body">
                     	   <div class="accordion-inner">
-                           <table id="row-link-table">                            
-                           {% for admin in company_admins %}
-                           <tr>
-                            <td>
-                                <img src="{{admin.user.get_gravatar_url}}&s=35" class="gravatar pull-left">                        
-                                <a href="{{ admin.user|get_userid }}">{{admin.user|get_name_obj_or_email}}</a>
-                            </td>
-                           </tr>
+                    	   
+                           {% for admin in company_admins %}                                                  
+                                {{admin.user|get_name_obj_or_email}}<br>
                            {% endfor %}
-                           </table>                       							
+                           
                            </div>
                         </div>
             		</div>
