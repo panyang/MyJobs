@@ -1,12 +1,17 @@
 import re
-import newrelic.agent
 
+from django.conf import settings
 from django.utils.text import compress_string
 from django.utils.cache import patch_vary_headers
 
 from django import http
 from django.core.urlresolvers import reverse
 
+if settings.NEW_RELIC_TRACKING:
+    try:
+        import newrelic.agent
+    except ImportError:
+        pass
 
 class RedirectMiddleware:
     """
