@@ -17,7 +17,7 @@ def company_active_users_with_saved_searches(companies):
 		microsites = Microsite.objects.filter(company=company)
 		for microsite in microsites:
 			searches = SavedSearch.objects.select_related('user')
-			searches = searches.filter(url__contains=microsite.company)
+			searches = searches.filter(url__contains=microsite.url)
 			for search in searches:
 				active_users.setdefault(company.name, []).append(search.user)
 	return active_users

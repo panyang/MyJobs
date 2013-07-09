@@ -103,6 +103,6 @@ def candidate_information(request, user_id):
             raise Http404
     else:
         raise Http404
-        
+
     return render_to_response('myactivity/candidate_information.html', data_dict,
                             RequestContext(request))
