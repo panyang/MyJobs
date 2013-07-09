@@ -1,0 +1,17 @@
+Django==1.5
+South==0.7.6
+django-debug-toolbar==0.8.5
+pep8==1.3.3
+django-jenkins==0.13.0
+pyflakes==0.5.0
+coverage==3.5.3
+django-widget-tweaks==1.1.2
+factory-boy==1.2.0
+django-nose==1.1
+celery==3.0.15
+django-celery==3.0.11
+beautifulsoup4==4.1.3
+newrelic==1.11.0.55
+django-tastypie==0.9.15
+git+git://github.com/arneb/django-messages.git@bc443623fde4945a841c48665b477a529f4ec676
+testfixtures==3.0.0
