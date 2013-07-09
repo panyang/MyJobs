@@ -38,10 +38,9 @@ def dashboard(request):
     
     settings = {'user': request.user}
     
-    #company = Company.objects()    
-    company = CompanyUser.objects.get(user=request.user)
-    admins = CompanyUser.objects.filter(company=company.company)
-    microsites = Microsite.objects.filter(company=company.company)   
+    company = Company.objects.get(admins=request.user)
+    admins = CompanyUser.objects.filter(company=company.id)
+    microsites = Microsite.objects.filter(company=company.id)   
      
     search_microsite = request.GET.get('microsite', False)    
     
@@ -52,7 +51,7 @@ def dashboard(request):
                 url = '//' + url
             microsite = urlparse(url).netloc
         else:
-            microsite = company.company
+            microsite = company.name
         
         # Saved searches were created after this date...
         if 'today' in request.POST:
@@ -96,11 +95,12 @@ def dashboard(request):
         if search_microsite:
             microsite=search_microsite
         else:
-            microsite=company.company
+            microsite=company.name
         
         searchescandidates = SavedSearch.objects.filter(url__contains=microsite)        
         searchescandidates = searchescandidates.filter(created_on__range=[after, before]).order_by('-created_on')
-    
+        microsite='All Microsites'        
+            
     paginator = Paginator(searchescandidates, 5) # Show 5 candidates per page
     page = request.GET.get('page')
     
@@ -111,9 +111,9 @@ def dashboard(request):
         candidates = paginator.page(1)
     except EmptyPage:
         # If page is out of range (e.g. 9999), deliver last page of results.
-        candidates = paginator.page(paginator.num_pages)
+        candidates = paginator.page(paginator.num_pages)    
     
-    data_dict = {'company_name': company.company,
+    data_dict = {'company_name': company.name,
                  'company_microsites': microsites,
                  'company_admins': admins,                 
                  'after': after,
