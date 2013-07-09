@@ -19,6 +19,7 @@ from myjobs.models import User, EmailLog
 from myjobs.tests.factories import *
 
 from myprofile.models import *
+from mysearches.models import SavedSearch
 from registration.forms import *
 from registration.models import ActivationProfile
 from registration import signals as custom_signals
@@ -270,6 +271,7 @@ class MyJobsViewsTests(TestCase):
         month_ago = date.today() - timedelta(days=30)
         self.user.last_response = month_ago - timedelta(days=1)
         self.user.save()
+        SavedSearch(user=self.user).save()
 
         # Submit a batch of events created a month ago
         # The owners of these addresses should be sent an email

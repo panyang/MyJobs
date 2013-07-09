@@ -66,7 +66,7 @@ def process_batch_events():
         user = User.objects.get_email_owner(email=log.email)
         if not user:
             # This can happen if a user removes a secondary address or deletes
-            # their account before interacting with an email and the batch
+            # their account between interacting with an email and the batch
             # process being run
             # There is no course of action but to ignore that event
             continue
@@ -77,11 +77,14 @@ def process_batch_events():
         log.save()
 
     # These users have not responded in a month. Send them an email.
-    not_responding = User.objects.filter(last_response=now-timedelta(days=30))
-    for user in not_responding:
-        message = render_to_string('myjobs/email_inactive.html')
-        user.email_user('Account Inactivity', message,
-                        settings.DEFAULT_FROM_EMAIL)
+    inactive = User.objects.select_related('savedsearch_set')
+    inactive = inactive.filter(last_response=now-timedelta(days=30))
+
+    for user in inactive:
+        if user.savedsearch_set.exists():
+            message = render_to_string('myjobs/email_inactive.html')
+            user.email_user('Account Inactivity', message,
+                            settings.DEFAULT_FROM_EMAIL)
 
     # These users have not responded in a month and a week. Stop sending emails.
     stop_sending = User.objects.filter(
