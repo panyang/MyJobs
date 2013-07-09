@@ -79,7 +79,7 @@ $(document).ready(function()
                 </form>
                 <br>
                 <hr>
-                <div class="pull-left"><strong>Activity between {{after}} and {{before}} for {{ microsite }}</strong></div><br>
+                <div class="pull-left"><strong>Activity between {{after.date}} and {{before.date}} for {{ microsite }}</strong></div><br>
                   
                  <table id="row-link-table">                            
                     {% for candidate in candidates %}
@@ -94,7 +94,7 @@ $(document).ready(function()
                         <td>
                         <strong>{% if candidate.label %}{{candidate.label}}{% else %}Unlabeled{% endif %}</strong><br>
                         {{candidate.url}}<br>
-                        {{candidate.created_on}}                        
+                        {{candidate.created_on.date}}                        
                         </td>
                     </tr>
                     {% endfor %}

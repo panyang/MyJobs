@@ -37,7 +37,8 @@ def dashboard(request):
     """
     
     settings = {'user': request.user}
-        
+    
+    #company = Company.objects()    
     company = CompanyUser.objects.get(user=request.user)
     admins = CompanyUser.objects.filter(company=company.company)
     microsites = Microsite.objects.filter(company=company.company)   
@@ -59,7 +60,7 @@ def dashboard(request):
             after = datetime.strptime(after, '%m/%d/%Y')
         else:
             # Defaults to one week ago
-            after = datetime.now() - timedelta(days=7)
+            after = datetime.now() - timedelta(days=30)
         
         before = request.REQUEST.get('before')
         if before:
