@@ -97,6 +97,9 @@ table#row-link-table {
     border-bottom: 1px solid #eae6de;
     padding: 4px;    
 }
+.move-left {
+    margin-left: -45px;
+}
 
 /*Ajax Indicator*/
 #ajax-busy {
