@@ -41,7 +41,7 @@ def dashboard(request):
     company = CompanyUser.objects.get(user=request.user)
     admins = CompanyUser.objects.filter(company=company.company)
     microsites = Microsite.objects.filter(company=company.company)   
-    candidate_link = 'activity/'  
+     
     search_microsite = request.GET.get('microsite', False)    
     
     if request.method == 'POST':
@@ -108,8 +108,7 @@ def dashboard(request):
                  'after': after,
                  'before': before,                 
                  'candidates': candidates,
-                 'microsite': microsite,
-                 'candidate_link': candidate_link,}
+                 'microsite': microsite,}
     
     return render_to_response('mydashboard/mydashboard.html', data_dict,
                               context_instance=RequestContext(request))

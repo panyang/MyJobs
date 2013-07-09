@@ -19,17 +19,6 @@ def get_distinct_users(values):
 
     return users
     
-@register.filter(name='get_userid')
-def get_userid(value):    
-    user = User.objects.get(email=value)
-    user_id = user.id
-    return user_id
-    
-@register.filter(name='get_gravatar')
-def get_gravatar(value):    
-    user = User.objects.get(email=value)
-    user_gravatar = user.gravatar
-    return user_gravatar
-    
+
 
     
