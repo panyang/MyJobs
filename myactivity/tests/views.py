@@ -83,7 +83,7 @@ class MyActivityViewsTests(TestCase):
         response = self.client.post(reverse('candidate_information', kwargs={'user_id':self.candidate_user.id}))
         self.assertEqual(response.status_code, 404)
 
-    def test_candidate_page_load_with_profileunits_activites(self):
+    def test_candidate_page_load_with_profileunits_and_activites(self):
         # Building User with ProfileUnits
         self.name = PrimaryNameFactory(user = self.candidate_user)
         self.second_email = SecondaryEmailFactory(user = self.candidate_user)
@@ -114,17 +114,15 @@ class MyActivityViewsTests(TestCase):
         self.assertEqual(len(info), 8)
         self.assertEqual(response.status_code, 200)
 
-    def test_candidate_page_load_without_profileunits_activites(self):
+    def test_candidate_page_load_without_profileunits_and_activites(self):
         saved_search = SavedSearch.objects.get(user=self.candidate_user)
-        del saved_search
+        saved_search.delete()
         response = self.client.post(reverse('candidate_information', kwargs={'user_id':self.candidate_user.id}))
 
         soup = BeautifulSoup(response.content)
-        import ipdb
-        ipdb.set_trace()
         titles = soup.findAll('a', {'class':'accordion-toggle'})
         info = soup.findAll('li')
 
         self.assertEqual(len(titles), 0)
         self.assertEqual(len(info), 5)
-        self.assertEqual(response.status_code, 200)
+        self.assertEqual(response.status_code, 404)
