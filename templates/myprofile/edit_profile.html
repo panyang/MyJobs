@@ -1,8 +1,10 @@
 {% extends "base.html" %}
 {% load common_tags %}
 {% block site-title %}
-    <title>{% if name_obj %}{{ name_obj }} on{% else %}&nbsp;{% endif %} My.jobs</title>
-    <meta name="title" content="{% if name_obj %}{{ name_obj }} on{% else %}&nbsp;{% endif %} My.jobs">
+    {% with name_obj=user|get_name_obj %}
+        <title>{% if name_obj %}{{ name_obj }} on{% else %}&nbsp;{% endif %} My.jobs</title>
+        <meta name="title" content="{% if name_obj %}{{ name_obj }} on{% else %}&nbsp;{% endif %} My.jobs">
+    {% endwith %}
 {% endblock %}
 {% load i18n %}
 {% block meta-extra %}
@@ -29,7 +31,9 @@
             <img src="{{user.get_gravatar_url}}&s=140">
         </div>
         <div class="span10" id="profileTitleBar">
+            {% with name_obj=user|get_name_obj %}
             <h1>{% if name_obj %}{{name_obj}}{%else%}&nbsp;{%endif%}</h1>
+            {% endwith %}
             <h3>{{user.email}}</h3>
         </div>
         <div class="span10" id="profileSubtitleBar">

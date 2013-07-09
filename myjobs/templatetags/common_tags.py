@@ -11,22 +11,21 @@ def cache_buster():
     return cache_buster
 
 @register.filter
-def get_name_obj_or_email(user):
+def get_name_obj(user):
     """
-    Retrieve the given user's primary name (if one exists and is not blank) or
-    email address
+    Retrieve the given user's primary name (if one exists) or an empty string
 
     Inputs:
     :user: User instance
 
     Outputs:
-    :name: Name instance or email address
+    :name: Name instance or blank
     """
     try:
         name = user.profileunits_set.get(content_type__name="name",
                                          name__primary=True).name
         if not name.get_full_name():
-            name = user.email
+            name = ""
     except ProfileUnits.DoesNotExist:
-        name = user.email
+        name = ""
     return name
