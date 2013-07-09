@@ -29,8 +29,6 @@ def edit_profile(request):
                      verbose - the displayable title of the module
                      name - the module name as it's named in the models.
                      items - all the instances in that module for the user
-
-    :name_obj:       The name of the user or, if not provided, the user's email
     """
 
     settings = {'user': request.user}
