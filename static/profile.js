@@ -135,9 +135,9 @@ $(function() {
                             $("[for='id_employmenthistory-end_date']").hide();
                         }
                         $('#edit_modal').modal();
-                        add_date_button($('#edit_modal'));
                         $('input[id$="date"]').datepicker({dateFormat: window.dateFormat,
                                                            constrainInput: false});
+                        add_date_button($('#edit_modal'));
                     }
                 });            
             } else {
@@ -369,8 +369,8 @@ somewhere in it's ID.
 and puts up css for backposition. Called glyphicons.
 */
 function add_date_button(modal) {
-    modal.find('[id$="date"]').parent().addClass('input-append');
-    modal.find('[id$="date"]').after('<span class="btn add-on calendar"><i class="icon-search icon-calendar"></i></span>');
+    modal.find('[class="hasDatepicker"]').parent().addClass('input-append');
+    modal.find('[class="hasDatepicker"]').after('<span class="btn add-on calendar"><i class="icon-search icon-calendar"></i></span>');
 }
 
 $(document).ready(function() {
