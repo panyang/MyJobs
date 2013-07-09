@@ -6,6 +6,6 @@ from myjobs.views import *
 
 urlpatterns = patterns('MyJobs.mydashboard.views',
     url(r'^$', 'dashboard', name='dashboard'),
-    url(r'^(?P<user_id>\d+)/$', 'candidate_information', name='candidate_information'),    
+    url(r'^(?P<user_id>\d+)/?$', 'candidate_information', name='candidate_information'),    
 )
 
