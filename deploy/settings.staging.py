@@ -1,7 +1,7 @@
 from secrets import PROD_DB_PASSWD
 from default_settings import *
 
-DEBUG = False
+DEBUG = True
 
 DATABASES = {
     'default': {
@@ -17,7 +17,3 @@ DATABASES = {
 }
 
 ALLOWED_HOSTS = ['my.jobs', 'localhost']
-
-# Add newrelic here since it shouldn't be used on non-production servers
-MIDDLEWARE_CLASSES.append('middleware.NewRelic')
-NEW_RELIC_TRACKING = True
