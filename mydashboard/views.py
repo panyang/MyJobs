@@ -55,19 +55,29 @@ def dashboard(request):
             microsite = company.company
         
         # Saved searches were created after this date...
-        after = request.REQUEST.get('after')
-        if after:
-            after = datetime.strptime(after, '%m/%d/%Y')
-        else:
-            # Defaults to one week ago
+        if 'today' in request.POST:
+            after = datetime.now()
+            before = datetime.now()
+        elif 'seven' in request.POST:
+            after = datetime.now() - timedelta(days=7)
+            before = datetime.now()
+        elif 'thirty' in request.POST:
             after = datetime.now() - timedelta(days=30)
-        
-        before = request.REQUEST.get('before')
-        if before:
-            before = datetime.strptime(before, '%m/%d/%Y')
+            before = datetime.now()
         else:
-            # Defaults to the date and time that the page is accessed
-            before = datetime.now()        
+            after = request.REQUEST.get('after')
+            if after:
+                after = datetime.strptime(after, '%m/%d/%Y')
+            else:
+                # Defaults to one week ago
+                after = datetime.now() - timedelta(days=30)
+        
+            before = request.REQUEST.get('before')
+            if before:
+                before = datetime.strptime(before, '%m/%d/%Y')
+            else:
+                # Defaults to the date and time that the page is accessed
+                before = datetime.now()        
         
         searchescandidates = SavedSearch.objects.select_related('user')
 
