@@ -250,6 +250,7 @@ class MyJobsViewsTests(TestCase):
                                             'accounts%40my.jobs:secret'))
         self.assertEqual(response.status_code, 200)
         self.assertEqual(EmailLog.objects.count(), 3)
+        process_batch_events()
         self.assertEqual(len(mail.outbox), 0)
 
         for log in EmailLog.objects.all():
