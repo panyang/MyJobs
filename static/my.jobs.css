@@ -1237,7 +1237,7 @@ form input[type='checkbox']{
         display: block;
     }
     .mobile-heading-candidate-view .btn.primary{
-        width:100%;
+        display: block;
         margin-top: 10px;
     }
     #mobile-name-heading{
