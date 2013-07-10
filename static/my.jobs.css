@@ -1255,7 +1255,7 @@ form input[type='checkbox']{
     #candidate-flag{
         font-size: 1.2em;
     }
-    .mobile-heading-candidate-view a{
+    .mobile-heading-candidate-view a.href-small-icon{
         padding: 0px;
         border: 0px;
     }
