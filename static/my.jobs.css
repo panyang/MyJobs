@@ -85,7 +85,6 @@ table#row-link-table {
     list-style-type: none;
     margin-left: -10px;
 }
-
 .link-list {     
     list-style-type: none; 
     background-color: rgb(250, 250, 250);
@@ -103,6 +102,9 @@ table#row-link-table {
 }
 .move-left {
     margin-left: -45px;
+}
+.text-middle {
+    vertical-align: middle;   
 }
 
 /*Ajax Indicator*/
