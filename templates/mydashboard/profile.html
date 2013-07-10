@@ -12,7 +12,7 @@
                     	   <div class="accordion-inner">
                     	   {{ admin_you|get_name_obj }} (You)<br>
                            {% for admin in company_admins %}                                                  
-                                {{admin.user|get_name_obj}}<br>                                
+                                {{ admin.user|get_name_obj }}<br>                                
                            {% endfor %}                           
                            </div>
                         </div>
