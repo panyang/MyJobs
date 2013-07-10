@@ -9,12 +9,12 @@
                     	   <a class="accordion-toggle" data-toggle="collapse" data-parent="#details-collapse" href="#details-table">User List</a>
                     	</div>
                 		<div id="details-table" class="accordion-body">
-                    	   <div class="accordion-inner">
-                    	   {{ admin_you|get_name_obj }} (You)<br>
-                           {% for admin in company_admins %}                                                  
-                                {{ admin.user|get_name_obj }}<br>                                
-                           {% endfor %}                           
-                           </div>
+                           <ul class="link-list">
+                                <li>{{ admin_you|get_name_obj }} (You)</li>
+                                {% for admin in company_admins %}                                                  
+                                    <li>{{ admin.user|get_name_obj }}</li>                                
+                                {% endfor %} 
+                           </ul>
                         </div>
             		</div>
        			 </div>
