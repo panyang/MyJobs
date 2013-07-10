@@ -89,7 +89,7 @@ $(document).ready(function()
                         <img src="{{candidate.user.get_gravatar_url}}&s=35" class="gravatar pull-left">                        
                         </td>
                         <td>
-                        <strong>{{candidate.user|get_name_obj_or_email}}</strong><br>
+                        <strong>{{candidate.user|get_name_obj}}</strong><br>
                         <a href="{{ candidate.user.id }}">{{candidate.user}}</a>
                         </td>
                         <td>
