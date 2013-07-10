@@ -35,7 +35,7 @@ def get_name_obj(user):
 @register.assignment_tag
 def is_a_group_member(user, group):
     """ 
-    Determines whether or not the user is a member of the Employer group
+    Determines whether or not the user is a member of a group
 
     Inputs:
     :user: User instance
