@@ -34,13 +34,13 @@ $(document).ready(function(){
 		container = $(this).parent().parent();
 		container.removeClass('show-activity');
 		container.addClass('show-details');
-		mobileToggleAccordian();
+		mobileToggleAccordion();
 	});
 	$('[id$=activity-toggle]').click(function(){
 		container = $(this).parent().parent();
 		container.removeClass('show-details');
 		container.addClass('show-activity');
-		mobileToggleAccordian();
+		mobileToggleAccordion();
 	});
 });
 
