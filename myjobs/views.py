@@ -35,6 +35,8 @@ class Privacy(TemplateView):
 class Terms(TemplateView):
     template_name = "terms.html"
 
+class Contact(TemplateView):
+    template_name = "contact.html"
 
 def home(request):
     """
