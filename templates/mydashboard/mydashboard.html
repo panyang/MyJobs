@@ -70,7 +70,7 @@ $(document).ready(function()
                     <div class="span2 form-label">&nbsp;</div><input class="btn" type="submit" name="today" value="Today">&nbsp;<input class="btn" type="submit" name="seven_days" value="7 Days">&nbsp;<input class="btn" type="submit" name="thirty_days" value="30 days">
                     <br><br>
                     <div class="span3 form-label"><strong>Filter by site:</strong></div> 
-                    <select name="microsite">
+                    <select name="microsite" class="btn">
                         <option value="{{ company_name }}">All</option>
                         {% for url in company_microsites %}
                         <option value="{{ url.url|cut:'http://' }}">{{ url.url|cut:"http://" }}</option>
