@@ -54,7 +54,7 @@
                                     {% endif %}
                                     <li class=""><a href="{% url 'view_profile' %}">{% trans "My Profile" %}</a></li>
                                     {% if group_member and user.is_active and company_name|length >= 1%}
-                                        <li class=""><a href="">
+                                        <li class=""><a href="dashboard">
                                         {% if company_name|length > 1 %}
                                             {% trans "Company Dashboards" %}
                                         {% else %}
@@ -68,7 +68,7 @@
                                     {% endif %}
                                     <li class="active"><a href="{% url 'view_profile' %}">{% trans "My Profile" %}</a></li>
                                     {% if group_member and user.is_active and company_name|length >= 1%}
-                                        <li class=""><a href="">
+                                        <li class=""><a href="dashboard">
                                         {% if company_name|length > 1 %}
                                             {% trans "Company Dashboards" %}
                                         {% else %}
@@ -82,7 +82,7 @@
                                     {% endif %}                                    
                                     <li class=""><a href="{% url 'view_profile' %}">{% trans "My Profile" %}</a></li>
                                     {% if group_member and user.is_active and company_name|length >= 1%}
-                                        <li class=""><a href="">
+                                        <li class=""><a href="dashboard">
                                         {% if company_name|length > 1 %}
                                             {% trans "Company Dashboards" %}
                                         {% else %}
@@ -96,7 +96,7 @@
                         <div class="pull-right">                                               
                         <div class="menu-bar span2 pagination-right">                            
                             <ul id="nav" class="pull-right">
-                                <li><a href="" class="main-nav">
+                                <li><a href="dashboard" class="main-nav">
                                         <img src="{{user.get_gravatar_url}}">
                                         <span class="arrow"></span>
                                     </a>
@@ -112,7 +112,7 @@
                                             {% if user.is_active %}
                                                 <li><a id="savedsearch_link" href="{% url 'saved_search_main' %}">{% trans "Saved Searches" %}</a></li>
                                                 {% if group_member and user.is_active and company_name|length >= 1%}
-                                                    <li><a id="company_dashboard_link" href="">
+                                                    <li><a id="company_dashboard_link" href="dashboard">
                                                     {% if company_name|length > 1 %}
                                                         {% trans "Company Dashboards" %}
                                                     {% else %}
