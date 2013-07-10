@@ -1,0 +1,40 @@
+{% extends 'static_page.html' %}
+{% load i18n %}
+{% block site-title %}
+        <title>Contact My.jobs</title>
+        <meta name="title" content="Contact My.jobs">
+{% endblock %}
+{% block meta-extra %}{% endblock %}
+{% block header %}
+    <h1>Contact My.jobs</h1>
+{% endblock %}
+
+
+{% block text %}
+<fieldset>
+	<div class="span3 form-label pull-left initial">
+		<label>First Name:</label>
+	</div>
+	<div class="profile-form-input">
+		<input maxlength="60" placeholder="Full Name" required type="text">
+	</div>
+	<div class="clear"></div>
+	<div class="span3 form-label pull-left initial">
+		<label>Email:</label>
+	</div>
+	<div class="profile-form-input">
+		<input maxlength="60" placeholder="Email" required type="text">
+	</div>
+	<div class="clear"></div>
+	<div class="span3 form-label pull-left initial">
+		<label>Comments:</label>
+	</div>
+	<div class="profile-form-input">
+		<textarea class="form-textarea"></textarea>
+	</div>
+	<div class="clear"></div>
+	<div class="span3 form-label pull-right initial">
+		<input type="submit" class="submit" value="Submit">
+	</div>
+</fieldset>
+{% endblock %}
