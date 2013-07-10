@@ -54,7 +54,7 @@
                                     {% endif %}
                                     <li class=""><a href="{% url 'view_profile' %}">{% trans "My Profile" %}</a></li>
                                     {% if group_member and user.is_active and company_name|length >= 1%}
-                                        <li class=""><a href="dashboard">
+                                        <li class=""><a href="{% url 'dashboard' %}">
                                         {% if company_name|length > 1 %}
                                             {% trans "Company Dashboards" %}
                                         {% else %}
@@ -68,7 +68,7 @@
                                     {% endif %}
                                     <li class="active"><a href="{% url 'view_profile' %}">{% trans "My Profile" %}</a></li>
                                     {% if group_member and user.is_active and company_name|length >= 1%}
-                                        <li class=""><a href="dashboard">
+                                        <li class=""><a href="{% url 'dashboard' %}">
                                         {% if company_name|length > 1 %}
                                             {% trans "Company Dashboards" %}
                                         {% else %}
@@ -82,7 +82,7 @@
                                     {% endif %}                                    
                                     <li class=""><a href="{% url 'view_profile' %}">{% trans "My Profile" %}</a></li>
                                     {% if group_member and user.is_active and company_name|length >= 1%}
-                                        <li class=""><a href="dashboard">
+                                        <li class=""><a href="{% url 'dashboard' %}">
                                         {% if company_name|length > 1 %}
                                             {% trans "Company Dashboards" %}
                                         {% else %}
@@ -118,7 +118,7 @@
                                             {% if user.is_active %}
                                                 <li><a id="savedsearch_link" href="{% url 'saved_search_main' %}">{% trans "Saved Searches" %}</a></li>
                                                 {% if group_member and user.is_active and company_name|length >= 1%}
-                                                    <li><a id="company_dashboard_link" href="dashboard">
+                                                    <li><a id="company_dashboard_link" href="{% url 'dashboard' %}">
                                                     {% if company_name|length > 1 %}
                                                         {% trans "Company Dashboards" %}
                                                     {% else %}

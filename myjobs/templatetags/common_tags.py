@@ -45,7 +45,10 @@ def is_a_group_member(user, group):
     Boolean value indicating whether or not the user is a member of the requested group
     """
 
-    return User.objects.is_group_member(user, group)
+    try:
+        return User.objects.is_group_member(user, group)
+    except ValueError:
+        return False
 
 @register.assignment_tag
 def get_company_name(user):
