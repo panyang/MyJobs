@@ -1244,7 +1244,7 @@ form input[type='checkbox']{
         display: block;
     }
     .mobile-heading-candidate-view .btn.primary{
-        width:100%;
+        display: block;
         margin-top: 10px;
     }
     #mobile-name-heading{
@@ -1262,7 +1262,7 @@ form input[type='checkbox']{
     #candidate-flag{
         font-size: 1.2em;
     }
-    .mobile-heading-candidate-view a{
+    .mobile-heading-candidate-view a.href-small-icon{
         padding: 0px;
         border: 0px;
     }

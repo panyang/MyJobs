@@ -20,7 +20,7 @@
     </div>
     <div class="row default-heading-candidate-view">
     	<span class="span6">
-    		<input type="button" class="btn primary" value="Back to Company Dashboard" />
+    		<a class="btn primary" href="/dashboard/">Back to Company Dashboard</a>
     	</span>
     </div>
     <div class="span4 mobile-heading-candidate-view">
@@ -30,20 +30,20 @@
             <br />
             <span id="candidate-flag">Candidate Information</span>
             <br />
-            <a href="mailto:{{the_user.email}}"><img id="email-img" src="{{STATIC_URL}}images/rsz_1envelope4.jpg" /></a>
+            <a class="href-small-icon" href="mailto:{{the_user.email}}"><img id="email-img" src="{{STATIC_URL}}images/rsz_1envelope4.jpg" /></a>
         </div>
         <div class="clear"></div>
-        <input type="button" class="btn primary" value="Back to Company Dashboard" />
+        <a class="btn primary" href="/dashboard/">Back to Company Dashboard</a>
         <div class="clear"></div>
     </div>
     <div class="clear"></div>
     <br />
-    <div class="row">
+    <div class="row" id="candidate-content">
         <div class="span4 default-heading-candidate-view">
 			<img src="{{the_user.get_gravatar_url}}&s=100">
             <br />
             <p>
-                <a href="mailto:{{the_user.email}}"><img src="{{STATIC_URL}}images/rsz_1envelope4.jpg" /><span style="margin-top:5px; margin-left:5px;">{{the_user.email}}</span></a>
+                <a class="href-small-icon" href="mailto:{{the_user.email}}"><img src="{{STATIC_URL}}images/rsz_1envelope4.jpg" /><span style="margin-top:5px; margin-left:5px;">{{the_user.email}}</span></a>
             </p>
         </div>
         {% if user_info %}
