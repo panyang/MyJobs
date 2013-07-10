@@ -60,10 +60,10 @@ def dashboard(request):
         if 'today' in request.POST:
             after = datetime.now()
             before = datetime.now()
-        elif 'seven' in request.POST:
+        elif 'seven_days' in request.POST:
             after = datetime.now() - timedelta(days=7)
             before = datetime.now()
-        elif 'thirty' in request.POST:
+        elif 'thirty_days' in request.POST:
             after = datetime.now() - timedelta(days=30)
             before = datetime.now()
         else:
