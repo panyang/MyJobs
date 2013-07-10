@@ -96,22 +96,22 @@ class MyActivityViewsTests(TestCase):
         response = self.client.post(reverse('candidate_information', kwargs={'user_id':self.candidate_user.id}))
 
         soup = BeautifulSoup(response.content)
-        titles = soup.findAll('a', {'class':'accordion-toggle'})
-        info = soup.findAll('li')
+        titles = soup.find('div', {'id':'candidate-content'}).findAll('a', {'class':'accordion-toggle'})
+        info = soup.find('div', {'id':'candidate-content'}).findAll('li')
 
         self.assertEqual(len(titles), 6)
-        self.assertEqual(len(info), 24)
+        self.assertEqual(len(info), 16)
         self.assertEqual(response.status_code, 200)
 
     def test_candidate_page_load_without_profileunits_with_activites(self):
         response = self.client.post(reverse('candidate_information', kwargs={'user_id':self.candidate_user.id}))
 
         soup = BeautifulSoup(response.content)
-        titles = soup.findAll('a', {'class':'accordion-toggle'})
-        info = soup.findAll('li')
+        titles = soup.find('div', {'id':'candidate-content'}).findAll('a', {'class':'accordion-toggle'})
+        info = soup.find('div', {'id':'candidate-content'}).findAll('li')
 
         self.assertEqual(len(titles), 1)
-        self.assertEqual(len(info), 11)
+        self.assertEqual(len(info), 3)
         self.assertEqual(response.status_code, 200)
 
     def test_candidate_page_load_without_profileunits_and_activites(self):
@@ -120,9 +120,7 @@ class MyActivityViewsTests(TestCase):
         response = self.client.post(reverse('candidate_information', kwargs={'user_id':self.candidate_user.id}))
 
         soup = BeautifulSoup(response.content)
-        titles = soup.findAll('a', {'class':'accordion-toggle'})
-        info = soup.findAll('li')
+        info = soup.find('div', {'id':'candidate-content'})
 
-        self.assertEqual(len(titles), 0)
-        self.assertEqual(len(info), 8)
+        self.assertFalse(info)
         self.assertEqual(response.status_code, 404)
