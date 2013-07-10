@@ -90,7 +90,7 @@ MIDDLEWARE_CLASSES = (
     'middleware.RedirectMiddleware',
     'middleware.XsSharing',
     'django.middleware.locale.LocaleMiddleware',
-)
+    )
 
 AUTHENTICATION_BACKENDS = (
     'backends.CaseInsensitiveAuthBackend',
@@ -233,3 +233,5 @@ GRAVATAR_URL_PREFIX = "http://www.gravatar.com/avatar/"
 GRAVATAR_URL_DEFAULT = 'mm'
 
 CAPTCHA_AJAX = True
+
+NEW_RELIC_TRACKING = False

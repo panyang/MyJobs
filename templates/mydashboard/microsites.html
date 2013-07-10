@@ -1,0 +1,14 @@
+            <div class="formBox">
+                
+                <h3>Microsites</h3>
+                
+                <ul class="link-list">
+                {% for url in company_microsites %}
+                    <li>
+                    <strong>{{ url.url|cut:"http://" }}</strong><br>
+                    <a href="{{url.url}}" target="_blank">{{url.url}}</a>
+                    </li>
+                {% endfor %}
+                </ul>
+                
+            </div>

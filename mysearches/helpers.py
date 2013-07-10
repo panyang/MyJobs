@@ -1,7 +1,8 @@
 import json
 import urllib2
 from bs4 import BeautifulSoup
-from urlparse import urlparse
+from urlparse import urlparse, urlunparse, parse_qs
+from urllib import urlencode
 from dateutil import parser as dateparser
 import datetime
 
@@ -117,3 +118,28 @@ def parse_rss(feed_url, frequency='W', num_items=20, offset=0):
 
 def date_in_range(start, end, x):
     return start <= x <= end
+
+def url_sort_options(feed_url, sort_by):
+    """
+    Updates urls based on sort by option. 
+
+    Inputs:
+    :feed_url:      URL of an RSS feed 
+    :sort_by:       What the feed should be sorted by ('Relevance' or 'Date')
+
+    Output:
+    :feed_url:      URL updated with sorting options. 'Date' has no additions to
+                    the URL and  'Relevance' should has '&date_sort=False' added
+    """
+
+    unparsed_feed = urlparse(feed_url)
+    query = parse_qs(unparsed_feed.query)
+    query.pop('date_sort', None)
+
+    if sort_by == "Relevance":
+        query.update({'date_sort': 'False'})
+
+    unparsed_feed = unparsed_feed._replace(query = urlencode(query, True))
+    feed_url = urlunparse(unparsed_feed)
+
+    return feed_url

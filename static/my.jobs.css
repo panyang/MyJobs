@@ -29,6 +29,11 @@ a{
 a:hover{
     color: #a42e14;
     }
+/* Sort by field in saved search save/edit */
+label[for^='id_sort_by'], label[for^='id_edit_sort_by'] {
+    display: inline;
+    margin: 5px;
+}
 .profile-unit h4 {
     color: #000;    
     }
@@ -50,6 +55,56 @@ a:hover{
 
 #moduleBank {    
     z-index:100;  
+}
+
+table#row-link-table {
+    border-collapse: collapse;   
+}
+#row-link-table tr {
+    background-color: rgb(250, 250, 250);    
+}
+#row-link-table tr:hover {
+    background-color: #d2cfc7;
+}
+#row-link-table th {
+    background-color: rgb(250, 250, 250);
+    text-align: left;
+    border-top: none;
+}
+#row-link-table th, #row-link-table td {
+    padding: 2px;
+}
+#row-link-table td:hover {
+    cursor: pointer;
+}
+#row-link-table td {
+    padding: 5px;    
+    border-bottom: 1px solid #eae6de;
+}
+#row-link-table ul {
+    list-style-type: none;
+    margin-left: -10px;
+}
+.link-list {     
+    list-style-type: none; 
+    background-color: rgb(250, 250, 250);
+    margin: 0;
+    padding: 0;    
+}
+.link-list li {
+    display: block;
+    background-color: rgb(250, 250, 250);
+    border-bottom: 1px solid #eae6de;
+    padding: 5px;      
+}
+.link-list li:last-child {
+    border: none;
+}
+.move-left {
+    margin-left: -45px;
+}
+.text-middle {
+    vertical-align: middle;   
 }
 
 /*Ajax Indicator*/
@@ -182,12 +237,31 @@ ul.ui-autocomplete{
     color: #fff;
     font-size: .8em;
 }
+.menu-tabs {
+    border-bottom: 0px solid #333;
+}
+.topbar .menu-tabs a{
+    border: 1px solid #333 !important;
+    background-color: #333;
+    color: #FFF;
+    font-weight: bold;
+    text-decoration: none;
+    padding-top: 4px !important;
+    padding-bottom: 5px !important;
+    }
+.topbar .menu-tabs a:hover{
+    color: #FFF;
+    background-color: #b34529;
+    }
+.menu-tabs .active a {
+    background-color: #b34529 !important;
+    }
 .formBox select {
     width: 216px;
-}
+    }
 form select{
     width: 264px;
-}
+    }
 #title{
     padding-top: 60px;
     padding-bottom: 60px;
@@ -267,7 +341,7 @@ form select{
 .formBox, .account-box h3 {
     color: #FFF;    
     }
-.formBox, .loginBox, .account-box h3 {
+.formBox, .account-box h3 {
     color: #000;    
     }
 .loginBox a{
@@ -276,6 +350,9 @@ form select{
 .loginBox a:hover{
     color: #333;
     }
+.loginBox .btn:hover{
+    color: #FFF;
+}
 #account-page-2 .loginBox, #account-page-2 .profileBox{
     padding-left: 0px;
     padding-right: 0px;
@@ -395,9 +472,7 @@ form select{
     font-size: 1.1em;
     color: #fff
     }
-    .btn.primary:hover{
-    color: #FFF;
-    }
+
 .alert-message ul{
     list-style: none;
     padding: 0;
@@ -513,6 +588,7 @@ em.pendingText{
 #pop-menu li{
     margin: 0px;
     padding: 0px;
+    color: #FFF;
 }
 #pop-menu a{
 	display: block;
@@ -523,6 +599,9 @@ em.pendingText{
 #nav.active li ul#pop-menu{ 
 	display: block;
 	text-align: left;
+}
+#logged_in_li {
+    padding: 4px !important;
 }
 #ui-datepicker-div {
     position: relative;
@@ -538,6 +617,18 @@ em.pendingText{
     }
 }
 @media screen and (min-width: 1025px){
+    #nav {
+        width: 15%;
+    }
+    #nav ul#pop-menu {
+        right: 1px;
+    }
+    #profile_link, #savedsearch_link {
+        display: none !important;
+    }
+    .topbar ul {
+        position: relative;
+    }
     #nav li:hover ul#pop-menu{ 
         display: block;
         text-align: left;
@@ -676,6 +767,9 @@ form input[type='checkbox']{
     color: #333;
     text-decoration: none;
 }
+.gravatar {
+    padding: 4px;   
+}
 .info-row{
     background-color: rgb(250, 250, 250);
     padding: 6px 8px;
@@ -693,10 +787,23 @@ form input[type='checkbox']{
         height: 50px;        
         border-bottom: 20px solid #c44e34;
     }
+    #logged_in_li {
+        display: block;
+        font-size: 2em;
+        height: 25px;
+        line-height: 20px;
+        padding: 10px !important;        
+        }
     #logo-block{
         margin-top: 10px;
     }
+    .topbar .menu-tabs {
+        display: none;
+    }
     .topbar #nav .arrow{
+        display: none;
+    }
+    .topbar #nav img {
         display: none;
     }
     #nav .main-nav{
@@ -801,6 +908,10 @@ form input[type='checkbox']{
     #saved-search-form label[for=id_label],
     #saved-search-form label[for=id_edit_label] {
         margin-top: 10px;
+    }
+    #saved-search-form label[for^='id_sort_by'], label[for^='id_edit_sort_by'] {
+    display: inline;
+    margin: 5px;
     }
     #saved-search-form input,
     #saved-search-form textarea,
@@ -907,7 +1018,9 @@ form input[type='checkbox']{
         clear: both;
         display: block;
     }
-
+    #logged_in_li {
+        display: none !important;
+    }
     form .pull-left{
         float: none;
     }
@@ -929,6 +1042,9 @@ form input[type='checkbox']{
     ul.ui-autocomplete{
         display: none !important;
     }
+
+    /* Mobile Saved Search */
+
     #saved-search-form label[for=id_is_active],
     #saved-search-form label[for=id_edit_is_active] {
         margin-top:10px;
@@ -974,6 +1090,16 @@ form input[type='checkbox']{
     #id_label {
         margin-top: 0px !important;
     }
+    #saved-search-list .view_search {
+        cursor: pointer;
+    }
+
+    /* Mobile Saved Search Listing */
+
+    #saved-search-listing-details {
+        margin-bottom: 15px;
+    }
+
     .section.subpage {
         background-color: #fff;
     }
@@ -1282,6 +1408,37 @@ table td, table th{
     margin-left: 5px;
     margin-right: 5px;
     margin-top: 5px;
+}
+
+/* Saved Search Listing */
+
+#saved-search-listing-table a {
+    text-decoration: none;
+}
+
+#saved-search-listing-table ul {
+    list-style-type: none;
+    margin: 0px;
+}
+
+#saved-search-listing-table p {
+    display: inline;
+    font-size: 1.7em;
+    font-weight: bold;
+}
+
+#saved-search-listing-details > div,
+#saved-search-listing-details > h2 {
+    padding-left: 10px;
+    padding-right: 10px;
+}
+
+#saved-search-listing-details > div {
+    padding-top: 10px;
+}
+
+#saved-search-listing-details {
+    padding-bottom: 0px;
 }
 
 [class^="icon-"], [class*=" icon-"] {

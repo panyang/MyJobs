@@ -52,3 +52,5 @@ class CompanyAdmin(admin.ModelAdmin):
     form = CompanyForm
 
 admin.site.register(Company, CompanyAdmin)
+
+admin.site.register(Microsite)

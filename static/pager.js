@@ -8,10 +8,11 @@ $(document).ready(function() {
                 url: "/saved-search/more-results",
                 data: { 'offset': offset,
                         'frequency': frequency,
-                        'feed': feed
+                        'feed': feed,
+                        'sort_by': sort_by
                       },
                 success: function(data) {
-                    $('.feed-page').append(data);
+                    $('#saved-search-listing-table tbody').append(data);
                 }
             });
         }

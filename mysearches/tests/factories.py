@@ -15,6 +15,7 @@ class SavedSearchFactory(factory.Factory):
     frequency = "W"
     day_of_week = "1"
     notes = "All jobs from jobs.jobs"
+    sort_by = "Relevance"
 
 
 class SavedSearchDigestFactory(factory.Factory):
