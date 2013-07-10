@@ -69,7 +69,13 @@
                                         <li id="logged_in_li">
                                             {% trans "Logged in as " %} 
                                         <b>
-                                            {{ user|get_name_obj_or_email|truncatechars:"20" }}
+                                            {% with name_obj=user|get_name_obj %}
+                                                {% if name_obj %}
+                                                    {{ name_obj }}
+                                                {% else %}
+                                                    {{ user.email|truncatechars:"20" }}
+                                                {% endif %}
+                                            {% endwith %}
                                         </b>
                                         </li>
                                         {% if not user.is_disabled %}
