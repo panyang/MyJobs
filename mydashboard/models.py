@@ -6,13 +6,14 @@ from myjobs.models import User
 
 class Company(models.Model):
     """
-    Companies are the central hub for a group of modules and admins (Users).
+    Companies are the central hub for a group of modules and employers.
+
+    *** Why isn't the primary key an auto incrementing field? ***
+    To keep the my.jobs Company model in sync with the microsites Company
+    model the id is the same to ease the transition to a single model down the
+    line.
 
     """
-    # Why isn't the primary key an auto incrementing field?
-    # To keep the my.jobs Company model in sync with the microsites Company
-    # model the id is the same to ease the transition to a single model down the
-    # line.
     id = models.IntegerField(primary_key=True, unique=True)
     name = models.CharField(max_length=255)
     admins = models.ManyToManyField(User, through='CompanyUser')
@@ -22,6 +23,19 @@ class Company(models.Model):
 
     class Meta:
         verbose_name_plural = 'companies'
+
+
+class CandidateEvent(models.Model):
+    """
+    Something happened! This log tracks job views and saved searches.
+    
+    """
+    who = models.ForeignKey(User)
+    whom = models.ForeignKey(Company)
+    what = models.CharField(max_length=255)
+    where = models.URLField(max_length=300)
+    when = models.DateTimeField(auto_now=True)
+
 
 class DashboardModule(models.Model):
     company = models.ForeignKey(Company)
