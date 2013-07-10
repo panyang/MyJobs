@@ -56,9 +56,9 @@
                                     {% if group_member and user.is_active and company_name|length >= 1%}
                                         <li class=""><a href="{% url 'dashboard' %}">
                                         {% if company_name|length > 1 %}
-                                            {% trans "Company Dashboards" %}
+                                            {% trans "Dashboards" %}
                                         {% else %}
-                                            {% trans "Company" %} {{ company_name.0|truncatechars:"20" }} {% trans "Dashboard" %}
+                                            {{ company_name.0|truncatechars:"20" }} {% trans "Dashboard" %}
                                         {% endif %}
                                         </a></li>
                                     {% endif %}
@@ -70,9 +70,9 @@
                                     {% if group_member and user.is_active and company_name|length >= 1%}
                                         <li class=""><a href="{% url 'dashboard' %}">
                                         {% if company_name|length > 1 %}
-                                            {% trans "Company Dashboards" %}
+                                            {% trans "Dashboards" %}
                                         {% else %}
-                                            {% trans "Company" %} {{ company_name.0|truncatechars:"20" }} {% trans "Dashboard" %}
+                                            {{ company_name.0|truncatechars:"20" }} {% trans "Dashboard" %}
                                         {% endif %}
                                         </a></li>
                                     {% endif %}
@@ -84,9 +84,9 @@
                                     {% if group_member and user.is_active and company_name|length >= 1%}
                                         <li class="active"><a href="{% url 'dashboard' %}">
                                         {% if company_name|length > 1 %}
-                                            {% trans "Company Dashboards" %}
+                                            {% trans "Dashboards" %}
                                         {% else %}
-                                            {% trans "Company" %} {{ company_name.0|truncatechars:"20" }} {% trans "Dashboard" %}
+                                            {{ company_name.0|truncatechars:"20" }} {% trans "Dashboard" %}
                                         {% endif %}
                                         </a></li>
                                     {% endif %}
@@ -98,9 +98,9 @@
                                     {% if group_member and user.is_active and company_name|length >= 1%}
                                         <li class=""><a href="{% url 'dashboard' %}">
                                         {% if company_name|length > 1 %}
-                                            {% trans "Company Dashboards" %}
+                                            {% trans "Dashboards" %}
                                         {% else %}
-                                            {% trans "Company" %} {{ company_name.0|truncatechars:"20" }} {% trans "Dashboard" %}
+                                            {{ company_name.0|truncatechars:"20" }} {% trans "Dashboard" %}
                                         {% endif %}
                                         </a></li>
                                     {% endif %}
@@ -134,9 +134,9 @@
                                                 {% if group_member and user.is_active and company_name|length >= 1%}
                                                     <li><a id="company_dashboard_link" href="{% url 'dashboard' %}">
                                                     {% if company_name|length > 1 %}
-                                                        {% trans "Company Dashboards" %}
+                                                        {% trans "Dashboards" %}
                                                     {% else %}
-                                                        {% trans "Company" %} {{ company_name.0|truncatechars:"20" }} {% trans "Dashboard" %}
+                                                        {{ company_name.0|truncatechars:"20" }} {% trans "Dashboard" %}
                                                     {% endif %}
                                                     </a></li>
                                                 {% endif %}
