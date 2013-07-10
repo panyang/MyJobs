@@ -100,7 +100,7 @@ class MyActivityViewsTests(TestCase):
         info = soup.findAll('li')
 
         self.assertEqual(len(titles), 6)
-        self.assertEqual(len(info), 21)
+        self.assertEqual(len(info), 24)
         self.assertEqual(response.status_code, 200)
 
     def test_candidate_page_load_without_profileunits_with_activites(self):
@@ -111,7 +111,7 @@ class MyActivityViewsTests(TestCase):
         info = soup.findAll('li')
 
         self.assertEqual(len(titles), 1)
-        self.assertEqual(len(info), 8)
+        self.assertEqual(len(info), 11)
         self.assertEqual(response.status_code, 200)
 
     def test_candidate_page_load_without_profileunits_and_activites(self):
@@ -124,5 +124,5 @@ class MyActivityViewsTests(TestCase):
         info = soup.findAll('li')
 
         self.assertEqual(len(titles), 0)
-        self.assertEqual(len(info), 5)
+        self.assertEqual(len(info), 8)
         self.assertEqual(response.status_code, 404)
