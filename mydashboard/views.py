@@ -38,7 +38,7 @@ def dashboard(request):
     
     settings = {'user': request.user}
     
-    company = Company.objects.get(admins=request.user)
+    company = Company.objects.filter(admins=request.user)[0]
     admins = CompanyUser.objects.filter(company=company.id)
     microsites = Microsite.objects.filter(company=company.id)   
     
