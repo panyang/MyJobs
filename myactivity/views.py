@@ -73,12 +73,7 @@ def candidate_information(request, user_id):
     except User.DoesNotExist:
         raise Http404
 
-    # employer's company gets pulled out to check if candidate is within
-    # employer's search tables (active_users)
-    companies = Company.objects.filter(admins=request.user)
-    active_users = company_active_users_with_saved_searches(companies)
-
-    if company_candidate_realtionship(active_users, user):
+    if employer_can_view_candidate(request.user, user):
 
         if user.opt_in_employers:
             units = ProfileUnits.objects.filter(user=user)
