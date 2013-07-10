@@ -125,7 +125,8 @@ def dashboard(request):
                  'before': before,                 
                  'candidates': candidates,
                  'microsite': microsite,
-                 'admin_you': admin_you,}
+                 'admin_you': admin_you,
+                 'view_name': 'Company Dashboard'}
     
     return render_to_response('mydashboard/mydashboard.html', data_dict,
                               context_instance=RequestContext(request))
