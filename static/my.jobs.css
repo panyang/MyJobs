@@ -502,6 +502,10 @@ em.pendingText{
 #nav a{
     color: #fff;
     }
+#nav .main-nav img {
+    max-width: none;
+    margin: -25px;
+}
 #nav .main-nav{
     color: #fff;
     text-decoration: none;
@@ -962,7 +966,10 @@ form input[type='checkbox']{
     }
     #logged_in_li {
         display: none !important;
-    }
+        }
+    #company_dashboard_link {
+        overflow: hidden;
+        }
     form .pull-left{
         float: none;
     }
