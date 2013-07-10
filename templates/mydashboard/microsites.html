@@ -2,17 +2,13 @@
                 
                 <h3>Microsites</h3>
                 
-                <table id="row-link-table">
-                                    
+                <ul class="link-list">
                 {% for url in company_microsites %}
-                   <tr>
-                        <td>
-                        <strong>{{ url.url|cut:"http://" }}</strong><br>
-                        <a href="{{url.url}}" target="_blank">{{url.url}}</a>
-                        </td>
-                   </tr>
+                    <li>
+                    <strong>{{ url.url|cut:"http://" }}</strong><br>
+                    <a href="{{url.url}}" target="_blank">{{url.url}}</a>
+                    </li>
                 {% endfor %}
-                
-                </table>
+                </ul>
                 
             </div>
