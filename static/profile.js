@@ -35,6 +35,9 @@ $(function() {
             // targets "View" button for each item
             "click [id$='view']": "viewDetails",
 
+            // targets calendar buttons for each DateField
+            "click [class$='calendar']": "datepickerButton",
+
             // targets "I still work here" checkbox in Employment History
             "click [id='id_employmenthistory-current_indicator']": "hideEndDate",
         },
@@ -50,6 +53,21 @@ $(function() {
             else {
                 $("[id='id_employmenthistory-end_date']").show();
                 $("[for='id_employmenthistory-end_date']").show();
+            }
+        },
+
+        /*
+        Shows the datepicker that is already connected DateField in profile modals
+        */
+        datepickerButton: function(e) {
+            e.stopPropagation();    
+            e.preventDefault();
+            that = $(e.target).parents('.input-append');
+            if ($('#ui-datepicker-div').css("display") == "block") {
+                that.find('[id$="date"]').datepicker('hide');
+            }
+            else {
+                that.find('[id$="date"]').datepicker('show');
             }
         },
 
@@ -119,6 +137,7 @@ $(function() {
                         $('#edit_modal').modal();
                         $('input[id$="date"]').datepicker({dateFormat: window.dateFormat,
                                                            constrainInput: false});
+                        add_date_button($('#edit_modal'));
                     }
                 });            
             } else {
@@ -340,14 +359,19 @@ function manageModuleDisplay(module) {
         $('#'+module+'-new-section').parents('.profile-section').show();
         $("#moduleBank").show();
     }
-}
-
-function datepicker() {
-    $(function() {
-        $( "input[id$='date']" ).datepicker({dateFormat: "yy-mm-dd",
-                                             constrainInput: false});
-    });
 };
+
+/*
+Adds a button to the right (after) of a field that has date 
+somewhere in it's ID.
+
+.icon-search is a bootstrap function that searches a large 'sprite'
+and puts up css for backposition. Called glyphicons.
+*/
+function add_date_button(modal) {
+    modal.find('[class="hasDatepicker"]').parent().addClass('input-append');
+    modal.find('[class="hasDatepicker"]').after('<span class="btn add-on calendar"><i class="icon-search icon-calendar"></i></span>');
+}
 
 $(document).ready(function() {
     if($(window).width() >= 501) {

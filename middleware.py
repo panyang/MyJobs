@@ -1,12 +1,17 @@
 import re
-import newrelic.agent
 
+from django.conf import settings
 from django.utils.text import compress_string
 from django.utils.cache import patch_vary_headers
 
 from django import http
 from django.core.urlresolvers import reverse
 
+if settings.NEW_RELIC_TRACKING:
+    try:
+        import newrelic.agent
+    except ImportError:
+        pass
 
 class RedirectMiddleware:
     """
@@ -78,8 +83,14 @@ class NewRelic(object):
 
     """
     def process_response(self, request, response):
-        newrelic.agent.add_custom_parameter('user_id', request.user.id)
+        if hasattr(request, 'user'):
+            newrelic.agent.add_custom_parameter('user_id', request.user.id)
+        else:
+            newrelic.agent.add_custom_parameter('user_id', 'anonymous')
         return response
 
     def process_request(self, request):
-        newrelic.agent.add_custom_parameter('user_id', request.user.id)
+        if hasattr(request, 'user'):
+            newrelic.agent.add_custom_parameter('user_id', request.user.id)
+        else:
+            newrelic.agent.add_custom_parameter('user_id', 'anonymous')

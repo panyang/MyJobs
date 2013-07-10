@@ -57,6 +57,56 @@ label[for^='id_sort_by'], label[for^='id_edit_sort_by'] {
     z-index:100;  
 }
 
+table#row-link-table {
+    border-collapse: collapse;   
+}
+#row-link-table tr {
+    background-color: rgb(250, 250, 250);    
+}
+#row-link-table tr:hover {
+    background-color: #d2cfc7;
+}
+#row-link-table th {
+    background-color: rgb(250, 250, 250);
+    text-align: left;
+    border-top: none;
+}
+#row-link-table th, #row-link-table td {
+    padding: 2px;
+}
+#row-link-table td:hover {
+    cursor: pointer;
+}
+#row-link-table td {
+    padding: 5px;    
+    border-bottom: 1px solid #eae6de;
+}
+#row-link-table ul {
+    list-style-type: none;
+    margin-left: -10px;
+}
+.link-list {     
+    list-style-type: none; 
+    background-color: rgb(250, 250, 250);
+    margin: 0;
+    padding: 0;    
+}
+.link-list li {
+    display: block;
+    background-color: rgb(250, 250, 250);
+    border-bottom: 1px solid #eae6de;
+    padding: 5px;      
+}
+.link-list li:last-child {
+    border: none;
+}
+.move-left {
+    margin-left: -45px;
+}
+.text-middle {
+    vertical-align: middle;   
+}
+
 /*Ajax Indicator*/
 #ajax-busy {
     display: none;    
@@ -696,6 +746,9 @@ form input[type='checkbox']{
 .candidate-details .no-side-padding{
     padding: 0px;
 }
+.accordion-inner {
+    background-color: #FFF;   
+}
 .candidate-details .table{
     margin-top:-1px;
     margin-bottom: 0px;
@@ -715,6 +768,9 @@ form input[type='checkbox']{
 .details-heading a:hover{
     color: #333;
     text-decoration: none;
+}
+.gravatar {
+    padding: 4px;   
 }
 .info-row{
     background-color: rgb(250, 250, 250);
