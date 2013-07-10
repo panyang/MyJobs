@@ -577,7 +577,7 @@ em.pendingText{
     #nav ul#pop-menu {
         right: 1px;
     }
-    #profile_link, #savedsearch_link {
+    #profile_link, #savedsearch_link, #company_dashboard_link {
         display: none !important;
     }
     .topbar ul {
