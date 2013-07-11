@@ -106,6 +106,17 @@ $(document).ready(function()
                  
                  <div class="pull-left span6">
                  
+                 {% if candidates.has_previous %}
+                    <a href="?page={{ candidates.previous_page_number }}&microsite={{ site_name }}">Previous</a>
+                 {% else %}
+                    &nbsp;
+                 {% endif %}
+                 &nbsp;
+                 Page {{ candidates.number }} of {{ candidates.paginator.num_pages }}
+                 &nbsp;
+                 {% if candidates.has_next %}
+                    <a href="?page={{ candidates.next_page_number }}&microsite={{ site_name }}">Next</a>
+                 {% endif %}
                  </div>
                  
                  

@@ -37,24 +37,31 @@ def dashboard(request):
     
     company = Company.objects.filter(admins=request.user)[0]
     admins = CompanyUser.objects.filter(company=company.id)
-    microsites = Microsite.objects.filter(company=company.id)
+    authorized_microsites = Microsite.objects.filter(company=company.id)
     
     # Removes main user from admin list to display other admins
     admins = admins.exclude(user=request.user)
     
-    active_microsite = request.REQUEST.get('microsite', company.name)    
+    requested_microsite = request.REQUEST.get('microsite', company.name)  
+    
     
     # the url value for 'All' in the select box is company name 
     # which then gets replaced with all microsite urls for that company
-    if active_microsite == company.name:
-        microsite_urls = [microsite.url for microsite in microsites]
-        site_name = company.name
+    site_name = ''
+    if requested_microsite != company.name:
+        if requested_microsite.find('//') == -1:
+            requested_microsite = '//' + requested_microsite
+        active_microsites = authorized_microsites.filter(
+                url__contains=requested_microsite)
+        
     else:
-        if active_microsite.find('//') == -1:
-            active_microsite = '//' + active_microsite
-        microsite_urls = [urlparse(active_microsite).netloc]
-        site_name = microsite_urls[0]
-    
+        active_microsites = authorized_microsites
+        site_name = company.name
+        
+    microsite_urls = [microsite.url for microsite in active_microsites]
+    if not site_name:
+        site_name = microsite_urls[0]      
+
     q_list = [Q(url__contains=ms) for ms in microsite_urls]
     
     # All searches saved on the employer's company microsites       
@@ -90,7 +97,7 @@ def dashboard(request):
     candidate_searches = candidate_searches.filter(
             created_on__range=[after, before]).order_by('-created_on')  
     
-    paginator = Paginator(candidate_searches, 25) # Show 5 candidates per page
+    paginator = Paginator(candidate_searches, 5) # Show 5 candidates per page
     page = request.GET.get('page')
     
     try:
@@ -105,7 +112,7 @@ def dashboard(request):
     admin_you = request.user
     
     data_dict = {'company_name': company.name,
-                 'company_microsites': microsites,
+                 'company_microsites': authorized_microsites,
                  'company_admins': admins,                 
                  'after': after,
                  'before': before,                 
