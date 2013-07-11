@@ -106,7 +106,9 @@ table#row-link-table {
 .text-middle {
     vertical-align: middle;   
 }
-
+.candidate-name {
+    font-size: 1.5em;   
+}
 /*Ajax Indicator*/
 #ajax-busy {
     display: none;    
