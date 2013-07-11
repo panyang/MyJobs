@@ -104,6 +104,7 @@ def dashboard(request):
             microsite=search_microsite
             searchescandidates = SavedSearch.objects.filter(url__contains=microsite)
         else:
+            #searches all microsites by default
             microsite = [microsite.url for microsite in microsites]            
             q_list = [Q(url__contains=ms) for ms in microsite]
             searchescandidates = SavedSearch.objects.select_related('user')
