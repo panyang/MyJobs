@@ -26,7 +26,7 @@ def update_url_length(value):
     version of the url
 
     Inputs:
-    :candidate.url: url that candidate has for the saved search
+    :value: url that candidate has for the saved search
 
     Outputs:
     :updated_url.netloc: url netloc
