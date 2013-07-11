@@ -81,7 +81,7 @@ $(document).ready(function()
                 </form>
                 <br>
                 <hr>
-                <div class="pull-left"><strong>Activity between {{after.date}} and {{before.date}} for {{ microsite }}</strong></div><br>                
+                <div class="pull-left"><strong>Activity between {{after.date}} and {{before.date}} for {{ site_name|cut:"http://" }}</strong></div><br>                
                  <table id="row-link-table">                            
                     {% for candidate in candidates %}
                     <tr>
@@ -102,19 +102,17 @@ $(document).ready(function()
                     
                  </table>
                  
-                 <div class="pull-left span3">
+                 <div class="pull-left span6">
                  {% if candidates.has_previous %}
-                    <a href="?page={{ candidates.previous_page_number }}&microsite={{microsite}}">previous</a>
+                    <a href="?page={{ candidates.previous_page_number }}&microsite={{microsite}}">Previous</a>
                  {% else %}
                     &nbsp;
                  {% endif %}
-                 </div>
-                 <div class="pull-left span2">
+                 &nbsp;
                  Page {{ candidates.number }} of {{ candidates.paginator.num_pages }}
-                 </div>
-                 <div class="pull-left span2">
+                 &nbsp;
                  {% if candidates.has_next %}
-                    <div class="pull-right"><a href="?page={{ candidates.next_page_number }}&microsite={{microsite}}">next</a></div>
+                    <a href="?page={{ candidates.next_page_number }}&microsite={{microsite}}">Next</a>
                  {% endif %}
                  </div>
                  

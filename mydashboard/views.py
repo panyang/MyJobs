@@ -1,13 +1,13 @@
 import logging
 import urllib2
+import operator
 
 from datetime import datetime, timedelta
 import time
 from urlparse import urlparse
-
+from django.db.models import Q
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
-from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import user_passes_test, login_required
 from django.core.urlresolvers import reverse
 from django.forms.models import model_to_dict
@@ -23,9 +23,6 @@ from mysearches.models import SavedSearch
 from mydashboard.models import *
 from myjobs.forms import *
 from myjobs.helpers import *
-from myprofile.forms import *
-from registration.forms import *
-
 from myactivity.views import *
    
 @user_passes_test(lambda u: User.objects.is_group_member(u, 'Employer'))
@@ -40,71 +37,60 @@ def dashboard(request):
     
     company = Company.objects.filter(admins=request.user)[0]
     admins = CompanyUser.objects.filter(company=company.id)
-    microsites = Microsite.objects.filter(company=company.id)   
+    microsites = Microsite.objects.filter(company=company.id)
     
-    #Removes main user from admin list to display other admins
-    admins = admins.exclude(user=request.user) 
+    # Removes main user from admin list to display other admins
+    admins = admins.exclude(user=request.user)
     
-    search_microsite = request.GET.get('microsite', False)    
+    active_microsite = request.REQUEST.get('microsite', company.name)    
     
-    if request.method == 'POST':
-        url = request.REQUEST.get('microsite')
-        if url:
-            if url.find('//') == -1:
-                url = '//' + url
-            microsite = urlparse(url).netloc
-        else:
-            microsite = company.name
+    # the url value for 'All' in the select box is company name 
+    # which then gets replaced with all microsite urls for that company
+    if active_microsite == company.name:
+        microsite_urls = [microsite.url for microsite in microsites]
+        site_name = company.name
+    else:
+        if active_microsite.find('//') == -1:
+            active_microsite = '//' + active_microsite
+        microsite_urls = [urlparse(active_microsite).netloc]
+        site_name = microsite_urls[0]
+    
+    q_list = [Q(url__contains=ms) for ms in microsite_urls]
+    
+    # All searches saved on the employer's company microsites       
+    candidate_searches = SavedSearch.objects.select_related('user')
+    candidate_searches = candidate_searches.filter(reduce(operator.or_, q_list))
         
-        # Saved searches were created after this date...
-        if 'today' in request.POST:
-            after = datetime.now()
-            before = datetime.now()
-        elif 'seven_days' in request.POST:
-            after = datetime.now() - timedelta(days=7)
-            before = datetime.now()
-        elif 'thirty_days' in request.POST:
-            after = datetime.now() - timedelta(days=30)
-            before = datetime.now()
-        else:
-            after = request.REQUEST.get('after')
-            if after:
-                after = datetime.strptime(after, '%m/%d/%Y')
-            else:
-                # Defaults to one week ago
-                after = datetime.now() - timedelta(days=30)
-        
-            before = request.REQUEST.get('before')
-            if before:
-                before = datetime.strptime(before, '%m/%d/%Y')
-            else:
-                # Defaults to the date and time that the page is accessed
-                before = datetime.now()        
-        
-        searchescandidates = SavedSearch.objects.select_related('user')
-
-        # All searches saved from a given microsite
-        searchescandidates = searchescandidates.filter(url__contains=microsite)
-
-        # Specific microsite searches saved between two dates
-        searchescandidates = searchescandidates.filter(created_on__range=[after, before]).order_by('-created_on')           
-        
-    else:        
-        
-        #default dates and search
+    # Pre-set Date ranges
+    if 'today' in request.REQUEST:
+        after = datetime.now()
+        before = datetime.now()
+    elif 'seven_days' in request.REQUEST:
+        after = datetime.now() - timedelta(days=7)
+        before = datetime.now()
+    elif 'thirty_days' in request.REQUEST:
         after = datetime.now() - timedelta(days=30)
         before = datetime.now()
-        
-        if search_microsite:
-            microsite=search_microsite
+    else:
+        after = request.REQUEST.get('after')
+        if after:
+            after = datetime.strptime(after, '%m/%d/%Y')
         else:
-            microsite=company.name
-        
-        searchescandidates = SavedSearch.objects.filter(url__contains=microsite)        
-        searchescandidates = searchescandidates.filter(created_on__range=[after, before]).order_by('-created_on')
-        microsite='All Microsites'        
-            
-    paginator = Paginator(searchescandidates, 5) # Show 5 candidates per page
+            # Defaults to one week ago
+            after = datetime.now() - timedelta(days=30)
+    
+        before = request.REQUEST.get('before')
+        if before:
+            before = datetime.strptime(before, '%m/%d/%Y')
+        else:
+            # Defaults to the date and time that the page is accessed
+            before = datetime.now()
+    
+    # Specific microsite searches saved between two dates
+    candidate_searches = candidate_searches.filter(
+            created_on__range=[after, before]).order_by('-created_on')  
+    
+    paginator = Paginator(candidate_searches, 2) # Show 5 candidates per page
     page = request.GET.get('page')
     
     try:
@@ -123,10 +109,10 @@ def dashboard(request):
                  'company_admins': admins,                 
                  'after': after,
                  'before': before,                 
-                 'candidates': candidates,
-                 'microsite': microsite,
+                 'candidates': candidates,                
                  'admin_you': admin_you,
-                 'view_name': 'Company Dashboard'}
+                 'site_name': site_name,
+                 'view_name': 'Company Dashboard',}
     
     return render_to_response('mydashboard/mydashboard.html', data_dict,
                               context_instance=RequestContext(request))
