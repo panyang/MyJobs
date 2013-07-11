@@ -21,7 +21,10 @@ def get_distinct_users(values):
     
 @register.filter(name='update_url_length')
 def update_url_length(value):
-    
+    """
+    Return the netloc of the url instead of the full one in the 
+    candidate activity list on employer dashboard
+    """
     active_url = value
     
     if active_url.find('//') == -1:
