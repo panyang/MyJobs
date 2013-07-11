@@ -71,7 +71,9 @@ $(document).ready(function()
                     <br><br>
                     <div class="span3 form-label"><strong>Filter by site:</strong></div> 
                     <select name="microsite" class="btn">
+                        
                         <option value="{{ company_name }}">All</option>
+                        
                         {% for url in company_microsites %}
                         <option value="{{ url.url|cut:'http://' }}">{{ url.url|cut:"http://" }}</option>
                         {% endfor %}
@@ -94,7 +96,7 @@ $(document).ready(function()
                         </td>
                         <td>
                         <strong>{% if candidate.label %}{{candidate.label}}{% else %}Unlabeled{% endif %}</strong><br>
-                        {{candidate.url|clean_url}}<br>
+                        {{candidate.url|update_url_length}}<br>
                         {{candidate.created_on.date}}                        
                         </td>
                     </tr>

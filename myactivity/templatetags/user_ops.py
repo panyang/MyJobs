@@ -19,8 +19,8 @@ def get_distinct_users(values):
 
     return users
     
-@register.filter(name='clean_url')
-def clean_url(value):
+@register.filter(name='update_url_length')
+def update_url_length(value):
     
     active_url = value
     
