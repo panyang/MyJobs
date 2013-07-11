@@ -129,14 +129,10 @@ def home(request):
 @login_required
 def view_account(request):
     return render_to_response('done.html', RequestContext(request))
-
+    
 @user_passes_test(User.objects.not_disabled)
 def edit_account(request):
-    initial_dict = model_to_dict(request.user)
-    name = get_name_obj(request.user)
-    if name:
-        initial_dict.update(model_to_dict(name))
-
+    initial_dict = check_name_obj(request.user)
     ctx = {'user': request.user,
            'gravatar_100': request.user.get_gravatar_url(size=100)}
 
@@ -158,11 +154,7 @@ def edit_account(request):
 
 @user_passes_test(User.objects.not_disabled)
 def edit_basic(request):
-    initial_dict = model_to_dict(request.user)
-    name = get_name_obj(request.user)
-    if name:
-        initial_dict.update(model_to_dict(name))
-
+    initial_dict = check_name_obj(request.user)    
     form = EditAccountForm(initial=initial_dict, user=request.user)        
     if request.method == "POST":
         form = EditAccountForm(user=request.user, data=request.POST, auto_id=False)
@@ -308,3 +300,19 @@ def continue_sending_mail(request):
     user.last_response = datetime.date.today()
     user.save()
     return redirect('/')
+    
+def check_name_obj(user):
+    """
+    Utility function to process and return the user name obect.
+    
+    Inputs: 
+    :user:  request.user object
+    
+    Returns:
+    :initial_dict: Dictionary object with updated name information
+    """
+    initial_dict = model_to_dict(user)
+    name = get_name_obj(user)
+    if name:
+        initial_dict.update(model_to_dict(name))
+    return initial_dict
