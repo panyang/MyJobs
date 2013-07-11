@@ -7,6 +7,7 @@ import urllib2
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import user_passes_test, login_required
+from django.core.mail import EmailMessage
 from django.core.urlresolvers import reverse
 from django.forms.models import model_to_dict
 from django.http import HttpResponseRedirect, HttpResponse
@@ -15,6 +16,9 @@ from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.utils.html import mark_safe
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
+
+from captcha.fields import ReCaptchaField
+from secrets import RECAPTCHA_PUBLIC_KEY, RECAPTCHA_PRIVATE_KEY
 
 from myjobs.models import User, EmailLog
 from myjobs.forms import *
@@ -35,8 +39,9 @@ class Privacy(TemplateView):
 class Terms(TemplateView):
     template_name = "terms.html"
 
-class Contact(TemplateView):
-    template_name = "contact.html"
+
+class CaptchaForm(Form):
+    captcha = ReCaptchaField(label="", attrs={'theme': 'white'})
 
 def home(request):
     """
@@ -126,6 +131,31 @@ def home(request):
             
     return render_to_response('index.html', data_dict, RequestContext(request))
 
+def contact(request):
+    if request.POST:
+        name = request.POST.get('name')
+        from_email = request.POST.get('email')
+        comment = request.POST.get('comment')
+        form = CaptchaForm(request.POST)
+        if form.is_valid():
+            subject = ('Contact My.jobs by %s'%name)
+            message = """
+                      Name: %s
+                      Email: %s
+
+                      %s
+                      """%(name, from_email, comment)
+            to_email = ['david@directemployersfoundation.org']
+            msg = EmailMessage(subject, message, from_email, to_email)
+            msg.send()
+            #return HttpResponse('success')
+            return render_to_response('index.html', RequestContext(request))
+        else:
+            return HttpResponse(json.dumps(form.errors))
+    else:
+        form = CaptchaForm()
+        data_dict = {'form':form}
+    return render_to_response('contact.html',data_dict, RequestContext(request))
     
 @login_required
 def view_account(request):

@@ -11,30 +11,39 @@
 
 
 {% block text %}
-<fieldset>
+<form method="POST">
+	<br />
 	<div class="span3 form-label pull-left initial">
-		<label>First Name:</label>
+		<label>Full Name:</label>
 	</div>
 	<div class="profile-form-input">
-		<input maxlength="60" placeholder="Full Name" required type="text">
+		<input maxlength="60" name="name" placeholder="Full Name" required type="text">
 	</div>
 	<div class="clear"></div>
 	<div class="span3 form-label pull-left initial">
 		<label>Email:</label>
 	</div>
 	<div class="profile-form-input">
-		<input maxlength="60" placeholder="Email" required type="text">
+		<input maxlength="60" name="email" placeholder="Email" required type="text">
 	</div>
 	<div class="clear"></div>
 	<div class="span3 form-label pull-left initial">
 		<label>Comments:</label>
 	</div>
 	<div class="profile-form-input">
-		<textarea class="form-textarea"></textarea>
+		<textarea class="form-textarea" name="comment" required placeholder="Type your comment here"></textarea>
 	</div>
 	<div class="clear"></div>
-	<div class="span3 form-label pull-right initial">
-		<input type="submit" class="submit" value="Submit">
+	<div class="span3 form-label pull-left initial">
+		<label>Are you Human?</label>
 	</div>
-</fieldset>
+	<div class="profile-form-input captcha">
+		{{form}}
+	</div>
+	<div class="clear"></div>
+	<br />
+	{% csrf_token %}
+	<div class="span3 form-label pull-left initial"></div>
+	<input type="submit" class="submit btn primary" id="contact-submit" value="Submit">
+</form>
 {% endblock %}

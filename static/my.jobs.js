@@ -58,6 +58,11 @@ $(document).ready(function(){
     $(function() {
         $('input, textarea').placeholder();
     });
+
+    $('contact-submit').click(function(e) {
+        e.preventDefault();
+        formThing();
+    });
 });
              
 function clearForm(form) {
@@ -73,5 +78,39 @@ function clearForm(form) {
             this.selectedIndex = -1;
     });
 };
+
+// This does nothing go directly to jail and do not collect $200
+function formThing(){
+    console.log("pass")
+    csrf_token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+    console.log("pass")
+    $.ajax({
+        type: 'POST',
+        url: '/contact/',
+        data: {csrfmiddlewaretoken: csrf_token,},
+        success: function(data) {
+            console.log("pass")
+            var json = jQuery.parseJSON(data);
+            if(json == 'success'){
+                window.location.href = "http://my.jobs"
+            }else{
+                for (var index in json.errors) {
+                    var $error = $('[id$="-'+json.errors[index][0]+'"]');
+                    var $field = $('[id$=recaptcha_response_field]')
+                    var $labelOfError = $error.prev();
+                    // insert new errors after the relevant inputs
+                    $error.wrap('<span class="required" />');
+                    if(!($.browser.msie)){
+                        $field.attr("placeholder",json.errors[index][1]);
+                    }else{
+                        field = $error.parent();
+                        field.before("<div class='msieError'><i>" + json.errors[index][1] + "</i></div>");
+                    }
+                    $labelOfError.css('color', '#900');
+                }
+            }
+        }
+    });
+}
 
 window.dateFormat = 'dd-M-yy';

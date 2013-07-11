@@ -474,7 +474,15 @@ form select{
     font-size: 1.1em;
     color: #fff
     }
-
+.profile-form-input textarea{
+    width: 248px;
+    height: 100px;
+    }
+.captcha{
+    float:left;
+    margin-left: -3px;
+    line-height: 0px;
+}
 .alert-message ul{
     list-style: none;
     padding: 0;
@@ -483,25 +491,25 @@ form select{
     }
 .alert-message li{
     color: red;
-}
+    }
 .input-prepend .add-on{
     width: 35%;
     text-align: right;
-}
+    }
 .input-prepend input,
 .input-prepend select{
     width: 61.5%;
-}
+    }
 #account-page-2 .loginBox input[type="text"].phoneCountryCode,
 .loginBox .phoneCountryCode,
 .phoneCountryCode{
     width: 45px;
-}
+    }
 #account-page-2 .loginBox input[type="text"].phoneAreaCode,
 .loginBox .phoneAreaCode,
 .phoneAreaCode{
     width: 45px;
-}
+    }
 #account-page-2 .loginBox input[type="text"].phoneNumber,
 .loginBox .phoneNumber,
 .phoneNumber,
@@ -509,11 +517,11 @@ form select{
 .loginBox .phoneExtension,
 .phoneExtension{
     width: 150px;
-}
+    }
 #usaPhoneField{
     margin-top: 10px;
     display: none;
-}
+    }
 .friendlyPhoneForm input[type=text],
 .friendlyPhoneForm .input-prepend{
     display: none;
