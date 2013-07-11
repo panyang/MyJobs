@@ -71,7 +71,9 @@ $(document).ready(function()
                     <br><br>
                     <div class="span3 form-label"><strong>Filter by site:</strong></div> 
                     <select name="microsite" class="btn">
+                        
                         <option value="{{ company_name }}">All</option>
+                        
                         {% for url in company_microsites %}
                         <option value="{{ url.url|cut:'http://' }}">{{ url.url|cut:"http://" }}</option>
                         {% endfor %}
@@ -94,7 +96,7 @@ $(document).ready(function()
                         </td>
                         <td>
                         <strong>{% if candidate.label %}{{candidate.label}}{% else %}Unlabeled{% endif %}</strong><br>
-                        {{candidate.url}}<br>
+                        {{candidate.url|url_domain}}<br>
                         {{candidate.created_on.date}}                        
                         </td>
                     </tr>
@@ -104,7 +106,7 @@ $(document).ready(function()
                  
                  <div class="pull-left span6">
                  {% if candidates.has_previous %}
-                    <a href="?page={{ candidates.previous_page_number }}&microsite={{microsite}}">Previous</a>
+                    <a href="?page={{ candidates.previous_page_number }}&microsite={{ site_name }}">Previous</a>
                  {% else %}
                     &nbsp;
                  {% endif %}
@@ -112,7 +114,7 @@ $(document).ready(function()
                  Page {{ candidates.number }} of {{ candidates.paginator.num_pages }}
                  &nbsp;
                  {% if candidates.has_next %}
-                    <a href="?page={{ candidates.next_page_number }}&microsite={{microsite}}">Next</a>
+                    <a href="?page={{ candidates.next_page_number }}&microsite={{ site_name }}">Next</a>
                  {% endif %}
                  </div>
                  
