@@ -1,10 +1,11 @@
 import logging
 import urllib2
+import operator
 
 from datetime import datetime, timedelta
 import time
 from urlparse import urlparse
-
+from django.db.models import Q
 from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
 from django.contrib.auth import authenticate, login, logout
@@ -25,7 +26,7 @@ from myjobs.forms import *
 from myjobs.helpers import *
 from myprofile.forms import *
 from registration.forms import *
-
+from myactivity.helpers import *
 from myactivity.views import *
    
 @user_passes_test(lambda u: User.objects.is_group_member(u, 'Employer'))
@@ -40,21 +41,24 @@ def dashboard(request):
     
     company = Company.objects.filter(admins=request.user)[0]
     admins = CompanyUser.objects.filter(company=company.id)
-    microsites = Microsite.objects.filter(company=company.id)   
+    microsites = Microsite.objects.filter(company=company.id)
     
     #Removes main user from admin list to display other admins
-    admins = admins.exclude(user=request.user) 
+    admins = admins.exclude(user=request.user)
     
     search_microsite = request.GET.get('microsite', False)    
     
     if request.method == 'POST':
         url = request.REQUEST.get('microsite')
-        if url:
+        if url == company.name:
+            microsite = [microsite.url for microsite in microsites]
+        else:
             if url.find('//') == -1:
                 url = '//' + url
-            microsite = urlparse(url).netloc
-        else:
-            microsite = company.name
+            microsite = [urlparse(url).netloc]
+        q_list = [Q(url__contains=ms) for ms in microsite]
+        
+        site_name = url
         
         # Saved searches were created after this date...
         if 'today' in request.POST:
@@ -84,8 +88,9 @@ def dashboard(request):
         searchescandidates = SavedSearch.objects.select_related('user')
 
         # All searches saved from a given microsite
-        searchescandidates = searchescandidates.filter(url__contains=microsite)
-
+        #searchescandidates = searchescandidates.filter(url__contains=microsite)
+        searchescandidates = searchescandidates.filter(reduce(operator.or_, q_list))
+        
         # Specific microsite searches saved between two dates
         searchescandidates = searchescandidates.filter(created_on__range=[after, before]).order_by('-created_on')           
         
@@ -97,12 +102,15 @@ def dashboard(request):
         
         if search_microsite:
             microsite=search_microsite
+            searchescandidates = SavedSearch.objects.filter(url__contains=microsite)
         else:
-            microsite=company.name
-        
-        searchescandidates = SavedSearch.objects.filter(url__contains=microsite)        
-        searchescandidates = searchescandidates.filter(created_on__range=[after, before]).order_by('-created_on')
-        microsite='All Microsites'        
+            microsite = [microsite.url for microsite in microsites]            
+            q_list = [Q(url__contains=ms) for ms in microsite]
+            searchescandidates = SavedSearch.objects.select_related('user')
+            searchescandidates = searchescandidates.filter(reduce(operator.or_, q_list))
+            site_name = company.name
+            
+        searchescandidates = searchescandidates.filter(created_on__range=[after, before]).order_by('-created_on')           
             
     paginator = Paginator(searchescandidates, 5) # Show 5 candidates per page
     page = request.GET.get('page')
@@ -126,7 +134,7 @@ def dashboard(request):
                  'candidates': candidates,
                  'microsite': microsite,
                  'admin_you': admin_you,
-                 'view_name': 'Company Dashboard'}
+                 'site_name': site_name,}
     
     return render_to_response('mydashboard/mydashboard.html', data_dict,
                               context_instance=RequestContext(request))
