@@ -21,9 +21,15 @@ def get_distinct_users(values):
     
 @register.filter(name='update_url_length')
 def update_url_length(value):
-    """
-    Return the netloc of the url instead of the full one in the 
-    candidate activity list on employer dashboard
+    """        
+    Retrieve the given url from the candidate activity and returns a netloc
+    version of the url
+
+    Inputs:
+    :candidate.url: url that candidate has for the saved search
+
+    Outputs:
+    :updated_url.netloc: url netloc
     """
     active_url = value
     
