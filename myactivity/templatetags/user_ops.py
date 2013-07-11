@@ -19,8 +19,8 @@ def get_distinct_users(values):
 
     return users
     
-@register.filter(name='update_url_length')
-def update_url_length(value):
+@register.filter(name='url_domain')
+def url_domain(value):
     """        
     Retrieve the given url from the candidate activity and returns a netloc
     version of the url
