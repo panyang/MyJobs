@@ -73,7 +73,7 @@ $(document).ready(function()
                     <select name="microsite" class="btn">
                         <option value="{{ company_name }}">All</option>
                         {% for url in company_microsites %}
-                        <option value="{{ url.url|cut:'http://' }}">{{ url.url|cut:"http://" }}</option>
+                        <option value="{{ url.url }}">{{ url.url|cut:"http://" }}</option>
                         {% endfor %}
                     </select>
                     <br>
@@ -81,7 +81,7 @@ $(document).ready(function()
                 </form>
                 <br>
                 <hr>
-                <div class="pull-left"><strong>Activity between {{after.date}} and {{before.date}} for {{ microsite }}</strong></div><br>                
+                <div class="pull-left"><strong>Activity between {{after.date}} and {{before.date}} for {{ site_name|cut:"http://" }}</strong></div><br>                
                  <table id="row-link-table">                            
                     {% for candidate in candidates %}
                     <tr>
