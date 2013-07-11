@@ -78,8 +78,12 @@ table#row-link-table {
     cursor: pointer;
 }
 #row-link-table td {
-    padding: 5px;    
+    padding: 5px;
+    width: 40%;    
     border-bottom: 1px solid #eae6de;
+}
+#row-link-table td:first-child {    
+    width: 10%;
 }
 #row-link-table ul {
     list-style-type: none;

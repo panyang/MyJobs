@@ -1,5 +1,5 @@
 from django import template
-
+from urlparse import urlparse
 from myjobs.models import User
 from myprofile.models import ProfileUnits, Name
 
@@ -18,6 +18,18 @@ def get_distinct_users(values):
         users[name.user] = name.get_full_name()
 
     return users
+    
+@register.filter(name='clean_url')
+def clean_url(value):
+    
+    active_url = value
+    
+    if active_url.find('//') == -1:
+        active_url = '//' + value
+    
+    updated_url = urlparse(active_url)
+
+    return updated_url.netloc
     
 
 
