@@ -50,6 +50,8 @@ def dashboard(request):
     
     if request.method == 'POST':
         url = request.REQUEST.get('microsite')
+        #the url value for 'All' in the select box is company name 
+        #which then gets replaced with all microsite urls for that company
         if url == company.name:
             microsite = [microsite.url for microsite in microsites]
         else:
@@ -87,8 +89,7 @@ def dashboard(request):
         
         searchescandidates = SavedSearch.objects.select_related('user')
 
-        # All searches saved from a given microsite
-        #searchescandidates = searchescandidates.filter(url__contains=microsite)
+        # All searches saved from a given microsite        
         searchescandidates = searchescandidates.filter(reduce(operator.or_, q_list))
         
         # Specific microsite searches saved between two dates
