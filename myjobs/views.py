@@ -19,6 +19,7 @@ from django.views.generic import TemplateView
 from myjobs.models import User, EmailLog
 from myjobs.forms import *
 from myjobs.helpers import *
+from myjobs.templatetags.common_tags import get_name_obj
 from myprofile.forms import *
 from registration.forms import *
 
@@ -132,6 +133,9 @@ def view_account(request):
 @user_passes_test(User.objects.not_disabled)
 def edit_account(request):
     initial_dict = model_to_dict(request.user)
+    name = get_name_obj(request.user)
+    if name:
+        initial_dict.update(model_to_dict(name))
 
     ctx = {'user': request.user,
            'gravatar_100': request.user.get_gravatar_url(size=100)}
@@ -155,6 +159,9 @@ def edit_account(request):
 @user_passes_test(User.objects.not_disabled)
 def edit_basic(request):
     initial_dict = model_to_dict(request.user)
+    name = get_name_obj(request.user)
+    if name:
+        initial_dict.update(model_to_dict(name))
 
     form = EditAccountForm(initial=initial_dict, user=request.user)        
     if request.method == "POST":
