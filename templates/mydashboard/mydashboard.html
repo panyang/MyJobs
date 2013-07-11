@@ -1,0 +1,134 @@
+{% extends "base.html" %}
+{% load common_tags %}
+{% block site-title %}
+    <title>{% if name_obj %}{{ name_obj }} on{% else %}&nbsp;{% endif %} My.jobs</title>
+    <meta name="title" content="{% if name_obj %}{{ name_obj }} on{% else %}&nbsp;{% endif %} My.jobs">
+{% endblock %}
+{% load i18n %}
+{% load user_ops %}
+{% block meta-extra %}
+<script src="{{ STATIC_URL }}profile.js{% cache_buster %}"></script>
+<script src="http://js.nlx.org/framework/v2/js/def.ui.bootstrap.tabs.js" type="text/javascript"></script>
+<script src="http://js.nlx.org/framework/v2/js/code/bootstrap-collapse.js" type="text/javascript"></script>
+<script>
+  $(function() {
+    $( ".datepicker" ).datepicker();
+  });
+</script>
+<script>
+$(document).ready(function()
+{
+   $('#row-link-table tr').each(function(i,e)
+   {
+      $(e).children('td').click(function()
+      {
+         //here we are working on a td element, that's why we need
+         //to refer to its parent (tr) in order to find the <a> element
+         var href = $(this).closest("tr").find("a").attr("href");
+         if(href)
+         {
+            window.location = href;
+         }              
+      });
+   });
+});
+</script>
+{% endblock %}
+
+{% block content %}
+<style>
+#profileTitleRow{
+    margin-bottom: 20px;
+}
+#profileTitleRow img{
+    border-radius:5px;
+    border: 2px solid #b34529;
+}
+#profileTitleBar{
+    border-bottom: 2px solid #b34529;
+}
+#profileSubtitleBar{}
+</style>
+<div class="wrapper"> 
+    <div class="row" id="profileTitleRow">        
+        <div class="span12" id="profileTitleBar">
+            <h1>{{company_name}}</h1>            
+        </div>
+        <div class="span12" id="profileSubtitleBar">
+            &nbsp;
+        </div>
+    </div>
+    <div class="row">
+        <div class="span8" id="moduleColumn">            
+        
+            <div class="formBox">
+            <h3>Candidate Activity</h3>
+                
+                <form action='/dashboard/' method='POST' class="move-left">
+                    {% csrf_token %}
+                    <div class="span2 form-label"><strong>Date Range:</strong></div><input name="after" type="text" placeholder="{{ after.date }}" class="datepicker"> <strong>to</strong> <input name="before" type="text" placeholder="{{ before.date }}" class="datepicker"></br>
+                    <div class="span2 form-label">&nbsp;</div><input class="btn" type="submit" name="today" value="Today">&nbsp;<input class="btn" type="submit" name="seven_days" value="7 Days">&nbsp;<input class="btn" type="submit" name="thirty_days" value="30 days">
+                    <br><br>
+                    <div class="span3 form-label"><strong>Filter by site:</strong></div> 
+                    <select name="microsite" class="btn">
+                        <option value="{{ company_name }}">All</option>
+                        {% for url in company_microsites %}
+                        <option value="{{ url.url|cut:'http://' }}">{{ url.url|cut:"http://" }}</option>
+                        {% endfor %}
+                    </select>
+                    <br>
+                    <div class="span2 pull-right"><input type="submit" class="btn" value="View Activity"></div>
+                </form>
+                <br>
+                <hr>
+                <div class="pull-left"><strong>Activity between {{after.date}} and {{before.date}} for {{ site_name|cut:"http://" }}</strong></div><br>                
+                 <table id="row-link-table">                            
+                    {% for candidate in candidates %}
+                    <tr>
+                        <td>
+                        <img src="{{candidate.user.get_gravatar_url}}&s=35" class="gravatar pull-left">                        
+                        </td>
+                        <td>
+                        <div class="candidate-name">{{candidate.user|get_name_obj}}</div>
+                        <a href="{{ candidate.user.id }}">{{candidate.user}}</a>
+                        </td>
+                        <td>
+                        <strong>{% if candidate.label %}{{candidate.label}}{% else %}Unlabeled{% endif %}</strong><br>
+                        {{candidate.url}}<br>
+                        {{candidate.created_on.date}}                        
+                        </td>
+                    </tr>
+                    {% endfor %}
+                    
+                 </table>
+                 
+                 <div class="pull-left span6">
+                 {% if candidates.has_previous %}
+                    <a href="?page={{ candidates.previous_page_number }}&microsite={{microsite}}">Previous</a>
+                 {% else %}
+                    &nbsp;
+                 {% endif %}
+                 &nbsp;
+                 Page {{ candidates.number }} of {{ candidates.paginator.num_pages }}
+                 &nbsp;
+                 {% if candidates.has_next %}
+                    <a href="?page={{ candidates.next_page_number }}&microsite={{microsite}}">Next</a>
+                 {% endif %}
+                 </div>
+                 
+                 
+                  
+             </div>
+            
+            {% include "mydashboard/microsites.html" %}
+            
+        </div>
+        <div class="span4">
+            
+            {% include "mydashboard/profile.html" %}            
+            
+        </div>
+    </div>
+</div>
+
+{% endblock %}

@@ -158,7 +158,8 @@ INSTALLED_APPS = (
 
 # Add all MyJobs apps here. This separation ensures that automated Jenkins tests
 # only run on these apps
-PROJECT_APPS = ('myjobs','myprofile','mysearches','registration')
+PROJECT_APPS = ('myjobs','myprofile','mysearches','registration', 'mydashboard',
+                'myactivity')
 
 INSTALLED_APPS += PROJECT_APPS
 
