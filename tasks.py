@@ -58,6 +58,11 @@ def delete_inactive_activations():
 
 @task(name='tasks.process_batch_events')
 def process_batch_events():
+    """
+    Processes all events that have accumulated over the last day, sends emails
+    to inactive users, and disables users who have been inactive for a long
+    period of time.
+    """
     now = date.today()
     EmailLog.objects.filter(received__lte=now-timedelta(days=60),
                             processed=True).delete()
@@ -66,7 +71,7 @@ def process_batch_events():
         user = User.objects.get_email_owner(email=log.email)
         if not user:
             # This can happen if a user removes a secondary address or deletes
-            # their account before interacting with an email and the batch
+            # their account between interacting with an email and the batch
             # process being run
             # There is no course of action but to ignore that event
             continue
@@ -76,12 +81,16 @@ def process_batch_events():
         log.processed = True
         log.save()
 
-    # These users have not responded in a month. Send them an email.
-    not_responding = User.objects.filter(last_response=now-timedelta(days=30))
-    for user in not_responding:
-        message = render_to_string('myjobs/email_inactive.html')
-        user.email_user('Account Inactivity', message,
-                        settings.DEFAULT_FROM_EMAIL)
+    # These users have not responded in a month. Send them an email if they
+    # own any saved searches
+    inactive = User.objects.select_related('savedsearch_set')
+    inactive = inactive.filter(last_response=now-timedelta(days=30))
+
+    for user in inactive:
+        if user.savedsearch_set.exists():
+            message = render_to_string('myjobs/email_inactive.html')
+            user.email_user('Account Inactivity', message,
+                            settings.DEFAULT_FROM_EMAIL)
 
     # These users have not responded in a month and a week. Stop sending emails.
     stop_sending = User.objects.filter(

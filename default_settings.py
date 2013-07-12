@@ -90,7 +90,7 @@ MIDDLEWARE_CLASSES = (
     'middleware.RedirectMiddleware',
     'middleware.XsSharing',
     'django.middleware.locale.LocaleMiddleware',
-)
+    )
 
 AUTHENTICATION_BACKENDS = (
     'backends.CaseInsensitiveAuthBackend',
@@ -158,7 +158,8 @@ INSTALLED_APPS = (
 
 # Add all MyJobs apps here. This separation ensures that automated Jenkins tests
 # only run on these apps
-PROJECT_APPS = ('myjobs','myprofile','mysearches','registration')
+PROJECT_APPS = ('myjobs','myprofile','mysearches','registration', 'mydashboard',
+                'myactivity')
 
 INSTALLED_APPS += PROJECT_APPS
 
@@ -234,3 +235,5 @@ GRAVATAR_URL_PREFIX = "http://www.gravatar.com/avatar/"
 GRAVATAR_URL_DEFAULT = 'mm'
 
 CAPTCHA_AJAX = True
+
+NEW_RELIC_TRACKING = False
