@@ -3,12 +3,12 @@
         <div class="formBox">
                 <h3>Company Information</h3>
                 
-                <div class="accordion" id="details-company-information-collapse">
+                <div class="accordion" id="details-user-list-collapse">
                     <div class="accordion-group">
                         <div class="accordion-heading details-heading">
-                    	   <a class="accordion-toggle" data-toggle="collapse" data-parent="#details-collapse" href="#details-table">User List</a>
+                    	   <a class="accordion-toggle" data-toggle="collapse" data-parent="#details-user-list-collapse" href="#user-list-details-table">User List</a>
                     	</div>
-                		<div id="details-table" class="accordion-body">
+                		<div id="user-list-details-table" class="accordion-body in collapse">
                            <ul class="link-list">
                                 <li>{{ admin_you|get_name_obj }} (You)</li>
                                 {% for admin in company_admins %}                                                  
@@ -18,7 +18,25 @@
                         </div>
             		</div>
        			 </div>
-                
+       			 
+       			 <div class="accordion" id="details-microsites-collapse">
+                    <div class="accordion-group">
+                        <div class="accordion-heading details-heading">
+                    	   <a class="accordion-toggle" data-toggle="collapse" data-parent="#details-microsites-collapse" href="#microsites-details-table">Microsites</a>
+                    	</div>
+                		<div id="microsites-details-table" class="accordion-body in collapse">
+                           <ul class="link-list">
+                           {% for url in company_microsites %}
+                             <li>
+                             <strong>{{ url.url|cut:"http://" }}</strong><br>
+                             <a href="{{url.url}}" target="_blank">{{url.url}}</a>
+                             </li>
+                           {% endfor %} 
+                           </ul>
+                        </div>
+            		</div>
+       			 </div>
+       			 
             </div>
             
                             
