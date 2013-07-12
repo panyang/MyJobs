@@ -79,7 +79,7 @@ function clearForm(form) {
     });
 };
 
-// This does nothing go directly to jail and do not collect $200
+// Validation for contact form
 function contactForm(){
 
     var form = $('#captcha-form');
