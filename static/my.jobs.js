@@ -101,10 +101,10 @@ function contactForm(){
             }else{
                 var json = jQuery.parseJSON(data);
                 // remove color from labels of current errors
-                $('[class*=required]').prev().css('color', '#333');
+                $('[class*=required]').prev().removeClass('required-label');
 
                 // remove border around element
-                $('[class*=required]').children().css('border', '0');
+                $('[class*=required]').children().removeClass('required-border');
 
                 // remove current errors
                 $('[class*=required]').children().unwrap();
@@ -118,7 +118,7 @@ function contactForm(){
                     var $labelOfError = $error.prev();
                     // insert new errors after the relevant inputs
                     $error.wrap('<span class="required" />');
-                    $error.css('border', '1px solid #900');
+                    $error.addClass('required-border')
                     if(!($.browser.msie)){
                         $field.attr("placeholder",json.errors[index][1]);
                         $field.val('');
@@ -126,7 +126,7 @@ function contactForm(){
                         field = $error.parent();
                         field.before("<div class='msieError'><i>" + json.errors[index][1] + "</i></div>");
                     }
-                    $labelOfError.css('color', '#900');
+                    $labelOfError.addClass('required-label')
                 }
             }
         }

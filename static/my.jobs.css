@@ -1509,3 +1509,9 @@ body.modal-open {
 .required select {
     border: 1px solid #900;
 }
+.required-label{
+    color: #900;
+}
+.required-border{
+    border: 1px solid #900;
+}

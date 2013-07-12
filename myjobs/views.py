@@ -18,7 +18,7 @@ from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
 
 from captcha.fields import ReCaptchaField
-from secrets import RECAPTCHA_PUBLIC_KEY, RECAPTCHA_PRIVATE_KEY
+from secrets import RECAPTCHA_PUBLIC_KEY, RECAPTCHA_PRIVATE_KEY, EMAIL_TO_ADMIN
 
 from myjobs.models import User, EmailLog
 from myjobs.forms import *
@@ -145,7 +145,7 @@ def contact(request):
 
                       %s
                       """%(name, from_email, comment)
-            to_email = ['admin+myjobs@directemployersfoundation.org']
+            to_email = [EMAIL_TO_ADMIN]
             msg = EmailMessage(subject, message, from_email, to_email)
             msg.send()
             return HttpResponse('success')
