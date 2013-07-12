@@ -5,7 +5,7 @@ import logging
 import urllib2
 
 from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, logout
 from django.contrib.auth.decorators import user_passes_test, login_required
 from django.core.urlresolvers import reverse
 from django.forms.models import model_to_dict
