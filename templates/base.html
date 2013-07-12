@@ -118,12 +118,10 @@
                                         <li id="logged_in_li">
                                             {% trans "Logged in as " %} 
                                         <b>
-                                            {% with name_obj=user|get_name_obj %}
-                                                {% if name_obj %}
+                                            {% with short_email=user.email|truncatechars:"20" %}
+                                                {% with name_obj=user|get_name_obj:short_email %}
                                                     {{ name_obj }}
-                                                {% else %}
-                                                    {{ user.email|truncatechars:"20" }}
-                                                {% endif %}
+                                                {% endwith %}
                                             {% endwith %}
                                         </b>
                                         </li>
