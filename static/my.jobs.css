@@ -107,6 +107,9 @@ table#row-link-table {
 .move-left {
     margin-left: -45px;
 }
+.primary-btn-padding {
+    padding: 10px;
+}
 .text-middle {
     vertical-align: middle;   
 }

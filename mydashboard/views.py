@@ -68,32 +68,33 @@ def dashboard(request):
     # All searches saved on the employer's company microsites       
     candidate_searches = SavedSearch.objects.select_related('user')
     candidate_searches = candidate_searches.filter(reduce(operator.or_, q_list))
-        
+    
     # Pre-set Date ranges
     if 'today' in request.REQUEST:
         after = datetime.now()
         before = datetime.now() - timedelta(days=1)
+        
     elif 'seven_days' in request.REQUEST:
         after = datetime.now() - timedelta(days=7)
         before = datetime.now()
+        
     elif 'thirty_days' in request.REQUEST:
         after = datetime.now() - timedelta(days=30)
         before = datetime.now()
+        
     else:
-        if requested_after_date:
-            after = datetime.strptime(requested_after_date, '%m/%d/%Y')
-            #after = datetime.now() - timedelta(days=30)
+        if requested_after_date:            
+            after = datetime.strptime(requested_after_date, '%m/%d/%Y')            
         else:
             after = request.REQUEST.get('after')
             if after:
                 after = datetime.strptime(after, '%m/%d/%Y')
             else:
-                # Defaults to one week ago
-                after = datetime.now() - timedelta(days=30)
-        
+                # Defaults to 30 days ago
+                after = datetime.now() - timedelta(days=30)                
+                
         if requested_before_date:
-            before = datetime.strptime(requested_before_date, '%m/%d/%Y')
-            #after = datetime.now() - timedelta(days=30)
+            before = datetime.strptime(requested_before_date, '%m/%d/%Y')            
         else:        
             before = request.REQUEST.get('before')
             if before:
