@@ -30,10 +30,8 @@ def instantiate_profile_forms(request, form_classes, settings, post=False):
             profile_instances.append(form_class(**settings))
     return profile_instances
 
-def login(request, *args, **kwargs):
+def expiry_login(request, *args, **kwargs):
     if request.method == 'POST':
-        print request.POST.get('remember_me')
-        print request.POST
         if request.POST.get('remember_me', None):
             # Session expires in 2 weeks (default)
             request.session.set_expiry(None)
