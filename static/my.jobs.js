@@ -59,9 +59,9 @@ $(document).ready(function(){
         $('input, textarea').placeholder();
     });
 
-    $('contact-submit').click(function(e) {
-        e.preventDefault();
-        formThing();
+    $('#contact-submit').submit(function() {
+        console.log('tada');
+        return false;
     });
 });
              
@@ -81,25 +81,33 @@ function clearForm(form) {
 
 // This does nothing go directly to jail and do not collect $200
 function formThing(){
-    console.log("pass")
-    csrf_token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
-    console.log("pass")
+
+   // protection from cross site requests
+   csrf_token_tag = document.getElementsByName('csrfmiddlewaretoken')[0];
+   var csrf_token = "";
+   if(typeof(csrf_token_tag)!='undefined'){
+       csrf_token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+   }
+   data = '&csrfmiddlewaretoken=' + csrf_token;
     $.ajax({
         type: 'POST',
         url: '/contact/',
-        data: {csrfmiddlewaretoken: csrf_token,},
+        data: data,
         success: function(data) {
-            console.log("pass")
             var json = jQuery.parseJSON(data);
+            console.log(json)
             if(json == 'success'){
+                console.log('works')
                 window.location.href = "http://my.jobs"
             }else{
                 for (var index in json.errors) {
-                    var $error = $('[id$="-'+json.errors[index][0]+'"]');
+                    var $error = $('[class$="'+json.errors[index][0]+'"]');
                     var $field = $('[id$=recaptcha_response_field]')
                     var $labelOfError = $error.prev();
+                    console.log(json.errors[index][1])
                     // insert new errors after the relevant inputs
                     $error.wrap('<span class="required" />');
+                    $error.css('border', '1px solid #900')
                     if(!($.browser.msie)){
                         $field.attr("placeholder",json.errors[index][1]);
                     }else{
