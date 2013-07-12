@@ -43,7 +43,8 @@ def dashboard(request):
     admins = admins.exclude(user=request.user)
     
     requested_microsite = request.REQUEST.get('microsite', company.name)  
-    
+    requested_after_date = request.REQUEST.get('after', False)
+    requested_before_date = request.REQUEST.get('before', False)
     
     # the url value for 'All' in the select box is company name 
     # which then gets replaced with all microsite urls for that company
@@ -71,7 +72,7 @@ def dashboard(request):
     # Pre-set Date ranges
     if 'today' in request.REQUEST:
         after = datetime.now()
-        before = datetime.now()
+        before = datetime.now() - timedelta(days=1)
     elif 'seven_days' in request.REQUEST:
         after = datetime.now() - timedelta(days=7)
         before = datetime.now()
@@ -79,25 +80,33 @@ def dashboard(request):
         after = datetime.now() - timedelta(days=30)
         before = datetime.now()
     else:
-        after = request.REQUEST.get('after')
-        if after:
-            after = datetime.strptime(after, '%m/%d/%Y')
+        if requested_after_date:
+            after = datetime.strptime(requested_after_date, '%m/%d/%Y')
+            #after = datetime.now() - timedelta(days=30)
         else:
-            # Defaults to one week ago
-            after = datetime.now() - timedelta(days=30)
-    
-        before = request.REQUEST.get('before')
-        if before:
-            before = datetime.strptime(before, '%m/%d/%Y')
-        else:
-            # Defaults to the date and time that the page is accessed
-            before = datetime.now()
+            after = request.REQUEST.get('after')
+            if after:
+                after = datetime.strptime(after, '%m/%d/%Y')
+            else:
+                # Defaults to one week ago
+                after = datetime.now() - timedelta(days=30)
+        
+        if requested_before_date:
+            before = datetime.strptime(requested_before_date, '%m/%d/%Y')
+            #after = datetime.now() - timedelta(days=30)
+        else:        
+            before = request.REQUEST.get('before')
+            if before:
+                before = datetime.strptime(before, '%m/%d/%Y')
+            else:
+                # Defaults to the date and time that the page is accessed
+                before = datetime.now()
     
     # Specific microsite searches saved between two dates
     candidate_searches = candidate_searches.filter(
             created_on__range=[after, before]).order_by('-created_on')  
     
-    paginator = Paginator(candidate_searches, 5) # Show 5 candidates per page
+    paginator = Paginator(candidate_searches, 1) # Show 5 candidates per page
     page = request.GET.get('page')
     
     try:

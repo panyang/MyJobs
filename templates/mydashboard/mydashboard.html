@@ -66,7 +66,7 @@ $(document).ready(function()
                 
                 <form action='/dashboard/' method='POST' class="move-left">
                     {% csrf_token %}
-                    <div class="span2 form-label"><strong>Date Range:</strong></div><input name="after" type="text" placeholder="{{ after.date }}" class="datepicker"> <strong>to</strong> <input name="before" type="text" placeholder="{{ before.date }}" class="datepicker"></br>
+                    <div class="span2 form-label"><strong>Date Range:</strong></div><input name="after" type="text" placeholder="{{ after|date:'m/d/Y' }}" class="datepicker"> <strong>to</strong> <input name="before" type="text" placeholder="{{ before|date:'m/d/Y' }}" class="datepicker"></br>
                     <div class="span2 form-label">&nbsp;</div><input class="btn" type="submit" name="today" value="Today">&nbsp;<input class="btn" type="submit" name="seven_days" value="7 Days">&nbsp;<input class="btn" type="submit" name="thirty_days" value="30 days">
                     <br><br>
                     <div class="span3 form-label"><strong>Filter by site:</strong></div> 
@@ -107,7 +107,7 @@ $(document).ready(function()
                  <div class="pull-left span6">
                  
                  {% if candidates.has_previous %}
-                    <a href="?page={{ candidates.previous_page_number }}&microsite={{ site_name }}">Previous</a>
+                    <a href="?page={{ candidates.previous_page_number }}&microsite={{ site_name }}&after={{ after|date:'m/d/Y' }}&before={{ before|date:'m/d/Y' }}">Previous</a>
                  {% else %}
                     &nbsp;
                  {% endif %}
@@ -115,7 +115,7 @@ $(document).ready(function()
                  Page {{ candidates.number }} of {{ candidates.paginator.num_pages }}
                  &nbsp;
                  {% if candidates.has_next %}
-                    <a href="?page={{ candidates.next_page_number }}&microsite={{ site_name }}">Next</a>
+                    <a href="?page={{ candidates.next_page_number }}&microsite={{ site_name }}&after={{ after|date:'m/d/Y' }}&before={{ before|date:'m/d/Y' }}">Next</a>
                  {% endif %}
                  </div>
                  
