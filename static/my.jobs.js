@@ -59,9 +59,10 @@ $(document).ready(function(){
         $('input, textarea').placeholder();
     });
 
-    $('#contact-submit').submit(function() {
+    $('#captcha-form').submit(function(e) {
+        e.preventDefault();
         console.log('tada');
-        return false;
+        formThing();
     });
 });
              
@@ -82,6 +83,7 @@ function clearForm(form) {
 // This does nothing go directly to jail and do not collect $200
 function formThing(){
 
+    var form = $('#captcha-form');
    // protection from cross site requests
    csrf_token_tag = document.getElementsByName('csrfmiddlewaretoken')[0];
    var csrf_token = "";
@@ -89,17 +91,18 @@ function formThing(){
        csrf_token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
    }
    data = '&csrfmiddlewaretoken=' + csrf_token;
+   data += form.serialize();
     $.ajax({
         type: 'POST',
         url: '/contact/',
         data: data,
         success: function(data) {
-            var json = jQuery.parseJSON(data);
-            console.log(json)
-            if(json == 'success'){
+            console.log(data)
+            if(data == 'success'){
                 console.log('works')
                 window.location.href = "http://my.jobs"
             }else{
+                var json = jQuery.parseJSON(data);
                 for (var index in json.errors) {
                     var $error = $('[class$="'+json.errors[index][0]+'"]');
                     var $field = $('[id$=recaptcha_response_field]')

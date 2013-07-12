@@ -148,10 +148,10 @@ def contact(request):
             to_email = ['david@directemployersfoundation.org']
             msg = EmailMessage(subject, message, from_email, to_email)
             msg.send()
-            #return HttpResponse('success')
-            return render_to_response('index.html', RequestContext(request))
+            return HttpResponse('success')
+            #return render_to_response('index.html', RequestContext(request))
         else:
-            return HttpResponse(json.dumps(form.errors))
+            return HttpResponse(json.dumps({'errors': form.errors.items()}))
     else:
         form = CaptchaForm()
         data_dict = {'form':form}
