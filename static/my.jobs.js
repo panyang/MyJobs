@@ -61,8 +61,7 @@ $(document).ready(function(){
 
     $('#captcha-form').submit(function(e) {
         e.preventDefault();
-        console.log('tada');
-        formThing();
+        contactForm();
     });
 });
              
@@ -81,38 +80,48 @@ function clearForm(form) {
 };
 
 // This does nothing go directly to jail and do not collect $200
-function formThing(){
+function contactForm(){
 
     var form = $('#captcha-form');
-   // protection from cross site requests
-   csrf_token_tag = document.getElementsByName('csrfmiddlewaretoken')[0];
-   var csrf_token = "";
-   if(typeof(csrf_token_tag)!='undefined'){
+    // protection from cross site requests
+    csrf_token_tag = document.getElementsByName('csrfmiddlewaretoken')[0];
+    var csrf_token = "";
+    if(typeof(csrf_token_tag)!='undefined'){
        csrf_token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
-   }
-   data = '&csrfmiddlewaretoken=' + csrf_token;
-   data += form.serialize();
+    }
+    data = '&csrfmiddlewaretoken=' + csrf_token;
+    data += form.serialize();
     $.ajax({
         type: 'POST',
         url: '/contact/',
         data: data,
         success: function(data) {
-            console.log(data)
             if(data == 'success'){
-                console.log('works')
                 window.location.href = "http://my.jobs"
             }else{
                 var json = jQuery.parseJSON(data);
+                // remove color from labels of current errors
+                $('[class*=required]').prev().css('color', '#333');
+
+                // remove border around element
+                $('[class*=required]').children().css('border', '0');
+
+                // remove current errors
+                $('[class*=required]').children().unwrap();
+
+                if($.browser.msie){
+                    $('[class*=msieError]').remove()
+                }
                 for (var index in json.errors) {
                     var $error = $('[class$="'+json.errors[index][0]+'"]');
                     var $field = $('[id$=recaptcha_response_field]')
                     var $labelOfError = $error.prev();
-                    console.log(json.errors[index][1])
                     // insert new errors after the relevant inputs
                     $error.wrap('<span class="required" />');
-                    $error.css('border', '1px solid #900')
+                    $error.css('border', '1px solid #900');
                     if(!($.browser.msie)){
                         $field.attr("placeholder",json.errors[index][1]);
+                        $field.val('');
                     }else{
                         field = $error.parent();
                         field.before("<div class='msieError'><i>" + json.errors[index][1] + "</i></div>");

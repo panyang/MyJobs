@@ -145,11 +145,10 @@ def contact(request):
 
                       %s
                       """%(name, from_email, comment)
-            to_email = ['david@directemployersfoundation.org']
+            to_email = ['admin+myjobs@directemployersfoundation.org']
             msg = EmailMessage(subject, message, from_email, to_email)
             msg.send()
             return HttpResponse('success')
-            #return render_to_response('index.html', RequestContext(request))
         else:
             return HttpResponse(json.dumps({'errors': form.errors.items()}))
     else:
