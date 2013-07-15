@@ -3,13 +3,11 @@
 {% block site-title %}
         <title>Contact My.jobs</title>
         <meta name="title" content="Contact My.jobs">
-{% endblock %}
-{% block meta-extra %}{% endblock %}
+{% endblock site-title %}
+{% block meta-extra %}{% endblock meta-extra %}
 {% block header %}
     <h1>Contact My.jobs</h1>
-{% endblock %}
-
-
+{% endblock header%}
 {% block text %}
 <form method="POST" id="captcha-form">
 	<br />
@@ -58,6 +56,5 @@
 	<div class="span3 form-label pull-left initial"></div>
 	<input type="submit" class="submit btn primary" id="contact-submit" value="Submit">
 </form>
-{% endblock %}
-
-{% block quick-links %}{% endblock %}
+{% endblock text %}
+{% block quick-links %}{% endblock quick-links %}

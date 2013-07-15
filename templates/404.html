@@ -3,23 +3,18 @@
 {% block site-title %}
     <title>Error 404 My.jobs</title>
     <meta name="title" content="Error 404 My.jobs">
-{% endblock %}
-
-{% block meta-extra %}{% endblock %}
-
+{% endblock site-title %}
+{% block meta-extra %}{% endblock meta-extra %}
 {% block header %}
     <h1>
         {% trans "Error 404"%}
         <small>{% trans "Page not found" %}</small>
     </h1>
-{% endblock %}
-
+{% endblock header %}
 {% block text %}     
     The page you have requested could not be found or has been removed. 
     You can either return to the <a href = "/">home page</a> or use the 
     links to the right.
 {% endblock text %}
-
 {% block focusbox-content %}
-
 {% endblock focusbox-content %}

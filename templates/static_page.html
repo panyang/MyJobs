@@ -5,10 +5,9 @@ This page was created to make editing
 style for static pages (about.html, privacy, etc)
 easier and faster
 {% endcomment %}
-
 {% block content %}
     <div class="span8">
-		{% block text %}{% endblock %}
+		{% block text %}{% endblock text %}
 	</div>
 	{% block quick-links %}
 	<div class="span4">
@@ -21,28 +20,19 @@ easier and faster
                 <tr class="profile-section">
                     <td><a href="{% url 'view_profile' %}">Profile</a></td>
                 </tr>
-
                 {% if user.is_authenticated %}
-
-                <tr class="profile-section">
-                    <td><a href="{% url 'saved_search_main' %}">Saved Search</a></td>
-                </tr>
-
-                {% is_a_group_member user "Employer" as group_member %}
-
-                {% if group_member and user.is_active %}
-
-                <tr class="profile-section">
-                    <td><a href="{% url 'dashboard' %}">Dashboard</a></td>
-                </tr>
-
+                	<tr class="profile-section">
+                    	<td><a href="{% url 'saved_search_main' %}">Saved Search</a></td>
+                	</tr>
+                	{% is_a_group_member user "Employer" as group_member %}
+                	{% if group_member and user.is_active %}
+                		<tr class="profile-section">
+                    		<td><a href="{% url 'dashboard' %}">Dashboard</a></td>
+                		</tr>
+                	{% endif %}
                 {% endif %}
-
-                {% endif %}
-                
             </table>
         </div>
     </div>
-	{% endblock %}
-{% endblock %}
-
+	{% endblock quick-links %}
+{% endblock content %}

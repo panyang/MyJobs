@@ -4,22 +4,17 @@
     <title>Error 500 My.jobs</title>
     <meta name="title" content="Error 500 My.jobs">
 {% endblock %}
-
-{% block meta-extra %}{% endblock %}
-
+{% block meta-extra %}{% endblock meta-extra %}
 {% block header %}
     <h1>
         {% trans "Error 500"%}
         <small>{% trans "Page not found" %}</small>
     </h1>
-{% endblock %}
-
+{% endblock header %}
 {% block text %}       
     Something has gone wrong on the server, and we can't process this request 
     right now. Please hit the back button in your browser, or use the links to 
     the right.
 {% endblock text %}
-
 {% block focusbox-content %}
-
 {% endblock focusbox-content %}
