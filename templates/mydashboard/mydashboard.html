@@ -122,7 +122,8 @@ $(document).ready(function()
                 </form>
                 <br>
                 <hr>
-                <div class="pull-left"><strong>Activity between {{after.date}} and {{before.date}} for {{ site_name|cut:"http://" }}</strong></div><br>                
+                {% if candidates %}
+                <div class="pull-left"><strong>Activity between {{after.date}} and {{before.date}} for {{ site_name|cut:"http://" }}</strong></div><br>                                
                  <table id="row-link-table">                            
                     {% for candidate in candidates %}
                     <tr>
@@ -157,7 +158,11 @@ $(document).ready(function()
                     <a href="?page={{ candidates.next_page_number }}&microsite={{ site_name }}&after={{ after|date:'m/d/Y' }}&before={{ before|date:'m/d/Y' }}">Next</a>
                  {% endif %}
                  </div>
-                  
+                 {% else %}
+                 <div id="no-activity">
+                 <strong>There is no candidate activity between {{after.date}} and {{before.date}} for {{ site_name|cut:"http://" }}</strong>
+                 </div>
+                 {% endif %}
              </div>
             
         </div>

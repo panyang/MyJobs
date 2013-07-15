@@ -116,6 +116,12 @@ table#row-link-table {
 .candidate-name {
     font-size: 1.5em;   
 }
+#no-activity {    
+    background-color: #FFF;
+    width: 95%;    
+    padding: 10px;
+}
+
 /*Ajax Indicator*/
 #ajax-busy {
     display: none;    
