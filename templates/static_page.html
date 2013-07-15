@@ -1,4 +1,5 @@
 {% extends 'base.html' %}
+{% load common_tags %}
 {% comment %}
 This page was created to make editing 
 style for static pages (about.html, privacy, etc)
@@ -14,15 +15,31 @@ easier and faster
         <div class="formBox" id="moduleBank"> 
             <h2>Quick Links:</h2>
             <table class="table table-bordered tables-striped">
+            	<tr class="profile-section">
+                    <td><a href="/">Home</a></td>
+                </tr>
                 <tr class="profile-section">
                     <td><a href="{% url 'view_profile' %}">Profile</a></td>
                 </tr>
+
+                {% if user.is_authenticated %}
+
                 <tr class="profile-section">
                     <td><a href="{% url 'saved_search_main' %}">Saved Search</a></td>
                 </tr>
+
+                {% is_a_group_member user "Employer" as group_member %}
+
+                {% if group_member and user.is_active %}
+
                 <tr class="profile-section">
-                    <td><a href="/">Home</a></td>
+                    <td><a href="{% url 'dashboard' %}">Dashboard</a></td>
                 </tr>
+
+                {% endif %}
+
+                {% endif %}
+                
             </table>
         </div>
     </div>
