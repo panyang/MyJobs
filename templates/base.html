@@ -49,10 +49,10 @@
                                 {% is_a_group_member user "Employer" as group_member %}
                                 {% get_company_name user as company_name %}
                                 {% if view_name == 'Saved Searches' %}
+                                    <li class=""><a href="{% url 'view_profile' %}">{% trans "My Profile" %}</a></li>
                                     {% if user.is_active %}
                                         <li class="active"> <a href="{% url 'saved_search_main' %}">{% trans "Saved Searches" %}</a></li>
                                     {% endif %}
-                                    <li class=""><a href="{% url 'view_profile' %}">{% trans "My Profile" %}</a></li>
                                     {% if group_member and user.is_active and company_name|length >= 1%}
                                         <li class=""><a href="{% url 'dashboard' %}">
                                         {% if company_name|length > 1 %}
@@ -63,10 +63,10 @@
                                         </a></li>
                                     {% endif %}
                                 {% elif view_name == 'My Profile' %}
+                                    <li class="active"><a href="{% url 'view_profile' %}">{% trans "My Profile" %}</a></li>
                                     {% if user.is_active and user.is_active %}
                                         <li class=""> <a href="{% url 'saved_search_main' %}">{% trans "Saved Searches" %}</a></li>
                                     {% endif %}
-                                    <li class="active"><a href="{% url 'view_profile' %}">{% trans "My Profile" %}</a></li>
                                     {% if group_member and user.is_active and company_name|length >= 1%}
                                         <li class=""><a href="{% url 'dashboard' %}">
                                         {% if company_name|length > 1 %}
@@ -77,10 +77,10 @@
                                         </a></li>
                                     {% endif %}
                                 {% elif view_name == 'Company Dashboard' %}
+                                    <li class=""><a href="{% url 'view_profile' %}">{% trans "My Profile" %}</a></li>
                                     {% if user.is_active %}
                                         <li class=""> <a href="{% url 'saved_search_main' %}">{% trans "Saved Searches" %}</a></li>
                                     {% endif %}                                    
-                                    <li class=""><a href="{% url 'view_profile' %}">{% trans "My Profile" %}</a></li>
                                     {% if group_member and user.is_active and company_name|length >= 1%}
                                         <li class="active"><a href="{% url 'dashboard' %}">
                                         {% if company_name|length > 1 %}
@@ -91,10 +91,10 @@
                                         </a></li>
                                     {% endif %}
                                 {% else %}
+                                    <li class=""><a href="{% url 'view_profile' %}">{% trans "My Profile" %}</a></li>
                                     {% if user.is_active %}
                                         <li class=""> <a href="{% url 'saved_search_main' %}">{% trans "Saved Searches" %}</a></li>
                                     {% endif %}                                    
-                                    <li class=""><a href="{% url 'view_profile' %}">{% trans "My Profile" %}</a></li>
                                     {% if group_member and user.is_active and company_name|length >= 1%}
                                         <li class=""><a href="{% url 'dashboard' %}">
                                         {% if company_name|length > 1 %}
