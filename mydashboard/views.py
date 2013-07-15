@@ -71,8 +71,8 @@ def dashboard(request):
     
     # Pre-set Date ranges
     if 'today' in request.REQUEST:
-        after = datetime.now()
-        before = datetime.now() - timedelta(days=1)
+        after = datetime.now() - timedelta(days=1)
+        before = datetime.now() 
         
     elif 'seven_days' in request.REQUEST:
         after = datetime.now() - timedelta(days=7)
