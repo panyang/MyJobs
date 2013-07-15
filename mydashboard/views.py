@@ -107,7 +107,7 @@ def dashboard(request):
     candidate_searches = candidate_searches.filter(
             created_on__range=[after, before]).order_by('-created_on')  
     
-    paginator = Paginator(candidate_searches, 8) # Show 8 candidates per page
+    paginator = Paginator(candidate_searches, 10) # Show 10 candidates per page
     page = request.GET.get('page')
     
     try:
