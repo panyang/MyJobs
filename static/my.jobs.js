@@ -97,7 +97,7 @@ function contactForm(){
         data: data,
         success: function(data) {
             if(data == 'success'){
-                window.location.href = "http://my.jobs/success"
+                window.location.href = "/success/"
             }else{
                 var json = jQuery.parseJSON(data);
                 // remove color from labels of current errors
