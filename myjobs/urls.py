@@ -9,6 +9,7 @@ urlpatterns = patterns('MyJobs.myjobs.views',
     url(r'^about/$', About.as_view(), name='about'),
     url(r'^privacy/$', Privacy.as_view(), name='privacy'),
     url(r'^terms/$', Terms.as_view(), name='terms'),
+    url(r'^contact/$', 'contact', name='contact'),
     url(r'^account/$', 'view_account', name='view_account'),
     url(r'^account/delete$', 'delete_account', name='delete_account'),
     url(r'^account/disable$', 'disable_account', name='disable_account'),
@@ -21,4 +22,5 @@ urlpatterns = patterns('MyJobs.myjobs.views',
     url(r'^error/$', 'error', name='error'),
     url(r'^batch$', 'batch_message_digest', name='batch_message_digest'),
     url(r'^send/$', 'continue_sending_mail', name='continue_sending_mail'),
+    url(r'^success/$', Success.as_view(), name='success')
 )
