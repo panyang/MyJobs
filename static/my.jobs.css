@@ -259,9 +259,12 @@ ul.ui-autocomplete{
     background-color: #b34529 !important;
     }
 .formBox select {
-    width: 216px;
+    width: 221px;
     }
 form select{
+    width: 262px;
+    }
+fieldset select{
     width: 264px;
     }
 #title{

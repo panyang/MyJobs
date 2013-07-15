@@ -40,6 +40,10 @@ class Terms(TemplateView):
     template_name = "terms.html"
 
 
+class Success(TemplateView):
+    template_name = "success.html"
+
+
 class CaptchaForm(Form):
     captcha = ReCaptchaField(label="", attrs={'theme': 'white'})
 
@@ -134,17 +138,19 @@ def home(request):
 def contact(request):
     if request.POST:
         name = request.POST.get('name')
+        is_a = request.POST.get('subject')
         from_email = request.POST.get('email')
         comment = request.POST.get('comment')
         form = CaptchaForm(request.POST)
         if form.is_valid():
-            subject = ('Contact My.jobs by %s'%name)
+            subject = ('Contact My.jobs by a(n) %s'%is_a)
             message = """
                       Name: %s
+                      Is a(n): %s
                       Email: %s
 
                       %s
-                      """%(name, from_email, comment)
+                      """%(name, is_a, from_email, comment)
             to_email = [EMAIL_TO_ADMIN]
             msg = EmailMessage(subject, message, from_email, to_email)
             msg.send()
