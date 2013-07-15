@@ -107,12 +107,24 @@ table#row-link-table {
 .move-left {
     margin-left: -45px;
 }
+.primary-btn-padding {
+    padding: 10px;
+}
 .text-middle {
     vertical-align: middle;   
 }
 .candidate-name {
     font-size: 1.5em;   
 }
+#no-activity {    
+    background-color: #FFF;
+    width: 95%;    
+    padding: 10px;
+}
+.btn + .btn-success {
+    color: #FFF;
+}
+
 /*Ajax Indicator*/
 #ajax-busy {
     display: none;    
