@@ -13,23 +13,24 @@ def cache_buster():
     return cache_buster
 
 @register.filter
-def get_name_obj(user):
+def get_name_obj(user, default=""):
     """
-    Retrieve the given user's primary name (if one exists) or an empty string
+    Retrieve the given user's primary name (if one exists) or a default value
 
     Inputs:
     :user: User instance
+    :default: Return this if no name exists
 
     Outputs:
-    :name: Name instance or blank
+    :name: Name instance or :default:
     """
     try:
         name = user.profileunits_set.get(content_type__name="name",
                                          name__primary=True).name
         if not name.get_full_name():
-            name = ""
+            name = default
     except ProfileUnits.DoesNotExist:
-        name = ""
+        name = default
     return name
 
 @register.assignment_tag
