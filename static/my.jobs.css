@@ -121,6 +121,9 @@ table#row-link-table {
     width: 95%;    
     padding: 10px;
 }
+.btn + .btn-success {
+    color: #FFF;
+}
 
 /*Ajax Indicator*/
 #ajax-busy {
