@@ -45,7 +45,7 @@ def dashboard(request):
     requested_microsite = request.REQUEST.get('microsite', company.name)  
     requested_after_date = request.REQUEST.get('after', False)
     requested_before_date = request.REQUEST.get('before', False)
-    requested_before_date = request.REQUEST.get('date_button', False)
+    requested_date_button = request.REQUEST.get('date_button', False)
     
     # the url value for 'All' in the select box is company name 
     # which then gets replaced with all microsite urls for that company
@@ -74,15 +74,15 @@ def dashboard(request):
     if 'today' in request.REQUEST:
         after = datetime.now() - timedelta(days=1)
         before = datetime.now() 
-        date_button = 'today'
+        requested_date_button = 'today'
     elif 'seven_days' in request.REQUEST:
         after = datetime.now() - timedelta(days=7)
         before = datetime.now()
-        date_button = 'seven_days'
+        requested_date_button = 'seven_days'
     elif 'thirty_days' in request.REQUEST:
         after = datetime.now() - timedelta(days=30)
         before = datetime.now()
-        date_button = 'thirty_days'
+        requested_date_button = 'thirty_days'
     else:
         if requested_after_date:            
             after = datetime.strptime(requested_after_date, '%m/%d/%Y')            
@@ -131,7 +131,7 @@ def dashboard(request):
                  'admin_you': admin_you,
                  'site_name': site_name,
                  'view_name': 'Company Dashboard',
-                 'date_button': date_button,}
+                 'date_button': requested_date_button,}
     
     return render_to_response('mydashboard/mydashboard.html', data_dict,
                               context_instance=RequestContext(request))
