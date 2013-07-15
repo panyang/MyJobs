@@ -712,10 +712,6 @@ input[type='checkbox'] + .help-block{
 form input[type='checkbox']{
     margin-top: -1px;
 }
-#profileTitleBar #candidate-flag{
-    font-size: 0.6em;
-    color: #333;
-}
 #user-buttons input[type="button"]{
     margin-left: 20px;
     width: 180px;
