@@ -1,41 +1,25 @@
-{% extends "base.html" %}
+{% extends "static_page.html" %}
 {% load i18n %}
-{% block header-content %}
-<h1>{% trans "Error 500"%}</h1>
-<small>{% trans "Page not found" %}</small>
-{% endblock header-content %}
-{% block content %}
+{% block site-title %}
+    <title>Error 500 My.jobs</title>
+    <meta name="title" content="Error 500 My.jobs">
+{% endblock %}
 
-<div class="row">
-    <div class="span12">
-        <h1>{% trans "Error 500 " %}
-    	<small>{% trans "Something has gone wrong with the server" %}</small></h1>
-    </div>
-</div>
+{% block meta-extra %}{% endblock %}
 
-<div class="row">
-    <div class="span8">        
-    	<p> Something has gone wrong on the server, and we can't process this request right now. Please hit the back button in your browser, or use the links to the right.
-    	</p>
-    </div>
-    <div class="span4">
-        <div class="formBox" id="moduleBank"> 
-            <h2>Quick Links:</h2>
-            <table class="table table-bordered tables-striped">
-                <tr class="profile-section">
-                    <td><a href="{% url 'view_profile' %}">Profile</a></td>
-                </tr>
-                <tr class="profile-section">
-                    <td><a href="{% url 'saved_search_main' %}">Saved Search</a></td>
-                </tr>
-                <tr class="profile-section">
-                    <td><a href="/">Home</a></td>
-                </tr>
-            </table>
-        </div>
-    </div>
-</div>
+{% block header %}
+    <h1>
+        {% trans "Error 500"%}
+        <small>{% trans "Page not found" %}</small>
+    </h1>
+{% endblock %}
 
-{% endblock content %}
+{% block text %}       
+    Something has gone wrong on the server, and we can't process this request 
+    right now. Please hit the back button in your browser, or use the links to 
+    the right.
+{% endblock text %}
+
 {% block focusbox-content %}
+
 {% endblock focusbox-content %}
