@@ -20,7 +20,7 @@ class CompanyForm(forms.ModelForm):
     the cleaned_data dict to make the form valid again.
     """
     admins = forms.ModelMultipleChoiceField(
-        queryset=User.objects.filter(groups=CompanyUser.GROUP), required=False,
+        queryset=User.objects.filter(groups__name=CompanyUser.GROUP_NAME), required=False,
         widget=admin.widgets.FilteredSelectMultiple('admins', False))
 
     def save(self, commit=True):
