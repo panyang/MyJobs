@@ -154,6 +154,7 @@ INSTALLED_APPS = (
     'django_nose',
     'django_messages',
     'tastypie',
+    'captcha'
 )
 
 # Add all MyJobs apps here. This separation ensures that automated Jenkins tests
