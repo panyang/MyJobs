@@ -19,12 +19,8 @@ done.html -- presents user_view_profile.
                   <td>{{ user.email|default:"Not provided" }}</td></tr>
                 <tr><td class="table-field"><b>{% trans "Name" %}</b></td>
                   <td>
-                    {% with name_obj=user|get_name_obj %}
-                        {% if name_obj %}
-                            {{ name_obj }}
-                        {% else %}
-                            Not Provided
-                        {% endif%}
+                    {% with name_obj=user|get_name_obj:"Not Provided" %}
+                        {{ name_obj }}
                     {% endwith %}
                 </td></tr>
                 <tr><td class="table-field"><b>{% trans "Date Joined" %}</b></td>

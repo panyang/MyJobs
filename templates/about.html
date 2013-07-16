@@ -2,11 +2,11 @@
 {% block site-title %}
         <title>About My.jobs</title>
         <meta name="title" content="About My.jobs">
-{% endblock %}
+{% endblock site-title%}
 {% block meta-extra %}{% endblock %}
 {% block header %}
     <h1>About My.jobs</h1>
-{% endblock %}
+{% endblock header %}
 {% block text %}
     <p>This platform is designed to make finding employment easier. This is done by empowering the job seeker to control their data, and then making it easy for them to connect to like minded and interested employers.</p>
 
@@ -37,4 +37,5 @@
     <h2>Why?</h2>
 
     <p>My.jobs is funded and maintained by the <a href="http://directemployersfoundation.org">DirectEmployers Foundation</a>, an organization dedicated to a fair, open, and trusted job search experience.</p>
-{% endblock %}
+{% endblock text %}
+{% block quick-links %}{% endblock quick-links %}
