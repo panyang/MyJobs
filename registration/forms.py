@@ -26,6 +26,8 @@ class CustomAuthForm(AuthenticationForm):
                                           'id':'id_password'},
                                    render_value=False,))
 
+    remember_me = forms.BooleanField(label=_('Trust This Computer'), required=False)
+
     def __init__(self, request=None, *args, **kwargs):
         super(CustomAuthForm, self).__init__(request, *args, **kwargs)
 

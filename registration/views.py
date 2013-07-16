@@ -5,7 +5,7 @@ from django.shortcuts import render_to_response
 from django.template import RequestContext
 from django.views.generic import TemplateView
 
-from myjobs.helpers import expiry_login
+from myjobs.helpers import expire_login
 from myjobs.models import *
 from registration.models import ActivationProfile
 from registration.forms import RegistrationForm
@@ -29,7 +29,7 @@ def register(request):
             username=form.cleaned_data['email']
             password=form.cleaned_data['password1']
             user = authenticate(username=username, password=password)
-            expiry_login(request, user)
+            expire_login(request, user)
             return HttpResponseRedirect('/accounts/register/complete/')
     return HttpResponse(json.dumps({'errors': form.errors.items()}))
 

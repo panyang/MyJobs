@@ -30,9 +30,13 @@ def instantiate_profile_forms(request, form_classes, settings, post=False):
             profile_instances.append(form_class(**settings))
     return profile_instances
 
-def expiry_login(request, *args, **kwargs):
+def expire_login(request, *args, **kwargs):
+    """
+    Wrapper for django.contrib.auth.login that sets the session expiration
+    based on the presence/absence of POST data
+    """
     if request.method == 'POST':
-        if request.POST.get('remember_me', None):
+        if request.POST.get('remember_me', None) is not None:
             # Session expires in 2 weeks (default)
             request.session.set_expiry(None)
         else:
