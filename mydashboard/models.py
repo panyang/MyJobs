@@ -48,7 +48,7 @@ class Microsite(models.Model):
         return 'Microsite %s for %s' % (self.url, self.company.name)
 
 class CompanyUser(models.Model):
-    GROUP = Group.objects.get(name='Employer')
+    GROUP_NAME = 'Employer'
 
     user = models.ForeignKey(User)
     company = models.ForeignKey(Company)
@@ -65,7 +65,8 @@ class CompanyUser(models.Model):
         If the user is already a member of the Employer group, the Group app
         is smart enough to not add it a second time.
         """
-        self.user.groups.add(self.GROUP)
+        group = Group.objects.get(name=self.GROUP_NAME)
+        self.user.groups.add(group)
 
         super(CompanyUser,self).save(*args, **kwargs)
 

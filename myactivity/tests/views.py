@@ -6,24 +6,24 @@ from django.contrib.auth.models import Group
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 
+from mydashboard.models import CompanyUser
+from mydashboard.tests.factories import CompanyFactory, CompanyUserFactory, MicrositeFactory
 from myjobs.models import User
 from myjobs.tests.views import TestClient
 from myjobs.tests.factories import UserFactory
-from mysearches.models import SavedSearch
-from mysearches.tests.factories import SavedSearchFactory
 from myprofile.models import ProfileUnits
 from myprofile.tests.factories import PrimaryNameFactory, SecondaryEmailFactory, EducationFactory
 from myprofile.tests.factories import AddressFactory, TelephoneFactory, EmploymentHistoryFactory
-from mydashboard.tests.factories import CompanyFactory, CompanyUserFactory, MicrositeFactory
+from mysearches.models import SavedSearch
+from mysearches.tests.factories import SavedSearchFactory
 
-
-EMPLOYER = Group.objects.get(name='Employer')
 SEARCH_OPTS = ['django', 'python', 'programming']
 
 class MyActivityViewsTests(TestCase):
     def setUp(self):
         self.staff_user = UserFactory()
-        self.staff_user.groups.add(EMPLOYER)
+        group = Group.objects.get(name=CompanyUser.GROUP_NAME)
+        self.staff_user.groups.add(group)
         self.staff_user.save()
 
         self.company = CompanyFactory()

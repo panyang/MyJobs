@@ -10,9 +10,17 @@
                     	</div>
                 		<div id="user-list-details-table" class="accordion-body in collapse">
                            <ul class="link-list">
-                                <li>{{ admin_you|get_name_obj }} (You)</li>
-                                {% for admin in company_admins %}                                                  
-                                    <li>{{ admin.user|get_name_obj }}</li>                                
+                                {% with user_name=admin_you|get_name_obj:admin_you.email %}
+                                <li>
+                                    {{ user_name }} (You)
+                                </li>
+                                {% endwith %}
+                                {% for admin in company_admins %}
+                                    {% with user_name=admin.user|get_name_obj:admin.user.email %}
+                                    <li>
+                                        {{ user_name }}
+                                    </li>
+                                    {% endwith %}
                                 {% endfor %} 
                            </ul>
                         </div>
