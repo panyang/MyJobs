@@ -130,9 +130,6 @@ table#row-link-table {
 .btn + .btn-success {
     color: #FFF !important;  
 }
-.btn-success {
-    color: #FFF;
-}
 
 /*Ajax Indicator*/
 #ajax-busy {
