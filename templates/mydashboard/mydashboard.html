@@ -65,7 +65,7 @@ $(document).ready(function()
         
             <div class="formBox">
             <h3>Candidate Activity</h3>
-                
+                <div class="mobile-hide">    
                 <form action='/dashboard/' method='POST' class="move-left">
                     {% csrf_token %}
                     <div class="span2 form-label"><strong>Date Range:</strong></div><input name="after" type="text" placeholder="{{ after|date:'m/d/Y' }}" class="datepicker"> <strong>to</strong> <input name="before" type="text" placeholder="{{ before|date:'m/d/Y' }}" class="datepicker"></br>
@@ -85,11 +85,12 @@ $(document).ready(function()
                 </form>
                 <br>
                 <hr>
+                </div>
                 {% if candidates %}
-                <div class="pull-left"><strong>Activity between {{after.date}} and {{before.date}} for {{ site_name|cut:"http://" }}</strong></div><br>                                
+                <div class="pull-left mobile-hide"><strong>Activity between {{after.date}} and {{before.date}} for {{ site_name|cut:"http://" }}</strong></div><br>                                
                  <table id="row-link-table">                            
                     {% for candidate in candidates %}
-                    <tr>
+                    <tr class="mobile-hide">
                         <td>
                         <img src="{{candidate.user.get_gravatar_url}}&s=35" class="gravatar pull-left">                        
                         </td>
@@ -103,6 +104,15 @@ $(document).ready(function()
                         {{candidate.created_on.date}}                        
                         </td>
                     </tr>
+                    <tr class="candidate-activity-mobile">
+                        <td>
+                        <img src="{{candidate.user.get_gravatar_url}}&s=45" class="gravatar pull-left"> 
+                        </td>
+                        <td>
+                        <div class="candidate-name pull-left">{{candidate.user|get_name_obj}}</div>
+                        <a href="{{ candidate.user.id }}">{{candidate.user}}</a>
+                        </td>
+                    <tr>
                     {% endfor %}
                     
                  </table>
