@@ -1019,6 +1019,10 @@ form input[type='checkbox']{
     #company-information {
         margin-top: 10px;
     }
+    .formBox h4 {
+        border: none;
+        background-color: transparent;
+    }    
     
     /*Ajax Indicator*/
     #ajax-busy {

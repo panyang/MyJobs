@@ -40,8 +40,8 @@
        			 <table id="row-link-table" class="candidate-activity-mobile">                            
                     {% for url in company_microsites %}                    
                     <tr>
-                        <td>
-                        <a href="{{url.url}}" target="_blank">{{url.url}}</a>
+                        <td>                        
+                        <a href="microsite/?microsite_url={{url.url}}"><h4 class="mobile-site-links">{{url.url}}</h4></a>
                         </td>
                     <tr>
                     {% endfor %}
