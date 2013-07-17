@@ -128,6 +128,9 @@ table#row-link-table {
     padding: 10px;
 }
 .btn + .btn-success {
+    color: #FFF !important;  
+}
+.btn-success {
     color: #FFF;
 }
 
