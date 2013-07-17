@@ -1004,10 +1004,14 @@ form input[type='checkbox']{
     .candidate-activity-mobile {
         display: block;
     }
-    #row-link-table td {
-        padding: 5px;
-        width: 80%;    
-        border-bottom: 1px solid #eae6de;
+    .candidate-activity-mobile a{
+        border: none;
+        padding: 2px;
+        background-color: transparent;
+        text-decoration: none;
+    }
+    #row-link-table td {        
+        width: 80%;
     }
     #row-link-table td:first-child {    
         width: 20%;
