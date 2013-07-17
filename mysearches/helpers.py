@@ -132,7 +132,10 @@ def url_sort_options(feed_url, sort_by):
                     the URL and  'Relevance' should has '&date_sort=False' added
     """
 
-    unparsed_feed = urlparse(feed_url)
+    # The url should have already had all unicode safely escaped, so this
+    # should be just fine
+    feed = feed_url.encode('ascii')
+    unparsed_feed = urlparse(feed)
     query = parse_qs(unparsed_feed.query)
     query.pop('date_sort', None)
 
@@ -140,6 +143,7 @@ def url_sort_options(feed_url, sort_by):
         query.update({'date_sort': 'False'})
 
     unparsed_feed = unparsed_feed._replace(query = urlencode(query, True))
-    feed_url = urlunparse(unparsed_feed)
+    # We received utf8; return utf8
+    feed_url = urlunparse(unparsed_feed).decode('utf8')
 
     return feed_url
