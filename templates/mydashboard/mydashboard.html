@@ -66,8 +66,8 @@ $(document).ready(function()
         <div class="span8" id="moduleColumn">            
         
             <div class="formBox">
-            <h3 class="mobile-hide">Candidate Activity</h3><h3 class="candidate-activity-mobile">Job Seeker Activity</h3>
-                <div class="mobile-hide">                
+            <h3 class="hide-mobile">Candidate Activity</h3><h3 class="candidate-activity-mobile">Job Seeker Activity</h3>
+                <div class="hide-mobile">                
                 <form action='/dashboard/' method='POST' class="move-left">
                     {% csrf_token %}
                     
@@ -92,10 +92,10 @@ $(document).ready(function()
                 <hr>
                 </div>
                 {% if candidates %}
-                <div class="pull-left mobile-hide"><strong>Activity between {{after.date}} and {{before.date}} for {{ site_name|cut:"http://" }}</strong></div><br>                                
+                <div class="pull-left hide-mobile"><strong>Activity between {{after.date}} and {{before.date}} for {{ site_name|cut:"http://" }}</strong></div><br>                                
                  <table id="row-link-table">                            
                     {% for candidate in candidates %}
-                    <tr class="mobile-hide">
+                    <tr class="hide-mobile">
                         <td>
                         <img src="{{candidate.user.get_gravatar_url}}&s=35" class="gravatar pull-left">                        
                         </td>
