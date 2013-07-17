@@ -1,7 +1,7 @@
 {% load user_ops %}
 {% load common_tags %}
         <div class="formBox right-side-fixed" id="company-information">
-                <h3>Company Information</h3>
+                <h3 class="mobile-hide">Company Information</h3><h3 class="candidate-activity-mobile">Microsites</h3>
                 
                 <div class="accordion" id="details-user-list-collapse">
                     <div class="accordion-group">
@@ -19,7 +19,7 @@
             		</div>
        			 </div>
        			 
-       			 <div class="accordion" id="details-microsites-collapse">
+       			 <div class="accordion mobile-hide" id="details-microsites-collapse">
                     <div class="accordion-group">
                         <div class="accordion-heading details-heading">
                     	   <a class="accordion-toggle" data-toggle="collapse" data-parent="#details-microsites-collapse" href="#microsites-details-table">Microsites</a>
@@ -36,6 +36,17 @@
                         </div>
             		</div>
        			 </div>
+       			 
+       			 <table id="row-link-table" class="candidate-activity-mobile">                            
+                    {% for url in company_microsites %}                    
+                    <tr>
+                        <td>
+                        <a href="{{url.url}}" target="_blank">{{url.url}}</a>
+                        </td>
+                    <tr>
+                    {% endfor %}
+                    
+                 </table>
        			 
             </div>
             
