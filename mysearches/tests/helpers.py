@@ -1,4 +1,5 @@
 import datetime
+from urlparse import urlparse, parse_qs
 
 from django.test import TestCase
 from django.core import mail
@@ -77,5 +78,19 @@ class SavedSearchHelperTests(TestCase):
         feed_url = url_sort_options(feed_url, "Date")
         self.assertTrue(feed_url == "http://jobs.jobs/jobs/feed/rss")
 
-        
+    def test_unicode_in_search(self):
+        search = SavedSearch(url=u"http://jobs.jobs/search?q=%E2%80%93",
+                             user=self.user,
+                             feed=u"http://jobs.jobs/search/feed/rss?q=%E2%80%93")
+        search.save()
 
+        feed_url = url_sort_options(search.feed, search.sort_by)
+
+        old = parse_qs(urlparse(search.feed).query)
+        new = parse_qs(urlparse(feed_url).query)
+
+        self.assertFalse(old.get('date_sort'))
+        self.assertTrue(new['date_sort'][0])
+
+        del new['date_sort']
+        self.assertEqual(new, old)
