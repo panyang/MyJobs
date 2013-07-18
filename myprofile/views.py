@@ -37,8 +37,7 @@ def edit_profile(request):
     units = request.user.profileunits_set
     profile_config = []
     
-    user_registered = User.objects.get(email=request.user)
-    user_registered = user_registered.is_active
+    user_registered = User.objects.get(email=request.user)    
     
     for module in module_list:
         model = globals()[module]
@@ -59,7 +58,7 @@ def edit_profile(request):
 
     data_dict = {'profile_config': profile_config,
 				 'view_name': 'My Profile',
-	             'user_registered': user_registered}
+	             'user_registered': user_registered.is_active}
     
     return render_to_response('myprofile/edit_profile.html', data_dict,
                               RequestContext(request))
