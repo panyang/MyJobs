@@ -26,13 +26,7 @@
 #profileSubtitleBar{}
 </style>
 <div class="wrapper"> 
-    <div class="row" id="profileTitleRow">
-        {% if not user_registered %}
-        <div class="alert alert-error hide-mobile">
-            <button type="button" class="close" data-dismiss="alert">&times;</button>
-            Please activate your account using the activation link sent to your email. <a href="{% url 'resend_activation' %}">Click here to resend the activation email.</a>
-        </div>
-        {% endif %}
+    <div class="row" id="profileTitleRow">        
         <div class="span2">
             <img src="{{user.get_gravatar_url}}&s=140">
         </div>
