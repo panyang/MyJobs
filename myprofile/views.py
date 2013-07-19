@@ -35,7 +35,7 @@ def edit_profile(request):
     module_list = ['Name', 'Education', 'EmploymentHistory', 'SecondaryEmail',
                    'Telephone', 'Address']
     units = request.user.profileunits_set
-    profile_config = []    
+    profile_config = []
     
     for module in module_list:
         model = globals()[module]
