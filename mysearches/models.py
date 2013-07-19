@@ -8,6 +8,7 @@ from django.utils.translation import ugettext_lazy as _
 from django.template.loader import render_to_string
 from mysearches.helpers import parse_rss, url_sort_options
 
+
 class SavedSearch(models.Model):
 
     FREQUENCY_CHOICES = (

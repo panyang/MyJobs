@@ -24,7 +24,9 @@ def delete_saved_search(request,search_id):
     except ValueError:
         # all searches are being disabled
         SavedSearch.objects.filter(user=request.user).delete()
-    return HttpResponse(status=200)
+    except SavedSearch.DoesNotExist:
+        pass
+    return HttpResponseRedirect(reverse('saved_search_main'))
         
 @user_passes_test(User.objects.is_active)
 @user_passes_test(User.objects.not_disabled)
@@ -57,7 +59,7 @@ def view_full_feed(request, search_id):
                                    'view_name': 'Saved Searches'},
                                   RequestContext(request))
     else:
-        return HttpResponseRedirect('/saved-search')
+        return HttpResponseRedirect(reverse('saved_search_main'))
 
 @user_passes_test(User.objects.is_active)
 @user_passes_test(User.objects.not_disabled)
@@ -107,54 +109,50 @@ def save_digest_form(request):
 @user_passes_test(User.objects.is_active)
 @user_passes_test(User.objects.not_disabled)
 def save_search_form(request):
-    if request.is_ajax():
-        search_id = request.POST.get('search_id')
-        render = request.POST.get('render')
+    search_id = request.POST.get('search_id')
 
-        try:
-            search_id = int(search_id)
-            original = SavedSearch.objects.get(id=search_id)
-            form = SavedSearchForm(user=request.user,
-                                   data=request.POST,
-                                   instance=original)
-        except:
-            form = SavedSearchForm(user=request.user, data=request.POST)
+    try:
+        search_id = int(search_id)
+        original = SavedSearch.objects.get(id=search_id,
+                                           user=request.user)
+        form = SavedSearchForm(user=request.user,
+                               data=request.POST,
+                               instance=original)
+    except:
+        form = SavedSearchForm(user=request.user, data=request.POST)
 
-        first_instance = request.POST.get('first_instance')
-        if first_instance:
-            first_instance = int(first_instance)
+    if form.is_valid():
+        form.save()
 
-        if form.is_valid():
-            form.save()
-            if first_instance:
-                template = 'mysearches/saved_search_table.html'
-                data = {'saved_searches': [form.instance]}
-            else:
-                template = 'mysearches/saved_search_row.html'
-                data = {'search': form.instance}
-
-            if render == 'True':
-                return render_to_response(template, data,
-                                          RequestContext(request))
-            else:
-                return HttpResponse(status=200)
+        if request.is_ajax():
+            return HttpResponse(status=200)
         else:
+            return HttpResponseRedirect(reverse('saved_search_main'))
+    else:
+        if request.is_ajax():
             return HttpResponse(json.dumps(form.errors))
+        else:
+            return render_to_response('mysearches/saved_search_edit.html',
+                                      {'form': form, 'search_id': search_id},
+                                      RequestContext(request))
 
 @user_passes_test(User.objects.is_active)
 @user_passes_test(User.objects.not_disabled)
-def get_edit_template(request):
-    if request.is_ajax():
-        search_id = request.GET.get('search_id')
+def edit_search(request, search_id=None):
+    if search_id:
         try:
-            saved_search = SavedSearch.objects.get(id=search_id)
+            saved_search = SavedSearch.objects.get(id=search_id, user=request.user)
         except SavedSearch.DoesNotExist:
-            saved_search = None
-        form = SavedSearchForm(user=request.user, instance=saved_search,
-                               auto_id='id_edit_%s')
-        return render_to_response('mysearches/saved_search_edit.html',
-                                  {'form':form, 'search_id':search_id},
-                                  RequestContext(request))
+            return HttpResponseRedirect(reverse('saved_search_main'))
+    else:
+        saved_search = None
+
+    form = SavedSearchForm(user=request.user, instance=saved_search,
+                           auto_id='id_edit_%s')
+    return render_to_response('mysearches/saved_search_edit.html',
+                              {'form': form, 'search_id': search_id,
+                               'view_name': 'Saved Searches'},
+                              RequestContext(request))
 
 @user_passes_test(User.objects.is_active)
 @user_passes_test(User.objects.not_disabled)
