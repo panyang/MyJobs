@@ -517,6 +517,9 @@ fieldset select{
 .alert-message li{
     color: red;
     }
+.alert-error a{
+    color: #b94a48;
+    }
 .input-prepend .add-on{
     width: 35%;
     text-align: right;
