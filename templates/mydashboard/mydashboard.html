@@ -35,29 +35,8 @@ $(document).ready(function()
       });
    });
     
-   $("#{{ date_button }}").attr('class', 'btn btn-success');
+   $("#{{ date_button }}").attr('class', 'btn btn-success');   
    
-   $('.collapse').collapse().on('hidden',function(){
-		if(this.id){
-			localStorage[this.id] = "true";
-		}
-	}).on('shown', function(){
-		if(this.id){
-			localStorage.removeItem(this.id);
-		}
-   
-   //when heading get clicked. Looks bootstrap collasping classes and changes icon to + or -
-	$('[class*=details-heading]').click(function(){
-		var icon = $(this).children('a').children('span').children('i');
-		var item = $(this).next();
-		item.collapse().on('shown',function(){
-			icon.removeClass('icon-plus');
-			icon.addClass('icon-minus');
-		}).on('hidden',function(){
-			icon.removeClass('icon-minus');
-			icon.addClass('icon-plus');
-		});
-	});
 });
 </script>
 {% endblock %}
