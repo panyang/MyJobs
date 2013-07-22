@@ -130,6 +130,29 @@ class MyProfileTests(TestCase):
         self.assertTrue(old_email.verified)
         user = User.objects.get(email=new_primary)
 
+    def test_duplicate_primary_name(self):
+        """
+        Makes sure that one can not create duplicate primary names.
+        """
+        primary_name1 = PrimaryNameFactory(user=self.user)
+        primary_name2 = PrimaryNameFactory(user=self.user)
+
+        num_results = self.user.profileunits_set.filter(
+                        content_type__name='name').count()
+        self.assertEqual(num_results, 1)
+
+    def test_duplicate_name(self):
+        """
+        Makes sure that duplicate names is not saving.
+        """
+        primary_name = NewPrimaryNameFactory(user=self.user)
+        name1 = NewNameFactory(user=self.user)
+        name2 = NewNameFactory(user=self.user)
+
+        num_results = self.user.profileunits_set.filter(
+                        content_type__name='name').count()
+        self.assertEqual(num_results, 2)
+
     def test_unverified_primary_email(self):
         """
         Only verified emails can be set as the primary email
