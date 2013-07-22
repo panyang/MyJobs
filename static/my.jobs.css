@@ -37,7 +37,7 @@ a:hover{
 
 /*Employer Dashboard */
 #user-list-details-table {
-    overflow-y: scroll;
+    overflow-y: auto;
     height: auto;
     max-height: 500px;
     overflow-x: hidden;    
