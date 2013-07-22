@@ -36,6 +36,26 @@ $(document).ready(function()
    });
     
    $("#{{ date_button }}").attr('class', 'btn btn-success');   
+
+   $('.collapse').each(function(){
+        if($(this).hasClass('in')) {
+            $(this).collapse('show');
+        }else{
+            $(this).collapse('hide');
+        };
+    });
+
+   $('[class*=details-heading]').click(function(){
+        var icon = $(this).children('a').children('span').children('i');
+        var item = $(this).next();
+        item.collapse().on('shown',function(){
+            icon.removeClass('icon-plus');
+            icon.addClass('icon-minus');
+        }).on('hidden',function(){
+            icon.removeClass('icon-minus');
+            icon.addClass('icon-plus');
+        });
+    }); 
    
 });
 </script>
