@@ -192,13 +192,13 @@ class Name(ProfileUnits):
             try:
                 temp = Name.objects.select_for_update().get(primary=True,
                                                           user=self.user)
+            except Name.DoesNotExist:
+                pass
+            else:
                 if self.get_full_name() != temp.get_full_name():
                     temp.primary = False
                     temp.save()
                     super(Name, self).save(*args, **kwargs)
-                    
-            except Name.DoesNotExist:
-                super(Name, self).save(*args, **kwargs)
         else:
             names = self.user.profileunits_set.filter(content_type__name='name')
 
