@@ -188,17 +188,28 @@ class Name(ProfileUnits):
         has primary=True. We avoid a race condition by locking the transaction
         using select_for_update.
         """
-        
         if self.primary:
             try:
                 temp = Name.objects.select_for_update().get(primary=True,
                                                           user=self.user)
-                if self != temp:
+                if self.get_full_name() != temp.get_full_name():
                     temp.primary = False
                     temp.save()
+                    super(Name, self).save(*args, **kwargs)
+                    
             except Name.DoesNotExist:
-                pass
-        super(Name, self).save(*args, **kwargs)
+                super(Name, self).save(*args, **kwargs)
+
+
+
+        else:
+            names = self.user.profileunits_set.filter(content_type__name='name')
+
+            full_name_list = [name.name.get_full_name() for name in names]
+
+            if (self.get_full_name() not in full_name_list or 
+                self.id in [name.id for name in names]):
+                super(Name, self).save(*args, **kwargs)
 
     def __unicode__(self):
         return self.get_full_name()
