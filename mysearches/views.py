@@ -92,11 +92,12 @@ def validate_url(request):
 @user_passes_test(User.objects.is_active)
 @user_passes_test(User.objects.not_disabled)
 def save_digest_form(request):
-    if request.is_ajax():
+    if request.method == 'POST':
         try:
             digest_obj = SavedSearchDigest.objects.get(user=request.user)
         except:
             digest_obj = None
+
         form = DigestForm(user=request.user, data=request.POST,
                           instance=digest_obj)
         if form.is_valid():
@@ -104,7 +105,13 @@ def save_digest_form(request):
             data = "success"
         else:
             data = "failure"
-        return HttpResponse(data)
+
+        if request.is_ajax():
+            # If this is an ajax request, we can return success/failure
+            return HttpResponse(data)
+
+    # The request is not ajax; Redirect to the main saved search page
+    return HttpResponseRedirect(reverse('saved_search_main'))
 
 @user_passes_test(User.objects.is_active)
 @user_passes_test(User.objects.not_disabled)

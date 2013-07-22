@@ -7,9 +7,7 @@
     <meta name="title" content="Saved Search - My.jobs">
 {% endblock %}
 {% block meta-extra %}
-<script src="{{ STATIC_URL }}saved-search-main-ready.js{% cache_buster %}"></script>
 <script src="{{ STATIC_URL }}saved-search-edit.js{% cache_buster %}"></script>
-<script src="{{ STATIC_URL }}saved-search-main.js{% cache_buster %}"></script>
 {% endblock %}
 
 {% block content %}
@@ -41,7 +39,7 @@
                 {% csrf_token %}
 
                 <div class="actions">
-                    <input type="submit" value="{% trans 'Save' %}" id="edit_search" class="btn primary pull-right save">
+                    <button type="submit" id="edit_search" class="btn primary pull-right save">{% trans 'Save' %}</button>
                     <a onclick="history.go(-1); return true;" class="btn pull-right">{% trans 'Cancel' %}</a>
                     {% if search_id and search_id != 'None' %}
                     <button type="button" data-toggle="modal" data-target="#delete-confirm" class="btn pull-right">{% trans 'Delete' %}</button>
@@ -61,6 +59,7 @@
                         </div>
                     </div>
                     {% endif %}
+                    <div class="clear"></div>
                 </div>
             </form>
         </div>

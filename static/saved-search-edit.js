@@ -1,4 +1,127 @@
-function add_errors(that, data) {
+$(function() {
+    var EditSearchView = Backbone.View.extend({
+        el: 'body',
+
+        initialize: function() {
+            this.once('renderEvent', function() {
+                disable_fields();
+                add_valid_label();
+                add_refresh_btn();
+            });
+        },
+
+
+        render: function() {
+            this.trigger('renderEvent');
+        },
+
+
+        events: {
+            'click [id$="_search"]': 'save_form',
+            'click [class$="refresh"]': 'validate',
+            'input input[id$="url"]': 'validate',
+            'keypress input[id$="url"]': 'validate',
+            'cut input[id$="url"]': 'validate',
+            'paste input[id$="url"]': 'validate',
+        },
+
+
+        save_form: function(e, options) {
+            e.preventDefault();
+
+            var form = $('#saved-search-form');
+
+            data = form.serialize();
+            data = data.replace('=on','=True').replace('=off','=False');
+            data = data.replace('undefined', 'None');
+            console.log(data)
+            $.ajax({
+                data: data,
+                type: 'POST',
+                url: '/saved-search/save/',
+                success: function(data) {
+                    if (data == '') {
+                        window.location = '/saved-search/';
+                    } else {
+                        add_errors(data);
+                    }
+                }
+            });
+        },
+
+
+        validate: function(e) {
+            if (e.target == $('[id$="url"]').get(0)) {
+                if (this.timer) {
+                    clearTimeout(this.timer);
+                }
+                var pause_interval = 1000;
+                this.timer = setTimeout(function() {
+                    do_validate();
+                }, pause_interval);
+            } else {
+                do_validate();
+            }
+
+            function do_validate() {
+                var csrf_token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+                var url = $('[id$="url"]').val(); 
+                validation_status('validating...')
+                $.ajax({
+                    type: "POST",
+                    url: "/saved-search/validate-url/",
+                    data: { csrfmiddlewaretoken: csrf_token,
+                            action: "validate",
+                            url: url},
+                    success: function(data) {
+                        var json = jQuery.parseJSON(data);
+                        if (json.url_status == 'valid') {
+                            validation_status(json.url_status);
+                            if ($('[id$="label"]').val().length == 0) {
+                                $('[id$="label"]').val(json.feed_title);
+                            }
+                            if ($('[id$="feed"]').val() != json.rss_url) {
+                                $('[id$="feed"]').val(json.rss_url);
+                            }
+                            enable_fields();
+                            date_select();
+                        
+                        marginTop = (($('#new_modal').height())/2) *-1 + "px";
+                        $('#new_modal').css({'margin-top': marginTop});
+                        }
+                        else {
+                            validation_status(json.url_status);
+                        }
+                    }
+                });
+                function validation_status(status) {
+                    var label_text;
+
+                    if (status == 'valid') {
+                        label_text = 'label label-success';
+                    } else {
+                        label_text = 'label label-important';
+                    }
+                    if ($('#validated').length) {
+                        $('#validated').removeAttr('class');
+                        $('#validated').addClass(label_text);
+                        $('#validated').text(status);
+                    } else {
+                        $('#label_validated').after('<div id="'+
+                                                    'validated" class="'+
+                                                    label_text+'">'+status+
+                                                    '</div>');
+                    }
+                }
+            }
+        },
+    });
+
+    var EditSearch = new EditSearchView;
+    EditSearch.render();
+});
+
+function add_errors(data) {
     // remove color from labels of current errors
     $('[class*=required]').prev().children().css('color', '#000');
 
@@ -8,110 +131,97 @@ function add_errors(that, data) {
     errors = jQuery.parseJSON(data)
     for (var key in errors) {
         if (key == 'day_of_week' || key == 'day_of_month') {
-            that.find('label[for$="frequency"]').parent().next().wrap('<span class="required" />');
-            that.find('label[for$="frequency"]').css('color', '#900');
-            that.find('label[for$="'+key+'"]').parent().next().wrap('<span class="required" />');
+            $('label[for$="frequency"]').parent().next().wrap('<span class="required" />');
+            $('label[for$="frequency"]').css('color', '#900');
+            $('label[for$="'+key+'"]').parent().next().wrap('<span class="required" />');
         } else {
-            console.log(that.find('label[for$="'+key+'"]').parent().next())
-            that.find('label[for$="'+key+'"]').parent().next().wrap('<span class="required" />');
-            console.log(that.find('label[for$="'+key+'"]').parent().next())
-            that.find('label[for$="'+key+'"]').parent().next().children().attr("placeholder","Required Field");
-            that.find('label[for$="'+key+'"]').css('color', '#900');
+            $('label[for$="'+key+'"]').parent().next().wrap('<span class="required" />');
+            $('label[for$="'+key+'"]').parent().next().children().attr("placeholder","Required Field");
+            $('label[for$="'+key+'"]').css('color', '#900');
         }
     }
 }
 
-function add_refresh_btn(that) {
-    that.find('[id$="url"]').parent().addClass('input-append');
-    that.find('[id$="url"]').after('<span class="btn add-on refresh"><i class="icon icon-refresh">');
+function add_refresh_btn() {
+    $('[id$="url"]').parent().addClass('input-append');
+    $('[id$="url"]').after('<span class="btn add-on refresh"><i class="icon icon-refresh">');
 }
 
-function add_valid_label(that) {
-    that.find('[id$="url"]').after('<div id="label_validated" class="span3 form-label pull-left id_label"><div class="form-label pull-left">&nbsp;</div>');
-    that.find('[id$="label_validated"]').after('<div id="validated">&nbsp;</div>');
-    that.find('[id$="url"]').after('<div class="clear"></div>');
+function add_valid_label() {
+    $('[id$="url"]').after('<div id="label_validated" class="span3 form-label pull-left id_label"><div class="form-label pull-left">&nbsp;</div>');
+    $('[id$="label_validated"]').after('<div id="validated">&nbsp;</div>');
+    $('[id$="url"]').after('<div class="clear"></div>');
 }
 
-function disable_fields(that) {
+function disable_fields() {
     // Disable/hide fields until valid URL is entered
-    if (that.find('[id$="url"]').val() == '') {
-        that.find('[id^="id_sort_by_"]').attr("disabled", "disabled");
-        that.find('[id^="id_sort_by_"]').hide();
-        that.find('[id$="label"]').attr("disabled", "disabled");
-        that.find('[id$="label"]').hide();
-        that.find('[id$="is_active"]').attr("disabled", "disabled");
-        that.find('[id$="is_active"]').hide();
-        that.find('[id$="email"]').attr("disabled", "disabled");
-        that.find('[id$="email"]').hide();
-        that.find('[id$="frequency"]').attr("disabled", "disabled");
-        that.find('[id$="frequency"]').hide();
-        that.find('[id$="notes"]').attr("disabled", "disabled");
-        that.find('[id$="notes"]').hide();
-        that.find('[id$="day_of_week"]').attr("disabled", "disabled");
-        that.find('[id$="day_of_week"]').hide();
-        that.find('[id$="day_of_month"]').attr("disabled", "disabled");
-        that.find('[id$="day_of_month"]').hide();
-        that.find('label[for^="id_sort_by_"]').hide();
-        that.find('label[for$="frequency"]').hide();
-        that.find('label[for$="email"]').hide();
-        that.find('label[for$="is_active"]').hide();
-        that.find('label[for$="label"]').hide()
-        that.find('label[for$="notes"]').hide();
-        that.find('label[for$="day_of_week"]').hide();
-        that.find('label[for$="day_of_month"]').hide();
-        that.find('.save').hide();
+    if ($('[id$="url"]').val() == '') {
+        $('[id^="id_edit_sort_by_"]').hide();
+        $('label[for^="id_edit_sort_by_"]').hide();
+        $('[id$="label"]').hide();
+        $('label[for$="label"]').hide()
+        $('[id$="is_active"]').hide();
+        $('label[for$="is_active"]').hide();
+        $('[id$="email"]').hide();
+        $('label[for$="email"]').hide();
+        $('[id$="frequency"]').hide();
+        $('label[for$="frequency"]').hide();
+        $('[id$="notes"]').hide();
+        $('label[for$="notes"]').hide();
+        $('[id$="day_of_week"]').hide();
+        $('[id$="day_of_month"]').hide();
+        $('label[for$="day_of_week"]').hide();
+        $('label[for$="day_of_month"]').hide();
+        $('.save').hide();
+    } else {
+        enable_fields();
+        date_select();
     }
 }
 
-function enable_fields(that) {
-    that.find('[id^="id_sort_by_"]').removeAttr("disabled");
-    that.find('[id^="id_sort_by_"]').show();
-    that.find('[id$="label"]').removeAttr("disabled");
-    that.find('[id$="label"]').show();
-    that.find('[id$="is_active"]').removeAttr("disabled");
-    that.find('[id$="is_active"]').show();
-    that.find('[id$="email"]').removeAttr("disabled");
-    that.find('[id$="email"]').show();
-    that.find('[id$="frequency"]').removeAttr("disabled");
-    that.find('[id$="frequency"]').show();
-    that.find('[id$="notes"]').removeAttr("disabled");
-    that.find('[id$="notes"]').show();
-    that.find('[id$="day_of_week"]').removeAttr("disabled");
-    that.find('[id$="day_of_week"]').show();
-    that.find('[id$="day_of_month"]').removeAttr("disabled");
-    that.find('[id$="day_of_month"]').show();
-    that.find('label[for^="id_sort_by_"]').show();
-    that.find('label[for$="frequency"]').show();
-    that.find('label[for$="label"]').show();
-    that.find('label[for$="email"]').show();
-    that.find('label[for$="is_active"]').show();
-    that.find('label[for$="notes"]').show();
-    that.find('.save').show();
+function enable_fields() {
+    $('[id^="id_edit_sort_by_"]').show();
+    $('label[for^="id_edit_sort_by_"]').show();
+    $('[id$="label"]').show();
+    $('label[for$="label"]').show();
+    $('[id$="is_active"]').show();
+    $('label[for$="is_active"]').show();
+    $('[id$="email"]').show();
+    $('label[for$="email"]').show();
+    $('[id$="frequency"]').show();
+    $('label[for$="frequency"]').show();
+    $('[id$="notes"]').show();
+    $('label[for$="notes"]').show();
+    $('[id$="day_of_week"]').show();
+    $('[id$="day_of_month"]').show();
+    $('label[for$="day_of_week"]').show();
+    $('label[for$="day_of_month"]').show();
+    $('.save').show();
 }
 
-function date_select(that) {
+function date_select() {
     show_dates();
 
-    that.find('[id$="frequency"]').on('change', function() {
+    $('[id$="frequency"]').on('change', function() {
         show_dates();
     });
 
     function show_dates() {
-        if (that.find('[id$="frequency"]').attr('value') == 'D') {
-            that.find('label[for$="day_of_month"]').hide();
-            that.find('label[for$="day_of_week"]').hide();
-            that.find('[id$="day_of_month"]').hide();
-            that.find('[id$="day_of_week"]').hide();
-        } else if (that.find('[id$="frequency"]').attr('value') == 'M') { 
-            that.find('label[for$="day_of_week"]').hide();
-            that.find('label[for$="day_of_month"]').show();
-            that.find('[id$="day_of_week"]').hide();
-            that.find('[id$="day_of_month"]').show();
-        } else if (that.find('[id$="frequency"]').attr('value') == 'W') {
-            that.find('label[for$="day_of_month"]').hide();
-            that.find('label[for$="day_of_week"]').show();
-            that.find('[id$="day_of_month"]').hide();
-            that.find('[id$="day_of_week"]').show();
+        if ($('[id$="frequency"]').attr('value') == 'D') {
+            $('label[for$="day_of_month"]').hide();
+            $('label[for$="day_of_week"]').hide();
+            $('[id$="day_of_month"]').hide();
+            $('[id$="day_of_week"]').hide();
+        } else if ($('[id$="frequency"]').attr('value') == 'M') { 
+            $('label[for$="day_of_week"]').hide();
+            $('label[for$="day_of_month"]').show();
+            $('[id$="day_of_week"]').hide();
+            $('[id$="day_of_month"]').show();
+        } else if ($('[id$="frequency"]').attr('value') == 'W') {
+            $('label[for$="day_of_month"]').hide();
+            $('label[for$="day_of_week"]').show();
+            $('[id$="day_of_month"]').hide();
+            $('[id$="day_of_week"]').show();
         }
     }
 }
