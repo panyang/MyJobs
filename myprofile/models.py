@@ -199,9 +199,6 @@ class Name(ProfileUnits):
                     
             except Name.DoesNotExist:
                 super(Name, self).save(*args, **kwargs)
-
-
-
         else:
             names = self.user.profileunits_set.filter(content_type__name='name')
 
