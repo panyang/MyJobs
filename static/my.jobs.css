@@ -1558,6 +1558,10 @@ body.modal-open {
     overflow: hidden !important;
 }
 
+.label-required {
+    color: #900;
+}
+
 .required input[type=text],
 .required select {
     border: 1px solid #900;

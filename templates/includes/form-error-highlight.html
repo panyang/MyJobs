@@ -12,102 +12,121 @@ form -- the rest of the form.
 <fieldset>
     {# Include but don't display hidden fields #}
     {% for hidden in form.hidden_fields %}
-        {{ hidden}}
+        {{ hidden }}
     {% endfor %}
-    
-    {% if form.errors %}
-    <div class="alert-message block-message error">
-      <ul class="errorlist">
-        {% for error in form.non_field_errors %}
-        <li>{{error}}</li>
-        {% endfor %}
-      </ul>
-    </div>
-    {% endif %}
     
     {# Include the visible fields #}
     {% for field in form.visible_fields %}
-      {% is_boolean_field field as is_boolean %}
-      {% is_select_field field as is_select %}
+    {% is_boolean_field field as is_boolean %}
+    {% is_select_field field as is_select %}
 
-      {% if is_boolean or not form.only_show_required or form.only_show_required and field.field.required %}
+    {% if is_boolean or not form.only_show_required or form.only_show_required and field.field.required %}
         {% if field.errors %}
-          <div class="alert-message block-message error">
-            {{ field.errors }}
-          {% endif %}
 
-          {# Don't show placeholder text if auto_id is True #}
-          {% if form.auto_id %}
+        <span class="required">
+
+        {% endif %}
+
+        {# Don't show placeholder text if auto_id is True #}
+        {% if form.auto_id %}
+
             <div class='span3 form-label pull-left {{field.auto_id}}'>
-              {{ field.label_tag }}
+                {% add_required_label field %}
             </div>
             {{ field|attr:"placeholder:" }}
 
-          {% elif is_select %}
-              {% if field.html_name == "use_code" %}
-                <div class="span3 form-label pull-left initial">
-                  {{ field.label_tag }}
-                </div>
-                <div class="profile-form-input">
-                  {{field}}
-                </div>
-              {% else %}
-              <div class="span3 form-label pull-left initial">
-                  {{ field.label_tag }}
-              </div>
-              <div class="profile-form-input">
-                {{field}}
-              </div>
-            {% endif %}
-            
-          {% elif is_boolean %}
-            {{field}}
-            <div class="span3 form-label pull-left checkbox-label">
-              {{ field.label_tag }}
+        {% elif is_select %}
+
+            {% if field.html_name == "use_code" %}
+
+            <div class="span3 form-label pull-left initial">
+                {% add_required_label field %}
             </div>
-        
-          {% elif 'country_code' in field.html_name %}
-            
-              <div class="span3 form-label pull-left">
-                <div class="clear"></div>
-                {% with "id_"|add:form.prefix|add:"-country_sub_division_code" as region_id %}
-              {% country_select selected="USA" html_id=field.id_for_label  region_html_id=region_id input_name=field.html_name %}
-            {% endwith %}
-            </div>
-          {% else %}
-            {% if '_dialing' in field.html_name or field.html_name == "ph-number" or field.html_name == "ph-extension" or field.html_name == "number" or field.html_name == "extension" %}
-              <div class="span3 form-label pull-left initial">
-                  {{ field.label_tag }}
-              </div>
-              <div class="profile-form-input">
+            <div class="profile-form-input">
                 {{field}}
-              </div>
+            </div>
+
             {% else %}
-              <div class="span3 form-label pull-left initial">{{ field.label_tag }}</div><div class="profile-form-input">{{ field  }}</div>
+
+            <div class="span3 form-label pull-left initial">
+                {% add_required_label field %}
+            </div>
+            <div class="profile-form-input">
+                {{field}}
+            </div>
+
             {% endif %}
-    {% endif %}
 
-                {% if field.errors %}
-                    </div>
-                {% endif %}
+        {% elif is_boolean %}
 
-        {% if field.help_text %}
-          <span class="help-block">{{ field.help_text }}</span>
-      <div class="clear"></div>
+        {{field}}
+        <div class="span3 form-label pull-left checkbox-label">
+            {% add_required_label field %}
+        </div>
+
+        {% elif 'country_code' in field.html_name %}
+
+        <div class="span3 form-label pull-left">
+            <div class="clear"></div>
+            {% with "id_"|add:form.prefix|add:"-country_sub_division_code" as region_id %}
+            {% country_select selected="USA" html_id=field.id_for_label  region_html_id=region_id input_name=field.html_name %}
+            {% endwith %}
+        </div>
+
+        {% else %}
+
+            {% if '_dialing' in field.html_name or field.html_name == "ph-number" or field.html_name == "ph-extension" or field.html_name == "number" or field.html_name == "extension" %}
+
+            <div class="span3 form-label pull-left initial">
+                {% add_required_label field %}
+            </div>
+            <div class="profile-form-input">
+                {{field}}
+            </div>
+
+            {% else %}
+
+            <div class="span3 form-label pull-left initial">
+                {% add_required_label field %}
+            </div>
+            <div class="profile-form-input">
+                {{ field  }}
+            </div>
+
+            {% endif %}
+
         {% endif %}
 
         {% if field.errors %}
-          <div class="clear"></div>
-        {% endif %}
-                <div class="clear"></div>
+            </span>
         {% endif %}
 
-        {% if field.html_name == "gravatar" %}
-          <div class="form-label pull-left">
-              <img src="{{ gravatar_100 }}" id="gravatar-img">
-            </div>
-            <a href="http://www.gravatar.com" target="_blank" id="gravatar-link">Change your profile image on gravatar.com</a>
-            <div class="clear"></div>
+        {% if field.help_text %}
+
+        <span class="help-block">{{ field.help_text }}</span>
+        <div class="clear"></div>
+
         {% endif %}
-  {% endfor %}
+
+        {% if field.errors %}
+
+         <div class="clear"></div>
+
+        {% endif %}
+
+        <div class="clear"></div>
+
+    {% endif %}
+
+    {% if field.html_name == "gravatar" %}
+
+    <div class="form-label pull-left">
+        <img src="{{ gravatar_100 }}" id="gravatar-img">
+    </div>
+    <a href="http://www.gravatar.com" target="_blank" id="gravatar-link">Change your profile image on gravatar.com</a>
+    <div class="clear"></div>
+
+    {% endif %}
+
+    {% endfor %}
 </fieldset>
