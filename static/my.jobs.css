@@ -34,7 +34,15 @@ a:hover{
 .candidate-activity-mobile {
     display: none;
 }
-    
+
+/*Employer Dashboard */
+#user-list-details-table {
+    overflow-y: scroll;
+    height: auto;
+    max-height: 500px;
+    overflow-x: hidden;    
+}
+
 /* Sort by field in saved search save/edit */
 label[for^='id_sort_by'], label[for^='id_edit_sort_by'] {
     display: inline;
