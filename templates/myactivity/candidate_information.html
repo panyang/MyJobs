@@ -108,7 +108,7 @@
 
                                                             {% elif item.content_type.name == "military service" %}
 
-                                                            <li>{% if item.expertise %}{{item.expertise}},{% endif %} {{item.branch}}</li>
+                                                            <li>{{item.branch}} {% if item.expertise %}- {{item.expertise}}{% endif %}</li>
                                                             <li>{{item.service_start_date}} - {{item.service_end_date}}</li>
                                                             <li>{% if item.end_rank %}Rank: {{item.end_rank}} {% endif %}</li>
                                                             
