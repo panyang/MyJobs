@@ -1,6 +1,6 @@
 {% load user_ops %}
 {% load common_tags %}
-        <div class="formBox right-side-fixed" id="company-information">
+        <div class="formBox" id="company-information">
                 <h3 class="hide-mobile">Company Information</h3><h3 class="candidate-activity-mobile">Microsites</h3>
                 
                 <div class="accordion" id="details-user-list-collapse">
@@ -8,7 +8,7 @@
                         <div class="accordion-heading details-heading">
                     	   <a class="accordion-toggle" data-toggle="collapse" data-parent="#details-user-list-collapse" href="#user-list-details-table">User List<span class="pull-right"><i class="icon icon-minus"></i></span></a>
                     	</div>
-                		<div id="user-list-details-table" class="accordion-body in collapse">
+                		<div id="user-list-details-table" class="accordion-body collapse">
                            <ul class="link-list">
                                 {% with user_name=admin_you|get_name_obj:admin_you.email %}
                                 <li>
