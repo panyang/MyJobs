@@ -284,21 +284,23 @@ class MilitaryService(ProfileUnits):
     )
     country_code = country_code = models.CharField(max_length=3, blank=True,
                                 verbose_name=_("Country")) # ISO 3166-1
-    branch = models.CharField(max_length=255, 
-                                help_text="Army, Navy, Air Force, etc..")
+    branch = models.CharField(max_length=255, verbose_name="Branch")
     department = models.CharField(max_length=255, blank=True, null=True,
                                 verbose_name="Department")
-    division = models.CharField(max_length=255, blank=True, null=True)
-    expertise = models.CharField(max_length=255, blank=True, null=True, 
-                help_text="Job in military")
+    division = models.CharField(max_length=255, blank=True, null=True,
+                                verbose_name="Division")
+    expertise = models.CharField(max_length=255, blank=True, null=True,
+                                verbose_name="Expertise")
     service_start_date = models.DateField(verbose_name=_("Start Date"))
     service_end_date = models.DateField(verbose_name=_("End Date"))
     start_rank = models.CharField(max_length=4, choices=MILITARY_RANK_CHOICES,
                                 blank=True, verbose_name=_("Start Rank"))
     end_rank = models.CharField(max_length=4, choices=MILITARY_RANK_CHOICES,
                                 blank=True, verbose_name=_("End Rank"))
-    campaign = models.CharField(max_length=255, blank=True, null=True)
-    honor = models.CharField(max_length=255, blank=True, null=True)
+    campaign = models.CharField(max_length=255, blank=True, null=True,
+                                verbose_name="Campaign")
+    honor = models.CharField(max_length=255, blank=True, null=True,
+                                verbose_name="Honors")
 
 
 def delete_secondary_activation(sender, **kwargs):
