@@ -49,7 +49,7 @@ class NameForm(BaseUserForm):
         model = Name
         widgets = generate_custom_widgets(model)
         
-
+        
 class SecondaryEmailForm(BaseUserForm):
     class Meta:
         form_name = _("Secondary Email")
@@ -119,6 +119,18 @@ class AddressForm(BaseUserForm):
     class Meta:
         form_name = _("Address")
         model = Address
+        widgets = generate_custom_widgets(model)
+
+
+class MilitaryServiceForm(BaseUserForm):
+    def __init__(self, *args, **kwargs):
+        super(MilitaryServiceForm, self).__init__(*args, **kwargs)
+        self.fields['service_start_date'].input_formats = settings.DATE_INPUT_FORMATS  
+        self.fields['service_end_date'].input_formats = settings.DATE_INPUT_FORMATS  
+
+    class Meta:
+        form_name = _("Military Service History")
+        model = MilitaryService
         widgets = generate_custom_widgets(model)
 
 class InitialForm(BaseUserForm):

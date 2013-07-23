@@ -254,6 +254,53 @@ class SecondaryEmail(ProfileUnits):
         else:
             return False
 
+
+class MilitaryService(ProfileUnits):
+    MILITARY_RANK_CHOICES = (
+        ('E-1', _('E-1')),
+        ('E-2', _('E-2')),
+        ('E-3', _('E-3')),
+        ('E-4', _('E-4')),
+        ('E-5', _('E-5')),
+        ('E-6', _('E-6')),
+        ('E-7', _('E-7')),
+        ('E-8', _('E-8')),
+        ('E-9', _('E-9')),
+        ('O-1', _('O-1')),
+        ('O-2', _('O-2')),
+        ('O-3', _('O-3')),
+        ('O-4', _('O-4')),
+        ('O-5', _('O-5')),
+        ('O-6', _('O-6')),
+        ('O-7', _('O-7')),
+        ('O-8', _('O-8')),
+        ('O-9', _('O-9')),
+        ('O-10', _('O-10')),
+        ('W-1', _('W-1')),
+        ('W-2', _('W-2')),
+        ('W-3', _('W-3')),
+        ('W-4', _('W-4')),
+        ('W-5', _('W-5')),
+    )
+    country_code = country_code = models.CharField(max_length=3, blank=True,
+                                verbose_name=_("Country")) # ISO 3166-1
+    branch = models.CharField(max_length=255, 
+                                help_text="Army, Navy, Air Force, etc..")
+    department = models.CharField(max_length=255, blank=True, null=True,
+                                verbose_name="Department")
+    division = models.CharField(max_length=255, blank=True, null=True)
+    expertise = models.CharField(max_length=255, blank=True, null=True, 
+                help_text="Job in military")
+    service_start_date = models.DateField(verbose_name=_("Start Date"))
+    service_end_date = models.DateField(verbose_name=_("End Date"))
+    start_rank = models.CharField(max_length=4, choices=MILITARY_RANK_CHOICES,
+                                blank=True, verbose_name=_("Start Rank"))
+    end_rank = models.CharField(max_length=4, choices=MILITARY_RANK_CHOICES,
+                                blank=True, verbose_name=_("End Rank"))
+    campaign = models.CharField(max_length=255, blank=True, null=True)
+    honor = models.CharField(max_length=255, blank=True, null=True)
+
+
 def delete_secondary_activation(sender, **kwargs):
     """
     When a secondary email is deleted, deletes that email's associated
