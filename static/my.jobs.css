@@ -1121,14 +1121,22 @@ form input[type='checkbox']{
         margin-left: 35px;
     }
 
-    div.actions button {
+    div.actions a.btn,
+    div.actions button.btn {
+        display: block;
+        float: none;
+        margin-bottom: 10px;
         width: 100%;
+        margin-left: 0px;
+        margin-right: 0px;
+        padding-left: 0px;
+        padding-right: 0px;
+    }
+
+    div.actions .btn + button.btn {
     }
 
     div.actions button, div.actions a {
-        float: none;
-        margin-bottom: 10px !important;
-        display: block;
     }
     #saved-search-form label[for=id_url],
     #saved-search-form label[for=id_edit_url] {
@@ -1216,11 +1224,6 @@ form input[type='checkbox']{
     div.account-box {
         min-height: auto;
         background-color: #f4f1ea;
-    }
-
-    div.account-settings .actions button {
-        width: 100%;
-        margin: 0;
     }
     div.settings-nav ul {
         height: auto;
