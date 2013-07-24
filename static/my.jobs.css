@@ -130,6 +130,12 @@ table#row-link-table {
 .candidate-name {
     font-size: 1.5em;   
 }
+.microsite-name {
+    font-size: 1.2em;
+    font-weight: bold;
+    padding: 10px;
+    font-family: inherit;
+}
 #no-activity {    
     background-color: #FFF;
     width: 95%;    
