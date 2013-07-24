@@ -672,6 +672,9 @@ em.pendingText{
         display: block;
         text-align: left;
     }
+    #saved-search-list .buttons {
+        width: 125px;
+    }
 }
 #nav.active ul#pop-menu li a:hover,
 #nav li:hover ul#pop-menu li a:hover{ 
@@ -928,6 +931,9 @@ form input[type='checkbox']{
         border-style: none;
         padding: 0;
         display: block;
+    }
+    #saved-search-list .buttons {
+        width: 175px;
     }
 
 }
