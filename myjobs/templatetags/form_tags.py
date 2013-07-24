@@ -23,8 +23,7 @@ def readable_boolean(value):
 @register.simple_tag(name='add_required_label')
 def add_required_label(field, *classes):
     if not classes:
-        classes = []
+        classes = ()
     if field.errors:
-        classes.append('label-required')
-        label_tag = field.label_tag(attrs={'class': 'label-required'})
+        classes += ('label-required',)
     return field.label_tag(attrs={'class': ' '.join(classes)})
