@@ -29,7 +29,6 @@ class MySearchViewTests(TestCase):
             'frequency': 'D',
             'is_active': 'True',
             'sort_by': 'Relevance',
-            'render': 'True',
         }
         self.new_digest_data = {
             'is_active': 'True',
@@ -46,36 +45,33 @@ class MySearchViewTests(TestCase):
         self.r.restore()
 
     def test_search_main(self):
-        response = self.client.get('/saved-search/')
+        response = self.client.get(reverse('saved_search_main'))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'mysearches/saved_search_main.html')
-        self.assertTemplateUsed(response, 'includes/form-error-highlight.html')
         self.failUnless(isinstance(response.context['form'], forms.DigestForm));
         self.failUnless(isinstance(response.context['add_form'],
                         forms.SavedSearchForm));
 
     def test_save_new_search_form(self):
-        response = self.client.post('/saved-search/save',
+        response = self.client.post(reverse('save_search_form'),
                                     data = self.new_form_data,
                                     HTTP_X_REQUESTED_WITH = 'XMLHttpRequest')
         self.assertEqual(response.status_code, 200)
-        self.assertTrue(self.new_form_data['label'] in response.content)
+        self.assertEqual(response.content, '')
 
     def test_save_new_search_invalid(self):
-        del self.new_form_data['feed']
         del self.new_form_data['frequency']
-        response = self.client.post('/saved-search/save',
+        response = self.client.post(reverse('save_search_form'),
                                     data = self.new_form_data,
                                     HTTP_X_REQUESTED_WITH = 'XMLHttpRequest')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(json.loads(response.content).keys(),
-                         ['feed', 'frequency'])
+                         ['frequency'])
 
-    def test_get_edit_template(self):
+    def test_get_edit_page(self):
         self.new_form.save()
         search_id = self.new_form.instance.id
-        response = self.client.get('/saved-search/edit',
-                                    data = {'search_id': search_id},
+        response = self.client.get(reverse('edit_search', args=[search_id]),
                                     HTTP_X_REQUESTED_WITH = 'XMLHttpRequest')
         self.assertEqual(response.status_code, 200)
         
@@ -84,12 +80,11 @@ class MySearchViewTests(TestCase):
         self.assertTemplateUsed(response, 'mysearches/saved_search_edit.html')
 
         search_id += 1
-        response = self.client.get('/saved-search/edit',
-                                    data = {'search_id': search_id},
+        response = self.client.get(reverse('edit_search', args=[search_id]),
                                     HTTP_X_REQUESTED_WITH = 'XMLHttpRequest')
-        self.assertEqual(response.status_code, 200)
-        self.assertTemplateUsed(response, 'mysearches/saved_search_edit.html')
-        self.assertEqual(response.context['form'].instance, models.SavedSearch())
+        self.assertEqual(response.status_code, 302)
+        self.assertEqual(response.get('location'),
+                         'http://testserver' + reverse('saved_search_main'))
 
     def test_save_edit_form(self):
         self.new_form.save()
@@ -102,23 +97,22 @@ class MySearchViewTests(TestCase):
 
         new_form = forms.SavedSearchForm(user=self.user,
                                          data=self.new_form_data)
-        response = self.client.post('/saved-search/save',
+        response = self.client.post(reverse('save_search_form'),
                                     data = self.new_form_data,
                                     HTTP_X_REQUESTED_WITH = 'XMLHttpRequest')
         self.assertEqual(response.status_code, 200)
-
-        self.assertTrue(self.new_form_data['label'] in response.content)
+        self.assertEqual(response.content, '')
 
         del self.new_form_data['frequency']
 
-        response = self.client.post('/saved-search/save',
+        response = self.client.post(reverse('save_search_form'),
                                     data = self.new_form_data,
                                     HTTP_X_REQUESTED_WITH = 'XMLHttpRequest')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(json.loads(response.content).keys(), ['frequency'])
 
     def test_validate_url(self):
-        response = self.client.post('/saved-search/validate-url',
+        response = self.client.post(reverse('validate_url'),
                                     data = { 'url': self.new_form_data['url'] },
                                     HTTP_X_REQUESTED_WITH = 'XMLHttpRequest')
         self.assertEqual(response.status_code, 200)
@@ -127,7 +121,7 @@ class MySearchViewTests(TestCase):
                  'url_status': 'valid' }
         self.assertEqual(json.loads(response.content), data)
 
-        response = self.client.post('/saved-search/validate-url',
+        response = self.client.post(reverse('validate_url'),
                                     data = { 'url': 'google.com' },
                                     HTTP_X_REQUESTED_WITH = 'XMLHttpRequest')
         self.assertEqual(response.status_code, 200)
@@ -135,14 +129,14 @@ class MySearchViewTests(TestCase):
                          { 'url_status': 'not valid' })
 
     def test_save_digest_form(self):
-        response = self.client.post('/saved-search/save-digest',
+        response = self.client.post(reverse('save_digest_form'),
                                     self.new_digest_data,
                                     HTTP_X_REQUESTED_WITH = 'XMLHttpRequest')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content, 'success')
 
         del self.new_digest_data['email']
-        response = self.client.post('/saved-search/save-digest',
+        response = self.client.post(reverse('save_digest_form'),
                                     self.new_digest_data,
                                     HTTP_X_REQUESTED_WITH = 'XMLHttpRequest')
         self.assertEqual(response.status_code, 200)
