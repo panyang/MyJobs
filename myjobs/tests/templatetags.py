@@ -1,6 +1,9 @@
+from bs4 import BeautifulSoup
+
 from django.template import Template, Context, TemplateSyntaxError
 from django.test import TestCase
 
+from myjobs.forms import EditAccountForm
 from myjobs.models import User
 from myjobs.tests.factories import UserFactory
 from myprofile.tests.factories import PrimaryNameFactory
@@ -36,3 +39,33 @@ class CommonTagsTests(TestCase):
                  )
         out = template.render(self.context)
         self.assertEqual(out, 'Default value')
+
+class FormTagsTests(TestCase):
+    def setUp(self):
+        self.user = UserFactory()
+        self.form = EditAccountForm(user=self.user, data={})
+        self.context = Context({'form': self.form})
+        self.template = Template(
+                         '{% load form_tags %}'
+                         '{% add_required_label form.visible_fields.2 %}'
+                      )
+
+    def test_add_required_label(self):
+        self.form.data['gravatar'] = self.user.email
+        out = self.template.render(self.context)
+        soup = BeautifulSoup(out)
+        self.assertEqual(soup.label['class'], [u''])
+
+    def test_add_required_label_bad_form(self):
+        out = self.template.render(self.context)
+        soup = BeautifulSoup(out)
+        self.assertEqual(soup.label['class'], [u'label-required'])
+
+    def test_add_required_label_extra_classes(self):
+        self.template = Template(
+                         '{% load form_tags %}'
+                         '{% add_required_label form.visible_fields.2 "extra-class" %}'
+                      )
+        out = self.template.render(self.context)
+        soup = BeautifulSoup(out)
+        self.assertItemsEqual(soup.label['class'], [u'extra-class', u'label-required'])
