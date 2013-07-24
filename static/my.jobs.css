@@ -62,6 +62,9 @@ label[for^='id_sort_by'], label[for^='id_edit_sort_by'] {
 .profile-form-input input {
     width: 40%;
     }
+.profile-action-form {
+    display: inline;
+    }
 
 .reset-form-input input[type="text"], .reset-form-input input[type="password"] {
     width: 100%;

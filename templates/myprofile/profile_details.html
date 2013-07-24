@@ -1,28 +1,34 @@
+{% extends 'base.html' %}
 {% load i18n %}
 {% load model_fields %}
-<div class="modal hide fade" id="detail_modal">
-    <div class="modal-header">
-        <button id="modal-header-cancel" class="close mobile_hide" aria-hidden="true" data-dismiss="modal" type="button">×</button>
+
+{% block content %}
+<div class="row">
+    <div class="span12">
         <h1>{{module.verbose}} <small>Details</small></h1>
     </div>
-    <div class="modal-body">
-        <div class="formBox">
-            <table class="table table-bordered table-striped">
-                {% with module.item|process_field_types as fields %}
-                {% for label, value, type in fields|slice:":3" %}
-                    <tr class="row">
-                        <td class="span3">{{ label }}</td>
-                        <td class="span9">{{ value }}</td>
-                    </tr>
-                {% endfor %}
-                {% endwith %}
-            </table>
-        </div>
-    </div>
-    <div class="modal-footer">
-        <div class="actions">
-            <a data-dismiss="modal" class="btn primary pull-right" id="{{module.name}}-{{module.item.id}}-cancel">{% trans 'Close' %}</a>
-            <a class="btn pull-right" id="{{module.name}}-{{module.item.id}}-view_edit">{% trans 'Edit' %}</a>
+</div>
+<div class="row">
+    <div class="span8 offset2">
+        <div class="modal-body">
+            <div class="formBox">
+                <table class="table table-bordered table-striped">
+                    {% with module.item|process_field_types as fields %}
+                    {% for label, value, type in fields|slice:":3" %}
+                        <tr class="row">
+                            <td class="span3">{{ label }}</td>
+                            <td class="span9">{{ value }}</td>
+                        </tr>
+                    {% endfor %}
+                    {% endwith %}
+                </table>
+                <div class="actions">
+                    <a class="btn primary pull-right" href="{% url 'view_profile' %}">{% trans 'Back' %}</a>
+                    <a class="btn pull-right" id="{{module.name}}-{{module.item.id}}-view_edit">{% trans 'Edit' %}</a>
+                    <div class="clear"></div>
+                </div>
+            </div>
         </div>
     </div>
 </div>
+{% endblock %}

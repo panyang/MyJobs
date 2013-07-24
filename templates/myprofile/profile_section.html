@@ -1,3 +1,4 @@
+{% load i18n %}
 {% load model_fields %}
 <div class="formBox profile-mobile" id="{{module.name}}_items">       
     <h4 id="{{module.name}}-verbose">{{ module.verbose }}</h4>
@@ -20,13 +21,24 @@
                 {% endfor %}
                 {% endwith %}
                 <td class="action">
-                    <button class="btn" id="{{module.name}}-{{item.id}}-view">View</button>
-                    <button class="btn" id="{{module.name}}-{{item.id}}-edit">Edit</button>
+                    <form action="{% url 'get_details' %}" class="profile-action-form" method="GET">
+                        <input type="hidden" name="id" value="{{item.id}}" >
+                        <button class="btn" type="submit">{% trans 'Details' %}</button>
+                    </form>
+                    <form action="{% url 'handle_form' %}" class="profile-action-form" method="GET">
+                        <input type="hidden" name="id" value="{{item.id}}" >
+                        <input type="hidden" name="module" value="{{module.name}}" >
+                        <button type="submit" class="btn" >{% trans 'Edit' %}</button>
+                    </form>
                 </td>
             </tr>
             {% endfor %}
         </tbody>
-    </table>                
-    {% endif %}    
-    <button class="btn primary" id="{{module.name}}-new-add">Add</button>
+    </table>
+    {% endif %}
+    <form action="{% url 'handle_form' %}" class="profile-action-form" method="GET">
+        <input type="hidden" name="id" value="new" >
+        <input type="hidden" name="module" value="{{module.name}}" >
+        <a class="btn primary" href="{% url 'handle_form' %}">{% trans 'Add' %}</a>
+    </form>
 </div>

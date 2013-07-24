@@ -7,33 +7,11 @@ $(function() {
         el: $("body"),
 
         events: {
-            // targets event fired when buttons within #moduleBank are clicked
-            "click [id$='section']": "editForm",
-
-            // targets event fired when "Add Another" buttons in each module
-            // section are clicked
-            "click [id$='add']": "editForm",
-
-            // targets "Edit" buttons for individual modules
-            "click [id$='edit']": "editForm",
-
-            // targets event fired when a modal is hidden
-            "hidden [id$='modal']": "cancelForm",
-
             // targets "Save" button  in the modal window
             "click [id$='save']": "saveForm",
 
             // targets email reactivation link in SecondaryEmail window
             "click [id$='updateEmail']": "updateEmail",
-
-            // targets "Delete" button on confirmation modal
-            "click [id$='delete']": "deleteItem",
-
-            // targets delete buttons not on confirmation modal
-            "click [id$='confirm']": "confirmDelete",
-
-            // targets "View" button for each item
-            "click [id$='view']": "viewDetails",
 
             // targets calendar buttons for each DateField
             "click [class$='calendar']": "datepickerButton",
@@ -68,80 +46,6 @@ $(function() {
             }
             else {
                 that.find('[id$="date"]').datepicker('show');
-            }
-        },
-
-        /*
-        Returns document to the state it was in prior to opening the most 
-        recent modal. Called when a modal is hidden
-
-        :e: modal window
-        */
-        cancelForm: function(e) {
-            e.preventDefault();
-
-            var target = $(e.target).find('a[id$="cancel"]');
-
-            // this file may be included in a location whose structure does not
-            // support this event. If it does not, return immediately.
-            try {
-                // id is formatted [module_type]-[item_id]-[event]
-                var module = target.attr('id').split('-')[0];
-                var item_id = target.attr('id').split('-')[1];
-            } catch(e) {
-                return;
-            }
-            if (!$('[id$="modal"]:visible').length) {
-                // All modals are hidden; Remove them
-                $('[id$="modal"]').remove();
-            }
-
-            manageModuleDisplay(module);
-        },
-
-        /*
-        Retrieves the desired form via AJAX, adds the modal form to the
-        document, and displays the form
-
-        :e: "Add Another" button for the current module section
-             or "Edit" button associated with the item to be edited
-        */
-        editForm: function(e) {
-            e.preventDefault();
-
-            // id is formatted [module_type]-[item_id]-[event]
-            var module = $(e.target).attr('id').split("-")[0];
-            var id = $(e.target).attr('id').split("-")[1];
-            var item;
-            if (id == 'new') {
-                $(e.target).parents('.profile-section').hide();
-                if ($('#moduleBank').find('tr:visible').length == 0) {
-                    $('#moduleBank').hide();
-                }
-            } else {
-                // targets the table row containing the item to be edited
-                item = $('#'+module+'-'+id+'-item');
-            } 
-
-            if ($('#edit_modal').length == 0) {
-                $.ajax({
-                    url: '/profile/form/',
-                    data: {'module':module, 'id':id},
-                    success: function(data) {
-                        $('#moduleColumn').append(data);
-                        // Prevents end date from showing up if "I still work here" is checked
-                        if(($("[id='id_employmenthistory-current_indicator']").is(":checked"))) {
-                            $("[id='id_employmenthistory-end_date']").hide();
-                            $("[for='id_employmenthistory-end_date']").hide();
-                        }
-                        $('#edit_modal').modal();
-                        $('input[id$="date"]').datepicker({dateFormat: window.dateFormat,
-                                                           constrainInput: false});
-                        add_date_button($('#edit_modal'));
-                    }
-                });            
-            } else {
-                $('#edit_modal').modal();
             }
         },
 
@@ -312,35 +216,6 @@ $(function() {
                     manageModuleDisplay(module);
                 }
             });
-        },
-
-        viewDetails: function(e) {
-            e.preventDefault();
-
-            // id is formatted [module_type]-[item_id]-view
-            var module = $(e.target).attr('id').split('-')[0];
-            var id = $(e.target).attr('id').split('-')[1];
-
-            $.ajax({
-                url: '/profile/details/',
-                data: {'module': module, 'id': id},
-                success: function(data) {
-                    $(e.target).parents('table').after(data);
-                    var target = $('#detail_modal');
-                    target.modal();
-                }
-            });
-        },
-
-        /*
-        Shows a confirmation message to determine if user really wants
-        to delete the specified item
-
-        :e: "Delete" button within item details modal
-        */
-        confirmDelete: function(e) {
-            e.preventDefault();
-            $('#confirm_modal').modal();
         },
     });
 
