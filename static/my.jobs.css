@@ -953,7 +953,12 @@ form input[type='checkbox']{
     #saved-search-form select {
         margin-bottom: 5px;
     }
-
+    div.actions .btn ~ .btn {
+        margin-left: 10px;
+    }
+    div.actions > .btn {
+        margin-left: 20px;
+    }
 
 }
 @media screen and (max-width: 500px){  
@@ -1121,8 +1126,8 @@ form input[type='checkbox']{
         margin-left: 35px;
     }
 
-    div.actions a.btn,
-    div.actions button.btn {
+    div.actions .btn,
+    div.actions .btn {
         display: block;
         float: none;
         margin-bottom: 10px;
@@ -1133,11 +1138,6 @@ form input[type='checkbox']{
         padding-right: 0px;
     }
 
-    div.actions .btn + button.btn {
-    }
-
-    div.actions button, div.actions a {
-    }
     #saved-search-form label[for=id_url],
     #saved-search-form label[for=id_edit_url] {
         padding-left: 3%;
