@@ -7,6 +7,7 @@ from dateutil import parser as dateparser
 import datetime
 
 from django.utils import simplejson
+from django.utils.encoding import smart_str, smart_unicode
 
 from myprofile.models import SecondaryEmail
 
@@ -132,7 +133,9 @@ def url_sort_options(feed_url, sort_by):
                     the URL and  'Relevance' should has '&date_sort=False' added
     """
 
-    unparsed_feed = urlparse(feed_url)
+    # If unicode is present in the string, escape it
+    feed = smart_str(feed_url)
+    unparsed_feed = urlparse(feed)
     query = parse_qs(unparsed_feed.query)
     query.pop('date_sort', None)
 
@@ -140,6 +143,7 @@ def url_sort_options(feed_url, sort_by):
         query.update({'date_sort': 'False'})
 
     unparsed_feed = unparsed_feed._replace(query = urlencode(query, True))
-    feed_url = urlunparse(unparsed_feed)
+    # Convert byte string back into unicode
+    feed_url = smart_unicode(urlunparse(unparsed_feed))
 
     return feed_url

@@ -12,6 +12,7 @@
 <script src="{{ STATIC_URL }}profile.js{% cache_buster %}"></script>
 <script src="http://js.nlx.org/framework/v2/js/def.ui.bootstrap.tabs.js" type="text/javascript"></script>
 <script src="http://js.nlx.org/framework/v2/js/code/bootstrap-collapse.js" type="text/javascript"></script>
+
 <script>
   $(function() {
     $( ".datepicker" ).datepicker();
@@ -35,6 +36,27 @@ $(document).ready(function()
    });
     
    $("#{{ date_button }}").attr('class', 'btn btn-success');   
+
+   $('.collapse').each(function(){
+        if($(this).hasClass('in')) {
+            $(this).collapse('show');
+        }else{
+            $(this).collapse('hide');
+        };
+    });
+
+   $('[class*=details-heading]').click(function(){
+        var icon = $(this).children('a').children('span').children('i');
+        var item = $(this).next();
+        item.collapse().on('shown',function(){
+            icon.removeClass('icon-plus');
+            icon.addClass('icon-minus');
+        }).on('hidden',function(){
+            icon.removeClass('icon-minus');
+            icon.addClass('icon-plus');
+        });
+    }); 
+   
 });
 </script>
 {% endblock %}
@@ -144,7 +166,7 @@ $(document).ready(function()
              </div>
             
         </div>
-        <div class="scroller_anchor"></div>
+        
         <div class="span4">
             
             {% include "mydashboard/profile.html" %}            
