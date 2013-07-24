@@ -13,15 +13,15 @@ class Migration(SchemaMigration):
             (u'profileunits_ptr', self.gf('django.db.models.fields.related.OneToOneField')(to=orm['myprofile.ProfileUnits'], unique=True, primary_key=True)),
             ('country_code', self.gf('django.db.models.fields.CharField')(max_length=3, blank=True)),
             ('branch', self.gf('django.db.models.fields.CharField')(max_length=255)),
-            ('department', self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True)),
-            ('division', self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True)),
-            ('expertise', self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True)),
+            ('department', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
+            ('division', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
+            ('expertise', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
             ('service_start_date', self.gf('django.db.models.fields.DateField')()),
             ('service_end_date', self.gf('django.db.models.fields.DateField')()),
-            ('start_rank', self.gf('django.db.models.fields.CharField')(max_length=4, blank=True)),
+            ('start_rank', self.gf('django.db.models.fields.CharField')(max_length=50, blank=True)),
             ('end_rank', self.gf('django.db.models.fields.CharField')(max_length=4, blank=True)),
-            ('campaign', self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True)),
-            ('honor', self.gf('django.db.models.fields.CharField')(max_length=255, null=True, blank=True)),
+            ('campaign', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
+            ('honor', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
         ))
         db.send_create_signal(u'myprofile', ['MilitaryService'])
 
@@ -116,17 +116,17 @@ class Migration(SchemaMigration):
         u'myprofile.militaryservice': {
             'Meta': {'object_name': 'MilitaryService', '_ormbases': [u'myprofile.ProfileUnits']},
             'branch': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
-            'campaign': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
+            'campaign': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
             'country_code': ('django.db.models.fields.CharField', [], {'max_length': '3', 'blank': 'True'}),
-            'department': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
-            'division': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
+            'department': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
+            'division': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
             'end_rank': ('django.db.models.fields.CharField', [], {'max_length': '4', 'blank': 'True'}),
-            'expertise': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
-            'honor': ('django.db.models.fields.CharField', [], {'max_length': '255', 'null': 'True', 'blank': 'True'}),
+            'expertise': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
+            'honor': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
             u'profileunits_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['myprofile.ProfileUnits']", 'unique': 'True', 'primary_key': 'True'}),
             'service_end_date': ('django.db.models.fields.DateField', [], {}),
             'service_start_date': ('django.db.models.fields.DateField', [], {}),
-            'start_rank': ('django.db.models.fields.CharField', [], {'max_length': '4', 'blank': 'True'})
+            'start_rank': ('django.db.models.fields.CharField', [], {'max_length': '50', 'blank': 'True'})
         },
         u'myprofile.name': {
             'Meta': {'object_name': 'Name', '_ormbases': [u'myprofile.ProfileUnits']},
