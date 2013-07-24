@@ -107,13 +107,30 @@ $(function() {
                 'OF-9',
                 'OF-10',
             ];
+            var defBranches = [
+                'Army',
+                'Navy',
+                'Air Force',
+            ]
+            var usBranches = [
+                'Army',
+                'Navy',
+                'Air Force',
+                'Marine Corps',
+                'Coast Guard',
+            ]
             chosenCountry = $('#id_militaryservice-country_code').val();
             if(chosenCountry == 'USA'){
                 var rankTagGroup = usTags;
+                var branches = usBranches;
             }else{
                 var rankTagGroup = natoTags;
+                var branches = defBranches;
             }
 
+            $('#id_militaryservice-branch').autocomplete({
+                source: branches
+            });
             $('#id_militaryservice-start_rank').autocomplete({
                 source: rankTagGroup
             });

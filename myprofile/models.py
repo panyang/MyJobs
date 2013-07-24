@@ -256,17 +256,9 @@ class SecondaryEmail(ProfileUnits):
 
 
 class MilitaryService(ProfileUnits):
-    MILITARY_BRANCH_CHOICES = (
-        ('army', _('Army')),
-        ('navy', _('Navy')),
-        ('air force', _('Air Force')),
-        ('marine corps', _('Marine Corps')),
-        ('coast guard', _('Coast Guard')),
-    )
     country_code = models.CharField(max_length=3, blank=True,
                                 verbose_name=_("Country")) # ISO 3166-1
-    branch = models.CharField(max_length=255, choices=MILITARY_BRANCH_CHOICES,
-                                verbose_name="Branch")
+    branch = models.CharField(max_length=255, verbose_name="Branch")
     department = models.CharField(max_length=255, blank=True,
                                 verbose_name="Department")
     division = models.CharField(max_length=255, blank=True,
