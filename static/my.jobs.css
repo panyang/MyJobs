@@ -1138,6 +1138,10 @@ form input[type='checkbox']{
         padding-right: 0px;
     }
 
+    #saved-search-form div[class*=id_edit_sort_by] {
+        display: inline;
+    }
+
     #saved-search-form label[for=id_url],
     #saved-search-form label[for=id_edit_url] {
         padding-left: 3%;
