@@ -60,14 +60,13 @@ class MySearchViewTests(TestCase):
         self.assertEqual(response.content, '')
 
     def test_save_new_search_invalid(self):
-        del self.new_form_data['feed']
         del self.new_form_data['frequency']
         response = self.client.post(reverse('save_search_form'),
                                     data = self.new_form_data,
                                     HTTP_X_REQUESTED_WITH = 'XMLHttpRequest')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(json.loads(response.content).keys(),
-                         ['feed', 'frequency'])
+                         ['frequency'])
 
     def test_get_edit_page(self):
         self.new_form.save()
