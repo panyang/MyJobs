@@ -59,9 +59,11 @@ form -- the rest of the form.
 
             {% elif is_boolean %}
 
-            {{field}}
             <div class="span3 form-label pull-left checkbox-label">
                 {% add_required_label field %}
+            </div>
+            <div class="profile-form-input">
+            {{field}}
             </div>
 
             {% elif 'country_code' in field.html_name %}

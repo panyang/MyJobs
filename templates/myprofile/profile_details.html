@@ -13,14 +13,18 @@
         <div class="modal-body">
             <div class="formBox">
                 <table class="table table-bordered table-striped">
+
                     {% with module.item|process_field_types as fields %}
-                    {% for label, value, type in fields|slice:":3" %}
+                        {% for label, value, type in fields|slice:":3" %}
+
                         <tr class="row">
                             <td class="span3">{{ label }}</td>
                             <td class="span9">{{ value }}</td>
                         </tr>
-                    {% endfor %}
+
+                        {% endfor %}
                     {% endwith %}
+
                 </table>
                 <div class="actions">
                     <a class="btn primary pull-right" href="{% url 'view_profile' %}">{% trans 'Back' %}</a>
