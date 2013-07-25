@@ -79,37 +79,31 @@ def candidate_information(request, user_id):
     except User.DoesNotExist:
         raise Http404
 
-    employer_companies = request.user.company_set.all()
-    employer_microsites = Microsite.objects.filter(
-                            company__in=employer_companies).values_list(
-                            'url', flat=True)
-    employer_domains = [urlparse(url).netloc for url in employer_microsites]
-
-    if employer_can_view_candidate(employer_domains, user):
-
-        if user.opt_in_employers:
-            units = ProfileUnits.objects.filter(user=user)
-
-            for unit in units:
-                if unit.__getattribute__(unit.get_model_name()).is_displayed():
-                    models.setdefault(unit.get_model_name(), []).append(
-                    unit.__getattribute__(unit.get_model_name()))
-
-            # if Name ProfileUnit exsists
-            if models.get('name'):
-                name=models['name'][0]
-                del models['name']
-
-            searches = candidate_saved_searches_in_view(employer_domains, user)
-    
-            data_dict = {'user_info': models,
-                        'primary_name': name,
-                        'the_user': user,
-                        'searches': searches}
-        else:
-            raise Http404
-    else:
+    url_list = saved_seaches(request.user, user)
+    if not url_list:
         raise Http404
+
+    if not user.opt_in_employers:
+        raise Http404
+
+    units = ProfileUnits.objects.filter(user=user)
+
+    for unit in units:
+        if unit.__getattribute__(unit.get_model_name()).is_displayed():
+            models.setdefault(unit.get_model_name(), []).append(
+            unit.__getattribute__(unit.get_model_name()))
+
+    # if Name ProfileUnit exsists
+    if models.get('name'):
+        name=models['name'][0]
+        del models['name']
+
+    searches = user.savedsearch_set.filter(url__in=url_list)
+
+    data_dict = {'user_info': models,
+                'primary_name': name,
+                'the_user': user,
+                'searches': searches}
 
     return render_to_response('myactivity/candidate_information.html', data_dict,
                             RequestContext(request))
