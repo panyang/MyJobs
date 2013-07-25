@@ -96,7 +96,7 @@ def candidate_information(request, user_id):
     # if Name ProfileUnit exsists
     if models.get('name'):
         name=models['name'][0]
-        del models['name']
+        models.pop('name')
 
     searches = user.savedsearch_set.filter(url__in=urls)
 
