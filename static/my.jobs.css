@@ -699,6 +699,9 @@ em.pendingText{
         display: block;
         text-align: left;
     }
+    #saved-search-list .buttons {
+        width: 125px;
+    }
 }
 #nav.active ul#pop-menu li a:hover,
 #nav li:hover ul#pop-menu li a:hover{ 
@@ -956,6 +959,9 @@ form input[type='checkbox']{
         padding: 0;
         display: block;
     }
+    #saved-search-list .buttons {
+        width: 175px;
+    }
 
 }
 @media screen and (min-width: 501px){
@@ -980,7 +986,12 @@ form input[type='checkbox']{
     #saved-search-form select {
         margin-bottom: 5px;
     }
-
+    div.actions .btn ~ .btn {
+        margin-left: 10px;
+    }
+    div.actions > .btn {
+        margin-left: 20px;
+    }
 
 }
 @media screen and (max-width: 500px){  
@@ -1147,11 +1158,23 @@ form input[type='checkbox']{
         display:inline-block;
         margin-left: 35px;
     }
-    div.actions button, div.actions a {
-        float: none;
-        margin-bottom: 10px !important;
+
+    div.actions .btn,
+    div.actions .btn {
         display: block;
+        float: none;
+        margin-bottom: 10px;
+        width: 100%;
+        margin-left: 0px;
+        margin-right: 0px;
+        padding-left: 0px;
+        padding-right: 0px;
     }
+
+    #saved-search-form div[class*=id_edit_sort_by] {
+        display: inline;
+    }
+
     #saved-search-form label[for=id_url],
     #saved-search-form label[for=id_edit_url] {
         padding-left: 3%;
@@ -1238,11 +1261,6 @@ form input[type='checkbox']{
     div.account-box {
         min-height: auto;
         background-color: #f4f1ea;
-    }
-
-    div.account-settings .actions button {
-        width: 100%;
-        margin: 0;
     }
     div.settings-nav ul {
         height: auto;
@@ -1578,6 +1596,10 @@ body.modal-open {
 
 #captcha_modal .modal-body {
     overflow: hidden !important;
+}
+
+.label-required {
+    color: #900;
 }
 
 .required input[type=text],
