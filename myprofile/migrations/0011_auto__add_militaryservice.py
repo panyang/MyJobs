@@ -19,7 +19,7 @@ class Migration(SchemaMigration):
             ('service_start_date', self.gf('django.db.models.fields.DateField')()),
             ('service_end_date', self.gf('django.db.models.fields.DateField')()),
             ('start_rank', self.gf('django.db.models.fields.CharField')(max_length=50, blank=True)),
-            ('end_rank', self.gf('django.db.models.fields.CharField')(max_length=4, blank=True)),
+            ('end_rank', self.gf('django.db.models.fields.CharField')(max_length=50, blank=True)),
             ('campaign', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
             ('honor', self.gf('django.db.models.fields.CharField')(max_length=255, blank=True)),
         ))
@@ -120,7 +120,7 @@ class Migration(SchemaMigration):
             'country_code': ('django.db.models.fields.CharField', [], {'max_length': '3', 'blank': 'True'}),
             'department': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
             'division': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
-            'end_rank': ('django.db.models.fields.CharField', [], {'max_length': '4', 'blank': 'True'}),
+            'end_rank': ('django.db.models.fields.CharField', [], {'max_length': '50', 'blank': 'True'}),
             'expertise': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
             'honor': ('django.db.models.fields.CharField', [], {'max_length': '255', 'blank': 'True'}),
             u'profileunits_ptr': ('django.db.models.fields.related.OneToOneField', [], {'to': u"orm['myprofile.ProfileUnits']", 'unique': 'True', 'primary_key': 'True'}),
