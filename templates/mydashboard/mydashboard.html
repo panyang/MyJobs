@@ -73,7 +73,6 @@ $(document).ready(function()
 #profileTitleBar{
     border-bottom: 2px solid #b34529;
 }
-#profileSubtitleBar{}
 </style>
 <div class="wrapper"> 
     <div class="row" id="profileTitleRow">        
@@ -160,10 +159,10 @@ $(document).ready(function()
                  </div>
                  {% else %}
                  <div id="no-activity">
-                 <strong>There is no candidate activity between {{after.date}} and {{before.date}} for {{ site_name|cut:"http://" }}</strong>
+                    <strong>There is no candidate activity between {{after.date}} and {{before.date}} for {{ site_name|cut:"http://" }}</strong>
                  </div>
                  {% endif %}
-             </div>
+             </div>{# /formBox #}
             
         </div>
         
@@ -172,7 +171,7 @@ $(document).ready(function()
             {% include "mydashboard/profile.html" %}            
             
         </div>
-    </div>
-</div>
+    </div>{# /row #}
+</div>{# /wrapper #}
 
 {% endblock %}
