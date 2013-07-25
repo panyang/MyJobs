@@ -141,9 +141,7 @@ class MilitaryServiceForm(BaseUserForm):
 
     def clean_end_rank(self):
         return self.cleaned_data['end_rank'].upper()
-
-
-
+        
 
 class InitialForm(BaseUserForm):
     def __init__(self, *args, **kwargs):
