@@ -269,7 +269,7 @@ class MilitaryService(ProfileUnits):
     service_end_date = models.DateField(verbose_name=_("End Date"))
     start_rank = models.CharField(max_length=50, blank=True, 
                                 verbose_name=_("Start Rank"))
-    end_rank = models.CharField(max_length=4, blank=True, 
+    end_rank = models.CharField(max_length=50, blank=True, 
                                 verbose_name=_("End Rank"))
     campaign = models.CharField(max_length=255, blank=True,
                                 verbose_name="Campaign")
