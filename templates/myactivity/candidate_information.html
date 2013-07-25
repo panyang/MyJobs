@@ -49,90 +49,93 @@
 
         {% if user_info %}
 
-            <div id="candidate-page-mobile-view">
-                <div id="candidate-page-mobile-toggle">
-                    <span class="toggle-text" id="detail-toggle">&nbsp;Details</span><span class="toggle-text" id="activity-toggle">&nbsp;Activity</span>
-                </div>
-                <div class="span4 pull-left">
-                    <div class="formBox candidate-details">
-                        <h3 class="form-box-title">Details</h3>
+        <div id="candidate-page-mobile-view">
+            <div id="candidate-page-mobile-toggle">
+                <span class="toggle-text" id="detail-toggle">&nbsp;Details</span><span class="toggle-text" id="activity-toggle">&nbsp;Activity</span>
+            </div>
+            <div class="span4 pull-left">
+                <div class="formBox candidate-details">
+                    <h3 class="form-box-title">Details</h3>
 
-                        {% for model in user_info.values %}
+                    {% for model in user_info.values %}
 
-                            {% if model %}
+                    {% if model %}
 
-                                <div class="accordion" id="details-{{model.0.get_model_name}}-collapse">
-                                    <div class="accordion-group">
-                                        <div class="accordion-heading details-heading">
-                                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#details-{{model.0.get_model_name}}-collapse" 
-                                                href="#{{model.0.get_model_name}}-details-table">{{model.0.get_verbose}}<span class="pull-right"><i class="icon icon-plus"></i></span></a>
-                                        </div>
-                                        <div id="{{model.0.get_model_name}}-details-table" class="accordion-body collapse">
-                                            <div class="accordion-inner">
+                    <div class="accordion" id="details-{{model.0.get_model_name}}-collapse">
+                        <div class="accordion-group">
+                            <div class="accordion-heading details-heading">
+                                <a class="accordion-toggle" data-toggle="collapse" data-parent="#details-{{model.0.get_model_name}}-collapse" 
+                                    href="#{{model.0.get_model_name}}-details-table">{{model.0.get_verbose}}<span class="pull-right"><i class="icon icon-plus"></i></span></a>
+                            </div>
+                            <div id="{{model.0.get_model_name}}-details-table" class="accordion-body collapse">
+                                <div class="accordion-inner">
 
-                                                {% for item in model %}
+                                    {% for item in model %}
 
-                                                    <div class="info-row">
-                                                        <ul id="details-smallList">
+                                    <div class="info-row">
+                                        <ul id="details-smallList">
 
-                                                            {% if item.content_type.name == 'education' %}
+                                            {% if item.content_type.name == 'education' %}
 
-                                                            <li><b>{{item.get_education_level_code_display}} in {{item.degree_major}}</b></li>
-                                                            <li>{{item.organization_name}}</li>
-                                                            <li>{{item.degree_date}}</li>
-                                                            
-                                                            {% elif item.content_type.name == "employment history" %}
-                                                                
-                                                            <li><b>{{item.position_title}}</b></li>
-                                                            <li>{{item.organization_name}}</li>
-                                                                
-                                                                {% if item.current_indicator == True %}
-                                                            
-                                                            <li>{{item.start_date}} - Current</li>
-                                                            
-                                                                {%else%}
-                                                            
-                                                            <li>{{item.start_date}} - {{item.end_date}}</li>
-                                                            
-                                                                {%endif%}
+                                            <li><b>{{item.get_education_level_code_display}} in {{item.degree_major}}</b></li>
+                                            <li>{{item.organization_name}}</li>
+                                            <li>{{item.degree_date}}</li>
+                                            
+                                            {% elif item.content_type.name == "employment history" %}
+                                                
+                                            <li><b>{{item.position_title}}</b></li>
+                                            <li>{{item.organization_name}}</li>
+                                                
+                                            {% if item.current_indicator == True %}
+                                            
+                                            <li>{{item.start_date}} - Current</li>
+                                            
+                                            {%else%}
+                                            
+                                            <li>{{item.start_date}} - {{item.end_date}}</li>
+                                            
+                                            {%endif%}
 
-                                                            {% elif item.content_type.name == "telephone" %}
-                                                                
-                                                            <li><b>{{item.use_code}}</b></li>
-                                                            <li>({{item.area_dialing}}) {{item.number}} {% if item.extension %}Ext: {{item.extension}} {%endif%}</li>
-                                                            
-                                                            {% elif item.content_type.name == "secondary email" %}
-                                                                
-                                                            <li><b>{{item.label}}</b></li>
-                                                            <li>{{item.email}}</li>
+                                            {% elif item.content_type.name == "telephone" %}
+                                                
+                                            <li><b>{{item.use_code}}</b></li>
+                                            <li>({{item.area_dialing}}) {{item.number}} {% if item.extension %}Ext: {{item.extension}} {%endif%}</li>
+                                            
+                                            {% elif item.content_type.name == "secondary email" %}
+                                                
+                                            <li><b>{{item.label}}</b></li>
+                                            <li>{{item.email}}</li>
 
-                                                            {% elif item.content_type.name == "military service" %}
+                                            {% elif item.content_type.name == "military service" %}
 
-                                                            <li>{{item.branch}} {% if item.expertise %}- {{item.expertise}}{% endif %}</li>
-                                                            <li>{{item.service_start_date}} - {{item.service_end_date}}</li>
-                                                            <li>{% if item.end_rank %}Rank: {{item.end_rank}} {% endif %}</li>
-                                                            
-                                                            
-                                                            {% else %}
-                                                                
-                                                            <li><b>{{item.label}}</b></li>
-                                                            <li>{%if item.address_line_one%}{{item.address_line_one}},{%endif%} {{item.address_line_two}}</li>
-                                                            <li>{%if item.city_name%}{{item.city_name}},{%endif%}{%if item.country_sub_division_code%}{{item.country_sub_division_code}}{%else%}{{item.country_code}}{%endif%} {{item.postal_code}}</li>
-                                                            
-                                                            {% endif %}
-                                                        </ul>
-                                                    </div>{# /info-row #}
+                                            <li>{{item.branch}} {% if item.expertise %}- {{item.expertise}}{% endif %}</li>
+                                            <li>{{item.service_start_date}} - {{item.service_end_date}}</li>
+                                            <li>{% if item.end_rank %}Rank: {{item.end_rank}} {% endif %}</li>
+                                            
+                                            
+                                            {% else %}
+                                                
+                                            <li><b>{{item.label}}</b></li>
+                                            <li>{%if item.address_line_one%}{{item.address_line_one}},{%endif%} {{item.address_line_two}}</li>
+                                            <li>{%if item.city_name%}{{item.city_name}},{%endif%}{%if item.country_sub_division_code%}{{item.country_sub_division_code}}{%else%}{{item.country_code}}{%endif%} {{item.postal_code}}</li>
+                                            
+                                            {% endif %}
+                                        </ul>
+                                    </div>{# /info-row #}
 
-                                                {% endfor %}
+                                    {% endfor %}
 
-                                            </div>{# /accordion-inner #}
-                                        </div>{# /-details-table #}
-                                    </div>{# /accordion-group #}
-                                </div>{# /accordion #}
-                            {% endif %}
-                        {% endfor %}
-                    </div>{# /formBox #}
-                </div>{# /span4 #}
+                                </div>{# /accordion-inner #}
+                            </div>{# /-details-table #}
+                        </div>{# /accordion-group #}
+                    </div>{# /accordion #}
+
+                    {% endif %}
+
+                    {% endfor %}
+
+                </div>{# /formBox #}
+            </div>{# /span4 #}
 
         {% else %}
 
