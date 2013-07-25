@@ -62,6 +62,12 @@ def activity_search_feed(request):
 
 @user_passes_test(lambda u: User.objects.is_group_member(u, 'Employer'))
 def candidate_information(request, user_id):
+    """
+    Sends user info, primary name, and searches to candidate_information.html.
+    Gathers the employer's (request.user) companies and microsites and puts 
+    the microsites' domains in a list for further checking and logic, 
+    see helpers.py.
+    """
     # gets returned with response to request
     data_dict = {}
     models = {}
@@ -73,7 +79,13 @@ def candidate_information(request, user_id):
     except User.DoesNotExist:
         raise Http404
 
-    if employer_can_view_candidate(request.user, user):
+    employer_companies = request.user.company_set.all()
+    employer_microsites = Microsite.objects.filter(
+                            company__in=employer_companies).values_list(
+                            'url', flat=True)
+    employer_domains = [urlparse(url).netloc for url in employer_microsites]
+
+    if employer_can_view_candidate(employer_domains, user):
 
         if user.opt_in_employers:
             units = ProfileUnits.objects.filter(user=user)
@@ -88,7 +100,7 @@ def candidate_information(request, user_id):
                 name=models['name'][0]
                 del models['name']
 
-            searches = SavedSearch.objects.filter(user=user)
+            searches = candidate_saved_searches_in_view(employer_domains, user)
     
             data_dict = {'user_info': models,
                         'primary_name': name,
