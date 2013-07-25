@@ -40,6 +40,8 @@ $(function() {
 
             // targets "I still work here" checkbox in Employment History
             "click [id='id_employmenthistory-current_indicator']": "hideEndDate",
+
+            "change [id='id_militaryservice-country_code']": 'auto_complete_rankings',
         },
 
         /*
@@ -54,6 +56,87 @@ $(function() {
                 $("[id='id_employmenthistory-end_date']").show();
                 $("[for='id_employmenthistory-end_date']").show();
             }
+        },
+
+        auto_complete_rankings: function(){
+            var usTags = [
+                'E-1',
+                'E-2',
+                'E-3',
+                'E-4',
+                'E-5',
+                'E-6',
+                'E-7',
+                'E-8',
+                'E-9',
+                'E-10',
+                'W-1',
+                'W-2',
+                'W-3',
+                'W-4',
+                'W-5',
+                'O-1',
+                'O-2',
+                'O-3',
+                'O-4',
+                'O-5',
+                'O-6',
+                'O-7',
+                'O-8',
+                'O-9',
+                'O-10',
+            ];
+            var natoTags = [
+                'OR-1',
+                'OR-2',
+                'OR-3',
+                'OR-4',
+                'OR-5',
+                'OR-6',
+                'OR-7',
+                'OR-8',
+                'OR-9',
+                'OF-1',
+                'OF-2',
+                'OF-3',
+                'OF-4',
+                'OF-5',
+                'OF-6',
+                'OF-7',
+                'OF-8',
+                'OF-9',
+                'OF-10',
+            ];
+            var defBranches = [
+                'Army',
+                'Navy',
+                'Air Force',
+            ]
+            var usBranches = [
+                'Army',
+                'Navy',
+                'Air Force',
+                'Marine Corps',
+                'Coast Guard',
+            ]
+            chosenCountry = $('#id_militaryservice-country_code').val();
+            if(chosenCountry == 'USA'){
+                var rankTagGroup = usTags;
+                var branches = usBranches;
+            }else{
+                var rankTagGroup = natoTags;
+                var branches = defBranches;
+            }
+
+            $('#id_militaryservice-branch').autocomplete({
+                source: branches
+            });
+            $('#id_militaryservice-start_rank').autocomplete({
+                source: rankTagGroup
+            });
+            $('#id_militaryservice-end_rank').autocomplete({
+                source: rankTagGroup
+            });
         },
 
         /*
@@ -138,6 +221,9 @@ $(function() {
                         $('input[id$="date"]').datepicker({dateFormat: window.dateFormat,
                                                            constrainInput: false});
                         add_date_button($('#edit_modal'));
+                        if(module == "MilitaryService"){
+                            $('#id_militaryservice-country_code').change();
+                        }
                     }
                 });            
             } else {
@@ -412,5 +498,3 @@ $(document).ready(function() {
         });
     }
 });
-
-
