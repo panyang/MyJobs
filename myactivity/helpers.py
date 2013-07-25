@@ -6,7 +6,7 @@ from mydashboard.models import Company, Microsite
 from mysearches.models import SavedSearch
 
 
-def saved_seaches(employer, candidate):
+def saved_searches(employer, candidate):
 	"""
 	Function that gets employer's companies and those companies microsites.
 	Will pull the domain out of the employer_microsites. Gathers the 

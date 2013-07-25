@@ -79,8 +79,8 @@ def candidate_information(request, user_id):
     except User.DoesNotExist:
         raise Http404
 
-    url_list = saved_seaches(request.user, user)
-    if not url_list:
+    urls = saved_searches(request.user, user)
+    if not urls:
         raise Http404
 
     if not user.opt_in_employers:
@@ -98,7 +98,7 @@ def candidate_information(request, user_id):
         name=models['name'][0]
         del models['name']
 
-    searches = user.savedsearch_set.filter(url__in=url_list)
+    searches = user.savedsearch_set.filter(url__in=urls)
 
     data_dict = {'user_info': models,
                 'primary_name': name,
