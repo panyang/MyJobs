@@ -154,6 +154,13 @@ table#row-link-table {
    margin-left: 15px;
    padding: 0px 0px 0px 5px;
 }
+h1, h4 {
+   display: inline;      
+}
+.margin-left {
+    padding-left: 18px;
+    padding-right: 5px;    
+}
 
 /*Ajax Indicator*/
 #ajax-busy {
@@ -1065,6 +1072,9 @@ form input[type='checkbox']{
         border: none;
         background-color: transparent;
     }    
+    .margin-left {
+        padding-left: 10px;    
+    }
     
     /*Ajax Indicator*/
     #ajax-busy {

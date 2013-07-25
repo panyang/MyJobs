@@ -71,14 +71,10 @@ $(document).ready(function()
 }
 </style>
 <div class="wrapper"> 
-    <div class="row" id="profileTitleRow">        
-        <div class="span12" id="profileTitleBar">
-            <h1>{{microsite_url|cut:"http://"}}</h1>            
-        </div>
-        <div class="span12" id="profileSubtitleBar">
-                
-        </div>
-        <br>
+    <div class="row" id="profileTitleRow">   
+        <h1 class="margin-left">{{microsite_url|cut:"http://"}}</h1><h4>Activity Information</h4>
+        <div class="span12" id="profileTitleBar">                          
+        </div>        
         <span class="span6"><a class="btn primary" href="/dashboard/">Back to Company Dashboard</a><a href="{{microsite_url}}" class="btn">View Site</a></span>
     </div>
     <div class="row">
