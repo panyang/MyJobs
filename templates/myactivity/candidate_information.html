@@ -86,15 +86,15 @@
                                             <li><b>{{item.position_title}}</b></li>
                                             <li>{{item.organization_name}}</li>
                                                 
-                                            {% if item.current_indicator == True %}
-                                            
-                                            <li>{{item.start_date}} - Current</li>
-                                            
-                                            {%else%}
-                                            
-                                            <li>{{item.start_date}} - {{item.end_date}}</li>
-                                            
-                                            {%endif%}
+                                                {% if item.current_indicator == True %}
+                                                
+                                                <li>{{item.start_date}} - Current</li>
+                                                
+                                                {%else%}
+                                                
+                                                <li>{{item.start_date}} - {{item.end_date}}</li>
+                                                
+                                                {%endif%}
 
                                             {% elif item.content_type.name == "telephone" %}
                                                 
