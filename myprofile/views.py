@@ -34,7 +34,7 @@ def edit_profile(request):
 
     settings = {'user': request.user}
     module_list = ['Name', 'Education', 'EmploymentHistory', 'SecondaryEmail',
-                   'Telephone', 'Address']
+                   'Telephone', 'Address', 'MilitaryService']
     units = request.user.profileunits_set
     profile_config = []
     
