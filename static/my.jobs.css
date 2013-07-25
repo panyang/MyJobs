@@ -144,6 +144,16 @@ table#row-link-table {
 .btn + .btn-success {
     color: #FFF !important;  
 }
+.accordion-body {
+    background-color: rgb(250, 250, 250);   
+}
+#custom-input-datepicker input {
+    width: 75px;   
+}
+#time-period-details-table select {
+   margin-left: 15px;
+   padding: 0px 0px 0px 5px;
+}
 
 /*Ajax Indicator*/
 #ajax-busy {

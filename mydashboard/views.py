@@ -148,17 +148,40 @@ def microsite_activity(request):
     company = Company.objects.filter(admins=request.user)[0]
     
     requested_microsite = request.REQUEST.get('microsite_url', company.name)
+    requested_date_range = request.REQUEST.get('date_select', False)
+    requested_after_date = request.REQUEST.get('after', False)
+    requested_before_date = request.REQUEST.get('before', False)
     
     if requested_microsite.find('//') == -1:
             requested_microsite = '//' + requested_microsite
+            
+    if requested_date_range:
+        if requested_date_range == 'today':
+            after = datetime.now() - timedelta(days=1)
+            before = datetime.now() 
+            requested_date = 'today'
+        elif requested_date_range == 'seven_days':
+            after = datetime.now() - timedelta(days=7)
+            before = datetime.now()
+            requested_date = 'seven_days'
+        elif requested_date_range == 'thirty_days':
+            after = datetime.now() - timedelta(days=30)
+            before = datetime.now()
+            requested_date = 'thirty_days'
+    else:
+        if not requested_after_date:
+            after = request.REQUEST.get('after', (datetime.now() - timedelta(days=30)))                
+        else:
+            after = datetime.strptime(requested_after_date, '%m/%d/%Y')
+            
+        if not requested_before_date:
+            before = request.REQUEST.get('before', (datetime.now()))
+        else:
+            before = datetime.strptime(requested_before_date, '%m/%d/%Y')
     
     # All searches saved on the employer's company microsites       
     candidate_searches = SavedSearch.objects.filter(url__contains=requested_microsite)
-            
-    # Pre-set Date ranges
-    after = datetime.now() - timedelta(days=30)                
-    before = datetime.now()
-    
+        
     # Specific microsite searches saved between two dates
     candidate_searches = candidate_searches.filter(
             created_on__range=[after, before]).order_by('-created_on')  

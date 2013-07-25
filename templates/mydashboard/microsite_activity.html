@@ -114,7 +114,7 @@ $(document).ready(function()
                          <div class="pull-left span6">
                          
                          {% if candidates.has_previous %}
-                            <a href="?page={{ candidates.previous_page_number }}&microsite_url={{ microsite_url }}">Previous</a>
+                            <a href="?page={{ candidates.previous_page_number }}&microsite_url={{ microsite_url }}&after={{ after|date:'m/d/Y' }}&before={{ before|date:'m/d/Y' }}">Previous</a>
                          {% else %}
                             &nbsp;
                          {% endif %}
@@ -122,7 +122,7 @@ $(document).ready(function()
                          Page {{ candidates.number }} of {{ candidates.paginator.num_pages }}
                          &nbsp;
                          {% if candidates.has_next %}
-                            <a href="?page={{ candidates.next_page_number }}&microsite_url={{ microsite_url }}">Next</a>
+                            <a href="?page={{ candidates.next_page_number }}&microsite_url={{ microsite_url }}&after={{ after|date:'m/d/Y' }}&before={{ before|date:'m/d/Y' }}">Next</a>
                          {% endif %}
                          </div>
                          {% else %}
@@ -144,33 +144,27 @@ $(document).ready(function()
                 <div class="accordion" id="details-candidate-activity-collapse">
                     <div class="accordion-group">
                         <div class="accordion-heading details-heading">
-                    	   <a class="accordion-toggle" data-toggle="collapse" data-parent="#details-candidate-activity-collapse" href="#candidate-activity-details-table">Time Period<span class="pull-right"><i class="icon icon-minus"></i></span></a>
+                    	   <a class="accordion-toggle" data-toggle="collapse" data-parent="#details-time-period-collapse" href="#time-period-details-table">Time Period<span class="pull-right"><i class="icon icon-minus"></i></span></a>
                     	</div>
-                    	<div id="candidate-activity-details-table" class="accordion-body in collapse">
+                    	<div id="time-period-details-table" class="accordion-body in collapse">
+                    	<br>
+                    	<form action='/dashboard/microsite/' method='POST'>
+                    	{% csrf_token %}                                        
+                    	<select name="date_select" onchange="this.form.submit()" class="btn">                        
+                            <option value="">Auto Date Range</option>
+                    	    <option value="today">Today</option>
+                            <option value="seven_days">7 Days</option>
+                            <option value="thirty_days">30 Days</option>                        
+                        </select>
+                        <br><br>
+                        <div id="custom-input-datepicker" class="span4">
+                        <strong>Custom:</strong><input name="after" type="text" placeholder="{{ after|date:'m/d/Y' }}" class="datepicker"> <strong>to</strong> <input name="before" type="text" placeholder="{{ before|date:'m/d/Y' }}" class="datepicker">
+                        </div>
+                        <input type="submit" class="btn primary" value="Update">
+                        </div>
+                        </form>
                     	
-                    	</div>
-                    </div>
-                 </div>
-                 
-                 <div class="accordion" id="details-candidate-activity-collapse">
-                    <div class="accordion-group">
-                        <div class="accordion-heading details-heading">
-                    	   <a class="accordion-toggle" data-toggle="collapse" data-parent="#details-candidate-activity-collapse" href="#candidate-activity-details-table">Job Seeker Activity<span class="pull-right"><i class="icon icon-minus"></i></span></a>
-                    	</div>
-                    	<div id="candidate-activity-details-table" class="accordion-body in collapse">
                     	
-                    	</div>
-                    </div>
-                 </div>
-                 
-                 <div class="accordion" id="details-candidate-activity-collapse">
-                    <div class="accordion-group">
-                        <div class="accordion-heading details-heading">
-                    	   <a class="accordion-toggle" data-toggle="collapse" data-parent="#details-candidate-activity-collapse" href="#candidate-activity-details-table">General<span class="pull-right"><i class="icon icon-minus"></i></span></a>
-                    	</div>
-                    	<div id="candidate-activity-details-table" class="accordion-body in collapse">
-                    	
-                    	</div>
                     </div>
                  </div>
                 
