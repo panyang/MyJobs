@@ -140,17 +140,20 @@ def dashboard(request):
 @user_passes_test(lambda u: User.objects.is_group_member(u, 'Employer'))
 def microsite_activity(request):
     """
-    Returns a list of candidates who created a saved search for one of the microsites within the
-    company microsite list over the last 30 days
+    Returns the activity information for the microsite that was select on the employer
+    dashboard page.  Candidate activity for saved searches, job views, etc.
     """    
     settings = {'user': request.user}
     
     company = Company.objects.filter(admins=request.user)[0]
     
-    requested_microsite = request.REQUEST.get('microsite_url', company.name)
+    requested_microsite = request.REQUEST.get('microsite_url', False)
     requested_date_range = request.REQUEST.get('date_select', False)
     requested_after_date = request.REQUEST.get('after', False)
     requested_before_date = request.REQUEST.get('before', False)
+    
+    if not requested_microsite:
+        requested_microsite = request.REQUEST.get('microsite-hide', False)
     
     if requested_microsite.find('//') == -1:
             requested_microsite = '//' + requested_microsite
@@ -203,7 +206,7 @@ def microsite_activity(request):
                  'before': before,                 
                  'candidates': candidates,                
                  'view_name': 'Company Dashboard',
-                 'company_name': company.name,}
+                 'company_name': company.name}
     
     return render_to_response('mydashboard/microsite_activity.html', data_dict,
                               context_instance=RequestContext(request))

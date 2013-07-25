@@ -74,13 +74,13 @@ $(document).ready(function()
 <div class="wrapper"> 
     <div class="row" id="profileTitleRow">        
         <div class="span12" id="profileTitleBar">
-            <h1>{{microsite_url|cut:"http://"}}</h1>            
+            <h1>{{microsite_url|cut:"http://"}}{{microsite_test}}</h1>            
         </div>
         <div class="span12" id="profileSubtitleBar">
                 
         </div>
         <br>
-        <span class="span6"><a href="{{microsite_url}}" target="_blank" class="btn">View Site</a><a class="btn primary" href="/dashboard/">Back to Company Dashboard</a></span>
+        <span class="span6"><a href="{{microsite_url}}" class="btn">View Site</a><a class="btn primary" href="/dashboard/">Back to Company Dashboard</a></span>
     </div>
     <div class="row">
         <div class="span6" id="moduleColumn">
@@ -138,7 +138,7 @@ $(document).ready(function()
             
         </div>
         
-        <div class="span6" id="moduleColumn">
+        <div class="span6 hide-mobile" id="moduleColumn">
             <div class="formBox">
             <h3>Activity</h3>
                 <div class="accordion" id="details-candidate-activity-collapse">
@@ -150,12 +150,13 @@ $(document).ready(function()
                     	<br>
                     	<form action='/dashboard/microsite/' method='POST'>
                     	{% csrf_token %}                                        
-                    	<select name="date_select" onchange="this.form.submit()" class="btn">                        
+                    	<select id="{{ microsite_url }}" name="date_select" onchange="this.form.submit()" class="btn">                        
                             <option value="">Auto Date Range</option>
                     	    <option value="today">Today</option>
                             <option value="seven_days">7 Days</option>
                             <option value="thirty_days">30 Days</option>                        
                         </select>
+                        <input type="hidden" name="microsite-hide" value="{{ microsite_url }}">
                         <br><br>
                         <div id="custom-input-datepicker" class="span4">
                         <strong>Custom:</strong><input name="after" type="text" placeholder="{{ after|date:'m/d/Y' }}" class="datepicker"> <strong>to</strong> <input name="before" type="text" placeholder="{{ before|date:'m/d/Y' }}" class="datepicker">
