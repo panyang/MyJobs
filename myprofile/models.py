@@ -276,7 +276,6 @@ class MilitaryService(ProfileUnits):
     honor = models.CharField(max_length=255, blank=True,
                                 verbose_name="Honors")
 
-
 def delete_secondary_activation(sender, **kwargs):
     """
     When a secondary email is deleted, deletes that email's associated

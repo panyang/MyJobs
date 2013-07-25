@@ -133,6 +133,18 @@ class MilitaryServiceForm(BaseUserForm):
         model = MilitaryService
         widgets = generate_custom_widgets(model)
 
+    def clean_branch(self):
+        return self.cleaned_data['branch'].lower()
+
+    def clean_start_rank(self):
+        return self.cleaned_data['start_rank'].upper()
+
+    def clean_end_rank(self):
+        return self.cleaned_data['end_rank'].upper()
+
+
+
+
 class InitialForm(BaseUserForm):
     def __init__(self, *args, **kwargs):
         super(InitialForm, self).__init__(*args, **kwargs)
