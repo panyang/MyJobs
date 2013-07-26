@@ -59,9 +59,14 @@ label[for^='id_sort_by'], label[for^='id_edit_sort_by'] {
     margin-left: 200px;
     margin-top: -27px;
     }
-.profile-form-input input {
+
+.profile-form-input input[type!=checkbox] {
     width: 40%;
-    }
+}
+
+.profile-action-form {
+    display: inline;
+}
 
 .reset-form-input input[type="text"], .reset-form-input input[type="password"] {
     width: 100%;
@@ -159,27 +164,33 @@ table#row-link-table {
 .table-striped thead th {
     background-color: #FFF;   
     color: #000;
-    }    
+}    
+
 .table-striped tbody tr:nth-child(even) td {background-color: #d2cfc7 !important;}
 .table-striped tbody tr:nth-child(odd) td {background-color: #eae6de !important;}
 
 /*New Account initial form*/
 #newAccountData .initial {
     display: none;   
-    }
-#newAccountData .profile-form-input input {
+}
+
+#newAccountData .profile-form-input input[type!=checkbox] {
     width: 95%;   
-    }
+}
+
 #newAccountData .input-prepend {
     width: 95%;  
-    }
+}
+
 #newAccountData .hasRegions {
     margin-left: -20px;  
-    }
+}
+
 #newAccountData li {
     display: block;
     width: 100%;
 }
+
 #newAccountData li label {
     display: none;
 }
@@ -975,30 +986,39 @@ form input[type='checkbox']{
     #saved-search-form #id_edit_label {
         margin-top: 10px;
     }
+
     #saved-search-form #id_url,
     #saved-search-form #id_edit_url {
         margin-bottom: 10px !important;
     }
+
     #saved-search-form label[for=id_label],
     #saved-search-form label[for=id_edit_label] {
         margin-top: 10px;
     }
+
     #saved-search-form label[for^='id_sort_by'], label[for^='id_edit_sort_by'] {
     display: inline;
     margin: 5px;
     }
+
     #saved-search-form input,
     #saved-search-form textarea,
     #saved-search-form select {
         margin-bottom: 5px;
     }
+
     div.actions .btn ~ .btn {
         margin-left: 10px;
     }
+
     div.actions > .btn {
         margin-left: 20px;
     }
 
+    .modal-footer div.actions .btn {
+        margin-left: 0px;
+    }
 }
 @media screen and (max-width: 500px){  
     .profile-mobile table, 
@@ -1086,10 +1106,12 @@ form input[type='checkbox']{
         margin-top: 1px;
         margin-bottom: 0px;
     }
+
     .checkbox-margin {
         padding-top: 14px;    
     }
-    .profile-form-input input {
+
+    .profile-form-input input[type!=checkbox] {
         width: 65%;
     }
     
@@ -1100,6 +1122,7 @@ form input[type='checkbox']{
     #titleRow{
         margin-top: 0px;
     }
+
     #titleRow #title{
         display: none;
     }
@@ -1152,20 +1175,22 @@ form input[type='checkbox']{
         display: none !important;
     }
 
-    /* Mobile Saved Search */
+    /* Mobile Forms */
 
     #saved-search-form label[for=id_is_active],
-    #saved-search-form label[for=id_edit_is_active] {
+    #saved-search-form label[for=id_edit_is_active],
+    #profile-unit-form label[for=id_name-primary],
+    #profile-unit-form label[for=id_employmenthistory-current_indicator] {
         margin-top:10px;
         float: left;
     }
 
+    #profile-unit-form input[type=checkbox],
     #saved-search-form input[type=checkbox]{
         display:inline-block;
         margin-left: 35px;
     }
 
-    div.actions .btn,
     div.actions .btn {
         display: block;
         float: none;
@@ -1443,16 +1468,6 @@ form input[type='checkbox']{
     padding-bottom: 30px;
 }
 
-#edit_modal .input-prepend .add-on {
-    width: 96px;
-}
-
-#edit_modal .input-prepend input,
-#edit_modal .input-prepend select {
-    width: auto;
-}
-
-
 #captcha_modal {
     width: 620px;
 }
@@ -1569,16 +1584,6 @@ body.modal-open {
     text-align: center;
     padding-bottom: 30px;
 }
-
-#edit_modal .input-prepend .add-on {
-    width: 96px;
-}
-
-#edit_modal .input-prepend input,
-#edit_modal .input-prepend select {
-    width: auto;
-}
-
 
 #captcha_modal {
     width: 620px;

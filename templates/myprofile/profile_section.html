@@ -1,32 +1,58 @@
+{% load i18n %}
 {% load model_fields %}
 <div class="formBox profile-mobile" id="{{module.name}}_items">       
     <h4 id="{{module.name}}-verbose">{{ module.verbose }}</h4>
+
     {% if module.items.0 %}
+
     <table class="table table-bordered table-striped">
         <thead>
             <tr>
+
                 {% for label, value, type in module.items.0.get_fields|slice:":3" %}
-                    <th>{{label}}</th>
+
+                <th>{{label}}</th>
+
                 {% endfor %}
+
                 <th class="action"></th>
             </tr>
         </thead>
         <tbody>
+
             {% for item in module.items %}
+
             <tr id="{{module.name}}-{{item.id}}-item">
+
                 {% with item|process_field_types as fields %}
-                {% for label, value, type in fields|slice:":3" %}
-                <td data-title="{{label}}">{{ value }}&nbsp;</td>
-                {% endfor %}
+                    {% for label, value, type in fields|slice:":3" %}
+
+                    <td data-title="{{label}}">{{ value }}&nbsp;</td>
+
+                    {% endfor %}
                 {% endwith %}
                 <td class="action">
-                    <button class="btn" id="{{module.name}}-{{item.id}}-view">View</button>
-                    <button class="btn" id="{{module.name}}-{{item.id}}-edit">Edit</button>
+                    <form action="{% url 'get_details' %}" class="profile-action-form" method="GET">
+                        <input type="hidden" name="id" value="{{item.id}}" >
+                        <button class="btn" type="submit">{% trans 'Details' %}</button>
+                    </form>
+                    <form action="{% url 'handle_form' %}" class="profile-action-form" method="GET">
+                        <input type="hidden" name="id" value="{{item.id}}" >
+                        <input type="hidden" name="module" value="{{module.name}}" >
+                        <button type="submit" class="btn" >{% trans 'Edit' %}</button>
+                    </form>
                 </td>
             </tr>
+
             {% endfor %}
+
         </tbody>
-    </table>                
-    {% endif %}    
-    <button class="btn primary" id="{{module.name}}-new-add">Add</button>
+    </table>
+
+    {% endif %}
+
+    <form action="{% url 'handle_form' %}" class="profile-action-form" method="GET">
+        <input type="hidden" name="module" value="{{module.name}}" >
+        <button type="submit" class="btn primary">{% trans 'Add' %}</button>
+    </form>
 </div>

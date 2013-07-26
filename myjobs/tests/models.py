@@ -65,19 +65,19 @@ class UserManagerTests(TestCase):
         user = UserFactory()
         
         #Anonymous user
-        resp = client.get(reverse('edit_profile'))
-        self.assertRedirects(resp, "http://testserver/?next=/profile/edit/")
+        resp = client.get(reverse('view_profile'))
+        self.assertRedirects(resp, "http://testserver/?next=/profile/")
 
         # Active user
         client.login_user(user)
-        resp = client.get(reverse('edit_profile'))
+        resp = client.get(reverse('view_profile'))
         self.assertTrue(resp.status_code, 200)
         
         #Disabled user
         user.is_disabled = True
         user.save()
-        resp = client.get(reverse('edit_profile'))
-        self.assertRedirects(resp, "http://testserver/?next=/profile/edit/")
+        resp = client.get(reverse('view_profile'))
+        self.assertRedirects(resp, "http://testserver/?next=/profile/")
 
     def test_is_active(self):
         """

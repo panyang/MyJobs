@@ -31,18 +31,23 @@
 
                 {% if search.frequency == 'D' %}
 
-                <b>Daily</b>
+                Daily
 
                 {% elif search.frequency == 'W' %}
 
-                <b>Weekly</b> on {{search.get_verbose_dow}}
+                Weekly on {{search.get_verbose_dow}}
 
                 {% else %}
 
-                <b>Monthly</b> on the {{search.day_of_month|ordinal}}
+                Monthly on the {{search.day_of_month|ordinal}}
 
                 {% endif %}
 
+            </div>
+            <div>
+                <b>{% trans 'Sort By:' %}</b>
+                <div class='clear'></div>
+                {{search.sort_by}}
             </div>
 
             <div>
