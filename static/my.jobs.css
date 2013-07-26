@@ -159,7 +159,7 @@ table#row-link-table {
     position: absolute;
     margin: -33px 0px 0px 185px;
     }
-h1, h4 {
+#header-inline h1, #header-inline h4 {
     display: inline;      
     }
 .margin-left {
