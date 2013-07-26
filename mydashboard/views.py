@@ -137,4 +137,53 @@ def dashboard(request):
                               context_instance=RequestContext(request))
     
 
+@user_passes_test(lambda u: User.objects.is_group_member(u, 'Employer'))
+def microsite_activity(request):
+    """
+    Returns a list of candidates who created a saved search for one of the microsites within the
+    company microsite list over the last 30 days
+    """    
+    settings = {'user': request.user}
+    
+    company = Company.objects.filter(admins=request.user)[0]
+    
+    requested_microsite = request.REQUEST.get('microsite_url', company.name)
+    
+    if requested_microsite.find('//') == -1:
+            requested_microsite = '//' + requested_microsite
+    
+    # All searches saved on the employer's company microsites       
+    candidate_searches = SavedSearch.objects.filter(url__contains=requested_microsite)
+            
+    # Pre-set Date ranges
+    after = datetime.now() - timedelta(days=30)                
+    before = datetime.now()
+    
+    # Specific microsite searches saved between two dates
+    candidate_searches = candidate_searches.filter(
+            created_on__range=[after, before]).order_by('-created_on')  
+    
+    paginator = Paginator(candidate_searches, 25) # Show 25 candidates per page
+    page = request.GET.get('page')
+    
+    try:
+        candidates = paginator.page(page)
+    except PageNotAnInteger:
+        # If page is not an integer, deliver first page.
+        candidates = paginator.page(1)
+    except EmptyPage:
+        # If page is out of range (e.g. 9999), deliver last page of results.
+        candidates = paginator.page(paginator.num_pages)    
+    
+    data_dict = {'microsite_url': requested_microsite,
+                 'after': after,
+                 'before': before,                 
+                 'candidates': candidates,                
+                 'view_name': 'Company Dashboard',
+                 'company_name': company.name,}
+    
+    return render_to_response('mydashboard/microsite_activity.html', data_dict,
+                              context_instance=RequestContext(request))
+    
+
 
