@@ -152,10 +152,12 @@ table#row-link-table {
 #custom-input-datepicker input {
     width: 75px;   
 }
+
 #time-period-details-table select {
    margin-left: 15px;
    padding: 0px 0px 0px 5px;
 }
+
 h1, h4 {
    display: inline;      
 }
