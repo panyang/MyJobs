@@ -50,6 +50,7 @@ class CompanyForm(forms.ModelForm):
 
 class CompanyAdmin(admin.ModelAdmin):
     form = CompanyForm
+    search_fields = ('name',)
 
 admin.site.register(Company, CompanyAdmin)
 
