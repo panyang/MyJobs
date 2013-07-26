@@ -152,8 +152,7 @@ table#row-link-table {
 #custom-input-datepicker input {
     width: 75px;   
     }
-#time-period-details-table select {
-    margin-left: 15px;
+#details-candidate-activity-collapse select {    
     padding: 0px 0px 0px 5px;
     }
 #preset-date {
