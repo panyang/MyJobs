@@ -136,29 +136,29 @@ $(document).ready(function()
             <div class="formBox">
             <h3>Activity</h3>
                 <div class="accordion" id="details-candidate-activity-collapse">
-                    <div class="accordion-group">
+                    <form action='/dashboard/microsite/' method='POST'>
+                    {% csrf_token %}
+                    <div class="accordion-group">                        
                         <div class="accordion-heading details-heading">
-                    	   <a class="accordion-toggle" data-toggle="collapse" data-parent="#details-time-period-collapse" href="#time-period-details-table">Time Period<span class="pull-right"><i class="icon icon-minus"></i></span></a>
-                    	</div>
-                    	<div id="time-period-details-table" class="accordion-body in collapse">
-                           <br>
-                           <form action='/dashboard/microsite/' method='POST'>
-                           {% csrf_token %}                                        
-                           <select name="date_select" onchange="this.form.submit()" class="btn">                        
+                    	   <a class="accordion-toggle" data-toggle="collapse" data-parent="#details-time-period-collapse" href="#time-period-details-table">Time Period</a>                    	   
+                    	   <select id="preset-date" name="date_select" onchange="this.form.submit()" class="btn">                        
                                 <option value="">Auto Date Range</option>
                                 <option value="today">Today</option>
                                 <option value="seven_days">7 Days</option>
                                 <option value="thirty_days">30 Days</option>                        
                             </select>
-                            <br><br>
+                    	</div>
+                    	<div id="time-period-details-table" class="accordion-body in collapse">
+                            <br>
                             <div id="custom-input-datepicker" class="span4">
                                <strong>Custom:</strong><input name="after" type="text" placeholder="{{ after|date:'m/d/Y' }}" class="datepicker"> <strong>to</strong> <input name="before" type="text" placeholder="{{ before|date:'m/d/Y' }}" class="datepicker">
                             </div>                           
                             <input type="hidden" name="microsite-hide" value="{{ microsite_url }}">
                             <input type="submit" class="btn primary" value="Update">                        
-                            </form>
-                        </div>{# /accordion-body #}
+                            <br><br>                        
+                        </div>{# /accordion-body #}                        
                     </div>{# /accordion-group #}
+                    </form>
                  </div>{# /accordion #}
              </div>{# /formBox #}            
         </div>{# /moduleColumn #}
