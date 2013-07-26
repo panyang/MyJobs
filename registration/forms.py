@@ -26,7 +26,7 @@ class CustomAuthForm(AuthenticationForm):
                                           'id':'id_password'},
                                    render_value=False,))
 
-    remember_me = forms.BooleanField(label=_('Trust This Computer'), required=False,
+    remember_me = forms.BooleanField(label=_('Keep me logged in for 2 weeks'), required=False,
                                      widget=forms.CheckboxInput(
                                          attrs={'id':'id_remember_me'}))
 
