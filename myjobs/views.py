@@ -5,7 +5,7 @@ import logging
 import urllib2
 
 from django.contrib import messages
-from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import authenticate, logout
 from django.contrib.auth.decorators import user_passes_test, login_required
 from django.core.mail import EmailMessage
 from django.core.urlresolvers import reverse
@@ -88,7 +88,7 @@ def home(request):
                                           cleaned_data['email'],
                                           password = registrationform.
                                           cleaned_data['password1'])
-                login(request, user_cache)
+                expire_login(request, user_cache)
                 # pass in gravatar url once user is logged in. Image generated
                 # on AJAX success
                 data={'gravatar_url': new_user.get_gravatar_url(size=100)}
@@ -99,7 +99,7 @@ def home(request):
         elif request.POST['action'] == "login":
             loginform = CustomAuthForm(data=request.POST)
             if loginform.is_valid():
-                login(request, loginform.get_user())
+                expire_login(request, loginform.get_user())
                 return HttpResponse('valid')
             else:
                 return HttpResponse(json.dumps({'errors': loginform.errors.items()}))

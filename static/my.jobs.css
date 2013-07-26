@@ -210,9 +210,6 @@ table#row-link-table {
     width: 67%;
     clear: right;
 }
-#newAccountData #id_work-current_indicator {
-    width: 15%;
-}
 #newAccountData hr {
     margin: 0px 0px 10px 0px;
     border-top: 1px solid #a3aeb1;
@@ -427,55 +424,80 @@ fieldset select{
     color: #000;
     background: #fff;
 }
+
 .loginBox input, .profileBox input{
     /*display: block;*/
     padding: 4px 0px;
     text-indent: 4px;
-    }
+}
+
 #titleRow input{
     width: 100%;
-    }
-.loginBox input, .initial-profileBox input[type=checkbox]{
+}
+
+.loginBox input[type!=checkbox], .initial-profileBox input[type=checkbox]{
     float: left;
     width: auto;
-    }
+}
+
 #account-page-2 .loginBox input, #account-page-2 .initial-profileBox input[type=text]{
     width: 100%;
-    }
+}
+
 .initial-profileBox input.comboboxWidget, .loginBox input.comboboxWidget,
 #account-page-2 .loginBox input.comboboxWidget{
     width: 230px;
-    }
+}
+
 .loginBox label{
     display: none;
-    }
+}
+
 .loginBox .checkbox-label label,
 .loginBox .select-label label,
 .loginBox .add-on label{
     display: inline;
     text-align: left;    
-    }
+}
+
+.loginBox label[for=id_remember_me] {
+    display: inline;
+}
+
+.loginBox li {
+    display: block;
+}
+
 .loginBox .checkbox-label{
     padding-left: 10px;
-    }
+}
+
 .loginBox .select-label,
 .loginBox .checkbox-label{
     text-align: left;
     width: auto;
-    }
+}
+
 .loginBox .help-block{
     display: block;   
     font-size: 1em;
     padding-right: 10px;
     text-align: right;
-    }
+}
+
 .loginBox form{
     margin-bottom: 0px;
-    }
+}
+
+#newAccountData #id_work-current_indicator,
+.loginBox input#id_remember_me {
+    width: 15%;
+}
 
 #newAccountInfo{
     height: 100%:    
-    }
+}
+
 #newAccountData{
     margin-left: 10px;
     padding-left: 10px;
