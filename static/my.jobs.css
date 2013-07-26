@@ -29,6 +29,20 @@ a{
 a:hover{
     color: #a42e14;
     }
+    
+/*Candidate Activity mobile desktop hide*/
+.candidate-activity-mobile {
+    display: none;
+}
+
+/*Employer Dashboard */
+#user-list-details-table {
+    overflow-y: auto;
+    height: auto;
+    max-height: 500px;
+    overflow-x: hidden;    
+}
+
 /* Sort by field in saved search save/edit */
 label[for^='id_sort_by'], label[for^='id_edit_sort_by'] {
     display: inline;
@@ -78,8 +92,12 @@ table#row-link-table {
     cursor: pointer;
 }
 #row-link-table td {
-    padding: 5px;    
+    padding: 5px;
+    width: 40%;    
     border-bottom: 1px solid #eae6de;
+}
+#row-link-table td:first-child {    
+    width: 10%;
 }
 #row-link-table ul {
     list-style-type: none;
@@ -103,12 +121,24 @@ table#row-link-table {
 .move-left {
     margin-left: -45px;
 }
+.primary-btn-padding {
+    padding: 10px;
+}
 .text-middle {
     vertical-align: middle;   
 }
 .candidate-name {
     font-size: 1.5em;   
 }
+#no-activity {    
+    background-color: #FFF;
+    width: 95%;    
+    padding: 10px;
+}
+.btn + .btn-success {
+    color: #FFF !important;  
+}
+
 /*Ajax Indicator*/
 #ajax-busy {
     display: none;    
@@ -259,9 +289,12 @@ ul.ui-autocomplete{
     background-color: #b34529 !important;
     }
 .formBox select {
-    width: 216px;
+    width: 221px;
     }
 form select{
+    width: 262px;
+    }
+fieldset select{
     width: 264px;
     }
 #title{
@@ -474,7 +507,15 @@ form select{
     font-size: 1.1em;
     color: #fff
     }
-
+.profile-form-input textarea{
+    width: 248px;
+    height: 100px;
+    }
+.captcha{
+    float:left;
+    margin-left: -3px;
+    line-height: 0px;
+}
 .alert-message ul{
     list-style: none;
     padding: 0;
@@ -483,25 +524,28 @@ form select{
     }
 .alert-message li{
     color: red;
-}
+    }
+.alert-error a{
+    color: #b94a48;
+    }
 .input-prepend .add-on{
     width: 35%;
     text-align: right;
-}
+    }
 .input-prepend input,
 .input-prepend select{
     width: 61.5%;
-}
+    }
 #account-page-2 .loginBox input[type="text"].phoneCountryCode,
 .loginBox .phoneCountryCode,
 .phoneCountryCode{
     width: 45px;
-}
+    }
 #account-page-2 .loginBox input[type="text"].phoneAreaCode,
 .loginBox .phoneAreaCode,
 .phoneAreaCode{
     width: 45px;
-}
+    }
 #account-page-2 .loginBox input[type="text"].phoneNumber,
 .loginBox .phoneNumber,
 .phoneNumber,
@@ -509,11 +553,11 @@ form select{
 .loginBox .phoneExtension,
 .phoneExtension{
     width: 150px;
-}
+    }
 #usaPhoneField{
     margin-top: 10px;
     display: none;
-}
+    }
 .friendlyPhoneForm input[type=text],
 .friendlyPhoneForm .input-prepend{
     display: none;
@@ -639,6 +683,9 @@ em.pendingText{
         display: block;
         text-align: left;
     }
+    #saved-search-list .buttons {
+        width: 125px;
+    }
 }
 #nav.active ul#pop-menu li a:hover,
 #nav li:hover ul#pop-menu li a:hover{ 
@@ -700,10 +747,6 @@ input[type='checkbox'] + .help-block{
 
 form input[type='checkbox']{
     margin-top: -1px;
-}
-#profileTitleBar #candidate-flag{
-    font-size: 0.6em;
-    color: #333;
 }
 #user-buttons input[type="button"]{
     margin-left: 20px;
@@ -900,6 +943,9 @@ form input[type='checkbox']{
         padding: 0;
         display: block;
     }
+    #saved-search-list .buttons {
+        width: 175px;
+    }
 
 }
 @media screen and (min-width: 501px){
@@ -924,7 +970,12 @@ form input[type='checkbox']{
     #saved-search-form select {
         margin-bottom: 5px;
     }
-
+    div.actions .btn ~ .btn {
+        margin-left: 10px;
+    }
+    div.actions > .btn {
+        margin-left: 20px;
+    }
 
 }
 @media screen and (max-width: 500px){  
@@ -971,6 +1022,33 @@ form input[type='checkbox']{
     #moduleBank {
         margin-top: 20px;
     }
+    
+    /*Employer Dashboard*/    
+    #details-user-list-collapse {
+        display: none;
+    }
+    .candidate-activity-mobile {
+        display: block;
+    }
+    .candidate-activity-mobile a{
+        border: none;
+        padding: 2px;
+        background-color: transparent;
+        text-decoration: none;
+    }
+    #row-link-table td {        
+        width: 80%;
+    }
+    #row-link-table td:first-child {    
+        width: 20%;
+    }
+    #company-information {
+        margin-top: 10px;
+    }
+    .formBox h4 {
+        border: none;
+        background-color: transparent;
+    }    
     
     /*Ajax Indicator*/
     #ajax-busy {
@@ -1064,11 +1142,23 @@ form input[type='checkbox']{
         display:inline-block;
         margin-left: 35px;
     }
-    div.actions button, div.actions a {
-        float: none;
-        margin-bottom: 10px !important;
+
+    div.actions .btn,
+    div.actions .btn {
         display: block;
+        float: none;
+        margin-bottom: 10px;
+        width: 100%;
+        margin-left: 0px;
+        margin-right: 0px;
+        padding-left: 0px;
+        padding-right: 0px;
     }
+
+    #saved-search-form div[class*=id_edit_sort_by] {
+        display: inline;
+    }
+
     #saved-search-form label[for=id_url],
     #saved-search-form label[for=id_edit_url] {
         padding-left: 3%;
@@ -1155,11 +1245,6 @@ form input[type='checkbox']{
     div.account-box {
         min-height: auto;
         background-color: #f4f1ea;
-    }
-
-    div.account-settings .actions button {
-        width: 100%;
-        margin: 0;
     }
     div.settings-nav ul {
         height: auto;
@@ -1497,7 +1582,17 @@ body.modal-open {
     overflow: hidden !important;
 }
 
+.label-required {
+    color: #900;
+}
+
 .required input[type=text],
 .required select {
+    border: 1px solid #900;
+}
+.required-label{
+    color: #900;
+}
+.required-border{
     border: 1px solid #900;
 }

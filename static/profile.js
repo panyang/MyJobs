@@ -40,6 +40,8 @@ $(function() {
 
             // targets "I still work here" checkbox in Employment History
             "click [id='id_employmenthistory-current_indicator']": "hideEndDate",
+
+            "change [id='id_militaryservice-country_code']": 'auto_complete_rankings',
         },
 
         /*
@@ -54,6 +56,87 @@ $(function() {
                 $("[id='id_employmenthistory-end_date']").show();
                 $("[for='id_employmenthistory-end_date']").show();
             }
+        },
+
+        auto_complete_rankings: function(){
+            var usTags = [
+                'E-1',
+                'E-2',
+                'E-3',
+                'E-4',
+                'E-5',
+                'E-6',
+                'E-7',
+                'E-8',
+                'E-9',
+                'E-10',
+                'W-1',
+                'W-2',
+                'W-3',
+                'W-4',
+                'W-5',
+                'O-1',
+                'O-2',
+                'O-3',
+                'O-4',
+                'O-5',
+                'O-6',
+                'O-7',
+                'O-8',
+                'O-9',
+                'O-10',
+            ];
+            var natoTags = [
+                'OR-1',
+                'OR-2',
+                'OR-3',
+                'OR-4',
+                'OR-5',
+                'OR-6',
+                'OR-7',
+                'OR-8',
+                'OR-9',
+                'OF-1',
+                'OF-2',
+                'OF-3',
+                'OF-4',
+                'OF-5',
+                'OF-6',
+                'OF-7',
+                'OF-8',
+                'OF-9',
+                'OF-10',
+            ];
+            var defBranches = [
+                'Army',
+                'Navy',
+                'Air Force',
+            ]
+            var usBranches = [
+                'Army',
+                'Navy',
+                'Air Force',
+                'Marine Corps',
+                'Coast Guard',
+            ]
+            chosenCountry = $('#id_militaryservice-country_code').val();
+            if(chosenCountry == 'USA'){
+                var rankTagGroup = usTags;
+                var branches = usBranches;
+            }else{
+                var rankTagGroup = natoTags;
+                var branches = defBranches;
+            }
+
+            $('#id_militaryservice-branch').autocomplete({
+                source: branches
+            });
+            $('#id_militaryservice-start_rank').autocomplete({
+                source: rankTagGroup
+            });
+            $('#id_militaryservice-end_rank').autocomplete({
+                source: rankTagGroup
+            });
         },
 
         /*
@@ -138,6 +221,9 @@ $(function() {
                         $('input[id$="date"]').datepicker({dateFormat: window.dateFormat,
                                                            constrainInput: false});
                         add_date_button($('#edit_modal'));
+                        if(module == "MilitaryService"){
+                            $('#id_militaryservice-country_code').change();
+                        }
                     }
                 });            
             } else {
@@ -386,24 +472,24 @@ $(document).ready(function() {
                 }
      
                 // Check if the user has scrolled and the current position is after the scroller start location and if its not already fixed at the top 
-                if ($(this).scrollTop() >= scroller_anchor && $('#moduleBank').css('position') != 'fixed') 
+                if ($(this).scrollTop() >= scroller_anchor && $('.right-side-fixed').css('position') != 'fixed') 
                 {    // Change the CSS of the scroller to hilight it and fix it at the top of the screen.
-                    $('#moduleBank').css({
-                            'width': '276px',
+                    $('.right-side-fixed').css({
+                            'width': '288px',
                             'position': 'fixed',
                             'top': '10px'
                 });
                 // Changing the height of the scroller anchor to that of scroller so that there is no change in the overall height of the page.
                 $('.scroller_anchor').css('height', '50px');
                 } 
-                else if ($(this).scrollTop() < scroller_anchor && $('#moduleBank').css('position') != 'relative') 
+                else if ($(this).scrollTop() < scroller_anchor && $('.right-side-fixed').css('position') != 'relative') 
                 {    // If the user has scrolled back to the location above the scroller anchor place it back into the content.
          
                     // Change the height of the scroller anchor to 0 and now we will be adding the scroller back to the content.
                     $('.scroller_anchor').css('height', '0px');
          
                     // Change the CSS and put it back to its original position.
-                    $('#moduleBank').css({
+                    $('.right-side-fixed').css({
                             'width': 'auto',
                             'top': '0px',
                             'position': 'relative'
@@ -412,5 +498,3 @@ $(document).ready(function() {
         });
     }
 });
-
-

@@ -28,24 +28,33 @@ class SavedSearchForm(BaseUserForm):
 
     # day_of_week and day_of_month are not required in the database.
     # These clean functions ensure that it is required only when
-    # the correct frequency is selected and clears any remaining
-    # day_of_week/day_of_month data that shouldn't be there
+    # the correct frequency is selected
     def clean_day_of_week(self):
         if self.cleaned_data.get('frequency', None) == 'W':
             if not self.cleaned_data['day_of_week']:
                 raise ValidationError(_("This field is required."))
-            self.cleaned_data['day_of_month'] = None
         return self.cleaned_data['day_of_week']
 
     def clean_day_of_month(self):
         if self.cleaned_data.get('frequency', None) == 'M':
             if not self.cleaned_data['day_of_month']:
                 raise ValidationError(_("This field is required."))
-            self.cleaned_data['day_of_week'] = None
         return self.cleaned_data['day_of_month']
 
+    def clean(self):
+        cleaned_data = self.cleaned_data
+        url = cleaned_data.get('url')
+        feed = cleaned_data.get('feed')
+
+        if not feed:
+            new_feed = validate_dotjobs_url(url)[1]
+            if new_feed:
+                cleaned_data['feed'] = new_feed
+                del self._errors['feed']
+        return cleaned_data
+
     def clean_url(self):
-        rss_url = validate_dotjobs_url(self.cleaned_data['url'])[0]
+        rss_url = validate_dotjobs_url(self.cleaned_data['url'])[1]
         if not rss_url:
             raise ValidationError(_('This URL is not valid.'))
 

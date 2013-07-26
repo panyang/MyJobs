@@ -7,6 +7,7 @@ import urllib2
 from django.contrib import messages
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import user_passes_test, login_required
+from django.core.mail import EmailMessage
 from django.core.urlresolvers import reverse
 from django.forms.models import model_to_dict
 from django.http import HttpResponseRedirect, HttpResponse
@@ -16,9 +17,13 @@ from django.utils.html import mark_safe
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
 
+from captcha.fields import ReCaptchaField
+from secrets import RECAPTCHA_PUBLIC_KEY, RECAPTCHA_PRIVATE_KEY, EMAIL_TO_ADMIN
+
 from myjobs.models import User, EmailLog
 from myjobs.forms import *
 from myjobs.helpers import *
+from myjobs.templatetags.common_tags import get_name_obj
 from myprofile.forms import *
 from registration.forms import *
 
@@ -35,6 +40,13 @@ class Privacy(TemplateView):
 class Terms(TemplateView):
     template_name = "terms.html"
 
+
+class Success(TemplateView):
+    template_name = "success.html"
+
+
+class CaptchaForm(Form):
+    captcha = ReCaptchaField(label="", attrs={'theme': 'white'})
 
 def home(request):
     """
@@ -124,15 +136,40 @@ def home(request):
             
     return render_to_response('index.html', data_dict, RequestContext(request))
 
+def contact(request):
+    if request.POST:
+        name = request.POST.get('name')
+        is_a = request.POST.get('subject')
+        from_email = request.POST.get('email')
+        comment = request.POST.get('comment')
+        form = CaptchaForm(request.POST)
+        if form.is_valid():
+            subject = ('Contact My.jobs by a(n) %s'%is_a)
+            message = """
+                      Name: %s
+                      Is a(n): %s
+                      Email: %s
+
+                      %s
+                      """%(name, is_a, from_email, comment)
+            to_email = [EMAIL_TO_ADMIN]
+            msg = EmailMessage(subject, message, from_email, to_email)
+            msg.send()
+            return HttpResponse('success')
+        else:
+            return HttpResponse(json.dumps({'errors': form.errors.items()}))
+    else:
+        form = CaptchaForm()
+        data_dict = {'form':form}
+    return render_to_response('contact.html',data_dict, RequestContext(request))
     
 @login_required
 def view_account(request):
     return render_to_response('done.html', RequestContext(request))
-
+    
 @user_passes_test(User.objects.not_disabled)
 def edit_account(request):
-    initial_dict = model_to_dict(request.user)
-
+    initial_dict = check_name_obj(request.user)
     ctx = {'user': request.user,
            'gravatar_100': request.user.get_gravatar_url(size=100)}
 
@@ -154,8 +191,7 @@ def edit_account(request):
 
 @user_passes_test(User.objects.not_disabled)
 def edit_basic(request):
-    initial_dict = model_to_dict(request.user)
-
+    initial_dict = check_name_obj(request.user)    
     form = EditAccountForm(initial=initial_dict, user=request.user)        
     if request.method == "POST":
         form = EditAccountForm(user=request.user, data=request.POST, auto_id=False)
@@ -301,3 +337,19 @@ def continue_sending_mail(request):
     user.last_response = datetime.date.today()
     user.save()
     return redirect('/')
+    
+def check_name_obj(user):
+    """
+    Utility function to process and return the user name obect.
+    
+    Inputs: 
+    :user:  request.user object
+    
+    Returns:
+    :initial_dict: Dictionary object with updated name information
+    """
+    initial_dict = model_to_dict(user)
+    name = get_name_obj(user)
+    if name:
+        initial_dict.update(model_to_dict(name))
+    return initial_dict

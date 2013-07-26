@@ -49,10 +49,10 @@
                                 {% is_a_group_member user "Employer" as group_member %}
                                 {% get_company_name user as company_name %}
                                 {% if view_name == 'Saved Searches' %}
+                                    <li class=""><a href="{% url 'view_profile' %}">{% trans "My Profile" %}</a></li>
                                     {% if user.is_active %}
                                         <li class="active"> <a href="{% url 'saved_search_main' %}">{% trans "Saved Searches" %}</a></li>
                                     {% endif %}
-                                    <li class=""><a href="{% url 'view_profile' %}">{% trans "My Profile" %}</a></li>
                                     {% if group_member and user.is_active and company_name|length >= 1%}
                                         <li class=""><a href="{% url 'dashboard' %}">
                                         {% if company_name|length > 1 %}
@@ -63,10 +63,10 @@
                                         </a></li>
                                     {% endif %}
                                 {% elif view_name == 'My Profile' %}
+                                    <li class="active"><a href="{% url 'view_profile' %}">{% trans "My Profile" %}</a></li>
                                     {% if user.is_active and user.is_active %}
                                         <li class=""> <a href="{% url 'saved_search_main' %}">{% trans "Saved Searches" %}</a></li>
                                     {% endif %}
-                                    <li class="active"><a href="{% url 'view_profile' %}">{% trans "My Profile" %}</a></li>
                                     {% if group_member and user.is_active and company_name|length >= 1%}
                                         <li class=""><a href="{% url 'dashboard' %}">
                                         {% if company_name|length > 1 %}
@@ -77,10 +77,10 @@
                                         </a></li>
                                     {% endif %}
                                 {% elif view_name == 'Company Dashboard' %}
+                                    <li class=""><a href="{% url 'view_profile' %}">{% trans "My Profile" %}</a></li>
                                     {% if user.is_active %}
                                         <li class=""> <a href="{% url 'saved_search_main' %}">{% trans "Saved Searches" %}</a></li>
                                     {% endif %}                                    
-                                    <li class=""><a href="{% url 'view_profile' %}">{% trans "My Profile" %}</a></li>
                                     {% if group_member and user.is_active and company_name|length >= 1%}
                                         <li class="active"><a href="{% url 'dashboard' %}">
                                         {% if company_name|length > 1 %}
@@ -91,10 +91,10 @@
                                         </a></li>
                                     {% endif %}
                                 {% else %}
+                                    <li class=""><a href="{% url 'view_profile' %}">{% trans "My Profile" %}</a></li>
                                     {% if user.is_active %}
                                         <li class=""> <a href="{% url 'saved_search_main' %}">{% trans "Saved Searches" %}</a></li>
                                     {% endif %}                                    
-                                    <li class=""><a href="{% url 'view_profile' %}">{% trans "My Profile" %}</a></li>
                                     {% if group_member and user.is_active and company_name|length >= 1%}
                                         <li class=""><a href="{% url 'dashboard' %}">
                                         {% if company_name|length > 1 %}
@@ -118,12 +118,10 @@
                                         <li id="logged_in_li">
                                             {% trans "Logged in as " %} 
                                         <b>
-                                            {% with name_obj=user|get_name_obj %}
-                                                {% if name_obj %}
+                                            {% with short_email=user.email|truncatechars:"20" %}
+                                                {% with name_obj=user|get_name_obj:short_email %}
                                                     {{ name_obj }}
-                                                {% else %}
-                                                    {{ user.email|truncatechars:"20" }}
-                                                {% endif %}
+                                                {% endwith %}
                                             {% endwith %}
                                         </b>
                                         </li>
@@ -177,7 +175,15 @@
                     </div>
                 </div>                
                 <div class="wrapper">
-                    <div class="row">                    
+                    <div class="row">
+                    {% if user.is_authenticated %}
+                        {% if not user.is_active %}
+                        <div class="alert alert-error hide-mobile">
+                            <button type="button" class="close" data-dismiss="alert">&times;</button>
+                            Please activate your account using the activation link sent to your email. <a href="{% url 'resend_activation' %}">Click here to resend the activation email.</a>
+                        </div>
+                        {% endif %}    
+                    {% endif %}
                     {% block content %}{% endblock %}                    
                     <div id="ajax-busy"></div>
                     </div>
@@ -193,7 +199,7 @@
 		              <a href="{% url 'about' %}">About</a>
 		        </div>
                 <div class="span1">
-                    <a href="http://about.jobs/contact/" target="_blank">Contact</a>
+                    <a href="/contact/" target="_blank">Contact</a>
                 </div>
                 <div class="span1">
                     <a href="{% url 'privacy' %}">Privacy</a>
