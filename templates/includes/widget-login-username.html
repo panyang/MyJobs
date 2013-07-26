@@ -4,14 +4,14 @@ login-username.html -- Username/password login form
 {% endcomment %}
 
 <form action="" method="post" id="login-form">
-  {% include 'includes/form-error-highlight.html' %}
-  {% csrf_token %}
-  <div class="actions">
-    <button type="submit" class="btn primary pull-right" name="login" id="login">{% trans "Login" %}</button>
-    <div class="clear"></div>
-    <span class="pull-right pagination-right">
-      <a href="{% url 'auth_password_reset' %}">{% trans "lost password" %}</a>
-    </span>
-    <div class="clear"></div>
-  </div>
+    {{ form.as_ul }}
+    {% csrf_token %}
+    <div class="actions">
+        <button type="submit" class="btn primary pull-right" name="login" id="login">{% trans "Login" %}</button>
+        <div class="clear"></div>
+        <span class="pull-right pagination-right">
+            <a href="{% url 'auth_password_reset' %}">{% trans "lost password" %}</a>
+        </span>
+        <div class="clear"></div>
+    </div>
 </form>

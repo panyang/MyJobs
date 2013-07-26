@@ -38,12 +38,10 @@ class MyJobsHelpersTests(TestCase):
         # It probably isn't worth it to bring in pytz just for tests
         now = datetime.datetime.now(session.expire_date.tzinfo)
         diff = session.expire_date - now
-        # Session expiration should be 900 seconds (5 min)
-        # <= because 
-        import math
-        print diff.total_seconds()
-        print math.ceil(diff.total_seconds()/10)*10
-        self.assertEqual(int(math.ceil(diff.total_seconds()/10))*10, 900)
+
+        # Due to the delay between the post at the top of this test
+        # and reaching this line, this can't be an assertEquals;
+        self.assertTrue(880 <= diff.total_seconds() <= 900)
 
     def test_login_remember_me(self):
         self.assertEqual(Session.objects.count(), 0)
@@ -58,7 +56,7 @@ class MyJobsHelpersTests(TestCase):
         user_id = session_dict['_auth_user_id']
         self.assertEqual(user_id, self.user.id)
 
-        weeks = (datetime.datetime.now() + datetime.timedelta(days=14)).toordinal()
+        weeks = (datetime.datetime.now() + datetime.timedelta(days=14))
         # Session expiration should be two weeks from now - comparing number
         # of days should be good enough
-        self.assertEqual(session.expire_date.toordinal(), weeks)
+        self.assertEqual(session.expire_date.toordinal(), weeks.toordinal())
