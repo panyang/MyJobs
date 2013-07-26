@@ -74,15 +74,15 @@
                             <a class="btn pull-right" href="{% url 'delete_item' item_id %}">{% trans 'Delete' %}</a>
                         </div>
                     </div>
-                </div>
+                </div>{# /delete-confirm #}
 
                 {% endif %}
 
                 <a href="{% url 'view_profile' %}" class="btn">{% trans 'Cancel' %}</a>
                 <button type="submit" class="btn primary" id="profile-save">{% trans 'Save' %}</button>
-            </div>
+            </div>{# /actions #}
         </form>
-    </div>
-</div>
+    </div>{# /span10 #}
+</div>{# /row #}
 
 {% endblock %}
