@@ -5,9 +5,9 @@ $(document).ready(function() {
         $( "input[id$='date']" ).datepicker({dateFormat: window.dateFormat,
                                              constrainInput: false});
     });
-    // perform display modifications for fields
-    $("#id_name-primary").hide()
-    $("label[for=id_name-primary]").hide()
+    // perform display modifications for fields on initial profile form
+    $("#newAccountData #id_name-primary").hide()
+    $("#newAccountData label[for=id_name-primary]").hide()
     user_email = "";
     current_url = '/'
 });

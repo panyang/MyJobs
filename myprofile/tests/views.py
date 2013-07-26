@@ -28,7 +28,7 @@ class MyProfileViewsTests(TestCase):
         items in the main content section and a list of profile sections that
         don't have data filled out in the sidebar.
         """
-        resp = self.client.get(reverse('edit_profile'))
+        resp = self.client.get(reverse('view_profile'))
         soup = BeautifulSoup(resp.content)
         item_id = Name.objects.all()[0].id
 
@@ -48,28 +48,9 @@ class MyProfileViewsTests(TestCase):
                                data = {'module': 'Name'})
         self.assertTemplateUsed(resp, 'myprofile/profile_form.html')
         soup = BeautifulSoup(resp.content)
-        self.assertEquals(soup.form.attrs['id'], 'Name-new-form')
+        self.assertEquals(soup.form.attrs['id'], 'profile-unit-form')
         with self.assertRaises(KeyError):
             soup.find('input', id='id_name-given_name').attrs['value']
-            
-    def test_handle_form_get_existing(self):
-        """
-        Invoking the handle_form view with and id paraemeter returns
-        a form filled out with the corresponding profile/ID combination
-        """
-        
-        name = PrimaryNameFactory(user=self.user)
-        resp = self.client.get(reverse('handle_form'),
-                               data = {'module': 'Name', 'id': 1})
-        self.assertTemplateUsed(resp, 'myprofile/profile_form.html')
-        soup = BeautifulSoup(resp.content)
-        self.assertEquals(soup.form.attrs['id'], 'Name-1-form')
-        self.assertEquals(soup.find('input', id='id_name-given_name')
-                          .attrs['value'], 'Alice')
-        self.assertEquals(soup.find('input', id='id_name-family_name')
-                          .attrs['value'], 'Smith')
-        self.assertEquals(soup.find('input', id='id_name-primary')
-                          .attrs['checked'], 'checked')
 
     def test_handle_form_get_existing(self):
         """
@@ -81,7 +62,7 @@ class MyProfileViewsTests(TestCase):
                                data = {'module': 'Name', 'id': self.name.id})
         self.assertTemplateUsed(resp, 'myprofile/profile_form.html')
         soup = BeautifulSoup(resp.content)
-        self.assertEquals(soup.form.attrs['id'], 'Name-'+str(self.name.id)+'-form')
+        self.assertEquals(soup.form.attrs['id'], 'profile-unit-form')
         self.assertEquals(soup.find('input', id='id_name-given_name')
                           .attrs['value'], 'Alice')
         self.assertEquals(soup.find('input', id='id_name-family_name')
@@ -101,12 +82,9 @@ class MyProfileViewsTests(TestCase):
                                        'given_name': 'Susy',
                                        'family_name': 'Smith'
                                    })
-        self.assertTemplateUsed(resp, 'myprofile/profile_item.html')
+        self.assertRedirects(resp, reverse('view_profile'))
         self.assertEqual(Name.objects.filter(given_name='Susy',
                                              family_name='Smith').count(), 1)
-        item_id = Name.objects.get(given_name='Susy', family_name='Smith').id
-        soup = BeautifulSoup(resp.content)
-        self.assertEquals(soup.tr.attrs['id'], 'Name-'+str(item_id)+'-item')
 
     def test_handle_form_post_invalid(self):
         """
@@ -114,13 +92,12 @@ class MyProfileViewsTests(TestCase):
         form returns the list of form errors.
         """
         resp = self.client.post(reverse('handle_form'),
-                               data = {'module': 'Name', 'id': 'new',
-                                       'given_name': 'Susy'})
+                                data = {'module': 'Name', 'id': 'new',
+                                        'given_name': 'Susy'},
+                                HTTP_X_REQUESTED_WITH = 'XMLHttpRequest')
+
         self.assertEqual(json.loads(resp.content),
-            { u'errors':
-                [[u'family_name', [u'This field is required.']]]
-            }
-        )
+            {u'family_name': [u'This field is required.']})
 
     def test_handle_form_post_existing_valid(self):
         """
@@ -131,12 +108,9 @@ class MyProfileViewsTests(TestCase):
                                data = {'module': 'Name', 'id': self.name.id,
                                        'given_name': 'Susy',
                                        'family_name': 'Smith'})
-        self.assertTemplateUsed(resp, 'myprofile/profile_item.html')
-        name_obj = Name.objects.get(id=self.name.id)
-        self.assertTrue(name_obj.given_name == 'Susy')
-
-        soup = BeautifulSoup(resp.content)
-        self.assertEquals(soup.tr.attrs['id'], 'Name-'+str(self.name.id)+'-item')
+        self.assertRedirects(resp, reverse('view_profile'))
+        self.assertEqual(Name.objects.filter(given_name='Susy',
+                                             family_name='Smith').count(), 1)
 
     def test_delete_item(self):
         """
@@ -144,10 +118,9 @@ class MyProfileViewsTests(TestCase):
         the 'Deleted!' HttpResponse
         """
 
-        resp = self.client.post(reverse('delete_item'),
-                                data = {'module': 'Name', 'id': self.name.id})
+        resp = self.client.post(reverse('delete_item', args=[self.name.id]))
 
-        self.assertEqual(resp.content, 'Deleted!')
+        self.assertEqual(resp.content, '')
         self.assertEqual(Name.objects.filter(id=self.name.id).count(), 0)
 
     def test_add_duplicate_primary_email(self):
@@ -161,8 +134,7 @@ class MyProfileViewsTests(TestCase):
         resp = self.client.post(reverse('handle_form'),
                                 data = {'module': 'SecondaryEmail',
                                         'id': 'new',
-                                        'email': self.user.email
-                                })
-        self.assertEqual(json.loads(resp.content), {u'errors':
-            [[u'email', [u'This email is already registered.']]]
-        })
+                                        'email': self.user.email},
+                                HTTP_X_REQUESTED_WITH = 'XMLHttpRequest')
+        self.assertEqual(json.loads(resp.content),
+            {u'email': [u'This email is already registered.']})
