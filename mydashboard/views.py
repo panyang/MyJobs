@@ -153,12 +153,12 @@ def microsite_activity(request):
     requested_before_date = request.REQUEST.get('before', False)
     
     if not requested_microsite:
-        requested_microsite = request.REQUEST.get('microsite-hide', False)
+        requested_microsite = request.REQUEST.get('microsite-hide', company.name)
     
     if requested_microsite.find('//') == -1:
             requested_microsite = '//' + requested_microsite
             
-    if requested_date_range:
+    if requested_date_range:        
         if requested_date_range == 'today':
             after = datetime.now() - timedelta(days=1)
             before = datetime.now() 
@@ -172,15 +172,25 @@ def microsite_activity(request):
             before = datetime.now()
             requested_date = 'thirty_days'
     else:
-        if not requested_after_date:
-            after = request.REQUEST.get('after', (datetime.now() - timedelta(days=30)))                
+        if requested_after_date:
+            after = datetime.strptime(requested_after_date, '%m/%d/%Y')                
         else:
-            after = datetime.strptime(requested_after_date, '%m/%d/%Y')
+            after = request.REQUEST.get('after')
+            if after:
+                after = datetime.strptime(after, '%m/%d/%Y')
+            else:
+                # Defaults to 30 days ago
+                after = datetime.now() - timedelta(days=30)
             
-        if not requested_before_date:
-            before = request.REQUEST.get('before', (datetime.now()))
-        else:
+        if requested_before_date:
             before = datetime.strptime(requested_before_date, '%m/%d/%Y')
+        else:
+            before = request.REQUEST.get('before')
+            if before:
+                before = datetime.strptime(before, '%m/%d/%Y')
+            else:
+                # Defaults to 30 days ago
+                before = datetime.now()
     
     # All searches saved on the employer's company microsites       
     candidate_searches = SavedSearch.objects.filter(url__contains=requested_microsite)
