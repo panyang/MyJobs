@@ -166,6 +166,9 @@ table#row-link-table {
     padding-left: 18px;
     padding-right: 5px;    
     }
+.activity-table td {
+    width: 50%;
+    }
 
 /*Ajax Indicator*/
 #ajax-busy {
@@ -1078,7 +1081,12 @@ form input[type='checkbox']{
         background-color: transparent;
     }    
     .margin-left {
-        padding-left: 10px;    
+        padding-left: 10px;
+                
+    }
+    .activity-mobile {
+        margin-left: 46px;
+        margin-bottom: -30px;                
     }
     
     /*Ajax Indicator*/

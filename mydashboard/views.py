@@ -148,7 +148,7 @@ def microsite_activity(request):
     company = Company.objects.filter(admins=request.user)[0]
     
     requested_microsite = request.REQUEST.get('microsite_url', False)
-    requested_date_range = request.REQUEST.get('date_select', False)
+    requested_date_button = request.REQUEST.get('date_button', False)
     requested_after_date = request.REQUEST.get('after', False)
     requested_before_date = request.REQUEST.get('before', False)
     
@@ -158,38 +158,38 @@ def microsite_activity(request):
     if requested_microsite.find('//') == -1:
             requested_microsite = '//' + requested_microsite
             
-    if requested_date_range:        
-        if requested_date_range == 'today':
-            after = datetime.now() - timedelta(days=1)
-            before = datetime.now() 
-            requested_date = 'today'
-        elif requested_date_range == 'seven_days':
-            after = datetime.now() - timedelta(days=7)
-            before = datetime.now()
-            requested_date = 'seven_days'
-        elif requested_date_range == 'thirty_days':
-            after = datetime.now() - timedelta(days=30)
-            before = datetime.now()
-            requested_date = 'thirty_days'
+    # Pre-set Date ranges
+    if 'today' in request.REQUEST:
+        after = datetime.now() - timedelta(days=1)
+        before = datetime.now() 
+        requested_date_button = 'today'
+    elif 'seven_days' in request.REQUEST:
+        after = datetime.now() - timedelta(days=7)
+        before = datetime.now()
+        requested_date_button = 'seven_days'
+    elif 'thirty_days' in request.REQUEST:
+        after = datetime.now() - timedelta(days=30)
+        before = datetime.now()
+        requested_date_button = 'thirty_days'
     else:
-        if requested_after_date:
-            after = datetime.strptime(requested_after_date, '%m/%d/%Y')                
+        if requested_after_date:            
+            after = datetime.strptime(requested_after_date, '%m/%d/%Y')            
         else:
             after = request.REQUEST.get('after')
             if after:
                 after = datetime.strptime(after, '%m/%d/%Y')
             else:
                 # Defaults to 30 days ago
-                after = datetime.now() - timedelta(days=30)
-            
+                after = datetime.now() - timedelta(days=30)                
+                
         if requested_before_date:
-            before = datetime.strptime(requested_before_date, '%m/%d/%Y')
-        else:
+            before = datetime.strptime(requested_before_date, '%m/%d/%Y')            
+        else:        
             before = request.REQUEST.get('before')
             if before:
                 before = datetime.strptime(before, '%m/%d/%Y')
             else:
-                # Defaults to 30 days ago
+                # Defaults to the date and time that the page is accessed
                 before = datetime.now()
     
     # All searches saved on the employer's company microsites       
@@ -198,6 +198,8 @@ def microsite_activity(request):
     # Specific microsite searches saved between two dates
     candidate_searches = candidate_searches.filter(
             created_on__range=[after, before]).order_by('-created_on')  
+    
+    saved_search_count = candidate_searches.count()
     
     paginator = Paginator(candidate_searches, 25) # Show 25 candidates per page
     page = request.GET.get('page')
@@ -216,7 +218,9 @@ def microsite_activity(request):
                  'before': before,                 
                  'candidates': candidates,                
                  'view_name': 'Company Dashboard',
-                 'company_name': company.name}
+                 'company_name': company.name,
+                 'date_button': requested_date_button,
+                 'saved_search_count': saved_search_count}
     
     return render_to_response('mydashboard/microsite_activity.html', data_dict,
                               context_instance=RequestContext(request))
