@@ -1119,20 +1119,20 @@ form input[type='checkbox']{
         display: none;        
     }
     
-    #titleRow{
+    #titleRow {
         margin-top: 0px;
     }
 
-    #titleRow #title{
+    #titleRow #title {
         display: none;
     }
 
-    #titleRow{
+    #titleRow {
          background-image: none;
          min-height: 100px; 
     }
 
-    #titleRow .loginBox{
+    #titleRow .loginBox {
          margin-top: 5px;
          margin-bottom: 5px;
     }    
@@ -1149,30 +1149,30 @@ form input[type='checkbox']{
         overflow: hidden;
     }
 
-    form .pull-left{
+    form .pull-left {
         float: none;
     }
 
-    form .pull-left label{
+    form .pull-left label {
         text-align: left;
     }
 
-    .form-label{
+    .form-label {
         width: 96%;
     }    
 
-    input[type=checkbox]{
+    input[type=checkbox] {
         float: left;
         margin: 2px;
     }
 
-    input.comboboxWidget{
+    input.comboboxWidget {
         width: 60%;
         float: none;
         margin-top: -12px;
     }
 
-    ul.ui-autocomplete{
+    ul.ui-autocomplete {
         display: none !important;
     }
 
@@ -1187,7 +1187,7 @@ form input[type='checkbox']{
     }
 
     #profile-unit-form input[type=checkbox],
-    #saved-search-form input[type=checkbox]{
+    #saved-search-form input[type=checkbox] {
         display:inline-block;
         margin-left: 35px;
     }
