@@ -17,8 +17,11 @@ from django.utils.html import mark_safe
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
 
+from jira.client import JIRA
+
 from captcha.fields import ReCaptchaField
 from secrets import RECAPTCHA_PUBLIC_KEY, RECAPTCHA_PRIVATE_KEY, EMAIL_TO_ADMIN
+from secrets import options, my_agent_auth
 
 from myjobs.models import User, EmailLog
 from myjobs.forms import *
@@ -138,26 +141,34 @@ def home(request):
 
 def contact(request):
     if request.POST:
-        name = request.POST.get('name')
-        is_a = request.POST.get('subject')
-        from_email = request.POST.get('email')
-        comment = request.POST.get('comment')
-        form = CaptchaForm(request.POST)
-        if form.is_valid():
-            subject = ('Contact My.jobs by a(n) %s'%is_a)
-            message = """
-                      Name: %s
-                      Is a(n): %s
-                      Email: %s
-
-                      %s
-                      """%(name, is_a, from_email, comment)
-            to_email = [EMAIL_TO_ADMIN]
-            msg = EmailMessage(subject, message, from_email, to_email)
-            msg.send()
-            return HttpResponse('success')
+        try:
+            jira = JIRA(options=options, basic_auth=my_agent_auth)
         else:
-            return HttpResponse(json.dumps({'errors': form.errors.items()}))
+            jira = []
+            pass
+        if not jira:
+            name = request.POST.get('name')
+            is_a = request.POST.get('subject')
+            from_email = request.POST.get('email')
+            comment = request.POST.get('comment')
+            form = CaptchaForm(request.POST)
+            if form.is_valid():
+                subject = ('Contact My.jobs by a(n) %s'%is_a)
+                message = """
+                          Name: %s
+                          Is a(n): %s
+                          Email: %s
+
+                          %s
+                          """%(name, is_a, from_email, comment)
+                to_email = ['david@directemployersfoundation.org']
+                msg = EmailMessage(subject, message, from_email, to_email)
+                msg.send()
+                return HttpResponse('success')
+            else:
+                return HttpResponse(json.dumps({'errors': form.errors.items()}))
+        if jira:
+            print "jira!"
     else:
         form = CaptchaForm()
         data_dict = {'form':form}
