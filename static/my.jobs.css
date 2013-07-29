@@ -1126,51 +1126,52 @@ form input[type='checkbox']{
     #titleRow #title{
         display: none;
     }
+
     #titleRow{
          background-image: none;
          min-height: 100px; 
     }
+
     #titleRow .loginBox{
          margin-top: 5px;
          margin-bottom: 5px;
     }    
-    .topbar #topbar-login input{
-        padding-left: 0px;
-        padding-right: 0px;
-        text-indent: 5px;
+
+    .topbar #topbar-login ul {
+        margin-top: -30px;
     }
-    .topbar #topbar-login input,
-    .topbar #topbar-login button{
-        width: 80%;
-        margin: 0 0 10px 10px;
-        float: none;
-        clear: both;
-        display: block;
-    }
+
     #logged_in_li {
         display: none !important;
-        }
+    }
+
     #company_dashboard_link {
         overflow: hidden;
-        }
+    }
+
     form .pull-left{
         float: none;
     }
+
     form .pull-left label{
         text-align: left;
     }
+
     .form-label{
         width: 96%;
     }    
+
     input[type=checkbox]{
         float: left;
         margin: 2px;
     }
+
     input.comboboxWidget{
         width: 60%;
         float: none;
         margin-top: -12px;
     }
+
     ul.ui-autocomplete{
         display: none !important;
     }
