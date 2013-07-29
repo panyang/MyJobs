@@ -17,12 +17,12 @@
     {% endblock %}
 
     <script type="text/javascript">
-    loc = document.location+""; 
+    loc = document.location+"";
     if(loc.indexOf(".jobs:")<0){ //only run this on live sites
         var _gaq = _gaq || [];
         _gaq.push(['_setAccount', 'UA-19801062-4']);
         _gaq.push(['_trackPageview']);
-        
+
         (function() {
             var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
             ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
@@ -180,7 +180,7 @@
                                     </a>
                                     <ul class="span4" id="pop-menu">
                                         <li id="logged_in_li">
-                                            {% trans "Logged in as " %} 
+                                            {% trans "Logged in as " %}
                                             <b>
 
                                                 {% with short_email=user.email|truncatechars:"20" %}
@@ -196,13 +196,13 @@
 
                                         {% if not user.is_disabled %}
 
-                                        <li><a id="profile_link" href="{% url 'view_profile' %}">{% trans "My Profile" %}</a></li> 
+                                        <li><a id="profile_link" href="{% url 'view_profile' %}">{% trans "My Profile" %}</a></li>
                                             {% if user.is_active %}
-        
+
                                             <li><a id="savedsearch_link" href="{% url 'saved_search_main' %}">{% trans "Saved Searches" %}</a></li>
-        
+
                                                 {% if group_member and user.is_active and company_name|length >= 1%}
-        
+
                                                 <li>
                                                     <a id="company_dashboard_link" href="{% url 'dashboard' %}">
 
@@ -218,22 +218,22 @@
 
                                                     </a>
                                                 </li>
-        
+
                                                 {% endif %}
                                             {% endif %}
-    
+
                                             <li><a id="account_link" href="{% url 'edit_account' %}">{% trans "Account Settings" %}</a></li>
-    
+
                                         {% endif %}
-    
+
                                         <li><a id="logout_link" href="{% url 'auth_logout' %}">Log Out</a></li>
                                     </ul>{# /pop-menu #}
                                 </li>
                             </ul>{# /nav #}
                         </div>{# /menu-bar span2 pagination-right #}
-    
+
                         {% else %}
-    
+
                         <div class="span10 pagination-right" id="topbar-login">
                             {% block topbarlogin %}
                             <ul id="nav" class="navbar pull-right">
@@ -243,9 +243,9 @@
                             </ul>
                             {% endblock %}
                         </div>
-    
+
                         {% endif %}
-    
+
                     </div>{# /inline-inputs #}
                 </div>
             </div>
