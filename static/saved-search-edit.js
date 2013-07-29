@@ -34,7 +34,6 @@ $(function() {
             data = form.serialize();
             data = data.replace('=on','=True').replace('=off','=False');
             data = data.replace('undefined', 'None');
-            console.log(data)
             $.ajax({
                 data: data,
                 type: 'POST',
@@ -85,9 +84,6 @@ $(function() {
                             }
                             enable_fields();
                             date_select();
-                        
-                        marginTop = (($('#new_modal').height())/2) *-1 + "px";
-                        $('#new_modal').css({'margin-top': marginTop});
                         }
                         else {
                             validation_status(json.url_status);
