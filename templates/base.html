@@ -4,22 +4,25 @@
 <html lang="en">
 <head>
     {% block site-title %}
-        <title>My.jobs</title>
-        <meta name="title" content="My.jobs">
+    <title>My.jobs</title>
+    <meta name="title" content="My.jobs">
     {% endblock %}
+
     {% block meta %}
-        {% include "includes/meta.html" %}
+    {% include "includes/meta.html" %}
     {% endblock %}
+
     {% block meta-extra %}
-        <script src="{{ STATIC_URL}}account-creation.js" type="text/javascript"></script>
+    <script src="{{ STATIC_URL}}account-creation.js" type="text/javascript"></script>
     {% endblock %}
+
     <script type="text/javascript">
-    loc = document.location+""; 
+    loc = document.location+"";
     if(loc.indexOf(".jobs:")<0){ //only run this on live sites
         var _gaq = _gaq || [];
         _gaq.push(['_setAccount', 'UA-19801062-4']);
         _gaq.push(['_trackPageview']);
-        
+
         (function() {
             var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
             ga.src = ('https:' == document.location.protocol ? 'https://ssl' : 'http://www') + '.google-analytics.com/ga.js';
@@ -27,14 +30,13 @@
         })();
     }
     </script>
-    
 </head>
 
 <body>
     {% block topbar %}
-        <div class="topbar" data-dropdown="dropdown">
-            <div class="topbar-inner">
-                <div class="wrapper">
+    <div class="topbar" data-dropdown="dropdown">
+        <div class="topbar-inner">
+            <div class="wrapper">
                 <div class="row">
                     <div class="span2" id="logo-block">
                         <a href="/">
@@ -43,161 +45,258 @@
                         <span id="alpha-flag">beta</span>
                     </div>
                     <div class="inline-inputs">
-                        {% if user.is_authenticated %}                                               
+
+                        {% if user.is_authenticated %}
+
                         <div class="span8">
                             <ul class="nav nav-tabs pull-left menu-tabs">
+
                                 {% is_a_group_member user "Employer" as group_member %}
                                 {% get_company_name user as company_name %}
                                 {% if view_name == 'Saved Searches' %}
+
                                     <li class=""><a href="{% url 'view_profile' %}">{% trans "My Profile" %}</a></li>
+
                                     {% if user.is_active %}
-                                        <li class="active"> <a href="{% url 'saved_search_main' %}">{% trans "Saved Searches" %}</a></li>
+
+                                    <li class="active"><a href="{% url 'saved_search_main' %}">{% trans "Saved Searches" %}</a></li>
+
                                     {% endif %}
                                     {% if group_member and user.is_active and company_name|length >= 1%}
-                                        <li class=""><a href="{% url 'dashboard' %}">
-                                        {% if company_name|length > 1 %}
+
+                                    <li class="">
+                                        <a href="{% url 'dashboard' %}">
+
+                                            {% if company_name|length > 1 %}
+
                                             {% trans "Dashboards" %}
-                                        {% else %}
+
+                                            {% else %}
+
                                             {{ company_name.0|truncatechars:"20" }} {% trans "Dashboard" %}
-                                        {% endif %}
-                                        </a></li>
+
+                                            {% endif %}
+
+                                        </a>
+                                    </li>
+
                                     {% endif %}
                                 {% elif view_name == 'My Profile' %}
+
                                     <li class="active"><a href="{% url 'view_profile' %}">{% trans "My Profile" %}</a></li>
+
                                     {% if user.is_active and user.is_active %}
-                                        <li class=""> <a href="{% url 'saved_search_main' %}">{% trans "Saved Searches" %}</a></li>
+
+
+                                    <li class=""><a href="{% url 'saved_search_main' %}">{% trans "Saved Searches" %}</a></li>
+
                                     {% endif %}
                                     {% if group_member and user.is_active and company_name|length >= 1%}
-                                        <li class=""><a href="{% url 'dashboard' %}">
+
+                                    <li class="">
+                                        <a href="{% url 'dashboard' %}">
+
                                         {% if company_name|length > 1 %}
-                                            {% trans "Dashboards" %}
+
+                                        {% trans "Dashboards" %}
+
                                         {% else %}
-                                            {{ company_name.0|truncatechars:"20" }} {% trans "Dashboard" %}
+
+                                        {{ company_name.0|truncatechars:"20" }} {% trans "Dashboard" %}
+
                                         {% endif %}
-                                        </a></li>
+
+                                        </a>
+                                    </li>
+
                                     {% endif %}
                                 {% elif view_name == 'Company Dashboard' %}
-                                    <li class=""><a href="{% url 'view_profile' %}">{% trans "My Profile" %}</a></li>
+
+                                <li class=""><a href="{% url 'view_profile' %}">{% trans "My Profile" %}</a></li>
+
                                     {% if user.is_active %}
-                                        <li class=""> <a href="{% url 'saved_search_main' %}">{% trans "Saved Searches" %}</a></li>
-                                    {% endif %}                                    
+
+                                    <li class=""><a href="{% url 'saved_search_main' %}">{% trans "Saved Searches" %}</a></li>
+
+                                    {% endif %}
                                     {% if group_member and user.is_active and company_name|length >= 1%}
-                                        <li class="active"><a href="{% url 'dashboard' %}">
-                                        {% if company_name|length > 1 %}
+
+                                    <li class="active">
+                                        <a href="{% url 'dashboard' %}">
+
+                                            {% if company_name|length > 1 %}
+
                                             {% trans "Dashboards" %}
-                                        {% else %}
+
+                                            {% else %}
+
                                             {{ company_name.0|truncatechars:"20" }} {% trans "Dashboard" %}
-                                        {% endif %}
-                                        </a></li>
+
+                                            {% endif %}
+
+                                        </a>
+                                    </li>
+
                                     {% endif %}
                                 {% else %}
-                                    <li class=""><a href="{% url 'view_profile' %}">{% trans "My Profile" %}</a></li>
+
+                                <li class=""><a href="{% url 'view_profile' %}">{% trans "My Profile" %}</a></li>
+
                                     {% if user.is_active %}
-                                        <li class=""> <a href="{% url 'saved_search_main' %}">{% trans "Saved Searches" %}</a></li>
-                                    {% endif %}                                    
+
+                                    <li class=""><a href="{% url 'saved_search_main' %}">{% trans "Saved Searches" %}</a></li>
+
+                                    {% endif %}
+
                                     {% if group_member and user.is_active and company_name|length >= 1%}
-                                        <li class=""><a href="{% url 'dashboard' %}">
+
+                                    <li class="">
+                                        <a href="{% url 'dashboard' %}">
+
                                         {% if company_name|length > 1 %}
-                                            {% trans "Dashboards" %}
+
+                                        {% trans "Dashboards" %}
+
                                         {% else %}
-                                            {{ company_name.0|truncatechars:"20" }} {% trans "Dashboard" %}
+
+                                        {{ company_name.0|truncatechars:"20" }} {% trans "Dashboard" %}
+
                                         {% endif %}
-                                        </a></li>
+
+                                        </a>
+                                    </li>
+
                                     {% endif %}
                                 {% endif %}
-                            </ul> <!-- /nav nav-tabs pull-left menu-tabs-->
-                        </div> <!-- /span8 -->
-                        <div class="pull-right">                                               
-                        <div class="menu-bar span2 pagination-right">                            
+                            </ul>{# /nav nav-tabs pull-left menu-tabs #}
+                        </div>{# /span8 #}
+                        <div class="pull-right">
+                        <div class="menu-bar span2 pagination-right">
                             <ul id="nav" class="pull-right">
-                                <li><a href="dashboard" class="main-nav">
+                                <li>
+                                    <a href="dashboard" class="main-nav">
                                         <img src="{{user.get_gravatar_url}}">
                                         <span class="arrow"></span>
                                     </a>
                                     <ul class="span4" id="pop-menu">
                                         <li id="logged_in_li">
-                                            {% trans "Logged in as " %} 
-                                        <b>
-                                            {% with short_email=user.email|truncatechars:"20" %}
-                                                {% with name_obj=user|get_name_obj:short_email %}
+                                            {% trans "Logged in as " %}
+                                            <b>
+
+                                                {% with short_email=user.email|truncatechars:"20" %}
+                                                    {% with name_obj=user|get_name_obj:short_email %}
+
                                                     {{ name_obj }}
+
+                                                    {% endwith %}
                                                 {% endwith %}
-                                            {% endwith %}
-                                        </b>
+
+                                            </b>
                                         </li>
+
                                         {% if not user.is_disabled %}
-                                            <li><a id="profile_link" href="{% url 'view_profile' %}">{% trans "My Profile" %}</a></li> 
+
+                                        <li><a id="profile_link" href="{% url 'view_profile' %}">{% trans "My Profile" %}</a></li>
                                             {% if user.is_active %}
-                                                <li><a id="savedsearch_link" href="{% url 'saved_search_main' %}">{% trans "Saved Searches" %}</a></li>
+
+                                            <li><a id="savedsearch_link" href="{% url 'saved_search_main' %}">{% trans "Saved Searches" %}</a></li>
+
                                                 {% if group_member and user.is_active and company_name|length >= 1%}
-                                                    <li><a id="company_dashboard_link" href="{% url 'dashboard' %}">
-                                                    {% if company_name|length > 1 %}
+
+                                                <li>
+                                                    <a id="company_dashboard_link" href="{% url 'dashboard' %}">
+
+                                                        {% if company_name|length > 1 %}
+
                                                         {% trans "Dashboards" %}
-                                                    {% else %}
+
+                                                        {% else %}
+
                                                         {{ company_name.0|truncatechars:"20" }} {% trans "Dashboard" %}
-                                                    {% endif %}
-                                                    </a></li>
+
+                                                        {% endif %}
+
+                                                    </a>
+                                                </li>
+
                                                 {% endif %}
                                             {% endif %}
-                                            <li><a id="account_link" href="{% url 'edit_account' %}">{% trans "Account Settings" %}</a></li>                                            
+
+                                            <li><a id="account_link" href="{% url 'edit_account' %}">{% trans "Account Settings" %}</a></li>
+
                                         {% endif %}
+
                                         <li><a id="logout_link" href="{% url 'auth_logout' %}">Log Out</a></li>
-                                    </ul>
+                                    </ul>{# /pop-menu #}
+                                </li>
+                            </ul>{# /nav #}
+                        </div>{# /menu-bar span2 pagination-right #}
+
+                        {% else %}
+
+                        <div class="span10 pagination-right" id="topbar-login">
+                            {% block topbarlogin %}
+                            <ul id="nav" class="navbar pull-right">
+                                <li>
+                                    <a class="pull-right" href="/">{% trans 'Login' %}</a>
                                 </li>
                             </ul>
-                        </div> <!-- /menu-bar span2 pagination-right -->
-                        {% else %}
-                        <div class="span10 pull-right pagination-right" id="topbar-login">
-                        {% block topbarlogin %}
-                        {% include "includes/widget-top-bar-login.html" with form=loginform %}
-                        {% endblock %}
+                            {% endblock %}
                         </div>
+
                         {% endif %}
-                    </div> <!-- /inline-inputs -->
+
+                    </div>{# /inline-inputs #}
                 </div>
-                </div>
-                </div>
-            </div><!-- /topbar-inner -->
-        </div>
+            </div>
+        </div>{# /topbar-inner #}
+    </div>
     {% endblock %}
-    <section><div class="section subpage">
-        {% block page %}
-            {% block main %}
+    <section>
+        <div class="section subpage">
+            {% block page %}
+                {% block main %}
                 <div id="header">
                     <div class="wrapper">
                         <div class="row">
                             <div class="span12">
                                 {% block header %}
-                                    {{ site_title }}
+                                {{ site_title }}
                                 {% endblock header %}
                             </div>
                         </div>
                     </div>
-                </div>                
+                </div>
                 <div class="wrapper">
                     <div class="row">
-                    {% if user.is_authenticated %}
-                        {% if not user.is_active %}
-                        <div class="alert alert-error hide-mobile">
-                            <button type="button" class="close" data-dismiss="alert">&times;</button>
-                            Please activate your account using the activation link sent to your email. <a href="{% url 'resend_activation' %}">Click here to resend the activation email.</a>
-                        </div>
-                        {% endif %}    
-                    {% endif %}
-                    {% block content %}{% endblock %}                    
-                    <div id="ajax-busy"></div>
+
+                        {% if user.is_authenticated %}
+                            {% if not user.is_active %}
+
+                            <div class="alert alert-error hide-mobile">
+                                <button type="button" class="close" data-dismiss="alert">&times;</button>
+                                Please activate your account using the activation link sent to your email. <a href="{% url 'resend_activation' %}">Click here to resend the activation email.</a>
+                            </div>
+
+                            {% endif %}
+                        {% endif %}
+
+                        {% block content %}{% endblock %}
+                        <div id="ajax-busy"></div>
                     </div>
-                </div>                               
-            {% endblock %} 
-        {% endblock %}
-        <div id="inbox-spacing"></div>
-    </div></section>
-    <footer><div id="footer">
-        {% block footer %}
+                </div>
+                {% endblock %}
+            {% endblock %}
+            <div id="inbox-spacing"></div>
+        </div>{# /section subpage #}
+    </section>
+    <footer>
+        <div id="footer">
+            {% block footer %}
             <div class="wrapper footer">
                 <div class="span1 offset5">
-		              <a href="{% url 'about' %}">About</a>
-		        </div>
+                      <a href="{% url 'about' %}">About</a>
+                </div>
                 <div class="span1">
                     <a href="/contact/" target="_blank">Contact</a>
                 </div>
@@ -211,11 +310,9 @@
                     <a href="http://directemployers.org" target="_blank">by DirectEmployers</a>
                 </div>
             </div>
-        {% endblock %}
-        {% block quantcast %}
-            {% comment %}
-                Start Quantcast tag
-            {% endcomment %}
+            {% endblock %}
+            {% block quantcast %}
+            {# Start Quantcast tag #}
             <script type="text/javascript">
                 _qoptions={
                     qacct:"p-f4sayuhJjqv_Q",
@@ -226,10 +323,9 @@
             <noscript>
                 <img src="http://pixel.quantserve.com/pixel/p-f4sayuhJjqv_Q.gif" style="display: none;" border="0" height="1" width="1" alt="Quantcast"/>
             </noscript>
-            {% comment %}
-                End Quantcast tag
-            {% endcomment %}
-        {% endblock %}
-    </div></footer>
+            {# End Quantcast tag #}
+            {% endblock %}
+        </div>
+    </footer>
 </body>
 </html>
