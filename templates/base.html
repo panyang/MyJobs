@@ -171,66 +171,67 @@
                             </ul>{# /nav nav-tabs pull-left menu-tabs #}
                         </div>{# /span8 #}
                         <div class="pull-right">
-                        <div class="menu-bar span2 pagination-right">
-                            <ul id="nav" class="pull-right">
-                                <li>
-                                    <a href="dashboard" class="main-nav">
-                                        <img src="{{user.get_gravatar_url}}">
-                                        <span class="arrow"></span>
-                                    </a>
-                                    <ul class="span4" id="pop-menu">
-                                        <li id="logged_in_li">
-                                            {% trans "Logged in as " %}
-                                            <b>
+                            <div class="menu-bar span2 pagination-right">
+                                <ul id="nav" class="pull-right">
+                                    <li>
+                                        <a href="dashboard" class="main-nav">
+                                            <img src="{{user.get_gravatar_url}}">
+                                            <span class="arrow"></span>
+                                        </a>
+                                        <ul class="span4" id="pop-menu">
+                                            <li id="logged_in_li">
+                                                {% trans "Logged in as " %}
+                                                <b>
 
-                                                {% with short_email=user.email|truncatechars:"20" %}
-                                                    {% with name_obj=user|get_name_obj:short_email %}
+                                                    {% with short_email=user.email|truncatechars:"20" %}
+                                                        {% with name_obj=user|get_name_obj:short_email %}
 
-                                                    {{ name_obj }}
+                                                        {{ name_obj }}
 
+                                                        {% endwith %}
                                                     {% endwith %}
-                                                {% endwith %}
 
-                                            </b>
-                                        </li>
+                                                </b>
+                                            </li>
 
-                                        {% if not user.is_disabled %}
+                                            {% if not user.is_disabled %}
 
-                                        <li><a id="profile_link" href="{% url 'view_profile' %}">{% trans "My Profile" %}</a></li>
-                                            {% if user.is_active %}
+                                            <li><a id="profile_link" href="{% url 'view_profile' %}">{% trans "My Profile" %}</a></li>
+                                                {% if user.is_active %}
 
-                                            <li><a id="savedsearch_link" href="{% url 'saved_search_main' %}">{% trans "Saved Searches" %}</a></li>
+                                                <li><a id="savedsearch_link" href="{% url 'saved_search_main' %}">{% trans "Saved Searches" %}</a></li>
 
-                                                {% if group_member and user.is_active and company_name|length >= 1%}
+                                                    {% if group_member and user.is_active and company_name|length >= 1%}
 
-                                                <li>
-                                                    <a id="company_dashboard_link" href="{% url 'dashboard' %}">
+                                                    <li>
+                                                        <a id="company_dashboard_link" href="{% url 'dashboard' %}">
 
-                                                        {% if company_name|length > 1 %}
+                                                            {% if company_name|length > 1 %}
 
-                                                        {% trans "Dashboards" %}
+                                                            {% trans "Dashboards" %}
 
-                                                        {% else %}
+                                                            {% else %}
 
-                                                        {{ company_name.0|truncatechars:"20" }} {% trans "Dashboard" %}
+                                                            {{ company_name.0|truncatechars:"20" }} {% trans "Dashboard" %}
 
-                                                        {% endif %}
+                                                            {% endif %}
 
-                                                    </a>
-                                                </li>
+                                                        </a>
+                                                    </li>
 
+                                                    {% endif %}
                                                 {% endif %}
+
+                                                <li><a id="account_link" href="{% url 'edit_account' %}">{% trans "Account Settings" %}</a></li>
+
                                             {% endif %}
 
-                                            <li><a id="account_link" href="{% url 'edit_account' %}">{% trans "Account Settings" %}</a></li>
-
-                                        {% endif %}
-
-                                        <li><a id="logout_link" href="{% url 'auth_logout' %}">Log Out</a></li>
-                                    </ul>{# /pop-menu #}
-                                </li>
-                            </ul>{# /nav #}
-                        </div>{# /menu-bar span2 pagination-right #}
+                                            <li><a id="logout_link" href="{% url 'auth_logout' %}">Log Out</a></li>
+                                        </ul>{# /pop-menu #}
+                                    </li>
+                                </ul>{# /nav #}
+                            </div>{# /menu-bar span2 pagination-right #}
+                        </div>{# /pull-right #}
 
                         {% else %}
 
