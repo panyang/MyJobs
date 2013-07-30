@@ -119,7 +119,7 @@ table#row-link-table {
     border: none;
     }
 .move-left {
-    margin-left: -45px;
+    margin-left: -75px;
     }
 .primary-btn-padding {
     padding: 10px;
@@ -149,16 +149,7 @@ table#row-link-table {
     }
 
 /*Microsite Activity*/
-#custom-input-datepicker input {
-    width: 75px;   
-    }
-#details-candidate-activity-collapse select {    
-    padding: 0px 0px 0px 5px;
-    }
-#preset-date {
-    position: absolute;
-    margin: -33px 0px 0px 185px;
-    }
+
 #header-inline h1, #header-inline h4 {
     display: inline;      
     }
@@ -1081,12 +1072,15 @@ form input[type='checkbox']{
         background-color: transparent;
     }    
     .margin-left {
-        padding-left: 10px;
-                
+        padding-left: 10px;                
     }
     .activity-mobile {
-        margin-left: 46px;
+        margin-left: 0px;
+        padding-top: 10px;
         margin-bottom: -30px;                
+    }
+    .move-left {
+        margin-left: 0px;
     }
     
     /*Ajax Indicator*/
@@ -1343,6 +1337,32 @@ form input[type='checkbox']{
     .show-activity#candidate-page-mobile-view #detail-toggle{
         background-color: #FFF;
     }
+    
+    /* Microsite Activity */
+    .show-details#candidate-page-mobile-view .span8{
+        display: block;
+    }
+    #candidate-page-mobile-view .span8 + .span4,
+    .show-details#candidate-page-mobile-view .span8 + .span4{
+        display:none;
+    }    
+    .show-details#candidate-page-mobile-view #detail-toggle,
+    #candidate-page-mobile-view #detail-toggle{
+        background-color: rgb(194, 187, 169);
+    }
+    .show-activity#candidate-page-mobile-view .span8 + .span4{
+        display: block;
+    }
+    .show-activity#candidate-page-mobile-view .span8{
+        display: none;
+    }
+    .show-activity#candidate-page-mobile-view #activity-toggle{
+        background-color: rgb(194, 187, 169);
+    }
+    .show-activity#candidate-page-mobile-view #detail-toggle{
+        background-color: #FFF;
+    }     
+    
     #candidate-page-mobile-view #candidate-page-mobile-toggle{
         width: auto;
         margin: 0 10px;
