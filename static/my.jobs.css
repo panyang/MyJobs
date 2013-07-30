@@ -159,6 +159,10 @@ table#row-link-table {
 .activity-table td {
     width: 50%;
 }
+.microsite-list {
+   margin-left: 15px;
+   padding: 0px 0px 0px 5px;
+}
 
 /*Ajax Indicator*/
 #ajax-busy {

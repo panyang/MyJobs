@@ -102,7 +102,7 @@ $(document).ready(function()
                     <div class="hide-mobile">
                     <br>
                     <div class="span3 form-label"><strong>Filter by site:</strong></div> 
-                    <select name="microsite" class="btn">
+                    <select name="microsite" class="microsite-list btn">
                         <option value="{{ company_name }}">All</option>                        
                         {% for url in company_microsites %}
                             {% ifequal site_name url.url %}
