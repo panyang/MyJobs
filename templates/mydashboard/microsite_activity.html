@@ -92,33 +92,30 @@ $(document).ready(function()
         </div>        
         <span class="span6"><a class="btn primary" href="/dashboard/">Back to Company Dashboard</a><a href="{{microsite_url}}" class="btn">View Site</a></span>
     </div>
-    <div class="row">
-        
+    <div class="row">        
         <div id="candidate-page-mobile-view">
                 <div id="candidate-page-mobile-toggle">
                     <span class="toggle-text" id="detail-toggle">&nbsp;Activity</span><span class="toggle-text" id="activity-toggle">&nbsp;Details</span>
                 </div>
                 <div class="span8 pull-left">
                     <div class="formBox">
-                        <h3 class="form-box-title hide-mobile">Site Activity</h3>
-                        
-                        <form action='/dashboard/microsite/' method='POST' class="move-left">
-                    {% csrf_token %}
-                    <div class="hide-mobile">
-                        <div class="span2 form-label"><strong>Date Range:</strong></div><input name="after" type="text" placeholder="{{ after|date:'m/d/Y' }}" class="datepicker"> <strong>to</strong> <input name="before" type="text" placeholder="{{ before|date:'m/d/Y' }}" class="datepicker"></br>
-                        <div class="span2 form-label">&nbsp;</div>
-                    </div>
-                    <div class="activity-mobile">
-                        <input class="btn btn-success" type="hidden" name="first-hide" id="first-hide"> 
-                        <input class="btn" type="submit" name="today" id="today" value="Today">&nbsp;<input class="btn" type="submit" name="seven_days" id="seven_days" value="7 Days">&nbsp;<input class="btn" type="submit" name="thirty_days" id="thirty_days" value="30 days">
-                        <br>
-                        <input type="hidden" name="microsite-hide" value="{{ microsite_url }}">
-                    </div>
-                    <div class="span2 pull-right primary-btn-padding hide-mobile"><input type="submit" class="btn primary" value="View Activity"></div>
-                </form>
-                <br>
-                <hr> 
-                        
+                        <h3 class="form-box-title hide-mobile">Site Activity</h3>                        
+                            <form action='/dashboard/microsite/' method='POST' class="move-left">
+                            {% csrf_token %}
+                            <div class="hide-mobile">
+                                <div class="span2 form-label"><strong>Date Range:</strong></div><input name="after" type="text" placeholder="{{ after|date:'m/d/Y' }}" class="datepicker"> <strong>to</strong> <input name="before" type="text" placeholder="{{ before|date:'m/d/Y' }}" class="datepicker"></br>
+                                <div class="span2 form-label">&nbsp;</div>
+                            </div>
+                            <div class="activity-mobile">
+                                <input class="btn btn-success" type="hidden" name="first-hide" id="first-hide"> 
+                                <input class="btn" type="submit" name="today" id="today" value="Today">&nbsp;<input class="btn" type="submit" name="seven_days" id="seven_days" value="7 Days">&nbsp;<input class="btn" type="submit" name="thirty_days" id="thirty_days" value="30 days">
+                                <br>
+                                <input type="hidden" name="microsite-hide" value="{{ microsite_url }}">
+                            </div>
+                            <div class="span2 pull-right primary-btn-padding hide-mobile"><input type="submit" class="btn primary" value="View Activity"></div>
+                            </form>
+                            <br>
+                            <hr>
                                 <div class="accordion" id="details-candidate-activity-collapse">
                                     <div class="accordion-group">
                                         <div class="accordion-heading details-heading">

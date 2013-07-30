@@ -40,13 +40,13 @@ def dashboard(request):
     authorized_microsites = Microsite.objects.filter(company=company.id)
     
     # Removes main user from admin list to display other admins
-    admins = admins.exclude(user=request.user)
+    admins = admins.exclude(user=request.user)    
     
     requested_microsite = request.REQUEST.get('microsite', company.name)  
     requested_after_date = request.REQUEST.get('after', False)
     requested_before_date = request.REQUEST.get('before', False)
-    requested_date_button = request.REQUEST.get('date_button', False)
-    
+    requested_date_button = request.REQUEST.get('date_button', False)    
+                
     # the url value for 'All' in the select box is company name 
     # which then gets replaced with all microsite urls for that company
     site_name = ''
