@@ -40,8 +40,7 @@ def dashboard(request):
     authorized_microsites = Microsite.objects.filter(company=company.id)
     
     # Removes main user from admin list to display other admins
-    admins = admins.exclude(user=request.user)    
-    
+    admins = admins.exclude(user=request.user)   
     requested_microsite = request.REQUEST.get('microsite', company.name)  
     requested_after_date = request.REQUEST.get('after', False)
     requested_before_date = request.REQUEST.get('before', False)
