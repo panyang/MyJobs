@@ -3,7 +3,7 @@
 {% block site-title %}
     {% with name_obj=user|get_name_obj %}
         <title>{% if name_obj %}{{ name_obj }} on{% else %}&nbsp;{% endif %} My.jobs</title>
-        <meta name="title" content="{% if name_obj %}{{ name_obj }} on{% else %}&nbsp;{% endif %} My.jobs">
+        <meta name="title" content="{% if name_obj %}{{ name_obj }} on{% endif %} My.jobs">
     {% endwith %}
 {% endblock %}
 {% load i18n %}
