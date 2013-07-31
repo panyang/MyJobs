@@ -151,7 +151,7 @@ def contact(request):
         form = CaptchaForm(request.POST)
         if form.is_valid():
             try:
-                jira = JIRA(options=options, basic_auth=('david', 'starman23'))
+                jira = JIRA(options=options, basic_auth=my_agent_auth)
             except:
                 jira = []
                 pass
