@@ -84,21 +84,21 @@ $(document).ready(function()
 }
 </style>
 <div class="wrapper"> 
-    <div class="row hide-mobile" id="profileTitleRow">
+    <div class="row" id="profileTitleRow">
         <div id="header-inline">
         <h1 class="margin-left">{{microsite_url|url_domain}}</h1>&nbsp;&nbsp;<h4>Activity Information</h4>
         </div>
         <div class="span12" id="profileTitleBar">                          
-        </div>        
-        <span class="span6"><a class="btn primary" href="/dashboard/">Back to Company Dashboard</a><a href="{{microsite_url}}" class="btn">View Site</a></span>
+        </div>
+        <div class="span12 hide-desktop"><a class="btn-size btn primary" href="/dashboard/">Back to Company Dashboard</a></div>
+        <br>
+        <div class="span12 hide-desktop"><a href="{{microsite_url}}" class="btn-size btn">View Site</a></div>
+        <span class="span6 hide-mobile"><a class="btn primary" href="/dashboard/">Back to Company Dashboard</a><a href="{{microsite_url}}" class="btn">View Site</a></span>
     </div>
     <div class="row">
-        <div class="span12 hide-desktop"><a class="btn-size btn primary" href="/dashboard/">Back to Company Dashboard</a></div>
-            <div class="hide-desktop"><br><br><br>
-                <div id="header-inline">
-                    <h1 class="form-box-title span4">{{microsite_url|url_domain}}</h1><a href="{{microsite_url}}" class="btn pull-right">View Site</a>
-                </div>
-             </div>
+        <div class="hide-desktop">
+        <br><br>
+        </div>
         <div id="candidate-page-mobile-view">                                
                 <div id="candidate-page-mobile-toggle">                    
                     <span class="toggle-text" id="detail-toggle">&nbsp;Activity</span><span class="toggle-text" id="activity-toggle">&nbsp;Details</span>
