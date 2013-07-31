@@ -305,6 +305,10 @@ form select{
 fieldset select{
     width: 264px;
     }
+fieldset textarea,
+.profile-form-input input[type="text"]{
+    width: 248px;
+}
 #title{
     padding-top: 60px;
     padding-bottom: 60px;
