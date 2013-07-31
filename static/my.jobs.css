@@ -1082,7 +1082,7 @@ form input[type='checkbox']{
         padding-left: 10px;                
     }
     .activity-mobile {
-        margin-left: 0px;
+        margin-left: -10px;
         padding-top: 10px;
         margin-bottom: -30px;                
     }
