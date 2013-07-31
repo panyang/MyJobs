@@ -167,7 +167,7 @@ def contact(request):
                 msg = EmailMessage(msg_subject, message, from_email, to_email)
                 msg.send()
                 return HttpResponse('success')   
-            if jira:
+            else:
                 issue_dict = {
                     'project': {'key': 'MJA'},
                     'summary': '%s - %s'%(reason, from_email),
