@@ -5,27 +5,30 @@ from itertools import chain
 from django.contrib.auth import authenticate, login
 from django.contrib.auth.decorators import login_required, user_passes_test
 from django.core.urlresolvers import reverse
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.template import RequestContext, loader
 from django.shortcuts import render_to_response, get_object_or_404
 
+from myjobs.decorators import user_is_allowed
 from myjobs.models import User
 from mysearches.models import SavedSearch, SavedSearchDigest
 from mysearches.forms import SavedSearchForm, DigestForm
 from mysearches.helpers import *
 
-@user_passes_test(User.objects.is_active)
-@user_passes_test(User.objects.not_disabled)
-def delete_saved_search(request,search_id):
-    try:
-        search_id = int(search_id)
-        # a single search is being disabled
-        SavedSearch.objects.filter(id=search_id, user=request.user).delete()
-    except ValueError:
+@user_is_allowed
+def delete_saved_search(request, user_email, search_id):
+    if search_id == 'digest':
         # all searches are being disabled
-        SavedSearch.objects.filter(user=request.user).delete()
-    except SavedSearch.DoesNotExist:
-        pass
+        SavedSearch.objects.filter(user__email=user_email).delete()
+    else:
+        # a single search is being disabled
+        search_id = int(search_id)
+        try:
+            SavedSearch.objects.filter(id=search_id,
+                                       user__email=user_email).delete()
+        except SavedSearch.DoesNotExist:
+            raise Http404
+
     return HttpResponseRedirect(reverse('saved_search_main'))
         
 @user_passes_test(User.objects.is_active)
@@ -176,31 +179,34 @@ def save_edit_form(request):
             else:
                 return HttpResponse(json.dumps(form.errors))
 
-@user_passes_test(User.objects.is_active)
-@user_passes_test(User.objects.not_disabled)
-def unsubscribe(request, search_id):
-    try:
-        search_id = int(search_id)
-        # a single search is being deactivated
-        saved_search = SavedSearch.objects.filter(id=search_id,
-                                                  user=request.user,
-                                                  is_active=True)
-        # Updating the field that a queryset was filtered on seems to empty
-        # that queryset; Make a copy and then update the queryset
-        cache = list(saved_search)
-        saved_search.update(is_active=False)
-    except ValueError:
+@user_is_allowed
+def unsubscribe(request, user_email, search_id):
+    """
+    Deactivate a user's saved searches.
+    """
+    if search_id == 'digest':
         # a digest is being deactivated
         digest = SavedSearchDigest.objects.get_or_create(user=request.user)[0]
         if digest.is_active:
             digest.is_active=False
             digest.save()
-            saved_search = SavedSearch.objects.filter(user=request.user,
-                                                      is_active=True)
-            cache = list(saved_search)
-            saved_search.update(is_active=False)
-        else:
-            cache = []
+        saved_search = SavedSearch.objects.filter(user__email=user_email,
+                                                  is_active=True)
+        # Updating the field that a queryset was filtered on seems to empty
+        # that queryset; Make a copy and then update the queryset
+        cache = list(saved_search)
+        saved_search.update(is_active=False)
+
+    else:
+        # a single search is being deactivated
+        search_id = int(search_id)
+        saved_search = get_object_or_404(SavedSearch, id=search_id,
+                                         user__email=user_email,
+                                         is_active=True)
+        # saved_search is a single search rather than a queryset this time
+        cache = [saved_search]
+        saved_search.is_active=False
+        saved_search.save()
     return render_to_response('mysearches/saved_search_disable.html',
                               {'search_id': search_id,
                                'searches': cache},

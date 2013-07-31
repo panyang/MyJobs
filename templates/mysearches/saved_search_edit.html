@@ -61,7 +61,7 @@
                     <div class="modal-footer">
                         <div class="actions">
                             <button data-dismiss="modal" class="btn primary pull-right">{% trans 'Cancel' %}</button>
-                            <a class="btn pull-right" href="{% url 'delete_saved_search' search_id %}">{% trans 'Delete' %}</a>
+                            <a class="btn pull-right" href="{% url 'delete_saved_search' user.id search_id %}">{% trans 'Delete' %}</a>
                         </div>
                     </div>
                 </div>

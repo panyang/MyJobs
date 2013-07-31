@@ -1,3 +1,5 @@
+{% load i18n %}
+
 <table style="border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-left-radius: 0px; border-bottom-right-radius: 0px; border: 1px solid #ddd; border-collapse: separate; border-spacing: 0; display: table;">
     <tr>
         <td colspan=2>
@@ -12,18 +14,20 @@
     <tr>
         <td colspan=2>
             {% block content %}
-                There are no results for today!
+            There are no results for today!
             {% endblock %}
         </td>
     </tr>
     <tr>
         <td colspan=1 style="width: 33%; border-left: 1px solid #ddd; padding: 8px; line-height: 20px; border-top: 1px solid #ddd;">
-            Saved Search Settings<br>
-            <a href="http://my.jobs{% url 'saved_search_main' %}">change settings</a>
+            <a href="my.jobs{% url 'view_profile' %}">{% trans 'My Profile' %}</a><br>
+            <a href="my.jobs{% url 'saved_search_main' %}">{% trans 'Saved Searches' %}</a><br>
+            <a href="my.jobs{% url 'edit_account' %}">{% trans 'Account Settings' %}</a><br>
         </td>
         <td colspan=1 style="border-left: 1px solid #ddd; padding: 8px; line-height: 20px; border-top: 1px solid #ddd;">
-            {% block footer %}
+            {% block footer-right %}
             {% endblock %}
+            <a href="my.jobs{% url 'stop_sending' user_email=user.email %}">{% trans 'Unsubscribe' %}</a><br>
         </td>
     </tr>
     <tr>

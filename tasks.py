@@ -29,10 +29,10 @@ def send_search_digests():
 
     not_digest = SavedSearchDigest.objects.filter(is_active=False)    
     for item in not_digest:
-        saved_searches = item.user.savedsearch_set.all()
-        daily = saved_searches.filter(frequency='D', is_active=True)
-        weekly = saved_searches.filter(day_of_week=str(day_of_week), is_active=True)
-        monthly = saved_searches.filter(day_of_month=today.day, is_active=True)
+        saved_searches = item.user.savedsearch_set.filter(is_active=True)
+        daily = saved_searches.filter(frequency='D')
+        weekly = saved_searches.filter(day_of_week=str(day_of_week))
+        monthly = saved_searches.filter(day_of_month=today.day)
 
         saved_search_objs = chain(daily, weekly, monthly)
         for search_obj in saved_search_objs:

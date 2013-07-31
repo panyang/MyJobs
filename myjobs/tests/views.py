@@ -458,3 +458,18 @@ class MyJobsViewsTests(TestCase):
             self.assertEqual(response.content, 'valid')
 
             self.client.get(reverse('auth_logout'))
+
+    def test_unsubscribe_myjobs(self):
+        """
+        Test that the user is properly unsubscribed when navigating to the
+        unsubscribe page
+        """
+
+        self.assertTrue(self.user.opt_in_myjobs)
+        response = self.client.get(reverse('stop_sending',
+                                           kwargs={'user_email': self.user.email}))
+
+        self.assertTemplateUsed(response, 'myjobs/stop_sending.html')
+
+        self.user = User.objects.get(id=self.user.id)
+        self.assertFalse(self.user.opt_in_myjobs)

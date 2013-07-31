@@ -1,7 +1,9 @@
+import json
+
+from django.contrib.sessions.models import Session
 from django.core.urlresolvers import reverse
 from django.utils.http import urlquote
 from django.test import TestCase
-import json
 
 from testfixtures import Replacer
 
@@ -151,7 +153,8 @@ class MySearchViewTests(TestCase):
         self.assertTrue(search.is_active)
 
         response = self.client.get(reverse('unsubscribe',
-                                           kwargs={'search_id':search.id}))
+                                           kwargs={'user_email': self.user.email,
+                                                   'search_id':search.id}))
         search = models.SavedSearch.objects.get(id=search.id)
         self.assertFalse(search.is_active)
         self.assertTemplateUsed(response,
@@ -166,9 +169,11 @@ class MySearchViewTests(TestCase):
         search = SavedSearchFactory(user=user)
 
         response = self.client.get(reverse('unsubscribe',
-                                           kwargs={'search_id':search.id}))
+                                           kwargs={'user_email': self.user.email,
+                                                   'search_id':search.id}))
         search = models.SavedSearch.objects.get(id=search.id)
         self.assertTrue(search.is_active)
+        self.assertEqual(response.status_code, 404)
 
     def test_unsubscribe_digest(self):
         """
@@ -184,7 +189,8 @@ class MySearchViewTests(TestCase):
             self.assertTrue(search.is_active)
 
         response = self.client.get(reverse('unsubscribe',
-                                           kwargs={'search_id':'digest'}))
+                                           kwargs={'user_email': self.user.email,
+                                                   'search_id':'digest'}))
         searches = list(models.SavedSearch.objects.all())
         for search in searches:
             self.assertFalse(search.is_active)
@@ -196,7 +202,8 @@ class MySearchViewTests(TestCase):
         self.assertEqual(models.SavedSearch.objects.count(), 1)
 
         response = self.client.get(reverse('delete_saved_search',
-                                           kwargs={'search_id':search.id}))
+                                           kwargs={'user_email': self.user.email,
+                                                   'search_id':search.id}))
         self.assertEqual(models.SavedSearch.objects.count(), 0)
 
     def test_delete_unowned_search(self):
@@ -208,8 +215,10 @@ class MySearchViewTests(TestCase):
         search = SavedSearchFactory(user=user)
 
         response = self.client.get(reverse('delete_saved_search',
-                                           kwargs={'search_id':search.id}))
+                                           kwargs={'user_email': user.email,
+                                                   'search_id':search.id}))
         self.assertEqual(models.SavedSearch.objects.count(), 1)
+        self.assertEqual(response.status_code, 404)
 
     def test_delete_owned_searches_by_digest(self):
         """
@@ -224,5 +233,17 @@ class MySearchViewTests(TestCase):
         self.assertEqual(models.SavedSearch.objects.count(), 2)
 
         response = self.client.get(reverse('delete_saved_search',
-                                           kwargs={'search_id':'digest'}))
+                                           kwargs={'user_email': self.user.email,
+                                                   'search_id':'digest'}))
+        self.assertEqual(models.SavedSearch.objects.count(), 0)
+
+    def test_anonymous_delete_searches(self):
+        search = SavedSearchFactory(user=self.user)
+
+        Session.objects.all().delete()
+
+        response = self.client.get(reverse('delete_saved_search',
+                                           kwargs={'user_email': self.user.email,
+                                                   'search_id': search.id}))
+
         self.assertEqual(models.SavedSearch.objects.count(), 0)

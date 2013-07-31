@@ -1,15 +1,18 @@
 {% extends 'mysearches/email_base.html' %}
 
+{% load i18n %}
 {% load form_tags %}
 
 {% block content %}
     {% for saved_search in saved_searches %}
+
         {% include 'mysearches/email_table_include.html' with saved_search=saved_search %}
+
     {% endfor %}
 {% endblock %}
 
-{% block footer %}
-    Sent to: {{digest.email}}<br>
+{% block footer-right %}
+    Sent to: {{email}}<br>
     Sent as Digest: {{digest.is_active|readable_boolean}}<br>
-    <a href="my.jobs{% url 'unsubscribe' search_id='digest' %}">unsubscribe</a></br>
+    <a href="my.jobs{% url 'unsubscribe' user_email=user.email search_id='digest' %}">{% trans 'Deactivate all saved searches' %}</a><br>
 {% endblock %}

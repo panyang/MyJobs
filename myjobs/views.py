@@ -20,6 +20,7 @@ from django.views.generic import TemplateView
 from captcha.fields import ReCaptchaField
 from secrets import RECAPTCHA_PUBLIC_KEY, RECAPTCHA_PRIVATE_KEY, EMAIL_TO_ADMIN
 
+from myjobs.decorators import user_is_allowed
 from myjobs.models import User, EmailLog
 from myjobs.forms import *
 from myjobs.helpers import *
@@ -353,3 +354,12 @@ def check_name_obj(user):
     if name:
         initial_dict.update(model_to_dict(name))
     return initial_dict
+
+@user_is_allowed
+def stop_sending(request, user_email):
+    user = get_object_or_404(User.objects, email=user_email)
+    user.opt_in_myjobs = False
+    user.save()
+
+    return render_to_response('myjobs/stop_sending.html',
+                              context_instance=RequestContext(request))

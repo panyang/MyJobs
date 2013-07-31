@@ -67,16 +67,25 @@ class SavedSearch(models.Model):
         return parse_rss(url_of_feed, self.frequency, num_items=num_items)
 
     def send_email(self):
-        context_dict = {'saved_searches': [self]}
-        subject = self.label.strip()
-        message = render_to_string('mysearches/email_single.html',
-                                   context_dict)
-        msg = EmailMessage(subject, message, settings.SAVED_SEARCH_EMAIL,
-                           [self.email])
-        msg.content_subtype='html'
-        msg.send()
-        self.last_sent = datetime.now()
-        self.save()
+        if self.user.opt_in_myjobs:
+            digest = self.user.savedsearchdigest
+            # Pre-fetch job listings
+            search = (self, self.get_feed_items())
+            if search[1] or digest.send_if_none:
+                # If search has job listings to display or user wants to
+                # receive emails even if there are no jobs, continue sending
+                context_dict = {'saved_searches': [search],
+                                'user': self.user, 'email': self.email}
+                subject = self.label.strip()
+                message = render_to_string('mysearches/email_single.html',
+                                           context_dict)
+                msg = EmailMessage(subject, message,
+                                   settings.SAVED_SEARCH_EMAIL,
+                                   [self.email])
+                msg.content_subtype='html'
+                msg.send()
+                self.last_sent = datetime.now()
+                self.save()
 
     def create(self, *args, **kwargs):
         """
@@ -116,15 +125,32 @@ class SavedSearchDigest(models.Model):
     send_if_none = models.BooleanField(default=False,
                                        verbose_name=_("Send even if there are"
                                                       " no results"))
-    
+
     def send_email(self):
         saved_searches = self.user.savedsearch_set.filter(is_active=True)
-        if saved_searches or self.send_if_none:
-            subject = _('Your Daily Saved Search Digest')
-            context_dict = {'saved_searches': saved_searches, 'digest': self}
-            message = render_to_string('mysearches/email_digest.html',
-                                       context_dict)
-            msg = EmailMessage(subject, message, settings.SAVED_SEARCH_EMAIL,
-                               [self.email])
-            msg.content_subtype='html'
-            msg.send()
+        if self.user.opt_in_myjobs and saved_searches:
+            saved_searches.update(last_sent=datetime.now())
+            # Pre-fetch job listings
+            saved_searches = zip(saved_searches,
+                                 [saved_search.get_feed_items()
+                                  for saved_search in saved_searches])
+
+            if not self.send_if_none:
+                # If user doesn't want to get emails when no new searches are
+                # available, strip out the empty searches
+                saved_searches = [(search, items)
+                                  for (search, items) in saved_searches
+                                  if items]
+            if saved_searches:
+                # This catches conditions where the user either has no saved
+                # searches or send_if_none is False and the user's searches
+                # have no new job listings to display
+                subject = _('Your Daily Saved Search Digest')
+                context_dict = {'saved_searches': saved_searches, 'digest': self,
+                                'user': self.user, 'email': self.email}
+                message = render_to_string('mysearches/email_digest.html',
+                                           context_dict)
+                msg = EmailMessage(subject, message, settings.SAVED_SEARCH_EMAIL,
+                                   [self.email])
+                msg.content_subtype='html'
+                msg.send()
