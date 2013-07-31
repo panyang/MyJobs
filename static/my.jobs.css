@@ -1098,6 +1098,17 @@ form input[type='checkbox']{
         margin-top: -115px;
     }    
     
+    /* Microsite Activity Page*/
+    #candidate-activity-details-table {
+    overflow-y: auto;
+    height: auto;
+    max-height: 520px;
+    overflow-x: hidden;    
+    }
+    .btn-size {
+        width: 87%;    
+    }    
+    
     /*Ajax Indicator*/
     #ajax-busy {
         margin: 0px 0px 0px -65px; /* left margin is half width of the div, to center it */
@@ -1351,14 +1362,7 @@ form input[type='checkbox']{
     }
     .show-activity#candidate-page-mobile-view #detail-toggle{
         background-color: #FFF;
-    }
-    
-    /* Microsite Activity Page*/
-    
-    .btn-size {
-        width: 87%;    
-    }    
-        
+    }      
     #candidate-page-mobile-view #candidate-page-mobile-toggle{
         width: auto;
         margin: 0 10px;
