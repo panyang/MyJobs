@@ -1,6 +1,7 @@
 from django.conf.urls.defaults import patterns, url, include
 from django.contrib import admin
 from django.http import HttpResponsePermanentRedirect
+from django.views.generic import RedirectView
 
 from myjobs.views import *
 
@@ -10,10 +11,10 @@ urlpatterns = patterns('MyJobs.myjobs.views',
     url(r'^privacy/$', Privacy.as_view(), name='privacy'),
     url(r'^terms/$', Terms.as_view(), name='terms'),
     url(r'^contact/$', 'contact', name='contact'),
-    url(r'^account/$', 'view_account', name='view_account'),
+    url(r'^account/$', 'edit_account', name='edit_account'),
     url(r'^account/delete$', 'delete_account', name='delete_account'),
     url(r'^account/disable$', 'disable_account', name='disable_account'),
-    url(r'^account/edit$', 'edit_account', name='edit_account'),
+    url(r'^account/edit$', RedirectView.as_view(url='/account/')),
     url(r'^edit/basic$', 'edit_basic', name='edit_basic'),
     url(r'^edit/password$', 'edit_password', name='edit_password'),
     url(r'^edit/delete$', 'edit_delete', name='edit_delete'),

@@ -163,10 +163,6 @@ def contact(request):
         data_dict = {'form':form}
     return render_to_response('contact.html',data_dict, RequestContext(request))
     
-@login_required
-def view_account(request):
-    return render_to_response('done.html', RequestContext(request))
-    
 @user_passes_test(User.objects.not_disabled)
 def edit_account(request):
     initial_dict = check_name_obj(request.user)
