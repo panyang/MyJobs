@@ -1096,7 +1096,7 @@ form input[type='checkbox']{
     #date-range {
         position: absolute;
         margin-top: -115px;
-    }
+    }    
     
     /*Ajax Indicator*/
     #ajax-busy {
