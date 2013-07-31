@@ -1095,7 +1095,7 @@ form input[type='checkbox']{
     }
     #date-range {
         position: absolute;
-        margin-top: -105px;
+        margin-top: -115px;
     }
     
     /*Ajax Indicator*/
@@ -1354,29 +1354,7 @@ form input[type='checkbox']{
     }
     
     /* Microsite Activity Page*/
-    .show-details#candidate-page-mobile-view .span8{
-        display: block;
-    }
-    #candidate-page-mobile-view .span8 + .span4,
-    .show-details#candidate-page-mobile-view .span8 + .span4{
-        display:none;
-    }    
-    .show-details#candidate-page-mobile-view #detail-toggle,
-    #candidate-page-mobile-view #detail-toggle{
-        background-color: rgb(194, 187, 169);
-    }
-    .show-activity#candidate-page-mobile-view .span8 + .span4{
-        display: block;
-    }
-    .show-activity#candidate-page-mobile-view .span8{
-        display: none;
-    }
-    .show-activity#candidate-page-mobile-view #activity-toggle{
-        background-color: rgb(194, 187, 169);
-    }
-    .show-activity#candidate-page-mobile-view #detail-toggle{
-        background-color: #FFF;
-    }     
+    
     .btn-size {
         width: 87%;    
     }    

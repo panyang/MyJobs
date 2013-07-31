@@ -52,20 +52,8 @@ $(document).ready(function()
             icon.removeClass('icon-minus');
             icon.addClass('icon-plus');
         });
-    });
+    });   
     
-    $('[id$=detail-toggle]').click(function(){
-		container = $(this).parent().parent();
-		container.removeClass('show-activity');
-		container.addClass('show-details');		
-		mobileToggleAccordion();
-	});
-	$('[id$=activity-toggle]').click(function(){
-		container = $(this).parent().parent();
-		container.removeClass('show-details');
-		container.addClass('show-activity');
-		mobileToggleAccordion();
-	});
 });
 </script>
 {% endblock %}
@@ -98,14 +86,10 @@ $(document).ready(function()
     <div class="row">
         <div class="hide-desktop">
         <br><br>
-        </div>
-        <div id="candidate-page-mobile-view">                                
-                <div id="candidate-page-mobile-toggle">                    
-                    <span class="toggle-text" id="detail-toggle">&nbsp;Activity</span><span class="toggle-text" id="activity-toggle">&nbsp;Details</span>
-                </div>
+        </div>                
                 <div class="span8 pull-left">
                     <div class="formBox">
-                        <h3 class="form-box-title hide-mobile">Site Activity</h3>                        
+                        <h3>Site Activity</h3>                        
                             <form action='/dashboard/microsite/' method='POST' id="date-range" class="move-left">
                             {% csrf_token %}
                             <div class="hide-mobile">
@@ -146,8 +130,7 @@ $(document).ready(function()
                                                         {{candidate.created_on.date}}</div>
                                                         </td>
                                                     <tr>
-                                                    {% endfor %}
-                                                    
+                                                    {% endfor %}                                                    
                                                  </table>                                                 
                                                  <div class="pull-left span6">                                                 
                                                  {% if candidates.has_previous %}
@@ -175,8 +158,9 @@ $(document).ready(function()
                 </div>{# /span8 #}
                 
             <div class="span4">
+               <div class="hide-desktop hide-tablet"><br></div>            
     	       <div class="formBox">
-    		      <h3 class="form-box-title hide-mobile">Details</h3>
+    		      <h3>Details</h3>
                         <div class="accordion" id="details-activity-collapse">
                             <div class="accordion-group">
                                 <div class="accordion-heading details-heading">
@@ -200,8 +184,7 @@ $(document).ready(function()
                             </div>{# /accordion-group #}
                         </div>{# /accordion #}
                 </div>{# /formBox #}
-            </div>{# /span4 #}
-        </div>{# /candidate-page-mobile-view #}        
+            </div>{# /span4 #}               
     </div>{# /row #}
 </div>{# /wrapper #}
 
