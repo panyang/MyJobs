@@ -154,7 +154,6 @@ def contact(request):
                 jira = JIRA(options=options, basic_auth=my_agent_auth)
             except:
                 jira = []
-                pass
             if not jira:
                 msg_subject = ('Contact My.jobs by a(n) %s'%im_a)
                 message = """
