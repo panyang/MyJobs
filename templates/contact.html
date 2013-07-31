@@ -12,40 +12,61 @@
 <form method="POST" id="captcha-form">
 	<br />
 	<div class="span3 form-label pull-left initial">
-		<label>Full Name:</label>
+		<label>{% trans "Full Name" %}:</label>
 	</div>
 	<div class="profile-form-input">
 		<input maxlength="60" name="name" placeholder="Full Name" required type="text">
 	</div>
 	<div class="clear"></div>
-	<div class="span 3 form-label pull-left initial">
-		<label>I am a(n):</label>
-	</div>
-	<div class="profile-form-input">
-		<select id="subject" name="subject" class="select">
-			<option value="Didn't Select" selected>----------</option>
-			<option value="Job Seeker">Job Seeker</option>
-			<option value="Employer">Employer</option>
-			<option value="Partner">Partner</option>
-		</select>
-	</div>
-	<div class="clear"></div>
 	<div class="span3 form-label pull-left initial">
-		<label>Email:</label>
+		<label>{% trans "Email" %}:</label>
 	</div>
 	<div class="profile-form-input">
 		<input maxlength="60" name="email" placeholder="Email"  required type="text">
 	</div>
 	<div class="clear"></div>
 	<div class="span3 form-label pull-left initial">
-		<label>Comments:</label>
+		<label>{% trans "Phone (optional)" %}:</label>
+	</div>
+	<div class="profile-form-input">
+		<input maxlength="60" name="phone" placeholder="Phone Number" type="text">
+	</div>
+	<div class="clear"></div>
+	<div class="span 3 form-label pull-left initial">
+		<label>{% trans "I am a(n)" %}:</label>
+	</div>
+	<div class="profile-form-input">
+		<select id="type" name="type" class="select">
+			<option value="Didn't Select" selected>----------</option>
+			<option value="Job Seeker">{% trans "Job Seeker" %}</option>
+			<option value="Employer">{% trans "Employer" %}</option>
+			<option value="Partner">{% trans "Partner" %}</option>
+		</select>
+	</div>
+	<div class="clear"></div>
+	<div class="span 3 form-label pull-left initial">
+		<label>{% trans "Reason" %}:</label>
+	</div>
+	<div class="profile-form-input">
+		<select id="reason" name="reason" class="select">
+			<option value="Didn't Select" selected>----------</option>
+			<option value="My Account">{% trans "My Account" %}</option>
+			<option value="Email from My.Jobs">{% trans "Email from My.Jobs" %}</option>
+			<option value="Media Inquiry">{% trans "Media Inquiry" %}</option>
+			<option value="My.Jobs Error">{% trans "Something on My.Jobs is Broken" %}</option>
+			<option value="Other">{% trans "Other" %}</option>
+		</select>
+	</div>
+	<div class="clear"></div>
+	<div class="span3 form-label pull-left initial">
+		<label>{% trans "Comments" %}:</label>
 	</div>
 	<div class="profile-form-input">
 		<textarea class="form-textarea" name="comment" required placeholder="Type your comment here"></textarea>
 	</div>
 	<div class="clear"></div>
 	<div class="span3 form-label pull-left initial">
-		<label>Are you Human?</label>
+		<label>{% trans "Are you Human?" %}</label>
 	</div>
 	<div class="profile-form-input captcha">
 		{{form}}
