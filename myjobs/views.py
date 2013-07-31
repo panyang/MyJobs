@@ -164,7 +164,7 @@ def contact(request):
 
                           %s
                           """%(name, im_a, from_email, comment)
-                to_email = ['david@directemployersfoundation.org']
+                to_email = [EMAIL_TO_ADMIN]
                 msg = EmailMessage(msg_subject, message, from_email, to_email)
                 msg.send()
                 return HttpResponse('success')   
