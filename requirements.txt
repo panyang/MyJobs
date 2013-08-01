@@ -16,4 +16,4 @@ django-tastypie==0.9.15
 git+git://github.com/arneb/django-messages.git@bc443623fde4945a841c48665b477a529f4ec676
 testfixtures==3.0.0
 django-recaptcha==0.0.6
-git+ssh://git@degit.directemployers.org/jira/jira-tools.git@57cfb93a7676ca739ce7c839038b8142a0e8a7de
+git+http://degit.directemployers.org/jira/jira-tools.git@57cfb93a7676ca739ce7c839038b8142a0e8a7de
