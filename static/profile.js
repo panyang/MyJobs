@@ -222,10 +222,12 @@ $(function() {
                             var $labelOfError = $error.parent().prev();
 
                             // insert new errors after the relevant inputs
-                            $error.wrap('<span class="required" />');
-                            $error.attr("placeholder",json[index][0]);
-                            $error.val('')
-                            $labelOfError.css('color', '#900');
+                            $error.addClass('has-error');
+                            $error.attr("title", json[index][0]);
+                            $error.tooltip({'trigger': 'focus'});
+                            //$error.tooltip();
+                            $error.wrap('<div class="required" />');
+                            $labelOfError.addClass('error-text');
                         }
                     }
                 }
@@ -286,4 +288,5 @@ $(document).ready(function() {
                 }
         });
     }
+    
 });

@@ -806,6 +806,15 @@ em.pendingText{
     padding: 10px;
 }
 
+input[type='text'] + .help-block,
+div + .help-block{
+    max-width: 250px;
+    margin: -12px 0 5px 225px;
+    color: #888;
+    font-size: 0.85em;
+    font-style: italic;
+}
+
 input[type='checkbox'] + .help-block{
     display:inline;
     padding-left: 5px;
@@ -1673,15 +1682,12 @@ body.modal-open {
     overflow: hidden !important;
 }
 
-.label-required {
-    color: #900;
-}
-
 .required input[type=text],
 .required select {
     border: 1px solid #900;
 }
-.required-label{
+.required-label,
+.error-text{
     color: #900;
 }
 .required-border{

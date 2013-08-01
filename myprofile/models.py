@@ -150,7 +150,8 @@ class EmploymentHistory(ProfileUnits):
                                             verbose_name=_("I still work here"))
 
     # Optional fields
-    end_date = models.DateField(blank=True, null=True)
+    end_date = models.DateField(blank=True, null=True, 
+                                help_text="Ex: 5/30/2013")
     city_name = models.CharField(max_length=255, blank=True,null=True)
     country_sub_division_code = models.CharField(max_length=5, blank=True,
                                                  verbose_name=_("State/Region")) 
@@ -258,7 +259,8 @@ class SecondaryEmail(ProfileUnits):
 class MilitaryService(ProfileUnits):
     country_code = models.CharField(max_length=3, blank=True,
                                 verbose_name=_("Country")) # ISO 3166-1
-    branch = models.CharField(max_length=255, verbose_name="Branch")
+    branch = models.CharField(max_length=255, verbose_name="Branch",
+                              help_text="Army, Navy, Air Force...")
     department = models.CharField(max_length=255, blank=True,
                                 verbose_name="Department")
     division = models.CharField(max_length=255, blank=True,
@@ -270,7 +272,8 @@ class MilitaryService(ProfileUnits):
     service_end_date = models.DateField(verbose_name=_("End Date"),
                                 null=True, blank=True)
     start_rank = models.CharField(max_length=50, blank=True, 
-                                verbose_name=_("Start Rank"))
+                                verbose_name=_("Start Rank"), 
+                                help_text="Pay Grade")
     end_rank = models.CharField(max_length=50, blank=True, 
                                 verbose_name=_("End Rank"))
     campaign = models.CharField(max_length=255, blank=True,
