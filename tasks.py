@@ -19,7 +19,7 @@ def send_search_digests():
     receive it daily and do not get individual saved search emails. Otherwise,
     each active saved search is sent individually.
     """
-    
+
     today = datetime.today()
     day_of_week = today.isoweekday()
 
@@ -27,7 +27,7 @@ def send_search_digests():
     for obj in digest:
         obj.send_email()
 
-    not_digest = SavedSearchDigest.objects.filter(is_active=False)    
+    not_digest = SavedSearchDigest.objects.filter(is_active=False)
     for item in not_digest:
         saved_searches = item.user.savedsearch_set.filter(is_active=True)
         daily = saved_searches.filter(frequency='D')

@@ -82,7 +82,7 @@ class SavedSearch(models.Model):
                 msg = EmailMessage(subject, message,
                                    settings.SAVED_SEARCH_EMAIL,
                                    [self.email])
-                msg.content_subtype='html'
+                msg.content_subtype = 'html'
                 msg.send()
                 self.last_sent = datetime.now()
                 self.save()
@@ -142,15 +142,17 @@ class SavedSearchDigest(models.Model):
                                   for (search, items) in saved_searches
                                   if items]
             if saved_searches:
-                # This catches conditions where the user either has no saved
-                # searches or send_if_none is False and the user's searches
-                # have no new job listings to display
+                # This catches a condition where send_if_none is False and the
+                # user's searches have no new job listings to display
                 subject = _('Your Daily Saved Search Digest')
-                context_dict = {'saved_searches': saved_searches, 'digest': self,
-                                'user': self.user, 'email': self.email}
+                context_dict = {'saved_searches': saved_searches,
+                                'digest': self,
+                                'user': self.user,
+                                'email': self.email}
                 message = render_to_string('mysearches/email_digest.html',
                                            context_dict)
-                msg = EmailMessage(subject, message, settings.SAVED_SEARCH_EMAIL,
+                msg = EmailMessage(subject, message,
+                                   settings.SAVED_SEARCH_EMAIL,
                                    [self.email])
-                msg.content_subtype='html'
+                msg.content_subtype = 'html'
                 msg.send()

@@ -15,6 +15,7 @@ from mysearches.models import SavedSearch, SavedSearchDigest
 from mysearches.forms import SavedSearchForm, DigestForm
 from mysearches.helpers import *
 
+
 @user_is_allowed
 def delete_saved_search(request, user_email, search_id):
     if search_id == 'digest':
@@ -30,7 +31,8 @@ def delete_saved_search(request, user_email, search_id):
             raise Http404
 
     return HttpResponseRedirect(reverse('saved_search_main'))
-        
+
+
 @user_passes_test(User.objects.is_active)
 @user_passes_test(User.objects.not_disabled)
 def saved_search_main(request):
@@ -44,8 +46,10 @@ def saved_search_main(request):
     add_form = SavedSearchForm(user=request.user)
     return render_to_response('mysearches/saved_search_main.html',
                               {'saved_searches': saved_searches,
-                               'form':form, 'add_form': add_form, 'view_name': 'Saved Searches'},
+                               'form': form, 'add_form': add_form,
+                               'view_name': 'Saved Searches'},
                               RequestContext(request))
+
 
 @user_passes_test(User.objects.is_active)
 @user_passes_test(User.objects.not_disabled)
@@ -58,11 +62,12 @@ def view_full_feed(request, search_id):
         label = saved_search.label
         return render_to_response('mysearches/view_full_feed.html',
                                   {'search': saved_search,
-                                   'items': items, 
+                                   'items': items,
                                    'view_name': 'Saved Searches'},
                                   RequestContext(request))
     else:
         return HttpResponseRedirect(reverse('saved_search_main'))
+
 
 @user_passes_test(User.objects.is_active)
 @user_passes_test(User.objects.not_disabled)
@@ -70,11 +75,13 @@ def more_feed_results(request):
     # Ajax request comes from the view_full_feed view when user scrolls to
     # bottom of the page
     if request.is_ajax():
-        url_of_feed = url_sort_options(request.GET['feed'], request.GET['sort_by'])
+        url_of_feed = url_sort_options(request.GET['feed'],
+                                       request.GET['sort_by'])
         items = parse_rss(url_of_feed, request.GET['frequency'],
                           offset=request.GET['offset'])
         return render_to_response('mysearches/feed_page.html',
-                                  {'items':items}, RequestContext(request))
+                                  {'items': items}, RequestContext(request))
+
 
 @user_passes_test(User.objects.is_active)
 @user_passes_test(User.objects.not_disabled)
@@ -82,15 +89,16 @@ def validate_url(request):
     if request.is_ajax():
         feed_title, rss_url = validate_dotjobs_url(request.POST['url'])
         if rss_url:
-           # returns the RSS url via AJAX to show if field is validated
-           # id valid, the label field is auto populated with the feed_title
-           data = {'rss_url': rss_url,
-                   'feed_title': feed_title,
-                   'url_status': 'valid'}
+            # returns the RSS url via AJAX to show if field is validated
+            # id valid, the label field is auto populated with the feed_title
+            data = {'rss_url': rss_url,
+                    'feed_title': feed_title,
+                    'url_status': 'valid'}
 
         else:
             data = {'url_status': 'not valid'}
         return HttpResponse(json.dumps(data))
+
 
 @user_passes_test(User.objects.is_active)
 @user_passes_test(User.objects.not_disabled)
@@ -115,6 +123,7 @@ def save_digest_form(request):
 
     # The request is not ajax; Redirect to the main saved search page
     return HttpResponseRedirect(reverse('saved_search_main'))
+
 
 @user_passes_test(User.objects.is_active)
 @user_passes_test(User.objects.not_disabled)
@@ -146,12 +155,14 @@ def save_search_form(request):
                                       {'form': form, 'search_id': search_id},
                                       RequestContext(request))
 
+
 @user_passes_test(User.objects.is_active)
 @user_passes_test(User.objects.not_disabled)
 def edit_search(request, search_id=None):
     if search_id:
         try:
-            saved_search = SavedSearch.objects.get(id=search_id, user=request.user)
+            saved_search = SavedSearch.objects.get(id=search_id,
+                                                   user=request.user)
         except SavedSearch.DoesNotExist:
             return HttpResponseRedirect(reverse('saved_search_main'))
     else:
@@ -163,6 +174,7 @@ def edit_search(request, search_id=None):
                               {'form': form, 'search_id': search_id,
                                'view_name': 'Saved Searches'},
                               RequestContext(request))
+
 
 @user_passes_test(User.objects.is_active)
 @user_passes_test(User.objects.not_disabled)
@@ -179,6 +191,7 @@ def save_edit_form(request):
             else:
                 return HttpResponse(json.dumps(form.errors))
 
+
 @user_is_allowed
 def unsubscribe(request, user_email, search_id):
     """
@@ -188,7 +201,7 @@ def unsubscribe(request, user_email, search_id):
         # a digest is being deactivated
         digest = SavedSearchDigest.objects.get_or_create(user=request.user)[0]
         if digest.is_active:
-            digest.is_active=False
+            digest.is_active = False
             digest.save()
         saved_search = SavedSearch.objects.filter(user__email=user_email,
                                                   is_active=True)
@@ -205,7 +218,7 @@ def unsubscribe(request, user_email, search_id):
                                          is_active=True)
         # saved_search is a single search rather than a queryset this time
         cache = [saved_search]
-        saved_search.is_active=False
+        saved_search.is_active = False
         saved_search.save()
     return render_to_response('mysearches/saved_search_disable.html',
                               {'search_id': search_id,
