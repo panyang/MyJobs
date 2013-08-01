@@ -63,7 +63,6 @@ def get_rss_soup(rss_url):
                    BeautifulSoup object
     """
 
-    print rss_url
     rss_feed = urllib2.urlopen(rss_url).read()
     return BeautifulSoup(rss_feed)
 
