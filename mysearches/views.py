@@ -49,7 +49,9 @@ def saved_search_main(request):
 def view_full_feed(request, search_id):
     saved_search = SavedSearch.objects.get(id=search_id)
     if request.user == saved_search.user:
-        url_of_feed = url_sort_options(saved_search.feed, saved_search.sort_by)
+        url_of_feed = url_sort_options(saved_search.feed,
+                                       saved_search.sort_by,
+                                       saved_search.frequency)
         items = parse_rss(url_of_feed, saved_search.frequency)
         date = datetime.date.today()
         label = saved_search.label
@@ -67,7 +69,9 @@ def more_feed_results(request):
     # Ajax request comes from the view_full_feed view when user scrolls to
     # bottom of the page
     if request.is_ajax():
-        url_of_feed = url_sort_options(request.GET['feed'], request.GET['sort_by'])
+        url_of_feed = url_sort_options(request.GET['feed'],
+                                       request.GET['sort_by'],
+                                       request.GET['frequency'])
         items = parse_rss(url_of_feed, request.GET['frequency'],
                           offset=request.GET['offset'])
         return render_to_response('mysearches/feed_page.html',

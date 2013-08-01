@@ -5,6 +5,7 @@ from urlparse import urlparse, urlunparse, parse_qs
 from urllib import urlencode
 from dateutil import parser as dateparser
 import datetime
+import time
 
 from django.utils import simplejson
 from django.utils.encoding import smart_str, smart_unicode
@@ -62,6 +63,7 @@ def get_rss_soup(rss_url):
                    BeautifulSoup object
     """
 
+    print rss_url
     rss_feed = urllib2.urlopen(rss_url).read()
     return BeautifulSoup(rss_feed)
 
@@ -91,12 +93,7 @@ def parse_rss(feed_url, frequency='W', num_items=20, offset=0):
     item_list = []
     items = rss_soup.find_all("item")
 
-    if frequency == 'M':
-        interval = -30
-    elif frequency == 'W':
-        interval = -7
-    else:
-        interval = -1
+    interval = get_interval_from_frequency(frequency)
 
     end = datetime.date.today()
     start = end + datetime.timedelta(days=interval)
@@ -111,8 +108,6 @@ def parse_rss(feed_url, frequency='W', num_items=20, offset=0):
         if date_in_range(start,end,item_dict['pubdate'].date()):
             item_list.append(item_dict)
         else:
-            # Since the RSS feeds are ordered by date, we know we can stop once 
-            # a job falls out of the date range
             break
 
     return item_list
@@ -120,7 +115,7 @@ def parse_rss(feed_url, frequency='W', num_items=20, offset=0):
 def date_in_range(start, end, x):
     return start <= x <= end
 
-def url_sort_options(feed_url, sort_by):
+def url_sort_options(feed_url, sort_by, frequency=None):
     """
     Updates urls based on sort by option. 
 
@@ -139,11 +134,27 @@ def url_sort_options(feed_url, sort_by):
     query = parse_qs(unparsed_feed.query)
     query.pop('date_sort', None)
 
+
     if sort_by == "Relevance":
         query.update({'date_sort': 'False'})
+
+        interval = get_interval_from_frequency(frequency)
+
+        now = datetime.datetime.now()
+        start = now + datetime.timedelta(days=interval)
+        query.update({'start':start})
 
     unparsed_feed = unparsed_feed._replace(query = urlencode(query, True))
     # Convert byte string back into unicode
     feed_url = smart_unicode(urlunparse(unparsed_feed))
 
     return feed_url
+
+def get_interval_from_frequency(frequency):
+    if frequency == 'M':
+        interval = -30
+    elif frequency == 'W':
+        interval = -7
+    else:
+        interval = -1
+    return interval

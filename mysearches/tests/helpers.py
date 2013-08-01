@@ -67,21 +67,27 @@ class SavedSearchHelperTests(TestCase):
         self.assertTrue(len(items) <= 20)
 
     def test_url_sort_options(self):
-        feed_url = 'http://jobs.jobs/jobs/feed/rss?date_sort=False'
+        feed = 'http://jobs.jobs/jobs/feed/rss?date_sort=False'
 
         # Test to make sure sort by "Relevance" has '&date_sort=False' added
         # a single time
-        feed_url = url_sort_options(feed_url, "Relevance")
-        self.assertTrue(feed_url == "http://jobs.jobs/jobs/feed/rss?date_sort=False")
+        feed_url = url_sort_options(feed, "Relevance")
+        parsed = urlparse(feed_url)
+        query = parse_qs(parsed.query)
 
+        self.assertEquals(parsed.path, "/jobs/feed/rss")
+        self.assertEquals(query['date_sort'], [u'False'])
+        datetime.datetime.strptime(query['start'][0], '%Y-%m-%d %H:%M:%S.%f')
+    
         # Test to make sure sort by "Date" doesn't have anything added
-        feed_url = url_sort_options(feed_url, "Date")
-        self.assertTrue(feed_url == "http://jobs.jobs/jobs/feed/rss")
+        feed_url = url_sort_options(feed, "Date")
+        self.assertEquals(feed_url, "http://jobs.jobs/jobs/feed/rss")
 
     def test_unicode_in_search(self):
         search = SavedSearch(url=u"http://jobs.jobs/search?q=%E2%80%93",
                              user=self.user,
-                             feed=u"http://jobs.jobs/search/feed/rss?q=%E2%80%93")
+                             feed=u"http://jobs.jobs/search/feed/rss?q=%E2%80%93",
+                             sort_by=u'Relevance')
         search.save()
 
         feed_url = url_sort_options(search.feed, search.sort_by)
@@ -90,7 +96,10 @@ class SavedSearchHelperTests(TestCase):
         new = parse_qs(urlparse(feed_url).query)
 
         self.assertFalse(old.get('date_sort'))
+        self.assertFalse(old.get('start'))
         self.assertTrue(new['date_sort'][0])
+        self.assertTrue(new['start'][0])
 
         del new['date_sort']
+        del new['start']
         self.assertEqual(new, old)
