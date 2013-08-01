@@ -13,7 +13,6 @@ meta.html -- default page metadata
 <script src="http://js.nlx.org/framework/v2/js/def.ui.bootstrap.alerts.js"></script>
 <script src="{% static "bootstrap/bootstrap-modalmanager.js" %}"></script>
 <script src="{% static "bootstrap/bootstrap-modal.js" %}"></script>
-<script src="{% static "bootstrap/bootstrap-tooltip.js" %}"></script>
 <script src="{{ STATIC_URL }}underscore-min.js"></script>
 <script src="{{ STATIC_URL }}backbone-min.js"></script>
 <script src="{{ STATIC_URL }}my.jobs.js{% cache_buster %}"></script>
@@ -24,5 +23,4 @@ meta.html -- default page metadata
 <link href="{{ STATIC_URL }}my.jobs.ie.css{% cache_buster %}" rel="stylesheet" type="text/css">
 <![endif]-->
 <link href="{% static "bootstrap/bootstrap-modal.css" %}" rel="stylesheet" type="text/css">
-<link href="{% static "bootstrap/bootstrap-tooltip.css" %}" rel="stylesheet" type="text/css">
 <link rel="icon" type="image/png" href="{{ STATIC_URL }}favicon.ico">

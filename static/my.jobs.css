@@ -810,7 +810,7 @@ input[type='text'] + .help-block,
 div + .help-block{
     max-width: 250px;
     margin: -12px 0 5px 225px;
-    color: #888;
+    color: #555;
     font-size: 0.85em;
     font-style: italic;
 }
@@ -1105,6 +1105,10 @@ form input[type='checkbox']{
     
     #moduleBank {
         margin-top: 20px;
+    }
+    input[type='text'] + .help-block,
+    div + .help-block{
+        margin: -12px 0 0 5px;
     }
     
     /*Employer Dashboard*/    
@@ -1685,6 +1689,9 @@ body.modal-open {
 .required input[type=text],
 .required select {
     border: 1px solid #900;
+}
+.required{
+    display: inline-block;
 }
 .required-label,
 .error-text{

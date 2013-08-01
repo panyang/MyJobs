@@ -222,11 +222,9 @@ $(function() {
                             var $labelOfError = $error.parent().prev();
 
                             // insert new errors after the relevant inputs
-                            $error.addClass('has-error');
-                            $error.attr("title", json[index][0]);
-                            $error.tooltip({'trigger': 'focus'});
-                            //$error.tooltip();
                             $error.wrap('<div class="required" />');
+                            $error.attr("placeholder",json[index][0]);
+                            $error.val('')
                             $labelOfError.addClass('error-text');
                         }
                     }
@@ -251,6 +249,7 @@ function add_date_button() {
 }
 
 $(document).ready(function() {
+    $('#id_militaryservice-country_code').trigger('change');
     if($(window).width() >= 501) {
         // This function will be executed when the user scrolls the page.
         $(window).scroll(function(e) {
@@ -288,5 +287,4 @@ $(document).ready(function() {
                 }
         });
     }
-    
 });
