@@ -17,8 +17,12 @@ from django.utils.html import mark_safe
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
 
+from jira.client import JIRA
+import jiratools
+
 from captcha.fields import ReCaptchaField
 from secrets import RECAPTCHA_PUBLIC_KEY, RECAPTCHA_PRIVATE_KEY, EMAIL_TO_ADMIN
+from secrets import options, my_agent_auth
 
 from myjobs.decorators import user_is_allowed
 from myjobs.models import User, EmailLog
@@ -140,33 +144,49 @@ def home(request):
 def contact(request):
     if request.POST:
         name = request.POST.get('name')
-        is_a = request.POST.get('subject')
+        im_a = request.POST.get('type')
+        reason = request.POST.get('reason')
         from_email = request.POST.get('email')
+        phone_num = request.POST.get('phone')
         comment = request.POST.get('comment')
         form = CaptchaForm(request.POST)
         if form.is_valid():
-            subject = ('Contact My.jobs by a(n) %s'%is_a)
-            message = """
-                      Name: %s
-                      Is a(n): %s
-                      Email: %s
+            try:
+                jira = JIRA(options=options, basic_auth=my_agent_auth)
+            except:
+                jira = []
+            if not jira:
+                msg_subject = ('Contact My.jobs by a(n) %s'%im_a)
+                message = """
+                          Name: %s
+                          Is a(n): %s
+                          Email: %s
 
-                      %s
-                      """%(name, is_a, from_email, comment)
-            to_email = [EMAIL_TO_ADMIN]
-            msg = EmailMessage(subject, message, from_email, to_email)
-            msg.send()
-            return HttpResponse('success')
+                          %s
+                          """%(name, im_a, from_email, comment)
+                to_email = [EMAIL_TO_ADMIN]
+                msg = EmailMessage(msg_subject, message, from_email, to_email)
+                msg.send()
+                return HttpResponse('success')   
+            else:
+                issue_dict = {
+                    'project': {'key': 'MJA'},
+                    'summary': '%s - %s'%(reason, from_email),
+                    'description': '%s'%(comment),
+                    'issuetype': {'name': 'Task'},
+                    'components': [{'id':'12703'}],
+                    'customfield_10400': str(name),
+                    'customfield_10401': str(from_email),
+                    'customfield_10402': str(phone_num),
+                }
+                jira.create_issue(fields=issue_dict)
+                return HttpResponse('success')
         else:
             return HttpResponse(json.dumps({'errors': form.errors.items()}))
     else:
         form = CaptchaForm()
         data_dict = {'form':form}
     return render_to_response('contact.html',data_dict, RequestContext(request))
-    
-@login_required
-def view_account(request):
-    return render_to_response('done.html', RequestContext(request))
     
 @user_passes_test(User.objects.not_disabled)
 def edit_account(request):

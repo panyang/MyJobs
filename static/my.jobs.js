@@ -89,7 +89,7 @@ function contactForm(){
     if(typeof(csrf_token_tag)!='undefined'){
        csrf_token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
     }
-    data = '&csrfmiddlewaretoken=' + csrf_token;
+    data = '&csrfmiddlewaretoken=' + csrf_token + '&';
     data += form.serialize();
     $.ajax({
         type: 'POST',
