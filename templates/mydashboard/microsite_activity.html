@@ -1,0 +1,202 @@
+{% extends "base.html" %}
+{% load common_tags %}
+{% block site-title %}
+    <title>{{ company_name }} Activity Information on My.jobs</title>
+    <meta name="title" content="{{ company_name }} Activity Information on My.jobs">
+{% endblock %}
+{% load i18n %}
+{% load user_ops %}
+{% block meta-extra %}
+
+<script src="http://js.nlx.org/framework/v2/js/def.ui.bootstrap.tabs.js" type="text/javascript"></script>
+<script src="http://js.nlx.org/framework/v2/js/code/bootstrap-collapse.js" type="text/javascript"></script>
+<script>
+  $(function() {
+    $( ".datepicker" ).datepicker();
+  });
+</script>
+<script>
+$(document).ready(function()
+{
+   $('#row-link-table tr').each(function(i,e)
+   {
+      $(e).children('td').click(function()
+      {
+         //here we are working on a td element, that's why we need
+         //to refer to its parent (tr) in order to find the <a> element
+         var href = $(this).closest("tr").find("a").attr("href");
+         if(href)
+         {
+            window.location = href;
+         }              
+      });
+   });
+    
+   $("#{{ date_button }}").attr('class', 'btn btn-success'); 
+   
+   $('.collapse').each(function(){
+        if($(this).hasClass('in')) {
+            $(this).collapse('show');
+        }else{
+            $(this).collapse('hide');
+        };
+    });
+
+   $('[class*=details-heading]').click(function(){
+        var icon = $(this).children('a').children('span').children('i');
+        var item = $(this).next();
+        item.collapse().on('shown',function(){
+            icon.removeClass('icon-plus');
+            icon.addClass('icon-minus');
+        }).on('hidden',function(){
+            icon.removeClass('icon-minus');
+            icon.addClass('icon-plus');
+        });
+    });   
+    
+});
+</script>
+{% endblock %}
+
+{% block content %}
+<style>
+#profileTitleRow{
+    margin-bottom: 20px;
+}
+#profileTitleRow img{
+    border-radius:5px;
+    border: 2px solid #b34529;
+}
+#profileTitleBar{
+    border-bottom: 2px solid #b34529;
+}
+</style>
+<div class="wrapper"> 
+    <div class="row" id="profileTitleRow">
+        <div id="header-inline">
+        <h1 class="margin-left">{{microsite_url|url_domain}}</h1>&nbsp;&nbsp;<h4>Activity Information</h4>
+        </div>
+        <div class="span12" id="profileTitleBar">                          
+        </div>
+        <div class="span12 hide-desktop hide-tablet"><a class="btn-size btn primary" href="/dashboard/">Back to Company Dashboard</a></div>
+        <br>
+        <div class="span12 hide-desktop hide-tablet"><a href="{{microsite_url}}" class="btn-size btn">View Site</a></div>
+        <span class="span6 hide-mobile"><a class="btn primary" href="/dashboard/">Back to Company Dashboard</a><a href="{{microsite_url}}" class="btn">View Site</a></span>
+    </div>
+    <div class="row">
+        <div class="hide-desktop">
+        <br><br>
+        </div>                
+                <div class="span8 pull-left">
+                    <div class="formBox">
+                        <h3>Site Activity</h3>                        
+                            <form action='/dashboard/microsite/' method='POST' id="date-range" class="move-left">
+                            {% csrf_token %}
+                            <div class="hide-mobile">
+                                <div class="span2 form-label"><strong>Date Range:</strong></div><input name="after" type="text" placeholder="{{ after|date:'m/d/Y' }}" class="datepicker"> <strong>to</strong> <input name="before" type="text" placeholder="{{ before|date:'m/d/Y' }}" class="datepicker"></br>
+                                <div class="span2 form-label">&nbsp;</div>
+                            </div>
+                            <div class="activity-mobile">
+                                <input class="btn btn-success" type="hidden" name="first-hide" id="first-hide"> 
+                                <input class="btn" type="submit" name="today" id="today" value="Today">&nbsp;<input class="btn" type="submit" name="seven_days" id="seven_days" value="7 Days">&nbsp;<input class="btn" type="submit" name="thirty_days" id="thirty_days" value="30 days">
+                                <br>
+                                <input type="hidden" name="microsite-hide" value="{{ microsite_url }}">
+                            </div>                          
+                            <div class="span2 pull-right primary-btn-padding hide-mobile"><input type="submit" class="btn primary" value="View Activity"></div>
+                            </form>
+                            <div class="hide-mobile">
+                            <br>
+                            <hr>
+                            </div>
+                                <div class="accordion" id="details-candidate-activity-collapse">
+                                    <div class="accordion-group">
+                                        <div class="accordion-heading details-heading">
+                                            <a class="accordion-toggle" data-toggle="collapse" data-parent="#details-candidate-activity-collapse" 
+                                                href="#candidate-activity-details-table">Saved Searches<span class="pull-right"><i class="icon icon-minus"></i></span></a>
+                                        </div>
+                                        <div id="candidate-activity-details-table" class="accordion-body in collapse">
+                                            <div class="accordion-inner">
+                                            {% if candidates %}                                               
+                                                <table id="row-link-table">                            
+                                                    {% for candidate in candidates %}                    
+                                                    <tr class="hide-mobile">
+                                                        <td>
+                                                        <img src="{{candidate.user.get_gravatar_url}}&s=65" class="gravatar pull-left"> 
+                                                        </td>
+                                                        <td>
+                                                        <div class="candidate-name pull-left">{{candidate.user|get_name_obj}}</div><br>
+                                                        <a href="{{ candidate.user.id }}" class="pull-left">{{candidate.user}}</a><br>
+                                                        <div class="pull-left">{{candidate.url|url_domain}}<br>
+                                                        {{candidate.created_on.date}}</div>
+                                                        </td>
+                                                    <tr>
+                                                    <tr class="candidate-activity-mobile">
+                                                        <td>
+                                                        <img src="{{candidate.user.get_gravatar_url}}&s=45" class="gravatar pull-left"> 
+                                                        </td>
+                                                        <td>
+                                                        <div class="candidate-name pull-left">{{candidate.user|get_name_obj}}</div>
+                                                        <a href="{{ candidate.user.id }}" class="candidate-activity-mobile pull-left">{{candidate.user}}</a>
+                                                        <div class="pull-left">{{candidate.url|url_domain}}<br>
+                                                        {{candidate.created_on.date}}</div>
+                                                        </td>
+                                                    <tr>
+                                                    {% endfor %}                                                    
+                                                 </table>                                                 
+                                                 <div class="pull-left span6">                                                 
+                                                 {% if candidates.has_previous %}
+                                                    <a href="?page={{ candidates.previous_page_number }}&microsite_url={{ microsite_url }}&after={{ after|date:'m/d/Y' }}&before={{ before|date:'m/d/Y' }}">Previous</a>
+                                                 {% else %}
+                                                    &nbsp;
+                                                 {% endif %}
+                                                 &nbsp;
+                                                 Page {{ candidates.number }} of {{ candidates.paginator.num_pages }}
+                                                 &nbsp;
+                                                 {% if candidates.has_next %}
+                                                    <a href="?page={{ candidates.next_page_number }}&microsite_url={{ microsite_url }}&after={{ after|date:'m/d/Y' }}&before={{ before|date:'m/d/Y' }}">Next</a>
+                                                 {% endif %}
+                                                 </div>
+                                             {% else %}
+                                                 <div id="no-activity">
+                                                    <strong>There is no candidate activity between {{after.date}} and {{before.date}} for {{ site_name|cut:"http://" }}</strong>
+                                                 </div>
+                                             {% endif %}
+                                            </div>{# /accordion-inner #}
+                                        </div>{# /-details-table #}
+                                    </div>{# /accordion-group #}
+                                </div>{# /accordion #}                           
+                    </div>{# /formBox #}
+                </div>{# /span8 #}
+                
+            <div class="span4">
+               <div class="hide-desktop hide-tablet"><br></div>            
+    	       <div class="formBox">
+    		      <h3>Details</h3>
+                        <div class="accordion" id="details-activity-collapse">
+                            <div class="accordion-group">
+                                <div class="accordion-heading details-heading">
+                                    <a class="accordion-toggle" data-toggle="collapse" data-parent="#details-activity-collapse" 
+                                        href="#activity-details-table">Job Seeker Activity<span class="pull-right"><i class="icon icon-minus"></i></span></a>
+                                </div>
+                                <div id="activity-details-table" class="accordion-body">
+                                    <div class="accordion-inner">
+                                        <table class="table-bordered activity-table">                                        
+                                        <tr>
+                                            <td>
+                                            <strong class="pull-right">Saved Searches:</strong>
+                                            </td>
+                                            <td>
+                                            {{ saved_search_count }}
+                                            </td>
+                                        </tr>                                        
+                                        </table>
+                                    </div>{# /accordion-inner #}
+                                </div>{# /accordion-body #}
+                            </div>{# /accordion-group #}
+                        </div>{# /accordion #}
+                </div>{# /formBox #}
+            </div>{# /span4 #}               
+    </div>{# /row #}
+</div>{# /wrapper #}
+
+{% endblock %}

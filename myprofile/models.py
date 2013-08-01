@@ -265,8 +265,10 @@ class MilitaryService(ProfileUnits):
                                 verbose_name="Division")
     expertise = models.CharField(max_length=255, blank=True,
                                 verbose_name="Expertise")
-    service_start_date = models.DateField(verbose_name=_("Start Date"))
-    service_end_date = models.DateField(verbose_name=_("End Date"))
+    service_start_date = models.DateField(verbose_name=_("Start Date"), 
+                                null=True, blank=True)
+    service_end_date = models.DateField(verbose_name=_("End Date"),
+                                null=True, blank=True)
     start_rank = models.CharField(max_length=50, blank=True, 
                                 verbose_name=_("Start Rank"))
     end_rank = models.CharField(max_length=50, blank=True, 

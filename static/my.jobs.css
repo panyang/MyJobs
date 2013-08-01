@@ -42,6 +42,10 @@ a:hover{
     max-height: 500px;
     overflow-x: hidden;    
 }
+.activity-mobile input {
+    display: inline;
+    width: 105px;
+}
 
 /* Sort by field in saved search save/edit */
 label[for^='id_sort_by'], label[for^='id_edit_sort_by'] {
@@ -124,7 +128,7 @@ table#row-link-table {
     border: none;
 }
 .move-left {
-    margin-left: -45px;
+    margin-left: -75px;
 }
 .primary-btn-padding {
     padding: 10px;
@@ -135,6 +139,12 @@ table#row-link-table {
 .candidate-name {
     font-size: 1.5em;   
 }
+.microsite-name {
+    font-size: 1.2em;
+    font-weight: bold;
+    padding: 10px;
+    font-family: inherit;
+    }
 #no-activity {    
     background-color: #FFF;
     width: 95%;    
@@ -142,6 +152,25 @@ table#row-link-table {
 }
 .btn + .btn-success {
     color: #FFF !important;  
+}
+.accordion-body {
+    background-color: rgb(250, 250, 250);   
+}
+
+/*Microsite Activity*/
+#header-inline h1, #header-inline h4 {
+    display: inline;      
+}
+.margin-left {
+    padding-left: 18px;
+    padding-right: 5px;    
+}
+.activity-table td {
+    width: 50%;
+}
+.microsite-list {
+   margin-left: 15px;
+   padding: 0px 0px 0px 5px;
 }
 
 /*Ajax Indicator*/
@@ -1095,6 +1124,36 @@ form input[type='checkbox']{
         border: none;
         background-color: transparent;
     }    
+    .margin-left {
+        padding-left: 10px;                
+    }
+    .activity-mobile {
+        margin-left: -10px;
+        padding-top: 10px;
+        margin-bottom: -30px;                
+    }
+    .activity-mobile input {
+        display: inline;
+        width: 105px;
+    }
+    .move-left {
+        margin-left: 0px;
+    }
+    #date-range {
+        position: absolute;
+        margin-top: -115px;
+    }    
+    
+    /* Microsite Activity Page*/
+    #candidate-activity-details-table {
+    overflow-y: auto;
+    height: auto;
+    max-height: 520px;
+    overflow-x: hidden;    
+    }
+    .btn-size {
+        width: 87%;    
+    }    
     
     /*Ajax Indicator*/
     #ajax-busy {
@@ -1355,7 +1414,7 @@ form input[type='checkbox']{
     }
     .show-activity#candidate-page-mobile-view #detail-toggle{
         background-color: #FFF;
-    }
+    }      
     #candidate-page-mobile-view #candidate-page-mobile-toggle{
         width: auto;
         margin: 0 10px;
