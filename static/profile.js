@@ -208,7 +208,7 @@ $(function() {
                         var json = jQuery.parseJSON(data);
 
                         // remove color from labels of current errors
-                        $('[class*=required]').parent().prev().css('color', '#000');
+                        $('[class*=required]').parent().prev().removeClass('error-text');
 
                         // remove current errors
                         $('[class*=required]').children().unwrap();

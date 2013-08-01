@@ -33,7 +33,9 @@ form -- the rest of the form.
                 <div class='span3 form-label pull-left {{field.auto_id}}'>
                     {% add_required_label field %}
                 </div>
-                {{ field|attr:"placeholder:" }}
+                <div class="profile-form-input">
+                    {{ field|attr:"placeholder:" }}
+                </div>
 
             {% elif is_select %}
 
