@@ -84,11 +84,11 @@ $(document).on("click", "button#login", function(e) {
                     jsonErrors(index, json.errors);
                 }
             } else {
-                $location = $(location).attr('href');
-                var next_location = $location.split('=');
+                url = window.location.search
+                var next_location = url.split('=');
                 var location = next_location[1];
                 location = decodeURIComponent(location);
-                if(your_location == undefined){
+                if(location == undefined){
                     window.location = '/profile';
                 }else{
                     window.location = location;
