@@ -413,7 +413,8 @@ class MyJobsViewsTests(TestCase):
         self.user.password_change = True
         self.user.save()
 
-        response = self.client.get(reverse('saved_search_main'))
+        #response = self.client.get(reverse('saved_search_main', kwargs={'user_email':self.user.email}))
+        response = self.client.get(reverse('saved_search_main', args=[self.user.email]))
 
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(response, reverse('edit_account'))
@@ -432,7 +433,7 @@ class MyJobsViewsTests(TestCase):
         self.user = User.objects.get(email=self.user.email)
         self.assertFalse(self.user.password_change)
 
-        response = self.client.get(reverse('saved_search_main'))
+        response = self.client.get(reverse('saved_search_main', args=[self.user.email]))
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'mysearches/saved_search_main.html')

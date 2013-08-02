@@ -45,7 +45,8 @@ class MySearchViewTests(TestCase):
         self.r.restore()
 
     def test_search_main(self):
-        response = self.client.get(reverse('saved_search_main'))
+        response = self.client.get(reverse('saved_search_main',
+                                           args=[self.user.email]))
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'mysearches/saved_search_main.html')
         self.failUnless(isinstance(response.context['form'], forms.DigestForm));
@@ -53,7 +54,8 @@ class MySearchViewTests(TestCase):
                         forms.SavedSearchForm));
 
     def test_save_new_search_form(self):
-        response = self.client.post(reverse('save_search_form'),
+        response = self.client.post(reverse('save_search_form',
+                                            args=[self.user.email]),
                                     data = self.new_form_data,
                                     HTTP_X_REQUESTED_WITH = 'XMLHttpRequest')
         self.assertEqual(response.status_code, 200)
@@ -61,7 +63,8 @@ class MySearchViewTests(TestCase):
 
     def test_save_new_search_invalid(self):
         del self.new_form_data['frequency']
-        response = self.client.post(reverse('save_search_form'),
+        response = self.client.post(reverse('save_search_form',
+                                            args=[self.user.email]),
                                     data = self.new_form_data,
                                     HTTP_X_REQUESTED_WITH = 'XMLHttpRequest')
         self.assertEqual(response.status_code, 200)
@@ -71,8 +74,8 @@ class MySearchViewTests(TestCase):
     def test_get_edit_page(self):
         self.new_form.save()
         search_id = self.new_form.instance.id
-        response = self.client.get(reverse('edit_search', args=[search_id]),
-                                    HTTP_X_REQUESTED_WITH = 'XMLHttpRequest')
+        response = self.client.get(reverse('edit_search',
+                                           args=[self.user.email, search_id]))
         self.assertEqual(response.status_code, 200)
         
         self.assertEqual(self.new_form.instance,
@@ -80,11 +83,9 @@ class MySearchViewTests(TestCase):
         self.assertTemplateUsed(response, 'mysearches/saved_search_edit.html')
 
         search_id += 1
-        response = self.client.get(reverse('edit_search', args=[search_id]),
-                                    HTTP_X_REQUESTED_WITH = 'XMLHttpRequest')
-        self.assertEqual(response.status_code, 302)
-        self.assertEqual(response.get('location'),
-                         'http://testserver' + reverse('saved_search_main'))
+        response = self.client.get(reverse('edit_search',
+                                           args=[self.user.email, search_id]))
+        self.assertEqual(response.status_code, 404)
 
     def test_save_edit_form(self):
         self.new_form.save()
@@ -97,7 +98,8 @@ class MySearchViewTests(TestCase):
 
         new_form = forms.SavedSearchForm(user=self.user,
                                          data=self.new_form_data)
-        response = self.client.post(reverse('save_search_form'),
+        response = self.client.post(reverse('save_search_form',
+                                            args=[self.user.email]),
                                     data = self.new_form_data,
                                     HTTP_X_REQUESTED_WITH = 'XMLHttpRequest')
         self.assertEqual(response.status_code, 200)
@@ -105,14 +107,16 @@ class MySearchViewTests(TestCase):
 
         del self.new_form_data['frequency']
 
-        response = self.client.post(reverse('save_search_form'),
+        response = self.client.post(reverse('save_search_form',
+                                            args=[self.user.email]),
                                     data = self.new_form_data,
                                     HTTP_X_REQUESTED_WITH = 'XMLHttpRequest')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(json.loads(response.content).keys(), ['frequency'])
 
     def test_validate_url(self):
-        response = self.client.post(reverse('validate_url'),
+        response = self.client.post(reverse('validate_url',
+                                            args=[self.user.email]),
                                     data = { 'url': self.new_form_data['url'] },
                                     HTTP_X_REQUESTED_WITH = 'XMLHttpRequest')
         self.assertEqual(response.status_code, 200)
@@ -121,7 +125,8 @@ class MySearchViewTests(TestCase):
                  'url_status': 'valid' }
         self.assertEqual(json.loads(response.content), data)
 
-        response = self.client.post(reverse('validate_url'),
+        response = self.client.post(reverse('validate_url',
+                                            args=[self.user.email]),
                                     data = { 'url': 'google.com' },
                                     HTTP_X_REQUESTED_WITH = 'XMLHttpRequest')
         self.assertEqual(response.status_code, 200)
@@ -129,14 +134,16 @@ class MySearchViewTests(TestCase):
                          { 'url_status': 'not valid' })
 
     def test_save_digest_form(self):
-        response = self.client.post(reverse('save_digest_form'),
+        response = self.client.post(reverse('save_digest_form',
+                                            args=[self.user.email]),
                                     self.new_digest_data,
                                     HTTP_X_REQUESTED_WITH = 'XMLHttpRequest')
         self.assertEqual(response.status_code, 200)
         self.assertEqual(response.content, 'success')
 
         del self.new_digest_data['email']
-        response = self.client.post(reverse('save_digest_form'),
+        response = self.client.post(reverse('save_digest_form',
+                                            args=[self.user.email]),
                                     self.new_digest_data,
                                     HTTP_X_REQUESTED_WITH = 'XMLHttpRequest')
         self.assertEqual(response.status_code, 200)
@@ -151,7 +158,7 @@ class MySearchViewTests(TestCase):
         self.assertTrue(search.is_active)
 
         response = self.client.get(reverse('unsubscribe',
-                                           kwargs={'search_id':search.id}))
+                                           args=[self.user.email, search.id]))
         search = models.SavedSearch.objects.get(id=search.id)
         self.assertFalse(search.is_active)
         self.assertTemplateUsed(response,
@@ -166,9 +173,10 @@ class MySearchViewTests(TestCase):
         search = SavedSearchFactory(user=user)
 
         response = self.client.get(reverse('unsubscribe',
-                                           kwargs={'search_id':search.id}))
+                                           args=[self.user.email, search.id]))
         search = models.SavedSearch.objects.get(id=search.id)
         self.assertTrue(search.is_active)
+        self.assertEqual(response.status_code, 404)
 
     def test_unsubscribe_digest(self):
         """
@@ -184,20 +192,23 @@ class MySearchViewTests(TestCase):
             self.assertTrue(search.is_active)
 
         response = self.client.get(reverse('unsubscribe',
-                                           kwargs={'search_id':'digest'}))
+                                           args=[self.user.email, 'digest']))
         searches = list(models.SavedSearch.objects.all())
         for search in searches:
             self.assertFalse(search.is_active)
         self.assertTemplateUsed(response,
                                 'mysearches/saved_search_disable.html')
+        self.assertEqual(response.status_code, 200)
 
     def test_delete_owned_search(self):
         search = SavedSearchFactory(user=self.user)
         self.assertEqual(models.SavedSearch.objects.count(), 1)
 
         response = self.client.get(reverse('delete_saved_search',
-                                           kwargs={'search_id':search.id}))
+                                           args=[self.user.email, search.id]))
         self.assertEqual(models.SavedSearch.objects.count(), 0)
+        self.assertRedirects(response, reverse('saved_search_main',
+                                               args=[self.user.email]))
 
     def test_delete_unowned_search(self):
         """
@@ -208,8 +219,9 @@ class MySearchViewTests(TestCase):
         search = SavedSearchFactory(user=user)
 
         response = self.client.get(reverse('delete_saved_search',
-                                           kwargs={'search_id':search.id}))
+                                           args=[self.user.email, search.id]))
         self.assertEqual(models.SavedSearch.objects.count(), 1)
+        self.assertEqual(response.status_code, 404)
 
     def test_delete_owned_searches_by_digest(self):
         """
@@ -224,5 +236,7 @@ class MySearchViewTests(TestCase):
         self.assertEqual(models.SavedSearch.objects.count(), 2)
 
         response = self.client.get(reverse('delete_saved_search',
-                                           kwargs={'search_id':'digest'}))
+                                           args={self.user.email, 'digest'}))
         self.assertEqual(models.SavedSearch.objects.count(), 0)
+        self.assertRedirects(response, reverse('saved_search_main',
+                                               args=[self.user.email]))

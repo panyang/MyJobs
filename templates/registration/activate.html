@@ -39,7 +39,7 @@ Used to check if registration was successful.
                             <td><a href="{% url 'view_profile' %}">Add to your profile</a></td>
                         </tr>
                         <tr class="profile-section">
-                            <td><a href="{% url 'saved_search_main' %}">Manage your saved searches</a></td>
+                            <td><a href="{% url 'saved_search_main' user.email %}">Manage your saved searches</a></td>
                         </tr>
                         <tr class="profile-section">
                             <td><a href="{% url 'edit_account' %}">Manage your account</a></td>

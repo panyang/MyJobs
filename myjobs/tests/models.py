@@ -87,22 +87,24 @@ class UserManagerTests(TestCase):
         """
         client = TestClient()
         user = UserFactory()
-        
-        #Anonymous user
-        resp = client.get(reverse('saved_search_main'))
-        self.assertRedirects(resp, "http://testserver/?next=/saved-search/")
+        quoted_email = urllib.quote(user.email)
 
+        #Anonymous user
+        resp = client.get(reverse('saved_search_main', args=[user.email]))
+        self.assertRedirects(resp, "http://testserver/?next=/%s/saved-search/"
+                             % (quoted_email,))
 
         # Active user
         client.login_user(user)
-        resp = client.get(reverse('saved_search_main'))
+        resp = client.get(reverse('saved_search_main', args=[user.email]))
         self.assertTrue(resp.status_code, 200)
 
         # Inactive user
         user.is_active = False
-        user.save()        
-        resp = client.get(reverse('saved_search_main'))
-        self.assertRedirects(resp, "http://testserver/?next=/saved-search/")
+        user.save()
+        resp = client.get(reverse('saved_search_main', args=[user.email]))
+        self.assertRedirects(resp, "http://testserver/?next=/%s/saved-search/"
+                             % (quoted_email,))
 
     def test_group_status(self):
         """

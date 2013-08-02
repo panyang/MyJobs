@@ -59,7 +59,7 @@
 
                                     {% if user.is_active %}
 
-                                    <li class="active"><a href="{% url 'saved_search_main' %}">{% trans "Saved Searches" %}</a></li>
+                                    <li class="active"><a href="{% url 'saved_search_main' user.email %}">{% trans "Saved Searches" %}</a></li>
 
                                     {% endif %}
                                     {% if group_member and user.is_active and company_name|length >= 1%}
@@ -88,7 +88,7 @@
                                     {% if user.is_active and user.is_active %}
 
 
-                                    <li class=""><a href="{% url 'saved_search_main' %}">{% trans "Saved Searches" %}</a></li>
+                                    <li class=""><a href="{% url 'saved_search_main' user.email %}">{% trans "Saved Searches" %}</a></li>
 
                                     {% endif %}
                                     {% if group_member and user.is_active and company_name|length >= 1%}
@@ -116,7 +116,7 @@
 
                                     {% if user.is_active %}
 
-                                    <li class=""><a href="{% url 'saved_search_main' %}">{% trans "Saved Searches" %}</a></li>
+                                    <li class=""><a href="{% url 'saved_search_main' user.email %}">{% trans "Saved Searches" %}</a></li>
 
                                     {% endif %}
                                     {% if group_member and user.is_active and company_name|length >= 1%}
@@ -144,7 +144,7 @@
 
                                     {% if user.is_active %}
 
-                                    <li class=""><a href="{% url 'saved_search_main' %}">{% trans "Saved Searches" %}</a></li>
+                                    <li class=""><a href="{% url 'saved_search_main' user.email %}">{% trans "Saved Searches" %}</a></li>
 
                                     {% endif %}
 
@@ -199,7 +199,7 @@
                                             <li><a id="profile_link" href="{% url 'view_profile' %}">{% trans "My Profile" %}</a></li>
                                                 {% if user.is_active %}
 
-                                                <li><a id="savedsearch_link" href="{% url 'saved_search_main' %}">{% trans "Saved Searches" %}</a></li>
+                                                <li><a id="savedsearch_link" href="{% url 'saved_search_main' user.email %}">{% trans "Saved Searches" %}</a></li>
 
                                                     {% if group_member and user.is_active and company_name|length >= 1%}
 

@@ -22,7 +22,7 @@ easier and faster
                 </tr>
                 {% if user.is_authenticated %}
                 	<tr class="profile-section">
-                    	<td><a href="{% url 'saved_search_main' %}">Saved Search</a></td>
+                    	<td><a href="{% url 'saved_search_main' user.email %}">Saved Search</a></td>
                 	</tr>
                 	{% is_a_group_member user "Employer" as group_member %}
                 	{% if group_member and user.is_active %}
