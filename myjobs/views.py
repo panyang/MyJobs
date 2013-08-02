@@ -83,7 +83,7 @@ def home(request):
                  'education_form': education_form}
 
     if request.method == "POST":
-        if request.POST['action'] == "register":
+        if request.POST.get('action') == "register":
             registrationform = RegistrationForm(request.POST, auto_id=False)
             if registrationform.is_valid():
                 new_user, created = User.objects.create_inactive_user(**registrationform.
@@ -100,15 +100,23 @@ def home(request):
             else:
                 return HttpResponse(json.dumps({'errors': registrationform.errors.items()}))
 
-        elif request.POST['action'] == "login":
+        elif request.POST.get('action') == "login":
             loginform = CustomAuthForm(data=request.POST)
             if loginform.is_valid():
                 expire_login(request, loginform.get_user())
-                return HttpResponse('valid')
+
+                url = request.environ.get('HTTP_REFERER')
+                location = url.split('=')
+                try:
+                    location = urllib2.unquote(location[1])
+                except:
+                    location = 'undefined'
+                response_data = {'validation':'valid', 'url': location}
+                return HttpResponse(json.dumps(response_data))
             else:
                 return HttpResponse(json.dumps({'errors': loginform.errors.items()}))
 
-        elif request.POST['action'] == "save_profile":
+        elif request.POST.get('action') == "save_profile":
             name_form = InitialNameForm(request.POST, prefix="name", user=request.user)
             education_form = InitialEducationForm(request.POST, prefix="edu", user=request.user)
             phone_form = InitialPhoneForm(request.POST, prefix="ph", user=request.user)
