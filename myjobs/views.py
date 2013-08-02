@@ -104,10 +104,9 @@ def home(request):
             loginform = CustomAuthForm(data=request.POST)
             if loginform.is_valid():
                 expire_login(request, loginform.get_user())
-
-                url = request.environ.get('HTTP_REFERER')
-                location = url.split('=')
                 try:
+                    url = request.environ.get('HTTP_REFERER')
+                    location = url.split('=')
                     location = urllib2.unquote(location[1])
                 except:
                     location = 'undefined'
