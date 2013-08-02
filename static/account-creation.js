@@ -84,7 +84,15 @@ $(document).on("click", "button#login", function(e) {
                     jsonErrors(index, json.errors);
                 }
             } else {
-                window.location = '/profile';
+                $location = $(location).attr('href');
+                var next_location = $location.split('=');
+                var your_location = next_location[1];
+                your_location = decodeURIComponent(your_location);
+                if(your_location == undefined){
+                    window.location = '/profile';
+                }else{
+                    window.location = your_location;
+                }           
             }
         }
     });
