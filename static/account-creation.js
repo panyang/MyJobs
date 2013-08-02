@@ -87,7 +87,7 @@ $(document).on("click", "button#login", function(e) {
                 $location = $(location).attr('href');
                 var next_location = $location.split('=');
                 var location = next_location[1];
-                location = decodeURIComponent(your_location);
+                location = decodeURIComponent(location);
                 if(your_location == undefined){
                     window.location = '/profile';
                 }else{
