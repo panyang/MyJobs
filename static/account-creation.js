@@ -86,12 +86,12 @@ $(document).on("click", "button#login", function(e) {
             } else {
                 $location = $(location).attr('href');
                 var next_location = $location.split('=');
-                var your_location = next_location[1];
-                your_location = decodeURIComponent(your_location);
+                var location = next_location[1];
+                location = decodeURIComponent(your_location);
                 if(your_location == undefined){
                     window.location = '/profile';
                 }else{
-                    window.location = your_location;
+                    window.location = location;
                 }           
             }
         }
