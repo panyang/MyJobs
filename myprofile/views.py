@@ -43,7 +43,7 @@ def edit_profile(request):
         verbose = model._meta.verbose_name
 
         x= []
-        module_config = {}
+        module_config = {} 
         module_units = units.filter(content_type__name=verbose)
 
         module_config['verbose'] = verbose.title()
@@ -100,7 +100,15 @@ def handle_form(request):
         model = form_instance._meta.model
         data_dict['form'] = form_instance
         data_dict['verbose'] = model._meta.verbose_name.title()
+        
+	u = request.user
+	model_name = model._meta.verbose_name.lower()
         if form_instance.is_valid():
+            # Profile completion % should only increase if you're deleting the last instance of a counted module.
+            if (model_name in settings.PROFILE_COMPLETION_MODULES and
+                len(u.profileunits_set.filter(content_type__name=model_name)) == 0):
+                u.profile_completion = u.profile_completion + (100/len(settings.PROFILE_COMPLETION_MODULES))
+                u.save()
             form_instance.save()
             if request.is_ajax():
                 return HttpResponse(status=200)
@@ -130,8 +138,15 @@ def handle_form(request):
 
 @user_passes_test(User.objects.not_disabled)
 def delete_item(request, item_id):
+    u = request.user
+    model_name = u.profileunits_set.get(id=item_id).get_verbose().lower()
+    # Profile completion % should only decrease if you're deleting the last instance of a counted module.
+    if (model_name in settings.PROFILE_COMPLETION_MODULES and
+       len(u.profileunits_set.filter(content_type__name=model_name)) == 1):
+        u.profile_completion = u.profile_completion - (100/len(settings.PROFILE_COMPLETION_MODULES))
+        u.save()
     try:
-        request.user.profileunits_set.get(id=item_id).delete()
+        u.profileunits_set.get(id=item_id).delete()
     except ProfileUnits.DoesNotExist:
         pass
     return HttpResponseRedirect(reverse('view_profile'))
