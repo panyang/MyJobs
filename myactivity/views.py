@@ -62,6 +62,12 @@ def activity_search_feed(request):
 
 @user_passes_test(lambda u: User.objects.is_group_member(u, 'Employer'))
 def candidate_information(request, user_id):
+    """
+    Sends user info, primary name, and searches to candidate_information.html.
+    Gathers the employer's (request.user) companies and microsites and puts 
+    the microsites' domains in a list for further checking and logic, 
+    see helpers.py.
+    """
     # gets returned with response to request
     data_dict = {}
     models = {}
@@ -73,31 +79,31 @@ def candidate_information(request, user_id):
     except User.DoesNotExist:
         raise Http404
 
-    if employer_can_view_candidate(request.user, user):
-
-        if user.opt_in_employers:
-            units = ProfileUnits.objects.filter(user=user)
-
-            for unit in units:
-                if unit.__getattribute__(unit.get_model_name()).is_displayed():
-                    models.setdefault(unit.get_model_name(), []).append(
-                    unit.__getattribute__(unit.get_model_name()))
-
-            # if Name ProfileUnit exsists
-            if models.get('name'):
-                name=models['name'][0]
-                del models['name']
-
-            searches = SavedSearch.objects.filter(user=user)
-    
-            data_dict = {'user_info': models,
-                        'primary_name': name,
-                        'the_user': user,
-                        'searches': searches}
-        else:
-            raise Http404
-    else:
+    urls = saved_searches(request.user, user)
+    if not urls:
         raise Http404
+
+    if not user.opt_in_employers:
+        raise Http404
+
+    units = ProfileUnits.objects.filter(user=user)
+
+    for unit in units:
+        if unit.__getattribute__(unit.get_model_name()).is_displayed():
+            models.setdefault(unit.get_model_name(), []).append(
+            unit.__getattribute__(unit.get_model_name()))
+
+    # if Name ProfileUnit exsists
+    if models.get('name'):
+        name=models['name'][0]
+        models.pop('name')
+
+    searches = user.savedsearch_set.filter(url__in=urls)
+
+    data_dict = {'user_info': models,
+                'primary_name': name,
+                'the_user': user,
+                'searches': searches}
 
     return render_to_response('myactivity/candidate_information.html', data_dict,
                             RequestContext(request))

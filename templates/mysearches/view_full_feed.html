@@ -6,8 +6,6 @@
 {% load label_tags %}
 {% block meta-extra %}
 <script src="{{ STATIC_URL }}pager.js{% cache_buster %}"></script>
-<script src="{{ STATIC_URL }}saved-search-main-ready.js{% cache_buster %}"></script>
-<script src="{{ STATIC_URL }}saved-search-main.js{% cache_buster %}"></script>
 {% endblock %}
 
 {% block content %}
@@ -30,13 +28,26 @@
             <div>
                 <b>{% trans 'Frequency:' %}</b>
                 <div class="clear"></div>
+
                 {% if search.frequency == 'D' %}
-                    <b>Daily</b>
+
+                Daily
+
                 {% elif search.frequency == 'W' %}
-                    <b>Weekly</b> on {{search.get_verbose_dow}}
+
+                Weekly on {{search.get_verbose_dow}}
+
                 {% else %}
-                    <b>Monthly</b> on the {{search.day_of_month|ordinal}}
+
+                Monthly on the {{search.day_of_month|ordinal}}
+
                 {% endif %}
+
+            </div>
+            <div>
+                <b>{% trans 'Sort By:' %}</b>
+                <div class='clear'></div>
+                {{search.sort_by}}
             </div>
 
             <div>
@@ -51,12 +62,23 @@
                 {{search.email}}
             </div>
 
+            <div>
+                <b>{% trans 'Notes:' %}</b>
+                <div class="clear"></div>
+
+                {% if search.notes %}
+                {{ search.notes }}
+                {% else %}
+                None Provided
+                {% endif %}
+            </div>
+
             <div class="pull-right">
-                <a href="{{ search.id }}" class="btn edit">Edit</a>
+                <a href="{% url 'edit_search' search.id %}" class="btn edit">Edit</a>
                 <a onclick="history.go(-1); return true;" class="btn">Back</a>
             </div>
             <div class="clear"></div>
-        </div>
+        </div>{# /saved-search-listing-details #}
     </div>
     <div class="span8 feed-page">
         <script type="text/javascript">
@@ -88,7 +110,7 @@
                 {% endif %}
             </tbody>
         </table>
-    </div>
+    </div>{# /feed-page #}
 </div>
 {% csrf_token %}
 <div id="edit_modal" class="modal hide fade row">

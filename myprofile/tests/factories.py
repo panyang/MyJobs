@@ -82,3 +82,16 @@ class EmploymentHistoryFactory(factory.Factory):
     start_date = datetime.date(2005, 3, 4)
     current_indicator = True
     user = factory.SubFactory(UserFactory)
+
+
+class MilitaryServiceFactory(factory.Factory):
+    FACTORY_FOR = MilitaryService
+
+    country_code = "USA"
+    branch = "Navy"
+    department = "CVN"
+    division = "Engineering"
+    expertise = "Tech"
+    service_start_date = datetime.date(2005, 1, 2)
+    service_end_date = datetime.date(2007, 1, 2)
+    end_rank = "E-7"

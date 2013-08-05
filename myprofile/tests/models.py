@@ -210,3 +210,11 @@ class MyProfileTests(TestCase):
         self.assertEqual(ActivationProfile.objects.count(), 1)
         secondary_email.delete()
         self.assertEqual(ActivationProfile.objects.count(), 0)
+
+    def test_add_military_service(self):
+        military_service = MilitaryServiceFactory(user=self.user)
+        military_service.save()
+
+        ms_object = ProfileUnits.objects.filter(
+                            content_type__name="military service").count()
+        self.assertEqual(ms_object, 1)

@@ -2,62 +2,129 @@ $(function() {
     if ($('#moduleBank').find('tr:visible').length == 0) {
         $('#moduleBank').hide();
     }
-        
+    setTimeout(add_date_button, 1);
+
     var AppView = Backbone.View.extend({
         el: $("body"),
 
         events: {
-            // targets event fired when buttons within #moduleBank are clicked
-            "click [id$='section']": "editForm",
-
-            // targets event fired when "Add Another" buttons in each module
-            // section are clicked
-            "click [id$='add']": "editForm",
-
-            // targets "Edit" buttons for individual modules
-            "click [id$='edit']": "editForm",
-
-            // targets event fired when a modal is hidden
-            "hidden [id$='modal']": "cancelForm",
-
-            // targets "Save" button  in the modal window
+            // targets "Save" button in profile unit forms
             "click [id$='save']": "saveForm",
 
-            // targets email reactivation link in SecondaryEmail window
+            // targets email reactivation link in SecondaryEmail form
             "click [id$='updateEmail']": "updateEmail",
-
-            // targets "Delete" button on confirmation modal
-            "click [id$='delete']": "deleteItem",
-
-            // targets delete buttons not on confirmation modal
-            "click [id$='confirm']": "confirmDelete",
-
-            // targets "View" button for each item
-            "click [id$='view']": "viewDetails",
 
             // targets calendar buttons for each DateField
             "click [class$='calendar']": "datepickerButton",
 
             // targets "I still work here" checkbox in Employment History
-            "click [id='id_employmenthistory-current_indicator']": "hideEndDate",
+            "click #id_employmenthistory-current_indicator": "hideEndDate",
+
+            "change [id='id_militaryservice-country_code']": 'auto_complete_rankings',
         },
 
         /*
         Hides the end date if the "I still work here" checkbox is checked
         */
         hideEndDate: function() {
-            if(($("[id='id_employmenthistory-current_indicator']").is(":checked"))) {
-                $("[id='id_employmenthistory-end_date']").hide();
-                $("[for='id_employmenthistory-end_date']").hide();
+            var label = $('[for="id_employmenthistory-end_date"]');
+            var input = $('#id_employmenthistory-end_date');
+
+            /*
+            Visibility status should be the inverse of this element's
+            checked status
+            */
+            var no_show = $('#id_employmenthistory-current_indicator')
+            no_show = no_show.is(':not(:checked)')
+
+            label.closest('div').toggle(no_show)
+            input.closest('div').toggle(no_show)
+        },
+
+        auto_complete_rankings: function(){
+            var usTags = [
+                'E-1',
+                'E-2',
+                'E-3',
+                'E-4',
+                'E-5',
+                'E-6',
+                'E-7',
+                'E-8',
+                'E-9',
+                'E-10',
+                'W-1',
+                'W-2',
+                'W-3',
+                'W-4',
+                'W-5',
+                'O-1',
+                'O-2',
+                'O-3',
+                'O-4',
+                'O-5',
+                'O-6',
+                'O-7',
+                'O-8',
+                'O-9',
+                'O-10',
+            ];
+            var natoTags = [
+                'OR-1',
+                'OR-2',
+                'OR-3',
+                'OR-4',
+                'OR-5',
+                'OR-6',
+                'OR-7',
+                'OR-8',
+                'OR-9',
+                'OF-1',
+                'OF-2',
+                'OF-3',
+                'OF-4',
+                'OF-5',
+                'OF-6',
+                'OF-7',
+                'OF-8',
+                'OF-9',
+                'OF-10',
+            ];
+            var defBranches = [
+                'Army',
+                'Navy',
+                'Air Force',
+            ]
+            var usBranches = [
+                'Army',
+                'Navy',
+                'Air Force',
+                'Marine Corps',
+                'Coast Guard',
+            ]
+            chosenCountry = $('#id_militaryservice-country_code').val();
+            if(chosenCountry == 'USA'){
+                var rankTagGroup = usTags;
+                var branches = usBranches;
+            }else{
+                var rankTagGroup = natoTags;
+                var branches = defBranches;
             }
-            else {
-                $("[id='id_employmenthistory-end_date']").show();
-                $("[for='id_employmenthistory-end_date']").show();
-            }
+
+            $('#id_militaryservice-branch').autocomplete({
+                source: branches
+            });
+            $('#id_militaryservice-start_rank').autocomplete({
+                source: rankTagGroup
+            });
+            $('#id_militaryservice-end_rank').autocomplete({
+                source: rankTagGroup
+            });
         },
 
         /*
-        Shows the datepicker that is already connected DateField in profile modals
+        Toggles the state of a datepicker widget that is associated
+        with a form input
         */
         datepickerButton: function(e) {
             e.stopPropagation();    
@@ -72,117 +139,31 @@ $(function() {
         },
 
         /*
-        Returns document to the state it was in prior to opening the most 
-        recent modal. Called when a modal is hidden
-
-        :e: modal window
-        */
-        cancelForm: function(e) {
-            e.preventDefault();
-
-            var target = $(e.target).find('a[id$="cancel"]');
-
-            // this file may be included in a location whose structure does not
-            // support this event. If it does not, return immediately.
-            try {
-                // id is formatted [module_type]-[item_id]-[event]
-                var module = target.attr('id').split('-')[0];
-                var item_id = target.attr('id').split('-')[1];
-            } catch(e) {
-                return;
-            }
-            if (!$('[id$="modal"]:visible').length) {
-                // All modals are hidden; Remove them
-                $('[id$="modal"]').remove();
-            }
-
-            manageModuleDisplay(module);
-        },
-
-        /*
-        Retrieves the desired form via AJAX, adds the modal form to the
-        document, and displays the form
-
-        :e: "Add Another" button for the current module section
-             or "Edit" button associated with the item to be edited
-        */
-        editForm: function(e) {
-            e.preventDefault();
-
-            // id is formatted [module_type]-[item_id]-[event]
-            var module = $(e.target).attr('id').split("-")[0];
-            var id = $(e.target).attr('id').split("-")[1];
-            var item;
-            if (id == 'new') {
-                $(e.target).parents('.profile-section').hide();
-                if ($('#moduleBank').find('tr:visible').length == 0) {
-                    $('#moduleBank').hide();
-                }
-            } else {
-                // targets the table row containing the item to be edited
-                item = $('#'+module+'-'+id+'-item');
-            } 
-
-            if ($('#edit_modal').length == 0) {
-                $.ajax({
-                    url: '/profile/form/',
-                    data: {'module':module, 'id':id},
-                    success: function(data) {
-                        $('#moduleColumn').append(data);
-                        // Prevents end date from showing up if "I still work here" is checked
-                        if(($("[id='id_employmenthistory-current_indicator']").is(":checked"))) {
-                            $("[id='id_employmenthistory-end_date']").hide();
-                            $("[for='id_employmenthistory-end_date']").hide();
-                        }
-                        $('#edit_modal').modal();
-                        $('input[id$="date"]').datepicker({dateFormat: window.dateFormat,
-                                                           constrainInput: false});
-                        add_date_button($('#edit_modal'));
-                    }
-                });            
-            } else {
-                $('#edit_modal').modal();
-            }
-        },
-
-        /*
         Resends activation link
 
-        :e: "Resend my activation email" link within SecondaryEmail modal
+        :e: "Resend my activation email" link
         */
         updateEmail: function(e) {
             e.preventDefault();
 
-            // id is formatted [module_type]-[item_id]-[event]
-            var module =  $(e.target).attr('id').split('-')[0];
-            var item_id = $(e.target).attr('id').split('-')[1];
+            var form = $('#profile-unit-form');
 
-            // targets the form contained in the modal window
-            var form = $('#edit_modal form');
-
-            // targets the item table in the current module section
-            var table = $('#'+module+'_items').children('table')
-
-            csrf_token_tag = document.getElementsByName('csrfmiddlewaretoken')[0];
-            var csrf_token = "";
-            if(typeof(csrf_token_tag)!='undefined'){
-                csrf_token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
-            }
-
-            first_instance=0;
-            if(typeof(table.attr("class"))=="undefined"){
-                first_instance = 1;
-            }
             var serialized_data = form.serialize();
-            serialized_data += '&module=' + module + '&id=' + item_id +
-                               '&first_instance=' + first_instance +
-                               '&csrfmiddlewaretoken=' + csrf_token + '&action=updateEmail';
+
+            // This page was accessed via GET; pass parameters along
+            var get_data = window.location.search
+            if (get_data.length) {
+                get_data = '&' + get_data.substr(1);
+            }
+            serialized_data += get_data;
+            serialized_data += '&action=updateEmail';
+
             $.ajax({
                 type: 'POST',
-                url: '/profile/form/',
+                url: '/profile/edit/',
                 data: serialized_data,
                 success: function(data) {
-                     $(".modal-body").prepend("<div class='alert alert-success'>Activation email resent to " + $("[name='email']").val() + "</div>");
+                     $("#activation_notification").replaceWith("<div class='alert alert-success'>Activation email resent to " + $("[name='email']").val() + "</div>");
                 }
             });
         },
@@ -191,7 +172,7 @@ $(function() {
         /*
         Saves both new and edited modules
 
-        :e: "Save" button within a modal
+        :e: "Save" button on profile unit forms
         */
         saveForm: function(e) {
             /*  
@@ -202,53 +183,26 @@ $(function() {
 
             e.preventDefault();
 
-            // id is formatted [module_type]-[item_id]-[event]
-            var module =  $(e.target).attr('id').split('-')[0];
-            var item_id = $(e.target).attr('id').split('-')[1];
+            var form = $('#profile-unit-form');
 
-            // targets the form contained in the modal window
-            var form = $('#edit_modal form');
-
-            // targets the item table in the current module section
-            var table = $('#'+module+'_items').children('table')
-
-            csrf_token_tag = document.getElementsByName('csrfmiddlewaretoken')[0];
-            var csrf_token = "";
-            if(typeof(csrf_token_tag)!='undefined'){
-                csrf_token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
-            }
-
-            first_instance=0;
-            if(typeof(table.attr("class"))=="undefined"){
-                first_instance = 1;
-            }
             var serialized_data = form.serialize();
-            serialized_data += '&module=' + module + '&id=' + item_id +
-                               '&first_instance=' + first_instance +
-                               '&csrfmiddlewaretoken=' + csrf_token;
+            // Page was likely requested via GET - all GET parameters
+            // should be passed along with POST request
+            var get_data = window.location.search
+            if (get_data.length) {
+                get_data = '&' + get_data.substr(1);
+            }
+            serialized_data += get_data;
+
             $.ajax({
                 type: 'POST',
-                url: '/profile/form/',
+                url: '/profile/edit/',
                 data: serialized_data,
-                success: function(data) {
-                    if (data.indexOf('<td') >= 0) {
-                        // form was valid
-                        if ($('#'+module+'_items').length < 1) {
-                            $('#moduleColumn').append(data);
-                        } else {
-                            $('#'+module+'-'+item_id+'-item').remove();
-                            if (first_instance) {
-                                $('#'+module+'_items').children('h4').after(
-                                    '<table class="table table-bordered table-striped"></table>'
-                                );
-                                table = $('#'+module+'_items').children('table');
-                                table.append(data);
-                            }
-                            else {
-                                table.children("tbody").append(data);
-                            }
+                success: function(data, status) {
+                    if (data == '') {
+                        if (status != 'prevent-redirect') {
+                            window.location = '/profile/';
                         }
-                        $('[id$="modal"]').modal('hide');
                     } else {
                         // form was a json-encoded list of errors and error messages
                         var json = jQuery.parseJSON(data);
@@ -263,103 +217,24 @@ $(function() {
                             $('[class*=msieError]').remove()
                         }
 
-                        for (var index in json.errors) {
-                            var $error = $('[id$="-'+json.errors[index][0]+'"]');
+                        for (var index in json) {
+                            var $error = $('[id$="-'+index+'"]');
                             var $labelOfError = $error.parent().prev();
+
                             // insert new errors after the relevant inputs
                             $error.wrap('<span class="required" />');
-                            if(!($.browser.msie)){
-                                $error.attr("placeholder",json.errors[index][1]);
-                            }else{
-                                field = $error.parent().parent().prev();
-                                field.before("<div class='msieError'><i>" + json.errors[index][1] + "</i></div>");
-                            }
+                            $error.attr("placeholder",json[index][0]);
+                            $error.val('')
                             $labelOfError.css('color', '#900');
                         }
                     }
                 }
             });
         },
-
-        /*
-        Deletes the specified item
-
-        :e: "Delete" button within the delete confirmation modal
-        */
-        deleteItem: function(e) {
-            e.preventDefault();
-
-            csrf_token_tag = document.getElementsByName('csrfmiddlewaretoken')[0];
-            var csrf_token = "";
-            if(typeof(csrf_token_tag)!='undefined'){
-                csrf_token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
-            }
-
-            // id is formatted [module_type]-[item_id]-delete
-            var module = $(e.target).attr('id').split("-")[0];
-            var id = $(e.target).attr('id').split("-")[1];
-
-            // targets the table row containing the item to be deleted
-            var item = $('#'+module+'-'+id+'-item');
-
-            $.ajax({
-                type: 'POST',
-                url: '/profile/delete/',
-                data: {'module':module, 'id':id, csrfmiddlewaretoken: csrf_token},
-                success: function(data) {
-                    $('[id$="modal"]').modal('hide').remove();
-                    item.remove();
-                    manageModuleDisplay(module);
-                }
-            });
-        },
-
-        viewDetails: function(e) {
-            e.preventDefault();
-
-            // id is formatted [module_type]-[item_id]-view
-            var module = $(e.target).attr('id').split('-')[0];
-            var id = $(e.target).attr('id').split('-')[1];
-
-            $.ajax({
-                url: '/profile/details/',
-                data: {'module': module, 'id': id},
-                success: function(data) {
-                    $(e.target).parents('table').after(data);
-                    var target = $('#detail_modal');
-                    target.modal();
-                }
-            });
-        },
-
-        /*
-        Shows a confirmation message to determine if user really wants
-        to delete the specified item
-
-        :e: "Delete" button within item details modal
-        */
-        confirmDelete: function(e) {
-            e.preventDefault();
-            $('#confirm_modal').modal();
-        },
     });
 
     var App = new AppView;
 });
-
-function manageModuleDisplay(module) {
-    var target = $('#'+module+'_items');
-    if (target.find('table tr').length <= 1) {
-        // The last item in a module section was deleted or the add operation was canceled
-
-        // Remove the empty section
-        target.remove();
-
-        // Re-show the button within the moduleBank table and display the moduleBank
-        $('#'+module+'-new-section').parents('.profile-section').show();
-        $("#moduleBank").show();
-    }
-};
 
 /*
 Adds a button to the right (after) of a field that has date 
@@ -368,9 +243,9 @@ somewhere in it's ID.
 .icon-search is a bootstrap function that searches a large 'sprite'
 and puts up css for backposition. Called glyphicons.
 */
-function add_date_button(modal) {
-    modal.find('[class="hasDatepicker"]').parent().addClass('input-append');
-    modal.find('[class="hasDatepicker"]').after('<span class="btn add-on calendar"><i class="icon-search icon-calendar"></i></span>');
+function add_date_button() {
+    $('[class="hasDatepicker"]').parent().addClass('input-append');
+    $('[class="hasDatepicker"]').after('<span class="btn add-on calendar"><i class="icon-search icon-calendar"></i></span>');
 }
 
 $(document).ready(function() {
@@ -412,5 +287,3 @@ $(document).ready(function() {
         });
     }
 });
-
-

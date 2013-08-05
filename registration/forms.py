@@ -26,6 +26,10 @@ class CustomAuthForm(AuthenticationForm):
                                           'id':'id_password'},
                                    render_value=False,))
 
+    remember_me = forms.BooleanField(label=_('Keep me logged in for 2 weeks'), required=False,
+                                     widget=forms.CheckboxInput(
+                                         attrs={'id':'id_remember_me'}))
+
     def __init__(self, request=None, *args, **kwargs):
         super(CustomAuthForm, self).__init__(request, *args, **kwargs)
 

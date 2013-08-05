@@ -1,3 +1,7 @@
+from datetime import timedelta
+
+from django.contrib import auth
+
 from myprofile.forms import *
 
 
@@ -25,3 +29,17 @@ def instantiate_profile_forms(request, form_classes, settings, post=False):
         else:
             profile_instances.append(form_class(**settings))
     return profile_instances
+
+def expire_login(request, *args, **kwargs):
+    """
+    Wrapper for django.contrib.auth.login that sets the session expiration
+    based on the presence/absence of POST data
+    """
+    if request.method == 'POST':
+        if request.POST.get('remember_me', None) is not None:
+            # Session expires in 2 weeks (default)
+            request.session.set_expiry(None)
+        else:
+            # Session expires in 900 seconds (5 mins)
+            request.session.set_expiry(900)
+    return auth.login(request, *args, **kwargs)

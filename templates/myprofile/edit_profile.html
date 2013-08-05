@@ -31,15 +31,17 @@
             <img src="{{user.get_gravatar_url}}&s=140">
         </div>
         <div class="span10" id="profileTitleBar">
+
             {% with name_obj=user|get_name_obj %}
-                <h1>{% if name_obj %}{{name_obj}}{%else%}&nbsp;{%endif%}</h1>
+            <h1>{% if name_obj %}{{name_obj}}{%else%}&nbsp;{%endif%}</h1>
             {% endwith %}
+
             <h3>{{user.email}}</h3>
         </div>
         <div class="span10" id="profileSubtitleBar">
             <a href="{% url 'edit_account' %}">{% trans "Account Settings" %}</a>
         </div>
-    </div>
+    </div>{# /profileTitleRow #}
     <div class="row">
         <div class="span8" id="moduleColumn">
             {% csrf_token %}
@@ -56,15 +58,15 @@
                 <table class="table table-bordered tables-striped">
                 {% for module in profile_config %}
                 <tr class="profile-section" {% if module.items %}style="display:none;"{% endif %}><td>
-                    <a class="" id="{{module.name}}-new-section" href="">
+                    <a class="" id="{{module.name}}-new-section" href="{% url 'handle_form' %}?module={{module.name}}&id=new">
                         {{ module.verbose }}
                     </a>
                 </td></tr>
                 {% endfor %}
                 </table>
-            </div>
-        </div>
-    </div>
-</div>
+            </div>{# /moduleBank #}
+        </div>{# /span4 #}
+    </div>{# /row #}
+</div>{# /wrapper #}
 
 {% endblock %}

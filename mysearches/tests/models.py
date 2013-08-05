@@ -14,6 +14,8 @@ class SavedSearchModelsTests(TestCase):
 
     def test_send_search_email(self):
         search = SavedSearchFactory(user=self.user)
+        search = SavedSearchFactory(user=self.user, is_active=False,
+                                    url='jobs.jobs/search?q=new+search')
         search.send_email()
         self.assertEqual(len(mail.outbox), 1)
 

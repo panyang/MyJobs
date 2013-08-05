@@ -1,14 +1,14 @@
 {% load user_ops %}
 {% load common_tags %}
-        <div class="formBox right-side-fixed" id="company-information">
+        <div class="formBox" id="company-information">
                 <h3 class="hide-mobile">Company Information</h3><h3 class="candidate-activity-mobile">Microsites</h3>
                 
                 <div class="accordion" id="details-user-list-collapse">
                     <div class="accordion-group">
                         <div class="accordion-heading details-heading">
-                    	   <a class="accordion-toggle" data-toggle="collapse" data-parent="#details-user-list-collapse" href="#user-list-details-table">User List</a>
+                    	   <a class="accordion-toggle" data-toggle="collapse" data-parent="#details-user-list-collapse" href="#user-list-details-table">User List<span class="pull-right"><i class="icon icon-plus"></i></span></a>
                     	</div>
-                		<div id="user-list-details-table" class="accordion-body in collapse">
+                		<div id="user-list-details-table" class="accordion-body collapse">
                            <ul class="link-list">
                                 {% with user_name=admin_you|get_name_obj:admin_you.email %}
                                 <li>
@@ -23,39 +23,40 @@
                                     {% endwith %}
                                 {% endfor %} 
                            </ul>
-                        </div>
-            		</div>
-       			 </div>
+                        </div>{# /accordion-body #}
+            		</div>{# /accordion-group #}
+       			 </div>{# /accordion #}
        			 
        			 <div class="accordion hide-mobile" id="details-microsites-collapse">
                     <div class="accordion-group">
                         <div class="accordion-heading details-heading">
-                    	   <a class="accordion-toggle" data-toggle="collapse" data-parent="#details-microsites-collapse" href="#microsites-details-table">Microsites</a>
+                    	   <a class="accordion-toggle" data-toggle="collapse" data-parent="#details-microsites-collapse" href="#microsites-details-table">Microsites<span class="pull-right"><i class="icon icon-minus"></i></span></a>
                     	</div>
                 		<div id="microsites-details-table" class="accordion-body in collapse">
-                           <ul class="link-list">
-                           {% for url in company_microsites %}
-                             <li>
-                             <strong>{{ url.url|cut:"http://" }}</strong><br>
-                             <a href="{{url.url}}" target="_blank">{{url.url}}</a>
-                             </li>
-                           {% endfor %} 
-                           </ul>
-                        </div>
-            		</div>
-       			 </div>
+                           <table id="row-link-table">                            
+                           {% for url in company_microsites %}                    
+                           <tr>
+                                <td>                                
+                                <div class="microsite-name"><a href="microsite/?microsite_url={{url.url}}">{{url.url|url_domain}}</a></div>
+                                </td>
+                           <tr>
+                           {% endfor %}                    
+                           </table>
+                        </div>{# /accordion-body #}
+            		</div>{# /accordion-group #}
+       			 </div>{# /accordion #}
        			 
        			 <table id="row-link-table" class="candidate-activity-mobile">                            
                     {% for url in company_microsites %}                    
                     <tr>
                         <td>                        
-                        <a href="{{url.url}}"><h4 class="mobile-site-links">{{url.url}}</h4></a>
+                        <a href="microsite/?microsite_url={{url.url}}"><h4 class="mobile-site-links">{{url.url|url_domain}}</h4></a>
                         </td>
                     <tr>
                     {% endfor %}
                     
                  </table>
-       			 
-            </div>
+                 
+            </div>{# /formBox #}
             
                             

@@ -20,16 +20,22 @@
 
 <div class="row">
     <div class="span12">
-      <div id="saved-search-list">
-        {% if saved_searches %}
-        {% include 'mysearches/saved_search_table.html'  with saved_searches=saved_searches %}
-        {% else %}
-        <p>No Saved Searches!</p>
-        {% endif %}
-        <div class="actions">
-            <a id="new_btn" data-toggle="modal" class="btn">{% trans 'New Saved Search' %}</a>
+        <div id="saved-search-list">
+
+            {% if saved_searches %}
+
+            {% include 'mysearches/saved_search_table.html'  with saved_searches=saved_searches %}
+
+            {% else %}
+
+            <p>No Saved Searches!</p>
+
+            {% endif %}
+
+            <div class="actions">
+                <a id="new_btn" class="btn" href='edit'>{% trans 'New Saved Search' %}</a>
+            </div>
         </div>
-      </div>
     </div>
 </div>
 
@@ -37,38 +43,19 @@
     <div class="formBox span7">
     <h5>Digest Options</h5>
     <p>Each day, you will receive a digest email containing the results of your saved searches that would have otherwise sent you results.</p>
-    <form method="post" id="digest-option">
-      {% csrf_token %}
-        <div>{{ form.is_active}}{{form.is_active.label_tag}}
-        {{form.email}}</div>
-        <div>{{ form.send_if_none }}{{form.send_if_none.label_tag}}</div>
-      <div class="pull-right">
-      <span id="saved"></span>
-      <a class="btn primary" id="digest_submit">Save</a>
-      </div>
-    </form>
-</div>
-
-<div id="new_modal" class="modal hide fade row">
-    <div class="modal-header">
-        <button class="close mobile_hide" aria-hidden="true" data-dismiss="modal" type="button">×</button>
-        <h1>{% trans "Save" %} <small>{% trans "a Search" %}</small></h1>
-    </div>
-    <form method="post" id="saved-search-form">
-    <div class="modal-body">
-        <div class="formBox">
-        {% include "includes/form-error-highlight.html" with form=add_form %}
+    <form method="post" action="{% url 'save_digest_form' %}" id="digest-option">
+        {% csrf_token %}
+        <div>
+            {{ form.is_active}}{{form.is_active.label_tag}}
+            {{form.email}}
         </div>
-    </div>
-    {% csrf_token %}
-    <div class="modal-footer">
-        <div class="actions">
-          <a id="new_search" class="btn pull-right primary save">Save</a>
-          <a data-dismiss="modal" aria-hidden="true" class="btn pull-right">{% trans 'Cancel' %}</a>
+        <div>
+            {{ form.send_if_none }}{{form.send_if_none.label_tag}}
         </div>
-    </div>
+        <div class="pull-right">
+            <span id="saved"></span>
+            <button type="submit" class="btn primary" id="digest_submit">{% trans 'Save' %}</button>
+        </div>
     </form>
-</div>
-<div id="edit_modal" class="modal hide fade row">
 </div>
 {% endblock content %}
