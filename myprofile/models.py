@@ -187,11 +187,13 @@ class Name(ProfileUnits):
         Custom name save method to ensure only one name object per user
         has primary=True. We avoid a race condition by locking the transaction
         using select_for_update.
+        :param args:
+        :param kwargs:
         """
         if self.primary:
             try:
                 temp = Name.objects.select_for_update().get(primary=True,
-                                                          user=self.user)
+                                                            user=self.user)
             except Name.DoesNotExist:
                 pass
             else:
@@ -204,8 +206,8 @@ class Name(ProfileUnits):
 
             full_name_list = [name.name.get_full_name() for name in names]
 
-            if (self.get_full_name() not in full_name_list or 
-                self.id in [name.id for name in names]):
+            if (self.get_full_name() not in full_name_list or
+                    self.id in [name.id for name in names]):
                 super(Name, self).save(*args, **kwargs)
 
     def __unicode__(self):
