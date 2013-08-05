@@ -6,6 +6,7 @@ from django.core.mail import EmailMessage
 from django.db import models
 from django.db.models.signals import post_save
 from django.utils.translation import ugettext_lazy as _
+from django.core.validators import MaxValueValidator, MinValueValidator
 
 from default_settings import GRAVATAR_URL_PREFIX, GRAVATAR_URL_DEFAULT
 from registration import signals as custom_signals
@@ -159,6 +160,10 @@ class User(AbstractBaseUser):
     gravatar = models.EmailField(verbose_name=_("gravatar email"),
                                  max_length=255, db_index=True, blank=True,
                                  null=True)
+
+    profile_completion = models.IntegerField(validators=[MaxValueValidator(100),
+                                                         MinValueValidator(0)],
+                                             blank=False)
 
     # Permission Levels
     is_staff = models.BooleanField(_('staff status'), default=False,

@@ -130,6 +130,7 @@ $(document).ready(function()
                         <td>
                         <div class="candidate-name">{{candidate.user|get_name_obj}}</div>
                         <a href="{{ candidate.user.id }}">{{candidate.user}}</a>
+                        <div class="candidate-profile-completion pull-left">Profile completion: {{ candidate.user.profile_completion }}%</div>
                         </td>
                         <td>
                         <strong>{% if candidate.label %}{{candidate.label}}{% else %}Unlabeled{% endif %}</strong><br>
@@ -144,6 +145,7 @@ $(document).ready(function()
                         <td>
                         <div class="candidate-name pull-left">{{candidate.user|get_name_obj}}</div>
                         <a href="{{ candidate.user.id }}" class="candidate-activity-mobile pull-left">{{candidate.user}}</a>
+                        <div class="candidate-profile-completion pull-left">Profile completion: {{ candidate.user.id }}%</div>
                         </td>
                     <tr>
                     {% endfor %}

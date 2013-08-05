@@ -53,6 +53,10 @@
         </div>
         <div class="scroller_anchor"></div>
         <div class="span4">
+            <div class="formBox right-side-fixed">
+                You have completed {{ user.profile_completion }}% of your profile
+                <div class="progress"><div class="bar" style="width: {{ user.profile_completion }}%;"></div></div>
+            </div>
             <div class="formBox right-side-fixed" id="moduleBank">
                 <h3>Add a New Section</h3>
                 <table class="table table-bordered tables-striped">
