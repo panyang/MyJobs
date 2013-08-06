@@ -6,7 +6,7 @@
 {% endblock %}
 
 {% block content %}
-    <p style="font-size: 14px;"> You created a Saved Search, {{saved_searches.0.label}} for {{ saved_searches.0.email }}.</p>
+    <p style="font-size: 14px;"> A Saved Search was created, {{saved_searches.0.label}} for {{ saved_searches.0.email }}.</p>
     <p style="font-size: 14px;"> Your Saved Search results for today:</p>
     {% include 'mysearches/email_table_include.html' with saved_search=saved_searches.0 %}
 {% endblock %}
