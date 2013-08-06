@@ -149,10 +149,7 @@ def url_sort_options(feed_url, sort_by, frequency=None):
     return feed_url
 
 def get_interval_from_frequency(frequency):
-    if frequency == 'M':
-        interval = -30
-    elif frequency == 'W':
-        interval = -7
-    else:
-        interval = -1
-    return interval
+    intervals = {'D': -1,
+                 'W': -7,
+                 'M': -30}
+    return intervals.get(frequency, -1)
