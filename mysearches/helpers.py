@@ -5,7 +5,6 @@ from urlparse import urlparse, urlunparse, parse_qs
 from urllib import urlencode
 from dateutil import parser as dateparser
 import datetime
-import time
 
 from django.utils import simplejson
 from django.utils.encoding import smart_str, smart_unicode
