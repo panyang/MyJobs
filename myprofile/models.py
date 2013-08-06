@@ -1,7 +1,6 @@
 import datetime
 
 from django.contrib.contenttypes.models import ContentType
-from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
@@ -29,7 +28,7 @@ class ProfileUnits(models.Model):
         Custom save method to set the content type of the instance.
         
         """
-        if(not self.content_type):
+        if not self.content_type:
             self.content_type = ContentType.objects.get_for_model(self.__class__)
         super(ProfileUnits, self).save(*args, **kwargs)
 
@@ -57,6 +56,7 @@ class ProfileUnits(models.Model):
 
     def is_displayed(self):
         return True
+
 
 class Education(ProfileUnits):
     EDUCATION_LEVEL_CHOICES = (
@@ -93,20 +93,20 @@ class Education(ProfileUnits):
 
 
 class Address(ProfileUnits):
-    label = models.CharField(max_length=60, blank=True, 
-                            verbose_name=_('Address Label'))
+    label = models.CharField(max_length=60, blank=True,
+                             verbose_name=_('Address Label'))
     address_line_one = models.CharField(max_length=255, blank=True,
                                         verbose_name=_('Address Line One'))
     address_line_two = models.CharField(max_length=255, blank=True,
                                         verbose_name=_('Address Line Two'))
-    city_name = models.CharField(max_length=255, blank=True, 
-                                verbose_name=_("City"))
+    city_name = models.CharField(max_length=255, blank=True,
+                                 verbose_name=_("City"))
     country_sub_division_code = models.CharField(max_length=5, blank=True,
                                                  verbose_name=_("State/Region"))
     country_code = models.CharField(max_length=3, blank=True, 
                                     verbose_name=_("Country"))
-    postal_code = models.CharField(max_length=12, blank=True, 
-                                    verbose_name=_("Postal Code"))
+    postal_code = models.CharField(max_length=12, blank=True,
+                                   verbose_name=_("Postal Code"))
 
 
 class Telephone(ProfileUnits):
@@ -195,7 +195,7 @@ class Name(ProfileUnits):
                 temp = Name.objects.select_for_update().get(primary=True,
                                                             user=self.user)
             except Name.DoesNotExist:
-                pass
+                super(Name, self).save(*args, **kwargs)
             else:
                 if self.get_full_name() != temp.get_full_name():
                     temp.primary = False
@@ -287,6 +287,7 @@ class MilitaryService(ProfileUnits):
                                 verbose_name="Campaign")
     honor = models.CharField(max_length=255, blank=True,
                                 verbose_name="Honors")
+
 
 def delete_secondary_activation(sender, **kwargs):
     """
