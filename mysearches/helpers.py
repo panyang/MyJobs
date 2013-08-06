@@ -91,12 +91,7 @@ def parse_rss(feed_url, frequency='W', num_items=20, offset=0):
     item_list = []
     items = rss_soup.find_all("item")
 
-    if frequency == 'M':
-        interval = -30
-    elif frequency == 'W':
-        interval = -7
-    else:
-        interval = -1
+    interval = get_interval_from_frequency(frequency)
 
     end = datetime.date.today()
     start = end + datetime.timedelta(days=interval)
@@ -111,8 +106,6 @@ def parse_rss(feed_url, frequency='W', num_items=20, offset=0):
         if date_in_range(start,end,item_dict['pubdate'].date()):
             item_list.append(item_dict)
         else:
-            # Since the RSS feeds are ordered by date, we know we can stop once 
-            # a job falls out of the date range
             break
 
     return item_list
@@ -120,13 +113,14 @@ def parse_rss(feed_url, frequency='W', num_items=20, offset=0):
 def date_in_range(start, end, x):
     return start <= x <= end
 
-def url_sort_options(feed_url, sort_by):
+def url_sort_options(feed_url, sort_by, frequency=None):
     """
     Updates urls based on sort by option. 
 
     Inputs:
     :feed_url:      URL of an RSS feed 
     :sort_by:       What the feed should be sorted by ('Relevance' or 'Date')
+    :frequency:     Frequency of saved search ('D', 'W', 'M')
 
     Output:
     :feed_url:      URL updated with sorting options. 'Date' has no additions to
@@ -139,11 +133,22 @@ def url_sort_options(feed_url, sort_by):
     query = parse_qs(unparsed_feed.query)
     query.pop('date_sort', None)
 
+
     if sort_by == "Relevance":
         query.update({'date_sort': 'False'})
+
+        interval = -get_interval_from_frequency(frequency)
+
+        query.update({'days_ago': interval})
 
     unparsed_feed = unparsed_feed._replace(query = urlencode(query, True))
     # Convert byte string back into unicode
     feed_url = smart_unicode(urlunparse(unparsed_feed))
 
     return feed_url
+
+def get_interval_from_frequency(frequency):
+    intervals = {'D': -1,
+                 'W': -7,
+                 'M': -30}
+    return intervals.get(frequency, -1)

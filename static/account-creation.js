@@ -72,10 +72,9 @@ $(document).on("click", "button#login", function(e) {
         data: json_data,
         global: false,
         success: function(data) {
-            if (data != 'valid') {
-                // form was a json-encoded list of errors and error messages
-                var json = jQuery.parseJSON(data);
-
+            // converts json to javascript object
+            var json = jQuery.parseJSON(data);
+            if (json.validation != 'valid') {
                 // Remove all required field changes, if any
                 removeRequiredChanges();
 
@@ -84,7 +83,11 @@ $(document).on("click", "button#login", function(e) {
                     jsonErrors(index, json.errors);
                 }
             } else {
-                window.location = '/profile';
+                if(json.url == 'undefined'){
+                    window.location = '/profile';
+                }else{
+                    window.location = json.url;
+                }           
             }
         }
     });
