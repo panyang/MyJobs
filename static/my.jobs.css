@@ -257,30 +257,30 @@ table#row-link-table {
     text-align: right;
     margin-right: 20px;
     width: 180px;
-    }
+}
 .form-label label{
     font-weight: bold;
-    }
+}
 .ui-combobox {
     position: relative;
     display: inline-block;
-    }
+}
 .ui-combobox-toggle {
     padding: 8px 0px 8px 0px;
     position: relative;
     left: -2px;
     border-top-left-radius: 0px;
     border-bottom-left-radius: 0px;
-    }
+}
 input.comboboxWidget {
     float: left;
     border-top-right-radius: 0px;
     border-bottom-right-radius: 0px;
-    }
+}
 ul.ui-autocomplete{
     height: 12em;
     overflow-y: scroll;
-    }
+}
 
 /*Topbar Styles*/
 .topbar #topbar-logo{
@@ -302,7 +302,7 @@ ul.ui-autocomplete{
     }
 .topbar #alpha-flag{
     display: block;
-    float-left;
+    float: left;
     color: #fff;
     font-size: .8em;
 }
@@ -318,53 +318,53 @@ ul.ui-autocomplete{
     padding-top: 4px !important;
     padding-bottom: 5px !important;
     }
-.topbar .menu-tabs a:hover{
+.topbar .menu-tabs a:hover {
     color: #FFF;
     background-color: #b34529;
-    }
+}
 .menu-tabs .active a {
     background-color: #b34529 !important;
-    }
+}
 .formBox select {
     width: 221px;
-    }
+}
 form select{
     width: 262px;
-    }
+}
 fieldset select{
     width: 264px;
-    }
+}
 fieldset textarea,
-.profile-form-input input[type="text"]{
+.profile-form-input input [type="text"]{
     width: 248px;
 }
 #title{
     padding-top: 60px;
     padding-bottom: 60px;
-    }
+}
 #title h1{
     text-indent: -9000px;    
     display: block;
     height: 81px;
     background: transparent url('/files/static/images/mydotjobs_home_logo.png') 65px 3px no-repeat;
-    }    
+}
 #subtitle{
     font-size: 1.85em;
     line-height: 1.1em;
     color: #574e44;
     padding-top: 13px;
     font-weight: bold;
-    }
+}
 
 /*Content Box Styles*/
-.profileBox{    
+.profileBox {
     background-color: #f4f1ea;
     padding: 10px;
     padding-bottom: 30px;
     border: 2px solid #574E44;
     border-radius: 5px;
-    }
-.formBox{    
+}
+.formBox{
     background-color: #e4e0d5;
     padding: 5px;
     padding-bottom: 30px;
@@ -372,14 +372,14 @@ fieldset textarea,
     border-right: 1px solid #d5d4d0;
     border-bottom: 1px solid #d5d4d0;
     border-radius: 5px;    
-    }
- .loginBox{    
+}
+ .loginBox{
     background-color: #f4f1ea;
     padding: 10px;
     padding-bottom: 30px;
     border: 2px solid #a3aeb1;
     border-radius: 5px;    
-    }
+}
 .formBox h2, 
 .formBox h3, 
 .formBox h4, 
@@ -394,19 +394,19 @@ fieldset textarea,
     border-top-right-radius: 5px;
     border-top-left-radius:5px;
     padding: 5px 20px;
-    }
-.formBox h3 {
+}
+.formBox h3{
     padding-bottom: 0px;
-    }
+}
 .formBox table{
     width: 100%;    
-    }
+}
 #titleRow .loginBox, #titleRow .profileBox{
     margin-top: 105px;   
-    }
+}
 .formBox + .formBox{
     margin-top: 20px;
-    }
+}
 .account-box{    
     background-color: #FFF;
     padding: 10px;
@@ -806,7 +806,7 @@ em.pendingText{
     padding: 10px;
 }
 
-input[type='text'] + .help-block,
+input [type='text'] + .help-block,
 div + .help-block{
     max-width: 250px;
     margin: -12px 0 5px 225px;
@@ -1106,7 +1106,8 @@ form input[type='checkbox']{
     #moduleBank {
         margin-top: 20px;
     }
-    input[type='text'] + .help-block,
+
+    input [type='text'] + .help-block,
     div + .help-block{
         margin: -12px 0 0 5px;
     }
