@@ -139,9 +139,7 @@ def url_sort_options(feed_url, sort_by, frequency=None):
 
         interval = get_interval_from_frequency(frequency)
 
-        now = datetime.datetime.utcnow()
-        start_date = now + datetime.timedelta(days=interval)
-        query.update({'start_date':start_date})
+        query.update({'date_range':interval})
 
     unparsed_feed = unparsed_feed._replace(query = urlencode(query, True))
     # Convert byte string back into unicode
