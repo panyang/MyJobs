@@ -77,7 +77,7 @@ class SavedSearchHelperTests(TestCase):
 
         self.assertEquals(parsed.path, "/jobs/feed/rss")
         self.assertEquals(query['date_sort'], [u'False'])
-        int(query['date_range'][0])
+        int(query['days_ago'][0])
     
         # Test to make sure sort by "Date" doesn't have anything added
         feed_url = url_sort_options(feed, "Date")
@@ -96,10 +96,10 @@ class SavedSearchHelperTests(TestCase):
         new = parse_qs(urlparse(feed_url).query)
 
         self.assertFalse(old.get('date_sort'))
-        self.assertFalse(old.get('date_range'))
+        self.assertFalse(old.get('days_ago'))
         self.assertTrue(new['date_sort'][0])
-        self.assertTrue(new['date_range'][0])
+        self.assertTrue(new['days_ago'][0])
 
         del new['date_sort']
-        del new['date_range']
+        del new['days_ago']
         self.assertEqual(new, old)

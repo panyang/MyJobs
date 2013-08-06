@@ -121,6 +121,7 @@ def url_sort_options(feed_url, sort_by, frequency=None):
     Inputs:
     :feed_url:      URL of an RSS feed 
     :sort_by:       What the feed should be sorted by ('Relevance' or 'Date')
+    :frequency:     Frequency of saved search ('D', 'W', 'M')
 
     Output:
     :feed_url:      URL updated with sorting options. 'Date' has no additions to
@@ -137,9 +138,9 @@ def url_sort_options(feed_url, sort_by, frequency=None):
     if sort_by == "Relevance":
         query.update({'date_sort': 'False'})
 
-        interval = get_interval_from_frequency(frequency)
+        interval = -get_interval_from_frequency(frequency)
 
-        query.update({'date_range':interval})
+        query.update({'days_ago': interval})
 
     unparsed_feed = unparsed_feed._replace(query = urlencode(query, True))
     # Convert byte string back into unicode
