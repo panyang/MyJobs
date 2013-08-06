@@ -1,40 +1,20 @@
+{% extends 'mysearches/email_base.html' %}
 {% load email_tags %}
-<table style="border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-left-radius: 0px; border-bottom-right-radius: 0px; border: 1px solid #ddd; border-collapse: separate; border-spacing: 0; display: table;">
-    <tr>
-        <td colspan=2>
-            <table>
-                <tr>
-                    <td style="text-align: left;"><a href="http://my.jobs"><img src="http://my.jobs/files/static/images/myjobs_logo.png" alt="My.Jobs logo"></a></td>
-                    <td style="text-align: left; vertical-align: center;"><b>Saved Search Conformation</b></td>
-                </tr>
-            </table>
-        </td>
-    </tr>
-    <tr>
-        <td colspan=2>
-            {% block content %}
-                <p style="font-size: 14px;"> You created a Saved Search, {{saved_searches.0.label}} for {{ saved_searches.0.email }}.</p>
-                <p style="font-size: 14px;"> Here is your Saved Search results for today:</p>
-                {% include 'mysearches/email_table_include.html' with saved_search=saved_searches.0 %}
-            {% endblock %}
-        </td>
-    </tr>
-    <tr>
-        <td colspan=1 style="width: 33%; border-left: 1px solid #ddd; padding: 8px; line-height: 20px; border-top: 1px solid #ddd;">
-            Saved Search Settings<br>
-            <a href="http://my.jobs{% url 'saved_search_main' %}">change settings</a>
-        </td>
-        <td colspan=1 style="border-left: 1px solid #ddd; padding: 8px; line-height: 20px; border-top: 1px solid #ddd;">
-            {% block footer %}
-                Sent to: {{saved_searches.0.email}}<br>
-                Sent as Digest: No<br>
-                <a href="http://my.jobs{% url 'unsubscribe' search_id=saved_searches.0.id %}">unsubscribe</a><br>
-            {% endblock %}
-        </td>
-    </tr>
-    <tr>
-        <td colspan=2 style="border-left: 1px solid #ddd; padding: 8px; line-height: 20px; border-top: 1px solid #ddd;">
-            <p>My.jobs <a href="http://my.jobs/terms">Terms</a> and <a href="http://my.jobs/privacy">Privacy</a></p>
-        </td>
-    </tr>
+
+{% block email-title %}
+<td style="text-align: left; vertical-align: center;"><b>Saved Search Confirmation</b></td>
+{% endblock %}
+
+{% block content %}
+    <p style="font-size: 14px;"> You created a Saved Search, {{saved_searches.0.label}} for {{ saved_searches.0.email }}.</p>
+    <p style="font-size: 14px;"> Your Saved Search results for today:</p>
+    {% include 'mysearches/email_table_include.html' with saved_search=saved_searches.0 %}
+{% endblock %}
+
+{% block footer %}
+    Sent to: {{saved_searches.0.email}}<br>
+    Sent as Digest: No<br>
+    <a href="http://my.jobs{% url 'unsubscribe' search_id=saved_searches.0.id %}">unsubscribe</a><br>
+{% endblock %}
+
 </table>
