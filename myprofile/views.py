@@ -56,7 +56,7 @@ def edit_profile(request):
         profile_config.append(module_config)
 
     data_dict = {'profile_config': profile_config,
-				 'view_name': 'My Profile'}
+                 'view_name': 'My Profile'}
     
     return render_to_response('myprofile/edit_profile.html', data_dict,
                               RequestContext(request))
@@ -101,8 +101,8 @@ def handle_form(request):
         data_dict['form'] = form_instance
         data_dict['verbose'] = model._meta.verbose_name.title()
         
-	u = request.user
-	model_name = model._meta.verbose_name.lower()
+        u = request.user
+        model_name = model._meta.verbose_name.lower()
         if form_instance.is_valid():
             # Profile completion % should only increase if you're deleting the last instance of a counted module.
             if (model_name in settings.PROFILE_COMPLETION_MODULES and

@@ -145,7 +145,7 @@ $(document).ready(function()
                         <td>
                         <div class="candidate-name pull-left">{{candidate.user|get_name_obj}}</div>
                         <a href="{{ candidate.user.id }}" class="candidate-activity-mobile pull-left">{{candidate.user}}</a>
-                        <div class="candidate-profile-completion pull-left">Profile completion: {{ candidate.user.id }}%</div>
+                        <div class="candidate-profile-completion pull-left">Profile completion: {{ candidate.user.profile_completion }}%</div>
                         </td>
                     <tr>
                     {% endfor %}
@@ -154,7 +154,7 @@ $(document).ready(function()
                  
                  <div class="pull-left span6">
                  
-                 {% if candidates.has_previous %}
+                 {% if candidates.has_previous %}`
                     <a href="?page={{ candidates.previous_page_number }}&microsite={{ site_name }}&after={{ after|date:'m/d/Y' }}&before={{ before|date:'m/d/Y' }}&date_button={{ date_button }}">Previous</a>
                  {% else %}
                     &nbsp;

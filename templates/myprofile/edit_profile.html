@@ -13,6 +13,15 @@
 
 {% block content %}
 <style>
+.bar {
+    width: {{ user.profile_completion }}% !important;
+    font-weight: bold;
+    background-color: #b34529 !important;
+    background-image: linear-gradient(to bottom, #b34529, #c44e34) !important;
+    {% if user.profile_completion == 0 %}    
+        color: #333 !important;
+    {% endif %}
+}
 #profileTitleRow{
     margin-bottom: 20px;
 }
@@ -54,8 +63,8 @@
         <div class="scroller_anchor"></div>
         <div class="span4">
             <div class="formBox right-side-fixed">
-                You have completed {{ user.profile_completion }}% of your profile
-                <div class="progress"><div class="bar" style="width: {{ user.profile_completion }}%;"></div></div>
+                <h3>Profile Completion</h3>
+                <div class="progress"><div class="bar">{{ user.profile_completion }}%</div></div>
             </div>
             <div class="formBox right-side-fixed" id="moduleBank">
                 <h3>Add a New Section</h3>

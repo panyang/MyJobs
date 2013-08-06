@@ -163,7 +163,7 @@ class User(AbstractBaseUser):
 
     profile_completion = models.IntegerField(validators=[MaxValueValidator(100),
                                                          MinValueValidator(0)],
-                                             blank=False)
+                                             blank=False, default=0)
 
     # Permission Levels
     is_staff = models.BooleanField(_('staff status'), default=False,

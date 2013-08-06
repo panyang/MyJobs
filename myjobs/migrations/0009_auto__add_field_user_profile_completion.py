@@ -65,7 +65,7 @@ class Migration(SchemaMigration):
             'opt_in_myjobs': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'password': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
             'password_change': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'profile_completion': ('django.db.models.fields.IntegerField', [], {})
+            'profile_completion': ('django.db.models.fields.IntegerField', [], {'default': '0'})
         }
     }
 
