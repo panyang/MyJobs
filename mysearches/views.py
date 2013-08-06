@@ -1,13 +1,11 @@
 import json
 from datetime import datetime
-from itertools import chain
 
-from django.contrib.auth import authenticate, login
-from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.decorators import user_passes_test
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponse
-from django.template import RequestContext, loader
-from django.shortcuts import render_to_response, get_object_or_404
+from django.template import RequestContext
+from django.shortcuts import render_to_response
 
 from myjobs.models import User
 from mysearches.models import SavedSearch, SavedSearchDigest
@@ -16,7 +14,7 @@ from mysearches.helpers import *
 
 @user_passes_test(User.objects.is_active)
 @user_passes_test(User.objects.not_disabled)
-def delete_saved_search(request,search_id):
+def delete_saved_search(request, search_id):
     try:
         search_id = int(search_id)
         # a single search is being disabled
@@ -41,7 +39,8 @@ def saved_search_main(request):
     add_form = SavedSearchForm(user=request.user)
     return render_to_response('mysearches/saved_search_main.html',
                               {'saved_searches': saved_searches,
-                               'form':form, 'add_form': add_form, 'view_name': 'Saved Searches'},
+                               'form': form, 'add_form': add_form,
+                               'view_name': 'Saved Searches'},
                               RequestContext(request))
 
 @user_passes_test(User.objects.is_active)
@@ -51,8 +50,6 @@ def view_full_feed(request, search_id):
     if request.user == saved_search.user:
         url_of_feed = url_sort_options(saved_search.feed, saved_search.sort_by)
         items = parse_rss(url_of_feed, saved_search.frequency)
-        date = datetime.date.today()
-        label = saved_search.label
         return render_to_response('mysearches/view_full_feed.html',
                                   {'search': saved_search,
                                    'items': items, 
@@ -67,9 +64,12 @@ def more_feed_results(request):
     # Ajax request comes from the view_full_feed view when user scrolls to
     # bottom of the page
     if request.is_ajax():
-        url_of_feed = url_sort_options(request.GET['feed'], request.GET['sort_by'])
+        url_of_feed = url_sort_options(request.GET['feed'],
+                                       request.GET['sort_by'])
+
         items = parse_rss(url_of_feed, request.GET['frequency'],
                           offset=request.GET['offset'])
+
         return render_to_response('mysearches/feed_page.html',
                                   {'items':items}, RequestContext(request))
 
@@ -81,9 +81,9 @@ def validate_url(request):
         if rss_url:
            # returns the RSS url via AJAX to show if field is validated
            # id valid, the label field is auto populated with the feed_title
-           data = {'rss_url': rss_url,
-                   'feed_title': feed_title,
-                   'url_status': 'valid'}
+            data = {'rss_url': rss_url,
+                    'feed_title': feed_title,
+                    'url_status': 'valid'}
 
         else:
             data = {'url_status': 'not valid'}
