@@ -19,11 +19,8 @@ from jira.client import JIRA
 
 from captcha.fields import ReCaptchaField
 
-try:
-    from secrets import RECAPTCHA_PUBLIC_KEY, RECAPTCHA_PRIVATE_KEY, EMAIL_TO_ADMIN
-    from secrets import options, my_agent_auth
-except:
-    pass
+from secrets import RECAPTCHA_PUBLIC_KEY, RECAPTCHA_PRIVATE_KEY, EMAIL_TO_ADMIN
+from secrets import options, my_agent_auth
 
 from myjobs.models import User, EmailLog
 from myjobs.forms import *

@@ -21,10 +21,7 @@ from mysearches.models import SavedSearch
 from registration.models import ActivationProfile
 from registration import signals as custom_signals
 
-try:
-    from secrets import options, my_agent_auth
-except:
-    pass
+from secrets import options, my_agent_auth
 from jira.client import JIRA
 
 from tasks import process_batch_events
