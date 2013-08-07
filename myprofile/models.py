@@ -185,10 +185,8 @@ class Name(ProfileUnits):
     def save(self, *args, **kwargs):
         """
         Custom name save method to ensure only one name object per user
-        has primary=True. We avoid a race condition by locking the transaction
+        has one primary=True. We avoid a race condition by locking the transaction
         using select_for_update.
-        :param args:
-        :param kwargs:
         """
         duplicate_names = Name.objects.filter(user=self.user,
                                               given_name=self.given_name,
@@ -201,7 +199,8 @@ class Name(ProfileUnits):
                     duplicate = duplicate_names[0]
                     if duplicate.primary is False:
                         try:
-                            current_primary = Name.objects.select_for_update().get(primary=True, user=self.user)
+                            current_primary = Name.objects.select_for_update().get(
+                                primary=True, user=self.user)
                         except:
                             duplicate.primary = True
                             duplicate.save()
@@ -215,7 +214,8 @@ class Name(ProfileUnits):
         else:
             if self.primary:
                 try:
-                    temp = Name.objects.select_for_update().get(primary=True, user=self.user)
+                    temp = Name.objects.select_for_update().get(primary=True,
+                                                                user=self.user)
                 except Name.DoesNotExist:
                     super(Name, self).save(*args, **kwargs)
                 else:
