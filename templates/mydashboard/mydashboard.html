@@ -13,6 +13,12 @@
 <script src="http://js.nlx.org/framework/v2/js/def.ui.bootstrap.tabs.js" type="text/javascript"></script>
 <script src="http://js.nlx.org/framework/v2/js/code/bootstrap-collapse.js" type="text/javascript"></script>
 
+<link rel="stylesheet" type="text/css" href="https://raw.github.com/webcreate/infinite-ajax-scroll/master/dist/css/jquery.ias.css" />
+<script type="text/javascript" src="https://ajax.googleapis.com/ajax/libs/jquery/1.9.1/jquery.min.js"></script>
+<script type="text/javascript" src="https://raw.github.com/webcreate/infinite-ajax-scroll/master/dist/jquery-ias.js"></script>
+<script type="text/javascript">
+
+
 <script>
   $(function() {
     $( ".datepicker" ).datepicker();
@@ -55,8 +61,16 @@ $(document).ready(function()
             icon.removeClass('icon-minus');
             icon.addClass('icon-plus');
         });
-    }); 
-   
+    });
+
+    jQuery.ias({
+                container : '.listing',
+                item: '.post',
+                pagination: '#content .navigation',
+                next: '.next-posts a',
+                loader: '<img src="https://raw.github.com/webcreate/infinite-ajax-scroll/master/dist/images/loader.gif"/>',
+                triggerPageThreshold: 2
+            });    
 });
 </script>
 {% endblock %}
@@ -119,10 +133,16 @@ $(document).ready(function()
                 <br>
                 <hr>
                 
+                
+                
                 {% if candidates %}
+                
                 <div class="pull-left"><strong>Activity between {{after.date}} and {{before.date}} for {{ site_name|cut:"http://" }}</strong></div><br>                                
-                 <table id="row-link-table">                            
+                 <table id="row-link-table"> 
+                 <div id="content">
+                <div class="listing">
                     {% for candidate in candidates %}
+                    <div class="post">
                     <tr class="hide-mobile">
                         <td>
                         <img src="{{candidate.user.get_gravatar_url}}&s=55" class="gravatar pull-left">                        
@@ -146,9 +166,19 @@ $(document).ready(function()
                         <a href="{{ candidate.user.id }}" class="candidate-activity-mobile pull-left">{{candidate.user}}</a>
                         </td>
                     <tr>
+                    </div>
                     {% endfor %}
-                    
+                 </div>
+                 <div class="navigation">
+        <ul>
+            <li>1</li>
+            <li class="next-posts"><a href="?page={{ candidates.previous_page_number }}&microsite={{ site_name }}&after={{ after|date:'m/d/Y' }}&before={{ before|date:'m/d/Y' }}&date_button={{ date_button }}">2</a></li>
+        </ul>
+    </div>
+                 </div>
                  </table>
+                 
+                 
                  
                  <div class="pull-left span6">
                  
@@ -168,7 +198,8 @@ $(document).ready(function()
                  <div id="no-activity">
                     <strong>There is no candidate activity between {{after.date}} and {{before.date}} for {{ site_name|cut:"http://" }}</strong>
                  </div>
-                 {% endif %}
+                 {% endif %}                 
+                 
              </div>{# /formBox #}
             
         </div>

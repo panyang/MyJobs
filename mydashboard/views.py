@@ -107,17 +107,17 @@ def dashboard(request):
     candidate_searches = candidate_searches.filter(
             created_on__range=[after, before]).order_by('-created_on')  
     
-    paginator = Paginator(candidate_searches, 25) # Show 25 candidates per page
-    page = request.GET.get('page')
+    #paginator = Paginator(candidate_searches, 3) # Show 25 candidates per page
+    #page = request.GET.get('page')
     
-    try:
-        candidates = paginator.page(page)
-    except PageNotAnInteger:
+    #try:
+    #    candidates = paginator.page(page)
+    #except PageNotAnInteger:
         # If page is not an integer, deliver first page.
-        candidates = paginator.page(1)
-    except EmptyPage:
+    #    candidates = paginator.page(1)
+    #except EmptyPage:
         # If page is out of range (e.g. 9999), deliver last page of results.
-        candidates = paginator.page(paginator.num_pages)    
+    #    candidates = paginator.page(paginator.num_pages)    
     
     admin_you = request.user
     
@@ -126,7 +126,7 @@ def dashboard(request):
                  'company_admins': admins,                 
                  'after': after,
                  'before': before,                 
-                 'candidates': candidates,                
+                 'candidates': candidate_searches,                
                  'admin_you': admin_you,
                  'site_name': site_name,
                  'view_name': 'Company Dashboard',
@@ -224,5 +224,178 @@ def microsite_activity(request):
     return render_to_response('mydashboard/microsite_activity.html', data_dict,
                               context_instance=RequestContext(request))
     
+from endless_pagination.decorators import page_template
+
+@page_template("mydashboard/entry_index_page.html") # just add this decorator
+def mydashboard(request, template="mydashboard/mydashboard_test.html",
+    extra_context=None):
+    
+    company = Company.objects.filter(admins=request.user)[0]
+    admins = CompanyUser.objects.filter(company=company.id)
+    authorized_microsites = Microsite.objects.filter(company=company.id)
+    
+    requested_microsite = request.REQUEST.get('microsite', company.name)  
+    requested_after_date = request.REQUEST.get('after', False)
+    requested_before_date = request.REQUEST.get('before', False)
+    requested_date_button = request.REQUEST.get('date_button', False)    
+                
+    # the url value for 'All' in the select box is company name 
+    # which then gets replaced with all microsite urls for that company
+    site_name = ''
+    if requested_microsite != company.name:
+        if requested_microsite.find('//') == -1:
+            requested_microsite = '//' + requested_microsite
+        active_microsites = authorized_microsites.filter(
+                url__contains=requested_microsite)
+        
+    else:
+        active_microsites = authorized_microsites
+        site_name = company.name
+        
+    microsite_urls = [microsite.url for microsite in active_microsites]
+    if not site_name:
+        site_name = microsite_urls[0]      
+
+    q_list = [Q(url__contains=ms) for ms in microsite_urls]
+    
+    # All searches saved on the employer's company microsites       
+    candidate_searches = SavedSearch.objects.select_related('user')
+    candidate_searches = candidate_searches.filter(reduce(operator.or_, q_list))    
+        
+    # Pre-set Date ranges
+    if 'today' in request.REQUEST:
+        after = datetime.now() - timedelta(days=1)
+        before = datetime.now() 
+        requested_date_button = 'today'
+    elif 'seven_days' in request.REQUEST:
+        after = datetime.now() - timedelta(days=7)
+        before = datetime.now()
+        requested_date_button = 'seven_days'
+    elif 'thirty_days' in request.REQUEST:
+        after = datetime.now() - timedelta(days=30)
+        before = datetime.now()
+        requested_date_button = 'thirty_days'
+    else:
+        if requested_after_date:            
+            after = datetime.strptime(requested_after_date, '%m/%d/%Y')            
+        else:
+            after = request.REQUEST.get('after')
+            if after:
+                after = datetime.strptime(after, '%m/%d/%Y')
+            else:
+                # Defaults to 30 days ago
+                after = datetime.now() - timedelta(days=30)                
+                
+        if requested_before_date:
+            before = datetime.strptime(requested_before_date, '%m/%d/%Y')            
+        else:        
+            before = request.REQUEST.get('before')
+            if before:
+                before = datetime.strptime(before, '%m/%d/%Y')
+            else:
+                # Defaults to the date and time that the page is accessed
+                before = datetime.now()
+    
+    # Specific microsite searches saved between two dates
+    candidate_searches = candidate_searches.filter(
+            created_on__range=[after, before]).order_by('-created_on')
+
+    context = {
+        'candidates': candidate_searches,
+    }    
+    
+    settings = {'user': request.user}
+    
+    company = Company.objects.filter(admins=request.user)[0]
+    admins = CompanyUser.objects.filter(company=company.id)
+    authorized_microsites = Microsite.objects.filter(company=company.id)
+    
+    # Removes main user from admin list to display other admins
+    admins = admins.exclude(user=request.user)   
+    requested_microsite = request.REQUEST.get('microsite', company.name)  
+    requested_after_date = request.REQUEST.get('after', False)
+    requested_before_date = request.REQUEST.get('before', False)
+    requested_date_button = request.REQUEST.get('date_button', False)    
+                
+    # the url value for 'All' in the select box is company name 
+    # which then gets replaced with all microsite urls for that company
+    site_name = ''
+    if requested_microsite != company.name:
+        if requested_microsite.find('//') == -1:
+            requested_microsite = '//' + requested_microsite
+        active_microsites = authorized_microsites.filter(
+                url__contains=requested_microsite)
+        
+    else:
+        active_microsites = authorized_microsites
+        site_name = company.name
+        
+    microsite_urls = [microsite.url for microsite in active_microsites]
+    if not site_name:
+        site_name = microsite_urls[0]      
+
+    q_list = [Q(url__contains=ms) for ms in microsite_urls]
+    
+    # All searches saved on the employer's company microsites       
+    candidate_searches = SavedSearch.objects.select_related('user')
+    candidate_searches = candidate_searches.filter(reduce(operator.or_, q_list))    
+        
+    # Pre-set Date ranges
+    if 'today' in request.REQUEST:
+        after = datetime.now() - timedelta(days=1)
+        before = datetime.now() 
+        requested_date_button = 'today'
+    elif 'seven_days' in request.REQUEST:
+        after = datetime.now() - timedelta(days=7)
+        before = datetime.now()
+        requested_date_button = 'seven_days'
+    elif 'thirty_days' in request.REQUEST:
+        after = datetime.now() - timedelta(days=30)
+        before = datetime.now()
+        requested_date_button = 'thirty_days'
+    else:
+        if requested_after_date:            
+            after = datetime.strptime(requested_after_date, '%m/%d/%Y')            
+        else:
+            after = request.REQUEST.get('after')
+            if after:
+                after = datetime.strptime(after, '%m/%d/%Y')
+            else:
+                # Defaults to 30 days ago
+                after = datetime.now() - timedelta(days=30)                
+                
+        if requested_before_date:
+            before = datetime.strptime(requested_before_date, '%m/%d/%Y')            
+        else:        
+            before = request.REQUEST.get('before')
+            if before:
+                before = datetime.strptime(before, '%m/%d/%Y')
+            else:
+                # Defaults to the date and time that the page is accessed
+                before = datetime.now()
+    
+    # Specific microsite searches saved between two dates
+    candidate_searches = candidate_searches.filter(
+            created_on__range=[after, before]).order_by('-created_on')       
+    
+    admin_you = request.user
+    
+    context = {'company_name': company.name,
+               'company_microsites': authorized_microsites,
+               'company_admins': admins,                 
+               'after': after,
+               'before': before,                 
+               'candidates': candidate_searches,                
+               'admin_you': admin_you,
+               'site_name': site_name,
+               'view_name': 'Company Dashboard',
+               'date_button': requested_date_button,}
+    
+    if extra_context is not None:
+        context.update(extra_context)
+    return render_to_response(template, context,
+        context_instance=RequestContext(request))
+
+        
 
 
