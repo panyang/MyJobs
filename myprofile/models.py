@@ -194,14 +194,14 @@ class Name(ProfileUnits):
         if duplicate_names:
             if self.primary:
                 if self.id in [name.id for name in duplicate_names]:
-                    super(Name, self).save(*args, **kwargs)
+                    self.switch_primary_name()
                 else:
                     duplicate = duplicate_names[0]
                     if duplicate.primary is False:
                         try:
                             current_primary = Name.objects.select_for_update().get(
                                 primary=True, user=self.user)
-                        except:
+                        except Name.DoesNotExist:
                             duplicate.primary = True
                             duplicate.save()
                         else:
@@ -213,16 +213,7 @@ class Name(ProfileUnits):
                 super(Name, self).save(*args, **kwargs)
         else:
             if self.primary:
-                try:
-                    temp = Name.objects.select_for_update().get(primary=True,
-                                                                user=self.user)
-                except Name.DoesNotExist:
-                    super(Name, self).save(*args, **kwargs)
-                else:
-                    if self.get_full_name() != temp.get_full_name():
-                        temp.primary = False
-                        temp.save()
-                        super(Name, self).save(*args, **kwargs)
+                self.switch_primary_name()
             else:
                 super(Name, self).save(*args, **kwargs)
 
@@ -231,6 +222,17 @@ class Name(ProfileUnits):
 
     def is_displayed(self):
         return self.primary
+
+    def switch_primary_name(self, *args, **kwargs):
+        try:
+            temp = Name.objects.select_for_update().get(primary=True,
+                                                        user=self.user)
+        except Name.DoesNotExist:
+            super(Name, self).save(*args, **kwargs)
+        else:
+            temp.primary = False
+            temp.save()
+            super(Name, self).save(*args, **kwargs)
 
 
 class SecondaryEmail(ProfileUnits):
@@ -255,7 +257,7 @@ class SecondaryEmail(ProfileUnits):
                                            email=self.email)
             reg_signals.send_activation.send(sender=self, user=self.user,
                                              email=self.email)
-        super(SecondaryEmail,self).save(*args,**kwargs)
+        super(SecondaryEmail, self).save(*args, **kwargs)
             
     def set_as_primary(self):
         """
