@@ -12,6 +12,14 @@ class SecondaryEmailFactory(factory.Factory):
     label = "Personal"
 
 
+class NewNameFactory(factory.Factory):
+    FACTORY_FOR = Name
+    given_name = "Alice"
+    family_name = "Smith"
+    primary = False
+    user = factory.SubFactory(UserFactory)
+    
+
 class PrimaryNameFactory(factory.Factory):
     FACTORY_FOR = Name
 
