@@ -2,15 +2,14 @@ from django.core import mail
 from django.core.exceptions import MultipleObjectsReturned
 from django.core.urlresolvers import reverse
 from django.db import IntegrityError
-from django.forms import forms
 from django.test import TestCase
 
 from myjobs.models import User
 from myjobs.tests.factories import UserFactory
-from myjobs.tests import TestClient
 from myprofile.models import *
 from myprofile.tests.factories import *
 from registration.models import ActivationProfile
+
 
 class MyProfileTests(TestCase):
     user_info = {'password1': 'complicated_password',
@@ -104,7 +103,7 @@ class MyProfileTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTrue(secondary_email.verified)
 
-    def test_set_primary(self):
+    def test_set_primary_email(self):
         """
         Calling the set_as_primary method in the SecondaryEmail removes it from
         SecondaryEmail, replaces the current address on the User model, and
@@ -130,7 +129,7 @@ class MyProfileTests(TestCase):
         self.assertTrue(old_email.verified)
         user = User.objects.get(email=new_primary)
 
-    def test_duplicate_primary_name(self):
+    def test_duplicate_same_primary_name(self):
         """
         Makes sure that one can not create duplicate primary names.
         """
@@ -138,20 +137,49 @@ class MyProfileTests(TestCase):
         primary_name2 = PrimaryNameFactory(user=self.user)
 
         num_results = self.user.profileunits_set.filter(
-                        content_type__name='name').count()
+            content_type__name='name').count()
         self.assertEqual(num_results, 1)
+
+    def test_different_primary_name(self):
+        primary_name1 = PrimaryNameFactory(user=self.user)
+        primary_name2 = NewPrimaryNameFactory(user=self.user)
+
+        primary_name_count = Name.objects.filter(user=self.user, primary=True).count()
+        non_primary_name_count = Name.objects.filter(user=self.user, primary=False).count()
+
+        self.assertEqual(primary_name_count, 1)
+        self.assertEqual(non_primary_name_count, 1)
+
+    def test_non_primary_name_to_primary(self):
+        name = NewNameFactory(user=self.user)
+        primary_name1 = PrimaryNameFactory(user=self.user)
+
+        primary_name_count = Name.objects.filter(user=self.user, primary=True).count()
+        non_primary_name_count = Name.objects.filter(user=self.user, primary=False).count()
+
+        self.assertEqual(primary_name_count, 1)
+        self.assertEqual(non_primary_name_count, 0)
+
+    def test_primary_name_to_non_primary(self):
+        primary_name = PrimaryNameFactory(user=self.user)
+        primary_name.primary = False
+        primary_name.save()
+
+        primary_name_count = Name.objects.filter(user=self.user, primary=True).count()
+        non_primary_name_count = Name.objects.filter(user=self.user, primary=False).count()
+
+        self.assertEqual(primary_name_count, 0)
+        self.assertEqual(non_primary_name_count, 1)
 
     def test_duplicate_name(self):
         """
         Makes sure that duplicate names is not saving.
         """
-        primary_name = NewPrimaryNameFactory(user=self.user)
         name1 = NewNameFactory(user=self.user)
         name2 = NewNameFactory(user=self.user)
 
-        num_results = self.user.profileunits_set.filter(
-                        content_type__name='name').count()
-        self.assertEqual(num_results, 2)
+        num_results = Name.objects.filter(user=self.user).count()
+        self.assertEqual(num_results, 1)
 
     def test_unverified_primary_email(self):
         """

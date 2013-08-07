@@ -190,24 +190,40 @@ class Name(ProfileUnits):
         :param args:
         :param kwargs:
         """
-        if self.primary:
-            try:
-                temp = Name.objects.select_for_update().get(primary=True,
-                                                            user=self.user)
-            except Name.DoesNotExist:
-                super(Name, self).save(*args, **kwargs)
-            else:
-                if self.get_full_name() != temp.get_full_name():
-                    temp.primary = False
-                    temp.save()
+        duplicate_names = Name.objects.filter(user=self.user,
+                                              given_name=self.given_name,
+                                              family_name=self.family_name)
+        if duplicate_names:
+            if self.primary:
+                if self.id in [name.id for name in duplicate_names]:
                     super(Name, self).save(*args, **kwargs)
+                else:
+                    duplicate = duplicate_names[0]
+                    if duplicate.primary is False:
+                        try:
+                            current_primary = Name.objects.select_for_update().get(primary=True, user=self.user)
+                        except:
+                            duplicate.primary = True
+                            duplicate.save()
+                        else:
+                            current_primary.primary = False
+                            current_primary.save()
+                            duplicate.primary = True
+                            duplicate.save()
+            elif self.id in [name.id for name in duplicate_names]:
+                super(Name, self).save(*args, **kwargs)
         else:
-            names = self.user.profileunits_set.filter(content_type__name='name')
-
-            full_name_list = [name.name.get_full_name() for name in names]
-
-            if (self.get_full_name() not in full_name_list or
-                    self.id in [name.id for name in names]):
+            if self.primary:
+                try:
+                    temp = Name.objects.select_for_update().get(primary=True, user=self.user)
+                except Name.DoesNotExist:
+                    super(Name, self).save(*args, **kwargs)
+                else:
+                    if self.get_full_name() != temp.get_full_name():
+                        temp.primary = False
+                        temp.save()
+                        super(Name, self).save(*args, **kwargs)
+            else:
                 super(Name, self).save(*args, **kwargs)
 
     def __unicode__(self):
@@ -219,7 +235,7 @@ class Name(ProfileUnits):
 
 class SecondaryEmail(ProfileUnits):
     email = models.EmailField(max_length=255, unique=True, error_messages={
-                                'unique':'This email is already registered.'})
+        'unique': 'This email is already registered.'})
     label = models.CharField(max_length=30, blank=True, null=True)
     verified = models.BooleanField(default=False, editable=False)
     verified_date = models.DateTimeField(blank=True, null=True, editable=False)
