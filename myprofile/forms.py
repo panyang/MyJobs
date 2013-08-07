@@ -75,6 +75,8 @@ class EducationForm(BaseUserForm):
         form_name = _("Education")
         model = Education
         widgets = generate_custom_widgets(model)
+        widgets['start_date'].attrs['placeholder'] = 'ie 05/30/2005'
+        widgets['end_date'].attrs['placeholder'] = 'ie 06/01/2007'
         
 
 class EmploymentHistoryForm(BaseUserForm):
@@ -87,6 +89,8 @@ class EmploymentHistoryForm(BaseUserForm):
         form_name = _("Most Recent Work History")
         model = EmploymentHistory
         widgets = generate_custom_widgets(model)
+        widgets['start_date'].attrs['placeholder'] = 'ie 05/30/2005'
+        widgets['end_date'].attrs['placeholder'] = 'ie 06/01/2007'
         
        
 class TelephoneForm(BaseUserForm):
@@ -132,6 +136,11 @@ class MilitaryServiceForm(BaseUserForm):
         form_name = _("Military Service History")
         model = MilitaryService
         widgets = generate_custom_widgets(model)
+        widgets['branch'].attrs['placeholder'] = 'Army, Navy, Air Force...'
+        widgets['service_start_date'].attrs['placeholder'] = 'ie 05/30/2005'
+        widgets['service_end_date'].attrs['placeholder'] = 'ie 06/01/2007'
+        widgets['start_rank'].attrs['placeholder'] = 'Pay Grade ie E-4'
+        widgets['end_rank'].attrs['placeholder'] = 'Pay Grade ie E-8'
 
     def clean_branch(self):
         return self.cleaned_data['branch'].lower()
