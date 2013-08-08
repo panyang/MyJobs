@@ -199,6 +199,12 @@ table#row-link-table {
    padding: 0 0 0 5px;
 }
 
+table tr td a {
+    display:block;
+    height:100%;
+    width:100%;
+}
+
 /*Ajax Indicator*/
 #ajax-busy {
     display: none;    
