@@ -12,17 +12,17 @@ from django.http import HttpRequest
 from django.test.client import Client
 from django.test import TestCase
 from django.utils import simplejson as json
-from django.utils.http import urlquote
 
 from myjobs.forms import *
 from myjobs.models import User, EmailLog
 from myjobs.tests.factories import *
 
-from myprofile.models import *
 from mysearches.models import SavedSearch
-from registration.forms import *
 from registration.models import ActivationProfile
 from registration import signals as custom_signals
+
+from secrets import options, my_agent_auth
+from jira.client import JIRA
 
 from tasks import process_batch_events
 
@@ -466,6 +466,10 @@ class MyJobsViewsTests(TestCase):
                                               'action': 'login'})
             self.assertEqual(response.status_code, 200)
             self.assertEqual(response.content, '{"url": "undefined",' +
-					       ' "validation": "valid"}')
+                                               ' "validation": "valid"}')
 
             self.client.get(reverse('auth_logout'))
+
+    def test_jira_login(self):
+        jira = JIRA(options=options, basic_auth=my_agent_auth)
+        self.assertIsNotNone(jira)

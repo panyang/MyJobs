@@ -208,7 +208,7 @@ $(function() {
                         var json = jQuery.parseJSON(data);
 
                         // remove color from labels of current errors
-                        $('[class*=required]').parent().prev().css('color', '#000');
+                        $('[class*=required]').parent().prev().removeClass('error-text');
 
                         // remove current errors
                         $('[class*=required]').children().unwrap();
@@ -222,10 +222,10 @@ $(function() {
                             var $labelOfError = $error.parent().prev();
 
                             // insert new errors after the relevant inputs
-                            $error.wrap('<span class="required" />');
+                            $error.wrap('<div class="required" />');
                             $error.attr("placeholder",json[index][0]);
                             $error.val('')
-                            $labelOfError.css('color', '#900');
+                            $labelOfError.addClass('error-text');
                         }
                     }
                 }
@@ -249,6 +249,7 @@ function add_date_button() {
 }
 
 $(document).ready(function() {
+    $('#id_militaryservice-country_code').trigger('change');
     if($(window).width() >= 501) {
         // This function will be executed when the user scrolls the page.
         $(window).scroll(function(e) {
