@@ -18,7 +18,7 @@ easier and faster
                     <td><a href="/">Home</a></td>
                 </tr>
                 <tr class="profile-section">
-                    <td><a href="{% url 'view_profile' %}">Profile</a></td>
+                    <td><a href="{% url 'view_profile' user.email %}">Profile</a></td>
                 </tr>
                 {% if user.is_authenticated %}
                 	<tr class="profile-section">

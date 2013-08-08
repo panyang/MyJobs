@@ -81,7 +81,8 @@ class MyJobsViewsTests(TestCase):
         return '\r\n'.join(messages)
 
     def test_edit_account_success(self):
-        resp = self.client.post(reverse('edit_account'),
+        resp = self.client.post(reverse('edit_account',
+                                        args=[self.user.email]),
                                     data={'given_name': 'Alice',
                                           'family_name': 'Smith',
                                           'gravatar': 'alice@example.com',
@@ -93,7 +94,8 @@ class MyJobsViewsTests(TestCase):
         self.assertEqual(resp.content, 'success')
         
     def test_change_password_success(self):
-        resp = self.client.post(reverse('edit_password'),
+        resp = self.client.post(reverse('edit_password',
+                                        args=[self.user.email]),
                                     data={'password': 'secret',
                                           'new_password1': 'new',
                                           'new_password2': 'new'}, follow=True)
@@ -103,7 +105,8 @@ class MyJobsViewsTests(TestCase):
         self.assertTrue(user.check_password('new'))
 
     def test_change_password_failure(self):
-        resp = self.client.post(reverse('edit_password'),
+        resp = self.client.post(reverse('edit_password',
+                                        args=[self.user.email]),
                                     data={'password': 'secret',
                                           'new_password1': 'new',
                                           'new_password2': 'notNew'}, follow=True)
@@ -194,7 +197,8 @@ class MyJobsViewsTests(TestCase):
         Going to the delete_account view removes a user and their date completely
         """
         self.assertEqual(User.objects.count(), 2)
-        resp = self.client.get(reverse('delete_account'), follow=True)
+        resp = self.client.get(reverse('delete_account',
+                                       args=[self.user.email]), follow=True)
         self.assertEqual(User.objects.count(), 1)
 
     def test_disable_account(self):
@@ -212,7 +216,8 @@ class MyJobsViewsTests(TestCase):
         profile = ActivationProfile.objects.get(user=user)
         self.assertEqual(profile.activation_key, 'ALREADY ACTIVATED')
 
-        resp = self.client.get(reverse('disable_account'), follow=True)
+        resp = self.client.get(reverse('disable_account',
+                                       args=[self.user.email]), follow=True)
         user = User.objects.get(id=self.user.id)
         profile = ActivationProfile.objects.get(user=user)
         self.assertNotEqual(profile.activation_key, 'ALREADY ACTIVATED')
@@ -395,7 +400,8 @@ class MyJobsViewsTests(TestCase):
         self.user.last_response = date.today() - timedelta(days=7)
         self.user.save()
 
-        response = self.client.get(reverse('continue_sending_mail'),
+        response = self.client.get(reverse('continue_sending_mail',
+                                           args=[self.user.email]),
                                     data={'user': self.user}, follow=True)
 
         self.assertEqual(self.user.last_response,
@@ -412,19 +418,21 @@ class MyJobsViewsTests(TestCase):
         """
         self.user.password_change = True
         self.user.save()
+        self.user = User.objects.get(email=self.user.email)
 
         response = self.client.get(reverse('saved_search_main',
                                            args=[self.user.email]))
 
         self.assertEqual(response.status_code, 302)
-        self.assertRedirects(response, reverse('edit_account'))
+        self.assertRedirects(response, reverse('edit_account', args=[self.user.email]))
 
         response = self.client.get(reverse('registration_activate',
                                    args=['activation_code_here']))
 
         self.assertEqual(response.status_code, 200)
 
-        response = self.client.post(reverse('edit_password'),
+        response = self.client.post(reverse('edit_password',
+                                            args=[self.user.email]),
                                     data={'password':'secret',
                                           'new_password1':'secret2',
                                           'new_password2':'secret2'})

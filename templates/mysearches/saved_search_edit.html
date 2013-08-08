@@ -8,9 +8,6 @@
 {% endblock %}
 {% block meta-extra %}
 <script src="{{ STATIC_URL }}saved-search-edit.js{% cache_buster %}"></script>
-<script>
-    var user_email = '{{user.email}}';
-</script>
 {% endblock %}
 
 {% block content %}

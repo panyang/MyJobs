@@ -149,7 +149,8 @@ def save_search_form(request):
         if request.is_ajax():
             return HttpResponse(status=200)
         else:
-            return HttpResponseRedirect(reverse('saved_search_main'))
+            return HttpResponseRedirect(reverse('saved_search_main',
+                                                args=[request.user.email]))
     else:
         if request.is_ajax():
             return HttpResponse(json.dumps(form.errors))

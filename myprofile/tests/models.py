@@ -94,6 +94,8 @@ class MyProfileTests(TestCase):
         secondary_email = SecondaryEmailFactory(user=self.user)
         activation = ActivationProfile.objects.get(user=self.user,
                                                    email=secondary_email.email)
+        #import ipdb
+        #ipdb.set_trace()
         response = self.client.get(reverse('registration_activate',
                                            kwargs={'activation_key':
                                                    activation.activation_key}))

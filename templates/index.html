@@ -27,7 +27,7 @@
                             {% endwith %}!</b></p>
                         {% endwith %}
                     
-                        <p><a href="{% url 'view_profile' %}">View Your Profile</a></p>
+                        <p><a href="{% url 'view_profile' user.email %}">View Your Profile</a></p>
                     {% endif %}
                     {% if not user.is_active %}
                     <div class="alert-message info">

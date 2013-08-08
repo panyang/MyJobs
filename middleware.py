@@ -28,13 +28,15 @@ class RedirectMiddleware:
     """
     def process_request(self, request):
         if request.user.is_authenticated():
-            if (not re.match(reverse('edit_account'), request.path) and
-                not re.match(reverse('edit_password'), request.path) and
+            #import ipdb
+            #ipdb.set_trace()
+            if (not re.match(reverse('edit_account', args=[request.user.email]), request.path) and
+                not re.match(reverse('edit_password', args=[request.user.email]), request.path) and
                 not re.match(reverse('auth_logout'), request.path) and
                 not re.match(reverse('registration_activate', args=['a'])[0:-2],
                                      request.path) and
                 request.user.password_change):
-                return http.HttpResponseRedirect(reverse('edit_account'))
+                return http.HttpResponseRedirect(reverse('edit_account', args=[request.user.email]))
         elif request.is_ajax() and bool(request.REQUEST.get('next')):
             return http.HttpResponse(status=403)
 

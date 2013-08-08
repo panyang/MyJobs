@@ -7,7 +7,7 @@ from django.shortcuts import get_object_or_404
 
 from myjobs.models import User
 
-def user_is_allowed(model, pk_name=None):
+def user_is_allowed(model=None, pk_name=None):
     """
     Determines if the currently logged in user should be accessing the
     decorated view
@@ -34,14 +34,13 @@ def user_is_allowed(model, pk_name=None):
         def wrap(request, *args, **kwargs):
             email = kwargs.pop('user_email')
 
-
             if not request.user.is_anonymous():
                 if request.user != User.objects.get_email_owner(email):
                     # If the currently logged in user doesn't own the email
                     # address from the requested url, log out the user
                     # and redirect to home page
                     logout(request)
-                    return HttpResponseRedirect(reverse('home'))
+                    raise Http404
 
             if pk_name:
                 pk = kwargs.get(pk_name)

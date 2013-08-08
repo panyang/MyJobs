@@ -24,6 +24,7 @@ from captcha.fields import ReCaptchaField
 from secrets import RECAPTCHA_PUBLIC_KEY, RECAPTCHA_PRIVATE_KEY, EMAIL_TO_ADMIN
 from secrets import options, my_agent_auth
 
+from myjobs.decorators import user_is_allowed
 from myjobs.models import User, EmailLog
 from myjobs.forms import *
 from myjobs.helpers import *
@@ -193,7 +194,8 @@ def contact(request):
         form = CaptchaForm()
         data_dict = {'form':form}
     return render_to_response('contact.html',data_dict, RequestContext(request))
-    
+
+@user_is_allowed()
 @user_passes_test(User.objects.not_disabled)
 def edit_account(request):
     initial_dict = check_name_obj(request.user)
@@ -201,8 +203,8 @@ def edit_account(request):
            'gravatar_100': request.user.get_gravatar_url(size=100)}
 
     if request.user.password_change:
-        resp = edit_password(request)
-        ctx['change_pass'] = mark_safe(resp.content)
+        ctx['form'] = ChangePasswordForm(user=request.user)
+        ctx['section_name'] = 'password'
     else:
         form = EditAccountForm(initial=initial_dict, user=request.user)
         if request.method == "POST":
@@ -211,11 +213,13 @@ def edit_account(request):
                 form.save(request.user)
                 return HttpResponse('success')
         ctx['form'] = form
+        ctx['section_name'] = 'basic'
            
     
     return render_to_response('myjobs/edit-account.html', ctx,
                               RequestContext(request))
 
+@user_is_allowed()
 @user_passes_test(User.objects.not_disabled)
 def edit_basic(request):
     initial_dict = check_name_obj(request.user)    
@@ -236,6 +240,7 @@ def edit_basic(request):
                               RequestContext(request))
     
 
+@user_is_allowed()
 @user_passes_test(User.objects.not_disabled)
 def edit_communication(request):
     obj = User.objects.get(id=request.user.id)
@@ -256,6 +261,7 @@ def edit_communication(request):
 
     
     
+@user_is_allowed()
 @user_passes_test(User.objects.not_disabled)
 def edit_password(request):
     form = ChangePasswordForm()
@@ -274,12 +280,14 @@ def edit_password(request):
     return render_to_response('myjobs/edit-form-template.html', ctx,
                               RequestContext(request))
 
+@user_is_allowed()
 @user_passes_test(User.objects.not_disabled)
 def edit_delete(request):
     ctx = {'gravatar_150': request.user.get_gravatar_url(size=150)}
     return render_to_response('myjobs/edit-delete.html', ctx,
                               RequestContext(request))
 
+@user_is_allowed()
 @user_passes_test(User.objects.not_disabled)
 def edit_disable(request):
     ctx = {'gravatar_150': request.user.get_gravatar_url(size=150)}
@@ -287,6 +295,7 @@ def edit_disable(request):
                               RequestContext(request))
 
         
+@user_is_allowed()
 @user_passes_test(User.objects.not_disabled)
 def delete_account(request):
     email = request.user.email
@@ -295,6 +304,7 @@ def delete_account(request):
     return render_to_response('myjobs/delete-account-confirmation.html', ctx,
                               RequestContext(request))
 
+@user_is_allowed()
 @user_passes_test(User.objects.not_disabled)
 def disable_account(request):
     user = request.user
@@ -304,15 +314,6 @@ def disable_account(request):
     ctx = {'email': email}
     return render_to_response('myjobs/disable-account-confirmation.html', ctx,
                               RequestContext(request))
-
-def error(request):
-    """Error view"""
-    messages = get_messages(request)
-    ctx = {
-        'version': version,
-        'messages': messages
-        }
-    return render_to_response('error.html', ctx, RequestContext(request))
 
 @csrf_exempt
 def batch_message_digest(request):
@@ -354,6 +355,7 @@ def batch_message_digest(request):
                     return HttpResponse(status=200)
     return HttpResponse(status=403)
 
+@user_is_allowed()
 @user_passes_test(User.objects.not_disabled)
 def continue_sending_mail(request):
     """

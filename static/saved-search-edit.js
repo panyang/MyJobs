@@ -39,6 +39,7 @@ $(function() {
                 type: 'POST',
                 url: '/'+user_email+'/saved-search/save/',
                 success: function(data) {
+                    console.log(data)
                     if (data == '') {
                         window.location = '/'+user_email+'/saved-search/';
                     } else {

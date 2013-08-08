@@ -39,7 +39,7 @@
             <h3>{{user.email}}</h3>
         </div>
         <div class="span10" id="profileSubtitleBar">
-            <a href="{% url 'edit_account' %}">{% trans "Account Settings" %}</a>
+            <a href="{% url 'edit_account' user.email %}">{% trans "Account Settings" %}</a>
         </div>
     </div>{# /profileTitleRow #}
     <div class="row">
@@ -58,7 +58,7 @@
                 <table class="table table-bordered tables-striped">
                 {% for module in profile_config %}
                 <tr class="profile-section" {% if module.items %}style="display:none;"{% endif %}><td>
-                    <a class="" id="{{module.name}}-new-section" href="{% url 'handle_form' %}?module={{module.name}}&id=new">
+                    <a class="" id="{{module.name}}-new-section" href="{% url 'handle_form' user.email %}?module={{module.name}}&id=new">
                         {{ module.verbose }}
                     </a>
                 </td></tr>

@@ -2,6 +2,10 @@
 Document Level Actions
 *******/
 $(document).ready(function(){
+    $("#id_email").attr("placeholder", "Email");
+    $( "input[id$='date']" ).datepicker({dateFormat: window.dateFormat,
+                                         constrainInput: false});
+
     var offset = 0;
 
     $(this).ajaxStart(function () {
@@ -24,7 +28,7 @@ $(document).ready(function(){
         $(this).dialog("close");
     });
     $(this).ajaxError(function (e, xhr) {
-        if (xhr.status == 403) {
+        if (xhr.status == 403 || xhr.status == 404) {
             // redirect to the home page on 403
             window.location = '/';
         }
@@ -43,7 +47,7 @@ $(document).ready(function(){
     $('#disable-account').click(function(){
         var answer = confirm('Are you sure you want to disable your account?');
         if (answer == true) {
-            window.location = '/account/disable';
+            window.location = '/' + url_prefix + '/account/disable';
         }
     });
 

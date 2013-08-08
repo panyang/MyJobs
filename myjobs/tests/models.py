@@ -63,21 +63,28 @@ class UserManagerTests(TestCase):
         """
         client = TestClient()
         user = UserFactory()
+
+        quoted_email = urllib.quote(user.email)
         
         #Anonymous user
-        resp = client.get(reverse('view_profile'))
-        self.assertRedirects(resp, "http://testserver/?next=/profile/")
+        resp = client.get(reverse('view_profile',
+                                  args=[user.email]))
+        self.assertRedirects(resp, "http://testserver/?next=/%s/profile/"
+                             % (quoted_email,))
 
         # Active user
         client.login_user(user)
-        resp = client.get(reverse('view_profile'))
+        resp = client.get(reverse('view_profile',
+                                  args=[user.email]))
         self.assertTrue(resp.status_code, 200)
         
         #Disabled user
         user.is_disabled = True
         user.save()
-        resp = client.get(reverse('view_profile'))
-        self.assertRedirects(resp, "http://testserver/?next=/profile/")
+        resp = client.get(reverse('view_profile',
+                                  args=[user.email]))
+        self.assertRedirects(resp, "http://testserver/?next=/%s/profile/"
+                             % (quoted_email,))
 
     def test_is_active(self):
         """
