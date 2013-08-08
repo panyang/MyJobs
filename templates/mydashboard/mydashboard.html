@@ -20,7 +20,20 @@
 <script>
 $(document).ready(function()
 {
-
+   $('#row-link-table tr').each(function(i,e)
+   {
+      $(e).children('td').click(function()
+      {
+         //here we are working on a td element, that's why we need
+         //to refer to its parent (tr) in order to find the <a> element
+         var href = $(this).closest("tr").find("a").attr("href");
+         if(href)
+         {
+            window.location = href;
+         }              
+      });
+   });
+   
    $("#{{ date_button }}").attr('class', 'btn btn-success');   
 
    $('.collapse').each(function(){
