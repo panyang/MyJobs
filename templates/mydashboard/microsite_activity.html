@@ -52,14 +52,30 @@ $(document).ready(function()
             icon.removeClass('icon-minus');
             icon.addClass('icon-plus');
         });
-    });   
+    });
     
+    $(function() {
+    $( "#accordion" ).accordion({
+        collapsible: true,
+        heightStyle: "content",
+        autoHeight: false,
+        clearStyle: true, 
+    });
+    
+    
+  });
 });
 </script>
 {% endblock %}
 
 {% block content %}
 <style>
+#accordion .ui-icon { display: none; }
+#accordion .ui-accordion-header a { padding-left: 10px; }
+
+.ui-state-active, .ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default {
+    background: #d2cfc7;    
+}
 #profileTitleRow{
     margin-bottom: 20px;
 }
@@ -108,62 +124,138 @@ $(document).ready(function()
                             <br>
                             <hr>
                             </div>
-                                <div class="accordion" id="details-candidate-activity-collapse">
-                                    <div class="accordion-group">
-                                        <div class="accordion-heading details-heading">
+                                <div id="accordion" class="accordion-group">                                    
+                                    <div class="accordion-heading details-heading">
                                             <a class="accordion-toggle" data-toggle="collapse" data-parent="#details-candidate-activity-collapse" 
                                                 href="#candidate-activity-details-table">Saved Searches<span class="pull-right"><i class="icon icon-minus"></i></span></a>
                                         </div>
-                                        <div id="candidate-activity-details-table" class="accordion-body in collapse">
-                                            <div class="accordion-inner">
-                                            {% if candidates %}                                               
-                                                <table id="row-link-table">                            
-                                                    {% for candidate in candidates %}                    
-                                                    <tr class="hide-mobile">
-                                                        <td>
-                                                        <img src="{{candidate.user.get_gravatar_url}}&s=65" class="gravatar pull-left"> 
-                                                        </td>
-                                                        <td>
-                                                        <div class="candidate-name pull-left">{{candidate.user|get_name_obj}}</div><br>
-                                                        <a href="{{ candidate.user.id }}" class="pull-left">{{candidate.user}}</a><br>
-                                                        <div class="pull-left">{{candidate.url|url_domain}}<br>
-                                                        {{candidate.created_on.date}}</div>
-                                                        </td>
-                                                    <tr>
-                                                    <tr class="candidate-activity-mobile">
-                                                        <td>
-                                                        <img src="{{candidate.user.get_gravatar_url}}&s=45" class="gravatar pull-left"> 
-                                                        </td>
-                                                        <td>
-                                                        <div class="candidate-name pull-left">{{candidate.user|get_name_obj}}</div>
-                                                        <a href="{{ candidate.user.id }}" class="candidate-activity-mobile pull-left">{{candidate.user}}</a>
-                                                        <div class="pull-left">{{candidate.url|url_domain}}<br>
-                                                        {{candidate.created_on.date}}</div>
-                                                        </td>
-                                                    <tr>
-                                                    {% endfor %}                                                    
-                                                 </table>                                                 
-                                                 <div class="pull-left span6">                                                 
-                                                 {% if candidates.has_previous %}
-                                                    <a href="?page={{ candidates.previous_page_number }}&microsite_url={{ microsite_url }}&after={{ after|date:'m/d/Y' }}&before={{ before|date:'m/d/Y' }}">Previous</a>
-                                                 {% else %}
-                                                    &nbsp;
-                                                 {% endif %}
-                                                 &nbsp;
-                                                 Page {{ candidates.number }} of {{ candidates.paginator.num_pages }}
-                                                 &nbsp;
-                                                 {% if candidates.has_next %}
-                                                    <a href="?page={{ candidates.next_page_number }}&microsite_url={{ microsite_url }}&after={{ after|date:'m/d/Y' }}&before={{ before|date:'m/d/Y' }}">Next</a>
-                                                 {% endif %}
-                                                 </div>
-                                             {% else %}
-                                                 <div id="no-activity">
-                                                    <strong>There is no candidate activity between {{after.date}} and {{before.date}} for {{ site_name|cut:"http://" }}</strong>
-                                                 </div>
-                                             {% endif %}
+                                        <div id="candidate-activity-details-table">
+                                            
+                                            
+                                            {% include page_template %}                
+                
+                                            {% block js_pagination %}
+                                                {{ block.super }}                
+                                                <script>
+                                                (function ($) {
+                                                'use strict';
+                                                
+                                                $.fn.endlessPaginate = function(options) {
+                                                var defaults = {
+                                                // Twitter-style pagination container selector.
+                                                containerSelector: '.endless_container',
+                                                // Twitter-style pagination loading selector.
+                                                loadingSelector: '.endless_loading',
+                                                // Twitter-style pagination link selector.
+                                                moreSelector: 'a.endless_more',
+                                                // Digg-style pagination page template selector.
+                                                pageSelector: '.endless_page_template',
+                                                // Digg-style pagination link selector.
+                                                pagesSelector: 'a.endless_page_link',
+                                                // Callback called when the user clicks to get another page.
+                                                onClick: function() {},
+                                                // Callback called when the new page is correctly displayed.
+                                                onCompleted: function() {},
+                                                // Set this to true to use the paginate-on-scroll feature.
+                                                paginateOnScroll: false,
+                                                // If paginate-on-scroll is on, this margin will be used.
+                                                paginateOnScrollMargin : 1,
+                                                // If paginate-on-scroll is on, it is possible to define chunks.
+                                                paginateOnScrollChunkSize: 0
+                                                },
+                                                settings = $.extend(defaults, options);
+                                                
+                                                var getContext = function(link) {
+                                                return {
+                                                key: link.attr('rel').split(' ')[0],
+                                                url: link.attr('href')
+                                                };
+                                                };
+                                                
+                                                return this.each(function() {
+                                                var element = $(this),
+                                                loadedPages = 1;
+                                                
+                                                // Twitter-style pagination.
+                                                element.on('click', settings.moreSelector, function() {
+                                                var link = $(this),
+                                                html_link = link.get(0),
+                                                container = link.closest(settings.containerSelector),
+                                                loading = container.find(settings.loadingSelector);
+                                                // Avoid multiple Ajax calls.
+                                                if (loading.is(':visible')) {
+                                                return false;
+                                                }
+                                                link.hide();
+                                                loading.show();
+                                                var context = getContext(link);
+                                                // Fire onClick callback.
+                                                if (settings.onClick.apply(html_link, [context]) !== false) {
+                                                var data = 'querystring_key=' + context.key;
+                                                // Send the Ajax request.
+                                                $.get(context.url, data, function(fragment) {
+                                                container.before(fragment);
+                                                container.remove();
+                                                // Increase the number of loaded pages.
+                                                loadedPages += 1;
+                                                // Fire onCompleted callback.
+                                                settings.onCompleted.apply(
+                                                html_link, [context, fragment.trim()]);
+                                                });
+                                                }
+                                                return false;
+                                                });
+                                                
+                                                // On scroll pagination.
+                                                if (settings.paginateOnScroll) {
+                                                var win = $(window),
+                                                doc = $(document);
+                                                win.scroll(function(){
+                                                if (doc.height() - win.height() -
+                                                win.scrollTop() <= settings.paginateOnScrollMargin) {
+                                                // Do not paginate on scroll if chunks are used and
+                                                // the current chunk is complete.
+                                                var chunckSize = settings.paginateOnScrollChunkSize;
+                                                if (!chunckSize || loadedPages % chunckSize) {
+                                                element.find(settings.moreSelector).click();
+                                                }
+                                                }
+                                                });
+                                                }
+                                                
+                                                // Digg-style pagination.
+                                                element.on('click', settings.pagesSelector, function() {
+                                                var link = $(this),
+                                                html_link = link.get(0),
+                                                context = getContext(link);
+                                                // Fire onClick callback.
+                                                if (settings.onClick.apply(html_link, [context]) !== false) {
+                                                var page_template = link.closest(settings.pageSelector),
+                                                data = 'querystring_key=' + context.key;
+                                                // Send the Ajax request.
+                                                page_template.load(context.url, data, function(fragment) {
+                                                // Fire onCompleted callback.
+                                                settings.onCompleted.apply(
+                                                html_link, [context, fragment.trim()]);
+                                                });
+                                                }
+                                                return false;
+                                                });
+                                                });
+                                                };
+                                                
+                                                $.endlessPaginate = function(options) {
+                                                return $('body').endlessPaginate(options);                                                
+                                                };
+                                                $("#accordion").accordion("refresh");
+                                                })(jQuery);
+                                                </script>                
+                                                <script>$.endlessPaginate();</script>
+                                                
+                                            {% endblock %}
+                                            
                                             </div>{# /accordion-inner #}
-                                        </div>{# /-details-table #}
-                                    </div>{# /accordion-group #}
+                                        
                                 </div>{# /accordion #}                           
                     </div>{# /formBox #}
                 </div>{# /span8 #}

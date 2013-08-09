@@ -126,10 +126,14 @@ def dashboard(request, template="mydashboard/mydashboard.html",
         context.update(extra_context)
     return render_to_response(template, context,
         context_instance=RequestContext(request))
-    
 
+@page_template("mydashboard/site_activity.html") 
 @user_passes_test(lambda u: User.objects.is_group_member(u, 'Employer'))
-def microsite_activity(request):
+def microsite_activity(request, template="mydashboard/microsite_activity.html",
+    extra_context=None):
+    context = {
+        'candidates': SavedSearch.objects.all(),
+    }
     """
     Returns the activity information for the microsite that was select on the employer
     dashboard page.  Candidate activity for saved searches, job views, etc.
@@ -204,7 +208,7 @@ def microsite_activity(request):
         # If page is out of range (e.g. 9999), deliver last page of results.
         candidates = paginator.page(paginator.num_pages)    
     
-    data_dict = {'microsite_url': requested_microsite,
+    context = {'microsite_url': requested_microsite,
                  'after': after,
                  'before': before,                 
                  'candidates': candidates,                
@@ -213,9 +217,8 @@ def microsite_activity(request):
                  'date_button': requested_date_button,
                  'saved_search_count': saved_search_count}
     
-    return render_to_response('mydashboard/microsite_activity.html', data_dict,
-                              context_instance=RequestContext(request))
-
-        
-
+    if extra_context is not None:
+        context.update(extra_context)
+    return render_to_response(template, context,
+        context_instance=RequestContext(request))
 
