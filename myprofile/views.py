@@ -19,7 +19,7 @@ def edit_profile(request):
     following in data_dict:
 
     :profile_config:    A dictionary of profile units
-    :profileunits_list: A list of ProfileUnits that hasn't been made
+    :empty_display_names: A list of ProfileUnits that hasn't been made
     """
 
     user = request.user
