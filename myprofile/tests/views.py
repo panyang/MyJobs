@@ -1,18 +1,14 @@
 from bs4 import BeautifulSoup
-from importlib import import_module
 import json
 
-from django.conf import settings
-from django.contrib.auth import login
 from django.core.urlresolvers import reverse
-from django.http import HttpRequest
 from django.test import TestCase
 
 from myjobs.tests.views import TestClient
 from myjobs.tests.factories import UserFactory
 from myprofile.models import *
-from myprofile.views import *
 from myprofile.tests.factories import *
+
 
 class MyProfileViewsTests(TestCase):
     def setUp(self):
@@ -78,10 +74,10 @@ class MyProfileViewsTests(TestCase):
         """
 
         resp = self.client.post(reverse('handle_form'),
-                               data = {'module': 'Name', 'id': 'new',
-                                       'given_name': 'Susy',
-                                       'family_name': 'Smith'
-                                   })
+                                data={'module': 'Name', 'id': 'new',
+                                      'given_name': 'Susy',
+                                      'family_name': 'Smith'
+                                      })
         self.assertRedirects(resp, reverse('view_profile'))
         self.assertEqual(Name.objects.filter(given_name='Susy',
                                              family_name='Smith').count(), 1)
