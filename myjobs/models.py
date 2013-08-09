@@ -286,9 +286,9 @@ class User(AbstractBaseUser):
         models = {}
 
         for unit in units:
-            if unit.__getattribute__(unit.get_model_name()).is_displayed():
+            if getattr(unit, unit.get_model_name()).is_displayed():
                 models.setdefault(unit.get_model_name(), []).append(
-                    unit.__getattribute__(unit.get_model_name()))
+                    getattr(unit, unit.get_model_name()))
 
         return models
 

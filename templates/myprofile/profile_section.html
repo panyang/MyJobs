@@ -33,12 +33,12 @@
                 {% endwith %}
                 <td class="action">
                     <form action="{% url 'get_details' %}" class="profile-action-form" method="GET">
-                        <input type="hidden" name="id" value="{{module.0.id}}" >
+                        <input type="hidden" name="id" value="{{item.id}}" >
                         <button class="btn" type="submit">{% trans 'Details' %}</button>
                     </form>
                     <form action="{% url 'handle_form' %}" class="profile-action-form" method="GET">
-                        <input type="hidden" name="id" value="{{module.0.id}}" >
-                        <input type="hidden" name="module" value="{{module.0.get_model_name}}" >
+                        <input type="hidden" name="id" value="{{item.id}}" >
+                        <input type="hidden" name="module" value="{{item.get_verbose.title}}" >
                         <button type="submit" class="btn" >{% trans 'Edit' %}</button>
                     </form>
                 </td>
@@ -52,7 +52,7 @@
     {% endif %}
 
     <form action="{% url 'handle_form' %}" class="profile-action-form" method="GET">
-        <input type="hidden" name="module" value="{{module.0.name}}" >
+        <input type="hidden" name="module" value="{{module.0.get_verbose.title}}" >
         <button type="submit" class="btn primary">{% trans 'Add' %}</button>
     </form>
 </div>

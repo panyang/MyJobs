@@ -46,6 +46,7 @@ def edit_profile(request):
 def handle_form(request):
     item_id = request.REQUEST.get('id', 'new')
     module = request.REQUEST.get('module')
+    module = module.replace(" ", "")
 
     item = None
     if item_id != 'new':
@@ -58,7 +59,6 @@ def handle_form(request):
             raise Http404
 
     try:
-        module = module.replace(" ", "")
         form = globals()[module + 'Form']
     except KeyError:
         # Someone must have manipulated request data?
