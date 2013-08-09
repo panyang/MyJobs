@@ -26,16 +26,16 @@ def edit_profile(request):
 
     profile_config = user.profileunits_dict()
 
-    profileunits_list = [model._meta.verbose_name.title()
-                         for model in ProfileUnits.__subclasses__()]
+    unit_names = [model._meta.verbose_name.title()
+                  for model in ProfileUnits.__subclasses__()]
 
     for unit in profile_config.itervalues():
         unit = unit[0].get_verbose()
-        if unit in profileunits_list:
-            del profileunits_list[profileunits_list.index(unit)]
+        if unit in unit_names:
+            del unit_names[unit_names.index(unit)]
 
     data_dict = {'profile_config': profile_config,
-                 'unit_list': profileunits_list,
+                 'unit_names': unit_names,
                  'view_name': 'My Profile'}
 
     return render_to_response('myprofile/edit_profile.html', data_dict,

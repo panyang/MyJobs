@@ -56,7 +56,7 @@
             <div class="formBox right-side-fixed" id="moduleBank">
                 <h3>Add a New Section</h3>
                 <table class="table table-bordered tables-striped">
-                {% for module in unit_list %}
+                {% for module in unit_names %}
                 <tr class="profile-section" {% if module.items %}style="display:none;"{% endif %}><td>
                     <a class="" id="{{module}}-new-section" href="{% url 'handle_form' %}?module={{module}}&id=new">
                         {{ module }}
