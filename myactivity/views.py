@@ -68,9 +68,6 @@ def candidate_information(request, user_id):
     the microsites' domains in a list for further checking and logic, 
     see helpers.py.
     """
-    # gets returned with response to request
-    data_dict = {}
-    models = {}
     name = "Name not given"
 
     # user gets pulled out from id
@@ -86,14 +83,9 @@ def candidate_information(request, user_id):
     if not user.opt_in_employers:
         raise Http404
 
-    units = ProfileUnits.objects.filter(user=user)
+    models = user.profileunits_dict()
 
-    for unit in units:
-        if unit.__getattribute__(unit.get_model_name()).is_displayed():
-            models.setdefault(unit.get_model_name(), []).append(
-            unit.__getattribute__(unit.get_model_name()))
-
-    # if Name ProfileUnit exsists
+    # if Name ProfileUnit exists
     if models.get('name'):
         name=models['name'][0]
         models.pop('name')
@@ -101,9 +93,9 @@ def candidate_information(request, user_id):
     searches = user.savedsearch_set.filter(url__in=urls)
 
     data_dict = {'user_info': models,
-                'primary_name': name,
-                'the_user': user,
-                'searches': searches}
+                 'primary_name': name,
+                 'the_user': user,
+                 'searches': searches}
 
     return render_to_response('myactivity/candidate_information.html', data_dict,
                             RequestContext(request))
