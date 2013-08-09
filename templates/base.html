@@ -69,7 +69,7 @@
                                     {% if group_member and user.is_active and company_name|length >= 1%}
 
                                     <li class="">
-                                        <a href="{% url 'dashboard' %}">
+                                        <a href="{% url 'dashboard' user.email %}">
 
                                             {% if company_name|length > 1 %}
 
@@ -98,7 +98,7 @@
                                     {% if group_member and user.is_active and company_name|length >= 1%}
 
                                     <li class="">
-                                        <a href="{% url 'dashboard' %}">
+                                        <a href="{% url 'dashboard' user.email %}">
 
                                         {% if company_name|length > 1 %}
 
@@ -126,7 +126,7 @@
                                     {% if group_member and user.is_active and company_name|length >= 1%}
 
                                     <li class="active">
-                                        <a href="{% url 'dashboard' %}">
+                                        <a href="{% url 'dashboard' user.email %}">
 
                                             {% if company_name|length > 1 %}
 
@@ -155,7 +155,7 @@
                                     {% if group_member and user.is_active and company_name|length >= 1%}
 
                                     <li class="">
-                                        <a href="{% url 'dashboard' %}">
+                                        <a href="{% url 'dashboard' user.email %}">
 
                                         {% if company_name|length > 1 %}
 
@@ -208,7 +208,7 @@
                                                     {% if group_member and user.is_active and company_name|length >= 1%}
 
                                                     <li>
-                                                        <a id="company_dashboard_link" href="{% url 'dashboard' %}">
+                                                        <a id="company_dashboard_link" href="{% url 'dashboard' user.email %}">
 
                                                             {% if company_name|length > 1 %}
 

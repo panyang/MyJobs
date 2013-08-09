@@ -1,3 +1,4 @@
+
 from django import template
 from urlparse import urlparse
 from myjobs.models import User
@@ -39,7 +40,3 @@ def url_domain(value):
     updated_url = urlparse(active_url)
 
     return updated_url.netloc
-    
-
-
-    

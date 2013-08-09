@@ -27,7 +27,7 @@ easier and faster
                 	{% is_a_group_member user "Employer" as group_member %}
                 	{% if group_member and user.is_active %}
                 		<tr class="profile-section">
-                    		<td><a href="{% url 'dashboard' %}">Dashboard</a></td>
+                    		<td><a href="{% url 'dashboard' user.email %}">Dashboard</a></td>
                 		</tr>
                 	{% endif %}
                 {% endif %}

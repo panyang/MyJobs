@@ -5,26 +5,29 @@ import operator
 from datetime import datetime, timedelta
 import time
 from urlparse import urlparse
-from django.db.models import Q
-from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 
+from django.core.paginator import Paginator, EmptyPage, PageNotAnInteger
 from django.contrib.auth.decorators import user_passes_test, login_required
 from django.core.urlresolvers import reverse
+from django.db.models import Q
 from django.forms.models import model_to_dict
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.template import RequestContext
 from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.utils.html import mark_safe
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
 
-from myjobs.models import User, EmailLog
-from mysearches.models import SavedSearch
+from mydashboard.helpers import saved_searches
 from mydashboard.models import *
-from myjobs.forms import *
-from myjobs.helpers import *
-from myactivity.views import *
-   
+from myjobs.decorators import user_is_allowed
+#from myjobs.forms import *
+#from myjobs.helpers import *
+from myjobs.models import User, EmailLog
+from myprofile.models import ProfileUnits
+from mysearches.models import SavedSearch
+
+@user_is_allowed()
 @user_passes_test(lambda u: User.objects.is_group_member(u, 'Employer'))
 def dashboard(request):
     """
@@ -134,8 +137,9 @@ def dashboard(request):
     
     return render_to_response('mydashboard/mydashboard.html', data_dict,
                               context_instance=RequestContext(request))
-    
 
+
+@user_is_allowed()
 @user_passes_test(lambda u: User.objects.is_group_member(u, 'Employer'))
 def microsite_activity(request):
     """
@@ -223,6 +227,53 @@ def microsite_activity(request):
     
     return render_to_response('mydashboard/microsite_activity.html', data_dict,
                               context_instance=RequestContext(request))
-    
 
 
+@user_is_allowed()
+@user_passes_test(lambda u: User.objects.is_group_member(u, 'Employer'))
+def candidate_information(request, user_id):
+    """
+    Sends user info, primary name, and searches to candidate_information.html.
+    Gathers the employer's (request.user) companies and microsites and puts 
+    the microsites' domains in a list for further checking and logic, 
+    see helpers.py.
+    """
+    # gets returned with response to request
+    data_dict = {}
+    models = {}
+    name = "Name not given"
+
+    # user gets pulled out from id
+    try:
+        user = User.objects.get(id=user_id)
+    except User.DoesNotExist:
+        raise Http404
+
+    urls = saved_searches(request.user, user)
+    if not urls:
+        raise Http404
+
+    if not user.opt_in_employers:
+        raise Http404
+
+    units = user.profileunits_set.all()
+
+    for unit in units:
+        if unit.__getattribute__(unit.get_model_name()).is_displayed():
+            models.setdefault(unit.get_model_name(), []).append(
+            unit.__getattribute__(unit.get_model_name()))
+
+    # if Name ProfileUnit exsists
+    if models.get('name'):
+        name=models['name'][0]
+        models.pop('name')
+
+    searches = user.savedsearch_set.filter(url__in=urls)
+
+    data_dict = {'user_info': models,
+                'primary_name': name,
+                'the_user': user,
+                'searches': searches}
+
+    return render_to_response('mydashboard/candidate_information.html', data_dict,
+                            RequestContext(request))

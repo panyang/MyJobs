@@ -30,6 +30,7 @@ $(document).ready(function()
          var href = $(this).closest("tr").find("a").attr("href");
          if(href)
          {
+            console.log(href)
             window.location = href;
          }              
       });
@@ -89,7 +90,7 @@ $(document).ready(function()
             <div class="formBox">
             <h3 class="hide-mobile">Candidate Activity</h3><h3 class="candidate-activity-mobile">Job Seeker Activity</h3>
                                
-                <form action='/dashboard/' method='POST' class="move-left">
+                <form action='{% url 'dashboard' user.email %}' method='POST' class="move-left">
                     {% csrf_token %}
                     <div class="hide-mobile">
                         <div class="span2 form-label"><strong>Date Range:</strong></div><input name="after" type="text" placeholder="{{ after|date:'m/d/Y' }}" class="datepicker"> <strong>to</strong> <input name="before" type="text" placeholder="{{ before|date:'m/d/Y' }}" class="datepicker"></br>
