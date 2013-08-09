@@ -18,7 +18,7 @@
                 {% if user.is_authenticated %}
                     {% if user.is_disabled %}
                         <center><h2>{% trans "Your account is disabled." %} </h2>
-                        <p><a href="{% url 'resend_activation' %}">Send me an activation link to bring back my account!</a></p>
+                        <p><a href="{% url 'resend_activation' user.email %}">Send me an activation link to bring back my account!</a></p>
                     {% else %}
                         <center><p>Welcome <b> 
                         {% with short_email=user.email|truncatechars:"23" %}
@@ -31,7 +31,7 @@
                     {% endif %}
                     {% if not user.is_active %}
                     <div class="alert-message info">
-                      <p>{% trans "Your account doesn't have full access to MyJobs features! Please activate it using the activation link sent to your email. "%} <a href="{% url 'resend_activation' %}">{% trans "Resend my activation email." %}</a></p>
+                      <p>{% trans "Your account doesn't have full access to MyJobs features! Please activate it using the activation link sent to your email. "%} <a href="{% url 'resend_activation' user.email %}">{% trans "Resend my activation email." %}</a></p>
                     </div>
                     {% endif %}
                     <a class="btn primary" href="{% url 'auth_logout' %}">Log Out</a></center>

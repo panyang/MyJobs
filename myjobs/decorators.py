@@ -7,6 +7,9 @@ from django.shortcuts import get_object_or_404
 
 from myjobs.models import User
 
+
+#def 
+
 def user_is_allowed(model=None, pk_name=None):
     """
     Determines if the currently logged in user should be accessing the

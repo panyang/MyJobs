@@ -426,8 +426,9 @@ class MyJobsViewsTests(TestCase):
         self.assertEqual(response.status_code, 302)
         self.assertRedirects(response, reverse('edit_account', args=[self.user.email]))
 
+        profile = ActivationProfile.objects.get_or_create(user=self.user, email=self.user.email)[0]
         response = self.client.get(reverse('registration_activate',
-                                   args=['activation_code_here']))
+                                   args=[self.user.email, profile.activation_key]))
 
         self.assertEqual(response.status_code, 200)
 

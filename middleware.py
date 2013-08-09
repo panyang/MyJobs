@@ -1,3 +1,4 @@
+import operator
 import re
 
 from django.conf import settings
@@ -28,14 +29,13 @@ class RedirectMiddleware:
     """
     def process_request(self, request):
         if request.user.is_authenticated():
-            #import ipdb
-            #ipdb.set_trace()
-            if (not re.match(reverse('edit_account', args=[request.user.email]), request.path) and
-                not re.match(reverse('edit_password', args=[request.user.email]), request.path) and
-                not re.match(reverse('auth_logout'), request.path) and
-                not re.match(reverse('registration_activate', args=['a'])[0:-2],
-                                     request.path) and
-                request.user.password_change):
+            urls = [reverse('edit_account', args=[request.user.email]),
+                    reverse('edit_password', args=[request.user.email]),
+                    reverse('auth_logout'),
+                    reverse('registration_activate', args=[request.user.email, 'a'])[0:-2]]
+            url_matches = reduce(operator.or_, [request.path.startswith(url) for url in urls])
+
+            if (not url_matches and request.user.password_change):
                 return http.HttpResponseRedirect(reverse('edit_account', args=[request.user.email]))
         elif request.is_ajax() and bool(request.REQUEST.get('next')):
             return http.HttpResponse(status=403)
