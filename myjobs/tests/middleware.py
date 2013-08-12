@@ -11,27 +11,6 @@ from myjobs.models import User
 from myjobs.tests.factories import UserFactory
 
 
-class MockRequest(object):
-    """
-    Mock request object used for testing RedirectMiddleware. Can be expanded
-    to work for other middlewares by adding more attributes if necessary
-    """
-    def is_ajax(self):
-        return True
-
-
-    def __init__(self, user=AnonymousUser()):
-        self.user = user
-        if user.is_anonymous():
-            email = 'email@example.com'
-        else:
-            email = self.user.email
-        self.path = reverse('edit_account', args=[email])
-        quoted_email = urllib.quote(email)
-        self.REQUEST = {'next': '?next=/%s//account/'
-                            % [quoted_email]}
-
-
 class RedirectMiddlewareTests(TestCase):
     def setUp(self):
         self.user = UserFactory()
@@ -73,11 +52,9 @@ class RedirectMiddlewareTests(TestCase):
         An anonymous user that tries to post to a private url should
         receive a 403 Forbidden status
         """
-        #request = self.client.get(reverse('saved_search_main',
-        #                                  args=[self.user.email]))
         request = self.request_factory.get(reverse('saved_search_main',
                                                    args=[self.user.email]),
-                                                   HTTP_X_REQUESTED_WITH = 'XMLHttpRequest')
+                                           HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         new_request = request.GET.copy()
         new_request['next'] = reverse('home')
         request.GET = new_request

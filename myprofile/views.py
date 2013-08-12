@@ -20,6 +20,7 @@ from myprofile.forms import *
 from myprofile.models import ProfileUnits
 from registration.forms import *
 
+
 @user_is_allowed(ProfileUnits)
 @user_passes_test(User.objects.not_disabled)
 def edit_profile(request):
@@ -39,12 +40,12 @@ def edit_profile(request):
                    'Telephone', 'Address', 'MilitaryService']
     units = request.user.profileunits_set
     profile_config = []
-    
+
     for module in module_list:
         model = globals()[module]
         verbose = model._meta.verbose_name
 
-        x= []
+        x = []
         module_config = {}
         module_units = units.filter(content_type__name=verbose)
 
@@ -54,12 +55,12 @@ def edit_profile(request):
             if hasattr(unit, module.lower()):
                 x.append(getattr(unit, module.lower()))
         module_config['items'] = x
-        
+
         profile_config.append(module_config)
 
     data_dict = {'profile_config': profile_config,
-				 'view_name': 'My Profile'}
-    
+                 'view_name': 'My Profile'}
+
     return render_to_response('myprofile/edit_profile.html', data_dict,
                               RequestContext(request))
 
@@ -94,14 +95,17 @@ def handle_form(request):
 
     if request.method == 'POST':
         if request.POST.get('action') == 'updateEmail':
-            activation = ActivationProfile.objects.get_or_create(user=request.user, email=item.email)[0]
+            activation = ActivationProfile.objects.get_or_create(user=request.user,
+                                                                 email=item.email)[0]
             activation.send_activation_email(primary=False)
             return HttpResponse('success')
 
         if item_id == 'new':
-            form_instance = form(user=request.user, data=request.POST, auto_id=False)
+            form_instance = form(user=request.user, data=request.POST,
+                                 auto_id=False)
         else:
-            form_instance = form(user=request.user, instance=item, auto_id=False, data=request.POST)
+            form_instance = form(user=request.user, instance=item,
+                                 auto_id=False, data=request.POST)
         model = form_instance._meta.model
         data_dict['form'] = form_instance
         data_dict['verbose'] = model._meta.verbose_name.title()

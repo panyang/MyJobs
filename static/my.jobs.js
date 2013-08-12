@@ -44,13 +44,6 @@ $(document).ready(function(){
         $("#nav").removeClass("active");
     });
 
-    $('#disable-account').click(function(){
-        var answer = confirm('Are you sure you want to disable your account?');
-        if (answer == true) {
-            window.location = '/' + url_prefix + '/account/disable';
-        }
-    });
-
     $('a.account-menu-item').click(function(e) {
         e.preventDefault();
         if ($(window).width() < 500) {

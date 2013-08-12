@@ -14,6 +14,7 @@ if settings.NEW_RELIC_TRACKING:
     except ImportError:
         pass
 
+
 class RedirectMiddleware:
     """
     Redirects a user to the password change form if several conditions are met:
@@ -32,20 +33,22 @@ class RedirectMiddleware:
             urls = [reverse('edit_account', args=[request.user.email]),
                     reverse('edit_password', args=[request.user.email]),
                     reverse('auth_logout'),
-                    reverse('registration_activate', args=[request.user.email, 'a'])[0:-2]]
-            url_matches = reduce(operator.or_, [request.path.startswith(url) for url in urls])
+                    reverse('registration_activate',
+                            args=[request.user.email, 'a'])[0:-2]]
+            url_matches = reduce(operator.or_,
+                                 [request.path.startswith(url)
+                                  for url in urls])
 
             if (not url_matches and request.user.password_change):
-                return http.HttpResponseRedirect(reverse('edit_account', args=[request.user.email]))
+                return http.HttpResponseRedirect(reverse('edit_account',
+                                                         args=[request.user.email]))
         elif request.is_ajax() and bool(request.REQUEST.get('next')):
             return http.HttpResponse(status=403)
-
 
 
 XS_SHARING_ALLOWED_ORIGINS = '*'
 XS_SHARING_ALLOWED_METHODS = ['POST','GET','OPTIONS', 'PUT', 'DELETE']
 XS_SHARING_ALLOWED_HEADERS = 'Content-Type'
-
 
 
 class XsSharing(object):
