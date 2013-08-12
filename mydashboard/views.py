@@ -24,14 +24,16 @@ from mydashboard.models import *
 from myjobs.forms import *
 from myjobs.helpers import *
 from myactivity.views import *
-   
+from endless_pagination.decorators import page_template
+
+
+@page_template("mydashboard/dashboard_activity.html") 
 @user_passes_test(lambda u: User.objects.is_group_member(u, 'Employer'))
-def dashboard(request):
-    """
-    Returns a list of candidates who created a saved search for one of the microsites within the
-    company microsite list or with the company name like jobs.jobs/company_name/careers for example
-    between the given (optional) dates
-    """
+def dashboard(request, template="mydashboard/mydashboard.html",
+    extra_context=None):
+    context = {
+        'candidates': SavedSearch.objects.all(),
+    }    
     
     settings = {'user': request.user}
     
@@ -105,39 +107,33 @@ def dashboard(request):
     
     # Specific microsite searches saved between two dates
     candidate_searches = candidate_searches.filter(
-            created_on__range=[after, before]).order_by('-created_on')  
-    
-    paginator = Paginator(candidate_searches, 25) # Show 25 candidates per page
-    page = request.GET.get('page')
-    
-    try:
-        candidates = paginator.page(page)
-    except PageNotAnInteger:
-        # If page is not an integer, deliver first page.
-        candidates = paginator.page(1)
-    except EmptyPage:
-        # If page is out of range (e.g. 9999), deliver last page of results.
-        candidates = paginator.page(paginator.num_pages)    
+            created_on__range=[after, before]).order_by('-created_on')       
     
     admin_you = request.user
     
-    data_dict = {'company_name': company.name,
-                 'company_microsites': authorized_microsites,
-                 'company_admins': admins,                 
-                 'after': after,
-                 'before': before,                 
-                 'candidates': candidates,                
-                 'admin_you': admin_you,
-                 'site_name': site_name,
-                 'view_name': 'Company Dashboard',
-                 'date_button': requested_date_button,}
+    context = {'company_name': company.name,
+               'company_microsites': authorized_microsites,
+               'company_admins': admins,                 
+               'after': after,
+               'before': before,                 
+               'candidates': candidate_searches,                
+               'admin_you': admin_you,
+               'site_name': site_name,
+               'view_name': 'Company Dashboard',
+               'date_button': requested_date_button,}
     
-    return render_to_response('mydashboard/mydashboard.html', data_dict,
-                              context_instance=RequestContext(request))
-    
+    if extra_context is not None:
+        context.update(extra_context)
+    return render_to_response(template, context,
+        context_instance=RequestContext(request))
 
+@page_template("mydashboard/site_activity.html") 
 @user_passes_test(lambda u: User.objects.is_group_member(u, 'Employer'))
-def microsite_activity(request):
+def microsite_activity(request, template="mydashboard/microsite_activity.html",
+    extra_context=None):
+    context = {
+        'candidates': SavedSearch.objects.all(),
+    }
     """
     Returns the activity information for the microsite that was select on the employer
     dashboard page.  Candidate activity for saved searches, job views, etc.
@@ -212,7 +208,7 @@ def microsite_activity(request):
         # If page is out of range (e.g. 9999), deliver last page of results.
         candidates = paginator.page(paginator.num_pages)    
     
-    data_dict = {'microsite_url': requested_microsite,
+    context = {'microsite_url': requested_microsite,
                  'after': after,
                  'before': before,                 
                  'candidates': candidates,                
@@ -221,8 +217,8 @@ def microsite_activity(request):
                  'date_button': requested_date_button,
                  'saved_search_count': saved_search_count}
     
-    return render_to_response('mydashboard/microsite_activity.html', data_dict,
-                              context_instance=RequestContext(request))
-    
-
+    if extra_context is not None:
+        context.update(extra_context)
+    return render_to_response(template, context,
+        context_instance=RequestContext(request))
 
