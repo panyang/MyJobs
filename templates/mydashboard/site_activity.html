@@ -13,7 +13,7 @@
                     <img src="{{candidate.user.get_gravatar_url}}&s=65" class="gravatar pull-left"> 
                 </td>
                 <td>
-                    <div class="pull-left">{{candidate.user|get_name_obj}}</div><br>
+                    <div class="candidate-name-bold pull-left">{{candidate.user|get_name_obj}}</div><br>
                     <a href="{{ candidate.user.id }}" class="pull-left">{{candidate.user}}</a><br>
                     <div class="pull-left">{{candidate.url|url_domain}}<br>
                     {{candidate.created_on.date}}</div>
@@ -24,7 +24,7 @@
                     <img src="{{candidate.user.get_gravatar_url}}&s=45" class="gravatar pull-left"> 
                 </td>
                 <td>
-                <div class="candidate-name pull-left">{{candidate.user|get_name_obj}}</div>
+                <div class="candidate-name-bold pull-left">{{candidate.user|get_name_obj}}</div>
                     <a href="{{ candidate.user.id }}" class="candidate-activity-mobile pull-left">{{candidate.user}}</a>
                     <div class="pull-left">{{candidate.url|url_domain}}<br>
                     {{candidate.created_on.date}}</div>

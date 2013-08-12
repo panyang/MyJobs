@@ -35,6 +35,9 @@ a:hover {
 .candidate-activity-mobile {
     display: none;
 }
+#candidate-activity-details-table a {
+    color: #c44e34;
+}
 
 /*Employer Dashboard */
 #user-list-details-table {
@@ -159,6 +162,9 @@ table#row-link-table {
     font-size: 1.5em;   
 }
 
+.candidate-name-bold {
+    font-weight: bold;   
+}
 .microsite-name {
     font-size: 1.2em;
     font-weight: bold;
