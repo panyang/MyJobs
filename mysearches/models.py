@@ -63,7 +63,7 @@ class SavedSearch(models.Model):
                 return choice[1]
 
     def get_feed_items(self, num_items=5):
-        url_of_feed = url_sort_options(self.feed, self.sort_by)
+        url_of_feed = url_sort_options(self.feed, self.sort_by, self.frequency)
         return parse_rss(url_of_feed, self.frequency, num_items=num_items)
 
     def send_email(self):
