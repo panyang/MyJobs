@@ -1,4 +1,5 @@
 from functools import wraps
+import logging
 
 from django.contrib.auth import logout
 from django.core.urlresolvers import reverse
@@ -6,6 +7,8 @@ from django.http import Http404, HttpResponseRedirect
 from django.shortcuts import get_object_or_404
 
 from myjobs.models import User
+
+logger = logging.getLogger(__name__)
 
 
 def user_is_allowed(model=None, pk_name=None):
@@ -17,8 +20,8 @@ def user_is_allowed(model=None, pk_name=None):
     not vital to view functionality; This is removed from the view's kwargs
     and is not passed to the view itself.
 
-    Throws KeyError if email is not provided. This is an indicator of two
-    things:
+    Logs a warning if `user_email` is not provided or is empty. This could be
+    an indicator of two things:
     - Using this decorator may not be necessary
     - If using this decorator really is desired, the url pattern may not be
         set up correctly
@@ -33,13 +36,19 @@ def user_is_allowed(model=None, pk_name=None):
     """
     def decorator(view_func):
         def wrap(request, *args, **kwargs):
-            email = kwargs.pop('user_email')
+            try:
+                email = kwargs.pop('user_email')
+            except KeyError:
+                logger.warning('`user_is_allowed` decorator used, but '
+                               'no email provided')
+                email = None
 
             if not request.user.is_anonymous():
-                if request.user != User.objects.get_email_owner(email):
+                if ((not email or
+                     request.user != User.objects.get_email_owner(email))):
                     # If the currently logged in user doesn't own the email
-                    # address from the requested url, log out the user
-                    # and redirect to home page
+                    # address from the requested url or no email address is
+                    # provided, log out the user and redirect to home page
                     logout(request)
                     raise Http404
 

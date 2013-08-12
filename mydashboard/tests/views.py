@@ -1,4 +1,5 @@
 from bs4 import BeautifulSoup
+from datetime import timedelta
 
 from django.contrib.auth.models import Group
 from django.core.urlresolvers import reverse
@@ -38,9 +39,36 @@ class MyDashboardViewsTests(TestCase):
 
         self.candidate_user = UserFactory(email="example@example.com")
         SavedSearchFactory(user=self.candidate_user,
-                           url='test.jobs/search?q=django',
+                           url='http://test.jobs/search?q=django',
                            label='test Jobs')
         self.candidate_user.save()
+
+        for i in range(5):
+            # Create 5 new users
+            user = UserFactory(email='example%s@example.com' % i)
+            for search in SEARCH_OPTS:
+                # Create 15 new searches and assign three per user
+                SavedSearchFactory(user=user,
+                                   url='http://test.jobs/search?q=%s' % search,
+                                   label='%s Jobs' % search)
+
+    def test_number_of_searches_and_users_is_correct(self):
+        response = self.client.post(reverse('dashboard',
+                                            args=[self.staff_user.email]),
+                                    {'microsite': 'test.jobs'})
+        soup = BeautifulSoup(response.content)
+        # 16 searches total, two rows per search
+        self.assertEqual(len(soup.select('#row-link-table tr')), 32)
+
+        old_search = SavedSearch.objects.all()[0]
+        old_search.created_on -= timedelta(days=31)
+        old_search.save()
+
+        response = self.client.post(reverse('dashboard',
+                                            args=[self.staff_user.email]),
+                                    {'microsite': 'test.jobs'})
+        soup = BeautifulSoup(response.content)
+        self.assertEqual(len(soup.select('#row-link-table tr')), 30)
 
     # Eventually these opted-in/out will be changed to
     # track if user is part of company's activity feed
