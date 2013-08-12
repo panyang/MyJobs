@@ -1,4 +1,3 @@
-<script>
 (function ($) {
 'use strict';
 
@@ -111,4 +110,4 @@ return $('body').endlessPaginate(options);
 };
 
 })(jQuery);
-</script>
+
