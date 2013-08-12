@@ -53,7 +53,7 @@ class ProfileUnits(models.Model):
 
     @classmethod
     def get_verbose_class(object):
-        return object.__name__.title()
+        return object.__name__
 
     def get_verbose(self):
         return self.content_type.name.title()

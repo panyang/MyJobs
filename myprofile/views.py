@@ -32,7 +32,11 @@ def edit_profile(request):
         if units[0].__class__ in empty_units:
             del empty_units[empty_units.index(units[0].__class__)]
 
-    empty_display_names = [model.get_verbose_class() for model in empty_units]
+    empty_names = [model.get_verbose_class() for model in empty_units]
+    empty_display_names = []
+    for name in empty_names:
+        name_with_space = re.sub(r"(\w)([A-Z])", r"\1 \2", name)
+        empty_display_names.append(name_with_space)
 
     data_dict = {'profile_config': profile_config,
                  'unit_names': empty_display_names,
