@@ -1,10 +1,10 @@
 import datetime
-import urllib, hashlib
+import urllib
+import hashlib
 
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, _user_has_perm, Group
 from django.core.mail import EmailMessage
 from django.db import models
-from django.db.models.signals import post_save
 from django.utils.translation import ugettext_lazy as _
 
 from default_settings import GRAVATAR_URL_PREFIX, GRAVATAR_URL_DEFAULT
@@ -76,7 +76,7 @@ class CustomUserManager(BaseUserManager):
                 else:
                     custom_signals.send_activation.send(sender=self,user=user,
                                                         email=email)
-        return (user, created)
+        return user, created
 
     def create_user(self, **kwargs):
         """
@@ -151,6 +151,7 @@ class CustomUserManager(BaseUserManager):
         """
         return user.groups.filter(name=group).count() >= 1
 
+
 # New in Django 1.5. This is now the default auth user table. 
 class User(AbstractBaseUser):
     email = models.EmailField(verbose_name=_("email address"),
@@ -201,7 +202,7 @@ class User(AbstractBaseUser):
 
     def email_user(self, subject, message, from_email):
         msg = EmailMessage(subject, message, from_email, [self.email])
-        msg.content_subtype='html'
+        msg.content_subtype = 'html'
         msg.send()
 
     def has_perm(self, perm, obj=None):
@@ -265,6 +266,31 @@ class User(AbstractBaseUser):
     def add_default_group(self):
         group = Group.objects.get(name='Job Seeker')
         self.groups.add(group.pk)
+
+    def profileunits_dict(self, profileunits=None):
+        """
+        Inputs:
+        :profileunits:  The default value is .all() profileunits, but you can
+                        input your own QuerySet of profileunits if you are
+                        using specific filters
+
+        Outputs:
+        :models:        Returns a dictionary of profileunits, an example:
+                        {u'Name': [<Name: Foo Bar>, <Name: Bar Foo>]}
+        """
+        if not profileunits:
+            units = self.profileunits_set.all()
+        else:
+            units = profileunits
+
+        models = {}
+
+        for unit in units:
+            if getattr(unit, unit.get_model_name()).is_displayed():
+                models.setdefault(unit.get_model_name(), []).append(
+                    getattr(unit, unit.get_model_name()))
+
+        return models
 
 
 class EmailLog(models.Model):

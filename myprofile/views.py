@@ -2,22 +2,15 @@ import json
 import logging
 import re
 
-from django.contrib import messages
-from django.contrib.auth import authenticate, login
-from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.decorators import user_passes_test
 from django.core.urlresolvers import reverse
-from django.forms.models import model_to_dict
 from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.template import RequestContext
 from django.shortcuts import render_to_response, get_object_or_404
-from django.views.generic import TemplateView
 
 from myjobs.models import User
-from myjobs.forms import *
 from myjobs.helpers import *
-from myprofile.forms import *
 from myprofile.models import ProfileUnits
-from registration.forms import *
 
 @user_passes_test(User.objects.not_disabled)
 def edit_profile(request):
@@ -25,39 +18,26 @@ def edit_profile(request):
     Main profile view that the user first sees. Ultimately generates the
     following in data_dict:
 
-    :profile_config: A list of dictionaries. Each dictionary represents a
-                     different module (based on module_list) with the keys:
-                     verbose - the displayable title of the module
-                     name - the module name as it's named in the models.
-                     items - all the instances in that module for the user
+    :profile_config:    A dictionary of profile units
+    :empty_display_names: A list of ProfileUnits that hasn't been made
     """
 
-    settings = {'user': request.user}
-    module_list = ['Name', 'Education', 'EmploymentHistory', 'SecondaryEmail',
-                   'Telephone', 'Address', 'MilitaryService']
-    units = request.user.profileunits_set
-    profile_config = []
-    
-    for module in module_list:
-        model = globals()[module]
-        verbose = model._meta.verbose_name
+    user = request.user
 
-        x= []
-        module_config = {}
-        module_units = units.filter(content_type__name=verbose)
+    profile_config = user.profileunits_dict()
 
-        module_config['verbose'] = verbose.title()
-        module_config['name'] = module
-        for unit in module_units:
-            if hasattr(unit, module.lower()):
-                x.append(getattr(unit, module.lower()))
-        module_config['items'] = x
-        
-        profile_config.append(module_config)
+    empty_units = [model for model in ProfileUnits.__subclasses__()]
+
+    for units in profile_config.itervalues():
+        if units[0].__class__ in empty_units:
+            del empty_units[empty_units.index(units[0].__class__)]
+
+    empty_display_names = [model.get_verbose_class() for model in empty_units]
 
     data_dict = {'profile_config': profile_config,
-				 'view_name': 'My Profile'}
-    
+                 'unit_names': empty_display_names,
+                 'view_name': 'My Profile'}
+
     return render_to_response('myprofile/edit_profile.html', data_dict,
                               RequestContext(request))
 
@@ -66,6 +46,7 @@ def edit_profile(request):
 def handle_form(request):
     item_id = request.REQUEST.get('id', 'new')
     module = request.REQUEST.get('module')
+    module = module.replace(" ", "")
 
     item = None
     if item_id != 'new':
