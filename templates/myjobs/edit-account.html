@@ -34,10 +34,10 @@
                         <ul>
                         <a href="" class="account-menu-item {{user.password_change|display}}" id="account-basic"><li><h4 class="account-menu-header">{% trans "Personal Information" %}</h4>
                         </li></a>
-                        <a href="{% url 'edit_communication' %}" class="account-menu-item {{user.password_change|display}}" id="account-communication"><li><h4 class="account-menu-header">{% trans "Communication Settings" %}</h4></li></a>
-                        <a href="{% url 'edit_password' %}" class="account-menu-item" id="account-password"><li><h4 class="account-menu-header">{% trans "Change Password" %}</h4></li></a>
-                        <a href="{% url 'edit_disable' %}" class="account-menu-item {{user.password_change|display}}" id="account-disable"><li><h4 class="account-menu-header">{% trans "Disable Account" %}</h4></li></a>
-                        <a href="{% url 'edit_delete' %}" class="account-menu-item {{user.password_change|display}}" id="account-delete"><li><h4 class="account-menu-header">{% trans "Delete Account" %}</h4></li></a>
+                        <a href="{% url 'edit_communication' user.email %}" class="account-menu-item {{user.password_change|display}}" id="account-communication"><li><h4 class="account-menu-header">{% trans "Communication Settings" %}</h4></li></a>
+                        <a href="{% url 'edit_password' user.email %}" class="account-menu-item" id="account-password"><li><h4 class="account-menu-header">{% trans "Change Password" %}</h4></li></a>
+                        <a href="{% url 'edit_disable' user.email %}" class="account-menu-item {{user.password_change|display}}" id="account-disable"><li><h4 class="account-menu-header">{% trans "Disable Account" %}</h4></li></a>
+                        <a href="{% url 'edit_delete' user.email %}" class="account-menu-item {{user.password_change|display}}" id="account-delete"><li><h4 class="account-menu-header">{% trans "Delete Account" %}</h4></li></a>
 
                         </ul>
                     </div>  
@@ -47,17 +47,16 @@
                         {% if user.password_change %}
                             <p>Welcome to my.jobs. Before doing anything else, you need to change your password from the one we created for you.</p>
                             {{ change_pass }}
-                        {% else %}
-                            <form action="" method="POST" id="form-basic">
-                              {% include "includes/form-error-highlight.html" %}
-                              {% csrf_token %}
-                              <div class="actions">
-                                <a href="" class="btn pull-right">{% trans 'Cancel' %}</a>
-                                <button type="submit" class="btn primary pull-right" value="submit">{% trans "Save" %}</button>
-                                <div class="clear"></div>
-                              </div>
-                            </form>
                         {% endif %}
+                        <form action="" method="POST" id="form-{{section_name}}">
+                          {% include "includes/form-error-highlight.html" %}
+                          {% csrf_token %}
+                          <div class="actions">
+                            <a href="" class="btn pull-right">{% trans 'Cancel' %}</a>
+                            <button type="submit" class="btn primary pull-right" value="submit">{% trans "Save" %}</button>
+                            <div class="clear"></div>
+                          </div>
+                        </form>
 
                         {% endblock%}
                     </div>

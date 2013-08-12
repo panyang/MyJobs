@@ -12,7 +12,7 @@ $(function() {
             "click [id$='save']": "saveForm",
 
             // targets email reactivation link in SecondaryEmail form
-            "click [id$='updateEmail']": "updateEmail",
+            "click [id='updateEmail']": "updateEmail",
 
             // targets calendar buttons for each DateField
             "click [class$='calendar']": "datepickerButton",
@@ -160,7 +160,7 @@ $(function() {
 
             $.ajax({
                 type: 'POST',
-                url: '/profile/edit/',
+                url: '/'+user_email+'/profile/edit/',
                 data: serialized_data,
                 success: function(data) {
                      $("#activation_notification").replaceWith("<div class='alert alert-success'>Activation email resent to " + $("[name='email']").val() + "</div>");
@@ -196,12 +196,12 @@ $(function() {
 
             $.ajax({
                 type: 'POST',
-                url: '/profile/edit/',
+                url: '/'+user_email+'/profile/edit/',
                 data: serialized_data,
                 success: function(data, status) {
                     if (data == '') {
                         if (status != 'prevent-redirect') {
-                            window.location = '/profile/';
+                            window.location = '/'+user_email+'/profile/';
                         }
                     } else {
                         // form was a json-encoded list of errors and error messages

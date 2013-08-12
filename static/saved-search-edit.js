@@ -37,10 +37,11 @@ $(function() {
             $.ajax({
                 data: data,
                 type: 'POST',
-                url: '/saved-search/save/',
+                url: '/'+user_email+'/saved-search/save/',
                 success: function(data) {
+                    console.log(data)
                     if (data == '') {
-                        window.location = '/saved-search/';
+                        window.location = '/'+user_email+'/saved-search/';
                     } else {
                         add_errors(data);
                     }
@@ -68,7 +69,7 @@ $(function() {
                 validation_status('validating...')
                 $.ajax({
                     type: "POST",
-                    url: "/saved-search/validate-url/",
+                    url: "/"+user_email+"/saved-search/validate-url/",
                     data: { csrfmiddlewaretoken: csrf_token,
                             action: "validate",
                             url: url},

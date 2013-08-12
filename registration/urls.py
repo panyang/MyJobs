@@ -4,8 +4,8 @@ from django.contrib.auth import views as auth_views
 from registration.forms import CustomAuthForm, CustomPasswordResetForm
 from registration.views import *
 
-# Authorization URLS
 urlpatterns = patterns('',
+                       # Authorization URLS
                        url(r'^logout/$',
                            auth_views.logout,
                            {'next_page': '/'},
@@ -23,14 +23,12 @@ urlpatterns = patterns('',
                        url(r'^password/reset/done/$',
                            auth_views.password_reset_done,
                            name='auth_password_reset_done'),
-)
 
-#Registration URLS
-urlpatterns += patterns('',
-                        url(r'^activate/(?P<activation_key>\w+)/$', activate,
-                            name='registration_activate'),
-                        url(r'^register/resend/$', resend_activation,
-                            name='resend_activation'),
-                        url(r'^register/complete/$', RegistrationComplete.as_view(),
-                            name='register_complete'),
+                       #Registration URLS
+                       url(r'^(?P<user_email>(\S+))/register/complete/$', RegistrationComplete.as_view(),
+                                     name='register_complete'),
+                       url(r'^(?P<user_email>(\S+))/activate/(?P<activation_key>(\S+))/$',
+                           activate, name='registration_activate'),
+                       url(r'^(?P<user_email>(\S+))/register/resend/$', resend_activation,
+                           name='resend_activation'),
 )
