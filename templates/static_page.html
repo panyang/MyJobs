@@ -7,32 +7,38 @@ easier and faster
 {% endcomment %}
 {% block content %}
     <div class="span8">
-		{% block text %}{% endblock text %}
-	</div>
-	{% block quick-links %}
-	<div class="span4">
+        {% block text %}{% endblock text %}
+    </div>
+    {% block quick-links %}
+    <div class="span4">
         <div class="formBox" id="moduleBank"> 
             <h2>Quick Links:</h2>
             <table class="table table-bordered tables-striped">
-            	<tr class="profile-section">
+                <tr class="profile-section">
                     <td><a href="/">Home</a></td>
                 </tr>
-                <tr class="profile-section">
-                    <td><a href="{% url 'view_profile' user.email %}">Profile</a></td>
-                </tr>
+
                 {% if user.is_authenticated %}
-                	<tr class="profile-section">
-                    	<td><a href="{% url 'saved_search_main' user.email %}">Saved Search</a></td>
-                	</tr>
-                	{% is_a_group_member user "Employer" as group_member %}
-                	{% if group_member and user.is_active %}
-                		<tr class="profile-section">
-                    		<td><a href="{% url 'dashboard' user.email %}">Dashboard</a></td>
-                		</tr>
-                	{% endif %}
+
+                    <tr class="profile-section">
+                        <td><a href="{% url 'view_profile' user.email %}">Profile</a></td>
+                    </tr>
+                    <tr class="profile-section">
+                        <td><a href="{% url 'saved_search_main' user.email %}">Saved Search</a></td>
+                    </tr>
+
+                    {% is_a_group_member user "Employer" as group_member %}
+                    {% if group_member and user.is_active %}
+
+                    <tr class="profile-section">
+                        <td><a href="{% url 'dashboard' user.email %}">Dashboard</a></td>
+                    </tr>
+
+                    {% endif %}
                 {% endif %}
+
             </table>
         </div>
     </div>
-	{% endblock quick-links %}
+    {% endblock quick-links %}
 {% endblock content %}
