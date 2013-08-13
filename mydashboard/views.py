@@ -20,9 +20,10 @@ from mysearches.models import SavedSearch
 from endless_pagination.decorators import page_template
 
 
-@page_template("mydashboard/dashboard_activity.html")
+
 @user_is_allowed()
 @user_passes_test(lambda u: User.objects.is_group_member(u, 'Employer'))
+@page_template("mydashboard/dashboard_activity.html")
 def dashboard(request, template="mydashboard/mydashboard.html",
     extra_context=None):
     context = {
@@ -34,6 +35,7 @@ def dashboard(request, template="mydashboard/mydashboard.html",
     jobs.jobs/company_name/careers for example between the given (optional)
     dates
     """
+    settings = {'user': request.user}
     
     company = Company.objects.filter(admins=request.user)[0]
     admins = CompanyUser.objects.filter(company=company.id)
