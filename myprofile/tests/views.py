@@ -32,7 +32,7 @@ class MyProfileViewsTests(TestCase):
         # The existing name object should be rendered on the main content
         # section
         self.assertIsNotNone(soup.find('tr',
-                                       id='Name-' + str(item_id) + '-item'))
+                                       id='name-' + str(item_id) + '-item'))
         # profile-section contains the name of a profile section that has no
         # information filled out yet and shows up in the sidebar
         self.assertTrue(soup.findAll('tr', {'class': 'profile-section'}))

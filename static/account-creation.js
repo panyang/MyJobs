@@ -143,11 +143,8 @@ function setPrimaryName(){
 }
 
 function removeRequiredChanges(){
-    // remove red border around past required fields
-    $('[class*=required]').children().css('border', '1px solid #CCC');
-
     // remove current errors
-    $('[class*=required]').children().unwrap();
+    $('[class*=required-border]').removeClass('required-border')
 
     // remove IE specific errors, if IE
     if($.browser.msie){
@@ -175,7 +172,7 @@ function jsonErrors(index, errors){
         field = $error.parent().prev();
         field.before("<div class='msieError'><i>" + errors[index][1] + "</i></div>");
     }else{
-        $error.wrap('<span class="required" />');
+        $error.addClass('required-border');
         $error.val('');
         $error.attr("placeholder",errors[index][1]);
     }
