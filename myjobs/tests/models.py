@@ -23,7 +23,6 @@ class UserManagerTests(TestCase):
         self.failUnless(new_user.check_password('complicated_password'))
         self.failUnless(new_user.groups.filter(name='Job Seeker').count() == 1)
 
-
     def test_active_user_creation(self):
         new_user = User.objects.create_user(**self.user_info)
 
@@ -34,8 +33,9 @@ class UserManagerTests(TestCase):
         self.failUnless(new_user.groups.filter(name='Job Seeker').count() == 1)
 
     def test_superuser_creation(self):
-        new_user = User.objects.create_superuser(**{'password': 'complicated_password',
-                                                    'email': 'alice@example.com'})
+        new_user = User.objects.create_superuser(
+            **{'password': 'complicated_password',
+               'email': 'alice@example.com'})
         self.assertEqual(User.objects.count(), 1)
         self.assertEqual(new_user.is_superuser, True)
         self.assertEqual(new_user.is_staff, True)
@@ -57,57 +57,66 @@ class UserManagerTests(TestCase):
 
     def test_not_disabled(self):
         """
-        Should return True if user isn't disabled and False if they are disabled.
-        Also always returns False if user is anonymous and redirect to the front
-        page.
+        An anonymous user or user with is_disabled set to True should be
+        redirected to the home page, while a user with is_active set to False
+        should proceed to their destination.
         """
         client = TestClient()
         user = UserFactory()
-        
+
+        quoted_email = urllib.quote(user.email)
+
         #Anonymous user
-        resp = client.get(reverse('view_profile'))
-        self.assertRedirects(resp, "http://testserver/?next=/profile/")
+        resp = client.get(reverse('view_profile',
+                                  args=[user.email]))
+        self.assertRedirects(resp, "http://testserver/?next=/%s/profile/"
+                             % (quoted_email,))
 
         # Active user
         client.login_user(user)
-        resp = client.get(reverse('view_profile'))
+        resp = client.get(reverse('view_profile',
+                                  args=[user.email]))
         self.assertTrue(resp.status_code, 200)
-        
+
         #Disabled user
         user.is_disabled = True
         user.save()
-        resp = client.get(reverse('view_profile'))
-        self.assertRedirects(resp, "http://testserver/?next=/profile/")
+        resp = client.get(reverse('view_profile',
+                                  args=[user.email]))
+        self.assertRedirects(resp, "http://testserver/?next=/%s/profile/"
+                             % (quoted_email,))
 
     def test_is_active(self):
         """
-        Should return True if user isn't disabled and False if they are disabled.
-        Also always returns False if user is anonymous and redirect to the front
-        page.
+        An anonymous user or user with is_active set to False should be
+        redirected to the home page, while a user with is_active set to True
+        should proceed to their destination.
         """
         client = TestClient()
         user = UserFactory()
-        
-        #Anonymous user
-        resp = client.get(reverse('saved_search_main'))
-        self.assertRedirects(resp, "http://testserver/?next=/saved-search/")
+        quoted_email = urllib.quote(user.email)
 
+        #Anonymous user
+        resp = client.get(reverse('saved_search_main', args=[user.email]))
+        self.assertRedirects(resp, "http://testserver/?next=/%s/saved-search/"
+                             % (quoted_email,))
 
         # Active user
         client.login_user(user)
-        resp = client.get(reverse('saved_search_main'))
+        resp = client.get(reverse('saved_search_main', args=[user.email]))
         self.assertTrue(resp.status_code, 200)
 
         # Inactive user
         user.is_active = False
-        user.save()        
-        resp = client.get(reverse('saved_search_main'))
-        self.assertRedirects(resp, "http://testserver/?next=/saved-search/")
+        user.save()
+        resp = client.get(reverse('saved_search_main', args=[user.email]))
+        self.assertRedirects(resp, "http://testserver/?next=/%s/saved-search/"
+                             % (quoted_email,))
 
     def test_group_status(self):
         """
-        Should return True if user.groups contains the group specified and False
-        if it does not.
+        Should return True if user.groups contains the group specified and
+        False if it does not.
         """
         client = TestClient()
         user = UserFactory()

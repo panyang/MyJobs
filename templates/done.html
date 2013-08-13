@@ -34,7 +34,7 @@ done.html -- presents user_view_profile.
           <br>
           {% if not user.is_active %}
           <div class="alert-message info">
-            <p>{% trans "Your account doesn't have full access to MyJobs features! Please activate it using the activation link sent to your email. "%} <a href="{% url 'resend_activation' %}">Didn't get an email?</a></p>
+            <p>{% trans "Your account doesn't have full access to MyJobs features! Please activate it using the activation link sent to your email. "%} <a href="{% url 'resend_activation' user.email %}">Didn't get an email?</a></p>
           </div>
           {% endif %}
         </div>

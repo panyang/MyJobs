@@ -14,6 +14,7 @@
             <table class="table table-bordered table-striped">
 
                 {% with module.item|process_field_types as fields %}
+                    {% for label, value, type in fields|slice:":3" %}
 
                     {% for label, value, type in fields %}
 

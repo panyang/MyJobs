@@ -28,7 +28,7 @@ $(function() {
                 var section_name = $(e.target).attr('id').split('-')[1];
             }
             $.ajax({
-                url: "/edit/" + section_name,
+                url: "/" + user_email + "/edit/" + section_name,
                 success: function(data) {
                     $('div.account-settings').html(data);
                 }
@@ -69,7 +69,7 @@ $(function() {
             $.ajax({
                 type: "POST",
                 data: serialized_data,
-                url: "/edit/" + section_name,
+                url: "/" + user_email + "/edit/" + section_name,
                 success: function(data) {
                     if (data == "success") {
                         // Remove all required field changes, if any
