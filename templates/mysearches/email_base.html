@@ -19,7 +19,7 @@
     <tr>
         <td colspan=1 style="width: 33%; border-left: 1px solid #ddd; padding: 8px; line-height: 20px; border-top: 1px solid #ddd;">
             Saved Search Settings<br>
-            <a href="http://my.jobs{% url 'saved_search_main' %}">change settings</a>
+            <a href="http://my.jobs{% url 'saved_search_main' saved_searches.0.user.email %}">change settings</a>
         </td>
         <td colspan=1 style="border-left: 1px solid #ddd; padding: 8px; line-height: 20px; border-top: 1px solid #ddd;">
             {% block footer %}
