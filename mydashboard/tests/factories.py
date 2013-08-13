@@ -14,7 +14,7 @@ class CompanyFactory(factory.Factory):
 class MicrositeFactory(factory.Factory):
 	FACTORY_FOR = Microsite
 
-	url = 'test.jobs'
+	url = 'http://test.jobs'
 	company = factory.SubFactory(CompanyFactory)
 
 class CompanyUserFactory(factory.Factory):
