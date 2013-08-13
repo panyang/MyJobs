@@ -14,11 +14,14 @@ v1_api.register(SavedSearchResource())
 
 
 urlpatterns = patterns('',
-    url('', include('MyJobs.myjobs.urls')),
-    url(r'^(?P<user_email>(\S+))/dashboard/', include('MyJobs.mydashboard.urls')),
-    url(r'^accounts/', include('MyJobs.registration.urls')),
-    url(r'^(?P<user_email>(\S+))/profile/', include('MyJobs.myprofile.urls')),
-    url(r'^(?P<user_email>(\S+))/saved-search/', include('MyJobs.mysearches.urls')),
-    url(r'^api/', include(v1_api.urls)),
-    url(r'^admin/', include(admin.site.urls)),
+                       url('', include('MyJobs.myjobs.urls')),
+                       url(r'^(?P<user_email>(\S+))/dashboard/',
+                           include('MyJobs.mydashboard.urls')),
+                       url(r'^accounts/', include('MyJobs.registration.urls')),
+                       url(r'^(?P<user_email>(\S+))/profile/',
+                           include('MyJobs.myprofile.urls')),
+                       url(r'^(?P<user_email>(\S+))/saved-search/',
+                           include('MyJobs.mysearches.urls')),
+                       url(r'^api/', include(v1_api.urls)),
+                       url(r'^admin/', include(admin.site.urls)),
 )

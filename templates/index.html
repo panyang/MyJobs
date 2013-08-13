@@ -18,7 +18,7 @@
 
                 {% if user.is_authenticated %}
 
-                    <center>
+                    <div class="centered">
 
                         {% if user.is_disabled %}
 
@@ -49,7 +49,7 @@
                         {% endif %}
 
                         <a class="btn primary" href="{% url 'auth_logout' %}">Log Out</a>
-                    </center>
+                    </div>
                 
                 {% else %}
 
@@ -70,12 +70,15 @@
             <div class="span4" id="newAccountInfo">
                 <div>
               	    <h2>{% trans "Profile" %}</h2>
-		            <center><img id="gravatar"><br>
-		            <a href="http://www.gravatar.com" target="_blank">Change your profile image on gravatar.com</a>
-  		            <p><b class="newUserEmail"></b><br/>account status: <b class="pendingText">Pending activation</b>
-		            </p>
-                    </center>
-                
+		            <div class="centered">
+                        <img id="gravatar"><br>{# src attr is set in account-creation.js #}
+    		            <a href="http://www.gravatar.com" target="_blank">Change your profile image on gravatar.com</a>
+      		            <p>
+                            <b class="newUserEmail"></b><br/>account status: <b class="pendingText">Pending activation</b>
+    		            </p>
+                    </div>
+
+                    {# .newUserEmail contents set in account-creation.js #}
                     <p>Thanks for registering! We have sent an email to <span class="newUserEmail"></span> with
                        an activation link for your account. While you wait, go
                        ahead and add some data modules to your profile.

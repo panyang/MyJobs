@@ -25,10 +25,12 @@ urlpatterns = patterns('',
                            name='auth_password_reset_done'),
 
                        #Registration URLS
-                       url(r'^(?P<user_email>(\S+))/register/complete/$', RegistrationComplete.as_view(),
-                                     name='register_complete'),
+                       url(r'^(?P<user_email>(\S+))/register/complete/$',
+                           RegistrationComplete.as_view(),
+                           name='register_complete'),
                        url(r'^(?P<user_email>(\S+))/activate/(?P<activation_key>(\S+))/$',
                            activate, name='registration_activate'),
-                       url(r'^(?P<user_email>(\S+))/register/resend/$', resend_activation,
+                       url(r'^(?P<user_email>(\S+))/register/resend/$',
+                           resend_activation,
                            name='resend_activation'),
 )

@@ -29,7 +29,13 @@ $(document).ready(function(){
     });
     $(this).ajaxError(function (e, xhr) {
         if (xhr.status == 403 || xhr.status == 404) {
-            // redirect to the home page on 403
+            /*
+            Redirects the user to the home page when various error types occur
+            403: the user is trying to access a protected page but is not
+                logged in
+            404: the user is trying to access a page using another user's
+                email address
+            */
             window.location = '/';
         }
     });
