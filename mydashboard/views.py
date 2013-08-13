@@ -61,7 +61,7 @@ def dashboard(request, template="mydashboard/mydashboard.html",
         
     microsite_urls = [microsite.url for microsite in active_microsites]
     if not site_name:
-        site_name = microsite_urls[0]      
+        site_name = microsite_urls[0]
 
     q_list = [Q(url__contains=ms) for ms in microsite_urls]
     
