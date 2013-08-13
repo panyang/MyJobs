@@ -106,12 +106,23 @@ def home(request):
             if loginform.is_valid():
                 expire_login(request, loginform.get_user())
                 try:
-                    url = request.environ.get('HTTP_REFERER')
-                    location = url.split('=')
-                    location = urllib2.unquote(location[1])
+                    url = ''
+                    request_url = request.environ.get('HTTP_REFERER')
+                    location = request_url.split('=')
+                    split_slashes = location[1].split('/')
+                    for url_part in split_slashes:
+                        if split_slashes.index(url_part) > 1:
+                            url += '/'+url_part
+
+                    # adds user's email to url
+                    url = request.user.email + url
+
+                    # decodes url
+                    url = urllib2.unquote(url)
+
                 except:
-                    location = 'undefined'
-                response_data = {'validation': 'valid', 'url': location}
+                    url = 'undefined'
+                response_data = {'validation': 'valid', 'url': url}
                 return HttpResponse(json.dumps(response_data))
             else:
                 return HttpResponse(json.dumps({'errors':
