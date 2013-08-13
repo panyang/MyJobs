@@ -43,7 +43,7 @@
     <div class="formBox span7">
     <h5>Digest Options</h5>
     <p>Each day, you will receive a digest email containing the results of your saved searches that would have otherwise sent you results.</p>
-    <form method="post" action="{% url 'save_digest_form' %}" id="digest-option">
+    <form method="post" action="{% url 'save_digest_form' user.email %}" id="digest-option">
         {% csrf_token %}
         <div>
             {{ form.is_active}}{{form.is_active.label_tag}}

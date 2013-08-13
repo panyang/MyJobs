@@ -11,5 +11,5 @@
 {% block footer %}
     Sent to: {{digest.email}}<br>
     Sent as Digest: {{digest.is_active|readable_boolean}}<br>
-    <a href="http://my.jobs{% url 'unsubscribe' search_id='digest' %}">unsubscribe</a></br>
+    <a href="http://my.jobs{% url 'unsubscribe' user_email=digest.user.email search_id='digest' %}">unsubscribe</a></br>
 {% endblock %}

@@ -7,8 +7,8 @@ Used to check if registration was successful.
 {% endcomment %}
 
 {% block content %}
-    <div class="wrapper"> 
-    {% if activated %}        
+    <div class="wrapper">
+    {% if activated %}
         <div class="row">
             <div class="span12">
                 <h1>{% trans "Account Activated" %}
@@ -21,28 +21,28 @@ Used to check if registration was successful.
             <div class="span6" id="profileTitleBar">
                 <h2>{{activated.email}}</h2>
                 <p>
-                {% if user.is_authenticated %}
+                {% if activated.is_authenticated %}
                     {% trans "Your account hass been successfully activated, and you are now logged in."%}
                 {%else%}
                     {% trans "Your account hass been successfully activated, but you need to login before you use it."%}
                 {%endif%}
                 <br/>
-                <a href="{% url 'edit_account' %}">{% trans "Account Settings" %}</a>
+                <a href="{% url 'edit_account' activated.email %}">{% trans "Account Settings" %}</a>
                 </p>
             </div>
             <div class="span4">
                 <div class="formBox" id="moduleBank"> 
                     <h2>Next Steps:</h2>
                     <table class="table table-bordered tables-striped">
-                    {% if user.is_authenticated %}
+                    {% if activated.is_authenticated %}
                         <tr class="profile-section">
-                            <td><a href="{% url 'view_profile' %}">Add to your profile</a></td>
+                            <td><a href="{% url 'view_profile' activated.email %}">Add to your profile</a></td>
                         </tr>
                         <tr class="profile-section">
-                            <td><a href="{% url 'saved_search_main' %}">Manage your saved searches</a></td>
+                            <td><a href="{% url 'saved_search_main' activated.email %}">Manage your saved searches</a></td>
                         </tr>
                         <tr class="profile-section">
-                            <td><a href="{% url 'edit_account' %}">Manage your account</a></td>
+                            <td><a href="{% url 'edit_account' activated.email %}">Manage your account</a></td>
                         </tr>
                     {% else %}
                         <tr class="profile-section">
