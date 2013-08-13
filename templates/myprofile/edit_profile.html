@@ -58,7 +58,7 @@
                 <table class="table table-bordered tables-striped">
                 {% for module in unit_names %}
                 <tr class="profile-section" {% if module.items %}style="display:none;"{% endif %}><td>
-                    <a class="" id="{{module}}-new-section" href="{% url 'handle_form' %}?module={{module}}&id=new">
+                    <a class="" id="{{module}}-new-section" href="{% url 'handle_form' user.email %}?module={{module}}&id=new">
                         {{ module }}
                     </a>
                 </td></tr>

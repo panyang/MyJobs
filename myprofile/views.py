@@ -1,24 +1,16 @@
 import json
-import logging
 import re
 
-from django.contrib import messages
-from django.contrib.auth import authenticate, login
-from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.decorators import user_passes_test
 from django.core.urlresolvers import reverse
-from django.forms.models import model_to_dict
 from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.template import RequestContext
 from django.shortcuts import render_to_response, get_object_or_404
-from django.views.generic import TemplateView
 
 from myjobs.decorators import user_is_allowed
 from myjobs.models import User
-from myjobs.forms import *
 from myjobs.helpers import *
-from myprofile.forms import *
 from myprofile.models import ProfileUnits
-from registration.forms import *
 
 
 @user_is_allowed(ProfileUnits)
@@ -147,6 +139,7 @@ def get_details(request):
     module_config = {}
     item_id = request.GET.get('id')
     module = request.GET.get('module')
+    module = module.replace(" ", "")
     item = get_object_or_404(request.user.profileunits_set,
                              pk=item_id)
     item = getattr(item, module.lower())
