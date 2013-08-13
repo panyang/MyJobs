@@ -72,7 +72,7 @@ def dashboard(request, template="mydashboard/mydashboard.html",
     # Pre-set Date ranges
     if 'today' in request.REQUEST:
         after = datetime.now() - timedelta(days=1)
-        before = datetime.now() 
+        before = datetime.now()
         requested_date_button = 'today'
     elif 'seven_days' in request.REQUEST:
         after = datetime.now() - timedelta(days=7)
@@ -155,7 +155,7 @@ def microsite_activity(request, template="mydashboard/microsite_activity.html",
     # Pre-set Date ranges
     if 'today' in request.REQUEST:
         after = datetime.now() - timedelta(days=1)
-        before = datetime.now() 
+        before = datetime.now()
         requested_date_button = 'today'
     elif 'seven_days' in request.REQUEST:
         after = datetime.now() - timedelta(days=7)
