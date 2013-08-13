@@ -20,9 +20,14 @@
     </tr>
     <tr>
         <td colspan=1 style="width: 33%; border-left: 1px solid #ddd; padding: 8px; line-height: 20px; border-top: 1px solid #ddd;">
-            <a href="my.jobs{% url 'view_profile' %}">{% trans 'My Profile' %}</a><br>
-            <a href="my.jobs{% url 'saved_search_main' %}">{% trans 'Saved Searches' %}</a><br>
-            <a href="my.jobs{% url 'edit_account' %}">{% trans 'Account Settings' %}</a><br>
+<<<<<<< HEAD
+            <a href="my.jobs{% url 'view_profile' user_email=user.email %}">{% trans 'My Profile' %}</a><br>
+            <a href="my.jobs{% url 'saved_search_main' user_email=email %}">{% trans 'Saved Searches' %}</a><br>
+            <a href="my.jobs{% url 'edit_account' user_email=user.email %}">{% trans 'Account Settings' %}</a><br>
+=======
+            Saved Search Settings<br>
+            <a href="http://my.jobs{% url 'saved_search_main' user_email=user.email %}">change settings</a>
+>>>>>>> master
         </td>
         <td colspan=1 style="border-left: 1px solid #ddd; padding: 8px; line-height: 20px; border-top: 1px solid #ddd;">
             {% block footer-right %}

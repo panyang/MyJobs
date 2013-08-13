@@ -4,23 +4,21 @@ import json
 import logging
 import urllib2
 
-from django.contrib import messages
 from django.contrib.auth import authenticate, logout
-from django.contrib.auth.decorators import user_passes_test, login_required
+from django.contrib.auth.decorators import user_passes_test
 from django.core.mail import EmailMessage
-from django.core.urlresolvers import reverse
 from django.forms.models import model_to_dict
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponse, Http404
 from django.template import RequestContext
-from django.shortcuts import render_to_response, get_object_or_404, redirect
+from django.shortcuts import render_to_response, redirect
 from django.utils.html import mark_safe
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
 
 from jira.client import JIRA
-import jiratools
 
 from captcha.fields import ReCaptchaField
+
 from secrets import RECAPTCHA_PUBLIC_KEY, RECAPTCHA_PRIVATE_KEY, EMAIL_TO_ADMIN
 from secrets import options, my_agent_auth
 
@@ -29,10 +27,10 @@ from myjobs.models import User, EmailLog
 from myjobs.forms import *
 from myjobs.helpers import *
 from myjobs.templatetags.common_tags import get_name_obj
-from myprofile.forms import *
 from registration.forms import *
 
 logger = logging.getLogger('__name__')
+
 
 class About(TemplateView):
     template_name = "about.html"
@@ -53,15 +51,17 @@ class Success(TemplateView):
 class CaptchaForm(Form):
     captcha = ReCaptchaField(label="", attrs={'theme': 'white'})
 
+
 def home(request):
     """
-    The home page view receives 2 separate Ajax requests, one for the registration
-    form and another for the initial profile information form. If everything
-    checks out alright and the form saves with no errors, it returns a simple string,
-    'valid', as an HTTP Response, which the front end recognizes as a signal to
-    continue with the account creation process. If an error occurs, this triggers
-    the jQuery to update the page. The form instances with errors must be passed
-    back to the form template it was originally from.
+    The home page view receives 2 separate Ajax requests, one for the
+    registration form and another for the initial profile information form. If
+    everything checks out alright and the form saves with no errors, it returns
+    a simple string, 'valid', as an HTTP Response, which the front end
+    recognizes as a signal to continue with the account creation process. If an
+    error occurs, this triggers the jQuery to update the page. The form
+    instances with errors must be passed back to the form template it was
+    originally from.
 
     """
 
@@ -74,8 +74,8 @@ def home(request):
     phone_form = InitialPhoneForm(prefix="ph")
     work_form = InitialWorkForm(prefix="work")
     address_form = InitialAddressForm(prefix="addr")
-        
-    data_dict = {'registrationform':registrationform,
+
+    data_dict = {'registrationform': registrationform,
                  'loginform': loginform,
                  'name_form': name_form,
                  'phone_form': phone_form,
@@ -84,40 +84,65 @@ def home(request):
                  'education_form': education_form}
 
     if request.method == "POST":
-        if request.POST['action'] == "register":
+        if request.POST.get('action') == "register":
             registrationform = RegistrationForm(request.POST, auto_id=False)
             if registrationform.is_valid():
-                new_user, created = User.objects.create_inactive_user(**registrationform.
-                                                             cleaned_data)
-                user_cache = authenticate(username = registrationform.
-                                          cleaned_data['email'],
-                                          password = registrationform.
-                                          cleaned_data['password1'])
+                new_user, created = User.objects.create_inactive_user(
+                    **registrationform.cleaned_data)
+                user_cache = authenticate(
+                    username=registrationform.cleaned_data['email'],
+                    password=registrationform.cleaned_data['password1'])
                 expire_login(request, user_cache)
                 # pass in gravatar url once user is logged in. Image generated
                 # on AJAX success
-                data={'gravatar_url': new_user.get_gravatar_url(size=100)}
+                data = {'gravatar_url': new_user.get_gravatar_url(size=100)}
                 return HttpResponse(json.dumps(data))
             else:
-                return HttpResponse(json.dumps({'errors': registrationform.errors.items()}))
+                return HttpResponse(json.dumps(
+                    {'errors': registrationform.errors.items()}))
 
-        elif request.POST['action'] == "login":
+        elif request.POST.get('action') == "login":
             loginform = CustomAuthForm(data=request.POST)
             if loginform.is_valid():
                 expire_login(request, loginform.get_user())
-                return HttpResponse('valid')
+                try:
+                    url = ''
+                    request_url = request.environ.get('HTTP_REFERER')
+                    location = request_url.split('=')
+                    split_slashes = location[1].split('/')
+                    # split_slashes[0] and [1] are being replaced by
+                    # correct request.user.email
+                    for url_part in split_slashes[2:]:
+                        url += '/'+url_part
+
+                    # adds user's email to url
+                    url = request.user.email + url
+
+                    # decodes url
+                    url = urllib2.unquote(url)
+
+                except:
+                    url = 'undefined'
+                response_data = {'validation': 'valid', 'url': url}
+                return HttpResponse(json.dumps(response_data))
             else:
-                return HttpResponse(json.dumps({'errors': loginform.errors.items()}))
+                return HttpResponse(json.dumps({'errors':
+                                                loginform.errors.items()}))
 
-        elif request.POST['action'] == "save_profile":
-            name_form = InitialNameForm(request.POST, prefix="name", user=request.user)
-            education_form = InitialEducationForm(request.POST, prefix="edu", user=request.user)
-            phone_form = InitialPhoneForm(request.POST, prefix="ph", user=request.user)
-            work_form = InitialWorkForm(request.POST, prefix="work", user=request.user)
-            address_form = InitialAddressForm(request.POST, prefix="addr", user=request.user)
+        elif request.POST.get('action') == "save_profile":
+            name_form = InitialNameForm(request.POST, prefix="name",
+                                        user=request.user)
+            education_form = InitialEducationForm(request.POST, prefix="edu",
+                                                  user=request.user)
+            phone_form = InitialPhoneForm(request.POST, prefix="ph",
+                                          user=request.user)
+            work_form = InitialWorkForm(request.POST, prefix="work",
+                                        user=request.user)
+            address_form = InitialAddressForm(request.POST, prefix="addr",
+                                              user=request.user)
 
-            forms = [name_form, education_form, phone_form, work_form, 
-                    address_form]
+            forms = [name_form, education_form, phone_form, work_form,
+                     address_form]
             valid_forms = [form for form in forms if form.is_valid()]
             invalid_forms = []
             for form in forms:
@@ -138,8 +163,9 @@ def home(request):
                                            'work_form': work_form,
                                            'education_form': education_form},
                                           context_instance=RequestContext(request))
-            
+
     return render_to_response('index.html', data_dict, RequestContext(request))
+
 
 def contact(request):
     if request.POST:
@@ -156,25 +182,25 @@ def contact(request):
             except:
                 jira = []
             if not jira:
-                msg_subject = ('Contact My.jobs by a(n) %s'%im_a)
+                msg_subject = ('Contact My.jobs by a(n) %s' % im_a)
                 message = """
                           Name: %s
                           Is a(n): %s
                           Email: %s
 
                           %s
-                          """%(name, im_a, from_email, comment)
+                          """ % (name, im_a, from_email, comment)
                 to_email = [EMAIL_TO_ADMIN]
                 msg = EmailMessage(msg_subject, message, from_email, to_email)
                 msg.send()
-                return HttpResponse('success')   
+                return HttpResponse('success')
             else:
                 issue_dict = {
                     'project': {'key': 'MJA'},
-                    'summary': '%s - %s'%(reason, from_email),
-                    'description': '%s'%(comment),
+                    'summary': '%s - %s' % (reason, from_email),
+                    'description': '%s' % comment,
                     'issuetype': {'name': 'Task'},
-                    'components': [{'id':'12703'}],
+                    'components': [{'id': '12703'}],
                     'customfield_10400': str(name),
                     'customfield_10401': str(from_email),
                     'customfield_10402': str(phone_num),
@@ -185,9 +211,12 @@ def contact(request):
             return HttpResponse(json.dumps({'errors': form.errors.items()}))
     else:
         form = CaptchaForm()
-        data_dict = {'form':form}
-    return render_to_response('contact.html',data_dict, RequestContext(request))
-    
+        data_dict = {'form': form}
+    return render_to_response('contact.html', data_dict,
+                              RequestContext(request))
+
+
+@user_is_allowed()
 @user_passes_test(User.objects.not_disabled)
 def edit_account(request):
     initial_dict = check_name_obj(request.user)
@@ -195,8 +224,8 @@ def edit_account(request):
            'gravatar_100': request.user.get_gravatar_url(size=100)}
 
     if request.user.password_change:
-        resp = edit_password(request)
-        ctx['change_pass'] = mark_safe(resp.content)
+        ctx['form'] = ChangePasswordForm(user=request.user)
+        ctx['section_name'] = 'password'
     else:
         form = EditAccountForm(initial=initial_dict, user=request.user)
         if request.method == "POST":
@@ -205,17 +234,21 @@ def edit_account(request):
                 form.save(request.user)
                 return HttpResponse('success')
         ctx['form'] = form
-           
-    
+        ctx['section_name'] = 'basic'
+
     return render_to_response('myjobs/edit-account.html', ctx,
                               RequestContext(request))
 
+
+@user_is_allowed()
 @user_passes_test(User.objects.not_disabled)
 def edit_basic(request):
-    initial_dict = check_name_obj(request.user)    
-    form = EditAccountForm(initial=initial_dict, user=request.user)        
+    initial_dict = check_name_obj(request.user)
+    form = EditAccountForm(initial=initial_dict, user=request.user)
     if request.method == "POST":
-        form = EditAccountForm(user=request.user, data=request.POST, auto_id=False)
+        form = EditAccountForm(user=request.user,
+                               data=request.POST,
+                               auto_id=False)
         if form.is_valid():
             form.save(request.user)
             return HttpResponse('success')
@@ -225,11 +258,12 @@ def edit_basic(request):
     ctx = {'form': form,
            'gravatar_100': request.user.get_gravatar_url(size=100),
            'section_name': 'basic'}
-           
+
     return render_to_response('myjobs/edit-form-template.html', ctx,
                               RequestContext(request))
-    
 
+
+@user_is_allowed()
 @user_passes_test(User.objects.not_disabled)
 def edit_communication(request):
     obj = User.objects.get(id=request.user.id)
@@ -241,15 +275,15 @@ def edit_communication(request):
         if form.is_valid():
             form.save()
             return HttpResponse('success')
-    
+
     ctx = {'form': form,
            'section_name': 'communication'}
-    
+
     return render_to_response('myjobs/edit-form-template.html', ctx,
                               RequestContext(request))
 
-    
-    
+
+@user_is_allowed()
 @user_passes_test(User.objects.not_disabled)
 def edit_password(request):
     form = ChangePasswordForm()
@@ -263,24 +297,29 @@ def edit_password(request):
         else:
             return HttpResponse(json.dumps({'errors': form.errors.items()}))
 
-    ctx = {'form':form,
+    ctx = {'form': form,
            'section_name': 'password'}
     return render_to_response('myjobs/edit-form-template.html', ctx,
                               RequestContext(request))
 
+
+@user_is_allowed()
 @user_passes_test(User.objects.not_disabled)
 def edit_delete(request):
     ctx = {'gravatar_150': request.user.get_gravatar_url(size=150)}
     return render_to_response('myjobs/edit-delete.html', ctx,
                               RequestContext(request))
 
+
+@user_is_allowed()
 @user_passes_test(User.objects.not_disabled)
 def edit_disable(request):
     ctx = {'gravatar_150': request.user.get_gravatar_url(size=150)}
     return render_to_response('myjobs/edit-disable.html', ctx,
                               RequestContext(request))
 
-        
+
+@user_is_allowed()
 @user_passes_test(User.objects.not_disabled)
 def delete_account(request):
     email = request.user.email
@@ -289,6 +328,8 @@ def delete_account(request):
     return render_to_response('myjobs/delete-account-confirmation.html', ctx,
                               RequestContext(request))
 
+
+@user_is_allowed()
 @user_passes_test(User.objects.not_disabled)
 def disable_account(request):
     user = request.user
@@ -299,14 +340,6 @@ def disable_account(request):
     return render_to_response('myjobs/disable-account-confirmation.html', ctx,
                               RequestContext(request))
 
-def error(request):
-    """Error view"""
-    messages = get_messages(request)
-    ctx = {
-        'version': version,
-        'messages': messages
-        }
-    return render_to_response('error.html', ctx, RequestContext(request))
 
 @csrf_exempt
 def batch_message_digest(request):
@@ -319,12 +352,13 @@ def batch_message_digest(request):
     if 'HTTP_AUTHORIZATION' in request.META:
         method, details = request.META['HTTP_AUTHORIZATION'].split()
         if method.lower() == 'basic':
-            # login_info is intended to be a base64-encoded string in the format
-            # "email:password" where email is a urlquoted string
+            # login_info is intended to be a base64-encoded string in the
+            # format "email:password" where email is a urlquoted string
             login_info = base64.b64decode(details).split(':')
             if len(login_info) == 2:
                 login_info[0] = urllib2.unquote(login_info[0])
-                user = authenticate(email=login_info[0], password=login_info[1])
+                user = authenticate(email=login_info[0],
+                                    password=login_info[1])
                 target_user = User.objects.get(email='accounts@my.jobs')
                 if user is not None and user == target_user:
                     events = request.raw_post_data
@@ -343,29 +377,32 @@ def batch_message_digest(request):
                         EmailLog(email=event['email'], event=event['event'],
                                  received=datetime.date.fromtimestamp(
                                      float(event['timestamp'])
-                                 )
-                        ).save()
+                                 )).save()
                     return HttpResponse(status=200)
     return HttpResponse(status=403)
 
+
+@user_is_allowed()
 @user_passes_test(User.objects.not_disabled)
 def continue_sending_mail(request):
     """
     Updates the user's last response time to right now.
-    Allows the user to choose to continue receiving emails if they are inactive.
+    Allows the user to choose to continue receiving emails if they are
+    inactive.
     """
     user = request.user
     user.last_response = datetime.date.today()
     user.save()
     return redirect('/')
-    
+
+
 def check_name_obj(user):
     """
     Utility function to process and return the user name obect.
-    
-    Inputs: 
+
+    Inputs:
     :user:  request.user object
-    
+
     Returns:
     :initial_dict: Dictionary object with updated name information
     """
@@ -375,9 +412,12 @@ def check_name_obj(user):
         initial_dict.update(model_to_dict(name))
     return initial_dict
 
-@user_is_allowed
+
+@user_is_allowed(keep_email=True)
 def stop_sending(request, user_email):
-    user = get_object_or_404(User.objects, email=user_email)
+    user = User.objects.get_email_owner(user_email)
+    if not user:
+        raise Http404
     user.opt_in_myjobs = False
     user.save()
 

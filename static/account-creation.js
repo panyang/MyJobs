@@ -1,15 +1,10 @@
 var current_url = ""; //init current_url as global
+var profile_url = "/profile/";
 $(document).ready(function() {
-    $("#id_email").attr("placeholder", "Email");
-    $(function() {
-        $( "input[id$='date']" ).datepicker({dateFormat: window.dateFormat,
-                                             constrainInput: false});
-    });
     // perform display modifications for fields on initial profile form
     $("#newAccountData #id_name-primary").hide()
     $("#newAccountData label[for=id_name-primary]").hide()
-    user_email = "";
-    current_url = '/'
+    current_url = '/';
 });
 
 /* When register button is clicked, this triggers an AJAX POST that sends the
@@ -72,10 +67,9 @@ $(document).on("click", "button#login", function(e) {
         data: json_data,
         global: false,
         success: function(data) {
-            if (data != 'valid') {
-                // form was a json-encoded list of errors and error messages
-                var json = jQuery.parseJSON(data);
-
+            // converts json to javascript object
+            var json = jQuery.parseJSON(data);
+            if (json.validation != 'valid') {
                 // Remove all required field changes, if any
                 removeRequiredChanges();
 
@@ -84,7 +78,11 @@ $(document).on("click", "button#login", function(e) {
                     jsonErrors(index, json.errors);
                 }
             } else {
-                window.location = '/profile';
+                if(json.url == 'undefined'){
+                    window.location = '/' + $('#id_username').val() + profile_url;
+                }else{
+                    window.location = json.url;
+                }           
             }
         }
     });
@@ -111,7 +109,7 @@ $(document).on("click", "button#save", function(e) {
                 $("#id_name-primary").hide()
                 $("label[for=id_name-primary]").hide()
             } else {
-                window.location = '/profile';
+                window.location = '/' + user_email + profile_url;
             }
         }
     });
@@ -126,7 +124,7 @@ $(document).on("click", "button#next", function(e) {
 // skip to profile page on click
 $(document).on("click", "button#profile", function(e) {
     e.preventDefault();
-    window.location = '/profile';
+    window.location = '/' + user_email + profile_url;
 });
 
 function setPrimaryName(){
