@@ -80,7 +80,7 @@ class SavedSearch(models.Model):
 
     def send_initial_email(self):
         context_dict = {'saved_searches': [self]}
-        subject = "My.jobs New Saved Search - [" + self.label + "]"
+        subject = "My.jobs New Saved Search - %s" % self.label.strip()
         message = render_to_string("mysearches/email_initial.html",
                                    context_dict)
 
