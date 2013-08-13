@@ -14,30 +14,24 @@
     <tr>
         <td colspan=2>
             {% block content %}
-            There are no results for today!
             {% endblock %}
         </td>
     </tr>
     <tr>
         <td colspan=1 style="width: 33%; border-left: 1px solid #ddd; padding: 8px; line-height: 20px; border-top: 1px solid #ddd;">
-<<<<<<< HEAD
-            <a href="my.jobs{% url 'view_profile' user_email=user.email %}">{% trans 'My Profile' %}</a><br>
-            <a href="my.jobs{% url 'saved_search_main' user_email=email %}">{% trans 'Saved Searches' %}</a><br>
-            <a href="my.jobs{% url 'edit_account' user_email=user.email %}">{% trans 'Account Settings' %}</a><br>
-=======
-            Saved Search Settings<br>
-            <a href="http://my.jobs{% url 'saved_search_main' user_email=user.email %}">change settings</a>
->>>>>>> master
+            <a href="http://my.jobs{% url 'view_profile' user_email=user.email %}">{% trans 'My Profile' %}</a><br>
+            <a href="http://my.jobs{% url 'saved_search_main' user_email=email %}">{% trans 'Saved Searches' %}</a><br>
+            <a href="http://my.jobs{% url 'edit_account' user_email=user.email %}">{% trans 'Account Settings' %}</a><br>
         </td>
         <td colspan=1 style="border-left: 1px solid #ddd; padding: 8px; line-height: 20px; border-top: 1px solid #ddd;">
             {% block footer-right %}
             {% endblock %}
-            <a href="my.jobs{% url 'stop_sending' user_email=user.email %}">{% trans 'Unsubscribe' %}</a><br>
+            <a href="http://my.jobs{% url 'stop_sending' user_email=user.email %}">{% trans 'Unsubscribe from all My.jobs emails' %}</a><br>
         </td>
     </tr>
     <tr>
         <td colspan=2 style="border-left: 1px solid #ddd; padding: 8px; line-height: 20px; border-top: 1px solid #ddd;">
-            <p>My.jobs <a href="my.jobs/terms">Terms</a> and <a href="my.jobs/privacy">Privacy</a></p>
+            <p>My.jobs <a href="http://my.jobs/terms">Terms</a> and <a href="http://my.jobs/privacy">Privacy</a></p>
         </td>
     </tr>
 </table>

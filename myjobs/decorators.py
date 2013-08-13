@@ -49,9 +49,9 @@ def user_is_allowed(model=None, pk_name=None, keep_email=False):
                                'no email provided')
                 email = None
 
+            user = User.objects.get_email_owner(email)
             if not request.user.is_anonymous():
-                if ((not email or
-                     request.user != User.objects.get_email_owner(email))):
+                if not email or request.user != user:
                     # If the currently logged in user doesn't own the email
                     # address from the requested url or no email address is
                     # provided, log out the user and redirect to home page
@@ -66,7 +66,7 @@ def user_is_allowed(model=None, pk_name=None, keep_email=False):
                         # If the current user doesn't own the requested object
                         # or said object does not exist, redirect to 404 page
                         obj = get_object_or_404(model.objects,
-                                                user=request.user,
+                                                user=user,
                                                 id=pk)
                     except ValueError:
                         # The value may not be an int; Saved searches, for
