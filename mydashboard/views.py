@@ -20,10 +20,9 @@ from mysearches.models import SavedSearch
 from endless_pagination.decorators import page_template
 
 
-
+@page_template("mydashboard/dashboard_activity.html")
 @user_is_allowed()
 @user_passes_test(lambda u: User.objects.is_group_member(u, 'Employer'))
-@page_template("mydashboard/dashboard_activity.html")
 def dashboard(request, template="mydashboard/mydashboard.html",
     extra_context=None):
     context = {
@@ -35,8 +34,7 @@ def dashboard(request, template="mydashboard/mydashboard.html",
     jobs.jobs/company_name/careers for example between the given (optional)
     dates
     """
-    settings = {'user': request.user}
-    
+        
     company = Company.objects.filter(admins=request.user)[0]
     admins = CompanyUser.objects.filter(company=company.id)
     authorized_microsites = Microsite.objects.filter(company=company.id)
@@ -126,34 +124,38 @@ def dashboard(request, template="mydashboard/mydashboard.html",
         context.update(extra_context)
     return render_to_response(template, context,
         context_instance=RequestContext(request))
+    
 
-
+@page_template("mydashboard/site_activity.html")
 @user_is_allowed()
 @user_passes_test(lambda u: User.objects.is_group_member(u, 'Employer'))
-def microsite_activity(request):
+def microsite_activity(request, template="mydashboard/microsite_activity.html",
+    extra_context=None):
+    context = {
+        'candidates': SavedSearch.objects.all(),
+    }
     """
     Returns the activity information for the microsite that was select on the
     employer dashboard page.  Candidate activity for saved searches, job
     views, etc.
     """
     company = Company.objects.filter(admins=request.user)[0]
-
+    
     requested_microsite = request.REQUEST.get('microsite_url', False)
     requested_date_button = request.REQUEST.get('date_button', False)
     requested_after_date = request.REQUEST.get('after', False)
     requested_before_date = request.REQUEST.get('before', False)
-
+    
     if not requested_microsite:
-        requested_microsite = request.REQUEST.get('microsite-hide',
-                                                  company.name)
-
+        requested_microsite = request.REQUEST.get('microsite-hide', company.name)
+    
     if requested_microsite.find('//') == -1:
-        requested_microsite = '//' + requested_microsite
-
+            requested_microsite = '//' + requested_microsite
+            
     # Pre-set Date ranges
     if 'today' in request.REQUEST:
         after = datetime.now() - timedelta(days=1)
-        before = datetime.now()
+        before = datetime.now() 
         requested_date_button = 'today'
     elif 'seven_days' in request.REQUEST:
         after = datetime.now() - timedelta(days=7)
@@ -164,59 +166,48 @@ def microsite_activity(request):
         before = datetime.now()
         requested_date_button = 'thirty_days'
     else:
-        if requested_after_date:
-            after = datetime.strptime(requested_after_date, '%m/%d/%Y')
+        if requested_after_date:            
+            after = datetime.strptime(requested_after_date, '%m/%d/%Y')            
         else:
             after = request.REQUEST.get('after')
             if after:
                 after = datetime.strptime(after, '%m/%d/%Y')
             else:
                 # Defaults to 30 days ago
-                after = datetime.now() - timedelta(days=30)
-
+                after = datetime.now() - timedelta(days=30)                
+                
         if requested_before_date:
-            before = datetime.strptime(requested_before_date, '%m/%d/%Y')
-        else:
+            before = datetime.strptime(requested_before_date, '%m/%d/%Y')            
+        else:        
             before = request.REQUEST.get('before')
             if before:
                 before = datetime.strptime(before, '%m/%d/%Y')
             else:
                 # Defaults to the date and time that the page is accessed
                 before = datetime.now()
-
-    # All searches saved on the employer's company microsites
-    candidate_searches = SavedSearch.objects.filter(
-        url__contains=requested_microsite)
-
+    
+    # All searches saved on the employer's company microsites       
+    candidate_searches = SavedSearch.objects.filter(url__contains=requested_microsite)
+        
     # Specific microsite searches saved between two dates
     candidate_searches = candidate_searches.filter(
-        created_on__range=[after, before]).order_by('-created_on')
-
-    saved_search_count = candidate_searches.count()
-
-    paginator = Paginator(candidate_searches, 25) # Show 25 candidates per page
-    page = request.GET.get('page')
-
-    try:
-        candidates = paginator.page(page)
-    except PageNotAnInteger:
-        # If page is not an integer, deliver first page.
-        candidates = paginator.page(1)
-    except EmptyPage:
-        # If page is out of range (e.g. 9999), deliver last page of results.
-        candidates = paginator.page(paginator.num_pages)
-
-    data_dict = {'microsite_url': requested_microsite,
+            created_on__range=[after, before]).order_by('-created_on')  
+    
+    saved_search_count = candidate_searches.count()      
+    
+    context = {'microsite_url': requested_microsite,
                  'after': after,
-                 'before': before,
-                 'candidates': candidates,
+                 'before': before,                 
+                 'candidates': candidate_searches,                
                  'view_name': 'Company Dashboard',
                  'company_name': company.name,
                  'date_button': requested_date_button,
                  'saved_search_count': saved_search_count}
-
-    return render_to_response('mydashboard/microsite_activity.html', data_dict,
-                              context_instance=RequestContext(request))
+    
+    if extra_context is not None:
+        context.update(extra_context)
+    return render_to_response(template, context,
+        context_instance=RequestContext(request))
 
 
 @user_is_allowed()

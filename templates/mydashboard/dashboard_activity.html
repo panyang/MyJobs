@@ -1,0 +1,43 @@
+{% load user_ops %}
+{% load common_tags %}
+
+{% if candidates %}
+                
+    {% load endless %}
+    {% paginate candidates %}                                            
+                   
+        <table id="row-link-table">  
+            {% for candidate in candidates %}                    
+            <tr class="hide-mobile" onclick="document.location = '{{ candidate.user.id }}';">
+                <td>
+                    <img src="{{candidate.user.get_gravatar_url}}&s=55" class="gravatar pull-left">                        
+                </td>
+                <td>
+                    <div class="candidate-name">{{candidate.user|get_name_obj}}</div>
+                    <a href="{{ candidate.user.id }}">{{candidate.user}}</a>
+                </td>
+                <td>
+                    <strong>{% if candidate.label %}{{candidate.label}}{% else %}Unlabeled{% endif %}</strong><br>
+                    {{candidate.url|url_domain}}<br>
+                    {{candidate.created_on.date}}                        
+                </td>
+             </tr>
+             <tr class="candidate-activity-mobile">
+                <td>
+                    <img src="{{candidate.user.get_gravatar_url}}&s=45" class="gravatar pull-left"> 
+                </td>
+                <td>
+                    <div class="candidate-name pull-left">{{candidate.user|get_name_obj}}</div>
+                    <a href="{{ candidate.user.id }}" class="candidate-activity-mobile pull-left">{{candidate.user}}</a>
+                </td>
+             <tr>
+             {% endfor %}                    
+         </table>
+         
+         {% show_more %}                
+                
+{% else %}
+    <div id="no-activity">
+        <strong>There is no candidate activity between {{after.date}} and {{before.date}} for {{ site_name|cut:"http://" }}</strong>
+    </div>
+{% endif %}   
