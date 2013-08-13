@@ -393,7 +393,7 @@ fieldset select {
 }
 
 fieldset textarea,
-.profile-form-input input [type="text"] {
+.profile-form-input input[type="text"] {
     width: 248px;
 }
 

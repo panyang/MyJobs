@@ -45,8 +45,8 @@
     <div class="row">
         <div class="span8" id="moduleColumn">
             {% csrf_token %}
-            {% for module in profile_config %}
-            {% if module.items %}
+            {% for module in profile_config.values %}
+            {% if module %}
             {% include "myprofile/profile_section.html" %}
             {% endif %}
             {% endfor %}
@@ -56,10 +56,10 @@
             <div class="formBox right-side-fixed" id="moduleBank">
                 <h3>Add a New Section</h3>
                 <table class="table table-bordered tables-striped">
-                {% for module in profile_config %}
+                {% for module in unit_names %}
                 <tr class="profile-section" {% if module.items %}style="display:none;"{% endif %}><td>
-                    <a class="" id="{{module.name}}-new-section" href="{% url 'handle_form' user.email %}?module={{module.name}}&id=new">
-                        {{ module.verbose }}
+                    <a class="" id="{{module}}-new-section" href="{% url 'handle_form' user.email %}?module={{module}}&id=new">
+                        {{ module }}
                     </a>
                 </td></tr>
                 {% endfor %}

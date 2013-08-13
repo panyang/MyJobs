@@ -120,7 +120,7 @@ function contactForm(){
                     var $field = $('[id$=recaptcha_response_field]')
                     var $labelOfError = $error.prev();
                     // insert new errors after the relevant inputs
-                    $error.wrap('<span class="required" />');
+                    $error.wrap('<div class="required" />');
                     $error.addClass('required-border')
                     if(!($.browser.msie)){
                         $field.attr("placeholder",json.errors[index][1]);

@@ -51,6 +51,10 @@ class ProfileUnits(models.Model):
     def get_model_name(self):
         return self.content_type.model
 
+    @classmethod
+    def get_verbose_class(object):
+        return object.__name__
+
     def get_verbose(self):
         return self.content_type.name.title()
 

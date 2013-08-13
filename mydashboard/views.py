@@ -231,8 +231,6 @@ def candidate_information(request, user_id):
     see helpers.py.
     """
     # gets returned with response to request
-    data_dict = {}
-    models = {}
     name = "Name not given"
 
     # user gets pulled out from id
@@ -242,20 +240,16 @@ def candidate_information(request, user_id):
         raise Http404
 
     urls = saved_searches(request.user, user)
+
     if not urls:
         raise Http404
 
     if not user.opt_in_employers:
         raise Http404
 
-    units = user.profileunits_set.all()
+    models = user.profileunits_dict()
 
-    for unit in units:
-        if getattr(unit, unit.get_model_name()).is_displayed():
-            models.setdefault(unit.get_model_name(), []).append(
-                getattr(unit, unit.get_model_name()))
-
-    # if Name ProfileUnit exsists
+    # if Name ProfileUnit exists
     if models.get('name'):
         name = models['name'][0]
         models.pop('name')
