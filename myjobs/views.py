@@ -110,9 +110,10 @@ def home(request):
                     request_url = request.environ.get('HTTP_REFERER')
                     location = request_url.split('=')
                     split_slashes = location[1].split('/')
-                    for url_part in split_slashes:
-                        if split_slashes.index(url_part) > 1:
-                            url += '/'+url_part
+                    # split_slashes[0] and [1] are being replaced by
+                    # correct request.user.email
+                    for url_part in split_slashes[2:]:
+                        url += '/'+url_part
 
                     # adds user's email to url
                     url = request.user.email + url
