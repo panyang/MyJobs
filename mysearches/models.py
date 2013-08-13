@@ -16,7 +16,7 @@ class SavedSearch(models.Model):
         ('W', _('Weekly')),
         ('M', _('Monthly')))
 
-    DOM_CHOICES = [(i,i) for i in range(1,31)]
+    DOM_CHOICES = [(i, i) for i in range(1,31)]
     DOW_CHOICES = (('1', _('Monday')),
                    ('2', _('Tuesday')),
                    ('3', _('Wednesday')),
@@ -25,7 +25,7 @@ class SavedSearch(models.Model):
                    ('6', _('Saturday')),
                    ('7', _('Sunday')))
     SORT_CHOICES = (('Relevance', _('Relevance')),
-                    (('Date'), _('Date')))
+                    ('Date', _('Date')))
 
     user = models.ForeignKey('myjobs.User',editable=False)
     created_on = models.DateTimeField(auto_now_add=True)
@@ -73,10 +73,21 @@ class SavedSearch(models.Model):
                                    context_dict)
         msg = EmailMessage(subject, message, settings.SAVED_SEARCH_EMAIL,
                            [self.email])
-        msg.content_subtype='html'
+        msg.content_subtype = 'html'
         msg.send()
         self.last_sent = datetime.now()
         self.save()
+
+    def send_initial_email(self):
+        context_dict = {'saved_searches': [self]}
+        subject = "My.jobs New Saved Search - %s" % self.label.strip()
+        message = render_to_string("mysearches/email_initial.html",
+                                   context_dict)
+
+        msg = EmailMessage(subject, message, settings.SAVED_SEARCH_EMAIL,
+                           [self.email])
+        msg.content_subtype = 'html'
+        msg.send()
 
     def create(self, *args, **kwargs):
         """
@@ -87,17 +98,18 @@ class SavedSearch(models.Model):
         duplicates = SavedSearch.objects.filter(user=self.user, url=self.url)
 
         if duplicates:
-            raise ValidationError('Saved Search URLS must be unique.') 
-        super(SavedSearch,self).create(*args,**kwargs)
+            raise ValidationError('Saved Search URLS must be unique.')
+        super(SavedSearch, self).create(*args, **kwargs)
 
-    def save(self, *args,**kwargs):
+    def save(self, *args, **kwargs):
         """"
         Create a new saved search digest if one doesn't exist yet
         """
 
         if not SavedSearchDigest.objects.filter(user=self.user):
             SavedSearchDigest.objects.create(user=self.user, email=self.email)
-        super(SavedSearch,self).save(*args,**kwargs)
+
+        super(SavedSearch, self).save(*args, **kwargs)
 
     def __unicode__(self):
         return "Saved Search %s for %s" % (self.url, self.user.email)
@@ -126,5 +138,5 @@ class SavedSearchDigest(models.Model):
                                        context_dict)
             msg = EmailMessage(subject, message, settings.SAVED_SEARCH_EMAIL,
                                [self.email])
-            msg.content_subtype='html'
+            msg.content_subtype = 'html'
             msg.send()
