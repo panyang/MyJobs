@@ -5,6 +5,7 @@ import sys
 
 from celery.schedules import crontab
 from os.path import abspath, dirname, basename, join
+from django.conf.global_settings import TEMPLATE_CONTEXT_PROCESSORS
 
 from secrets import *
 
@@ -154,7 +155,8 @@ INSTALLED_APPS = (
     'django_nose',
     'django_messages',
     'tastypie',
-    'captcha'
+    'captcha',
+    'endless_pagination'
 )
 
 # Add all MyJobs apps here. This separation ensures that automated Jenkins tests
