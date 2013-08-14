@@ -41,3 +41,12 @@ class SavedSearchModelsTests(TestCase):
         self.assertEqual(email.subject, "Your Daily Saved Search Digest")
         self.assertTrue("table" in email.body)
         self.assertTrue(email.to[0] in email.body)
+
+    def test_send_search_digest_send_if_none(self):
+        digest = SavedSearchDigestFactory(user=self.user, send_if_none=True)
+        digest.send_email()
+        self.assertEqual(len(mail.outbox), 0)
+
+        SavedSearchFactory(user=self.user)
+        digest.send_email()
+        self.assertEqual(len(mail.outbox), 1)

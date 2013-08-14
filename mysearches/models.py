@@ -131,7 +131,7 @@ class SavedSearchDigest(models.Model):
     
     def send_email(self):
         saved_searches = self.user.savedsearch_set.filter(is_active=True)
-        if saved_searches or self.send_if_none:
+        if saved_searches:
             subject = _('Your Daily Saved Search Digest')
             context_dict = {'saved_searches': saved_searches, 'digest': self}
             message = render_to_string('mysearches/email_digest.html',
