@@ -3,7 +3,7 @@
 {% load i18n %}
 
 {% block content %}
-    {% include 'mysearches/email_table_include.html' with saved_search=saved_searches.0 %}
+    {% include 'mysearches/email_table_include.html' with saved_search=saved_searches.0 user=user %}
 {% endblock %}
 
 {% block footer-right %}

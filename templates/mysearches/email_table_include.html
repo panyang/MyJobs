@@ -2,11 +2,13 @@
 
 <table style="width: 98%; margin: 5px; border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-left-radius: 0px; border-bottom-right-radius: 0px; border: 1px solid #ddd; border-collapse: separate; border-spacing: 0; display: table; font-size: 10px; line-height: 20px;">
     <tr>
-        <th style="text-align: left;"><b style="font-size: 14px;"><a href="http://my.jobs/saved-search/{{saved_search.0.id}}" style="text-decoration: none; color: #333;">{{saved_search.0.label}}</a></b></th>
+        <th style="text-align: left;"><b style="font-size: 14px;"><a href="http://my.jobs{% url 'edit_search' user.email saved_search.0.id %}" style="text-decoration: none; color: #333;">{{saved_search.0.label}}</a></b></th>
         <th style="text-align: right;"><p style="font-size: 10px; color: 555;">Frequency: {{saved_search.0.frequency|make_verbose_frequency}} {% if digest %}(Digest){% else %}(Individual){% endif %}</p></th>
     </tr>
-
-    {% with odd="background-color: #eae6de;" even="background-color: #d2cfc7;"%}
+{{ user|print_foo }}
+{{ saved_search.0|print_foo }}
+    {% with odd="background-color: #eae6de;" even="background-color: #d2cfc7;" %}
+        {{saved_search|print_foo}}
         {% if saved_search.1 %}
             {% for item in saved_search.1 %}
 
@@ -21,11 +23,12 @@
 
             {% endfor %}
         {% else %}
+        {{ 'foo'|print_foo }}
 
         <tr>
             <td colspan=2 style="font-size: 12px;">
                 There are no results for today! <br/>
-                You are subscribed to receive this email {{saved_search.0.frequency|make_verbose_frequency|lower}}, even when there are no results. <a href="http://my.jobs{% url 'saved_search_main' user.email %}">Click here</a> to change this setting.
+                You are subscribed to receive this email {{saved_search.0.frequency|make_verbose_frequency|lower}}, even when there are no results. <a href="http://my.jobs{% url 'saved_search_main' saved_search.0.user.email %}">Click here</a> to change this setting.
             </td>
         </tr>
 

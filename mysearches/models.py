@@ -74,8 +74,7 @@ class SavedSearch(models.Model):
             if search[1] or digest.send_if_none:
                 # If search has job listings to display or user wants to
                 # receive emails even if there are no jobs, continue sending
-                context_dict = {'saved_searches': [search],
-                                'user': self.user, 'email': self.email}
+                context_dict = {'saved_searches': [search]}
                 subject = self.label.strip()
                 message = render_to_string('mysearches/email_single.html',
                                            context_dict)
@@ -158,9 +157,7 @@ class SavedSearchDigest(models.Model):
                 # user's searches have no new job listings to display
                 subject = _('Your Daily Saved Search Digest')
                 context_dict = {'saved_searches': saved_searches,
-                                'digest': self,
-                                'user': self.user,
-                                'email': self.email}
+                                'digest': self}
                 message = render_to_string('mysearches/email_digest.html',
                                            context_dict)
                 msg = EmailMessage(subject, message,
