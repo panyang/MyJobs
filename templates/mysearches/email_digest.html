@@ -5,9 +5,7 @@
 
 {% block content %}
     {% for saved_search in saved_searches %}
-
         {% include 'mysearches/email_table_include.html' with saved_search=saved_search %}
-
     {% endfor %}
 {% endblock %}
 

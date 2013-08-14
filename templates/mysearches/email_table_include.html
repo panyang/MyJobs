@@ -10,15 +10,15 @@
         {% if saved_search.1 %}
             {% for item in saved_search.1 %}
             
-                <tr>
-                    <td colspan=2 style="border-left: 1px solid #ddd; padding: 8px; line-height: 20px; border-top: 1px solid #ddd; {% if forloop.counter|divisibleby:2 %}{{even}}{% else %}{{odd}}{% endif %}">
-                        <a href="{{item.link}}" style="text-decoration: none; color: #333;">
-                            <b>{{item.title}}</b><br>
-                            {{item.description|truncatechars:200}}<br>
-                            <i>Acquired: {{item.pubdate}}</i>
-                        </a>
-                    </td>
-                </tr>
+            <tr>
+                <td colspan=2 style="border-left: 1px solid #ddd; padding: 8px; line-height: 20px; border-top: 1px solid #ddd; {% if forloop.counter|divisibleby:2 %}{{even}}{% else %}{{odd}}{% endif %}">
+                    <a href="{{item.link}}" style="text-decoration: none; color: #333;">
+                        <b>{{item.title}}</b><br>
+                        {{item.description|truncatechars:200}}<br>
+                        <i>Acquired: {{item.pubdate}}</i>
+                    </a>
+                </td>
+            </tr>
 
             {% endfor %}
         {% else %}

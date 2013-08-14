@@ -240,10 +240,14 @@ class MySearchViewTests(TestCase):
         response = self.client.get(reverse('delete_saved_search',
                                            args={self.user.email, 'digest'}))
         self.assertEqual(models.SavedSearch.objects.count(), 0)
+        self.assertRedirects(response, reverse('saved_search_main',
+                                               args=[self.user.email]))
 
     def test_anonymous_delete_searches(self):
         search = SavedSearchFactory(user=self.user)
 
+        # `logout()` requires a request object as its first parameter but we
+        # don't have one; Deleting the user's session does this for us.
         Session.objects.all().delete()
 
         response = self.client.get(reverse('delete_saved_search',
@@ -251,7 +255,7 @@ class MySearchViewTests(TestCase):
         self.assertEqual(models.SavedSearch.objects.count(), 0)
 
         # assertRedirects follows any redirect and waits for a 200 status code;
-        # anonymous users always redirect, causing this to fail.
+        # anonymous users will always redirect, never returning a 200.
         self.client.login_user(self.user)
         self.assertRedirects(response, reverse('saved_search_main',
                                                args=[self.user.email]))

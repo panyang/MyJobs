@@ -18,17 +18,17 @@ from mysearches.helpers import *
 
 @user_is_allowed(SavedSearch, 'search_id', keep_email=True)
 def delete_saved_search(request, user_email, search_id):
-    if search_id == 'digest':
+    try:
+        search_id = int(search_id)
+
+        # a single search is being disabled
+        search = get_object_or_404(SavedSearch, id=search_id,
+                                   user__email=user_email)
+        search.delete()
+    except ValueError:
         # all searches are being disabled
         SavedSearch.objects.filter(user__email=user_email).delete()
-    else:
-        search_id = int(search_id)
-        try:
-            # a single search is being disabled
-            SavedSearch.objects.filter(id=search_id,
-                                       user__email=user_email).delete()
-        except SavedSearch.DoesNotExist:
-            raise Http404
+
     return HttpResponseRedirect(reverse('saved_search_main',
                                         args=[user_email]))
 
@@ -216,7 +216,17 @@ def unsubscribe(request, user_email, search_id):
     :search_id: the string 'digest' to disable all searches
         or the id value of a specific search to be disabled
     """
-    if search_id == 'digest':
+    try:
+        search_id = int(search_id)
+        saved_search = get_object_or_404(SavedSearch, id=search_id,
+                                         user__email=user_email,
+                                         is_active=True)
+
+        # saved_search is a single search rather than a queryset this time
+        cache = [saved_search]
+        saved_search.is_active = False
+        saved_search.save()
+    except ValueError:
         digest = SavedSearchDigest.objects.get_or_create(
             user__email=user_email)[0]
         if digest.is_active:
@@ -228,16 +238,7 @@ def unsubscribe(request, user_email, search_id):
         # that queryset; Make a copy and then update the queryset
         cache = list(saved_searches)
         saved_searches.update(is_active=False)
-    else:
-        search_id = int(search_id)
-        saved_search = get_object_or_404(SavedSearch, id=search_id,
-                                         user__email=user_email,
-                                         is_active=True)
 
-        # saved_search is a single search rather than a queryset this time
-        cache = [saved_search]
-        saved_search.is_active = False
-        saved_search.save()
     return render_to_response('mysearches/saved_search_disable.html',
                               {'search_id': search_id,
                                'searches': cache,
