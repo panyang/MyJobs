@@ -16,7 +16,7 @@ class SavedSearch(models.Model):
         ('W', _('Weekly')),
         ('M', _('Monthly')))
 
-    DOM_CHOICES = [(i, i) for i in range(1,31)]
+    DOM_CHOICES = [(i, i) for i in range(1, 31)]
     DOW_CHOICES = (('1', _('Monday')),
                    ('2', _('Tuesday')),
                    ('3', _('Wednesday')),
@@ -27,7 +27,7 @@ class SavedSearch(models.Model):
     SORT_CHOICES = (('Relevance', _('Relevance')),
                     ('Date', _('Date')))
 
-    user = models.ForeignKey('myjobs.User',editable=False)
+    user = models.ForeignKey('myjobs.User', editable=False)
     created_on = models.DateTimeField(auto_now_add=True)
     url = models.URLField(max_length=300,
                           verbose_name=_("URL of Search Results:"))
@@ -67,19 +67,21 @@ class SavedSearch(models.Model):
         return parse_rss(url_of_feed, self.frequency, num_items=num_items)
 
     def send_email(self):
-        context_dict = {'saved_searches': [self]}
-        subject = self.label.strip()
-        message = render_to_string('mysearches/email_single.html',
-                                   context_dict)
-        msg = EmailMessage(subject, message, settings.SAVED_SEARCH_EMAIL,
-                           [self.email])
-        msg.content_subtype = 'html'
-        msg.send()
-        self.last_sent = datetime.now()
-        self.save()
+        search = (self, self.get_feed_items())
+        if search[1]:
+            context_dict = {'saved_searches': [search]}
+            subject = self.label.strip()
+            message = render_to_string('mysearches/email_single.html',
+                                       context_dict)
+            msg = EmailMessage(subject, message, settings.SAVED_SEARCH_EMAIL,
+                               [self.email])
+            msg.content_subtype = 'html'
+            msg.send()
+            self.last_sent = datetime.now()
+            self.save()
 
     def send_initial_email(self):
-        context_dict = {'saved_searches': [self]}
+        context_dict = {'saved_searches': [(self,)]}
         subject = "My.jobs New Saved Search - %s" % self.label.strip()
         message = render_to_string("mysearches/email_initial.html",
                                    context_dict)
@@ -94,7 +96,7 @@ class SavedSearch(models.Model):
         On creation, check if that same URL exists for the user and raise
         validation if it's a duplicate.
         """
-        
+
         duplicates = SavedSearch.objects.filter(user=self.user, url=self.url)
 
         if duplicates:
@@ -124,13 +126,24 @@ class SavedSearchDigest(models.Model):
                                                    " all your saved searches"
                                                    " as one email?"))
     user = models.OneToOneField('myjobs.User', editable=False)
-    email = models.EmailField(max_length=255, verbose_name=_("Send results to"))
+    email = models.EmailField(max_length=255,
+                              verbose_name=_("Send results to"))
+
+    # For now, emails will only be sent if they have searches; When this
+    # functionality is added, remove `editable=False` to show this option on
+    # the form
     send_if_none = models.BooleanField(default=False,
                                        verbose_name=_("Send even if there are"
-                                                      " no results"))
-    
+                                                      " no results"),
+                                       editable=False)
+
     def send_email(self):
         saved_searches = self.user.savedsearch_set.filter(is_active=True)
+        saved_searches = [(search, search.get_feed_items())
+                          for search in saved_searches]
+        saved_searches = [(search, items)
+                          for search, items in saved_searches
+                          if items]
         if saved_searches:
             subject = _('Your Daily Saved Search Digest')
             context_dict = {'saved_searches': saved_searches, 'digest': self}
