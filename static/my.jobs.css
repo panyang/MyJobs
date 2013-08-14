@@ -159,6 +159,10 @@ table#row-link-table {
     font-size: 1.5em;   
 }
 
+.candidate-name-bold {
+    font-weight: bold;   
+}
+
 .microsite-name {
     font-size: 1.2em;
     font-weight: bold;
@@ -182,6 +186,18 @@ table#row-link-table {
 
 .centered {
     text-align: center;
+}
+
+/* Django Endless paging style modifications */
+.endless_container .btn {
+    padding-left: 0px;
+    padding-right: 0px;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.endless_container .btn + .btn {
+    margin-left: 0px;
 }
 
 /*Microsite Activity*/
