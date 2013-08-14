@@ -57,8 +57,8 @@ class MyDashboardViewsTests(TestCase):
                                             args=[self.staff_user.email]),
                                     {'microsite': 'test.jobs'})
         soup = BeautifulSoup(response.content)
-        # 16 searches total, two rows per search
-        self.assertEqual(len(soup.select('#row-link-table tr')), 32)
+        # 15 searches total, two rows per search
+        self.assertEqual(len(soup.select('#row-link-table tr')), 30)
 
         old_search = SavedSearch.objects.all()[0]
         old_search.created_on -= timedelta(days=31)
