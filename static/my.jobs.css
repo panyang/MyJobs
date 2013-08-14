@@ -187,6 +187,8 @@ table#row-link-table {
 .centered {
     text-align: center;
 }
+
+/* Django Endless paging style modifications */
 .endless_container .btn {
     padding-left: 0px;
     padding-right: 0px;
