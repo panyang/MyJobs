@@ -35,9 +35,6 @@ a:hover {
 .candidate-activity-mobile {
     display: none;
 }
-#candidate-activity-details-table a {
-    color: #c44e34;
-}
 
 /*Employer Dashboard */
 #user-list-details-table {
