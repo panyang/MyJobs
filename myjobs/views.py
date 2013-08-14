@@ -414,12 +414,12 @@ def check_name_obj(user):
 
 
 @user_is_allowed(keep_email=True)
-def stop_sending(request, user_email):
+def unsubscribe_all(request, user_email):
     user = User.objects.get_email_owner(user_email)
     if not user:
         raise Http404
     user.opt_in_myjobs = False
     user.save()
 
-    return render_to_response('myjobs/stop_sending.html',
+    return render_to_response('myjobs/unsubscribe_all.html',
                               context_instance=RequestContext(request))

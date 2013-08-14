@@ -1,5 +1,6 @@
 from datetime import date, timedelta, datetime
-from itertools import chain 
+from itertools import chain
+import logging
 
 from celery import task
 from celery.schedules import crontab
@@ -12,31 +13,52 @@ from myprofile.models import SecondaryEmail
 from mysearches.models import SavedSearch, SavedSearchDigest
 from registration.models import ActivationProfile
 
+logger = logging.getLogger(__name__)
+
+
 @task(name='tasks.send_search_digests')
 def send_search_digests():
     """
     Daily task to send saved searches. If user opted in for a digest, they
     receive it daily and do not get individual saved search emails. Otherwise,
     each active saved search is sent individually.
+
+    Catches and logs any exceptions that occur while sending emails.
     """
 
     today = datetime.today()
     day_of_week = today.isoweekday()
 
+    log_text = '{exception} - user: {user_id}, {object_type}: {object_id}'
+
     digest = SavedSearchDigest.objects.filter(is_active=True)
     for obj in digest:
-        obj.send_email()
+        try:
+            obj.send_email()
+        except Exception, e:
+            logger.error(log_text.format(exception=e,
+                                         user_id=obj.user.id,
+                                         object_type='saved search digest',
+                                         object_id=obj.id))
 
     not_digest = SavedSearchDigest.objects.filter(is_active=False)
     for item in not_digest:
-        saved_searches = item.user.savedsearch_set.filter(is_active=True)
-        daily = saved_searches.filter(frequency='D')
-        weekly = saved_searches.filter(day_of_week=str(day_of_week))
-        monthly = saved_searches.filter(day_of_month=today.day)
+        saved_searches = item.user.savedsearch_set.all()
+        daily = saved_searches.filter(frequency='D', is_active=True)
+        weekly = saved_searches.filter(day_of_week=str(day_of_week),
+                                       is_active=True)
+        monthly = saved_searches.filter(day_of_month=today.day,
+                                        is_active=True)
 
         saved_search_objs = chain(daily, weekly, monthly)
         for search_obj in saved_search_objs:
-            search_obj.send_email()
+            try:
+                search_obj.send_email()
+            except Exception, e:
+                logger.error(log_text.format(exception=e,
+                                             user_id=search_obj.user.id,
+                                             object_type='saved search',
+                                             object_id=search_obj.id))
 
 @task(name='task.delete_inactive_activations')
 def delete_inactive_activations():
