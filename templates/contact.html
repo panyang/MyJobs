@@ -14,15 +14,6 @@
     </script>
 {% endblock header%}
 {% block text %}
-<style>
-.table tr td{
-    min-width: 101px;
-}
-
-.table tr td + td{
-    font-weight: bold;
-}
-</style>
 <div id="contact-form">
     <form method="POST" id="captcha-form">
         <br />
@@ -98,7 +89,7 @@
         to find your way.
     </p>
     <p>Here are the details of your message:</p>
-    <table class="table table-bordered table-striped">
+    <table id="success-table" class="table table-bordered table-striped">
         <tr>
             <td class="text-right">Name:</td>
             <td id="name-input"></td>

@@ -309,6 +309,15 @@ table#row-link-table {
     color: #c44e34;
 }
 
+/* Contact Form Styles */
+#success-table tr td{
+    min-width: 101px;
+}
+
+#success-table tr td + td{
+    font-weight: bold;
+}
+
 /* Form Styles */
 .form-label {
     text-align: right;
@@ -1314,6 +1323,11 @@ form input[type='checkbox'] {
     input [type='text'] + .help-block,
     div + .help-block{
         margin: -12px 0 0 5px;
+    }
+
+    /* Contact Form Styles */
+    #success-table tr td{
+        min-width: 0;
     }
     
     /*Employer Dashboard*/    
