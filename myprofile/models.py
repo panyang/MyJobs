@@ -1,7 +1,6 @@
 import datetime
 
 from django.contrib.contenttypes.models import ContentType
-from django.core.exceptions import ValidationError
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 
@@ -29,7 +28,7 @@ class ProfileUnits(models.Model):
         Custom save method to set the content type of the instance.
         
         """
-        if(not self.content_type):
+        if not self.content_type:
             self.content_type = ContentType.objects.get_for_model(self.__class__)
         super(ProfileUnits, self).save(*args, **kwargs)
 
@@ -52,11 +51,16 @@ class ProfileUnits(models.Model):
     def get_model_name(self):
         return self.content_type.model
 
+    @classmethod
+    def get_verbose_class(object):
+        return object.__name__
+
     def get_verbose(self):
         return self.content_type.name.title()
 
     def is_displayed(self):
         return True
+
 
 class Education(ProfileUnits):
     EDUCATION_LEVEL_CHOICES = (
@@ -93,20 +97,20 @@ class Education(ProfileUnits):
 
 
 class Address(ProfileUnits):
-    label = models.CharField(max_length=60, blank=True, 
-                            verbose_name=_('Address Label'))
+    label = models.CharField(max_length=60, blank=True,
+                             verbose_name=_('Address Label'))
     address_line_one = models.CharField(max_length=255, blank=True,
                                         verbose_name=_('Address Line One'))
     address_line_two = models.CharField(max_length=255, blank=True,
                                         verbose_name=_('Address Line Two'))
-    city_name = models.CharField(max_length=255, blank=True, 
-                                verbose_name=_("City"))
+    city_name = models.CharField(max_length=255, blank=True,
+                                 verbose_name=_("City"))
     country_sub_division_code = models.CharField(max_length=5, blank=True,
                                                  verbose_name=_("State/Region"))
     country_code = models.CharField(max_length=3, blank=True, 
                                     verbose_name=_("Country"))
-    postal_code = models.CharField(max_length=12, blank=True, 
-                                    verbose_name=_("Postal Code"))
+    postal_code = models.CharField(max_length=12, blank=True,
+                                   verbose_name=_("Postal Code"))
 
 
 class Telephone(ProfileUnits):
@@ -185,20 +189,37 @@ class Name(ProfileUnits):
     def save(self, *args, **kwargs):
         """
         Custom name save method to ensure only one name object per user
-        has primary=True. We avoid a race condition by locking the transaction
+        has one primary=True. We avoid a race condition by locking the transaction
         using select_for_update.
         """
-        
-        if self.primary:
-            try:
-                temp = Name.objects.select_for_update().get(primary=True,
-                                                          user=self.user)
-                if self != temp:
-                    temp.primary = False
-                    temp.save()
-            except Name.DoesNotExist:
-                pass
-        super(Name, self).save(*args, **kwargs)
+        duplicate_names = Name.objects.filter(user=self.user,
+                                              given_name=self.given_name,
+                                              family_name=self.family_name)
+        if duplicate_names:
+            if self.primary:
+                if self.id in [name.id for name in duplicate_names]:
+                    self.switch_primary_name()
+                else:
+                    duplicate = duplicate_names[0]
+                    if duplicate.primary is False:
+                        try:
+                            current_primary = Name.objects.select_for_update().get(
+                                primary=True, user=self.user)
+                        except Name.DoesNotExist:
+                            duplicate.primary = True
+                            duplicate.save()
+                        else:
+                            current_primary.primary = False
+                            current_primary.save()
+                            duplicate.primary = True
+                            duplicate.save()
+            elif self.id in [name.id for name in duplicate_names]:
+                super(Name, self).save(*args, **kwargs)
+        else:
+            if self.primary:
+                self.switch_primary_name()
+            else:
+                super(Name, self).save(*args, **kwargs)
 
     def __unicode__(self):
         return self.get_full_name()
@@ -206,10 +227,21 @@ class Name(ProfileUnits):
     def is_displayed(self):
         return self.primary
 
+    def switch_primary_name(self, *args, **kwargs):
+        try:
+            temp = Name.objects.select_for_update().get(primary=True,
+                                                        user=self.user)
+        except Name.DoesNotExist:
+            super(Name, self).save(*args, **kwargs)
+        else:
+            temp.primary = False
+            temp.save()
+            super(Name, self).save(*args, **kwargs)
+
 
 class SecondaryEmail(ProfileUnits):
     email = models.EmailField(max_length=255, unique=True, error_messages={
-                                'unique':'This email is already registered.'})
+        'unique': 'This email is already registered.'})
     label = models.CharField(max_length=30, blank=True, null=True)
     verified = models.BooleanField(default=False, editable=False)
     verified_date = models.DateTimeField(blank=True, null=True, editable=False)
@@ -229,7 +261,7 @@ class SecondaryEmail(ProfileUnits):
                                            email=self.email)
             reg_signals.send_activation.send(sender=self, user=self.user,
                                              email=self.email)
-        super(SecondaryEmail,self).save(*args,**kwargs)
+        super(SecondaryEmail, self).save(*args, **kwargs)
             
     def set_as_primary(self):
         """
@@ -277,6 +309,7 @@ class MilitaryService(ProfileUnits):
                                 verbose_name="Campaign")
     honor = models.CharField(max_length=255, blank=True,
                                 verbose_name="Honors")
+
 
 def delete_secondary_activation(sender, **kwargs):
     """

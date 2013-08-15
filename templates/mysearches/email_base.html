@@ -1,10 +1,14 @@
+{% load i18n %}
+
 <table style="border-top-left-radius: 5px; border-top-right-radius: 5px; border-bottom-left-radius: 0px; border-bottom-right-radius: 0px; border: 1px solid #ddd; border-collapse: separate; border-spacing: 0; display: table;">
     <tr>
         <td colspan=2>
             <table>
                 <tr>
-                    <td style="text-align: left;"><a href="my.jobs"><img src="http://my.jobs/files/static/images/myjobs_logo.png" alt="My.Jobs logo"></a></td>
+                    <td style="text-align: left;"><a href="http://my.jobs"><img src="http://my.jobs/files/static/images/myjobs_logo.png" alt="My.Jobs logo"></a></td>
+                    {% block email-title %}
                     <td style="text-align: left; vertical-align: center;"><b>Saved Search Results</b></td>
+                    {% endblock %}
                 </tr>
             </table>
         </td>
@@ -12,23 +16,30 @@
     <tr>
         <td colspan=2>
             {% block content %}
-                There are no results for today!
             {% endblock %}
         </td>
     </tr>
     <tr>
+
+        {% with saved_search=saved_searches.0.0 %}
+
         <td colspan=1 style="width: 33%; border-left: 1px solid #ddd; padding: 8px; line-height: 20px; border-top: 1px solid #ddd;">
-            Saved Search Settings<br>
-            <a href="http://my.jobs{% url 'saved_search_main' %}">change settings</a>
+            <a href="http://my.jobs{% url 'view_profile' user_email=saved_search.user.email %}">{% trans 'My Profile' %}</a><br>
+            <a href="http://my.jobs{% url 'saved_search_main' user_email=saved_search.user.email %}">{% trans 'Saved Searches' %}</a><br>
+            <a href="http://my.jobs{% url 'edit_account' user_email=saved_search.user.email %}">{% trans 'Account Settings' %}</a><br>
         </td>
         <td colspan=1 style="border-left: 1px solid #ddd; padding: 8px; line-height: 20px; border-top: 1px solid #ddd;">
-            {% block footer %}
+            {% block footer-right %}
             {% endblock %}
+            <a href="http://my.jobs{% url 'unsubscribe_all' user_email=saved_search.user.email %}">{% trans 'Unsubscribe from all My.jobs emails' %}</a><br>
         </td>
+
+        {% endwith %}
+
     </tr>
     <tr>
         <td colspan=2 style="border-left: 1px solid #ddd; padding: 8px; line-height: 20px; border-top: 1px solid #ddd;">
-            <p>My.jobs <a href="my.jobs/terms">Terms</a> and <a href="my.jobs/privacy">Privacy</a></p>
+            <p>My.jobs <a href="http://my.jobs/terms">Terms</a> and <a href="http://my.jobs/privacy">Privacy</a></p>
         </td>
     </tr>
 </table>

@@ -1,15 +1,15 @@
 {% load i18n %}
 {% load model_fields %}
-<div class="formBox profile-mobile" id="{{module.name}}_items">       
-    <h4 id="{{module.name}}-verbose">{{ module.verbose }}</h4>
+<div class="formBox profile-mobile" id="{{module.0.get_model_name}}_items">
+    <h4 id="{{module.0.get_model_name}}-verbose">{{ module.0.get_verbose }}</h4>
 
-    {% if module.items.0 %}
+    {% if module.0 %}
 
     <table class="table table-bordered table-striped">
         <thead>
             <tr>
 
-                {% for label, value, type in module.items.0.get_fields|slice:":3" %}
+                {% for label, value, type in module.0.get_fields|slice:":3" %}
 
                 <th>{{label}}</th>
 
@@ -20,9 +20,9 @@
         </thead>
         <tbody>
 
-            {% for item in module.items %}
+            {% for item in module %}
 
-            <tr id="{{module.name}}-{{item.id}}-item">
+            <tr id="{{module.0.get_model_name}}-{{module.0.id}}-item">
 
                 {% with item|process_field_types as fields %}
                     {% for label, value, type in fields|slice:":3" %}
@@ -32,13 +32,14 @@
                     {% endfor %}
                 {% endwith %}
                 <td class="action">
-                    <form action="{% url 'get_details' %}" class="profile-action-form" method="GET">
+                    <form action="{% url 'get_details' user.email %}" class="profile-action-form" method="GET">
                         <input type="hidden" name="id" value="{{item.id}}" >
+                        <input type="hidden" name="module" value="{{item.get_verbose.title}}" >
                         <button class="btn" type="submit">{% trans 'Details' %}</button>
                     </form>
-                    <form action="{% url 'handle_form' %}" class="profile-action-form" method="GET">
+                    <form action="{% url 'handle_form' user.email %}" class="profile-action-form" method="GET">
                         <input type="hidden" name="id" value="{{item.id}}" >
-                        <input type="hidden" name="module" value="{{module.name}}" >
+                        <input type="hidden" name="module" value="{{item.get_verbose.title}}" >
                         <button type="submit" class="btn" >{% trans 'Edit' %}</button>
                     </form>
                 </td>
@@ -51,8 +52,8 @@
 
     {% endif %}
 
-    <form action="{% url 'handle_form' %}" class="profile-action-form" method="GET">
-        <input type="hidden" name="module" value="{{module.name}}" >
+    <form action="{% url 'handle_form' user.email %}" class="profile-action-form" method="GET">
+        <input type="hidden" name="module" value="{{module.0.get_verbose.title}}" >
         <button type="submit" class="btn primary">{% trans 'Add' %}</button>
     </form>
 </div>

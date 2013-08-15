@@ -2,15 +2,14 @@ from django.core import mail
 from django.core.exceptions import MultipleObjectsReturned
 from django.core.urlresolvers import reverse
 from django.db import IntegrityError
-from django.forms import forms
 from django.test import TestCase
 
 from myjobs.models import User
 from myjobs.tests.factories import UserFactory
-from myjobs.tests import TestClient
 from myprofile.models import *
 from myprofile.tests.factories import *
 from registration.models import ActivationProfile
+
 
 class MyProfileTests(TestCase):
     user_info = {'password1': 'complicated_password',
@@ -27,7 +26,7 @@ class MyProfileTests(TestCase):
         """
 
         initial_name = PrimaryNameFactory(user=self.user)
-        
+
         self.assertTrue(initial_name.primary)
         new_name = NewPrimaryNameFactory(user=self.user)
         initial_name = Name.objects.get(given_name='Alice')
@@ -69,7 +68,7 @@ class MyProfileTests(TestCase):
         Creating a new secondary email creates a corresponding unactivated
         ActivationProfile.
         """
-        
+
         secondary_email = SecondaryEmailFactory(user=self.user)
         activation = ActivationProfile.objects.get(email=secondary_email.email)
         self.assertEqual(secondary_email.email, activation.email)
@@ -95,8 +94,8 @@ class MyProfileTests(TestCase):
         activation = ActivationProfile.objects.get(user=self.user,
                                                    email=secondary_email.email)
         response = self.client.get(reverse('registration_activate',
-                                           kwargs={'activation_key':
-                                                   activation.activation_key}))
+                                           args=[self.user.email,
+                                                 activation.activation_key]))
         secondary_email = SecondaryEmail.objects.get(user=self.user,
                                                      email=secondary_email.email)
         activation = ActivationProfile.objects.get(user=self.user,
@@ -104,7 +103,7 @@ class MyProfileTests(TestCase):
         self.assertEqual(response.status_code, 200)
         self.assertTrue(secondary_email.verified)
 
-    def test_set_primary(self):
+    def test_set_primary_email(self):
         """
         Calling the set_as_primary method in the SecondaryEmail removes it from
         SecondaryEmail, replaces the current address on the User model, and
@@ -130,6 +129,64 @@ class MyProfileTests(TestCase):
         self.assertTrue(old_email.verified)
         user = User.objects.get(email=new_primary)
 
+    def test_duplicate_same_primary_name(self):
+        """
+        Makes sure that one can not create duplicate primary names.
+        """
+        primary_name1 = PrimaryNameFactory(user=self.user)
+        primary_name2 = PrimaryNameFactory(user=self.user)
+
+        num_results = self.user.profileunits_set.filter(
+            content_type__name='name').count()
+        self.assertEqual(num_results, 1)
+
+    def test_different_primary_name(self):
+        primary_name1 = PrimaryNameFactory(user=self.user)
+        primary_name2 = NewPrimaryNameFactory(user=self.user)
+
+        primary_name_count = Name.objects.filter(user=self.user,
+                                                 primary=True).count()
+        non_primary_name_count = Name.objects.filter(user=self.user,
+                                                     primary=False).count()
+
+        self.assertEqual(primary_name_count, 1)
+        self.assertEqual(non_primary_name_count, 1)
+
+    def test_non_primary_name_to_primary(self):
+        name = NewNameFactory(user=self.user)
+        primary_name1 = PrimaryNameFactory(user=self.user)
+
+        primary_name_count = Name.objects.filter(user=self.user,
+                                                 primary=True).count()
+        non_primary_name_count = Name.objects.filter(user=self.user,
+                                                     primary=False).count()
+
+        self.assertEqual(primary_name_count, 1)
+        self.assertEqual(non_primary_name_count, 0)
+
+    def test_primary_name_to_non_primary(self):
+        primary_name = PrimaryNameFactory(user=self.user)
+        primary_name.primary = False
+        primary_name.save()
+
+        primary_name_count = Name.objects.filter(user=self.user,
+                                                 primary=True).count()
+        non_primary_name_count = Name.objects.filter(user=self.user,
+                                                     primary=False).count()
+
+        self.assertEqual(primary_name_count, 0)
+        self.assertEqual(non_primary_name_count, 1)
+
+    def test_duplicate_name(self):
+        """
+        Makes sure that duplicate names is not saving.
+        """
+        name1 = NewNameFactory(user=self.user)
+        name2 = NewNameFactory(user=self.user)
+
+        num_results = Name.objects.filter(user=self.user).count()
+        self.assertEqual(num_results, 1)
+
     def test_unverified_primary_email(self):
         """
         Only verified emails can be set as the primary email
@@ -143,16 +200,16 @@ class MyProfileTests(TestCase):
             SecondaryEmail.objects.get(email=old_primary)
         self.assertFalse(primary)
         user = User.objects.get(email=old_primary)
-        self.assertEqual(user.email,old_primary)
+        self.assertEqual(user.email, old_primary)
 
     def test_maintain_verification_state(self):
         """
-        For security reasons, the state of verification of the user email should
-        be the same as it is when it is transferred into SecondaryEmail
+        For security reasons, the state of verification of the user email
+        should be the same as it is when it is transferred into SecondaryEmail
         """
-        
+
         old_primary = self.user.email
-        self.user.is_active=False
+        self.user.is_active = False
         self.user.save()
         secondary_email = SecondaryEmailFactory(user=self.user)
         activation = ActivationProfile.objects.get(user=self.user,
@@ -176,7 +233,7 @@ class MyProfileTests(TestCase):
         with self.assertRaises(IntegrityError):
             new_secondary_email = SecondaryEmailFactory(user=self.user)
         new_secondary_email = SecondaryEmailFactory(user=self.user,
-            email='email@example.com')
+                                                    email='email@example.com')
 
     def test_delete_secondary_email(self):
         """
@@ -193,5 +250,5 @@ class MyProfileTests(TestCase):
         military_service.save()
 
         ms_object = ProfileUnits.objects.filter(
-                            content_type__name="military service").count()
+            content_type__name="military service").count()
         self.assertEqual(ms_object, 1)

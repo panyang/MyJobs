@@ -105,7 +105,8 @@ class ActivationProfile(models.Model):
         ctx_dict = {'activation_key': self.activation_key,
                     'expiration_days': settings.ACCOUNT_ACTIVATION_DAYS,
                     'password': password,
-                    'primary': primary}
+                    'primary': primary,
+                    'user': self.user}
         subject = render_to_string('registration/activation_email_subject.txt',
                                    ctx_dict)
         subject = ''.join(subject.splitlines())

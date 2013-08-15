@@ -47,7 +47,7 @@
                 <h2>{% trans "What now:" %}</h2>
                 <table class="table table-bordered table-striped">
                     {% if searches|length %}
-                        {% url 'delete_saved_search' search_id=search_id as delete_url %}
+                        {% url 'delete_saved_search' user_email=user_email search_id=search_id as delete_url %}
                         <tr class="profile-section">
                             <td>
                                 <a href="{{delete_url}}">
@@ -61,7 +61,7 @@
                         </tr>
                     {% endif %}
                     <tr class="profile-section">
-                        <td><a href="{% url 'saved_search_main' %}">{% trans "Manage your searches" %}</a></td>
+                        <td><a href="{% url 'saved_search_main' user_email=user_email %}">{% trans "Manage your searches" %}</a></td>
                     </tr>
                 </table>
             </div>

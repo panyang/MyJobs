@@ -60,6 +60,17 @@ $(document).ready(function()
 
 {% block content %}
 <style>
+#accordion .ui-icon { display: none; }
+#accordion .ui-accordion-header a { padding-left: 10px; }
+.ui-corner-all, .ui-corner-top, .ui-corner-left, .ui-corner-tl {
+    border-radius: 0px;   
+}
+.ui-state-active, .ui-state-default, .ui-widget-content .ui-state-default, .ui-widget-header .ui-state-default {
+    background: #d2cfc7;    
+}
+.ui-accordion .ui-accordion-content {
+    padding: 0px;
+}
 #profileTitleRow{
     margin-bottom: 20px;
 }
@@ -78,10 +89,10 @@ $(document).ready(function()
         </div>
         <div class="span12" id="profileTitleBar">                          
         </div>
-        <div class="span12 hide-desktop hide-tablet"><a class="btn-size btn primary" href="/dashboard/">Back to Company Dashboard</a></div>
+        <div class="span12 hide-desktop hide-tablet"><a class="btn-size btn primary" href="{% url 'dashboard' user.email %}">Back to Company Dashboard</a></div>
         <br>
         <div class="span12 hide-desktop hide-tablet"><a href="{{microsite_url}}" class="btn-size btn">View Site</a></div>
-        <span class="span6 hide-mobile"><a class="btn primary" href="/dashboard/">Back to Company Dashboard</a><a href="{{microsite_url}}" class="btn">View Site</a></span>
+        <span class="span6 hide-mobile"><a class="btn primary" href="{% url 'dashboard' user.email %}">Back to Company Dashboard</a><a href="{{microsite_url}}" class="btn">View Site</a></span>
     </div>
     <div class="row">
         <div class="hide-desktop">
@@ -90,7 +101,7 @@ $(document).ready(function()
                 <div class="span8 pull-left">
                     <div class="formBox">
                         <h3>Site Activity</h3>                        
-                            <form action='/dashboard/microsite/' method='POST' id="date-range" class="move-left">
+                            <form action='{% url 'microsite_activity' user.email %}' method='POST' id="date-range" class="move-left">
                             {% csrf_token %}
                             <div class="hide-mobile">
                                 <div class="span2 form-label"><strong>Date Range:</strong></div><input name="after" type="text" placeholder="{{ after|date:'m/d/Y' }}" class="datepicker"> <strong>to</strong> <input name="before" type="text" placeholder="{{ before|date:'m/d/Y' }}" class="datepicker"></br>
@@ -108,62 +119,23 @@ $(document).ready(function()
                             <br>
                             <hr>
                             </div>
-                                <div class="accordion" id="details-candidate-activity-collapse">
-                                    <div class="accordion-group">
-                                        <div class="accordion-heading details-heading">
+                                <div id="accordion" class="accordion-group">                                    
+                                    <div class="accordion-heading details-heading">
                                             <a class="accordion-toggle" data-toggle="collapse" data-parent="#details-candidate-activity-collapse" 
                                                 href="#candidate-activity-details-table">Saved Searches<span class="pull-right"><i class="icon icon-minus"></i></span></a>
                                         </div>
-                                        <div id="candidate-activity-details-table" class="accordion-body in collapse">
-                                            <div class="accordion-inner">
-                                            {% if candidates %}                                               
-                                                <table id="row-link-table">                            
-                                                    {% for candidate in candidates %}                    
-                                                    <tr class="hide-mobile">
-                                                        <td>
-                                                        <img src="{{candidate.user.get_gravatar_url}}&s=65" class="gravatar pull-left"> 
-                                                        </td>
-                                                        <td>
-                                                        <div class="candidate-name pull-left">{{candidate.user|get_name_obj}}</div><br>
-                                                        <a href="{{ candidate.user.id }}" class="pull-left">{{candidate.user}}</a><br>
-                                                        <div class="pull-left">{{candidate.url|url_domain}}<br>
-                                                        {{candidate.created_on.date}}</div>
-                                                        </td>
-                                                    <tr>
-                                                    <tr class="candidate-activity-mobile">
-                                                        <td>
-                                                        <img src="{{candidate.user.get_gravatar_url}}&s=45" class="gravatar pull-left"> 
-                                                        </td>
-                                                        <td>
-                                                        <div class="candidate-name pull-left">{{candidate.user|get_name_obj}}</div>
-                                                        <a href="{{ candidate.user.id }}" class="candidate-activity-mobile pull-left">{{candidate.user}}</a>
-                                                        <div class="pull-left">{{candidate.url|url_domain}}<br>
-                                                        {{candidate.created_on.date}}</div>
-                                                        </td>
-                                                    <tr>
-                                                    {% endfor %}                                                    
-                                                 </table>                                                 
-                                                 <div class="pull-left span6">                                                 
-                                                 {% if candidates.has_previous %}
-                                                    <a href="?page={{ candidates.previous_page_number }}&microsite_url={{ microsite_url }}&after={{ after|date:'m/d/Y' }}&before={{ before|date:'m/d/Y' }}">Previous</a>
-                                                 {% else %}
-                                                    &nbsp;
-                                                 {% endif %}
-                                                 &nbsp;
-                                                 Page {{ candidates.number }} of {{ candidates.paginator.num_pages }}
-                                                 &nbsp;
-                                                 {% if candidates.has_next %}
-                                                    <a href="?page={{ candidates.next_page_number }}&microsite_url={{ microsite_url }}&after={{ after|date:'m/d/Y' }}&before={{ before|date:'m/d/Y' }}">Next</a>
-                                                 {% endif %}
-                                                 </div>
-                                             {% else %}
-                                                 <div id="no-activity">
-                                                    <strong>There is no candidate activity between {{after.date}} and {{before.date}} for {{ site_name|cut:"http://" }}</strong>
-                                                 </div>
-                                             {% endif %}
+                                        <div id="candidate-activity-details-table">                                            
+                                            
+                                            {% include page_template %}                
+                
+                                            {% block js_pagination %}
+                                                {{ block.super }}
+                                                <script src="{{ STATIC_URL }}endless-pagination.js" type="text/javascript"></script>                                                               
+                                                <script>$.endlessPaginate();</script>                                                
+                                            {% endblock %}
+                                            
                                             </div>{# /accordion-inner #}
-                                        </div>{# /-details-table #}
-                                    </div>{# /accordion-group #}
+                                        
                                 </div>{# /accordion #}                           
                     </div>{# /formBox #}
                 </div>{# /span8 #}

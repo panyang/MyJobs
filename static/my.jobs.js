@@ -2,6 +2,10 @@
 Document Level Actions
 *******/
 $(document).ready(function(){
+    $("#id_email").attr("placeholder", "Email");
+    $( "input[id$='date']" ).datepicker({dateFormat: window.dateFormat,
+                                         constrainInput: false});
+
     var offset = 0;
 
     $(this).ajaxStart(function () {
@@ -24,8 +28,14 @@ $(document).ready(function(){
         $(this).dialog("close");
     });
     $(this).ajaxError(function (e, xhr) {
-        if (xhr.status == 403) {
-            // redirect to the home page on 403
+        if (xhr.status == 403 || xhr.status == 404) {
+            /*
+            Redirects the user to the home page when various error types occur
+            403: the user is trying to access a protected page but is not
+                logged in
+            404: the user is trying to access a page using another user's
+                email address
+            */
             window.location = '/';
         }
     });
@@ -38,13 +48,6 @@ $(document).ready(function(){
     });
     $("#pop-menu").mouseleave(function(){
         $("#nav").removeClass("active");
-    });
-
-    $('#disable-account').click(function(){
-        var answer = confirm('Are you sure you want to disable your account?');
-        if (answer == true) {
-            window.location = '/account/disable';
-        }
     });
 
     $('a.account-menu-item').click(function(e) {
@@ -117,7 +120,7 @@ function contactForm(){
                     var $field = $('[id$=recaptcha_response_field]')
                     var $labelOfError = $error.prev();
                     // insert new errors after the relevant inputs
-                    $error.wrap('<span class="required" />');
+                    $error.wrap('<div class="required" />');
                     $error.addClass('required-border')
                     if(!($.browser.msie)){
                         $field.attr("placeholder",json.errors[index][1]);
