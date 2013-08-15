@@ -1,0 +1,39 @@
+{% extends 'base.html' %}
+
+{% load i18n %}
+
+{% block content %}
+<div class="row">
+    <div class="span12">
+        <h1>{% trans 'Unsubscribe Successful' %}</h1>
+    </div>
+</div>
+<div class="row">
+    <div class="span8">
+        <p>{% trans 'You have successfully unsubscribed from all nonessential My.Jobs communications.' %}</p>
+        <p>{% trans 'You may receive a few emails before your request is fully processed.' %}</p>
+    </div>
+    <div class="span4">
+        <div class="formBox" id="moduleBank">
+            <h2>{% trans 'What now:' %}</h2>
+            <table class="table table-bordered">
+
+                {% if user.is_authenticated %}
+
+                <tr class="profile-section">
+                    <td><a href="{% url 'edit_account' user.email %}">{% trans 'Manage your account' %}</a></td>
+                </tr>
+
+                {% else %}
+
+                <tr class="profile-section">
+                    <td><a href="{% url 'home' %}">{% trans 'Login' %}</a></td>
+                </tr>
+
+                {% endif %}
+
+            </table>
+        </div>
+    </div>
+</div>
+{% endblock %}

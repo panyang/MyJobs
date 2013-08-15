@@ -68,7 +68,7 @@ class SavedSearch(models.Model):
 
     def send_email(self):
         search = (self, self.get_feed_items())
-        if search[1]:
+        if self.user.opt_in_myjobs and search[1]:
             context_dict = {'saved_searches': [search]}
             subject = self.label.strip()
             message = render_to_string('mysearches/email_single.html',
@@ -81,15 +81,16 @@ class SavedSearch(models.Model):
             self.save()
 
     def send_initial_email(self):
-        context_dict = {'saved_searches': [(self,)]}
-        subject = "My.jobs New Saved Search - %s" % self.label.strip()
-        message = render_to_string("mysearches/email_initial.html",
-                                   context_dict)
+        if self.user.opt_in_myjobs:
+            context_dict = {'saved_searches': [(self,)]}
+            subject = "My.jobs New Saved Search - %s" % self.label.strip()
+            message = render_to_string("mysearches/email_initial.html",
+                                       context_dict)
 
-        msg = EmailMessage(subject, message, settings.SAVED_SEARCH_EMAIL,
-                           [self.email])
-        msg.content_subtype = 'html'
-        msg.send()
+            msg = EmailMessage(subject, message, settings.SAVED_SEARCH_EMAIL,
+                               [self.email])
+            msg.content_subtype = 'html'
+            msg.send()
 
     def create(self, *args, **kwargs):
         """
@@ -144,7 +145,7 @@ class SavedSearchDigest(models.Model):
         saved_searches = [(search, items)
                           for search, items in saved_searches
                           if items]
-        if saved_searches:
+        if self.user.opt_in_myjobs and saved_searches:
             subject = _('Your Daily Saved Search Digest')
             context_dict = {'saved_searches': saved_searches, 'digest': self}
             message = render_to_string('mysearches/email_digest.html',

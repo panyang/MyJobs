@@ -8,7 +8,7 @@ from django.contrib.auth import authenticate, logout
 from django.contrib.auth.decorators import user_passes_test
 from django.core.mail import EmailMessage
 from django.forms.models import model_to_dict
-from django.http import HttpResponse
+from django.http import HttpResponse, Http404
 from django.template import RequestContext
 from django.shortcuts import render_to_response, redirect
 from django.utils.html import mark_safe
@@ -416,3 +416,15 @@ def check_name_obj(user):
     if name:
         initial_dict.update(model_to_dict(name))
     return initial_dict
+
+
+@user_is_allowed(keep_email=True)
+def unsubscribe_all(request, user_email):
+    user = User.objects.get_email_owner(user_email)
+    if not user:
+        raise Http404
+    user.opt_in_myjobs = False
+    user.save()
+
+    return render_to_response('myjobs/unsubscribe_all.html',
+                              context_instance=RequestContext(request))

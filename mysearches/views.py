@@ -16,21 +16,21 @@ from mysearches.forms import SavedSearchForm, DigestForm
 from mysearches.helpers import *
 
 
-@user_is_allowed(SavedSearch, 'search_id')
-@user_passes_test(User.objects.is_active)
-@user_passes_test(User.objects.not_disabled)
-def delete_saved_search(request, search_id):
+@user_is_allowed(SavedSearch, 'search_id', keep_email=True)
+def delete_saved_search(request, user_email, search_id):
     try:
         search_id = int(search_id)
+
         # a single search is being disabled
-        SavedSearch.objects.filter(id=search_id, user=request.user).delete()
+        search = get_object_or_404(SavedSearch, id=search_id,
+                                   user__email=user_email)
+        search.delete()
     except ValueError:
         # all searches are being disabled
-        SavedSearch.objects.filter(user=request.user).delete()
-    except SavedSearch.DoesNotExist:
-        pass
+        SavedSearch.objects.filter(user__email=user_email).delete()
+
     return HttpResponseRedirect(reverse('saved_search_main',
-                                        args=[request.user.email]))
+                                        args=[user_email]))
 
 
 @user_is_allowed(SavedSearch)
@@ -206,33 +206,41 @@ def save_edit_form(request):
                 return HttpResponse(json.dumps(form.errors))
 
 
-@user_is_allowed(SavedSearch, 'search_id')
-@user_passes_test(User.objects.is_active)
-@user_passes_test(User.objects.not_disabled)
-def unsubscribe(request, search_id):
+@user_is_allowed(SavedSearch, 'search_id', keep_email=True)
+def unsubscribe(request, user_email, search_id):
+    """
+    Deactivates a user's saved searches.
+
+    Inputs:
+    :request: HttpRequest object
+    :search_id: the string 'digest' to disable all searches
+        or the id value of a specific search to be disabled
+    """
     try:
         search_id = int(search_id)
-        # a single search is being deactivated
-        saved_search = SavedSearch.objects.filter(id=search_id,
-                                                  user=request.user,
-                                                  is_active=True)
-        # Updating the field that a queryset was filtered on seems to empty
-        # that queryset; Make a copy and then update the queryset
-        cache = list(saved_search)
-        saved_search.update(is_active=False)
+        saved_search = get_object_or_404(SavedSearch, id=search_id,
+                                         user__email=user_email,
+                                         is_active=True)
+
+        # saved_search is a single search rather than a queryset this time
+        cache = [saved_search]
+        saved_search.is_active = False
+        saved_search.save()
     except ValueError:
-        # a digest is being deactivated
-        digest = SavedSearchDigest.objects.get_or_create(user=request.user)[0]
+        digest = SavedSearchDigest.objects.get_or_create(
+            user__email=user_email)[0]
         if digest.is_active:
             digest.is_active = False
             digest.save()
-            saved_search = SavedSearch.objects.filter(user=request.user,
-                                                      is_active=True)
-            cache = list(saved_search)
-            saved_search.update(is_active=False)
-        else:
-            cache = []
+        saved_searches = SavedSearch.objects.filter(user=digest.user,
+                                                    is_active=True)
+        # Updating the field that a queryset was filtered on seems to empty
+        # that queryset; Make a copy and then update the queryset
+        cache = list(saved_searches)
+        saved_searches.update(is_active=False)
+
     return render_to_response('mysearches/saved_search_disable.html',
                               {'search_id': search_id,
-                               'searches': cache},
+                               'searches': cache,
+                               'user_email': user_email},
                               RequestContext(request))
