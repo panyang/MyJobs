@@ -44,10 +44,6 @@ class Terms(TemplateView):
     template_name = "terms.html"
 
 
-class Success(TemplateView):
-    template_name = "success.html"
-
-
 class CaptchaForm(Form):
     captcha = ReCaptchaField(label="", attrs={'theme': 'white'})
 
