@@ -201,7 +201,7 @@ def contact(request):
                     'customfield_10401': str(from_email),
                     'customfield_10402': str(phone_num),
                 }
-                #jira.create_issue(fields=issue_dict)
+                jira.create_issue(fields=issue_dict)
                 time = datetime.datetime.now().strftime('%A, %B %d, %Y %l:%M %p')
                 return HttpResponse(json.dumps({'validation': 'success',
                                                 'name': name,
