@@ -706,6 +706,10 @@ fieldset textarea,
     text-align: right;
 }
 
+.text-right{
+    text-align: right !important;
+}
+
 .input-prepend input,
 .input-prepend select {
     width: 61.5%;
