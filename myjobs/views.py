@@ -44,10 +44,6 @@ class Terms(TemplateView):
     template_name = "terms.html"
 
 
-class Success(TemplateView):
-    template_name = "success.html"
-
-
 class CaptchaForm(Form):
     captcha = ReCaptchaField(label="", attrs={'theme': 'white'})
 
@@ -170,7 +166,7 @@ def home(request):
 def contact(request):
     if request.POST:
         name = request.POST.get('name')
-        im_a = request.POST.get('type')
+        contact_type = request.POST.get('type')
         reason = request.POST.get('reason')
         from_email = request.POST.get('email')
         phone_num = request.POST.get('phone')
@@ -182,14 +178,14 @@ def contact(request):
             except:
                 jira = []
             if not jira:
-                msg_subject = ('Contact My.jobs by a(n) %s' % im_a)
+                msg_subject = ('Contact My.jobs by a(n) %s' % contact_type)
                 message = """
                           Name: %s
                           Is a(n): %s
                           Email: %s
 
                           %s
-                          """ % (name, im_a, from_email, comment)
+                          """ % (name, contact_type, from_email, comment)
                 to_email = [EMAIL_TO_ADMIN]
                 msg = EmailMessage(msg_subject, message, from_email, to_email)
                 msg.send()
@@ -206,9 +202,18 @@ def contact(request):
                     'customfield_10402': str(phone_num),
                 }
                 jira.create_issue(fields=issue_dict)
-                return HttpResponse('success')
+                time = datetime.datetime.now().strftime('%A, %B %d, %Y %l:%M %p')
+                return HttpResponse(json.dumps({'validation': 'success',
+                                                'name': name,
+                                                'c_type': contact_type,
+                                                'reason': reason,
+                                                'c_email': from_email,
+                                                'phone': phone_num,
+                                                'comment': comment,
+                                                'c_time': time}))
         else:
-            return HttpResponse(json.dumps({'errors': form.errors.items()}))
+            return HttpResponse(json.dumps({'validation': 'failed',
+                                            'errors': form.errors.items()}))
     else:
         form = CaptchaForm()
         data_dict = {'form': form}
