@@ -7,10 +7,11 @@ import urllib2
 from django.contrib import messages
 from django.contrib.auth import authenticate, logout
 from django.contrib.auth.decorators import user_passes_test, login_required
+from django.contrib.sessions.models import Session
 from django.core.mail import EmailMessage
 from django.core.urlresolvers import reverse
 from django.forms.models import model_to_dict
-from django.http import HttpResponseRedirect, HttpResponse
+from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.template import RequestContext
 from django.shortcuts import render_to_response, get_object_or_404, redirect
 from django.utils.html import mark_safe
@@ -23,6 +24,8 @@ import jiratools
 from captcha.fields import ReCaptchaField
 from secrets import RECAPTCHA_PUBLIC_KEY, RECAPTCHA_PRIVATE_KEY, EMAIL_TO_ADMIN
 from secrets import options, my_agent_auth
+
+from tastypie.models import ApiKey
 
 from myjobs.models import User, EmailLog
 from myjobs.forms import *
@@ -373,3 +376,46 @@ def check_name_obj(user):
     if name:
         initial_dict.update(model_to_dict(name))
     return initial_dict
+
+@csrf_exempt
+def sso_authorize(request):
+    print request.META['HTTP_REFERER']
+    callback = request.GET.get('callback')
+    if callback:
+        print 'ajax'
+        session = request.GET.get('myjobssession')
+        if session:
+            print 'session'
+            try:
+                session = Session.objects.get(session_key=session)
+            except Session.DoesNotExist:
+                print 'no session'
+                raise Http404
+            return HttpResponse(status=200)
+        raise Http404
+
+    referer = request.POST.get('referer') or request.META.get('HTTP_REFERER')
+    if not referer:
+        raise Http404
+
+    parsed_referer = urllib2.urlparse.urlparse(referer)
+    short = parsed_referer.netloc
+    data_dict = {'referer': referer,
+                 'referer_short': short}
+    if request.method == 'POST':
+        login_form = CustomAuthForm(data=request.POST, auto_id=False)
+        data_dict['login_form'] = login_form
+
+        if login_form.is_valid():
+            expire_login(request, login_form.get_user())
+
+            response = redirect(referer)
+            response['Location'] += '?myjobssession=%s' % request.session.session_key
+            return response
+    else:
+        login_form = CustomAuthForm(auto_id=False)
+        data_dict['login_form'] = login_form
+
+    return render_to_response('myjobs/sso_auth.html',
+                              data_dict,
+                              context_instance=RequestContext(request))

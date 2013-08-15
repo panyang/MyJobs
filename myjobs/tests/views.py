@@ -6,6 +6,7 @@ import time
 
 from django.conf import settings
 from django.contrib.auth import login
+from django.contrib.sessions.models import Session
 from django.core import mail
 from django.core.urlresolvers import reverse
 from django.http import HttpRequest
@@ -458,3 +459,27 @@ class MyJobsViewsTests(TestCase):
             self.assertEqual(response.content, 'valid')
 
             self.client.get(reverse('auth_logout'))
+
+    def test_sso_auth(self):
+        response = self.client.get(reverse('sso_authorize'))
+        self.assertEqual(response.status_code, 404)
+
+        response = self.client.get(reverse('sso_authorize'),
+                                   HTTP_REFERER='http://www.google.com')
+        self.assertTemplateUsed(response, 'myjobs/sso_auth.html')
+
+    def test_sso_auth_sessions(self):
+        response = self.client.get(reverse('sso_authorize'))
+        self.assertEqual(response.status_code, 404)
+
+        response = self.client.get(reverse('sso_authorize'),
+                                   data={'session': 'bad_session_key',
+                                         'callback': 'jsonpcallback'})
+        self.assertEqual(response.status_code, 404)
+
+        session = Session.objects.all()[0]
+        response = self.client.get(reverse('sso_authorize'),
+                                   data={'session': session.session_key,
+                                         'callback': 'jsonpcallback'})
+        print response.request
+        self.assertEqual(response.status_code, 200)
