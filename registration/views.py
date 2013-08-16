@@ -6,7 +6,6 @@ from django.template import RequestContext
 from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView
 
-from myjobs.decorators import user_is_allowed
 from myjobs.helpers import expire_login
 from myjobs.models import *
 from registration.models import ActivationProfile
@@ -17,7 +16,6 @@ from registration.forms import RegistrationForm
 class RegistrationComplete(TemplateView):
     template_name = 'registration/registration_complete.html'
 
-    @method_decorator(user_is_allowed())
     def dispatch(self, *args, **kwargs):
         return super(RegistrationComplete, self).dispatch(*args, **kwargs)
 
@@ -41,7 +39,6 @@ def register(request):
     return HttpResponse(json.dumps({'errors': form.errors.items()}))
 
 
-@user_is_allowed()
 def resend_activation(request):
     activation = ActivationProfile.objects.get_or_create(user=request.user,
                                                          email=request.user.email)[0]
@@ -50,7 +47,6 @@ def resend_activation(request):
                               context_instance=RequestContext(request))
 
 
-@user_is_allowed()
 def activate(request, activation_key):
     """
     Activates user and returns a boolean to activated. Activated is passed

@@ -13,7 +13,6 @@ from django.shortcuts import render_to_response
 
 from mydashboard.helpers import saved_searches
 from mydashboard.models import *
-from myjobs.decorators import user_is_allowed
 from myjobs.models import User
 from myprofile.models import ProfileUnits
 from mysearches.models import SavedSearch
@@ -21,7 +20,6 @@ from endless_pagination.decorators import page_template
 
 
 @page_template("mydashboard/dashboard_activity.html")
-@user_is_allowed()
 @user_passes_test(lambda u: User.objects.is_group_member(u, 'Employer'))
 def dashboard(request, template="mydashboard/mydashboard.html",
     extra_context=None):
@@ -127,7 +125,6 @@ def dashboard(request, template="mydashboard/mydashboard.html",
     
 
 @page_template("mydashboard/site_activity.html")
-@user_is_allowed()
 @user_passes_test(lambda u: User.objects.is_group_member(u, 'Employer'))
 def microsite_activity(request, template="mydashboard/microsite_activity.html",
     extra_context=None):
@@ -210,7 +207,6 @@ def microsite_activity(request, template="mydashboard/microsite_activity.html",
         context_instance=RequestContext(request))
 
 
-@user_is_allowed()
 @user_passes_test(lambda u: User.objects.is_group_member(u, 'Employer'))
 def candidate_information(request, user_id):
     """

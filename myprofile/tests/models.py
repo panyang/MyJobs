@@ -94,8 +94,7 @@ class MyProfileTests(TestCase):
         activation = ActivationProfile.objects.get(user=self.user,
                                                    email=secondary_email.email)
         response = self.client.get(reverse('registration_activate',
-                                           args=[self.user.email,
-                                                 activation.activation_key]))
+                                                 args=[activation.activation_key]))
         secondary_email = SecondaryEmail.objects.get(user=self.user,
                                                      email=secondary_email.email)
         activation = ActivationProfile.objects.get(user=self.user,

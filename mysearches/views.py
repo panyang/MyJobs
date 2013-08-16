@@ -9,31 +9,27 @@ from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.template import RequestContext, loader
 from django.shortcuts import render_to_response, get_object_or_404
 
-from myjobs.decorators import user_is_allowed
 from myjobs.models import User
 from mysearches.models import SavedSearch, SavedSearchDigest
 from mysearches.forms import SavedSearchForm, DigestForm
 from mysearches.helpers import *
 
 
-@user_is_allowed(SavedSearch, 'search_id', keep_email=True)
-def delete_saved_search(request, user_email, search_id):
+def delete_saved_search(request, search_id):
     try:
         search_id = int(search_id)
 
         # a single search is being disabled
         search = get_object_or_404(SavedSearch, id=search_id,
-                                   user__email=user_email)
+                                   user=request.user)
         search.delete()
     except ValueError:
         # all searches are being disabled
-        SavedSearch.objects.filter(user__email=user_email).delete()
+        SavedSearch.objects.filter(user=request.user).delete()
 
-    return HttpResponseRedirect(reverse('saved_search_main',
-                                        args=[user_email]))
+    return HttpResponseRedirect(reverse('saved_search_main'))
 
 
-@user_is_allowed(SavedSearch)
 @user_passes_test(User.objects.is_active)
 @user_passes_test(User.objects.not_disabled)
 def saved_search_main(request):
@@ -52,7 +48,6 @@ def saved_search_main(request):
                               RequestContext(request))
 
 
-@user_is_allowed(SavedSearch, 'search_id')
 @user_passes_test(User.objects.is_active)
 @user_passes_test(User.objects.not_disabled)
 def view_full_feed(request, search_id):
@@ -73,7 +68,6 @@ def view_full_feed(request, search_id):
         return HttpResponseRedirect(reverse('saved_search_main'))
 
 
-@user_is_allowed(SavedSearch)
 @user_passes_test(User.objects.is_active)
 @user_passes_test(User.objects.not_disabled)
 def more_feed_results(request):
@@ -89,7 +83,6 @@ def more_feed_results(request):
                                   {'items': items}, RequestContext(request))
 
 
-@user_is_allowed(SavedSearch)
 @user_passes_test(User.objects.is_active)
 @user_passes_test(User.objects.not_disabled)
 def validate_url(request):
@@ -107,7 +100,6 @@ def validate_url(request):
         return HttpResponse(json.dumps(data))
 
 
-@user_is_allowed(SavedSearch)
 @user_passes_test(User.objects.is_active)
 @user_passes_test(User.objects.not_disabled)
 def save_digest_form(request):
@@ -130,11 +122,9 @@ def save_digest_form(request):
             return HttpResponse(data)
 
     # The request is not ajax; Redirect to the main saved search page
-    return HttpResponseRedirect(reverse('saved_search_main',
-                                        args=[request.user.email]))
+    return HttpResponseRedirect(reverse('saved_search_main'))
 
 
-@user_is_allowed(SavedSearch)
 @user_passes_test(User.objects.is_active)
 @user_passes_test(User.objects.not_disabled)
 def save_search_form(request):
@@ -156,8 +146,7 @@ def save_search_form(request):
         if request.is_ajax():
             return HttpResponse(status=200)
         else:
-            return HttpResponseRedirect(reverse('saved_search_main',
-                                                args=[request.user.email]))
+            return HttpResponseRedirect(reverse('saved_search_main'))
     else:
         if request.is_ajax():
             return HttpResponse(json.dumps(form.errors))
@@ -167,7 +156,6 @@ def save_search_form(request):
                                       RequestContext(request))
 
 
-@user_is_allowed(SavedSearch, 'search_id')
 @user_passes_test(User.objects.is_active)
 @user_passes_test(User.objects.not_disabled)
 def edit_search(request, search_id=None):
@@ -189,7 +177,6 @@ def edit_search(request, search_id=None):
                               RequestContext(request))
 
 
-@user_is_allowed(SavedSearch)
 @user_passes_test(User.objects.is_active)
 @user_passes_test(User.objects.not_disabled)
 def save_edit_form(request):
@@ -206,8 +193,7 @@ def save_edit_form(request):
                 return HttpResponse(json.dumps(form.errors))
 
 
-@user_is_allowed(SavedSearch, 'search_id', keep_email=True)
-def unsubscribe(request, user_email, search_id):
+def unsubscribe(request, search_id):
     """
     Deactivates a user's saved searches.
 
@@ -219,7 +205,7 @@ def unsubscribe(request, user_email, search_id):
     try:
         search_id = int(search_id)
         saved_search = get_object_or_404(SavedSearch, id=search_id,
-                                         user__email=user_email,
+                                         user=request.user,
                                          is_active=True)
 
         # saved_search is a single search rather than a queryset this time
@@ -228,7 +214,7 @@ def unsubscribe(request, user_email, search_id):
         saved_search.save()
     except ValueError:
         digest = SavedSearchDigest.objects.get_or_create(
-            user__email=user_email)[0]
+            user=request.user)[0]
         if digest.is_active:
             digest.is_active = False
             digest.save()
@@ -241,6 +227,5 @@ def unsubscribe(request, user_email, search_id):
 
     return render_to_response('mysearches/saved_search_disable.html',
                               {'search_id': search_id,
-                               'searches': cache,
-                               'user_email': user_email},
+                               'searches': cache},
                               RequestContext(request))

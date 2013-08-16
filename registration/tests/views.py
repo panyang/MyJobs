@@ -48,8 +48,7 @@ class RegistrationViewTests(TestCase):
         """
         profile = ActivationProfile.objects.get(user__email=self.user.email)
         response = self.client.get(reverse('registration_activate',
-                                           args=[self.user.email,
-                                                 profile.activation_key]))
+                                           args=[profile.activation_key]))
         self.assertEqual(response.status_code, 200)
         self.failUnless(User.objects.get(email=self.user.email).is_active)
 
@@ -61,8 +60,7 @@ class RegistrationViewTests(TestCase):
         self.client.post(reverse('auth_logout'))
         profile = ActivationProfile.objects.get(user__email=self.user.email)
         response = self.client.get(reverse('registration_activate',
-                                           args=[self.user.email,
-                                                 profile.activation_key]))
+                                           args=[profile.activation_key]))
         self.assertEqual(response.status_code, 200)
         self.assertContains(response, self.data['email'])
 
@@ -78,8 +76,7 @@ class RegistrationViewTests(TestCase):
             days=settings.ACCOUNT_ACTIVATION_DAYS)
         expired_profile.save()
         response = self.client.get(reverse('registration_activate',
-                                           args=[self.user.email,
-                                                 expired_profile.activation_key]))
+                                           args=[expired_profile.activation_key]))
         self.assertEqual(response.status_code, 200)
         self.assertNotEqual(response.context['activated'],
                             expired_profile.activation_key_expired())
@@ -90,7 +87,7 @@ class RegistrationViewTests(TestCase):
             **{'email': 'alice@example.com', 'password1': 'secret'})
         self.client.login_user(x)
         self.assertEqual(len(mail.outbox), 1)
-        resp = self.client.get(reverse('resend_activation', args=[x.email]))
+        resp = self.client.get(reverse('resend_activation'))
         self.assertEqual(resp.status_code, 200)
         # one email sent for creating an inactive user, another one for resend
         self.assertEqual(len(mail.outbox), 2)
@@ -101,11 +98,11 @@ class RegistrationViewTests(TestCase):
         self.assertEqual(ActivationProfile.objects.count(), 1)
 
         self.client.login_user(user)
-        self.client.get(reverse('resend_activation', args=[user.email]))
+        self.client.get(reverse('resend_activation'))
         self.assertEqual(len(mail.outbox), 2)
 
         SecondaryEmail.objects.create(user=user, email='test@example.com')
         self.assertEqual(len(mail.outbox), 3)
         self.assertEqual(ActivationProfile.objects.count(), 2)
-        self.client.get(reverse('resend_activation', args=[user.email]))
+        self.client.get(reverse('resend_activation'))
         self.assertEqual(len(mail.outbox), 4)

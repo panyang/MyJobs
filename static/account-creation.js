@@ -79,7 +79,7 @@ $(document).on("click", "button#login", function(e) {
                 }
             } else {
                 if(json.url == 'undefined'){
-                    window.location = '/' + $('#id_username').val() + profile_url;
+                    window.location = profile_url;
                 }else{
                     window.location = json.url;
                 }           
@@ -109,7 +109,7 @@ $(document).on("click", "button#save", function(e) {
                 $("#id_name-primary").hide()
                 $("label[for=id_name-primary]").hide()
             } else {
-                window.location = '/' + user_email + profile_url;
+                window.location = profile_url;
             }
         }
     });
@@ -124,7 +124,7 @@ $(document).on("click", "button#next", function(e) {
 // skip to profile page on click
 $(document).on("click", "button#profile", function(e) {
     e.preventDefault();
-    window.location = '/' + user_email + profile_url;
+    window.location = profile_url;
 });
 
 function setPrimaryName(){

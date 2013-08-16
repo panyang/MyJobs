@@ -106,21 +106,9 @@ def home(request):
             if loginform.is_valid():
                 expire_login(request, loginform.get_user())
                 try:
-                    url = ''
-                    request_url = request.environ.get('HTTP_REFERER')
-                    location = request_url.split('=')
-                    split_slashes = location[1].split('/')
-                    # split_slashes[0] and [1] are being replaced by
-                    # correct request.user.email
-                    for url_part in split_slashes[2:]:
-                        url += '/'+url_part
-
-                    # adds user's email to url
-                    url = request.user.email + url
-
-                    # decodes url
-                    url = urllib2.unquote(url)
-
+                    url = request.environ.get('HTTP_REFERER')
+                    url = url.split('=')
+                    url = urllib2.unquote(url[1])
                 except:
                     url = 'undefined'
                 response_data = {'validation': 'valid', 'url': url}
@@ -216,7 +204,6 @@ def contact(request):
                               RequestContext(request))
 
 
-@user_is_allowed()
 @user_passes_test(User.objects.not_disabled)
 def edit_account(request):
     initial_dict = check_name_obj(request.user)
@@ -240,7 +227,6 @@ def edit_account(request):
                               RequestContext(request))
 
 
-@user_is_allowed()
 @user_passes_test(User.objects.not_disabled)
 def edit_basic(request):
     initial_dict = check_name_obj(request.user)
@@ -263,7 +249,6 @@ def edit_basic(request):
                               RequestContext(request))
 
 
-@user_is_allowed()
 @user_passes_test(User.objects.not_disabled)
 def edit_communication(request):
     obj = User.objects.get(id=request.user.id)
@@ -283,7 +268,6 @@ def edit_communication(request):
                               RequestContext(request))
 
 
-@user_is_allowed()
 @user_passes_test(User.objects.not_disabled)
 def edit_password(request):
     form = ChangePasswordForm()
@@ -303,7 +287,6 @@ def edit_password(request):
                               RequestContext(request))
 
 
-@user_is_allowed()
 @user_passes_test(User.objects.not_disabled)
 def edit_delete(request):
     ctx = {'gravatar_150': request.user.get_gravatar_url(size=150)}
@@ -311,7 +294,6 @@ def edit_delete(request):
                               RequestContext(request))
 
 
-@user_is_allowed()
 @user_passes_test(User.objects.not_disabled)
 def edit_disable(request):
     ctx = {'gravatar_150': request.user.get_gravatar_url(size=150)}
@@ -319,7 +301,6 @@ def edit_disable(request):
                               RequestContext(request))
 
 
-@user_is_allowed()
 @user_passes_test(User.objects.not_disabled)
 def delete_account(request):
     email = request.user.email
@@ -329,7 +310,6 @@ def delete_account(request):
                               RequestContext(request))
 
 
-@user_is_allowed()
 @user_passes_test(User.objects.not_disabled)
 def disable_account(request):
     user = request.user
@@ -382,7 +362,6 @@ def batch_message_digest(request):
     return HttpResponse(status=403)
 
 
-@user_is_allowed()
 @user_passes_test(User.objects.not_disabled)
 def continue_sending_mail(request):
     """
@@ -413,11 +392,8 @@ def check_name_obj(user):
     return initial_dict
 
 
-@user_is_allowed(keep_email=True)
-def unsubscribe_all(request, user_email):
-    user = User.objects.get_email_owner(user_email)
-    if not user:
-        raise Http404
+def unsubscribe_all(request):
+    user = request.user
     user.opt_in_myjobs = False
     user.save()
 

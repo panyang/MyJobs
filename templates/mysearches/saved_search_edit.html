@@ -32,7 +32,7 @@
 
 <div class="row">
     <div class="span10 offset1">
-        <form method="post" action="{% url 'save_search_form' user_email=user.email %}" id="saved-search-form">
+        <form method="post" action="{% url 'save_search_form' %}" id="saved-search-form">
             {% include "includes/form-error-highlight.html" %}
             <input type="hidden" name="search_id" value="{{search_id}}" />
             {% csrf_token %}
@@ -61,14 +61,14 @@
                     <div class="modal-footer">
                         <div class="actions">
                             <button data-dismiss="modal" class="btn primary pull-right">{% trans 'Cancel' %}</button>
-                            <a class="btn pull-right" href="{% url 'delete_saved_search' user_email=user.email search_id=search_id %}">{% trans 'Delete' %}</a>
+                            <a class="btn pull-right" href="{% url 'delete_saved_search' search_id=search_id %}">{% trans 'Delete' %}</a>
                         </div>
                     </div>
                 </div>
 
                 {% endif %}
 
-                <a href="{% url 'saved_search_main' user_email=user.email %}" class="btn">{% trans 'Cancel' %}</a>
+                <a href="{% url 'saved_search_main' %}" class="btn">{% trans 'Cancel' %}</a>
                 <button type="submit" id="edit_search" class="btn primary save">{% trans 'Save' %}</button>
                 <div class="clear"></div>
             </div>

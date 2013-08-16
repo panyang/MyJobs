@@ -7,13 +7,11 @@ from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.template import RequestContext
 from django.shortcuts import render_to_response, get_object_or_404
 
-from myjobs.decorators import user_is_allowed
 from myjobs.models import User
 from myjobs.helpers import *
 from myprofile.models import ProfileUnits
 
 
-@user_is_allowed(ProfileUnits)
 @user_passes_test(User.objects.not_disabled)
 def edit_profile(request):
     """
@@ -48,7 +46,6 @@ def edit_profile(request):
                               RequestContext(request))
 
 
-@user_is_allowed(ProfileUnits)
 @user_passes_test(User.objects.not_disabled)
 def handle_form(request):
     item_id = request.REQUEST.get('id', 'new')
@@ -98,8 +95,7 @@ def handle_form(request):
             if request.is_ajax():
                 return HttpResponse(status=200)
             else:
-                return HttpResponseRedirect(reverse('view_profile',
-                                                    args=[request.user.email]))
+                return HttpResponseRedirect(reverse('view_profile'))
         else:
             if request.is_ajax():
                 return HttpResponse(json.dumps(form_instance.errors))
@@ -122,18 +118,15 @@ def handle_form(request):
                                   RequestContext(request))
 
 
-@user_is_allowed(ProfileUnits, 'item_id')
 @user_passes_test(User.objects.not_disabled)
 def delete_item(request, item_id):
     try:
         request.user.profileunits_set.get(id=item_id).delete()
     except ProfileUnits.DoesNotExist:
         pass
-    return HttpResponseRedirect(reverse('view_profile',
-                                        args=[request.user.email]))
+    return HttpResponseRedirect(reverse('view_profile'))
 
 
-@user_is_allowed(ProfileUnits)
 @user_passes_test(User.objects.not_disabled)
 def get_details(request):
     module_config = {}

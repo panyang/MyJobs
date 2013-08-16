@@ -24,14 +24,14 @@
         {% with saved_search=saved_searches.0.0 %}
 
         <td colspan=1 style="width: 33%; border-left: 1px solid #ddd; padding: 8px; line-height: 20px; border-top: 1px solid #ddd;">
-            <a href="http://my.jobs{% url 'view_profile' user_email=saved_search.user.email %}">{% trans 'My Profile' %}</a><br>
-            <a href="http://my.jobs{% url 'saved_search_main' user_email=saved_search.user.email %}">{% trans 'Saved Searches' %}</a><br>
-            <a href="http://my.jobs{% url 'edit_account' user_email=saved_search.user.email %}">{% trans 'Account Settings' %}</a><br>
+            <a href="http://my.jobs{% url 'view_profile' %}">{% trans 'My Profile' %}</a><br>
+            <a href="http://my.jobs{% url 'saved_search_main' %}">{% trans 'Saved Searches' %}</a><br>
+            <a href="http://my.jobs{% url 'edit_account' %}">{% trans 'Account Settings' %}</a><br>
         </td>
         <td colspan=1 style="border-left: 1px solid #ddd; padding: 8px; line-height: 20px; border-top: 1px solid #ddd;">
             {% block footer-right %}
             {% endblock %}
-            <a href="http://my.jobs{% url 'unsubscribe_all' user_email=saved_search.user.email %}">{% trans 'Unsubscribe from all My.jobs emails' %}</a><br>
+            <a href="http://my.jobs{% url 'unsubscribe_all' %}">{% trans 'Unsubscribe from all My.jobs emails' %}</a><br>
         </td>
 
         {% endwith %}
