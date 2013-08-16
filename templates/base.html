@@ -51,191 +51,69 @@
                     <div class="inline-inputs">
 
                         {% if user.is_authenticated %}
-
                         <div class="span8">
                             <ul class="nav nav-tabs pull-left menu-tabs">
-
                                 {% is_a_group_member user "Employer" as group_member %}
                                 {% get_company_name user as company_name %}
-                                {% if view_name == 'Saved Searches' %}
-
-                                    <li class=""><a href="{% url 'view_profile' user.email %}">{% trans "My Profile" %}</a></li>
-
-                                    {% if user.is_active %}
-
-                                    <li class="active"><a href="{% url 'saved_search_main' user.email %}">{% trans "Saved Searches" %}</a></li>
-
-                                    {% endif %}
-                                    {% if group_member and user.is_active and company_name|length >= 1%}
-
-                                    <li class="">
-                                        <a href="{% url 'dashboard' user.email %}">
-
-                                            {% if company_name|length > 1 %}
-
-                                            {% trans "Dashboards" %}
-
-                                            {% else %}
-
-                                            {{ company_name.0|truncatechars:"20" }} {% trans "Dashboard" %}
-
-                                            {% endif %}
-
-                                        </a>
-                                    </li>
-
-                                    {% endif %}
-                                {% elif view_name == 'My Profile' %}
-
-                                    <li class="active"><a href="{% url 'view_profile' user.email %}">{% trans "My Profile" %}</a></li>
-
-                                    {% if user.is_active and user.is_active %}
-
-
-                                    <li class=""><a href="{% url 'saved_search_main' user.email %}">{% trans "Saved Searches" %}</a></li>
-
-                                    {% endif %}
-                                    {% if group_member and user.is_active and company_name|length >= 1%}
-
-                                    <li class="">
-                                        <a href="{% url 'dashboard' user.email %}">
-
-                                        {% if company_name|length > 1 %}
-
-                                        {% trans "Dashboards" %}
-
-                                        {% else %}
-
-                                        {{ company_name.0|truncatechars:"20" }} {% trans "Dashboard" %}
-
-                                        {% endif %}
-
-                                        </a>
-                                    </li>
-
-                                    {% endif %}
-                                {% elif view_name == 'Company Dashboard' %}
-
-                                <li class=""><a href="{% url 'view_profile' user.email %}">{% trans "My Profile" %}</a></li>
-
-                                    {% if user.is_active %}
-
-                                    <li class=""><a href="{% url 'saved_search_main' user.email %}">{% trans "Saved Searches" %}</a></li>
-
-                                    {% endif %}
-                                    {% if group_member and user.is_active and company_name|length >= 1%}
-
-                                    <li class="active">
-                                        <a href="{% url 'dashboard' user.email %}">
-
-                                            {% if company_name|length > 1 %}
-
-                                            {% trans "Dashboards" %}
-
-                                            {% else %}
-
-                                            {{ company_name.0|truncatechars:"20" }} {% trans "Dashboard" %}
-
-                                            {% endif %}
-
-                                        </a>
-                                    </li>
-
-                                    {% endif %}
-                                {% else %}
-
-                                <li class=""><a href="{% url 'view_profile' user.email %}">{% trans "My Profile" %}</a></li>
-
-                                    {% if user.is_active %}
-
-                                    <li class=""><a href="{% url 'saved_search_main' user.email %}">{% trans "Saved Searches" %}</a></li>
-
-                                    {% endif %}
-
-                                    {% if group_member and user.is_active and company_name|length >= 1%}
-
-                                    <li class="">
-                                        <a href="{% url 'dashboard' user.email %}">
-
-                                        {% if company_name|length > 1 %}
-
-                                        {% trans "Dashboards" %}
-
-                                        {% else %}
-
-                                        {{ company_name.0|truncatechars:"20" }} {% trans "Dashboard" %}
-
-                                        {% endif %}
-
-                                        </a>
-                                    </li>
-
+                                <li class="{% active_tab 'My Profile' %}"><a href="{% url 'view_profile' user.email %}">{% trans "Profile" %}</a></li>
+                                {% if user.is_active %}
+                                    <li class="{% active_tab 'Saved Searches' %}"><a href="{% url 'saved_search_main' user.email %}">{% trans "Saved Searches" %}</a></li>
+                                    {% if group_member and company_name|length >= 1 %}
+                                        <li class="{% active_tab 'Company Dashboard' %}" id="company-dropdown">
+                                            <a href="#" id="candidate-tab">{% trans "Candidates" %}</a>
+                                            <ul id="company-menu" class="no-show">
+                                            {% for company in company_name %}
+                                                <li><a id="company-item" href="">{{ company }}</a></li>
+                                            {% endfor %}
+                                            </ul>{# /company-menu #}
+                                        </li>
                                     {% endif %}
                                 {% endif %}
                             </ul>{# /nav nav-tabs pull-left menu-tabs #}
                         </div>{# /span8 #}
+
                         <div class="pull-right">
                             <div class="menu-bar span2 pagination-right">
                                 <ul id="nav" class="pull-right">
                                     <li>
-                                        <a href="dashboard" class="main-nav">
+                                        <a href="" class="main-nav">
                                             <img src="{{user.get_gravatar_url}}">
                                             <span class="arrow"></span>
                                         </a>
                                         <ul class="span4" id="pop-menu">
-                                            <li id="logged_in_li">
+                                            <li id="logged-in-li">
                                                 {% trans "Logged in as " %}
                                                 <b>
-
                                                     {% with short_email=user.email|truncatechars:"20" %}
                                                         {% with name_obj=user|get_name_obj:short_email %}
-
-                                                        {{ name_obj }}
-
+                                                            {{ name_obj }}
                                                         {% endwith %}
                                                     {% endwith %}
-
                                                 </b>
                                             </li>
-
+                                            <li id="back-btn-li" class="no-show"><a id="back-btn"><span class="arrow-left"></span></a></li>
                                             {% if not user.is_disabled %}
-
-                                            <li><a id="profile_link" href="{% url 'view_profile' user.email %}">{% trans "My Profile" %}</a></li>
+                                                <li><a id="profile-link" href="{% url 'view_profile' user.email %}">{% trans "Profile" %}</a></li>
                                                 {% if user.is_active %}
-
-                                                <li><a id="savedsearch_link" href="{% url 'saved_search_main' user.email %}">{% trans "Saved Searches" %}</a></li>
-
-                                                    {% if group_member and user.is_active and company_name|length >= 1%}
-
-                                                    <li>
-                                                        <a id="company_dashboard_link" href="{% url 'dashboard' user.email %}">
-
-                                                            {% if company_name|length > 1 %}
-
-                                                            {% trans "Dashboards" %}
-
-                                                            {% else %}
-
-                                                            {{ company_name.0|truncatechars:"20" }} {% trans "Dashboard" %}
-
-                                                            {% endif %}
-
-                                                        </a>
-                                                    </li>
-
-                                                    {% endif %}
+                                                    <li><a id="savedsearch-link" href="{% url 'saved_search_main' user.email %}">{% trans "Saved Searches" %}</a></li>
+                                                        {% if group_member and user.is_active and company_name|length >= 1%}
+                                                            <li><a id="candidate-link">{% trans "Candidates" %}</a></li>
+                                                        {% endif %}
                                                 {% endif %}
-
-                                                <li><a id="account_link" href="{% url 'edit_account' user.email %}">{% trans "Account Settings" %}</a></li>
-
+                                                <li><a id="account-link" href="{% url 'edit_account' user.email %}">{% trans "Account Settings" %}</a></li>
+                                                <li><a id="settings-link">{% trans "Settings" %}</a></li>
                                             {% endif %}
-
-                                            <li><a id="logout_link" href="{% url 'auth_logout' %}">Log Out</a></li>
+                                            <li><a id="logout-link" href="{% url 'auth_logout' %}">Log Out</a></li>
+                                            {% for company in company_name %}
+                                                <li><a class="company-nav-item sub-nav-item no-show" href="">{{ company|truncatechars:"20" }}</a></li>
+                                            {% endfor %}
+                                            <li><a class="settings-nav-item sub-nav-item no-show" href="{% url 'edit_account' user.email %}">{% trans "Account Settings" %}</a></li>
+                                            <li><a class="settings-nav-item sub-nav-item no-show" href="{% url 'auth_logout' %}">Log Out</a></li>
                                         </ul>{# /pop-menu #}
                                     </li>
                                 </ul>{# /nav #}
                             </div>{# /menu-bar span2 pagination-right #}
-                        </div>{# /pull-right #}
+                        </div>{# /pull-right #}                      
 
                         {% else %}
 

@@ -81,7 +81,7 @@ label[for^='id_sort_by'], label[for^='id_edit_sort_by'] {
 }
 
 #moduleBank {    
-    z-index:100;  
+    z-index:99;  
 }
 
 table#row-link-table {
@@ -801,7 +801,7 @@ em.pendingText {
 
 #nav .main-nav img {
     max-width: none;
-    margin: -25px;
+    padding-left: 5px;
 }
 
 #nav .main-nav {
@@ -809,7 +809,18 @@ em.pendingText {
     text-decoration: none;
     display: block;
     padding-right: 4px;
+    width: 40px;
 }
+
+.arrow-left {
+    float: left;
+    width: 0px;
+    height: 0px;
+    border-style: solid;
+    border-width: 15px 20px 15px 0;
+    border-color: transparent #FFF transparent transparent;
+}
+
 
 #nav ul#pop-menu {
     background:#333;
@@ -859,9 +870,27 @@ em.pendingText {
 	text-align: left;
 }
 
-#logged_in_li {
+#logged-in-li {
     padding: 4px !important;
 }
+
+#back-btn {
+    border-right: 1px solid #FFF !important;
+    height: 100% !important;
+}
+
+#back-btn-li {
+    float: left;
+    width: 40px !important;
+    height: 100%;
+    z-index: 999;
+}
+
+.sub-nav-item {
+    margin-left: 40px;
+}
+
+
 
 #ui-datepicker-div {
     position: relative;
@@ -880,17 +909,14 @@ em.pendingText {
 }
 
 @media screen and (min-width: 1025px) {
-    #nav {
-        width: 15%;
-    }
-
     #nav ul#pop-menu {
-        right: 1px;
+        right: 0;
     }
 
-    #profile_link,
-    #savedsearch_link,
-    #company_dashboard_link {
+    #profile-link,
+    #savedsearch-link,
+    #candidate-link,
+    #settings-link {
         display: none !important;
     }
 
@@ -1093,13 +1119,22 @@ form input[type='checkbox'] {
         border-bottom: 20px solid #c44e34;
     }
 
-    #logged_in_li {
+    #logged-in-li {
         display: block;
         font-size: 2em;
         height: 25px;
         line-height: 20px;
         padding: 10px !important;        
     }
+    
+    #logout-link, #account-link {
+        display: none !important;
+    }
+    
+    #pop-menu {
+        height: 100%;
+    }
+    
 
     #logo-block {
         margin-top: 10px;
@@ -1448,7 +1483,7 @@ form input[type='checkbox'] {
         margin-top: -30px;
     }
 
-    #logged_in_li {
+    #logged-in-li {
         display: none !important;
     }
 
@@ -1963,4 +1998,30 @@ body.modal-open {
 
 .required-border {
     border: 1px solid #900;
+}
+
+/*Candidate menu items*/
+.no-show {
+    display: none !important;
+}
+.show {
+    background: #b34529 !important;
+}
+#company-menu {
+    margin: 0;
+}
+#company-menu a {
+    display: block;
+    padding: 4px;
+    background: #666 !important;
+    border-width: 1px 0 0 0 !important;
+}
+#company-menu a:hover {
+    background: #333 !important;
+}
+#candidate-tab {
+    width: 78px;
+}
+#company-item {
+    width: 250px;
 }
