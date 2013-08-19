@@ -68,7 +68,7 @@ class UserManagerTests(TestCase):
 
         #Anonymous user
         resp = client.get(reverse('view_profile'))
-        self.assertEqual(resp.status_code,  404)
+        self.assertRedirects(resp, reverse('home'))
 
         # This is ugly, but it is an artifact of the way Django redirects
         # users who fail the `user_passes_test` decorator.

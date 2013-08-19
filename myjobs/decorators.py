@@ -36,25 +36,27 @@ def user_is_allowed(model=None, pk_name=None, pass_user=False):
     def decorator(view_func):
         def wrap(request, *args, **kwargs):
             email = request.GET.get('verify-email', '')
-            user = None
-            if email or request.user.is_anonymous():
+            user = User.objects.get_email_owner(email)
+
+            if request.user.is_anonymous() and not email:
+                return HttpResponseRedirect(reverse('home'))
+
+            if email:
                 user = User.objects.get_email_owner(email)
                 if not user:
-                    # User is anonymous and did not provide :verify-email
-                    # -or-
                     # :verify-email: was provided but no user exists
-                    # Log out the user and display 404 page
+                    # Log out the user and redirect to login page
                     logout(request)
-                    raise Http404
+                    return HttpResponseRedirect(reverse('home'))
 
             if not request.user.is_anonymous():
                 if user:
                     if request.user != user:
                         # If the currently logged in user doesn't own the
                         # provided email address, log out the user and
-                        # redirect to the 404 page.
+                        # redirect to login page
                         logout(request)
-                        raise Http404
+                        return HttpResponseRedirect(reverse('home'))
                 else:
                     # If user was not set previously, set it to the currently
                     # logged in user.

@@ -195,13 +195,16 @@ class MySearchViewTests(TestCase):
         # Navigating to the 'unsubscribe' page while logged out...
         response = self.client.get(reverse('unsubscribe',
                                    args=[search.id]))
-        self.assertEqual(response.status_code, 404)
+        self.assertRedirects(response, reverse('home'))
         # or with the wrong email address...
         response = self.client.get(reverse('unsubscribe',
                                            args=[search.id]) +
                                    '?verify-email=wrong@example.com')
-        # results in a 404 page
-        self.assertEqual(response.status_code, 404)
+        # results in being redirected to the login page and the searches
+        # remaining unchanged
+        self.assertRedirects(response, reverse('home'))
+        search = models.SavedSearch.objects.get(id=search.id)
+        self.assertTrue(search.is_active)
 
         response = self.client.get(reverse('unsubscribe',
                                            args=[search.id]) +
@@ -255,14 +258,15 @@ class MySearchViewTests(TestCase):
         # Navigating to the 'delete saved search' page while logged out...
         response = self.client.get(reverse('delete_saved_search',
                                    args=[search.id]))
-        self.assertEqual(response.status_code, 404)
+        self.assertRedirects(response, reverse('home'))
         self.assertEqual(models.SavedSearch.objects.count(), 1)
         # or with the wrong email address...
         response = self.client.get(reverse('delete_saved_search',
                                            args=[search.id]) +
                                    '?verify-email=wrong@example.com')
-        # results in a 404 page and no searches being deleted
-        self.assertEqual(response.status_code, 404)
+        # results in being redirected to the login page and no searches being
+        # deleted
+        self.assertRedirects(response, reverse('home'))
         self.assertEqual(models.SavedSearch.objects.count(), 1)
 
         response = self.client.get(reverse('delete_saved_search',

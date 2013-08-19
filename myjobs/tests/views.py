@@ -404,13 +404,13 @@ class MyJobsViewsTests(TestCase):
 
         # Navigating to the 'continue sending email' page while logged out...
         response = self.client.get(reverse('continue_sending_mail'))
-        self.assertEqual(response.status_code, 404)
+        self.assertRedirects(response, reverse('home'))
 
         # or with the wrong email address...
         response = self.client.get(reverse('continue_sending_mail') +
                                    '?verify-email=wrong@example.com')
-        self.assertEqual(response.status_code, 404)
-        # should result in a 404 page
+        self.assertRedirects(response, reverse('home'))
+        # should result in redirecting to the login page
 
         response = self.client.get(reverse('continue_sending_mail') +
                                    '?verify-email=%s' % self.user.email)
@@ -501,13 +501,13 @@ class MyJobsViewsTests(TestCase):
 
         # Navigating to the unsubscribe page while logged out...
         response = self.client.get(reverse('unsubscribe_all'))
-        self.assertEqual(response.status_code, 404)
+        self.assertRedirects(response, reverse('home'))
         # or with the wrong email address...
         response = self.client.get(reverse('unsubscribe_all') +
                                    '?verify-email=wrong@example.com')
         # should result in the user's status remaining unchanged
-        # and the user should see a 404 page
-        self.assertEqual(response.status_code, 404)
+        # and the user should be redirected to the login page
+        self.assertRedirects(response, reverse('home'))
         self.user = User.objects.get(id=self.user.id)
         self.assertTrue(self.user.opt_in_myjobs)
 

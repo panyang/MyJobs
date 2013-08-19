@@ -209,7 +209,6 @@ def unsubscribe(request, search_id, user=None):
         or the id value of a specific search to be disabled
     """
     user = user or request.user
-    print user
     try:
         search_id = int(search_id)
         saved_search = get_object_or_404(SavedSearch, id=search_id,
