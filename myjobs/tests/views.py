@@ -6,6 +6,7 @@ import time
 
 from django.conf import settings
 from django.contrib.auth import login
+from django.contrib.sessions.models import Session
 from django.core import mail
 from django.core.urlresolvers import reverse
 from django.http import HttpRequest
@@ -396,6 +397,27 @@ class MyJobsViewsTests(TestCase):
                                             'does%40not.exist:wrong_pass'))
         self.assertEqual(response.status_code, 403)
 
+    def test_anonymous_continue_sending_mail(self):
+        Session.objects.all().delete()
+        self.user.last_response = date.today() - timedelta(days=7)
+        self.user.save()
+
+        # Navigating to the 'continue sending email' page while logged out...
+        response = self.client.get(reverse('continue_sending_mail'))
+        self.assertEqual(response.status_code, 404)
+
+        # or with the wrong email address...
+        response = self.client.get(reverse('continue_sending_mail') +
+                                   '?verify-email=wrong@example.com')
+        self.assertEqual(response.status_code, 404)
+        # should result in a 404 page
+
+        response = self.client.get(reverse('continue_sending_mail') +
+                                   '?verify-email=%s' % self.user.email)
+        self.assertRedirects(response, reverse('home'))
+        self.user = User.objects.get(pk=self.user.pk)
+        self.assertEqual(self.user.last_response, date.today())
+
     def test_continue_sending_mail(self):
         self.user.last_response = date.today() - timedelta(days=7)
         self.user.save()
@@ -406,8 +428,8 @@ class MyJobsViewsTests(TestCase):
         self.assertEqual(self.user.last_response,
                          date.today() - timedelta(days=7))
         self.assertRedirects(response, '/')
-        user = User.objects.get(pk=self.user.pk)
-        self.assertEqual(user.last_response, date.today())
+        self.user = User.objects.get(pk=self.user.pk)
+        self.assertEqual(self.user.last_response, date.today())
 
     def test_redirect_autocreated_user(self):
         """
@@ -472,3 +494,35 @@ class MyJobsViewsTests(TestCase):
     def test_jira_login(self):
         jira = JIRA(options=options, basic_auth=my_agent_auth)
         self.assertIsNotNone(jira)
+
+    def test_anonymous_unsubscribe_all_myjobs_emails(self):
+        Session.objects.all().delete()
+        self.assertTrue(self.user.opt_in_myjobs)
+
+        # Navigating to the unsubscribe page while logged out...
+        response = self.client.get(reverse('unsubscribe_all'))
+        self.assertEqual(response.status_code, 404)
+        # or with the wrong email address...
+        response = self.client.get(reverse('unsubscribe_all') +
+                                   '?verify-email=wrong@example.com')
+        # should result in the user's status remaining unchanged
+        # and the user should see a 404 page
+        self.assertEqual(response.status_code, 404)
+        self.user = User.objects.get(id=self.user.id)
+        self.assertTrue(self.user.opt_in_myjobs)
+
+        # Navigating to the unsubscribe page while logged out
+        # and with the correct email address...
+        response = self.client.get(reverse('unsubscribe_all') +
+                                   '?verify-email=%s' % self.user.email)
+        self.user = User.objects.get(id=self.user.id)
+        # should result in the user's :opt_in_myjobs: attribute being
+        # set to False
+        self.assertFalse(self.user.opt_in_myjobs)
+
+    def test_unsubscribe_all_myjobs_emails(self):
+        self.assertTrue(self.user.opt_in_myjobs)
+
+        response = self.client.get(reverse('unsubscribe_all'))
+        self.user = User.objects.get(id=self.user.id)
+        self.assertFalse(self.user.opt_in_myjobs)

@@ -3,9 +3,9 @@ from django.contrib.auth import views as auth_views
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView
 
+from myjobs.decorators import user_is_allowed
 from myjobs.helpers import expire_login
 from myjobs.models import *
 from registration.models import ActivationProfile
@@ -15,9 +15,6 @@ from registration.forms import RegistrationForm
 # New in Django 1.5. Class based template views for static pages
 class RegistrationComplete(TemplateView):
     template_name = 'registration/registration_complete.html'
-
-    def dispatch(self, *args, **kwargs):
-        return super(RegistrationComplete, self).dispatch(*args, **kwargs)
 
 
 def register(request):
@@ -47,6 +44,7 @@ def resend_activation(request):
                               context_instance=RequestContext(request))
 
 
+@user_is_allowed()
 def activate(request, activation_key):
     """
     Activates user and returns a boolean to activated. Activated is passed

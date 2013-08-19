@@ -9,27 +9,31 @@ from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.template import RequestContext, loader
 from django.shortcuts import render_to_response, get_object_or_404
 
+from myjobs.decorators import user_is_allowed
 from myjobs.models import User
 from mysearches.models import SavedSearch, SavedSearchDigest
 from mysearches.forms import SavedSearchForm, DigestForm
 from mysearches.helpers import *
 
 
-def delete_saved_search(request, search_id):
+@user_is_allowed(SavedSearch, 'search_id', pass_user=True)
+def delete_saved_search(request, search_id, user=None):
+    user = user or request.user
     try:
         search_id = int(search_id)
 
-        # a single search is being disabled
+        # a single search is being deleted
         search = get_object_or_404(SavedSearch, id=search_id,
-                                   user=request.user)
+                                   user=user)
         search.delete()
     except ValueError:
-        # all searches are being disabled
-        SavedSearch.objects.filter(user=request.user).delete()
+        # all searches are being deleted
+        SavedSearch.objects.filter(user=user).delete()
 
     return HttpResponseRedirect(reverse('saved_search_main'))
 
 
+@user_is_allowed()
 @user_passes_test(User.objects.is_active)
 @user_passes_test(User.objects.not_disabled)
 def saved_search_main(request):
@@ -48,6 +52,7 @@ def saved_search_main(request):
                               RequestContext(request))
 
 
+@user_is_allowed()
 @user_passes_test(User.objects.is_active)
 @user_passes_test(User.objects.not_disabled)
 def view_full_feed(request, search_id):
@@ -193,7 +198,8 @@ def save_edit_form(request):
                 return HttpResponse(json.dumps(form.errors))
 
 
-def unsubscribe(request, search_id):
+@user_is_allowed(SavedSearch, 'search_id', pass_user=True)
+def unsubscribe(request, search_id, user=None):
     """
     Deactivates a user's saved searches.
 
@@ -202,10 +208,12 @@ def unsubscribe(request, search_id):
     :search_id: the string 'digest' to disable all searches
         or the id value of a specific search to be disabled
     """
+    user = user or request.user
+    print user
     try:
         search_id = int(search_id)
         saved_search = get_object_or_404(SavedSearch, id=search_id,
-                                         user=request.user,
+                                         user=user,
                                          is_active=True)
 
         # saved_search is a single search rather than a queryset this time
@@ -214,11 +222,11 @@ def unsubscribe(request, search_id):
         saved_search.save()
     except ValueError:
         digest = SavedSearchDigest.objects.get_or_create(
-            user=request.user)[0]
+            user=user)[0]
         if digest.is_active:
             digest.is_active = False
             digest.save()
-        saved_searches = SavedSearch.objects.filter(user=digest.user,
+        saved_searches = SavedSearch.objects.filter(user=user,
                                                     is_active=True)
         # Updating the field that a queryset was filtered on seems to empty
         # that queryset; Make a copy and then update the queryset
@@ -227,5 +235,6 @@ def unsubscribe(request, search_id):
 
     return render_to_response('mysearches/saved_search_disable.html',
                               {'search_id': search_id,
-                               'searches': cache},
+                               'searches': cache,
+                               'email_user': user},
                               RequestContext(request))

@@ -46,6 +46,7 @@
             <div class="formBox" id="moduleBank">
                 <h2>{% trans "What now:" %}</h2>
                 <table class="table table-bordered table-striped">
+                {% if user.is_authenticated %}
                     {% if searches|length %}
                         {% url 'delete_saved_search' search_id=search_id as delete_url %}
                         <tr class="profile-section">
@@ -63,6 +64,11 @@
                     <tr class="profile-section">
                         <td><a href="{% url 'saved_search_main' %}">{% trans "Manage your searches" %}</a></td>
                     </tr>
+                {% else %}
+                    <tr class="profile-section">
+                        <td><a href="{% url 'home' %}">{% trans 'Login'%}</a></td>
+                    </tr>
+                {% endif %}
                 </table>
             </div>
     </div>

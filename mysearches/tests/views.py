@@ -188,6 +188,27 @@ class MySearchViewTests(TestCase):
                                 'mysearches/saved_search_disable.html')
         self.assertEqual(response.status_code, 200)
 
+    def test_anonymous_unsubscribe(self):
+        search = SavedSearchFactory(user=self.user)
+        Session.objects.all().delete()
+
+        # Navigating to the 'unsubscribe' page while logged out...
+        response = self.client.get(reverse('unsubscribe',
+                                   args=[search.id]))
+        self.assertEqual(response.status_code, 404)
+        # or with the wrong email address...
+        response = self.client.get(reverse('unsubscribe',
+                                           args=[search.id]) +
+                                   '?verify-email=wrong@example.com')
+        # results in a 404 page
+        self.assertEqual(response.status_code, 404)
+
+        response = self.client.get(reverse('unsubscribe',
+                                           args=[search.id]) +
+                                   '?verify-email=%s' % self.user.email)
+        search = models.SavedSearch.objects.get(id=search.id)
+        self.assertFalse(search.is_active)
+
     def test_delete_owned_search(self):
         search = SavedSearchFactory(user=self.user)
         self.assertEqual(models.SavedSearch.objects.count(), 1)
@@ -228,19 +249,28 @@ class MySearchViewTests(TestCase):
         self.assertRedirects(response, reverse('saved_search_main'))
 
     def test_anonymous_delete_searches(self):
-        # TODO: fix this once user_is_allowed is fixed
-        pass
-        #search = SavedSearchFactory(user=self.user)
+        search = SavedSearchFactory(user=self.user)
+        Session.objects.all().delete()
 
-        ## `logout()` requires a request object as its first parameter but we
-        ## don't have one; Deleting the user's session does this for us.
-        #Session.objects.all().delete()
+        # Navigating to the 'delete saved search' page while logged out...
+        response = self.client.get(reverse('delete_saved_search',
+                                   args=[search.id]))
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(models.SavedSearch.objects.count(), 1)
+        # or with the wrong email address...
+        response = self.client.get(reverse('delete_saved_search',
+                                           args=[search.id]) +
+                                   '?verify-email=wrong@example.com')
+        # results in a 404 page and no searches being deleted
+        self.assertEqual(response.status_code, 404)
+        self.assertEqual(models.SavedSearch.objects.count(), 1)
 
-        #response = self.client.get(reverse('delete_saved_search',
-        #                                   args=['digest']))
-        #self.assertEqual(models.SavedSearch.objects.count(), 0)
+        response = self.client.get(reverse('delete_saved_search',
+                                           args=[search.id]) +
+                                   '?verify-email=%s' % self.user.email)
+        self.assertEqual(models.SavedSearch.objects.count(), 0)
 
-        ## assertRedirects follows any redirect and waits for a 200 status code;
-        ## anonymous users will always redirect, never returning a 200.
-        #self.client.login_user(self.user)
-        #self.assertRedirects(response, reverse('saved_search_main'))
+        # assertRedirects follows any redirect and waits for a 200 status code;
+        # anonymous users will always redirect, never returning a 200.
+        self.client.login_user(self.user)
+        self.assertRedirects(response, reverse('saved_search_main'))

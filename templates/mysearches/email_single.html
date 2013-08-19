@@ -9,6 +9,6 @@
 {% block footer-right %}
     Sent to: {{saved_searches.0.0.email}}<br>
     Sent as Digest: No<br>
-    <a href="http://my.jobs{% url 'unsubscribe' search_id=saved_searches.0.0.id %}">{% trans 'Deactivate this saved search' %}</a><br>
-    <a href="http://my.jobs{% url 'unsubscribe' search_id='digest' %}">{% trans 'Deactivate all saved searches' %}</a><br>
+    <a href="http://my.jobs{% url 'unsubscribe' search_id=saved_searches.0.0.id %}?verify-email={{saved_searches.0.0.user.email}}">{% trans 'Deactivate this saved search' %}</a><br>
+    <a href="http://my.jobs{% url 'unsubscribe' search_id='digest' %}?verify-email={{saved_searches.0.0.user.email}}">{% trans 'Deactivate all saved searches' %}</a><br>
 {% endblock %}

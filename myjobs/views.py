@@ -204,6 +204,7 @@ def contact(request):
                               RequestContext(request))
 
 
+@user_is_allowed()
 @user_passes_test(User.objects.not_disabled)
 def edit_account(request):
     initial_dict = check_name_obj(request.user)
@@ -362,14 +363,14 @@ def batch_message_digest(request):
     return HttpResponse(status=403)
 
 
-@user_passes_test(User.objects.not_disabled)
-def continue_sending_mail(request):
+@user_is_allowed(pass_user=True)
+def continue_sending_mail(request, user=None):
     """
     Updates the user's last response time to right now.
     Allows the user to choose to continue receiving emails if they are
     inactive.
     """
-    user = request.user
+    user = user or request.user
     user.last_response = datetime.date.today()
     user.save()
     return redirect('/')
@@ -392,8 +393,9 @@ def check_name_obj(user):
     return initial_dict
 
 
-def unsubscribe_all(request):
-    user = request.user
+@user_is_allowed(pass_user=True)
+def unsubscribe_all(request, user=None):
+    user = user or request.user
     user.opt_in_myjobs = False
     user.save()
 

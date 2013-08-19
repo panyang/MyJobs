@@ -7,11 +7,13 @@ from django.http import HttpResponseRedirect, HttpResponse, Http404
 from django.template import RequestContext
 from django.shortcuts import render_to_response, get_object_or_404
 
+from myjobs.decorators import user_is_allowed
 from myjobs.models import User
 from myjobs.helpers import *
 from myprofile.models import ProfileUnits
 
 
+@user_is_allowed()
 @user_passes_test(User.objects.not_disabled)
 def edit_profile(request):
     """
