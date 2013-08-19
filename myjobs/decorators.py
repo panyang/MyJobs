@@ -43,7 +43,8 @@ def user_is_allowed(model=None, pk_name=None, pass_user=False):
                     # User is anonymous and did not provide :verify-email
                     # -or-
                     # :verify-email: was provided but no user exists
-                    # Display 404 page
+                    # Log out the user and display 404 page
+                    logout(request)
                     raise Http404
 
             if not request.user.is_anonymous():
