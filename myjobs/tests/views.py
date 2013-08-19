@@ -450,7 +450,7 @@ class MyJobsViewsTests(TestCase):
             user=self.user,
             email=self.user.email)[0]
         response = self.client.get(reverse('registration_activate',
-                                         args=[profile.activation_key]))
+                                           args=[profile.activation_key]))
 
         self.assertEqual(response.status_code, 200)
 
