@@ -15,7 +15,7 @@ v1_api.register(SavedSearchResource())
 
 urlpatterns = patterns('',
     url('', include('MyJobs.myjobs.urls')),
-    url(r'^(?P<user_email>(\S+))/dashboard/',
+    url(r'^(?P<user_email>(\S+))/candidates/',
         include('MyJobs.mydashboard.urls')),
     url(r'^accounts/', include('MyJobs.registration.urls')),
     url(r'^(?P<user_email>(\S+))/profile/',

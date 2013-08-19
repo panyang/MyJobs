@@ -54,7 +54,7 @@ class MyDashboardViewsTests(TestCase):
 
     def test_number_of_searches_and_users_is_correct(self):
         response = self.client.post(reverse('dashboard',
-                                            args=[self.staff_user.email]),
+                                            args=[self.staff_user.email])+'?company='+str(self.company.id),
                                     {'microsite': 'test.jobs'})
         soup = BeautifulSoup(response.content)
         # 15 searches total, two rows per search
@@ -65,7 +65,7 @@ class MyDashboardViewsTests(TestCase):
         old_search.save()
 
         response = self.client.post(reverse('dashboard',
-                                            args=[self.staff_user.email]),
+                                            args=[self.staff_user.email])+'?company='+str(self.company.id),
                                     {'microsite': 'test.jobs'})
         soup = BeautifulSoup(response.content)
         self.assertEqual(len(soup.select('#row-link-table tr')), 30)
@@ -74,8 +74,8 @@ class MyDashboardViewsTests(TestCase):
     # track if user is part of company's activity feed
     def test_candidate_has_opted_in(self):
         response = self.client.post(reverse('candidate_information',
-                                            args=[self.staff_user.email,
-                                            self.candidate_user.id]))
+                                            args=[self.staff_user.email]
+                                            )+'?company='+str(self.company.id)+'&user='+str(self.candidate_user.id))
 
         self.assertEqual(response.status_code, 200)
 
@@ -84,8 +84,8 @@ class MyDashboardViewsTests(TestCase):
         self.candidate_user.save()
 
         response = self.client.post(reverse('candidate_information',
-                                            args=[self.staff_user.email,
-                                            self.candidate_user.id]))
+                                            args=[self.staff_user.email]
+                                            )+'?company='+str(self.company.id)+'&user='+str(self.candidate_user.id))
         self.assertEqual(response.status_code, 404)
 
     def test_candidate_page_load_with_profileunits_and_activites(self):
@@ -99,8 +99,8 @@ class MyDashboardViewsTests(TestCase):
         self.candidate_user.save()
 
         response = self.client.post(reverse('candidate_information',
-                                            args=[self.staff_user.email,
-                                            self.candidate_user.id]))
+                                            args=[self.staff_user.email]
+                                            )+'?company='+str(self.company.id)+'&user='+str(self.candidate_user.id))
 
         soup = BeautifulSoup(response.content)
         titles = soup.find('div', {'id': 'candidate-content'}).findAll(
@@ -113,8 +113,8 @@ class MyDashboardViewsTests(TestCase):
 
     def test_candidate_page_load_without_profileunits_with_activites(self):
         response = self.client.post(reverse('candidate_information',
-                                            args=[self.staff_user.email,
-                                                  self.candidate_user.id]))
+                                            args=[self.staff_user.email]
+                                                  )+'?company='+str(self.company.id)+'&user='+str(self.candidate_user.id))
 
         soup = BeautifulSoup(response.content)
         titles = soup.find('div', {'id': 'candidate-content'}).findAll(
@@ -129,8 +129,8 @@ class MyDashboardViewsTests(TestCase):
         saved_search = SavedSearch.objects.get(user=self.candidate_user)
         saved_search.delete()
         response = self.client.post(reverse('candidate_information',
-                                            args=[self.staff_user.email,
-                                                  self.candidate_user.id]))
+                                            args=[self.staff_user.email]
+                                            )+'?company='+str(self.company.id)+'&user='+str(self.candidate_user.id))
 
         soup = BeautifulSoup(response.content)
         info = soup.find('div', {'id': 'candidate-content'})

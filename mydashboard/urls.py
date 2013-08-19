@@ -1,13 +1,11 @@
-from django.conf.urls.defaults import patterns, url, include
-from django.contrib import admin
-from django.http import HttpResponsePermanentRedirect
+from django.conf.urls.defaults import patterns, url
 
 
 urlpatterns = patterns('MyJobs.mydashboard.views',
-    url(r'^$', 'dashboard', name='dashboard'),
-    url(r'^(?P<user_id>\d+)/?$', 'candidate_information',
+    url(r'^view$', 'dashboard', name='dashboard'),
+    url(r'^view/candidate$', 'candidate_information',
         name='candidate_information'),
-    url(r'^microsite/$', 'microsite_activity', name='microsite_activity'),
-    url(r'^microsite/(?P<user_id>\d+)/?$', 'candidate_information',
+    url(r'^microsite$', 'microsite_activity', name='microsite_activity'),
+    url(r'^microsite/candidate$', 'candidate_information',
         name='candidate_information'),
 )

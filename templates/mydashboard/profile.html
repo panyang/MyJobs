@@ -37,7 +37,7 @@
                            {% for url in company_microsites %}                    
                            <tr>
                                 <td>                                
-                                <div class="microsite-name"><a href="microsite/?microsite_url={{url.url}}">{{url.url|url_domain}}</a></div>
+                                <div class="microsite-name"><a href="microsite?company={{ company_id }}&url={{url.url}}">{{url.url|url_domain}}</a></div>
                                 </td>
                            <tr>
                            {% endfor %}                    
@@ -50,7 +50,7 @@
                     {% for url in company_microsites %}                    
                     <tr>
                         <td>                        
-                        <a href="microsite/?microsite_url={{url.url}}"><h4 class="mobile-site-links">{{url.url|url_domain}}</h4></a>
+                        <a href="microsite?company={{ company_id }}&url={{url.url}}"><h4 class="mobile-site-links">{{url.url|url_domain}}</h4></a>
                         </td>
                     <tr>
                     {% endfor %}
