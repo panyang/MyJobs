@@ -73,7 +73,7 @@ class MyDashboardViewsTests(TestCase):
     # Eventually these opted-in/out will be changed to
     # track if user is part of company's activity feed
     def test_candidate_has_opted_in(self):
-        response = self.client.post(reverse('candidate_information',
+        response = self.client.post(reverse('view_candidate_information',
                                             args=[self.staff_user.email]
                                             )+'?company='+str(self.company.id)+'&user='+str(self.candidate_user.id))
 
@@ -83,7 +83,7 @@ class MyDashboardViewsTests(TestCase):
         self.candidate_user.opt_in_employers = False
         self.candidate_user.save()
 
-        response = self.client.post(reverse('candidate_information',
+        response = self.client.post(reverse('view_candidate_information',
                                             args=[self.staff_user.email]
                                             )+'?company='+str(self.company.id)+'&user='+str(self.candidate_user.id))
         self.assertEqual(response.status_code, 404)
@@ -98,7 +98,7 @@ class MyDashboardViewsTests(TestCase):
         self.employment = EmploymentHistoryFactory(user=self.candidate_user)
         self.candidate_user.save()
 
-        response = self.client.post(reverse('candidate_information',
+        response = self.client.post(reverse('view_candidate_information',
                                             args=[self.staff_user.email]
                                             )+'?company='+str(self.company.id)+'&user='+str(self.candidate_user.id))
 
@@ -112,7 +112,7 @@ class MyDashboardViewsTests(TestCase):
         self.assertEqual(response.status_code, 200)
 
     def test_candidate_page_load_without_profileunits_with_activites(self):
-        response = self.client.post(reverse('candidate_information',
+        response = self.client.post(reverse('view_candidate_information',
                                             args=[self.staff_user.email]
                                                   )+'?company='+str(self.company.id)+'&user='+str(self.candidate_user.id))
 
@@ -128,7 +128,7 @@ class MyDashboardViewsTests(TestCase):
     def test_candidate_page_load_without_profileunits_and_activites(self):
         saved_search = SavedSearch.objects.get(user=self.candidate_user)
         saved_search.delete()
-        response = self.client.post(reverse('candidate_information',
+        response = self.client.post(reverse('view_candidate_information',
                                             args=[self.staff_user.email]
                                             )+'?company='+str(self.company.id)+'&user='+str(self.candidate_user.id))
 

@@ -258,13 +258,22 @@ def candidate_information(request):
         name = models['name'][0]
         models.pop('name')
 
+    if 'view' in request.environ.get('PATH_INFO').split('/'):
+        coming_from = {'path': 'view'}
+    elif 'microsite' in request.environ.get('PATH_INFO').split('/'):
+        microsite_url = request.REQUEST.get('url')
+        coming_from = {'path': 'microsite', 'url': microsite_url}
+    else:
+        coming_from = {}
+
     searches = user.savedsearch_set.filter(url__in=urls)
 
     data_dict = {'user_info': models,
                  'company_id': company_id,
                  'primary_name': name,
                  'the_user': user,
-                 'searches': searches}
+                 'searches': searches,
+                 'coming_from': coming_from}
 
     return render_to_response('mydashboard/candidate_information.html',
                               data_dict, RequestContext(request))
