@@ -69,7 +69,7 @@
                                     {% if group_member and user.is_active and company_name|length >= 1%}
 
                                     <li class="">
-                                        <a href="{% url 'dashboard' user.email %}">
+                                        <a href="{% url 'dashboard' user.email %}?company={{ company_name.0.id }}">
 
                                             {% if company_name|length > 1 %}
 
@@ -98,7 +98,7 @@
                                     {% if group_member and user.is_active and company_name|length >= 1%}
 
                                     <li class="">
-                                        <a href="{% url 'dashboard' user.email %}">
+                                        <a href="{% url 'dashboard' user.email %}?company={{ company_name.0.id }}">
 
                                         {% if company_name|length > 1 %}
 
@@ -126,7 +126,7 @@
                                     {% if group_member and user.is_active and company_name|length >= 1%}
 
                                     <li class="active">
-                                        <a href="{% url 'dashboard' user.email %}">
+                                        <a href="{% url 'dashboard' user.email %}?company={{ company_name.0.id }}">
 
                                             {% if company_name|length > 1 %}
 
@@ -155,7 +155,7 @@
                                     {% if group_member and user.is_active and company_name|length >= 1%}
 
                                     <li class="">
-                                        <a href="{% url 'dashboard' user.email %}">
+                                        <a href="{% url 'dashboard' user.email %}?company={{ company_name.0.id }}">
 
                                         {% if company_name|length > 1 %}
 
