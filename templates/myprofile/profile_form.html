@@ -43,7 +43,11 @@
             <p id="activation_notification">This email address has not been activated! Please activate it using the activation link sent to your email. <a href="#" id="updateEmail" value="updateEmail">Resend my activation email. </a></p>
 
             {% endif %}
-
+            
+            <div id="profile-form-description">
+                {% get_description module %}
+            </div><br>
+            
             {% include "includes/form-error-highlight.html" %}
             {% csrf_token %}
             <div class="clear"></div>

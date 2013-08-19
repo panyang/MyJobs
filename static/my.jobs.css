@@ -76,6 +76,11 @@ label[for^='id_sort_by'], label[for^='id_edit_sort_by'] {
     display: inline;
 }
 
+#profile-form-description {
+    padding-left: 10%;
+    padding-right: 10%;
+}
+
 .reset-form-input input[type="text"], .reset-form-input input[type="password"] {
     width: 100%;
 }
@@ -307,6 +312,15 @@ table#row-link-table {
 
 #newAccountData .errorlist li {
     color: #c44e34;
+}
+
+/* Contact Form Styles */
+#success-table tr td{
+    min-width: 101px;
+}
+
+#success-table tr td + td{
+    font-weight: bold;
 }
 
 /* Form Styles */
@@ -704,6 +718,10 @@ fieldset textarea,
 .input-prepend .add-on {
     width: 35%;
     text-align: right;
+}
+
+.text-right{
+    text-align: right !important;
 }
 
 .input-prepend input,
@@ -1310,6 +1328,11 @@ form input[type='checkbox'] {
     input [type='text'] + .help-block,
     div + .help-block{
         margin: -12px 0 0 5px;
+    }
+
+    /* Contact Form Styles */
+    #success-table tr td{
+        min-width: 0;
     }
     
     /*Employer Dashboard*/    
