@@ -28,7 +28,7 @@ def get_description(module):
     
     try:
         model = get_model("myprofile", module)
-        return model.description if model.description else ""
+        return model.module_description if model.module_description else ""
     except Exception:
         return ""
 
