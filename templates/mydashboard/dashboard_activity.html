@@ -8,13 +8,13 @@
                    
         <table id="row-link-table">  
             {% for candidate in candidates %}                    
-            <tr class="hide-mobile" onclick="document.location = '{% url 'view_candidate_information' user.email %}?company={{ company_id }}&user={{ candidate.user.id }}';">
+            <tr class="hide-mobile" onclick="document.location = '{% url 'candidate_information' user.email %}?company={{ company_id }}&user={{ candidate.user.id }}';">
                 <td>
                     <img src="{{candidate.user.get_gravatar_url}}&s=55" class="gravatar pull-left">                        
                 </td>
                 <td>
                     <div class="candidate-name">{{candidate.user|get_name_obj}}</div>
-                    <a href="{% url 'view_candidate_information' user.email %}?company={{ company_id }}&user={{ candidate.user.id }}">{{candidate.user}}</a>
+                    <a href="{% url 'candidate_information' user.email %}?company={{ company_id }}&user={{ candidate.user.id }}">{{candidate.user}}</a>
                 </td>
                 <td>
                     <strong>{% if candidate.label %}{{candidate.label}}{% else %}Unlabeled{% endif %}</strong><br>
@@ -28,7 +28,7 @@
                 </td>
                 <td>
                     <div class="candidate-name pull-left">{{candidate.user|get_name_obj}}</div>
-                    <a href="{% url 'view_candidate_information' user.email %}?company={{ company_id }}&user={{ candidate.user.id }}" class="candidate-activity-mobile pull-left">{{candidate.user}}</a>
+                    <a href="{% url 'candidate_information' user.email %}?company={{ company_id }}&user={{ candidate.user.id }}" class="candidate-activity-mobile pull-left">{{candidate.user}}</a>
                 </td>
              <tr>
              {% endfor %}                    

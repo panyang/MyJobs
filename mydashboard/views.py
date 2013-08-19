@@ -258,13 +258,11 @@ def candidate_information(request):
         name = models['name'][0]
         models.pop('name')
 
-    if 'view' in request.environ.get('PATH_INFO').split('/'):
-        coming_from = {'path': 'view'}
-    elif 'microsite' in request.environ.get('PATH_INFO').split('/'):
+    if request.REQUEST.get('url'):
         microsite_url = request.REQUEST.get('url')
         coming_from = {'path': 'microsite', 'url': microsite_url}
     else:
-        coming_from = {}
+        coming_from = {'path': 'view'}
 
     searches = user.savedsearch_set.filter(url__in=urls)
 
