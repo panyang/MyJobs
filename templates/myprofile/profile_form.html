@@ -43,7 +43,11 @@
             <p id="activation_notification">This email address has not been activated! Please activate it using the activation link sent to your email. <a href="#" id="updateEmail" value="updateEmail">Resend my activation email. </a></p>
 
             {% endif %}
-
+            
+            <div id="profile-form-description">
+                {% get_description module %}
+            </div><br>
+            
             {% include "includes/form-error-highlight.html" %}
             {% csrf_token %}
             <div class="clear"></div>
@@ -70,14 +74,14 @@
                     <div class="modal-footer">
                         <div class="actions">
                             <button data-dismiss="modal" class="btn primary pull-right">{% trans 'Cancel' %}</button>
-                            <a class="btn pull-right" href="{% url 'delete_item' user.email item_id %}">{% trans 'Delete' %}</a>
+                            <a class="btn pull-right" href="{% url 'delete_item' item_id %}">{% trans 'Delete' %}</a>
                         </div>
                     </div>
                 </div>{# /delete-confirm #}
 
                 {% endif %}
 
-                <a href="{% url 'view_profile' user.email %}" class="btn">{% trans 'Cancel' %}</a>
+                <a href="{% url 'view_profile' %}" class="btn">{% trans 'Cancel' %}</a>
                 <button type="submit" class="btn primary" id="profile-save">{% trans 'Save' %}</button>
             </div>{# /actions #}
         </form>

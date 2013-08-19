@@ -4,6 +4,7 @@ from django.core import mail
 from django.core.urlresolvers import reverse
 from django.db.models import Q
 from django.test import TestCase
+from django.utils.http import urlquote
 
 from myjobs.models import *
 from myjobs.tests.views import TestClient
@@ -57,61 +58,59 @@ class UserManagerTests(TestCase):
 
     def test_not_disabled(self):
         """
-        An anonymous user or user with is_disabled set to True should be
-        redirected to the home page, while a user with is_active set to False
-        should proceed to their destination.
+        An anonymous user who provides the :verify-email: query string or
+        user with is_disabled set to True should be redirected to the home
+        page. An anonymous user who does not should see a 404. A user with
+        is_active set to False should proceed to their destination.
         """
         client = TestClient()
         user = UserFactory()
 
-        quoted_email = urllib.quote(user.email)
-
         #Anonymous user
-        resp = client.get(reverse('view_profile',
-                                  args=[user.email]))
-        self.assertRedirects(resp, "http://testserver/?next=/%s/profile/"
-                             % (quoted_email,))
+        resp = client.get(reverse('view_profile'))
+        self.assertRedirects(resp, reverse('home'))
+
+        # This is ugly, but it is an artifact of the way Django redirects
+        # users who fail the `user_passes_test` decorator.
+        qs = '?verify-email=%s' % user.email
+        next_qs = '?next=' + urlquote('/profile/%s' % qs)
+
+        # Anonymous user navigates to url with :verify-email: in query string
+        resp = client.get(reverse('view_profile') + qs)
+        # Old path + qs is urlquoted and added to the url as the :next: param
+        self.assertRedirects(resp, "http://testserver/" + next_qs)
 
         # Active user
         client.login_user(user)
-        resp = client.get(reverse('view_profile',
-                                  args=[user.email]))
+        resp = client.get(reverse('view_profile'))
         self.assertTrue(resp.status_code, 200)
 
         #Disabled user
         user.is_disabled = True
         user.save()
-        resp = client.get(reverse('view_profile',
-                                  args=[user.email]))
-        self.assertRedirects(resp, "http://testserver/?next=/%s/profile/"
-                             % (quoted_email,))
+        resp = client.get(reverse('view_profile'))
+        self.assertRedirects(resp, "http://testserver/?next=/profile/")
 
     def test_is_active(self):
         """
-        An anonymous user or user with is_active set to False should be
-        redirected to the home page, while a user with is_active set to True
-        should proceed to their destination.
+        A user with is_active set to False should be redirected to the home
+        page, while a user with is_active set to True should proceed to their
+        destination.
         """
         client = TestClient()
         user = UserFactory()
         quoted_email = urllib.quote(user.email)
 
-        #Anonymous user
-        resp = client.get(reverse('saved_search_main', args=[user.email]))
-        self.assertRedirects(resp, "http://testserver/?next=/%s/saved-search/"
-                             % (quoted_email,))
-
         # Active user
         client.login_user(user)
-        resp = client.get(reverse('saved_search_main', args=[user.email]))
+        resp = client.get(reverse('saved_search_main'))
         self.assertTrue(resp.status_code, 200)
 
         # Inactive user
         user.is_active = False
         user.save()
-        resp = client.get(reverse('saved_search_main', args=[user.email]))
-        self.assertRedirects(resp, "http://testserver/?next=/%s/saved-search/"
-                             % (quoted_email,))
+        resp = client.get(reverse('saved_search_main'))
+        self.assertRedirects(resp, "http://testserver/?next=/saved-search/")
 
     def test_group_status(self):
         """

@@ -3,7 +3,6 @@ from django.contrib.auth import views as auth_views
 from django.http import HttpResponseRedirect, HttpResponse
 from django.shortcuts import render_to_response
 from django.template import RequestContext
-from django.utils.decorators import method_decorator
 from django.views.generic import TemplateView
 
 from myjobs.decorators import user_is_allowed
@@ -16,10 +15,6 @@ from registration.forms import RegistrationForm
 # New in Django 1.5. Class based template views for static pages
 class RegistrationComplete(TemplateView):
     template_name = 'registration/registration_complete.html'
-
-    @method_decorator(user_is_allowed())
-    def dispatch(self, *args, **kwargs):
-        return super(RegistrationComplete, self).dispatch(*args, **kwargs)
 
 
 def register(request):
@@ -41,7 +36,6 @@ def register(request):
     return HttpResponse(json.dumps({'errors': form.errors.items()}))
 
 
-@user_is_allowed()
 def resend_activation(request):
     activation = ActivationProfile.objects.get_or_create(user=request.user,
                                                          email=request.user.email)[0]
