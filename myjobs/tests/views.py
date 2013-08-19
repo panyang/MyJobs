@@ -6,6 +6,7 @@ import time
 
 from django.conf import settings
 from django.contrib.auth import login
+from django.contrib.sessions.models import Session
 from django.core import mail
 from django.core.urlresolvers import reverse
 from django.http import HttpRequest
@@ -83,8 +84,7 @@ class MyJobsViewsTests(TestCase):
         return '\r\n'.join(messages)
 
     def test_edit_account_success(self):
-        resp = self.client.post(reverse('edit_account',
-                                        args=[self.user.email]),
+        resp = self.client.post(reverse('edit_account'),
                                 data={'given_name': 'Alice',
                                       'family_name': 'Smith',
                                       'gravatar': 'alice@example.com',
@@ -96,8 +96,7 @@ class MyJobsViewsTests(TestCase):
         self.assertEqual(resp.content, 'success')
 
     def test_change_password_success(self):
-        resp = self.client.post(reverse('edit_password',
-                                        args=[self.user.email]),
+        resp = self.client.post(reverse('edit_password'),
                                 data={'password': 'secret',
                                       'new_password1': 'new',
                                       'new_password2': 'new'}, follow=True)
@@ -107,8 +106,7 @@ class MyJobsViewsTests(TestCase):
         self.assertTrue(user.check_password('new'))
 
     def test_change_password_failure(self):
-        resp = self.client.post(reverse('edit_password',
-                                        args=[self.user.email]),
+        resp = self.client.post(reverse('edit_password'),
                                 data={'password': 'secret',
                                       'new_password1': 'new',
                                       'new_password2': 'notNew'}, follow=True)
@@ -202,8 +200,7 @@ class MyJobsViewsTests(TestCase):
         completely
         """
         self.assertEqual(User.objects.count(), 2)
-        resp = self.client.get(reverse('delete_account',
-                                       args=[self.user.email]), follow=True)
+        resp = self.client.get(reverse('delete_account'), follow=True)
         self.assertEqual(User.objects.count(), 1)
 
     def test_disable_account(self):
@@ -221,8 +218,7 @@ class MyJobsViewsTests(TestCase):
         profile = ActivationProfile.objects.get(user=user)
         self.assertEqual(profile.activation_key, 'ALREADY ACTIVATED')
 
-        resp = self.client.get(reverse('disable_account',
-                                       args=[self.user.email]), follow=True)
+        resp = self.client.get(reverse('disable_account'), follow=True)
         user = User.objects.get(id=self.user.id)
         profile = ActivationProfile.objects.get(user=user)
         self.assertNotEqual(profile.activation_key, 'ALREADY ACTIVATED')
@@ -401,19 +397,39 @@ class MyJobsViewsTests(TestCase):
                                             'does%40not.exist:wrong_pass'))
         self.assertEqual(response.status_code, 403)
 
+    def test_anonymous_continue_sending_mail(self):
+        Session.objects.all().delete()
+        self.user.last_response = date.today() - timedelta(days=7)
+        self.user.save()
+
+        # Navigating to the 'continue sending email' page while logged out...
+        response = self.client.get(reverse('continue_sending_mail'))
+        self.assertRedirects(response, reverse('home'))
+
+        # or with the wrong email address...
+        response = self.client.get(reverse('continue_sending_mail') +
+                                   '?verify-email=wrong@example.com')
+        self.assertRedirects(response, reverse('home'))
+        # should result in redirecting to the login page
+
+        response = self.client.get(reverse('continue_sending_mail') +
+                                   '?verify-email=%s' % self.user.email)
+        self.assertRedirects(response, reverse('home'))
+        self.user = User.objects.get(pk=self.user.pk)
+        self.assertEqual(self.user.last_response, date.today())
+
     def test_continue_sending_mail(self):
         self.user.last_response = date.today() - timedelta(days=7)
         self.user.save()
 
-        response = self.client.get(reverse('continue_sending_mail',
-                                           args=[self.user.email]),
+        response = self.client.get(reverse('continue_sending_mail'),
                                    data={'user': self.user}, follow=True)
 
         self.assertEqual(self.user.last_response,
                          date.today() - timedelta(days=7))
         self.assertRedirects(response, '/')
-        user = User.objects.get(pk=self.user.pk)
-        self.assertEqual(user.last_response, date.today())
+        self.user = User.objects.get(pk=self.user.pk)
+        self.assertEqual(self.user.last_response, date.today())
 
     def test_redirect_autocreated_user(self):
         """
@@ -425,24 +441,20 @@ class MyJobsViewsTests(TestCase):
         self.user.save()
         self.user = User.objects.get(email=self.user.email)
 
-        response = self.client.get(reverse('saved_search_main',
-                                           args=[self.user.email]))
+        response = self.client.get(reverse('saved_search_main'))
 
         self.assertEqual(response.status_code, 302)
-        self.assertRedirects(response, reverse('edit_account',
-                                               args=[self.user.email]))
+        self.assertRedirects(response, reverse('edit_account'))
 
         profile = ActivationProfile.objects.get_or_create(
             user=self.user,
             email=self.user.email)[0]
         response = self.client.get(reverse('registration_activate',
-                                   args=[self.user.email,
-                                         profile.activation_key]))
+                                           args=[profile.activation_key]))
 
         self.assertEqual(response.status_code, 200)
 
-        response = self.client.post(reverse('edit_password',
-                                            args=[self.user.email]),
+        response = self.client.post(reverse('edit_password'),
                                     data={'password': 'secret',
                                           'new_password1': 'secret2',
                                           'new_password2': 'secret2'})
@@ -451,8 +463,7 @@ class MyJobsViewsTests(TestCase):
         self.user = User.objects.get(email=self.user.email)
         self.assertFalse(self.user.password_change)
 
-        response = self.client.get(reverse('saved_search_main',
-                                           args=[self.user.email]))
+        response = self.client.get(reverse('saved_search_main'))
 
         self.assertEqual(response.status_code, 200)
         self.assertTemplateUsed(response, 'mysearches/saved_search_main.html')
@@ -483,3 +494,35 @@ class MyJobsViewsTests(TestCase):
     def test_jira_login(self):
         jira = JIRA(options=options, basic_auth=my_agent_auth)
         self.assertIsNotNone(jira)
+
+    def test_anonymous_unsubscribe_all_myjobs_emails(self):
+        Session.objects.all().delete()
+        self.assertTrue(self.user.opt_in_myjobs)
+
+        # Navigating to the unsubscribe page while logged out...
+        response = self.client.get(reverse('unsubscribe_all'))
+        self.assertRedirects(response, reverse('home'))
+        # or with the wrong email address...
+        response = self.client.get(reverse('unsubscribe_all') +
+                                   '?verify-email=wrong@example.com')
+        # should result in the user's status remaining unchanged
+        # and the user should be redirected to the login page
+        self.assertRedirects(response, reverse('home'))
+        self.user = User.objects.get(id=self.user.id)
+        self.assertTrue(self.user.opt_in_myjobs)
+
+        # Navigating to the unsubscribe page while logged out
+        # and with the correct email address...
+        response = self.client.get(reverse('unsubscribe_all') +
+                                   '?verify-email=%s' % self.user.email)
+        self.user = User.objects.get(id=self.user.id)
+        # should result in the user's :opt_in_myjobs: attribute being
+        # set to False
+        self.assertFalse(self.user.opt_in_myjobs)
+
+    def test_unsubscribe_all_myjobs_emails(self):
+        self.assertTrue(self.user.opt_in_myjobs)
+
+        response = self.client.get(reverse('unsubscribe_all'))
+        self.user = User.objects.get(id=self.user.id)
+        self.assertFalse(self.user.opt_in_myjobs)

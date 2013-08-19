@@ -23,7 +23,7 @@ module("profile.js Tests - saveForm", {
 
         ajax = $.ajax;
         $.ajax = function(params) {
-            if (params.url == '/' + user_email + '/profile/edit/' &&
+            if (params.url == '/profile/edit/' &&
                 params.data == 'csrfmiddlewaretoken=foo&given_name=Alice&family_name=Smith') {
                 params.success('', 'prevent-redirect');
             } else {

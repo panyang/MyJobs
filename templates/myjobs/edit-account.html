@@ -34,10 +34,10 @@
                         <ul>
                         <a href="" class="account-menu-item {{user.password_change|display}}" id="account-basic"><li><h4 class="account-menu-header">{% trans "Personal Information" %}</h4>
                         </li></a>
-                        <a href="{% url 'edit_communication' user.email %}" class="account-menu-item {{user.password_change|display}}" id="account-communication"><li><h4 class="account-menu-header">{% trans "Communication Settings" %}</h4></li></a>
-                        <a href="{% url 'edit_password' user.email %}" class="account-menu-item" id="account-password"><li><h4 class="account-menu-header">{% trans "Change Password" %}</h4></li></a>
-                        <a href="{% url 'edit_disable' user.email %}" class="account-menu-item {{user.password_change|display}}" id="account-disable"><li><h4 class="account-menu-header">{% trans "Disable Account" %}</h4></li></a>
-                        <a href="{% url 'edit_delete' user.email %}" class="account-menu-item {{user.password_change|display}}" id="account-delete"><li><h4 class="account-menu-header">{% trans "Delete Account" %}</h4></li></a>
+                        <a href="{% url 'edit_communication' %}" class="account-menu-item {{user.password_change|display}}" id="account-communication"><li><h4 class="account-menu-header">{% trans "Communication Settings" %}</h4></li></a>
+                        <a href="{% url 'edit_password' %}" class="account-menu-item" id="account-password"><li><h4 class="account-menu-header">{% trans "Change Password" %}</h4></li></a>
+                        <a href="{% url 'edit_disable' %}" class="account-menu-item {{user.password_change|display}}" id="account-disable"><li><h4 class="account-menu-header">{% trans "Disable Account" %}</h4></li></a>
+                        <a href="{% url 'edit_delete' %}" class="account-menu-item {{user.password_change|display}}" id="account-delete"><li><h4 class="account-menu-header">{% trans "Delete Account" %}</h4></li></a>
 
                         </ul>
                     </div>  

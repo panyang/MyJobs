@@ -12,5 +12,5 @@
 {% block footer-right %}
     Sent to: {{saved_searches.0.0.email}}<br>
     Sent as Digest: {{digest.is_active|readable_boolean}}<br>
-    <a href="http://my.jobs{% url 'unsubscribe' user_email=saved_searches.0.0.user.email search_id='digest' %}">Deactivate all saved searches</a><br>
+    <a href="http://my.jobs{% url 'unsubscribe' search_id='digest' %}?verify-email={{saved_searches.0.0.user.email}}">Deactivate all saved searches</a><br>
 {% endblock %}

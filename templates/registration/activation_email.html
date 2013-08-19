@@ -31,8 +31,8 @@ the following link:
 {% endblocktrans %}
 {% endif %}
 </p>
-{% url 'registration_activate' user.email activation_key as url %}
-<a href="http://my.jobs{{url}}">http://my.jobs{{url}}</a>
+{% url 'registration_activate' activation_key as url %}
+<a href="http://my.jobs{{url}}?verify-email={{user.email}}">Activate my account.</a>
 
 {% if password %}
     {% blocktrans %}
@@ -52,4 +52,4 @@ the verification process.</p>
 
 {% endblocktrans %}
 
-<p>My.jobs <a href="http://my.jobs/terms">Terms</a> and <a href="http://my.jobs/privacy">Privacy</a></p>
+<p>My.jobs <a href="http://my.jobs{% url 'terms' %}">Terms</a> and <a href="http://my.jobs{% url 'privacy' %}">Privacy</a></p>

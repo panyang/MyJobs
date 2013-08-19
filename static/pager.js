@@ -5,7 +5,7 @@ $(document).ready(function() {
         {
             offset += 20;
             $.ajax({
-                url: "/" + user_email + "/saved-search/more-results",
+                url: "/saved-search/more-results",
                 data: { 'offset': offset,
                         'frequency': frequency,
                         'feed': feed,

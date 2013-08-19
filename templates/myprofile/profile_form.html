@@ -74,14 +74,14 @@
                     <div class="modal-footer">
                         <div class="actions">
                             <button data-dismiss="modal" class="btn primary pull-right">{% trans 'Cancel' %}</button>
-                            <a class="btn pull-right" href="{% url 'delete_item' user.email item_id %}">{% trans 'Delete' %}</a>
+                            <a class="btn pull-right" href="{% url 'delete_item' item_id %}">{% trans 'Delete' %}</a>
                         </div>
                     </div>
                 </div>{# /delete-confirm #}
 
                 {% endif %}
 
-                <a href="{% url 'view_profile' user.email %}" class="btn">{% trans 'Cancel' %}</a>
+                <a href="{% url 'view_profile' %}" class="btn">{% trans 'Cancel' %}</a>
                 <button type="submit" class="btn primary" id="profile-save">{% trans 'Save' %}</button>
             </div>{# /actions #}
         </form>
