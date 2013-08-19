@@ -37,7 +37,7 @@
                            {% for url in company_microsites %}                    
                            <tr>
                                 <td>                                
-                                <div class="microsite-name"><a href="microsite?company={{ company_id }}&url={{url.url}}">{{url.url|url_domain}}</a></div>
+                                <div class="microsite-name"><a href="{% url 'microsite_activity' user.email %}?company={{ company_id }}&url={{url.url}}">{{url.url|url_domain}}</a></div>
                                 </td>
                            <tr>
                            {% endfor %}                    
