@@ -12,10 +12,6 @@
     {% include "includes/meta.html" %}
     {% endblock %}
 
-    <script>
-        var user_email = '{{user.email}}';
-    </script>
-
     {% block meta-extra %}
     <script src="{{ STATIC_URL}}account-creation.js" type="text/javascript"></script>
     {% endblock %}
@@ -57,9 +53,9 @@
 
                                 {% is_a_group_member user "Employer" as group_member %}
                                 {% get_company_name user as company_name %}
-                                <li class="{% active_tab 'My Profile' %}"><a href="{% url 'view_profile' user.email %}">{% trans "Profile" %}</a></li>
+                                <li class="{% active_tab 'My Profile' %}"><a href="{% url 'view_profile' %}">{% trans "Profile" %}</a></li>
                                 {% if user.is_active %}
-                                    <li class="{% active_tab 'Saved Searches' %}"><a href="{% url 'saved_search_main' user.email %}">{% trans "Saved Searches" %}</a></li>
+                                    <li class="{% active_tab 'Saved Searches' %}"><a href="{% url 'saved_search_main' %}">{% trans "Saved Searches" %}</a></li>
                                     {% if group_member and company_name|length >= 1 %}
                                         <li class="{% active_tab 'Company Dashboard' %}" id="company-dropdown">
                                             <a href="#" id="candidate-tab">{% trans "Candidates" %}</a>
@@ -96,21 +92,21 @@
                                             </li>
                                             <li id="back-btn-li" class="no-show"><a id="back-btn"><span class="arrow-left"></span></a></li>
                                             {% if not user.is_disabled %}
-                                                <li><a id="profile-link" href="{% url 'view_profile' user.email %}">{% trans "Profile" %}</a></li>
+                                                <li><a id="profile-link" href="{% url 'view_profile' %}">{% trans "Profile" %}</a></li>
                                                 {% if user.is_active %}
-                                                    <li><a id="savedsearch-link" href="{% url 'saved_search_main' user.email %}">{% trans "Saved Searches" %}</a></li>
+                                                    <li><a id="savedsearch-link" href="{% url 'saved_search_main' %}">{% trans "Saved Searches" %}</a></li>
                                                         {% if group_member and user.is_active and company_name|length >= 1%}
                                                             <li><a id="candidate-link">{% trans "Candidates" %}</a></li>
                                                         {% endif %}
                                                 {% endif %}
-                                                <li><a id="account-link" href="{% url 'edit_account' user.email %}">{% trans "Account Settings" %}</a></li>
+                                                <li><a id="account-link" href="{% url 'edit_account' %}">{% trans "Account Settings" %}</a></li>
                                                 <li><a id="settings-link">{% trans "Settings" %}</a></li>
                                             {% endif %}
                                             <li><a id="logout-link" href="{% url 'auth_logout' %}">Log Out</a></li>
                                             {% for company in company_name %}
                                                 <li><a class="company-nav-item sub-nav-item no-show" href="">{{ company|truncatechars:"20" }}</a></li>
                                             {% endfor %}
-                                            <li><a class="settings-nav-item sub-nav-item no-show" href="{% url 'edit_account' user.email %}">{% trans "Account Settings" %}</a></li>
+                                            <li><a class="settings-nav-item sub-nav-item no-show" href="{% url 'edit_account' %}">{% trans "Account Settings" %}</a></li>
                                             <li><a class="settings-nav-item sub-nav-item no-show" href="{% url 'auth_logout' %}">Log Out</a></li>
                                         </ul>{# /pop-menu #}
                                     </li>
