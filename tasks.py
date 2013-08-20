@@ -110,7 +110,8 @@ def process_batch_events():
 
     for user in inactive:
         if user.savedsearch_set.exists():
-            message = render_to_string('myjobs/email_inactive.html')
+            message = render_to_string('myjobs/email_inactive.html',
+                                       {'user': user})
             user.email_user('Account Inactivity', message,
                             settings.DEFAULT_FROM_EMAIL)
 

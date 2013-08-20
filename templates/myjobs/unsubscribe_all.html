@@ -21,7 +21,7 @@
                 {% if user.is_authenticated %}
 
                 <tr class="profile-section">
-                    <td><a href="{% url 'edit_account' user.email %}">{% trans 'Manage your account' %}</a></td>
+                    <td><a href="{% url 'edit_account' %}">{% trans 'Manage your account' %}</a></td>
                 </tr>
 
                 {% else %}

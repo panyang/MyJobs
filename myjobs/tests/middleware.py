@@ -22,8 +22,7 @@ class RedirectMiddlewareTests(TestCase):
         A logged in user whose password_change flag is not set
         should proceed to their original destination
         """
-        request = self.request_factory.get(reverse('edit_account',
-                                                   args=[self.user.email]))
+        request = self.request_factory.get(reverse('edit_account'))
         request.user = self.user
         response = self.redirect_middleware.process_request(request)
         self.assertEqual(response, None)
@@ -36,24 +35,21 @@ class RedirectMiddlewareTests(TestCase):
         self.user.password_change = True
         self.user.save()
 
-        request = self.request_factory.get(reverse('saved_search_main',
-                                                   args=[self.user.email]))
+        request = self.request_factory.get(reverse('saved_search_main'))
         request.user = self.user
 
         response = self.redirect_middleware.process_request(request)
 
         self.assertEqual(response.status_code, 302)
         self.assertEqual(response.get('location'),
-                         reverse('edit_account',
-                                 args=[self.user.email]))
+                         reverse('edit_account'))
 
     def test_not_logged_in_returns_forbidden(self):
         """
         An anonymous user that tries to post to a private url should
         receive a 403 Forbidden status
         """
-        request = self.request_factory.get(reverse('saved_search_main',
-                                                   args=[self.user.email]),
+        request = self.request_factory.get(reverse('saved_search_main'),
                                            HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         new_request = request.GET.copy()
         new_request['next'] = reverse('home')

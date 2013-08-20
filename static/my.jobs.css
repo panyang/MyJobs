@@ -76,6 +76,11 @@ label[for^='id_sort_by'], label[for^='id_edit_sort_by'] {
     display: inline;
 }
 
+#profile-form-description {
+    padding-left: 10%;
+    padding-right: 10%;
+}
+
 .reset-form-input input[type="text"], .reset-form-input input[type="password"] {
     width: 100%;
 }

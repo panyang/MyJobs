@@ -4,6 +4,7 @@ from myjobs import version
 from myprofile.models import ProfileUnits
 from myjobs.models import User
 from mydashboard.models import CompanyUser
+from django.db.models.loading import get_model
 
 register=template.Library()
 
@@ -11,6 +12,26 @@ register=template.Library()
 def cache_buster():
     cache_buster = "?v=%s" % version.cache_buster
     return cache_buster
+
+@register.simple_tag
+def get_description(module):
+    """
+    Gets the description for a module.
+
+    inputs:
+    :module: The module to get the description for.
+    
+    outputs:
+    The description for the module, or an empty string if the module or the
+    description doesn't exist.
+    """
+    
+    try:
+        model = get_model("myprofile", module)
+        return model.module_description if model.module_description else ""
+    except Exception:
+        return ""
+
 
 @register.filter
 def get_name_obj(user, default=""):

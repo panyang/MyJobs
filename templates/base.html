@@ -51,8 +51,10 @@
                     <div class="inline-inputs">
 
                         {% if user.is_authenticated %}
+
                         <div class="span8">
                             <ul class="nav nav-tabs pull-left menu-tabs">
+
                                 {% is_a_group_member user "Employer" as group_member %}
                                 {% get_company_name user as company_name %}
                                 <li class="{% active_tab 'My Profile' %}"><a href="{% url 'view_profile' user.email %}">{% trans "Profile" %}</a></li>
@@ -71,7 +73,6 @@
                                 {% endif %}
                             </ul>{# /nav nav-tabs pull-left menu-tabs #}
                         </div>{# /span8 #}
-
                         <div class="pull-right">
                             <div class="menu-bar span2 pagination-right">
                                 <ul id="nav" class="pull-right">
@@ -84,11 +85,13 @@
                                             <li id="logged-in-li">
                                                 {% trans "Logged in as " %}
                                                 <b>
+
                                                     {% with short_email=user.email|truncatechars:"20" %}
                                                         {% with name_obj=user|get_name_obj:short_email %}
                                                             {{ name_obj }}
                                                         {% endwith %}
                                                     {% endwith %}
+
                                                 </b>
                                             </li>
                                             <li id="back-btn-li" class="no-show"><a id="back-btn"><span class="arrow-left"></span></a></li>
@@ -113,7 +116,7 @@
                                     </li>
                                 </ul>{# /nav #}
                             </div>{# /menu-bar span2 pagination-right #}
-                        </div>{# /pull-right #}                      
+                        </div>{# /pull-right #}
 
                         {% else %}
 
