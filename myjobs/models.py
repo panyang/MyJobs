@@ -7,6 +7,7 @@ from django.core.mail import EmailMessage
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.core.validators import MaxValueValidator, MinValueValidator
+from django.conf import settings
 
 from default_settings import GRAVATAR_URL_PREFIX, GRAVATAR_URL_DEFAULT
 from registration import signals as custom_signals
@@ -267,6 +268,12 @@ class User(AbstractBaseUser):
         
         custom_signals.user_disabled.send(sender=self, user=self,
                                           email=self.email)
+
+    def update_profile_completion(self):
+        profile_dict = self.profileunits_dict()
+        num_complete = len([unit for unit in profile_dict if unit in settings.PROFILE_COMPLETION_MODULES])
+        self.profile_completion = int(float(1.0 * num_complete/len(settings.PROFILE_COMPLETION_MODULES))*100)
+        self.save()
 
     def add_default_group(self):
         group = Group.objects.get(name='Job Seeker')

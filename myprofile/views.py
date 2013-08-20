@@ -34,6 +34,8 @@ def edit_profile(request):
 
     user = request.user
 
+    user.update_profile_completion()
+
     profile_config = user.profileunits_dict()
 
     empty_units = [model for model in ProfileUnits.__subclasses__()]
