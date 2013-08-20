@@ -14,6 +14,28 @@ def cache_buster():
     return cache_buster
 
 @register.simple_tag
+def completion_level(level):
+    """
+    Determines the color of progress bar that should display.
+    
+    inputs:
+    :level: The completion percentage of a user's profile.
+    
+    outputs:
+    A string containing the bootstrap bar type
+    """
+    
+    if level <= 20:
+        return "error"
+    elif level <= 40:
+        return "warning"
+    elif level <= 60:
+        return "info"
+    else:
+        return "success"
+
+
+@register.simple_tag
 def get_description(module):
     """
     Gets the description for a module.

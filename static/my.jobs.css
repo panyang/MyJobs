@@ -30,7 +30,12 @@ a {
 a:hover {
     color: #a42e14;
 }
-    
+
+.activity-progress {
+    height: 6px;
+    width: 100px;
+}
+
 /*Candidate Activity mobile desktop hide*/
 .candidate-activity-mobile {
     display: none;

@@ -251,6 +251,6 @@ PROFILE_COMPLETION_MODULES = (
     'address',
     'telephone',
     'education',
-    'secondary email',
+    'secondaryemail',
     'name'
 )

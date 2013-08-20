@@ -270,9 +270,13 @@ class User(AbstractBaseUser):
                                           email=self.email)
 
     def update_profile_completion(self):
-        profile_dict = self.profileunits_dict()
-        num_complete = len([unit for unit in profile_dict if unit in settings.PROFILE_COMPLETION_MODULES])
-        self.profile_completion = int(float(1.0 * num_complete/len(settings.PROFILE_COMPLETION_MODULES))*100)
+        profile_dict = self.profileunits_set.all()        
+        num_complete = len(list(set([unit.get_model_name() for unit
+                           in profile_dict if unit.get_model_name()
+                           in settings.PROFILE_COMPLETION_MODULES])))
+        print num_complete
+        self.profile_completion = int(float(1.0 * num_complete/
+                                  len(settings.PROFILE_COMPLETION_MODULES))*100)
         self.save()
 
     def add_default_group(self):
