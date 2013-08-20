@@ -1270,6 +1270,10 @@ form input[type='checkbox'] {
 }
 
 @media screen and (max-width: 500px) {
+    #profile-completion {
+        display: none;
+    }
+    
     .profile-mobile table, 
     .profile-mobile thead, 
     .profile-mobile tbody, 
