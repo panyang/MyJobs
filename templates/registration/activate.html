@@ -7,8 +7,8 @@ Used to check if registration was successful.
 {% endcomment %}
 
 {% block content %}
-    <div class="wrapper"> 
-    {% if activated %}        
+    <div class="wrapper">
+    {% if activated %}
         <div class="row">
             <div class="span12">
                 <h1>{% trans "Account Activated" %}
@@ -21,7 +21,7 @@ Used to check if registration was successful.
             <div class="span6" id="profileTitleBar">
                 <h2>{{activated.email}}</h2>
                 <p>
-                {% if user.is_authenticated %}
+                {% if activated.is_authenticated %}
                     {% trans "Your account hass been successfully activated, and you are now logged in."%}
                 {%else%}
                     {% trans "Your account hass been successfully activated, but you need to login before you use it."%}
@@ -34,7 +34,7 @@ Used to check if registration was successful.
                 <div class="formBox" id="moduleBank"> 
                     <h2>Next Steps:</h2>
                     <table class="table table-bordered tables-striped">
-                    {% if user.is_authenticated %}
+                    {% if activated.is_authenticated %}
                         <tr class="profile-section">
                             <td><a href="{% url 'view_profile' %}">Add to your profile</a></td>
                         </tr>

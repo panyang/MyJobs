@@ -15,34 +15,52 @@
         </div>
         <div class="span4">
             <div class="loginBox">
+
                 {% if user.is_authenticated %}
-                    {% if user.is_disabled %}
-                        <center><h2>{% trans "Your account is disabled." %} </h2>
+
+                    <div class="centered">
+
+                        {% if user.is_disabled %}
+
+                        <h2>{% trans "Your account is disabled." %} </h2>
                         <p><a href="{% url 'resend_activation' %}">Send me an activation link to bring back my account!</a></p>
-                    {% else %}
-                        <center><p>Welcome <b> 
-                        {% with short_email=user.email|truncatechars:"23" %}
-                            {% with name_obj=user|get_name_obj:short_email %}
+
+                        {% else %}
+
+                        <p>Welcome <b> 
+
+                            {% with short_email=user.email|truncatechars:"23" %}
+                                {% with name_obj=user|get_name_obj:short_email %}
+
                                 {{name_obj}}
-                            {% endwith %}!</b></p>
-                        {% endwith %}
+
+                                {% endwith %}!</b></p>
+                            {% endwith %}
                     
                         <p><a href="{% url 'view_profile' %}">View Your Profile</a></p>
-                    {% endif %}
-                    {% if not user.is_active %}
-                    <div class="alert-message info">
-                      <p>{% trans "Your account doesn't have full access to MyJobs features! Please activate it using the activation link sent to your email. "%} <a href="{% url 'resend_activation' %}">{% trans "Resend my activation email." %}</a></p>
+
+                        {% endif %}
+                        {% if not user.is_active %}
+
+                        <div class="alert-message info">
+                            <p>{% trans "Your account doesn't have full access to MyJobs features! Please activate it using the activation link sent to your email. "%} <a href="{% url 'resend_activation' %}">{% trans "Resend my activation email." %}</a></p>
+                        </div>
+
+                        {% endif %}
+
+                        <a class="btn primary" href="{% url 'auth_logout' %}">Log Out</a>
                     </div>
-                    {% endif %}
-                    <a class="btn primary" href="{% url 'auth_logout' %}">Log Out</a></center>
                 
                 {% else %}
+
                     <h3>Sign Up</h3>
                     {% include "includes/widget-user-registration.html" with form=registrationform%}
                     <div class="clear"></div>                                                
                     <h3>Sign In</h3>
                     {% include "includes/widget-login-username.html" with form=loginform %}
+
                 {% endif %}
+
             </div>				
         </div>
     </div>
@@ -52,12 +70,15 @@
             <div class="span4" id="newAccountInfo">
                 <div>
               	    <h2>{% trans "Profile" %}</h2>
-		            <center><img id="gravatar"><br>
-		            <a href="http://www.gravatar.com" target="_blank">Change your profile image on gravatar.com</a>
-  		            <p><b class="newUserEmail"></b><br/>account status: <b class="pendingText">Pending activation</b>
-		            </p>
-                    </center>
-                
+		            <div class="centered">
+                        <img id="gravatar"><br>{# src attr is set in account-creation.js #}
+    		            <a href="http://www.gravatar.com" target="_blank">Change your profile image on gravatar.com</a>
+      		            <p>
+                            <b class="newUserEmail"></b><br/>account status: <b class="pendingText">Pending activation</b>
+    		            </p>
+                    </div>
+
+                    {# .newUserEmail contents set in account-creation.js #}
                     <p>Thanks for registering! We have sent an email to <span class="newUserEmail"></span> with
                        an activation link for your account. While you wait, go
                        ahead and add some data modules to your profile.

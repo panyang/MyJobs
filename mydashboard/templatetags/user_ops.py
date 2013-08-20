@@ -1,9 +1,11 @@
+
 from django import template
 from urlparse import urlparse
 from myjobs.models import User
 from myprofile.models import ProfileUnits, Name
 
-register=template.Library()
+register = template.Library()
+
 
 @register.filter(name='get_distinct_users')
 def get_distinct_users(values):
@@ -18,10 +20,11 @@ def get_distinct_users(values):
         users[name.user] = name.get_full_name()
 
     return users
-    
+
+
 @register.filter(name='url_domain')
 def url_domain(value):
-    """        
+    """
     Retrieve the given url from the candidate activity and returns a netloc
     version of the url
 
@@ -32,14 +35,10 @@ def url_domain(value):
     :updated_url.netloc: url netloc
     """
     active_url = value
-    
+
     if active_url.find('//') == -1:
         active_url = '//' + value
-    
+
     updated_url = urlparse(active_url)
 
     return updated_url.netloc
-    
-
-
-    

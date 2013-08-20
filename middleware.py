@@ -1,3 +1,4 @@
+import operator
 import re
 
 from django.conf import settings
@@ -12,6 +13,7 @@ if settings.NEW_RELIC_TRACKING:
         import newrelic.agent
     except ImportError:
         pass
+
 
 class RedirectMiddleware:
     """
@@ -28,22 +30,24 @@ class RedirectMiddleware:
     """
     def process_request(self, request):
         if request.user.is_authenticated():
-            if (not re.match(reverse('edit_account'), request.path) and
-                not re.match(reverse('edit_password'), request.path) and
-                not re.match(reverse('auth_logout'), request.path) and
-                not re.match(reverse('registration_activate', args=['a'])[0:-2],
-                                     request.path) and
-                request.user.password_change):
+            urls = [reverse('edit_account'),
+                    reverse('edit_password'),
+                    reverse('auth_logout'),
+                    reverse('registration_activate', args=['a'])[0:-2]]
+            url_matches = reduce(operator.or_,
+                                 [request.path.startswith(url)
+                                  for url in urls])
+
+            if (not url_matches and request.user.password_change):
                 return http.HttpResponseRedirect(reverse('edit_account'))
+
         elif request.is_ajax() and bool(request.REQUEST.get('next')):
             return http.HttpResponse(status=403)
-
 
 
 XS_SHARING_ALLOWED_ORIGINS = '*'
 XS_SHARING_ALLOWED_METHODS = ['POST','GET','OPTIONS', 'PUT', 'DELETE']
 XS_SHARING_ALLOWED_HEADERS = 'Content-Type'
-
 
 
 class XsSharing(object):

@@ -47,17 +47,16 @@
                         {% if user.password_change %}
                             <p>Welcome to my.jobs. Before doing anything else, you need to change your password from the one we created for you.</p>
                             {{ change_pass }}
-                        {% else %}
-                            <form action="" method="POST" id="form-basic">
-                              {% include "includes/form-error-highlight.html" %}
-                              {% csrf_token %}
-                              <div class="actions">
-                                <a href="" class="btn pull-right">{% trans 'Cancel' %}</a>
-                                <button type="submit" class="btn primary pull-right" value="submit">{% trans "Save" %}</button>
-                                <div class="clear"></div>
-                              </div>
-                            </form>
                         {% endif %}
+                        <form action="" method="POST" id="form-{{section_name}}">
+                          {% include "includes/form-error-highlight.html" %}
+                          {% csrf_token %}
+                          <div class="actions">
+                            <a href="" class="btn pull-right">{% trans 'Cancel' %}</a>
+                            <button type="submit" class="btn primary pull-right" value="submit">{% trans "Save" %}</button>
+                            <div class="clear"></div>
+                          </div>
+                        </form>
 
                         {% endblock%}
                     </div>

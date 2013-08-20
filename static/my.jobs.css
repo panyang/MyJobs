@@ -76,6 +76,11 @@ label[for^='id_sort_by'], label[for^='id_edit_sort_by'] {
     display: inline;
 }
 
+#profile-form-description {
+    padding-left: 10%;
+    padding-right: 10%;
+}
+
 .reset-form-input input[type="text"], .reset-form-input input[type="password"] {
     width: 100%;
 }
@@ -159,6 +164,10 @@ table#row-link-table {
     font-size: 1.5em;   
 }
 
+.candidate-name-bold {
+    font-weight: bold;   
+}
+
 .microsite-name {
     font-size: 1.2em;
     font-weight: bold;
@@ -178,6 +187,22 @@ table#row-link-table {
 
 .accordion-body {
     background-color: rgb(250, 250, 250);   
+}
+
+.centered {
+    text-align: center;
+}
+
+/* Django Endless paging style modifications */
+.endless_container .btn {
+    padding-left: 0px;
+    padding-right: 0px;
+    width: 100%;
+    margin-top: 10px;
+}
+
+.endless_container .btn + .btn {
+    margin-left: 0px;
 }
 
 /*Microsite Activity*/
@@ -289,6 +314,15 @@ table#row-link-table {
     color: #c44e34;
 }
 
+/* Contact Form Styles */
+#success-table tr td{
+    min-width: 101px;
+}
+
+#success-table tr td + td{
+    font-weight: bold;
+}
+
 /* Form Styles */
 .form-label {
     text-align: right;
@@ -389,7 +423,7 @@ fieldset select {
 }
 
 fieldset textarea,
-.profile-form-input input [type="text"] {
+.profile-form-input input[type="text"] {
     width: 248px;
 }
 
@@ -684,6 +718,10 @@ fieldset textarea,
 .input-prepend .add-on {
     width: 35%;
     text-align: right;
+}
+
+.text-right{
+    text-align: right !important;
 }
 
 .input-prepend input,
@@ -1290,6 +1328,11 @@ form input[type='checkbox'] {
     input [type='text'] + .help-block,
     div + .help-block{
         margin: -12px 0 0 5px;
+    }
+
+    /* Contact Form Styles */
+    #success-table tr td{
+        min-width: 0;
     }
     
     /*Employer Dashboard*/    

@@ -1,6 +1,6 @@
 {% load i18n %}
 {% comment %}
-**registration/activation_email.txt**
+**registration/activation_email.html**
 
 Used to generate the body of the activation email. Should display a
 link the user can click to activate the account. This template has the
@@ -31,20 +31,17 @@ the following link:
 {% endblocktrans %}
 {% endif %}
 </p>
-
-{% with "http://my.jobs/accounts/activate/"|add:activation_key as url %}
-<a href="{{url}}">{{url}}</a>
-{% endwith %}
-
+{% url 'registration_activate' activation_key as url %}
+<a href="http://my.jobs{{url}}?verify-email={{user.email}}">Activate my account.</a>
 
 {% if password %}
-{% blocktrans %}
+    {% blocktrans %}
 
-<p>Your temporary password is {{password}}</p>
+    <p>Your temporary password is {{password}}</p>
 
-<p>It must be changed upon logging in.</p>
+    <p>It must be changed upon logging in.</p>
 
-{% endblocktrans %}
+    {% endblocktrans %}
 {% endif %}
 
 {% blocktrans %}
@@ -55,4 +52,4 @@ the verification process.</p>
 
 {% endblocktrans %}
 
-<p>My.jobs <a href="http://my.jobs/terms">Terms</a> and <a href="http://my.jobs/privacy">Privacy</a></p>
+<p>My.jobs <a href="http://my.jobs{% url 'terms' %}">Terms</a> and <a href="http://my.jobs{% url 'privacy' %}">Privacy</a></p>

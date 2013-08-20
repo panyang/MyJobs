@@ -12,7 +12,7 @@ $(function() {
             "click [id$='save']": "saveForm",
 
             // targets email reactivation link in SecondaryEmail form
-            "click [id$='updateEmail']": "updateEmail",
+            "click [id='updateEmail']": "updateEmail",
 
             // targets calendar buttons for each DateField
             "click [class$='calendar']": "datepickerButton",

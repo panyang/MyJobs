@@ -14,20 +14,31 @@
             <table class="table table-bordered table-striped">
 
                 {% with module.item|process_field_types as fields %}
-                    {% for label, value, type in fields|slice:":3" %}
 
-                    <tr class="row">
-                        <td class="span3">{{ label }}</td>
-                        <td class="span9">{{ value }}</td>
-                    </tr>
+                    {% for label, value, type in fields %}
+
+                        {% if value == None or value == "" %}
+                        {% else %}
+
+                        <tr class="row">
+                            <td class="span3">{{ label }}</td>
+                            <td class="span9">{{ value }}</td>
+                        </tr>
+
+                        {% endif %}
 
                     {% endfor %}
+
                 {% endwith %}
 
             </table>
             <div class="actions">
                 <a class="btn primary pull-right" href="{% url 'view_profile' %}">{% trans 'Back' %}</a>
-                <a class="btn pull-right" id="{{module.name}}-{{module.item.id}}-view_edit">{% trans 'Edit' %}</a>
+                <form action="{% url 'handle_form' %}" class="profile-action-form" method="GET">
+                        <input type="hidden" name="id" value="{{module.item.id}}" >
+                        <input type="hidden" name="module" value="{{module.item.get_verbose.title}}" >
+                        <button type="submit" class="btn pull-right" >{% trans 'Edit' %}</button>
+                </form>
                 <div class="clear"></div>
             </div>
         </div>{# /formBox #}

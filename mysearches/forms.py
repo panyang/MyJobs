@@ -5,7 +5,7 @@ from django.utils.safestring import mark_safe
 from myjobs.forms import BaseUserForm, make_choices
 from mysearches.helpers import *
 from mysearches.models import SavedSearch, SavedSearchDigest
-from myprofile.models import SecondaryEmail
+
 
 class HorizontalRadioRenderer(RadioSelect.renderer):
     """
@@ -16,13 +16,13 @@ class HorizontalRadioRenderer(RadioSelect.renderer):
     def render(self):
             return mark_safe(u'\n'.join([u'%s\n' % w for w in self]))
 
+
 class SavedSearchForm(BaseUserForm):
     def __init__(self, *args, **kwargs):
         super(SavedSearchForm, self).__init__(*args, **kwargs)
         choices = make_choices(self.user)
         self.fields["email"] = ChoiceField(widget=Select(), choices=choices,
                                            initial=choices[0][0])
-
 
     feed = URLField(widget=HiddenInput())
 
@@ -60,14 +60,14 @@ class SavedSearchForm(BaseUserForm):
 
         # Check if form is editing existing instance and if duplicates exist
         if not self.instance.pk and SavedSearch.objects.filter(user=self.user,
-                                                url=self.cleaned_data['url']):
+                                                               url=self.cleaned_data['url']):
             raise ValidationError(_('URL must be unique.'))
         return self.cleaned_data['url']
         
     class Meta:
         model = SavedSearch
         widgets = {
-            'notes': Textarea(attrs={'rows':5, 'cols':24}),
+            'notes': Textarea(attrs={'rows': 5, 'cols': 24}),
             'sort_by': RadioSelect(renderer=HorizontalRadioRenderer)
         }
 
@@ -77,15 +77,13 @@ class DigestForm(BaseUserForm):
         super(DigestForm, self).__init__(*args, **kwargs)
         choices = make_choices(self.user)
         self.fields["email"] = ChoiceField(widget=Select(attrs={
-                                           'id':'id_digest_email'}),
+                                           'id': 'id_digest_email'}),
                                            choices=choices,
                                            initial=choices[0][0])
 
-    is_active = BooleanField(label=_('Send my results in a single digest email'
-                                         ' to:'),
-                                     widget=CheckboxInput(
-                                         attrs={'id': 'id_digest_active'}),
-                                     required=False)
+    is_active = BooleanField(label=_('Send my results in a single digest email to:'),
+                             widget=CheckboxInput(attrs={'id': 'id_digest_active'}),
+                             required=False)
     
     class Meta:
         model = SavedSearchDigest

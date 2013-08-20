@@ -12,6 +12,7 @@ from django.template import RequestContext
 from django.shortcuts import render_to_response, get_object_or_404
 from django.views.generic import TemplateView
 
+from myjobs.decorators import user_is_allowed
 from myjobs.models import User
 from myjobs.forms import *
 from myjobs.helpers import *
@@ -19,45 +20,38 @@ from myprofile.forms import *
 from myprofile.models import ProfileUnits
 from registration.forms import *
 
+
+@user_is_allowed()
 @user_passes_test(User.objects.not_disabled)
 def edit_profile(request):
     """
     Main profile view that the user first sees. Ultimately generates the
     following in data_dict:
 
-    :profile_config: A list of dictionaries. Each dictionary represents a
-                     different module (based on module_list) with the keys:
-                     verbose - the displayable title of the module
-                     name - the module name as it's named in the models.
-                     items - all the instances in that module for the user
+    :profile_config:    A dictionary of profile units
+    :empty_display_names: A list of ProfileUnits that hasn't been made
     """
 
-    settings = {'user': request.user}
-    module_list = ['Name', 'Education', 'EmploymentHistory', 'SecondaryEmail',
-                   'Telephone', 'Address', 'MilitaryService']
-    units = request.user.profileunits_set
-    profile_config = []
-    
-    for module in module_list:
-        model = globals()[module]
-        verbose = model._meta.verbose_name
+    user = request.user
 
-        x= []
-        module_config = {} 
-        module_units = units.filter(content_type__name=verbose)
+    profile_config = user.profileunits_dict()
 
-        module_config['verbose'] = verbose.title()
-        module_config['name'] = module
-        for unit in module_units:
-            if hasattr(unit, module.lower()):
-                x.append(getattr(unit, module.lower()))
-        module_config['items'] = x
-        
-        profile_config.append(module_config)
+    empty_units = [model for model in ProfileUnits.__subclasses__()]
+
+    for units in profile_config.itervalues():
+        if units[0].__class__ in empty_units:
+            del empty_units[empty_units.index(units[0].__class__)]
+
+    empty_names = [model.get_verbose_class() for model in empty_units]
+    empty_display_names = []
+    for name in empty_names:
+        name_with_space = re.sub(r"(\w)([A-Z])", r"\1 \2", name)
+        empty_display_names.append(name_with_space)
 
     data_dict = {'profile_config': profile_config,
+                 'unit_names': empty_display_names,
                  'view_name': 'My Profile'}
-    
+
     return render_to_response('myprofile/edit_profile.html', data_dict,
                               RequestContext(request))
 
@@ -66,6 +60,7 @@ def edit_profile(request):
 def handle_form(request):
     item_id = request.REQUEST.get('id', 'new')
     module = request.REQUEST.get('module')
+    module = module.replace(" ", "")
 
     item = None
     if item_id != 'new':
@@ -76,6 +71,8 @@ def handle_form(request):
             # User is trying to access a nonexistent PU
             # or a PU that belongs to someone else
             raise Http404
+
+    item_class = item.__class__
 
     try:
         form = globals()[module + 'Form']
@@ -89,14 +86,17 @@ def handle_form(request):
 
     if request.method == 'POST':
         if request.POST.get('action') == 'updateEmail':
-            activation = ActivationProfile.objects.get_or_create(user=request.user, email=item.email)[0]
+            activation = ActivationProfile.objects.get_or_create(user=request.user,
+                                                                 email=item.email)[0]
             activation.send_activation_email(primary=False)
             return HttpResponse('success')
 
         if item_id == 'new':
-            form_instance = form(user=request.user, data=request.POST, auto_id=False)
+            form_instance = form(user=request.user, data=request.POST,
+                                 auto_id=False)
         else:
-            form_instance = form(user=request.user, instance=item, auto_id=False, data=request.POST)
+            form_instance = form(user=request.user, instance=item,
+                                 auto_id=False, data=request.POST)
         model = form_instance._meta.model
         data_dict['form'] = form_instance
         data_dict['verbose'] = model._meta.verbose_name.title()
@@ -156,10 +156,11 @@ def delete_item(request, item_id):
 def get_details(request):
     module_config = {}
     item_id = request.GET.get('id')
+    module = request.GET.get('module')
+    module = module.replace(" ", "")
     item = get_object_or_404(request.user.profileunits_set,
                              pk=item_id)
-    module = item.content_type.model
-    item = getattr(item, module)
+    item = getattr(item, module.lower())
     model = item.__class__
     module_config['verbose'] = model._meta.verbose_name.title()
     module_config['name'] = module
