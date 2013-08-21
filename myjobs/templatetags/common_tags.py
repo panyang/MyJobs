@@ -26,7 +26,7 @@ def completion_level(level):
     """
     
     if level <= 20:
-        return "error"
+        return "danger"
     elif level <= 40:
         return "warning"
     elif level <= 60:
