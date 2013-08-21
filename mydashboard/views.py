@@ -18,23 +18,30 @@ from endless_pagination.decorators import page_template
 @page_template("mydashboard/dashboard_activity.html")
 @user_passes_test(lambda u: User.objects.is_group_member(u, 'Employer'))
 def dashboard(request, template="mydashboard/mydashboard.html",
-              extra_context=None):
+              extra_context=None, company=None):
+    """
+    Returns a list of candidates who created a saved search for one of the
+    microsites within the company microsite list or with the company name like
+    jobs.jobs/company_name/careers for example between the given (optional) dates
+    """
 
-    try:
-        company_id = request.REQUEST.get('company')
-    except Company.DoesNotExist:
-        raise Http404
+    company_id = request.REQUEST.get('company')
+    if company_id is None:
+        try:
+            company = Company.objects.filter(admins=request.user)[0]
+        except Company.DoesNotExist:
+            raise Http404
 
-    # Returns a list of candidates who created a saved search for one of the
-    # microsites within the company microsite list or with the company name like
-    # jobs.jobs/company_name/careers for example between the given (optional) dates
     context = {
         'candidates': SavedSearch.objects.all(),
     }
-    try:
-        company = Company.objects.get(admins=request.user, id=company_id)
-    except:
-        raise Http404
+
+    if not company:
+        try:
+            company = Company.objects.get(admins=request.user, id=company_id)
+        except:
+            raise Http404
+
     admins = CompanyUser.objects.filter(company=company.id)
     authorized_microsites = Microsite.objects.filter(company=company.id)
     
