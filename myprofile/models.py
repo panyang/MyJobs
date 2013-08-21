@@ -20,7 +20,7 @@ class ProfileUnits(models.Model):
                                         editable=False)
     date_updated = models.DateTimeField(default=datetime.datetime.now,
                                         editable=False)
-    content_type = models.ForeignKey(ContentType, editable=False,null=True)
+    content_type = models.ForeignKey(ContentType, editable=False, null=True)
     user = models.ForeignKey(User, editable=False)
 
     def save(self, *args, **kwargs):
@@ -57,9 +57,6 @@ class ProfileUnits(models.Model):
 
     def get_verbose(self):
         return self.content_type.name.title()
-
-    def is_displayed(self):
-        return True
 
 
 class Education(ProfileUnits):
@@ -223,9 +220,6 @@ class Name(ProfileUnits):
 
     def __unicode__(self):
         return self.get_full_name()
-
-    def is_displayed(self):
-        return self.primary
 
     def switch_primary_name(self, *args, **kwargs):
         try:
