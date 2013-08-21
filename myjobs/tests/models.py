@@ -73,7 +73,7 @@ class UserManagerTests(TestCase):
         # This is ugly, but it is an artifact of the way Django redirects
         # users who fail the `user_passes_test` decorator.
         qs = '?verify-email=%s' % user.email
-        next_qs = '?next=' + urlquote('/profile/%s' % qs)
+        next_qs = '?next=' + urlquote('/profile/view/%s' % qs)
 
         # Anonymous user navigates to url with :verify-email: in query string
         resp = client.get(reverse('view_profile') + qs)
@@ -89,7 +89,7 @@ class UserManagerTests(TestCase):
         user.is_disabled = True
         user.save()
         resp = client.get(reverse('view_profile'))
-        self.assertRedirects(resp, "http://testserver/?next=/profile/")
+        self.assertRedirects(resp, "http://testserver/?next=/profile/view/")
 
     def test_is_active(self):
         """
