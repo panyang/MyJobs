@@ -22,3 +22,8 @@
 .progress {
     border: 1px solid #333;
 }
+
+.activity-progress {
+    border-radius: 0;
+}
+
