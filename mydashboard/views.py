@@ -238,6 +238,7 @@ def candidate_information(request, user_id):
         for name in models.pop('name'):
             if name.primary is True:
                 primary_name = name
+                break
 
     searches = user.savedsearch_set.filter(url__in=urls)
 
