@@ -270,11 +270,14 @@ class User(AbstractBaseUser):
                                           email=self.email)
 
     def update_profile_completion(self):
+        """
+        Updates the percent of modules in
+        settings.PROFILE_COMPLETION_MODULES that a user has completed.
+        """
         profile_dict = self.profileunits_set.all()        
         num_complete = len(list(set([unit.get_model_name() for unit
                            in profile_dict if unit.get_model_name()
                            in settings.PROFILE_COMPLETION_MODULES])))
-        print num_complete
         self.profile_completion = int(float(1.0 * num_complete/
                                   len(settings.PROFILE_COMPLETION_MODULES))*100)
         self.save()
