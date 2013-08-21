@@ -924,6 +924,10 @@ em.pendingText {
     #settings-link {
         display: none !important;
     }
+    
+    #account-link, #logout-link {
+        display: block;
+    }
 
     .topbar ul {
         position: relative;
