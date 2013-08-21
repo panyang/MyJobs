@@ -235,10 +235,9 @@ def candidate_information(request, user_id):
 
     # if Name ProfileUnit exists
     if models.get('name'):
-        for name in models.get('name'):
+        for name in models.pop('name'):
             if name.primary is True:
                 primary_name = name
-        models.pop('name')
 
     searches = user.savedsearch_set.filter(url__in=urls)
 
