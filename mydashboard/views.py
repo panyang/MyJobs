@@ -140,7 +140,7 @@ def dashboard(request, template="mydashboard/mydashboard.html",
 @page_template("mydashboard/site_activity.html")
 @user_passes_test(lambda u: User.objects.is_group_member(u, 'Employer'))
 def microsite_activity(request, template="mydashboard/microsite_activity.html",
-                       extra_context=None):
+                       extra_context=None, company=None):
     """
     Returns the activity information for the microsite that was select on the
     employer dashboard page.  Candidate activity for saved searches, job
@@ -149,12 +149,18 @@ def microsite_activity(request, template="mydashboard/microsite_activity.html",
     context = {'candidates': SavedSearch.objects.all(),
                }
 
-    try:
-        company_id = request.REQUEST.get('company')
-    except Company.DoesNotExist:
-        raise Http404
+    company_id = request.REQUEST.get('company')
+    if company_id is None:
+        try:
+            company = Company.objects.filter(admins=request.user)[0]
+        except Company.DoesNotExist:
+            raise Http404
 
-    company = Company.objects.get(admins=request.user, id=company_id)
+    if not company:
+        try:
+            company = Company.objects.get(admins=request.user, id=company_id)
+        except:
+            raise Http404
     
     requested_microsite = request.REQUEST.get('url', False)
     requested_date_button = request.REQUEST.get('date_button', False)
@@ -234,17 +240,18 @@ def candidate_information(request):
     the microsites' domains in a list for further checking and logic,
     see helpers.py.
     """
-    try:
-        user_id = request.REQUEST.get('user')
-        company_id = request.REQUEST.get('company')
-    except User.DoesNotExist or Company.DoesNotExist:
-        raise Http404
+
+    user_id = request.REQUEST.get('user')
+    company_id = request.REQUEST.get('company')
 
     # gets returned with response to request
     name = "Name not given"
 
-    company = Company.objects.get(id=company_id)
-    user = User.objects.get(id=user_id)
+    try:
+        user = User.objects.get(id=user_id)
+        company = Company.objects.get(id=company_id)
+    except User.DoesNotExist or Company.DoesNotExist:
+        raise Http404
 
     if not user.opt_in_employers:
         raise Http404
