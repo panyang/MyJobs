@@ -68,6 +68,17 @@ label[for^='id_sort_by'], label[for^='id_edit_sort_by'] {
     margin-top: -27px;
 }
 
+#profileTitleRow{
+    margin-bottom: 20px;
+}
+#profileTitleRow img{
+    border-radius:5px;
+    border: 2px solid #b34529;
+}
+#profileTitleBar{
+    border-bottom: 2px solid #b34529;
+}
+
 .profile-form-input input[type!=checkbox] {
     width: 40%;
 }
@@ -81,6 +92,14 @@ label[for^='id_sort_by'], label[for^='id_edit_sort_by'] {
     padding-right: 10%;
 }
 
+#moduleColumn .add-module-btn {
+    font-weight: normal;
+}
+
+.add-module-btn span{
+    font-weight: bold;
+}
+    
 .reset-form-input input[type="text"], .reset-form-input input[type="password"] {
     width: 100%;
 }
@@ -457,7 +476,7 @@ fieldset textarea,
 
 .formBox {
     background-color: #e4e0d5;
-    padding: 5px 5px 30px 5px;
+    padding: 5px 5px 10px 5px;
     border-left: 1px solid #d5d4d0;
     border-right: 1px solid #d5d4d0;
     border-bottom: 1px solid #d5d4d0;
@@ -566,6 +585,10 @@ fieldset textarea,
 .formBox table {
     color: #000;
     background: #fff;
+}
+
+.formBox table.small-margin {
+    margin: 5px 0;
 }
 
 .loginBox input, .profileBox input {
@@ -959,7 +982,9 @@ em.pendingText {
 }
 
 #moduleColumn td.action {
-    min-width: 135px;
+    padding-left: 10px;
+    padding-right: 10px;
+    width: 135px;
 }
 
 /* Footer Styles */
@@ -1278,7 +1303,42 @@ form input[type='checkbox'] {
     .profile-mobile tr { 
         display: block; 
     }
-
+    #profileTitleRow .span2{
+        float: left;
+        width: 30%;
+    }
+    #profileTitleRow .span10{
+        float: left;
+        width: auto;
+    }
+    
+    #profileTitleBar {
+        border: 0;
+    }
+    
+    #profileTitleBar h1{
+        font-size: 1.5em;
+        line-height: auto;
+        margin: 0;        
+    }
+    
+    #profileTitleBar h3{
+        font-size: .8em;
+        line-height: auto;
+        margin: 0;
+    }
+    
+    #profileSubtitleBar {
+        display: block;
+        float: none;
+        width: auto;
+    }
+    
+    #profileSubtitleBar a {
+        display: block;
+        margin: 5px 0
+    }
+    
     .profile-mobile thead tr { 
         position: absolute;
         top: -9999px;
@@ -1308,7 +1368,7 @@ form input[type='checkbox'] {
         text-align:left;
         font-weight: bold;
      }
-  
+
     .table-striped tbody tr:nth-child(even) td {
         background-color: #FFF !important;
     }
@@ -1319,6 +1379,18 @@ form input[type='checkbox'] {
       
     .profile-mobile td:before {
         content: attr(data-title);
+    }
+    
+    #moduleColumn td.action {
+        width: auto;
+    }
+    
+    .add-module-btn,
+    .profile-mobile a.btn {        
+        display: block;
+        float: none;
+        margin: 5px 0;
+        width: auto;
     }
     
     #moduleBank {
