@@ -16,7 +16,7 @@
                     <div class="candidate-name">{{candidate.user|get_name_obj}}</div>
                     <a href="{{ candidate.user.id }}">{{candidate.user}}</a>
                     <div class="progress activity-progress">
-                        <div class="bar bar-{% completion_level user.profile_completion %}" style="width: {{ user.profile_completion }}%"></div>
+                        <div class="bar bar-{% completion_level candidate.user.profile_completion %}" style="width: {{ user.profile_completion }}%"></div>
                     </div>
                 </td>
                 <td>
@@ -34,7 +34,7 @@
                     <a href="{{ candidate.user.id }}" class="candidate-activity-mobile pull-left">{{candidate.user}}</a>
                     <br>
                     <div class="progress activity-progress">
-                        <div class="bar bar-{% completion_level user.profile_completion %}" style="width: {{ user.profile_completion }}%"></div>
+                        <div class="bar bar-{% completion_level candidate.user.profile_completion %}" style="width: {{ user.profile_completion }}%"></div>
                     </div>
                 </td>
              <tr>
