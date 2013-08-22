@@ -92,6 +92,14 @@ label[for^='id_sort_by'], label[for^='id_edit_sort_by'] {
     padding-right: 10%;
 }
 
+#moduleColumn .add-module-btn {
+    font-weight: normal;
+}
+
+.add-module-btn span{
+    font-weight: bold;
+}
+    
 .reset-form-input input[type="text"], .reset-form-input input[type="password"] {
     width: 100%;
 }
@@ -1360,7 +1368,7 @@ form input[type='checkbox'] {
         text-align:left;
         font-weight: bold;
      }
-  
+
     .table-striped tbody tr:nth-child(even) td {
         background-color: #FFF !important;
     }

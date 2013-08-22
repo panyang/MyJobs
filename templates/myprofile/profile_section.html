@@ -49,7 +49,7 @@
     {% endif %}
     <a class="btn primary pull-right add-module-btn" 
         href="{% url 'handle_form' %}?module={{ module.0.get_verbose.title }}">
-        {% trans 'Add' %}
+        {% trans 'Add' %} <span>{{ module.0.get_verbose.title }}</span>
     </a>
     <div class="clear"></div>
 </div>
