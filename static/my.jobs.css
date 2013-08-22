@@ -30,7 +30,12 @@ a {
 a:hover {
     color: #a42e14;
 }
-    
+
+.activity-progress {
+    height: 6px;
+    width: 100px;
+}
+
 /*Candidate Activity mobile desktop hide*/
 .candidate-activity-mobile {
     display: none;
@@ -90,6 +95,16 @@ label[for^='id_sort_by'], label[for^='id_edit_sort_by'] {
 #profile-form-description {
     padding-left: 10%;
     padding-right: 10%;
+}
+
+#profile-completion {
+    font-weight: bold;
+    line-height: 25px;
+    padding: 6px !important; 
+}
+
+#highlight {
+    color: #b34529;    
 }
 
 #moduleColumn .add-module-btn {
@@ -1295,6 +1310,10 @@ form input[type='checkbox'] {
 }
 
 @media screen and (max-width: 500px) {
+    #profile-completion {
+        display: none;
+    }
+    
     .profile-mobile table, 
     .profile-mobile thead, 
     .profile-mobile tbody, 
@@ -1368,7 +1387,7 @@ form input[type='checkbox'] {
         text-align:left;
         font-weight: bold;
      }
-
+  
     .table-striped tbody tr:nth-child(even) td {
         background-color: #FFF !important;
     }

@@ -245,3 +245,12 @@ GRAVATAR_URL_DEFAULT = 'mm'
 CAPTCHA_AJAX = True
 
 NEW_RELIC_TRACKING = False
+
+# Modules considered when calculating profile completion
+PROFILE_COMPLETION_MODULES = (
+    'address',
+    'telephone',
+    'education',
+    'secondaryemail',
+    'name'
+)
