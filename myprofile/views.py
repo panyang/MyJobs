@@ -125,7 +125,8 @@ def handle_form(request):
 
 
 @user_passes_test(User.objects.not_disabled)
-def delete_item(request, item_id):
+def delete_item(request):
+    item_id = request.REQUEST.get('item')
     try:
         request.user.profileunits_set.get(id=item_id).delete()
     except ProfileUnits.DoesNotExist:

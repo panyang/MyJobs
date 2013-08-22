@@ -1,6 +1,4 @@
-from django.conf.urls.defaults import patterns, url, include
-from django.contrib import admin
-from django.http import HttpResponsePermanentRedirect
+from django.conf.urls import patterns, url, include
 from django.views.generic import RedirectView
 
 from myjobs.views import *

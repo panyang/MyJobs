@@ -295,7 +295,7 @@ class User(AbstractBaseUser):
 
         Outputs:
         :models:        Returns a dictionary of profileunits, an example:
-                        {u'Name': [<Name: Foo Bar>, <Name: Bar Foo>]}
+                        {u'name': [<Name: Foo Bar>, <Name: Bar Foo>]}
         """
         if not profileunits:
             units = self.profileunits_set.all()
@@ -305,9 +305,8 @@ class User(AbstractBaseUser):
         models = {}
 
         for unit in units:
-            if getattr(unit, unit.get_model_name()).is_displayed():
-                models.setdefault(unit.get_model_name(), []).append(
-                    getattr(unit, unit.get_model_name()))
+            models.setdefault(unit.get_model_name(), []).append(
+                getattr(unit, unit.get_model_name()))
 
         return models
 

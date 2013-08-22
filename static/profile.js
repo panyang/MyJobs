@@ -160,7 +160,7 @@ $(function() {
 
             $.ajax({
                 type: 'POST',
-                url: '/profile/edit/',
+                url: '/profile/view/edit',
                 data: serialized_data,
                 success: function(data) {
                      $("#activation_notification").replaceWith("<div class='alert alert-success'>Activation email resent to " + $("[name='email']").val() + "</div>");
@@ -196,12 +196,12 @@ $(function() {
 
             $.ajax({
                 type: 'POST',
-                url: '/profile/edit/',
+                url: '/profile/view/edit',
                 data: serialized_data,
                 success: function(data, status) {
                     if (data == '') {
                         if (status != 'prevent-redirect') {
-                            window.location = '/profile/';
+                            window.location = '/profile/view/';
                         }
                     } else {
                         // form was a json-encoded list of errors and error messages

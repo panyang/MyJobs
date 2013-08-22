@@ -14,7 +14,6 @@ from django.shortcuts import render_to_response
 from mydashboard.helpers import saved_searches
 from mydashboard.models import *
 from myjobs.models import User
-from myprofile.models import ProfileUnits
 from mysearches.models import SavedSearch
 from endless_pagination.decorators import page_template
 
@@ -216,7 +215,7 @@ def candidate_information(request, user_id):
     see helpers.py.
     """
     # gets returned with response to request
-    name = "Name not given"
+    primary_name = "Name not given"
 
     # user gets pulled out from id
     try:
@@ -236,13 +235,15 @@ def candidate_information(request, user_id):
 
     # if Name ProfileUnit exists
     if models.get('name'):
-        name = models['name'][0]
-        models.pop('name')
+        for name in models.pop('name'):
+            if name.primary is True:
+                primary_name = name
+                break
 
     searches = user.savedsearch_set.filter(url__in=urls)
 
     data_dict = {'user_info': models,
-                 'primary_name': name,
+                 'primary_name': primary_name,
                  'the_user': user,
                  'searches': searches}
 
