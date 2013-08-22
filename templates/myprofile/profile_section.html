@@ -5,7 +5,7 @@
 
     {% if module.0 %}
 
-    <table class="table table-bordered table-striped">
+    <table class="table table-bordered table-striped small-margin">
         <thead>
             <tr>
 
@@ -32,11 +32,11 @@
                     {% endfor %}
                 {% endwith %}
                 <td class="action">
-                    <a class="btn pull-right" href="{% url 'handle_form' %}?id={{ item.id }}&module={{ item.get_verbose.title }}">
-                        {% trans 'Edit' %}
-                    </a>
-                    <a class="btn pull-right" href="{% url 'get_details' %}?id={{ item.id }}&module={{ item.get_verbose.title }}">
+                    <a class="btn" href="{% url 'get_details' %}?id={{ item.id }}&module={{ item.get_verbose.title }}">
                         {% trans 'Details' %}
+                    </a>
+                    <a class="btn" href="{% url 'handle_form' %}?id={{ item.id }}&module={{ item.get_verbose.title }}">
+                        {% trans 'Edit' %}
                     </a>
                 </td>
             </tr>
@@ -47,8 +47,9 @@
     </table>
 
     {% endif %}
-
-    <a class="btn primary" href="{% url 'handle_form' %}?module={{ module.0.get_verbose.title }}">
+    <a class="btn primary pull-right add-module-btn" 
+        href="{% url 'handle_form' %}?module={{ module.0.get_verbose.title }}">
         {% trans 'Add' %}
     </a>
+    <div class="clear"></div>
 </div>
