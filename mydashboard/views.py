@@ -22,7 +22,14 @@ def dashboard(request, template="mydashboard/mydashboard.html",
     """
     Returns a list of candidates who created a saved search for one of the
     microsites within the company microsite list or with the company name like
-    jobs.jobs/company_name/careers for example between the given (optional) dates
+    jobs.jobs/company_name/careers for example between the given (optional)
+    dates
+
+    Inputs:
+    :company:               company.id that is associated with request.user
+
+    Returns:
+    :render_to_response:    renders template with context dict
     """
 
     company_id = request.REQUEST.get('company')
@@ -145,6 +152,12 @@ def microsite_activity(request, template="mydashboard/microsite_activity.html",
     Returns the activity information for the microsite that was select on the
     employer dashboard page.  Candidate activity for saved searches, job
     views, etc.
+
+    Inputs:
+    :company:               company.id that is associated with request.user
+
+    Returns:
+    :render_to_response:    renders template with context dict
     """
     context = {'candidates': SavedSearch.objects.all(),
                }
