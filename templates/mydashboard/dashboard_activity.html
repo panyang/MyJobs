@@ -15,6 +15,9 @@
                 <td>
                     <div class="candidate-name">{{candidate.user|get_name_obj}}</div>
                     <a href="{% url 'candidate_information' %}?company={{ company_id }}&user={{ candidate.user.id }}">{{candidate.user}}</a>
+                    <div class="progress activity-progress">
+                        <div class="bar bar-{% completion_level candidate.user.profile_completion %}" style="width: {{ candidate.user.profile_completion }}%"></div>
+                    </div>
                 </td>
                 <td>
                     <strong>{% if candidate.label %}{{candidate.label}}{% else %}Unlabeled{% endif %}</strong><br>
@@ -29,6 +32,10 @@
                 <td>
                     <div class="candidate-name pull-left">{{candidate.user|get_name_obj}}</div>
                     <a href="{% url 'candidate_information' %}?company={{ company_id }}&user={{ candidate.user.id }}" class="candidate-activity-mobile pull-left">{{candidate.user}}</a>
+                    <br>
+                    <div class="progress activity-progress">
+                        <div class="bar bar-{% completion_level candidate.user.profile_completion %}" style="width: {{ candidate.user.profile_completion }}%"></div>
+                    </div>
                 </td>
              <tr>
              {% endfor %}                    

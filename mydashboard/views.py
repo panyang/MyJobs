@@ -258,8 +258,9 @@ def candidate_information(request):
     company_id = request.REQUEST.get('company')
 
     # gets returned with response to request
-    name = "Name not given"
+    primary_name = "Name not given"
 
+    # user gets pulled out from id
     try:
         user = User.objects.get(id=user_id)
         company = Company.objects.get(id=company_id)
@@ -278,8 +279,10 @@ def candidate_information(request):
 
     # if Name ProfileUnit exists
     if models.get('name'):
-        name = models['name'][0]
-        models.pop('name')
+        for name in models.pop('name'):
+            if name.primary is True:
+                primary_name = name
+                break
 
     if request.REQUEST.get('url'):
         microsite_url = request.REQUEST.get('url')
@@ -291,7 +294,7 @@ def candidate_information(request):
 
     data_dict = {'user_info': models,
                  'company_id': company_id,
-                 'primary_name': name,
+                 'primary_name': primary_name,
                  'the_user': user,
                  'searches': searches,
                  'coming_from': coming_from}
