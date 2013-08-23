@@ -304,6 +304,13 @@ class MilitaryService(ProfileUnits):
     honor = models.CharField(max_length=255, blank=True,
                                 verbose_name="Honors")
 
+class License(ProfileUnits):
+    license_name = models.CharField(max_length=255, verbose_name="License Name")
+    license_type = models.CharField(max_length=255, verbose_name="License Type")
+    description = models.CharField(max_length=255, verbose_name="Description",
+                                   blank=True)
+
+
 
 def delete_secondary_activation(sender, **kwargs):
     """

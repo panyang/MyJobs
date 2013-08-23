@@ -150,7 +150,13 @@ class MilitaryServiceForm(BaseUserForm):
 
     def clean_end_rank(self):
         return self.cleaned_data['end_rank'].upper()
-        
+
+class LicenseForm(BaseUserForm):
+    class Meta:
+        form_name = _("License")
+        model = License
+        widgets = generate_custom_widgets(model)    
+    
 
 class InitialForm(BaseUserForm):
     def __init__(self, *args, **kwargs):
