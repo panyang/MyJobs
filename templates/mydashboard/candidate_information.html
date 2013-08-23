@@ -20,7 +20,7 @@
     </div>
     <div class="row default-heading-candidate-view">
     	<span class="span6">
-    		<a class="btn primary" href="{% if coming_from.path == 'view' %}{% url 'dashboard' %}?company={{ company_id }}{% else %}{% url 'microsite_activity' %}?company={{ company_id }}&url={{ coming_from.url }}{% endif %}">Back to Company Dashboard</a>
+    		<a class="btn primary" onclick="window.location.replace(document.referrer)">Back to Company Dashboard</a>
     	</span>
     </div>
     <div class="span4 mobile-heading-candidate-view">
