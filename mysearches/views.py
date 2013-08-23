@@ -1,12 +1,10 @@
 import json
 from datetime import datetime
-from itertools import chain
 
-from django.contrib.auth import authenticate, login
-from django.contrib.auth.decorators import login_required, user_passes_test
+from django.contrib.auth.decorators import user_passes_test
 from django.core.urlresolvers import reverse
 from django.http import HttpResponseRedirect, HttpResponse, Http404
-from django.template import RequestContext, loader
+from django.template import RequestContext
 from django.shortcuts import render_to_response, get_object_or_404
 
 from myjobs.decorators import user_is_allowed
@@ -16,7 +14,7 @@ from mysearches.forms import SavedSearchForm, DigestForm
 from mysearches.helpers import *
 
 
-@user_is_allowed(SavedSearch, 'search_id', pass_user=True)
+@user_is_allowed(SavedSearch, 'id', pass_user=True)
 def delete_saved_search(request, search_id, user=None):
     user = user or request.user
     try:
@@ -198,7 +196,7 @@ def save_edit_form(request):
                 return HttpResponse(json.dumps(form.errors))
 
 
-@user_is_allowed(SavedSearch, 'search_id', pass_user=True)
+@user_is_allowed(SavedSearch, 'id', pass_user=True)
 def unsubscribe(request, search_id, user=None):
     """
     Deactivates a user's saved searches.

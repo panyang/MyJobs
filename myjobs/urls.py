@@ -12,7 +12,7 @@ editpatterns = patterns('MyJobs.myjobs.views',
 )
 
 accountpatterns = patterns('MyJobs.myjobs.views',
-    url(r'^$', 'edit_account', name='edit_account'),
+    url(r'^edit/$', 'edit_account', name='edit_account'),
     url(r'^delete$', 'delete_account', name='delete_account'),
     url(r'^disable$', 'disable_account', name='disable_account'),
     url(r'^edit$',
@@ -28,6 +28,6 @@ urlpatterns = patterns('MyJobs.myjobs.views',
     url(r'^batch$', 'batch_message_digest', name='batch_message_digest'),
     url(r'^unsubscribe/$', unsubscribe_all, name='unsubscribe_all'),
     url(r'^account/', include(accountpatterns)),
-    url(r'^edit/', include(editpatterns)),
+    url(r'^account/edit/', include(editpatterns)),
     url(r'^send/$', 'continue_sending_mail', name='continue_sending_mail'),
 )
