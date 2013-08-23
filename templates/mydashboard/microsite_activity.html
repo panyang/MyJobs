@@ -89,10 +89,10 @@ $(document).ready(function()
         </div>
         <div class="span12" id="profileTitleBar">                          
         </div>
-        <div class="span12 hide-desktop hide-tablet"><a class="btn-size btn primary" href="{% url 'dashboard' user.email %}">Back to Company Dashboard</a></div>
+        <div class="span12 hide-desktop hide-tablet"><a class="btn-size btn primary" href="{% url 'dashboard' %}">Back to Company Dashboard</a></div>
         <br>
         <div class="span12 hide-desktop hide-tablet"><a href="{{microsite_url}}" class="btn-size btn">View Site</a></div>
-        <span class="span6 hide-mobile"><a class="btn primary" href="{% url 'dashboard' user.email %}">Back to Company Dashboard</a><a href="{{microsite_url}}" class="btn">View Site</a></span>
+        <span class="span6 hide-mobile"><a class="btn primary" href="{% url 'dashboard' %}">Back to Company Dashboard</a><a href="{{microsite_url}}" class="btn">View Site</a></span>
     </div>
     <div class="row">
         <div class="hide-desktop">

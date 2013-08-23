@@ -1,7 +1,7 @@
 {% load i18n %}
 
 {% if not user.is_active and section_name == 'communication' %}
-  <p>{% trans "Your account doesn't have full access to MyJobs features! Please activate it using the activation link sent to your email. "%} <a href="{% url 'resend_activation' user.email %}">{% trans "Resend my activation email." %}</a></p>
+  <p>{% trans "Your account doesn't have full access to MyJobs features! Please activate it using the activation link sent to your email. "%} <a href="{% url 'resend_activation' %}">{% trans "Resend my activation email." %}</a></p>
 {% endif %}
 
 <form action="" method="POST" id="form-{{section_name}}">
