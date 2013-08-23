@@ -17,7 +17,8 @@ from mysearches.helpers import *
 
 
 @user_is_allowed(SavedSearch, 'search_id', pass_user=True)
-def delete_saved_search(request, search_id, user=None):
+def delete_saved_search(request, user=None):
+    search_id = request.REQUEST.get('id')
     user = user or request.user
     try:
         search_id = int(search_id)
@@ -55,7 +56,8 @@ def saved_search_main(request):
 @user_is_allowed()
 @user_passes_test(User.objects.is_active)
 @user_passes_test(User.objects.not_disabled)
-def view_full_feed(request, search_id):
+def view_full_feed(request):
+    search_id = request.REQUEST.get('id')
     saved_search = SavedSearch.objects.get(id=search_id)
     if request.user == saved_search.user:
         url_of_feed = url_sort_options(saved_search.feed,
@@ -163,7 +165,8 @@ def save_search_form(request):
 
 @user_passes_test(User.objects.is_active)
 @user_passes_test(User.objects.not_disabled)
-def edit_search(request, search_id=None):
+def edit_search(request):
+    search_id = request.REQUEST.get('id')
     if search_id:
         try:
             saved_search = SavedSearch.objects.get(id=search_id,
@@ -199,7 +202,7 @@ def save_edit_form(request):
 
 
 @user_is_allowed(SavedSearch, 'search_id', pass_user=True)
-def unsubscribe(request, search_id, user=None):
+def unsubscribe(request, user=None):
     """
     Deactivates a user's saved searches.
 
@@ -208,6 +211,7 @@ def unsubscribe(request, search_id, user=None):
     :search_id: the string 'digest' to disable all searches
         or the id value of a specific search to be disabled
     """
+    search_id = request.REQUEST.get('id')
     user = user or request.user
     try:
         search_id = int(search_id)
