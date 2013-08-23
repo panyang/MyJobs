@@ -154,7 +154,7 @@ class MyJobsViewsTests(TestCase):
 
         self.assertEquals(resp.content, 'valid')
 
-    def _ncomplete_profile_form(self):
+    def test_incomplete_profile_form(self):
         # Form with incomplete sections should return a page with "This field
         # "is required" errors
         resp = self.client.post(reverse('home'),
