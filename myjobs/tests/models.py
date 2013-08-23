@@ -110,7 +110,7 @@ class UserManagerTests(TestCase):
         user.is_active = False
         user.save()
         resp = client.get(reverse('saved_search_main'))
-        self.assertRedirects(resp, "http://testserver/?next=/saved-search/")
+        self.assertRedirects(resp, "http://testserver/?next=/saved-search/view/")
 
     def test_group_status(self):
         """
