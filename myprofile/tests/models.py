@@ -253,7 +253,7 @@ class MyProfileTests(TestCase):
             content_type__name="military service").count()
         self.assertEqual(ms_object, 1)
         
-    def test_add_military_service(self):
+    def test_add_license(self):
         license_form = LicenseFactory(user=self.user)
         license_form.save()
 
