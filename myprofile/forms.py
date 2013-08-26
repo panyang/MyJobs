@@ -150,6 +150,13 @@ class MilitaryServiceForm(BaseUserForm):
 
     def clean_end_rank(self):
         return self.cleaned_data['end_rank'].upper()
+
+
+class WebsiteForm(BaseUserForm):
+    class Meta:
+        form_name = _('Website')
+        model = Website
+        widgets = generate_custom_widgets(model)
         
 
 class InitialForm(BaseUserForm):
