@@ -179,16 +179,26 @@ def contact(request):
                 msg.send()
                 return HttpResponse('success')
             else:
+                project = jira.project('MJA')
+                components = []
+                if reason == 'My.Jobs Error':
+                    components.append({'id': '12903'})
+                if contact_type == 'Job Seeker':
+                    components.append({'id': '12901'})
+                elif contact_type == 'Employer':
+                    components.append({'id': '12900'})
+                else:
+                    components.append({'id': '12902'})
                 issue_dict = {
-                    'project': {'key': 'MJA'},
+                    'project': {'key': project.key},
                     'summary': '%s - %s' % (reason, from_email),
                     'description': '%s' % comment,
                     'issuetype': {'name': 'Task'},
-                    'components': [{'id': '12703'}],
                     'customfield_10400': str(name),
                     'customfield_10401': str(from_email),
                     'customfield_10402': str(phone_num),
                 }
+                issue_dict['components'] = components
                 jira.create_issue(fields=issue_dict)
                 time = datetime.datetime.now().strftime('%A, %B %d, %Y %l:%M %p')
                 return HttpResponse(json.dumps({'validation': 'success',
