@@ -15,7 +15,7 @@ accountpatterns = patterns('MyJobs.myjobs.views',
     url(r'^edit/$', 'edit_account', name='edit_account'),
     url(r'^delete$', 'delete_account', name='delete_account'),
     url(r'^disable$', 'disable_account', name='disable_account'),
-    url(r'^edit$',
+    url(r'^$',
         RedirectView.as_view(url='/account/edit/')),
 )
 
