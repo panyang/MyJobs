@@ -103,14 +103,27 @@ def get_company_name(user):
     :user: User instance
 
     Outputs:
-    :company_list: A list of company names, or an empty string if there are no companies associated with the user
+    :company_list: A list of company names, or an empty string if there are no
+                   companies associated with the user
     """
 
     try:
-        company_list = {}
         companies = CompanyUser.objects.filter(user=user)
-        for i, company in enumerate(companies):
-            company_list[i] = company.company
+        company_list = [company.company for company in companies]
         return company_list
     except CompanyUser.DoesNotExist:
         return {}
+
+@register.simple_tag(takes_context=True)
+def active_tab(context, view_name):
+    """
+    Determines whether a tab should be highlighted as the active tab.
+
+    Inputs: 
+    :view_name: The name of the view, as a string, for the tab being evaluated. 
+
+    Outputs:
+    Either "active" if it's the active tab, or an empty string.
+    """
+    
+    return "active" if context.get('view_name', '') == view_name else ""
