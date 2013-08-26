@@ -71,9 +71,6 @@ $(document).ready(function(){
         // Calculates the profile completion level every time a field on
         // the new account profile form is changed.
         
-        console.log($("#id_addr-country_code").val());
-        console.log($("#id_ph-use_code").val());
-        
         profile_completion = 0;
         if($("#id_name-given_name").val() != "" && $("#id_name-family_name").val() != "") {
             profile_completion += (100/5);
@@ -92,7 +89,24 @@ $(document).ready(function(){
             profile_completion += (100/5);
         }
         
-        $(".initial-bar").css("width", profile_completion + "%");
+        bar = "bar ";
+        if(profile_completion <= 20) {
+            bar += "bar-danger";
+        }
+        else if(profile_completion <= 40) {
+            bar += "bar-warning";
+        }
+        else if(profile_completion <= 60) {
+            bar += "bar-info";
+        }
+        else {
+            bar += "bar-success";
+        }
+        
+        $("#initial-bar").removeClass();
+        $("#initial-bar").addClass(bar);
+        
+        $("#initial-bar").css("width", profile_completion + "%");
         $(".initial-highlight").text(profile_completion + "% complete");
     })
 });
