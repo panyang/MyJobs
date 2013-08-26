@@ -338,6 +338,16 @@ class License(ProfileUnits):
                                    blank=True)
 
 
+class Summary(ProfileUnits):
+    headline = models.TextField(max_length=100, verbose_name="Headline",
+                                help_text='How you describe your profession.' +
+                                          ' ie "Experienced accounting ' +
+                                          'professional"')
+    summary = models.TextField(max_length=2000, verbose_name="Summary",
+                               help_text='A short summary of your strengths' +
+                                         'and career to date.')
+
+
 def delete_secondary_activation(sender, **kwargs):
     """
     When a secondary email is deleted, deletes that email's associated
