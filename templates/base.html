@@ -58,11 +58,15 @@
                                     <li class="{% active_tab 'Saved Searches' %}"><a href="{% url 'saved_search_main' %}">{% trans "Saved Searches" %}</a></li>
                                     {% if group_member and company_name|length >= 1 %}
                                         <li class="{% active_tab 'Company Dashboard' %}" id="company-dropdown">
-                                            <a id="candidate-tab">{% trans "Candidates" %}</a>
-                                            <ul id="company-menu" class="no-show">
-                                            {% for company in company_name %}
-                                                <li><a id="company-item" href="{% url 'dashboard' %}?company={{ company.id }}">{{ company }}</a></li>
-                                            {% endfor %}
+                                            {% if company_name|length == 1 %}
+                                                <a id="candidate-tab" href="{% url 'dashboard' %}?company={{ company_name.0.id }}">{% trans "Candidates" %}</a>
+                                            {% else %}
+                                                <a id="candidate-tab">{% trans "Candidates" %}</a>
+                                                <ul id="company-menu" class="no-show">
+                                                {% for company in company_name %}
+                                                    <li><a id="company-item" href="{% url 'dashboard' %}?company={{ company.id }}">{{ company }}</a></li>
+                                                {% endfor %}
+                                            {% endif %}
                                             </ul>{# /company-menu #}
                                         </li>
                                     {% endif %}
@@ -95,7 +99,9 @@
                                                 <li><a id="profile-link" href="{% url 'view_profile' %}">{% trans "Profile" %}</a></li>
                                                 {% if user.is_active %}
                                                     <li><a id="savedsearch-link" href="{% url 'saved_search_main' %}">{% trans "Saved Searches" %}</a></li>
-                                                        {% if group_member and user.is_active and company_name|length >= 1%}
+                                                        {% if group_member and user.is_active and company_name|length == 1  %}
+                                                            <li><a id="candidate-link-one" href="{% url 'dashboard' %}?company={{ company_name.0.id }}">{% trans "Candidates" %}</a></li>
+                                                        {% elif group_member and user.is_active and company_name|length >= 2 %}
                                                             <li><a id="candidate-link">{% trans "Candidates" %}</a></li>
                                                         {% endif %}
                                                 {% endif %}

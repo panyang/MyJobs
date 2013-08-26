@@ -474,7 +474,7 @@ class MyJobsViewsTests(TestCase):
         self.client.login_user(inactive_user)
         response = self.client.get("/")
         soup = BeautifulSoup(response.content)
-        self.assertFalse(soup.findAll('a', {'id': 'savedsearch_link'}))
+        self.assertFalse(soup.findAll('a', {'id': 'savedsearch-link'}))
 
     def test_case_insensitive_login(self):
         """

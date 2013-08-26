@@ -959,6 +959,7 @@ em.pendingText {
     #profile-link,
     #savedsearch-link,
     #candidate-link,
+    #candidate-link-one,
     #settings-link {
         display: none !important;
     }
