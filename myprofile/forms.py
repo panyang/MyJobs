@@ -34,8 +34,7 @@ def generate_custom_widgets(model):
                 widgets[field.attname] = CheckboxInput(attrs=attrs)
             elif internal_type == 'DateField':
                 widgets[field.attname] = DateInput(
-                                            format=settings.FORM_DATE_FORMAT,
-                                            attrs=attrs)
+                    format=settings.FORM_DATE_FORMAT, attrs=attrs)
             else:
                 widgets[field.attname] = TextInput(attrs=attrs)
 
@@ -58,7 +57,6 @@ class SecondaryEmailForm(BaseUserForm):
 
     def clean_email(self):
         email = self.cleaned_data['email']
-        user = self.user
         if email.lower() == self.user.email.lower():
             raise forms.ValidationError('This email is already registered.')
         return email
@@ -151,18 +149,20 @@ class MilitaryServiceForm(BaseUserForm):
     def clean_end_rank(self):
         return self.cleaned_data['end_rank'].upper()
 
+
 class LicenseForm(BaseUserForm):
     class Meta:
         form_name = _("License")
         model = License
-        widgets = generate_custom_widgets(model)   
+        widgets = generate_custom_widgets(model)
 
 
 class WebsiteForm(BaseUserForm):
     class Meta:
         form_name = _('Website')
         model = Website
-        widgets = generate_custom_widgets(model) 
+        widgets = generate_custom_widgets(model)
+        widgets['description'] = Textarea(attrs={'rows': 5, 'cols': 24})
     
 
 class InitialForm(BaseUserForm):
@@ -173,8 +173,9 @@ class InitialForm(BaseUserForm):
                 isinstance(field.widget, Textarea) or \
                 isinstance(field.widget, DateInput) or \
                 isinstance(field.widget, DateTimeInput) or \
-                isinstance(field.widget, TimeInput):
+                    isinstance(field.widget, TimeInput):
                 field.widget.attrs.update({'placeholder': field.label})
+
 
 class InitialNameForm(InitialForm):
     class Meta:
@@ -187,7 +188,7 @@ class InitialAddressForm(InitialForm):
         model = Address
         fields = ['address_line_one', 'address_line_two', 'city_name',
                   'country_sub_division_code', 'country_code', 'postal_code']
-        widgets = { 'country_code': Select(choices=COUNTRIES) }
+        widgets = {'country_code': Select(choices=COUNTRIES)}
 
 
 class InitialPhoneForm(InitialForm):
@@ -204,7 +205,7 @@ class InitialWorkForm(InitialForm):
     class Meta:
         model = EmploymentHistory
         fields = ['position_title', 'organization_name', 'start_date',
-                 'current_indicator']
+                  'current_indicator']
 
 
 class InitialEducationForm(InitialForm):

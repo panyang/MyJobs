@@ -95,10 +95,20 @@ class MilitaryServiceFactory(factory.Factory):
     service_start_date = datetime.date(2005, 1, 2)
     service_end_date = datetime.date(2007, 1, 2)
     end_rank = "E-7"
-    
+
+
+class WebsiteFactory(factory.Factory):
+    FACTORY_FOR = Website
+
+    display_text = "My Jobs"
+    uri = 'my.jobs'
+    uri_active = True
+    description = "The site we work on."
+    site_type = "Other"
+
+
 class LicenseFactory(factory.Factory):
     FACTORY_FOR = License
     
     license_type = "Type"
     license_name = "Name"
-

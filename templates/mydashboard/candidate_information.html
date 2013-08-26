@@ -111,10 +111,16 @@
                                                 <li>{{item.service_start_date}} - {{item.service_end_date}}</li>
                                                 <li>{% if item.end_rank %}Rank: {{item.end_rank}} {% endif %}</li>
                                                 
-						{% elif item.content_type.name == "license" %}
+						                        {% elif item.content_type.name == "license" %}
                                                 
-						<b><li>{{ item.license_name }}</li></b>
-						<li>{{ item.license_type }}</li>
+						                        <b><li>{{ item.license_name }}</li></b>
+						                        <li>{{ item.license_type }}</li>
+
+                                                {% elif item.content_type.name == "website" %}
+
+                                                <li><b>{{ item.display_text }}</b></li>
+                                                <li>{% if item.uri_active == True %}{{ item.uri }}{% else %}Not Active{% endif %}</li>
+                                                <li>{{ item.description }}</li>
 						
 						
                                                 {% else %}

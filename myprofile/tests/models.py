@@ -260,3 +260,11 @@ class MyProfileTests(TestCase):
         ms_object = ProfileUnits.objects.filter(
             content_type__name="license").count()
         self.assertEqual(ms_object, 1)
+
+    def test_add_website(self):
+        website_instance = WebsiteFactory(user=self.user)
+        website_instance.save()
+
+        ms_object = ProfileUnits.objects.filter(
+            content_type__name="website").count()
+        self.assertEqual(ms_object, 1)

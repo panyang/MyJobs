@@ -323,19 +323,19 @@ class Website(ProfileUnits):
     display_text = models.CharField(max_length=50, blank=True,
                                     verbose_name='Display Text')
     uri = models.URLField(verbose_name='Web Address')
-    uri_exists = models.BooleanField(default=False,
-                                     verbose_name='Currently exists?')
-    description = models.CharField(max_length=500, blank=True,
+    uri_active = models.BooleanField(default=False,
+                                     verbose_name='Currently active?')
+    description = models.TextField(max_length=500, blank=True,
                                    verbose_name='Site Description')
     site_type = models.CharField(max_length=50, choices=SITE_TYPE_CHOICES,
-                                 verbose_name='Type of Site')
+                                 blank=True, verbose_name='Type of Site')
+
 
 class License(ProfileUnits):
     license_name = models.CharField(max_length=255, verbose_name="License Name")
     license_type = models.CharField(max_length=255, verbose_name="License Type")
     description = models.CharField(max_length=255, verbose_name="Description",
                                    blank=True)
-
 
 
 def delete_secondary_activation(sender, **kwargs):
