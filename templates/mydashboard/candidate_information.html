@@ -111,7 +111,12 @@
                                                 <li>{{item.service_start_date}} - {{item.service_end_date}}</li>
                                                 <li>{% if item.end_rank %}Rank: {{item.end_rank}} {% endif %}</li>
                                                 
+						{% elif item.content_type.name == "license" %}
                                                 
+						<b><li>{{ item.license_name }}</li></b>
+						<li>{{ item.license_type }}</li>
+						
+						
                                                 {% else %}
                                                     
                                                 <li><b>{{item.label}}</b></li>

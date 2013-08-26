@@ -330,6 +330,13 @@ class Website(ProfileUnits):
     site_type = models.CharField(max_length=50, choices=SITE_TYPE_CHOICES,
                                  verbose_name='Type of Site')
 
+class License(ProfileUnits):
+    license_name = models.CharField(max_length=255, verbose_name="License Name")
+    license_type = models.CharField(max_length=255, verbose_name="License Type")
+    description = models.CharField(max_length=255, verbose_name="Description",
+                                   blank=True)
+
+
 
 def delete_secondary_activation(sender, **kwargs):
     """
