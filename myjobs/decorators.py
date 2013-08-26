@@ -68,7 +68,7 @@ def user_is_allowed(model=None, pk_name=None, pass_user=False):
                 kwargs['user'] = user
 
             if pk_name:
-                pk = kwargs.get(pk_name)
+                pk = request.REQUEST.get(str(pk_name))
                 if pk:
                     try:
                         pk = int(pk)
