@@ -66,6 +66,35 @@ $(document).ready(function(){
         e.preventDefault();
         contactForm();
     });
+    
+    $("#newAccountData").change(function() {
+        // Calculates the profile completion level every time a field on
+        // the new account profile form is changed.
+        
+        console.log($("#id_addr-country_code").val());
+        console.log($("#id_ph-use_code").val());
+        
+        profile_completion = 0;
+        if($("#id_name-given_name").val() != "" && $("#id_name-family_name").val() != "") {
+            profile_completion += (100/5);
+        }
+        if($("#id_edu-organization_name").val() != "" && $("#id_edu-degree_date").val() != "" &&
+           $("#id_edu-education_level_code").val() >= 3 && $("#id_edu-degree_name").val() != "") {
+            profile_completion += (100/5);
+        }
+        if ($("#id_ph-area_dialing").val() != "" || $("#id_ph-number").val() != "" ||
+            $("#id_ph-extension").val() != "" || $("#id_ph-use_code").val() != "") {
+            profile_completion += (100/5);
+        }
+        if ($("#id_addr-address_line_one").val() != "" || $("#id_addr-address_line_two").val() != "" ||
+            $("#id_addr-city_name").val() != "" || $("#id_addr-country_sub_division_code").val() != "" ||
+            $("#id_addr-country_code").val() != "" || $("#id_addr-postal_code").val() != "") {
+            profile_completion += (100/5);
+        }
+        
+        $(".initial-bar").css("width", profile_completion + "%");
+        $(".initial-highlight").text(profile_completion + "% complete");
+    })
 });
              
 function clearForm(form) {
