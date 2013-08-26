@@ -136,9 +136,9 @@ def home(request):
             if not invalid_forms:
                 for form in valid_forms:
                     if form.changed_data:
-						form.save(commit=False)
-						form.user = request.user
-						form.save_m2m()
+                        form.save(commit=False)
+                        form.user = request.user
+                        form.save_m2m()
                 return HttpResponse('valid')
             else:
                 return render_to_response('includes/initial-profile-form.html',
