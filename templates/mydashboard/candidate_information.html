@@ -112,9 +112,8 @@
                                                 <li>{% if item.end_rank %}Rank: {{item.end_rank}} {% endif %}</li>
                                                 
 						                        {% elif item.content_type.name == "license" %}
-                                                
-						                        <b><li>{{ item.license_name }}</li></b>
-						                        <li>{{ item.license_type }}</li>
+                                                <li><b>{{ item.license_name }}</b></li>
+                                                <li>{{ item.license_type }}</li>
 
                                                 {% elif item.content_type.name == "website" %}
 
