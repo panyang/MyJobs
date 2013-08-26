@@ -1,12 +1,11 @@
-import operator
-from django.db.models import Q
+from django.http import Http404
+
 from urlparse import urlparse
 
-from mydashboard.models import Company, Microsite
-from mysearches.models import SavedSearch
+from mydashboard.models import Microsite
 
 
-def saved_searches(employer, candidate):
+def saved_searches(employer, company, candidate):
     """
     Function that gets employer's companies and those companies microsites.
     Will pull the domain out of the employer_microsites. Gathers the
@@ -21,9 +20,12 @@ def saved_searches(employer, candidate):
     outputs:
                 A list of candidate urls.
     """
-    employer_companies = employer.company_set.all()
+    if employer in company.admins.all():
+        employer_company = company
+    else:
+        raise Http404
     employer_microsites = Microsite.objects.filter(
-        company__in=employer_companies).values_list('url', flat=True)
+        company=employer_company).values_list('url', flat=True)
     employer_domains = [urlparse(url).netloc for url in employer_microsites]
     candidate_urls = candidate.savedsearch_set.values_list('url', flat=True)
     return [url for url in candidate_urls

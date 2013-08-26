@@ -89,10 +89,10 @@ $(document).ready(function()
         </div>
         <div class="span12" id="profileTitleBar">                          
         </div>
-        <div class="span12 hide-desktop hide-tablet"><a class="btn-size btn primary" href="{% url 'dashboard' %}">Back to Company Dashboard</a></div>
+        <div class="span12 hide-desktop hide-tablet"><a class="btn-size btn primary" href="{% url 'dashboard' %}?company={{ company_id }}">Back to Company Dashboard</a></div>
         <br>
         <div class="span12 hide-desktop hide-tablet"><a href="{{microsite_url}}" class="btn-size btn">View Site</a></div>
-        <span class="span6 hide-mobile"><a class="btn primary" href="{% url 'dashboard' %}">Back to Company Dashboard</a><a href="{{microsite_url}}" class="btn">View Site</a></span>
+        <span class="span6 hide-mobile"><a class="btn primary" href="{% url 'dashboard' %}?company={{ company_id }}">Back to Company Dashboard</a><a href="{{microsite_url}}" class="btn">View Site</a></span>
     </div>
     <div class="row">
         <div class="hide-desktop">
@@ -101,7 +101,7 @@ $(document).ready(function()
                 <div class="span8 pull-left">
                     <div class="formBox">
                         <h3>Site Activity</h3>                        
-                            <form action='{% url 'microsite_activity' %}' method='POST' id="date-range" class="move-left">
+                            <form action='{% url 'microsite_activity' %}?company={{ company_id }}&url={{ microsite_url }}' method='POST' id="date-range" class="move-left">
                             {% csrf_token %}
                             <div class="hide-mobile">
                                 <div class="span2 form-label"><strong>Date Range:</strong></div><input name="after" type="text" placeholder="{{ after|date:'m/d/Y' }}" class="datepicker"> <strong>to</strong> <input name="before" type="text" placeholder="{{ before|date:'m/d/Y' }}" class="datepicker"></br>
