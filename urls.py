@@ -1,4 +1,4 @@
-from django.conf.urls.defaults import *
+from django.conf.urls import *
 from django.contrib import admin
 
 from tastypie.api import Api
@@ -15,7 +15,7 @@ v1_api.register(SavedSearchResource())
 
 urlpatterns = patterns('',
     url('', include('MyJobs.myjobs.urls')),
-    url(r'^dashboard/',
+    url(r'^candidates/',
         include('MyJobs.mydashboard.urls')),
     url(r'^accounts/', include('MyJobs.registration.urls')),
     url(r'^profile/',

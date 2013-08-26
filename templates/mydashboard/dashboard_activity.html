@@ -8,13 +8,16 @@
                    
         <table id="row-link-table">  
             {% for candidate in candidates %}                    
-            <tr class="hide-mobile" onclick="document.location = '{{ candidate.user.id }}';">
+            <tr class="hide-mobile" onclick="document.location = '{% url 'candidate_information' %}?company={{ company_id }}&user={{ candidate.user.id }}';">
                 <td>
                     <img src="{{candidate.user.get_gravatar_url}}&s=55" class="gravatar pull-left">                        
                 </td>
                 <td>
                     <div class="candidate-name">{{candidate.user|get_name_obj}}</div>
-                    <a href="{{ candidate.user.id }}">{{candidate.user}}</a>
+                    <a href="{% url 'candidate_information' %}?company={{ company_id }}&user={{ candidate.user.id }}">{{candidate.user}}</a>
+                    <div class="progress activity-progress">
+                        <div class="bar bar-{% completion_level candidate.user.profile_completion %}" style="width: {{ candidate.user.profile_completion }}%"></div>
+                    </div>
                 </td>
                 <td>
                     <strong>{% if candidate.label %}{{candidate.label}}{% else %}Unlabeled{% endif %}</strong><br>
@@ -28,7 +31,11 @@
                 </td>
                 <td>
                     <div class="candidate-name pull-left">{{candidate.user|get_name_obj}}</div>
-                    <a href="{{ candidate.user.id }}" class="candidate-activity-mobile pull-left">{{candidate.user}}</a>
+                    <a href="{% url 'candidate_information' %}?company={{ company_id }}&user={{ candidate.user.id }}" class="candidate-activity-mobile pull-left">{{candidate.user}}</a>
+                    <br>
+                    <div class="progress activity-progress">
+                        <div class="bar bar-{% completion_level candidate.user.profile_completion %}" style="width: {{ candidate.user.profile_completion }}%"></div>
+                    </div>
                 </td>
              <tr>
              {% endfor %}                    

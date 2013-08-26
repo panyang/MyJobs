@@ -6,6 +6,8 @@ from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, _user_
 from django.core.mail import EmailMessage
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+from django.core.validators import MaxValueValidator, MinValueValidator
+from django.conf import settings
 
 from default_settings import GRAVATAR_URL_PREFIX, GRAVATAR_URL_DEFAULT
 from registration import signals as custom_signals
@@ -161,6 +163,10 @@ class User(AbstractBaseUser):
                                  max_length=255, db_index=True, blank=True,
                                  null=True)
 
+    profile_completion = models.IntegerField(validators=[MaxValueValidator(100),
+                                                         MinValueValidator(0)],
+                                             blank=False, default=0)
+
     # Permission Levels
     is_staff = models.BooleanField(_('staff status'), default=False,
                                    help_text=_("Designates whether the user can " +\
@@ -263,6 +269,19 @@ class User(AbstractBaseUser):
         custom_signals.user_disabled.send(sender=self, user=self,
                                           email=self.email)
 
+    def update_profile_completion(self):
+        """
+        Updates the percent of modules in
+        settings.PROFILE_COMPLETION_MODULES that a user has completed.
+        """
+        profile_dict = self.profileunits_set.all()        
+        num_complete = len(list(set([unit.get_model_name() for unit
+                           in profile_dict if unit.get_model_name()
+                           in settings.PROFILE_COMPLETION_MODULES])))
+        self.profile_completion = int(float(1.0 * num_complete/
+                                  len(settings.PROFILE_COMPLETION_MODULES))*100)
+        self.save()
+
     def add_default_group(self):
         group = Group.objects.get(name='Job Seeker')
         self.groups.add(group.pk)
@@ -276,7 +295,7 @@ class User(AbstractBaseUser):
 
         Outputs:
         :models:        Returns a dictionary of profileunits, an example:
-                        {u'Name': [<Name: Foo Bar>, <Name: Bar Foo>]}
+                        {u'name': [<Name: Foo Bar>, <Name: Bar Foo>]}
         """
         if not profileunits:
             units = self.profileunits_set.all()
@@ -286,9 +305,8 @@ class User(AbstractBaseUser):
         models = {}
 
         for unit in units:
-            if getattr(unit, unit.get_model_name()).is_displayed():
-                models.setdefault(unit.get_model_name(), []).append(
-                    getattr(unit, unit.get_model_name()))
+            models.setdefault(unit.get_model_name(), []).append(
+                getattr(unit, unit.get_model_name()))
 
         return models
 

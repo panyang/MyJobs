@@ -34,11 +34,9 @@
             </table>
             <div class="actions">
                 <a class="btn primary pull-right" href="{% url 'view_profile' %}">{% trans 'Back' %}</a>
-                <form action="{% url 'handle_form' %}" class="profile-action-form" method="GET">
-                        <input type="hidden" name="id" value="{{module.item.id}}" >
-                        <input type="hidden" name="module" value="{{module.item.get_verbose.title}}" >
-                        <button type="submit" class="btn pull-right" >{% trans 'Edit' %}</button>
-                </form>
+                <a class="btn pull-right" href="{% url 'handle_form' %}?id={{ module.item.id }}&module={{ module.item.get_verbose.title }}">
+                    {% trans 'Edit' %}
+                </a>
                 <div class="clear"></div>
             </div>
         </div>{# /formBox #}

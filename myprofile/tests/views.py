@@ -115,7 +115,7 @@ class MyProfileViewsTests(TestCase):
         the 'Deleted!' HttpResponse
         """
 
-        resp = self.client.post(reverse('delete_item', args=[self.name.id]))
+        resp = self.client.post(reverse('delete_item')+'?item='+str(self.name.id))
 
         self.assertEqual(resp.content, '')
         self.assertEqual(Name.objects.filter(id=self.name.id).count(), 0)
