@@ -11,7 +11,6 @@ from django.forms.models import model_to_dict
 from django.http import HttpResponse, Http404
 from django.template import RequestContext
 from django.shortcuts import render_to_response, redirect
-from django.utils.html import mark_safe
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
 
@@ -179,16 +178,25 @@ def contact(request):
                 msg.send()
                 return HttpResponse('success')
             else:
+                project = jira.project('MJA')
+                components = []
+                component_ids = {'My.Jobs Error': {'id': '12903'},
+                                 'Job Seeker': {'id': '12901'},
+                                 'Employer': {'id': '12900'},
+                                 'Partner': {'id': '12902'}, }
+                components.append(component_ids.get(reason))
+                components.append(component_ids.get(contact_type))
+
                 issue_dict = {
-                    'project': {'key': 'MJA'},
+                    'project': {'key': project.key},
                     'summary': '%s - %s' % (reason, from_email),
                     'description': '%s' % comment,
                     'issuetype': {'name': 'Task'},
-                    'components': [{'id': '12703'}],
                     'customfield_10400': str(name),
                     'customfield_10401': str(from_email),
-                    'customfield_10402': str(phone_num),
-                }
+                    'customfield_10402': str(phone_num), }
+                
+                issue_dict['components'] = components
                 jira.create_issue(fields=issue_dict)
                 time = datetime.datetime.now().strftime('%A, %B %d, %Y %l:%M %p')
                 return HttpResponse(json.dumps({'validation': 'success',

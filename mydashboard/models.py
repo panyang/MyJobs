@@ -1,3 +1,4 @@
+from django.template.defaultfilters import slugify
 from django.contrib.auth.models import Group
 from django.db import models
 
@@ -24,6 +25,9 @@ class Company(models.Model):
     class Meta:
         verbose_name_plural = 'companies'
 
+    def slugified_name(self):
+        return slugify(self.name)
+
 
 class CandidateEvent(models.Model):
     """
@@ -40,12 +44,14 @@ class CandidateEvent(models.Model):
 class DashboardModule(models.Model):
     company = models.ForeignKey(Company)
 
+
 class Microsite(models.Model):
     url = models.URLField(max_length=300)
     company = models.ForeignKey(Company)
 
     def __unicode__(self):
         return 'Microsite %s for %s' % (self.url, self.company.name)
+
 
 class CompanyUser(models.Model):
     GROUP_NAME = 'Employer'
@@ -56,7 +62,6 @@ class CompanyUser(models.Model):
 
     def __unicode__(self):
         return 'Admin %s for %s' % (self.user.email, self.company.name)
-
 
     def save(self, *args, **kwargs):
         """

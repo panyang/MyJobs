@@ -73,7 +73,8 @@ class MySearchViewTests(TestCase):
     def test_get_edit_page(self):
         self.new_form.save()
         search_id = self.new_form.instance.id
-        response = self.client.get(reverse('edit_search', args=[search_id]))
+        response = self.client.get(
+            reverse('edit_search')+'?id=%s' % search_id)
         self.assertEqual(response.status_code, 200)
 
         self.assertEqual(self.new_form.instance,
@@ -81,7 +82,8 @@ class MySearchViewTests(TestCase):
         self.assertTemplateUsed(response, 'mysearches/saved_search_edit.html')
 
         search_id += 1
-        response = self.client.get(reverse('edit_search', args=[search_id]))
+        response = self.client.get(
+            reverse('edit_search')+'id=%s' % search_id)
         self.assertEqual(response.status_code, 404)
 
     def test_save_edit_form(self):
@@ -148,7 +150,7 @@ class MySearchViewTests(TestCase):
         search = SavedSearchFactory(user=self.user)
         self.assertTrue(search.is_active)
 
-        response = self.client.get(reverse('unsubscribe', args=[search.id]))
+        response = self.client.get(reverse('unsubscribe')+'?id=%s' % search.id)
         search = models.SavedSearch.objects.get(id=search.id)
         self.assertFalse(search.is_active)
         self.assertTemplateUsed(response,
@@ -162,7 +164,7 @@ class MySearchViewTests(TestCase):
         user = UserFactory(email='test@example.com')
         search = SavedSearchFactory(user=user)
 
-        response = self.client.get(reverse('unsubscribe', args=[search.id]))
+        response = self.client.get(reverse('unsubscribe')+'?id=%s' % search.id)
         search = models.SavedSearch.objects.get(id=search.id)
         self.assertTrue(search.is_active)
         self.assertEqual(response.status_code, 404)
@@ -180,7 +182,7 @@ class MySearchViewTests(TestCase):
         for search in searches:
             self.assertTrue(search.is_active)
 
-        response = self.client.get(reverse('unsubscribe', args=['digest']))
+        response = self.client.get(reverse('unsubscribe')+'?id=digest')
         searches = list(models.SavedSearch.objects.all())
         for search in searches:
             self.assertFalse(search.is_active)
@@ -193,22 +195,22 @@ class MySearchViewTests(TestCase):
         Session.objects.all().delete()
 
         # Navigating to the 'unsubscribe' page while logged out...
-        response = self.client.get(reverse('unsubscribe',
-                                   args=[search.id]))
+        response = self.client.get(
+            reverse('unsubscribe')+'?id='+str(search.id))
         self.assertRedirects(response, reverse('home'))
         # or with the wrong email address...
-        response = self.client.get(reverse('unsubscribe',
-                                           args=[search.id]) +
-                                   '?verify-email=wrong@example.com')
+        response = self.client.get(
+            reverse('unsubscribe') + '?id='+str(
+                search.id)+'&verify-email=wrong@example.com')
         # results in being redirected to the login page and the searches
         # remaining unchanged
         self.assertRedirects(response, reverse('home'))
         search = models.SavedSearch.objects.get(id=search.id)
         self.assertTrue(search.is_active)
 
-        response = self.client.get(reverse('unsubscribe',
-                                           args=[search.id]) +
-                                   '?verify-email=%s' % self.user.email)
+        response = self.client.get(
+            reverse('unsubscribe') + '?id=%s&verify-email=%s' % (
+                search.id, self.user.email))
         search = models.SavedSearch.objects.get(id=search.id)
         self.assertFalse(search.is_active)
 
@@ -216,8 +218,8 @@ class MySearchViewTests(TestCase):
         search = SavedSearchFactory(user=self.user)
         self.assertEqual(models.SavedSearch.objects.count(), 1)
 
-        response = self.client.get(reverse('delete_saved_search',
-                                           args=[search.id]))
+        response = self.client.get(
+            reverse('delete_saved_search')+'?id=%s' % search.id)
         self.assertEqual(models.SavedSearch.objects.count(), 0)
         self.assertRedirects(response, reverse('saved_search_main'))
 
@@ -229,8 +231,8 @@ class MySearchViewTests(TestCase):
         user = UserFactory(email='test@example.com')
         search = SavedSearchFactory(user=user)
 
-        response = self.client.get(reverse('delete_saved_search',
-                                           args=[search.id]))
+        response = self.client.get(
+            reverse('delete_saved_search')+'?id=%s' % search.id)
         self.assertEqual(models.SavedSearch.objects.count(), 1)
         self.assertEqual(response.status_code, 404)
 
@@ -246,8 +248,7 @@ class MySearchViewTests(TestCase):
 
         self.assertEqual(models.SavedSearch.objects.count(), 2)
 
-        response = self.client.get(reverse('delete_saved_search',
-                                           args=['digest']))
+        response = self.client.get(reverse('delete_saved_search')+'?id=digest')
         self.assertEqual(models.SavedSearch.objects.count(), 0)
         self.assertRedirects(response, reverse('saved_search_main'))
 
@@ -256,22 +257,22 @@ class MySearchViewTests(TestCase):
         Session.objects.all().delete()
 
         # Navigating to the 'delete saved search' page while logged out...
-        response = self.client.get(reverse('delete_saved_search',
-                                   args=[search.id]))
+        response = self.client.get(
+            reverse('delete_saved_search')+'?id='+str(search.id))
         self.assertRedirects(response, reverse('home'))
         self.assertEqual(models.SavedSearch.objects.count(), 1)
         # or with the wrong email address...
-        response = self.client.get(reverse('delete_saved_search',
-                                           args=[search.id]) +
-                                   '?verify-email=wrong@example.com')
+        response = self.client.get(
+            reverse('delete_saved_search')+'?id='+str(
+                search.id)+'&verify-email=wrong@example.com')
         # results in being redirected to the login page and no searches being
         # deleted
         self.assertRedirects(response, reverse('home'))
         self.assertEqual(models.SavedSearch.objects.count(), 1)
 
-        response = self.client.get(reverse('delete_saved_search',
-                                           args=[search.id]) +
-                                   '?verify-email=%s' % self.user.email)
+        response = self.client.get(
+            reverse('delete_saved_search')+'?id=%s&verify-email=%s' % (
+                search.id, self.user.email))
         self.assertEqual(models.SavedSearch.objects.count(), 0)
 
         # assertRedirects follows any redirect and waits for a 200 status code;
