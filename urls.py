@@ -22,6 +22,8 @@ urlpatterns = patterns('',
         include('MyJobs.myprofile.urls')),
     url(r'^saved-search/',
         include('MyJobs.mysearches.urls')),
+     url(r'^analytics/',
+        include('MyJobs.myanalytics.urls')),
     url(r'^api/', include(v1_api.urls)),
     url(r'^admin/', include(admin.site.urls)),
 )
