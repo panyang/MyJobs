@@ -311,6 +311,53 @@ class User(AbstractBaseUser):
         return models
 
 
+class BaseProfileUnitManager():
+    def __init__(self, profileunits):
+        self.profileunits = profileunits
+
+    def is_displayed(self, profileunit):
+        raise NotImplementedError
+
+    def profileunits_dict(self, profileunits):
+        for unit in profileunits:
+            if self.is_displayed(unit):
+                models.setdefault(unit.get_model_name(), []).append(
+                    getattr(unit, unit.get_model_name()))
+
+
+class PrimaryNameProfileUnitManager(BaseProfileUnitManager):
+    def is_displayed(self, profileunits):
+        for unit in profileunits:
+            if unit.get_model_name() == 'name':
+                if unit.primary:
+                    self.primary_name = unit.get_full_name()
+                return False
+            else:
+                return True
+
+
+class ContentProfileUnitManager(BaseProfileUnitManager):
+
+    def __init__(self, profileunits, displayed=None, excluded=None, order=None):
+        """
+        Pass in model names to be displayed or excluded. Default behavior is to display all.
+        """
+        super(self, ContentProfileUnitManager).__init__(profileunits)
+        self.displayed = displayed or []
+        self.excluded = excluded or []
+        self.order = order or []
+
+    def is_displayed(self, profileunit):
+        if not self.displayed and not self.excluded:
+            return True
+        elif self.displayed and self.excluded:
+            return profileunit.get_model_name in self.displayed and profileunit.get_model_name not in self.excluded
+        elif self.excluded:
+            return profileunit.get_model_name not in self.excluded
+        else:
+            return True
+
+
 class EmailLog(models.Model):
     email = models.EmailField(max_length=254)
     event = models.CharField(max_length=11)
