@@ -26,12 +26,15 @@ def delete_saved_search(request, user=None):
         # a single search is being deleted
         search = get_object_or_404(SavedSearch, id=search_id,
                                    user=user)
+        search_name = search.label.title()
         search.delete()
     except ValueError:
         # all searches are being deleted
         SavedSearch.objects.filter(user=user).delete()
+        search_name = 'all'
 
-    return HttpResponseRedirect(reverse('saved_search_main_query')+'?d=success')
+    return HttpResponseRedirect(
+        reverse('saved_search_main_query')+'?d='+str(search_name))
 
 
 @user_is_allowed()
