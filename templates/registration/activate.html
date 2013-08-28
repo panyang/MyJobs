@@ -6,7 +6,9 @@
 Used to check if registration was successful. 
 {% endcomment %}
 
-{% block activation_message %}{% endblock %}
+{% if activated %
+    {% block activation_message %}{% endblock %}
+{% endif %}
 
 {% block content %}
     <div class="wrapper">
