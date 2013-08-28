@@ -115,14 +115,28 @@ def home(request):
         elif request.POST.get('action') == "save_profile":
             name_form = InitialNameForm(request.POST, prefix="name",
                                         user=request.user)
+            if not name_form.changed_data:
+                name_form = InitialNameForm(prefix="name")
+
             education_form = InitialEducationForm(request.POST, prefix="edu",
                                                   user=request.user)
+            if not education_form.changed_data:
+                education_form = InitialEducationForm(prefix="edu")
+
             phone_form = InitialPhoneForm(request.POST, prefix="ph",
                                           user=request.user)
+            if not phone_form.changed_data:
+                phone_form = InitialPhoneForm(prefix="ph")
+
             work_form = InitialWorkForm(request.POST, prefix="work",
                                         user=request.user)
+            if not work_form.changed_data:
+                work_form = InitialWorkForm(prefix="work")
+
             address_form = InitialAddressForm(request.POST, prefix="addr",
                                               user=request.user)
+            if not address_form.changed_data:
+                address_form = InitialAddressForm(prefix="addr")
 
             forms = [name_form, education_form, phone_form, work_form,
                      address_form]
@@ -134,9 +148,10 @@ def home(request):
 
             if not invalid_forms:
                 for form in valid_forms:
-                    form.save(commit=False)
-                    form.user = request.user
-                    form.save_m2m()
+                    if form.changed_data:
+                        form.save(commit=False)
+                        form.user = request.user
+                        form.save_m2m()
                 return HttpResponse('valid')
             else:
                 return render_to_response('includes/initial-profile-form.html',
