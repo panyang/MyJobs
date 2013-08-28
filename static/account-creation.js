@@ -121,23 +121,30 @@ $(document).on("change", "#newAccountData", function() {
     // Calculates the profile completion level every time a field on
     // the new account profile form is changed.
     
+    // Profile completion % is approximately 100/6 per unit.  
     profile_completion = 0;
     if($("#id_name-given_name").val() != "" && $("#id_name-family_name").val() != "") {
-        profile_completion += (100/5);
+        profile_completion += 1;
     }
     if($("#id_edu-organization_name").val() != "" && $("#id_edu-degree_date").val() != "" &&
        $("#id_edu-education_level_code").val() >= 3 && $("#id_edu-degree_name").val() != "") {
-        profile_completion += (100/5);
+        profile_completion += 1;
     }
     if ($("#id_ph-area_dialing").val() != "" || $("#id_ph-number").val() != "" ||
         $("#id_ph-extension").val() != "" || $("#id_ph-use_code").val() != "") {
-        profile_completion += (100/5);
+        profile_completion += 1;
     }
     if ($("#id_addr-address_line_one").val() != "" || $("#id_addr-address_line_two").val() != "" ||
         $("#id_addr-city_name").val() != "" || $("#id_addr-country_sub_division_code").val() != "" ||
         $("#id_addr-country_code").val() != "" || $("#id_addr-postal_code").val() != "") {
-        profile_completion += (100/5);
+        profile_completion += 1;
     }
+    if($("#id_work-position_title").val() != "" && $("#id_work-organization_name").val() != "" &&
+       $("#id_work-start_date").val() != "") {
+        profile_completion += 1;
+    }
+    
+    profile_completion = Math.round((profile_completion/6)*100);
     
     bar = "bar ";
     if(profile_completion <= 20) {
