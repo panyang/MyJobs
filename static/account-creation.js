@@ -120,8 +120,7 @@ $(document).on("click", "button#save", function(e) {
 $(document).on("change", "#newAccountData", function() {
     // Calculates the profile completion level every time a field on
     // the new account profile form is changed.
-    
-    // Profile completion % is approximately 100/6 per unit.  
+     
     profile_completion = 0;
     if($("#id_name-given_name").val() != "" && $("#id_name-family_name").val() != "") {
         profile_completion += 1;
