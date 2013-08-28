@@ -1,3 +1,4 @@
+from collections import OrderedDict
 import datetime
 import urllib
 import hashlib
@@ -286,9 +287,53 @@ class User(AbstractBaseUser):
         group = Group.objects.get(name='Job Seeker')
         self.groups.add(group.pk)
 
-    def profileunits_dict(self, profileunits=None):
+
+class BaseProfileUnitManager(object):
+    """
+    Class for managing how profile units are displayed
+
+    Visible units are returned by displayed_units
+
+    Displayed and excluded models are defined as lists of model names
+
+    Child classes can define custom display logic per model in <model_name>_is_displayed methods
+        i.e.
+            def name_is_displayed(self, unit):
+                return unit.is_primary()
+    """
+    def __init__(self, displayed=None, excluded=None, order=None):
+        # TODO: order output of displayed_units with order list
+        self.displayed = displayed or []
+        self.excluded = excluded or []
+
+    def is_displayed(self, unit):
         """
-        Inputs:
+        Returns True if a unit should be displayed
+        Input:
+            :unit: An instance of ProfileUnit
+        """
+        try:
+            field_is_displayed = getattr(self, unit.get_model_name() + '_is_displayed')
+            if field_is_displayed:
+                return field_is_displayed(unit)
+        except:
+            pass
+        if not self.displayed and not self.excluded:
+            return True
+        elif self.displayed and self.excluded:
+            return unit.get_model_name() in self.displayed and unit.get_model_name() not in self.excluded
+        elif self.excluded:
+            return unit.get_model_name() not in self.excluded
+        elif self.displayed:
+            return unit.get_model_name() in self.displayed
+        else:
+            return True
+
+    def displayed_units(self, profileunits):
+        """
+        Returns a dictionary of {model_names:[profile units]} to be displayed
+
+         Inputs:
         :profileunits:  The default value is .all() profileunits, but you can
                         input your own QuerySet of profileunits if you are
                         using specific filters
@@ -297,65 +342,27 @@ class User(AbstractBaseUser):
         :models:        Returns a dictionary of profileunits, an example:
                         {u'name': [<Name: Foo Bar>, <Name: Bar Foo>]}
         """
-        if not profileunits:
-            units = self.profileunits_set.all()
-        else:
-            units = profileunits
-
         models = {}
 
-        for unit in units:
-            models.setdefault(unit.get_model_name(), []).append(
-                getattr(unit, unit.get_model_name()))
-
-        return models
-
-
-class BaseProfileUnitManager():
-    def __init__(self, profileunits):
-        self.profileunits = profileunits
-
-    def is_displayed(self, profileunit):
-        raise NotImplementedError
-
-    def profileunits_dict(self, profileunits):
         for unit in profileunits:
             if self.is_displayed(unit):
                 models.setdefault(unit.get_model_name(), []).append(
                     getattr(unit, unit.get_model_name()))
 
+        return models
+
 
 class PrimaryNameProfileUnitManager(BaseProfileUnitManager):
-    def is_displayed(self, profileunits):
-        for unit in profileunits:
-            if unit.get_model_name() == 'name':
-                if unit.primary:
-                    self.primary_name = unit.get_full_name()
-                return False
-            else:
-                return True
+    """
+    Excludes primary name from displayed_units and sets self.primary_name
+    """
+    def __init__(self, displayed=None, excluded=None):
+        super(PrimaryNameProfileUnitManager, self).__init__(displayed, excluded)
 
-
-class ContentProfileUnitManager(BaseProfileUnitManager):
-
-    def __init__(self, profileunits, displayed=None, excluded=None, order=None):
-        """
-        Pass in model names to be displayed or excluded. Default behavior is to display all.
-        """
-        super(self, ContentProfileUnitManager).__init__(profileunits)
-        self.displayed = displayed or []
-        self.excluded = excluded or []
-        self.order = order or []
-
-    def is_displayed(self, profileunit):
-        if not self.displayed and not self.excluded:
-            return True
-        elif self.displayed and self.excluded:
-            return profileunit.get_model_name in self.displayed and profileunit.get_model_name not in self.excluded
-        elif self.excluded:
-            return profileunit.get_model_name not in self.excluded
-        else:
-            return True
+    def name_is_displayed(self, profileunit):
+        if profileunit.name.primary:
+            self.primary_name = profileunit.name.get_full_name()
+        return False
 
 
 class EmailLog(models.Model):

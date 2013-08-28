@@ -8,7 +8,7 @@ from django.template import RequestContext
 from django.shortcuts import render_to_response, get_object_or_404
 
 from myjobs.decorators import user_is_allowed
-from myjobs.models import User
+from myjobs.models import User, BaseProfileUnitManager
 from myjobs.helpers import *
 from myprofile.models import ProfileUnits
 
@@ -28,7 +28,8 @@ def edit_profile(request):
 
     user.update_profile_completion()
 
-    profile_config = user.profileunits_dict()
+    manager = BaseProfileUnitManager()
+    profile_config = manager.displayed_units(user.profileunits_set.all())
 
     empty_units = [model for model in ProfileUnits.__subclasses__()]
 

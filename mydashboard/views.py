@@ -10,7 +10,7 @@ from django.shortcuts import render_to_response
 
 from mydashboard.helpers import saved_searches
 from mydashboard.models import *
-from myjobs.models import User
+from myjobs.models import User, PrimaryNameProfileUnitManager
 from mysearches.models import SavedSearch
 from endless_pagination.decorators import page_template
 
@@ -275,14 +275,13 @@ def candidate_information(request):
     if not urls:
         raise Http404
 
-    models = user.profileunits_dict()
+    manager = PrimaryNameProfileUnitManager()
+    models = manager.displayed_units(user.profileunits_set.all())
 
-    # if Name ProfileUnit exists
-    if models.get('name'):
-        for name in models.pop('name'):
-            if name.primary is True:
-                primary_name = name
-                break
+    try:
+        primary_name = manager.primary_name
+    except:
+        pass
 
     if request.REQUEST.get('url'):
         microsite_url = request.REQUEST.get('url')
