@@ -157,7 +157,7 @@
                 </div>
                 <div class="wrapper">
                     <div class="row">
-
+                        {% block activation %}
                         {% if user.is_authenticated %}
                             {% if not user.is_active %}
 
@@ -168,7 +168,8 @@
 
                             {% endif %}
                         {% endif %}
-
+                        {% endblock%}
+                        
                         {% block content %}{% endblock %}
                         <div id="ajax-busy"></div>
                     </div>
