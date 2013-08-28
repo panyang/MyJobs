@@ -31,7 +31,7 @@ def delete_saved_search(request, user=None):
         # all searches are being deleted
         SavedSearch.objects.filter(user=user).delete()
 
-    return HttpResponseRedirect(reverse('saved_search_main'))
+    return HttpResponseRedirect(reverse('saved_search_main_query')+'?d=success')
 
 
 @user_is_allowed()
@@ -43,12 +43,15 @@ def saved_search_main(request):
         digest_obj = SavedSearchDigest.objects.get(user=request.user)
     except:
         digest_obj = None
+    updated = request.REQUEST.get('d')
     saved_searches = SavedSearch.objects.filter(user=request.user)
     form = DigestForm(user=request.user, instance=digest_obj)
     add_form = SavedSearchForm(user=request.user)
     return render_to_response('mysearches/saved_search_main.html',
                               {'saved_searches': saved_searches,
-                               'form': form, 'add_form': add_form,
+                               'form': form,
+                               'add_form': add_form,
+                               'updated': updated,
                                'view_name': 'Saved Searches'},
                               RequestContext(request))
 
@@ -159,7 +162,8 @@ def save_search_form(request):
             return HttpResponse(json.dumps(form.errors))
         else:
             return render_to_response('mysearches/saved_search_edit.html',
-                                      {'form': form, 'search_id': search_id},
+                                      {'form': form,
+                                       'search_id': search_id},
                                       RequestContext(request))
 
 

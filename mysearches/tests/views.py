@@ -2,7 +2,6 @@ import json
 
 from django.contrib.sessions.models import Session
 from django.core.urlresolvers import reverse
-from django.utils.http import urlquote
 from django.test import TestCase
 
 from testfixtures import Replacer
@@ -11,7 +10,6 @@ from myjobs.tests.views import TestClient
 from myjobs.tests.factories import UserFactory
 
 from mysearches import forms
-from mysearches import helpers
 from mysearches import models
 from mysearches.tests.test_helpers import return_file
 from mysearches.tests.factories import SavedSearchDigestFactory, SavedSearchFactory
@@ -221,7 +219,8 @@ class MySearchViewTests(TestCase):
         response = self.client.get(
             reverse('delete_saved_search')+'?id=%s' % search.id)
         self.assertEqual(models.SavedSearch.objects.count(), 0)
-        self.assertRedirects(response, reverse('saved_search_main'))
+        self.assertRedirects(response, reverse(
+            'saved_search_main_query')+'?d=success')
 
     def test_delete_unowned_search(self):
         """
@@ -250,7 +249,8 @@ class MySearchViewTests(TestCase):
 
         response = self.client.get(reverse('delete_saved_search')+'?id=digest')
         self.assertEqual(models.SavedSearch.objects.count(), 0)
-        self.assertRedirects(response, reverse('saved_search_main'))
+        self.assertRedirects(response, reverse(
+            'saved_search_main_query')+'?d=success')
 
     def test_anonymous_delete_searches(self):
         search = SavedSearchFactory(user=self.user)
@@ -278,4 +278,5 @@ class MySearchViewTests(TestCase):
         # assertRedirects follows any redirect and waits for a 200 status code;
         # anonymous users will always redirect, never returning a 200.
         self.client.login_user(self.user)
-        self.assertRedirects(response, reverse('saved_search_main'))
+        self.assertRedirects(response, reverse(
+            'saved_search_main_query')+'?d=success')
