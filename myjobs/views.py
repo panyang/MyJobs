@@ -6,6 +6,7 @@ import urllib2
 
 from django.contrib.auth import authenticate, logout
 from django.contrib.auth.decorators import user_passes_test
+from django.conf import settings
 from django.core.mail import EmailMessage
 from django.forms.models import model_to_dict
 from django.http import HttpResponse, Http404
@@ -70,7 +71,8 @@ def home(request):
     work_form = InitialWorkForm(prefix="work")
     address_form = InitialAddressForm(prefix="addr")
 
-    data_dict = {'registrationform': registrationform,
+    data_dict = {'num_modules': len(settings.PROFILE_COMPLETION_MODULES),
+                 'registrationform': registrationform,
                  'loginform': loginform,
                  'name_form': name_form,
                  'phone_form': phone_form,
@@ -155,12 +157,13 @@ def home(request):
                 return HttpResponse('valid')
             else:
                 return render_to_response('includes/initial-profile-form.html',
-                                          {'name_form': name_form,
-                                           'phone_form': phone_form,
-                                           'address_form': address_form,
-                                           'work_form': work_form,
-                                           'education_form': education_form},
-                                          context_instance=RequestContext(request))
+                          {#'num_modules': len(settings.PROFILE_COMPLETION_MODULES),
+                           'name_form': name_form,
+                           'phone_form': phone_form,
+                           'address_form': address_form,
+                           'work_form': work_form,
+                           'education_form': education_form},
+                           context_instance=RequestContext(request))
 
     return render_to_response('index.html', data_dict, RequestContext(request))
 

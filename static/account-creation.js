@@ -144,7 +144,7 @@ $(document).on("change", "#newAccountData", function() {
         profile_completion += 1;
     }
     
-    profile_completion = Math.round((profile_completion/6)*100);
+    profile_completion = Math.round((profile_completion/num_modules)*100);
     
     bar = "bar ";
     if(profile_completion <= 20) {
