@@ -157,8 +157,7 @@ def home(request):
                 return HttpResponse('valid')
             else:
                 return render_to_response('includes/initial-profile-form.html',
-                          {#'num_modules': len(settings.PROFILE_COMPLETION_MODULES),
-                           'name_form': name_form,
+                          {'name_form': name_form,
                            'phone_form': phone_form,
                            'address_form': address_form,
                            'work_form': work_form,
