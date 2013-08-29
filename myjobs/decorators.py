@@ -1,5 +1,4 @@
 from functools import wraps
-import logging
 
 from django.contrib.auth import logout
 from django.core.urlresolvers import reverse
@@ -8,59 +7,67 @@ from django.shortcuts import get_object_or_404
 
 from myjobs.models import User
 
-logger = logging.getLogger(__name__)
 
-
-def user_is_allowed(model=None, pk_name=None, keep_email=False):
+def user_is_allowed(model=None, pk_name=None, pass_user=False):
     """
     Determines if the currently logged in user should be accessing the
     decorated view
 
-    Expects that the url contains a captured `user_email` parameter that is
-    not vital to view functionality; This is removed from the view's kwargs
-    and is not passed to the view itself unless the decorator is provided with
-    a `keep_email` parameter.
-
-    Logs a warning if `user_email` is not provided or is empty. This could be
-    an indicator of two things:
-    - Using this decorator may not be necessary
-    - If using this decorator really is desired, the url pattern may not be
-        set up correctly
+    Expects that the query string contains a :verify-email: key if the
+    request originates from a My.Jobs email; The user using this address
+    is added to the view's kwargs as :user: if :pass_user: is True. If the
+    user is not anonymous, passing :verify-email: will ensure that the user
+    owns that address.
 
     Inputs:
     :model: Optional; Model class that the user is trying to access
     :pk_name: Optional; Name of the id parameter being passed to
         the decorated view
-    :keep_email: Optional; Denotes whether or not email should be passed to
-        the decorated view
+    :pass_user: Optional; Denotes whether or not the email's owner should be
+        passed to the decorated view
 
     Outputs:
     :response: Http404 or the results of running the decorated view
+
+    GET Parameters:
+    :verify-email: Optional; User's primary email; Ensures that an individual
+        is authorized to access a logged in user's information
     """
     def decorator(view_func):
         def wrap(request, *args, **kwargs):
-            try:
-                if keep_email:
-                    email = kwargs['user_email']
-                else:
-                    email = kwargs.pop('user_email')
-            except KeyError:
-                logger.warning('`user_is_allowed` decorator used, but '
-                               'no email provided')
-                email = None
-
+            email = request.GET.get('verify-email', '')
             user = User.objects.get_email_owner(email)
-            if not request.user.is_anonymous():
-                if not email or request.user != user:
-                    # If the currently logged in user doesn't own the email
-                    # address from the requested url or no email address is
-                    # provided, log out the user and redirect to home page
-                    print "user doesn't match"
+            if request.user.is_anonymous() and not email:
+                return HttpResponseRedirect(reverse('home'))
+
+            if email:
+                user = User.objects.get_email_owner(email)
+                if not user:
+                    # :verify-email: was provided but no user exists
+                    # Log out the user and redirect to login page
                     logout(request)
-                    raise Http404
+                    return HttpResponseRedirect(reverse('home'))
+
+            if not request.user.is_anonymous():
+                if user:
+                    if request.user != user:
+                        # If the currently logged in user doesn't own the
+                        # provided email address, log out the user and
+                        # redirect to login page
+                        logout(request)
+                        return HttpResponseRedirect(reverse('home'))
+                else:
+                    # If user was not set previously, set it to the currently
+                    # logged in user.
+                    user = user or request.user
+
+            if pass_user:
+                # If :pass_user: is provided, the email address owner should be
+                # passed to the decorated view.
+                kwargs['user'] = user
 
             if pk_name:
-                pk = kwargs.get(pk_name)
+                pk = request.REQUEST.get(str(pk_name))
                 if pk:
                     try:
                         pk = int(pk)

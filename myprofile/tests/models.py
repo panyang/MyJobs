@@ -94,8 +94,8 @@ class MyProfileTests(TestCase):
         activation = ActivationProfile.objects.get(user=self.user,
                                                    email=secondary_email.email)
         response = self.client.get(reverse('registration_activate',
-                                           args=[self.user.email,
-                                                 activation.activation_key]))
+                                           args=[activation.activation_key]) +
+                                   '?verify-email=%s' % self.user.email)
         secondary_email = SecondaryEmail.objects.get(user=self.user,
                                                      email=secondary_email.email)
         activation = ActivationProfile.objects.get(user=self.user,
@@ -251,4 +251,20 @@ class MyProfileTests(TestCase):
 
         ms_object = ProfileUnits.objects.filter(
             content_type__name="military service").count()
+        self.assertEqual(ms_object, 1)
+        
+    def test_add_license(self):
+        license_form = LicenseFactory(user=self.user)
+        license_form.save()
+
+        ms_object = ProfileUnits.objects.filter(
+            content_type__name="license").count()
+        self.assertEqual(ms_object, 1)
+
+    def test_add_website(self):
+        website_instance = WebsiteFactory(user=self.user)
+        website_instance.save()
+
+        ms_object = ProfileUnits.objects.filter(
+            content_type__name="website").count()
         self.assertEqual(ms_object, 1)

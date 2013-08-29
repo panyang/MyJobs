@@ -20,7 +20,7 @@
     </div>
     <div class="row default-heading-candidate-view">
     	<span class="span6">
-    		<a class="btn primary" href="{% url 'dashboard' user.email %}">Back to Company Dashboard</a>
+    		<a class="btn primary" href="{% if coming_from.path == 'view' %}{% url 'dashboard' %}?company={{ company_id }}{% else %}{% url 'microsite_activity' %}?company={{ company_id }}&url={{ coming_from.url }}{% endif %}">{% if coming_from.path == 'view' %}{% trans 'Back to Company Dashboard' %}{% else %}{% trans 'Back to Microsite Dashboard' %}{% endif %}</a>
     	</span>
     </div>
     <div class="span4 mobile-heading-candidate-view">
@@ -33,7 +33,7 @@
             <a class="href-small-icon" href="mailto:{{the_user.email}}"><img id="email-img" src="{{STATIC_URL}}images/rsz_1envelope4.jpg" /></a>
         </div>
         <div class="clear"></div>
-        <a class="btn primary" href="{% url 'dashboard' user.email %}">Back to Company Dashboard</a>
+        <a class="btn primary" href="{% url 'dashboard' %}">Back to Company Dashboard</a>
         <div class="clear"></div>
     </div>
     <div class="clear"></div>
@@ -111,7 +111,17 @@
                                                 <li>{{item.service_start_date}} - {{item.service_end_date}}</li>
                                                 <li>{% if item.end_rank %}Rank: {{item.end_rank}} {% endif %}</li>
                                                 
-                                                
+						                        {% elif item.content_type.name == "license" %}
+                                                <li><b>{{ item.license_name }}</b></li>
+                                                <li>{{ item.license_type }}</li>
+
+                                                {% elif item.content_type.name == "website" %}
+
+                                                <li><b>{{ item.display_text }}</b></li>
+                                                <li>{% if item.uri_active == True %}{{ item.uri }}{% else %}Not Active{% endif %}</li>
+                                                <li>{{ item.description }}</li>
+						
+						
                                                 {% else %}
                                                     
                                                 <li><b>{{item.label}}</b></li>

@@ -20,7 +20,7 @@ class ProfileUnits(models.Model):
                                         editable=False)
     date_updated = models.DateTimeField(default=datetime.datetime.now,
                                         editable=False)
-    content_type = models.ForeignKey(ContentType, editable=False,null=True)
+    content_type = models.ForeignKey(ContentType, editable=False, null=True)
     user = models.ForeignKey(User, editable=False)
 
     def save(self, *args, **kwargs):
@@ -58,9 +58,6 @@ class ProfileUnits(models.Model):
     def get_verbose(self):
         return self.content_type.name.title()
 
-    def is_displayed(self):
-        return True
-
 
 class Education(ProfileUnits):
     EDUCATION_LEVEL_CHOICES = (
@@ -81,15 +78,15 @@ class Education(ProfileUnits):
     country_sub_division_code = models.CharField(max_length=5, blank=True,
                                                  verbose_name=_("State/Region")) 
     country_code = models.CharField(max_length=3, blank=True,
-                                    verbose_name=_("country")) # ISO 3166-1
+                                    verbose_name=_("country"))  # ISO 3166-1
     # ISCED-2011 Can be [0-8]
     education_level_code = models.IntegerField(choices=EDUCATION_LEVEL_CHOICES,
                                                verbose_name=_("education level"))
     start_date = models.DateField(blank=True, null=True)
     end_date = models.DateField(blank=True, null=True)
-    education_score = models.CharField(max_length=255, blank=True,null=True,
+    education_score = models.CharField(max_length=255, blank=True, null=True,
                                        verbose_name=_("GPA"))
-    degree_name = models.CharField(max_length=255, blank=True,null=True,
+    degree_name = models.CharField(max_length=255, blank=True, null=True,
                                    verbose_name=_('degree type'))
     degree_major = models.CharField(max_length=255, verbose_name=_('major'))
     degree_minor = models.CharField(max_length=255, blank=True, null=True,
@@ -147,27 +144,32 @@ class Telephone(ProfileUnits):
 
 
 class EmploymentHistory(ProfileUnits):
-    position_title = models.CharField(max_length=255,verbose_name=_("Position Title"))
-    organization_name = models.CharField(max_length=255,verbose_name=_("Company"))
+    position_title = models.CharField(max_length=255,
+                                      verbose_name=_("Position Title"))
+    organization_name = models.CharField(max_length=255,
+                                         verbose_name=_("Company"))
     start_date = models.DateField(verbose_name=_("Start Date"))
     current_indicator = models.BooleanField(default=False,
                                             verbose_name=_("I still work here"))
 
     # Optional fields
     end_date = models.DateField(blank=True, null=True)
-    city_name = models.CharField(max_length=255, blank=True,null=True)
+    city_name = models.CharField(max_length=255, blank=True, null=True)
     country_sub_division_code = models.CharField(max_length=5, blank=True,
-                                                 verbose_name=_("State/Region")) 
-    country_code = models.CharField(max_length=3, blank=True,null=True,
+                                                 verbose_name=_("State/Region"))
+    country_code = models.CharField(max_length=3, blank=True, null=True,
                                     verbose_name=_("country"))
-    description = models.TextField(blank=True,null=True)
+    description = models.TextField(blank=True, null=True)
 
     # Hidden fields
-    industry_code = models.CharField(max_length=255, blank=True,null=True,
-                                     verbose_name=_("industry"), editable=False)
-    job_category_code = models.CharField(max_length=255, blank=True,null=True,
-                                         verbose_name=_("job category"), editable=False)
-    onet_code = models.CharField(max_length=255, blank=True, null=True,editable=False)
+    industry_code = models.CharField(max_length=255, blank=True, null=True,
+                                     verbose_name=_("industry"),
+                                     editable=False)
+    job_category_code = models.CharField(max_length=255, blank=True, null=True,
+                                         verbose_name=_("job category"),
+                                         editable=False)
+    onet_code = models.CharField(max_length=255, blank=True, null=True,
+                                 editable=False)
 
 
 class Name(ProfileUnits):
@@ -224,9 +226,6 @@ class Name(ProfileUnits):
     def __unicode__(self):
         return self.get_full_name()
 
-    def is_displayed(self):
-        return self.primary
-
     def switch_primary_name(self, *args, **kwargs):
         try:
             temp = Name.objects.select_for_update().get(primary=True,
@@ -256,8 +255,8 @@ class SecondaryEmail(ProfileUnits):
         """
 
         primary = kwargs.pop('old_primary', None)
-        if not self.pk and not self.verified and primary==None:
-            reg_signals.email_created.send(sender=self,user=self.user,
+        if not self.pk and not self.verified and primary is None:
+            reg_signals.email_created.send(sender=self, user=self.user,
                                            email=self.email)
             reg_signals.send_activation.send(sender=self, user=self.user,
                                              email=self.email)
@@ -289,26 +288,54 @@ class SecondaryEmail(ProfileUnits):
 
 class MilitaryService(ProfileUnits):
     country_code = models.CharField(max_length=3, blank=True,
-                                verbose_name=_("Country")) # ISO 3166-1
+                                    verbose_name=_("Country"))  # ISO 3166-1
     branch = models.CharField(max_length=255, verbose_name="Branch")
     department = models.CharField(max_length=255, blank=True,
-                                verbose_name="Department")
+                                  verbose_name="Department")
     division = models.CharField(max_length=255, blank=True,
                                 verbose_name="Division")
     expertise = models.CharField(max_length=255, blank=True,
-                                verbose_name="Expertise")
-    service_start_date = models.DateField(verbose_name=_("Start Date"), 
-                                null=True, blank=True)
+                                 verbose_name="Expertise")
+    service_start_date = models.DateField(verbose_name=_("Start Date"),
+                                          null=True, blank=True)
     service_end_date = models.DateField(verbose_name=_("End Date"),
-                                null=True, blank=True)
-    start_rank = models.CharField(max_length=50, blank=True, 
-                                verbose_name=_("Start Rank"))
+                                        null=True, blank=True)
+    start_rank = models.CharField(max_length=50, blank=True,
+                                  verbose_name=_("Start Rank"))
     end_rank = models.CharField(max_length=50, blank=True, 
                                 verbose_name=_("End Rank"))
     campaign = models.CharField(max_length=255, blank=True,
                                 verbose_name="Campaign")
     honor = models.CharField(max_length=255, blank=True,
-                                verbose_name="Honors")
+                             verbose_name="Honors")
+
+
+class Website(ProfileUnits):
+    SITE_TYPE_CHOICES = (
+        ('personal', 'Personal'),
+        ('portfolio', 'Portfolio of my work'),
+        ('created', 'Site I created or helped create'),
+        ('association', 'Group or Association'),
+        ('social', 'Social media'),
+        ('other', 'Other'),
+    )
+
+    display_text = models.CharField(max_length=50, blank=True,
+                                    verbose_name='Display Text')
+    uri = models.URLField(verbose_name='Web Address')
+    uri_active = models.BooleanField(default=False,
+                                     verbose_name='Currently active?')
+    description = models.TextField(max_length=500, blank=True,
+                                   verbose_name='Site Description')
+    site_type = models.CharField(max_length=50, choices=SITE_TYPE_CHOICES,
+                                 blank=True, verbose_name='Type of Site')
+
+
+class License(ProfileUnits):
+    license_name = models.CharField(max_length=255, verbose_name="License Name")
+    license_type = models.CharField(max_length=255, verbose_name="License Type")
+    description = models.CharField(max_length=255, verbose_name="Description",
+                                   blank=True)
 
 
 def delete_secondary_activation(sender, **kwargs):
@@ -338,7 +365,7 @@ class Profile(models.Model):
     name = models.CharField(max_length=30)
     user = models.ForeignKey(User)
     profile_units = models.ManyToManyField(ProfileUnits)
-    display_order = models.CommaSeparatedIntegerField(max_length=255,blank=True,
+    display_order = models.CommaSeparatedIntegerField(max_length=255, blank=True,
                                                       null=True)
 
     class Meta:

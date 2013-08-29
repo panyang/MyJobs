@@ -1,3 +1,4 @@
+{% load i18n %}
 {% load label_tags %}
 {% load humanize %}
 
@@ -24,7 +25,7 @@
 
     </td>
     <td class="buttons">
-        <a href="{% url 'view_full_feed' user_email=user.email search_id=search.id %}" class="btn mobile_hide">View</a>
-        <a href="{% url 'edit_search' user.email search.id %}" class="btn edit">Edit</a>
+        <a href="{% url 'view_full_feed' %}?id={{ search.id }}" class="btn mobile_hide">{% trans 'View' %}</a>
+        <a href="{% url 'edit_search' %}?id={{ search.id }}" class="btn edit">{% trans 'Edit' %}</a>
     </td>
 </tr>

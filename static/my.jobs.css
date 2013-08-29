@@ -30,7 +30,12 @@ a {
 a:hover {
     color: #a42e14;
 }
-    
+
+.activity-progress {
+    height: 6px;
+    width: 100px;
+}
+
 /*Candidate Activity mobile desktop hide*/
 .candidate-activity-mobile {
     display: none;
@@ -68,6 +73,17 @@ label[for^='id_sort_by'], label[for^='id_edit_sort_by'] {
     margin-top: -27px;
 }
 
+#profileTitleRow{
+    margin-bottom: 20px;
+}
+#profileTitleRow img{
+    border-radius:5px;
+    border: 2px solid #b34529;
+}
+#profileTitleBar{
+    border-bottom: 2px solid #b34529;
+}
+
 .profile-form-input input[type!=checkbox] {
     width: 40%;
 }
@@ -76,12 +92,35 @@ label[for^='id_sort_by'], label[for^='id_edit_sort_by'] {
     display: inline;
 }
 
+#profile-form-description {
+    padding-left: 10%;
+    padding-right: 10%;
+}
+
+#profile-completion {
+    font-weight: bold;
+    line-height: 25px;
+    padding: 6px !important; 
+}
+
+#highlight {
+    color: #b34529;    
+}
+
+#moduleColumn .add-module-btn {
+    font-weight: normal;
+}
+
+.add-module-btn span{
+    font-weight: bold;
+}
+    
 .reset-form-input input[type="text"], .reset-form-input input[type="password"] {
     width: 100%;
 }
 
 #moduleBank {    
-    z-index:100;  
+    z-index:99;  
 }
 
 table#row-link-table {
@@ -309,6 +348,15 @@ table#row-link-table {
     color: #c44e34;
 }
 
+/* Contact Form Styles */
+#success-table tr td{
+    min-width: 101px;
+}
+
+#success-table tr td + td{
+    font-weight: bold;
+}
+
 /* Form Styles */
 .form-label {
     text-align: right;
@@ -443,7 +491,7 @@ fieldset textarea,
 
 .formBox {
     background-color: #e4e0d5;
-    padding: 5px 5px 30px 5px;
+    padding: 5px 5px 10px 5px;
     border-left: 1px solid #d5d4d0;
     border-right: 1px solid #d5d4d0;
     border-bottom: 1px solid #d5d4d0;
@@ -552,6 +600,10 @@ fieldset textarea,
 .formBox table {
     color: #000;
     background: #fff;
+}
+
+.formBox table.small-margin {
+    margin: 5px 0;
 }
 
 .loginBox input, .profileBox input {
@@ -706,6 +758,10 @@ fieldset textarea,
     text-align: right;
 }
 
+.text-right{
+    text-align: right !important;
+}
+
 .input-prepend input,
 .input-prepend select {
     width: 61.5%;
@@ -788,7 +844,7 @@ em.pendingText {
 
 #nav .main-nav img {
     max-width: none;
-    margin: -25px;
+    padding-left: 5px;
 }
 
 #nav .main-nav {
@@ -796,7 +852,18 @@ em.pendingText {
     text-decoration: none;
     display: block;
     padding-right: 4px;
+    width: 40px;
 }
+
+.arrow-left {
+    float: left;
+    width: 0px;
+    height: 0px;
+    border-style: solid;
+    border-width: 15px 20px 15px 0;
+    border-color: transparent #FFF transparent transparent;
+}
+
 
 #nav ul#pop-menu {
     background:#333;
@@ -846,9 +913,27 @@ em.pendingText {
 	text-align: left;
 }
 
-#logged_in_li {
+#logged-in-li {
     padding: 4px !important;
 }
+
+#back-btn {
+    border-right: 1px solid #FFF !important;
+    height: 100% !important;
+}
+
+#back-btn-li {
+    float: left;
+    width: 40px !important;
+    height: 100%;
+    z-index: 999;
+}
+
+.sub-nav-item {
+    margin-left: 40px;
+}
+
+
 
 #ui-datepicker-div {
     position: relative;
@@ -867,18 +952,20 @@ em.pendingText {
 }
 
 @media screen and (min-width: 1025px) {
-    #nav {
-        width: 15%;
-    }
-
     #nav ul#pop-menu {
-        right: 1px;
+        right: 0;
     }
 
-    #profile_link,
-    #savedsearch_link,
-    #company_dashboard_link {
+    #profile-link,
+    #savedsearch-link,
+    #candidate-link,
+    #candidate-link-one,
+    #settings-link {
         display: none !important;
+    }
+    
+    #account-link, #logout-link {
+        display: block;
     }
 
     .topbar ul {
@@ -941,7 +1028,9 @@ em.pendingText {
 }
 
 #moduleColumn td.action {
-    min-width: 135px;
+    padding-left: 10px;
+    padding-right: 10px;
+    width: 135px;
 }
 
 /* Footer Styles */
@@ -1080,13 +1169,22 @@ form input[type='checkbox'] {
         border-bottom: 20px solid #c44e34;
     }
 
-    #logged_in_li {
+    #logged-in-li {
         display: block;
         font-size: 2em;
         height: 25px;
         line-height: 20px;
         padding: 10px !important;        
     }
+    
+    #logout-link, #account-link {
+        display: none !important;
+    }
+    
+    #pop-menu {
+        height: 100%;
+    }
+    
 
     #logo-block {
         margin-top: 10px;
@@ -1252,6 +1350,10 @@ form input[type='checkbox'] {
 }
 
 @media screen and (max-width: 500px) {
+    #profile-completion {
+        display: none;
+    }
+    
     .profile-mobile table, 
     .profile-mobile thead, 
     .profile-mobile tbody, 
@@ -1260,7 +1362,42 @@ form input[type='checkbox'] {
     .profile-mobile tr { 
         display: block; 
     }
-
+    #profileTitleRow .span2{
+        float: left;
+        width: 30%;
+    }
+    #profileTitleRow .span10{
+        float: left;
+        width: auto;
+    }
+    
+    #profileTitleBar {
+        border: 0;
+    }
+    
+    #profileTitleBar h1{
+        font-size: 1.5em;
+        line-height: auto;
+        margin: 0;        
+    }
+    
+    #profileTitleBar h3{
+        font-size: .8em;
+        line-height: auto;
+        margin: 0;
+    }
+    
+    #profileSubtitleBar {
+        display: block;
+        float: none;
+        width: auto;
+    }
+    
+    #profileSubtitleBar a {
+        display: block;
+        margin: 5px 0
+    }
+    
     .profile-mobile thead tr { 
         position: absolute;
         top: -9999px;
@@ -1303,6 +1440,18 @@ form input[type='checkbox'] {
         content: attr(data-title);
     }
     
+    #moduleColumn td.action {
+        width: auto;
+    }
+    
+    .add-module-btn,
+    .profile-mobile a.btn {        
+        display: block;
+        float: none;
+        margin: 5px 0;
+        width: auto;
+    }
+    
     #moduleBank {
         margin-top: 20px;
     }
@@ -1310,6 +1459,11 @@ form input[type='checkbox'] {
     input [type='text'] + .help-block,
     div + .help-block{
         margin: -12px 0 0 5px;
+    }
+
+    /* Contact Form Styles */
+    #success-table tr td{
+        min-width: 0;
     }
     
     /*Employer Dashboard*/    
@@ -1430,7 +1584,7 @@ form input[type='checkbox'] {
         margin-top: -30px;
     }
 
-    #logged_in_li {
+    #logged-in-li {
         display: none !important;
     }
 
@@ -1945,4 +2099,30 @@ body.modal-open {
 
 .required-border {
     border: 1px solid #900;
+}
+
+/*Candidate menu items*/
+.no-show {
+    display: none !important;
+}
+.show {
+    background: #b34529 !important;
+}
+#company-menu {
+    margin: 0;
+}
+#company-menu a {
+    display: block;
+    padding: 4px;
+    background: #666 !important;
+    border-width: 1px 0 0 0 !important;
+}
+#company-menu a:hover {
+    background: #333 !important;
+}
+#candidate-tab {
+    width: 78px;
+}
+#company-item {
+    width: 250px;
 }

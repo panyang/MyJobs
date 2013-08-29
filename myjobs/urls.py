@@ -1,6 +1,4 @@
-from django.conf.urls.defaults import patterns, url, include
-from django.contrib import admin
-from django.http import HttpResponsePermanentRedirect
+from django.conf.urls import patterns, url, include
 from django.views.generic import RedirectView
 
 from myjobs.views import *
@@ -14,11 +12,11 @@ editpatterns = patterns('MyJobs.myjobs.views',
 )
 
 accountpatterns = patterns('MyJobs.myjobs.views',
-    url(r'^$', 'edit_account', name='edit_account'),
+    url(r'^edit/$', 'edit_account', name='edit_account'),
     url(r'^delete$', 'delete_account', name='delete_account'),
     url(r'^disable$', 'disable_account', name='disable_account'),
-    url(r'^edit$',
-        RedirectView.as_view(url='/%(user_email)s/account/')),
+    url(r'^$',
+        RedirectView.as_view(url='/account/edit/')),
 )
 
 urlpatterns = patterns('MyJobs.myjobs.views',
@@ -28,13 +26,9 @@ urlpatterns = patterns('MyJobs.myjobs.views',
     url(r'^terms/$', Terms.as_view(), name='terms'),
     url(r'^contact/$', 'contact', name='contact'),
     url(r'^batch$', 'batch_message_digest', name='batch_message_digest'),
-    url(r'^success/$', Success.as_view(), name='success'),
-    url(r'^(?P<user_email>(\S+))/unsubscribe/$', unsubscribe_all,
-        name='unsubscribe_all'),
-    url(r'^(?P<user_email>(\S+))/account/', include(accountpatterns)),
-    url(r'^(?P<user_email>(\S+))/edit/', include(editpatterns)),
-    url(r'^(?P<user_email>(\S+))/send/$', 'continue_sending_mail',
-        name='continue_sending_mail'),
-    url(r'^(?P<user_email>(\S+))/authorize/$', 'sso_authorize',
-        name='sso_authorize'),
+    url(r'^unsubscribe/$', unsubscribe_all, name='unsubscribe_all'),
+    url(r'^account/', include(accountpatterns)),
+    url(r'^account/edit/', include(editpatterns)),
+    url(r'^send/$', 'continue_sending_mail', name='continue_sending_mail'),
+    url(r'^authorize/$', 'sso_authorize', name='sso_authorize'),
 )

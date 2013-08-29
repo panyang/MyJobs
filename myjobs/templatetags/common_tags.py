@@ -4,6 +4,7 @@ from myjobs import version
 from myprofile.models import ProfileUnits
 from myjobs.models import User
 from mydashboard.models import CompanyUser
+from django.db.models.loading import get_model
 
 register=template.Library()
 
@@ -11,6 +12,48 @@ register=template.Library()
 def cache_buster():
     cache_buster = "?v=%s" % version.cache_buster
     return cache_buster
+
+@register.simple_tag
+def completion_level(level):
+    """
+    Determines the color of progress bar that should display.
+    
+    inputs:
+    :level: The completion percentage of a user's profile.
+    
+    outputs:
+    A string containing the bootstrap bar type
+    """
+    
+    if level <= 20:
+        return "danger"
+    elif level <= 40:
+        return "warning"
+    elif level <= 60:
+        return "info"
+    else:
+        return "success"
+
+
+@register.simple_tag
+def get_description(module):
+    """
+    Gets the description for a module.
+
+    inputs:
+    :module: The module to get the description for.
+    
+    outputs:
+    The description for the module, or an empty string if the module or the
+    description doesn't exist.
+    """
+    
+    try:
+        model = get_model("myprofile", module)
+        return model.module_description if model.module_description else ""
+    except Exception:
+        return ""
+
 
 @register.filter
 def get_name_obj(user, default=""):
@@ -60,14 +103,27 @@ def get_company_name(user):
     :user: User instance
 
     Outputs:
-    :company_list: A list of company names, or an empty string if there are no companies associated with the user
+    :company_list: A list of company names, or an empty string if there are no
+                   companies associated with the user
     """
 
     try:
-        company_list = {}
         companies = CompanyUser.objects.filter(user=user)
-        for i, company in enumerate(companies):
-            company_list[i] = company.company
+        company_list = [company.company for company in companies]
         return company_list
     except CompanyUser.DoesNotExist:
         return {}
+
+@register.simple_tag(takes_context=True)
+def active_tab(context, view_name):
+    """
+    Determines whether a tab should be highlighted as the active tab.
+
+    Inputs: 
+    :view_name: The name of the view, as a string, for the tab being evaluated. 
+
+    Outputs:
+    Either "active" if it's the active tab, or an empty string.
+    """
+    
+    return "active" if context.get('view_name', '') == view_name else ""

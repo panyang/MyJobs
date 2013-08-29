@@ -79,7 +79,7 @@ $(document).on("click", "button#login", function(e) {
                 }
             } else {
                 if(json.url == 'undefined'){
-                    window.location = '/' + $('#id_username').val() + profile_url;
+                    window.location = profile_url;
                 }else{
                     window.location = json.url;
                 }           
@@ -108,11 +108,56 @@ $(document).on("click", "button#save", function(e) {
                 form.replaceWith(data);
                 $("#id_name-primary").hide()
                 $("label[for=id_name-primary]").hide()
+                $( "input[id$='date']" ).datepicker({dateFormat: window.dateFormat,
+                                                 constrainInput: false});
             } else {
-                window.location = '/' + user_email + profile_url;
+                window.location = profile_url;
             }
         }
     });
+});
+
+$(document).on("change", "#newAccountData", function() {
+    // Calculates the profile completion level every time a field on
+    // the new account profile form is changed.
+    
+    profile_completion = 0;
+    if($("#id_name-given_name").val() != "" && $("#id_name-family_name").val() != "") {
+        profile_completion += (100/5);
+    }
+    if($("#id_edu-organization_name").val() != "" && $("#id_edu-degree_date").val() != "" &&
+       $("#id_edu-education_level_code").val() >= 3 && $("#id_edu-degree_name").val() != "") {
+        profile_completion += (100/5);
+    }
+    if ($("#id_ph-area_dialing").val() != "" || $("#id_ph-number").val() != "" ||
+        $("#id_ph-extension").val() != "" || $("#id_ph-use_code").val() != "") {
+        profile_completion += (100/5);
+    }
+    if ($("#id_addr-address_line_one").val() != "" || $("#id_addr-address_line_two").val() != "" ||
+        $("#id_addr-city_name").val() != "" || $("#id_addr-country_sub_division_code").val() != "" ||
+        $("#id_addr-country_code").val() != "" || $("#id_addr-postal_code").val() != "") {
+        profile_completion += (100/5);
+    }
+    
+    bar = "bar ";
+    if(profile_completion <= 20) {
+        bar += "bar-danger";
+    }
+    else if(profile_completion <= 40) {
+        bar += "bar-warning";
+    }
+    else if(profile_completion <= 60) {
+        bar += "bar-info";
+    }
+    else {
+        bar += "bar-success";
+    }
+    
+    $("#initial-bar").removeClass();
+    $("#initial-bar").addClass(bar);
+    
+    $("#initial-bar").css("width", profile_completion + "%");
+    $(".initial-highlight").text(profile_completion + "% complete");
 });
 
 // go to next carousel div on click
@@ -124,7 +169,7 @@ $(document).on("click", "button#next", function(e) {
 // skip to profile page on click
 $(document).on("click", "button#profile", function(e) {
     e.preventDefault();
-    window.location = '/' + user_email + profile_url;
+    window.location = profile_url;
 });
 
 function setPrimaryName(){

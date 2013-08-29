@@ -13,7 +13,7 @@ from myjobs.helpers import *
 from myprofile.models import ProfileUnits
 
 
-@user_is_allowed(ProfileUnits)
+@user_is_allowed()
 @user_passes_test(User.objects.not_disabled)
 def edit_profile(request):
     """
@@ -25,6 +25,8 @@ def edit_profile(request):
     """
 
     user = request.user
+
+    user.update_profile_completion()
 
     profile_config = user.profileunits_dict()
 
@@ -48,7 +50,6 @@ def edit_profile(request):
                               RequestContext(request))
 
 
-@user_is_allowed(ProfileUnits)
 @user_passes_test(User.objects.not_disabled)
 def handle_form(request):
     item_id = request.REQUEST.get('id', 'new')
@@ -93,13 +94,14 @@ def handle_form(request):
         model = form_instance._meta.model
         data_dict['form'] = form_instance
         data_dict['verbose'] = model._meta.verbose_name.title()
+        
+        model_name = model._meta.verbose_name.lower()
         if form_instance.is_valid():
             form_instance.save()
             if request.is_ajax():
                 return HttpResponse(status=200)
             else:
-                return HttpResponseRedirect(reverse('view_profile',
-                                                    args=[request.user.email]))
+                return HttpResponseRedirect(reverse('view_profile'))
         else:
             if request.is_ajax():
                 return HttpResponse(json.dumps(form_instance.errors))
@@ -122,18 +124,16 @@ def handle_form(request):
                                   RequestContext(request))
 
 
-@user_is_allowed(ProfileUnits, 'item_id')
 @user_passes_test(User.objects.not_disabled)
-def delete_item(request, item_id):
+def delete_item(request):
+    item_id = request.REQUEST.get('item')
     try:
         request.user.profileunits_set.get(id=item_id).delete()
     except ProfileUnits.DoesNotExist:
         pass
-    return HttpResponseRedirect(reverse('view_profile',
-                                        args=[request.user.email]))
+    return HttpResponseRedirect(reverse('view_profile'))
 
 
-@user_is_allowed(ProfileUnits)
 @user_passes_test(User.objects.not_disabled)
 def get_details(request):
     module_config = {}

@@ -1,11 +1,4 @@
-/******
-Document Level Actions
-*******/
 $(document).ready(function(){
-    $("#id_email").attr("placeholder", "Email");
-    $( "input[id$='date']" ).datepicker({dateFormat: window.dateFormat,
-                                         constrainInput: false});
-
     var offset = 0;
 
     $(this).ajaxStart(function () {
@@ -28,26 +21,88 @@ $(document).ready(function(){
         $(this).dialog("close");
     });
     $(this).ajaxError(function (e, xhr) {
-        if (xhr.status == 403 || xhr.status == 404) {
-            /*
-            Redirects the user to the home page when various error types occur
-            403: the user is trying to access a protected page but is not
-                logged in
-            404: the user is trying to access a page using another user's
-                email address
-            */
+        if (xhr.status == 403) {
+            // redirect to the home page on 403
             window.location = '/';
         }
     });
     
     /*Explicit control of main menu, primarily for mobile but also provides
     non hover and cover option if that becomes an issue.*/
-    $("#nav .main-nav").click(function(){
+    $("#nav .main-nav").click(function(e){
+        e.preventDefault();
+        
         $("#nav").toggleClass("active");
-        return false;
+        $(".company-nav-item").addClass("no-show");
+        $(".settings-nav-item").addClass("no-show");
+        $("#back-btn-li").addClass("no-show");
+        
+        $("#logged-in-li").removeClass("no-show");
+        $("#profile-link").removeClass("no-show");
+        $("#savedsearch-link").removeClass("no-show");
+        $("#candidate-link").removeClass("no-show");
+        $('#settings-link').removeClass("no-show");
     });
+
     $("#pop-menu").mouseleave(function(){
         $("#nav").removeClass("active");
+    });   
+    
+    // Handles sub-menu displaying/hiding.
+    $('#candidate-link').click(function(e) {
+        $(".company-nav-item").removeClass("no-show");
+        $("#back-btn-li").removeClass("no-show");
+        
+        $("#settings-link").addClass("no-show");
+        $("#logged-in-li").addClass("no-show");
+        $("#profile-link").addClass("no-show");
+        $("#savedsearch-link").addClass("no-show");
+        $("#candidate-link").addClass("no-show"); 
+        $("#account-link").addClass("no-show");
+        $("#logout-link").addClass("no-show"); 
+    });
+    $('#settings-link').click(function(e) {
+        $(".settings-nav-item").removeClass("no-show");
+        $("#back-btn-li").removeClass("no-show");
+        
+        $("#settings-link").addClass("no-show");
+        $("#logged-in-li").addClass("no-show");
+        $("#profile-link").addClass("no-show");
+        $("#savedsearch-link").addClass("no-show");
+        $("#candidate-link").addClass("no-show"); 
+        $("#account-link").addClass("no-show");
+        $("#logout-link").addClass("no-show"); 
+    });    
+    $("#back-btn").click(function(e){
+        e.preventDefault();
+        
+        $(".company-nav-item").addClass("no-show");
+        $(".settings-nav-item").addClass("no-show");
+        $("#back-btn-li").addClass("no-show");
+        
+        $("#logged-in-li").removeClass("no-show");
+        $("#profile-link").removeClass("no-show");
+        $("#savedsearch-link").removeClass("no-show");
+        $("#candidate-link").removeClass("no-show");
+        $("#settings-link").removeClass("no-show"); 
+    });
+
+    // Displays/hides and highlights/unhighlights candidate dropdown 
+    // depending on hover.
+    $("#company-dropdown").mouseover(function(){
+        $("#company-menu").removeClass("no-show");
+        $("#candidate-tab").addClass("show");
+    });
+    $("#company-dropdown").mouseleave(function(){
+        $("#company-menu").addClass("no-show");
+        $("#candidate-tab").removeClass("show");
+    });
+    
+    $('#disable-account').click(function(){
+        var answer = confirm('Are you sure you want to disable your account?');
+        if (answer == true) {
+            window.location = '/account/disable';
+        }
     });
 
     $('a.account-menu-item').click(function(e) {
@@ -84,50 +139,59 @@ function clearForm(form) {
 
 // Validation for contact form
 function contactForm(){
-
     var form = $('#captcha-form');
-    // protection from cross site requests
-    csrf_token_tag = document.getElementsByName('csrfmiddlewaretoken')[0];
-    var csrf_token = "";
-    if(typeof(csrf_token_tag)!='undefined'){
-       csrf_token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
-    }
-    data = '&csrfmiddlewaretoken=' + csrf_token + '&';
-    data += form.serialize();
+
+    var data = form.serialize();
     $.ajax({
         type: 'POST',
         url: '/contact/',
         data: data,
+        dataType: 'json',
         success: function(data) {
-            if(data == 'success'){
-                window.location.href = "/success/"
+            if(data.validation == 'success'){
+                $('#contact-form').hide('slide', {direction: 'left'}, 250);
+                setTimeout(function(){
+                    $('#success-info').show('slide', {direction: 'right'}, 250);
+                    $('.formBox').show('slide', {direction: 'right'}, 250);
+                }, 300);
+                $('#name-input').html(data.name);
+                $('#email-input').html(data.c_email);
+                if(data.phone == ''){
+                    $('#phone-input').html('Not provided');
+                }else{
+                    $('#phone-input').html(data.phone);
+                }
+                $('#iam-input').html(data.c_type);
+                $('#aoi-input').html(data.reason);
+                $('#comment-input').html(data.comment);
+                $('#time-input').html(data.c_time);
             }else{
-                var json = jQuery.parseJSON(data);
+                var required = $('[class*=required]');
                 // remove color from labels of current errors
-                $('[class*=required]').prev().removeClass('required-label');
+                required.prev().removeClass('required-label');
 
                 // remove border around element
-                $('[class*=required]').children().removeClass('required-border');
+                required.children().removeClass('required-border');
 
                 // remove current errors
-                $('[class*=required]').children().unwrap();
+                required.children().unwrap();
 
                 if($.browser.msie){
                     $('[class*=msieError]').remove()
                 }
-                for (var index in json.errors) {
-                    var $error = $('[class$="'+json.errors[index][0]+'"]');
+                for (var index in data.errors) {
+                    var $error = $('[class$="'+data.errors[index][0]+'"]');
                     var $field = $('[id$=recaptcha_response_field]')
                     var $labelOfError = $error.prev();
                     // insert new errors after the relevant inputs
                     $error.wrap('<div class="required" />');
                     $error.addClass('required-border')
                     if(!($.browser.msie)){
-                        $field.attr("placeholder",json.errors[index][1]);
+                        $field.attr("placeholder",data.errors[index][1]);
                         $field.val('');
                     }else{
                         field = $error.parent();
-                        field.before("<div class='msieError'><i>" + json.errors[index][1] + "</i></div>");
+                        field.before("<div class='msieError'><i>" + data.errors[index][1] + "</i></div>");
                     }
                     $labelOfError.addClass('required-label')
                 }

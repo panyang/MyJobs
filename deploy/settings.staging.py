@@ -7,11 +7,10 @@ DATABASES = {
     'default': {
         'NAME': 'myjobs1',
         'ENGINE': 'django.db.backends.mysql',
-        #'USER': 'db_mjuser',
-        'USER': 'def_mj_root',
+        'USER': 'db_mjuser',
+        #'USER': 'def_mj_root',
         'PASSWORD': PROD_DB_PASSWD,
-        #'HOST': 'myjobs.c9shuxvtcmer.us-east-1.rds.amazonaws.com',
-        'HOST': 'db-myjobs1.c9shuxvtcmer.us-east-1.rds.amazonaws.com',
+        'HOST': 'myjobs-staging.c9shuxvtcmer.us-east-1.rds.amazonaws.com',
         'PORT': '3306'
     },
 }

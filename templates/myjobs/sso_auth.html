@@ -10,7 +10,7 @@
 </div>
 <div class="row">
     <div class="span8 offset2">
-        <form method="POST" action="{% url 'sso_authorize' user_email %}">
+        <form method="POST" action="{% url 'sso_authorize' %}?id={{user_email}}">
             {% include 'includes/form-error-highlight.html' with form=login_form %}
             <input type="hidden" name="referer" value="{{referer}}" />
             {% csrf_token %}

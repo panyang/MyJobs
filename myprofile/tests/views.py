@@ -24,8 +24,7 @@ class MyProfileViewsTests(TestCase):
         items in the main content section and a list of profile sections that
         don't have data filled out in the sidebar.
         """
-        resp = self.client.get(reverse('view_profile',
-                                       args=[self.user.email]))
+        resp = self.client.get(reverse('view_profile'))
         soup = BeautifulSoup(resp.content)
         item_id = Name.objects.all()[0].id
 
@@ -43,8 +42,7 @@ class MyProfileViewsTests(TestCase):
         empty form with the correct form id
         """
 
-        resp = self.client.get(reverse('handle_form',
-                                       args=[self.user.email]),
+        resp = self.client.get(reverse('handle_form'),
                                data={'module': 'Name'})
         self.assertTemplateUsed(resp, 'myprofile/profile_form.html')
         soup = BeautifulSoup(resp.content)
@@ -58,8 +56,7 @@ class MyProfileViewsTests(TestCase):
         a form filled out with the corresponding profile/ID combination
         """
 
-        resp = self.client.get(reverse('handle_form',
-                                       args=[self.user.email]),
+        resp = self.client.get(reverse('handle_form'),
                                data={'module': 'Name', 'id': self.name.id})
         self.assertTemplateUsed(resp, 'myprofile/profile_form.html')
         soup = BeautifulSoup(resp.content)
@@ -78,13 +75,11 @@ class MyProfileViewsTests(TestCase):
         to be rendered on the page.
         """
 
-        resp = self.client.post(reverse('handle_form',
-                                        args=[self.user.email]),
+        resp = self.client.post(reverse('handle_form'),
                                 data={'module': 'Name', 'id': 'new',
                                       'given_name': 'Susy',
                                       'family_name': 'Smith'})
-        self.assertRedirects(resp, reverse('view_profile',
-                                           args=[self.user.email]))
+        self.assertRedirects(resp, reverse('view_profile'))
         self.assertEqual(Name.objects.filter(given_name='Susy',
                                              family_name='Smith').count(), 1)
 
@@ -93,8 +88,7 @@ class MyProfileViewsTests(TestCase):
         Invoking the handle_form view as a POST request with an invalid
         form returns the list of form errors.
         """
-        resp = self.client.post(reverse('handle_form',
-                                        args=[self.user.email]),
+        resp = self.client.post(reverse('handle_form'),
                                 data={'module': 'Name', 'id': 'new',
                                       'given_name': 'Susy'},
                                 HTTP_X_REQUESTED_WITH='XMLHttpRequest')
@@ -107,13 +101,11 @@ class MyProfileViewsTests(TestCase):
         Invoking the handle_form view as a POST request for an existing
         item updates that item and returns the update item snippet.
         """
-        resp = self.client.post(reverse('handle_form',
-                                        args=[self.user.email]),
+        resp = self.client.post(reverse('handle_form'),
                                 data={'module': 'Name', 'id': self.name.id,
                                       'given_name': 'Susy',
                                       'family_name': 'Smith'})
-        self.assertRedirects(resp, reverse('view_profile',
-                                           args=[self.user.email]))
+        self.assertRedirects(resp, reverse('view_profile'))
         self.assertEqual(Name.objects.filter(given_name='Susy',
                                              family_name='Smith').count(), 1)
 
@@ -123,8 +115,7 @@ class MyProfileViewsTests(TestCase):
         the 'Deleted!' HttpResponse
         """
 
-        resp = self.client.post(reverse('delete_item',
-                                        args=[self.user.email, self.name.id]))
+        resp = self.client.post(reverse('delete_item')+'?item='+str(self.name.id))
 
         self.assertEqual(resp.content, '')
         self.assertEqual(Name.objects.filter(id=self.name.id).count(), 0)
@@ -137,8 +128,7 @@ class MyProfileViewsTests(TestCase):
         Due to how the instance is constructed, this validation is form-level
         rather than model-level.
         """
-        resp = self.client.post(reverse('handle_form',
-                                        args=[self.user.email]),
+        resp = self.client.post(reverse('handle_form'),
                                 data={'module': 'SecondaryEmail',
                                       'id': 'new',
                                       'email': self.user.email},

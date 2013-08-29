@@ -12,7 +12,6 @@ from django.forms.models import model_to_dict
 from django.http import HttpResponse, Http404
 from django.template import RequestContext
 from django.shortcuts import render_to_response, redirect
-from django.utils.html import mark_safe
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
 
@@ -45,10 +44,6 @@ class Privacy(TemplateView):
 
 class Terms(TemplateView):
     template_name = "terms.html"
-
-
-class Success(TemplateView):
-    template_name = "success.html"
 
 
 class CaptchaForm(Form):
@@ -109,21 +104,9 @@ def home(request):
             if loginform.is_valid():
                 expire_login(request, loginform.get_user())
                 try:
-                    url = ''
-                    request_url = request.environ.get('HTTP_REFERER')
-                    location = request_url.split('=')
-                    split_slashes = location[1].split('/')
-                    # split_slashes[0] and [1] are being replaced by
-                    # correct request.user.email
-                    for url_part in split_slashes[2:]:
-                        url += '/'+url_part
-
-                    # adds user's email to url
-                    url = request.user.email + url
-
-                    # decodes url
-                    url = urllib2.unquote(url)
-
+                    url = request.environ.get('HTTP_REFERER')
+                    url = url.split('=')
+                    url = urllib2.unquote(url[1])
                 except:
                     url = 'undefined'
                 response_data = {'validation': 'valid', 'url': url}
@@ -135,14 +118,28 @@ def home(request):
         elif request.POST.get('action') == "save_profile":
             name_form = InitialNameForm(request.POST, prefix="name",
                                         user=request.user)
+            if not name_form.changed_data:
+                name_form = InitialNameForm(prefix="name")
+
             education_form = InitialEducationForm(request.POST, prefix="edu",
                                                   user=request.user)
+            if not education_form.changed_data:
+                education_form = InitialEducationForm(prefix="edu")
+
             phone_form = InitialPhoneForm(request.POST, prefix="ph",
                                           user=request.user)
+            if not phone_form.changed_data:
+                phone_form = InitialPhoneForm(prefix="ph")
+
             work_form = InitialWorkForm(request.POST, prefix="work",
                                         user=request.user)
+            if not work_form.changed_data:
+                work_form = InitialWorkForm(prefix="work")
+
             address_form = InitialAddressForm(request.POST, prefix="addr",
                                               user=request.user)
+            if not address_form.changed_data:
+                address_form = InitialAddressForm(prefix="addr")
 
             forms = [name_form, education_form, phone_form, work_form,
                      address_form]
@@ -154,9 +151,10 @@ def home(request):
 
             if not invalid_forms:
                 for form in valid_forms:
-                    form.save(commit=False)
-                    form.user = request.user
-                    form.save_m2m()
+                    if form.changed_data:
+                        form.save(commit=False)
+                        form.user = request.user
+                        form.save_m2m()
                 return HttpResponse('valid')
             else:
                 return render_to_response('includes/initial-profile-form.html',
@@ -173,7 +171,7 @@ def home(request):
 def contact(request):
     if request.POST:
         name = request.POST.get('name')
-        im_a = request.POST.get('type')
+        contact_type = request.POST.get('type')
         reason = request.POST.get('reason')
         from_email = request.POST.get('email')
         phone_num = request.POST.get('phone')
@@ -185,33 +183,51 @@ def contact(request):
             except:
                 jira = []
             if not jira:
-                msg_subject = ('Contact My.jobs by a(n) %s' % im_a)
+                msg_subject = ('Contact My.jobs by a(n) %s' % contact_type)
                 message = """
                           Name: %s
                           Is a(n): %s
                           Email: %s
 
                           %s
-                          """ % (name, im_a, from_email, comment)
+                          """ % (name, contact_type, from_email, comment)
                 to_email = [EMAIL_TO_ADMIN]
                 msg = EmailMessage(msg_subject, message, from_email, to_email)
                 msg.send()
                 return HttpResponse('success')
             else:
+                project = jira.project('MJA')
+                components = []
+                component_ids = {'My.Jobs Error': {'id': '12903'},
+                                 'Job Seeker': {'id': '12901'},
+                                 'Employer': {'id': '12900'},
+                                 'Partner': {'id': '12902'}, }
+                components.append(component_ids.get(reason))
+                components.append(component_ids.get(contact_type))
+
                 issue_dict = {
-                    'project': {'key': 'MJA'},
+                    'project': {'key': project.key},
                     'summary': '%s - %s' % (reason, from_email),
                     'description': '%s' % comment,
                     'issuetype': {'name': 'Task'},
-                    'components': [{'id': '12703'}],
                     'customfield_10400': str(name),
                     'customfield_10401': str(from_email),
-                    'customfield_10402': str(phone_num),
-                }
+                    'customfield_10402': str(phone_num), }
+                
+                issue_dict['components'] = components
                 jira.create_issue(fields=issue_dict)
-                return HttpResponse('success')
+                time = datetime.datetime.now().strftime('%A, %B %d, %Y %l:%M %p')
+                return HttpResponse(json.dumps({'validation': 'success',
+                                                'name': name,
+                                                'c_type': contact_type,
+                                                'reason': reason,
+                                                'c_email': from_email,
+                                                'phone': phone_num,
+                                                'comment': comment,
+                                                'c_time': time}))
         else:
-            return HttpResponse(json.dumps({'errors': form.errors.items()}))
+            return HttpResponse(json.dumps({'validation': 'failed',
+                                            'errors': form.errors.items()}))
     else:
         form = CaptchaForm()
         data_dict = {'form': form}
@@ -243,7 +259,6 @@ def edit_account(request):
                               RequestContext(request))
 
 
-@user_is_allowed()
 @user_passes_test(User.objects.not_disabled)
 def edit_basic(request):
     initial_dict = check_name_obj(request.user)
@@ -266,7 +281,6 @@ def edit_basic(request):
                               RequestContext(request))
 
 
-@user_is_allowed()
 @user_passes_test(User.objects.not_disabled)
 def edit_communication(request):
     obj = User.objects.get(id=request.user.id)
@@ -286,7 +300,6 @@ def edit_communication(request):
                               RequestContext(request))
 
 
-@user_is_allowed()
 @user_passes_test(User.objects.not_disabled)
 def edit_password(request):
     form = ChangePasswordForm()
@@ -306,7 +319,6 @@ def edit_password(request):
                               RequestContext(request))
 
 
-@user_is_allowed()
 @user_passes_test(User.objects.not_disabled)
 def edit_delete(request):
     ctx = {'gravatar_150': request.user.get_gravatar_url(size=150)}
@@ -314,7 +326,6 @@ def edit_delete(request):
                               RequestContext(request))
 
 
-@user_is_allowed()
 @user_passes_test(User.objects.not_disabled)
 def edit_disable(request):
     ctx = {'gravatar_150': request.user.get_gravatar_url(size=150)}
@@ -322,7 +333,6 @@ def edit_disable(request):
                               RequestContext(request))
 
 
-@user_is_allowed()
 @user_passes_test(User.objects.not_disabled)
 def delete_account(request):
     email = request.user.email
@@ -332,7 +342,6 @@ def delete_account(request):
                               RequestContext(request))
 
 
-@user_is_allowed()
 @user_passes_test(User.objects.not_disabled)
 def disable_account(request):
     user = request.user
@@ -385,15 +394,14 @@ def batch_message_digest(request):
     return HttpResponse(status=403)
 
 
-@user_is_allowed()
-@user_passes_test(User.objects.not_disabled)
-def continue_sending_mail(request):
+@user_is_allowed(pass_user=True)
+def continue_sending_mail(request, user=None):
     """
     Updates the user's last response time to right now.
     Allows the user to choose to continue receiving emails if they are
     inactive.
     """
-    user = request.user
+    user = user or request.user
     user.last_response = datetime.date.today()
     user.save()
     return redirect('/')
@@ -416,8 +424,8 @@ def check_name_obj(user):
     return initial_dict
 
 
-@user_is_allowed(keep_email=True)
-def sso_authorize(request, user_email):
+@user_is_allowed(pass_user=True)
+def sso_authorize(request, user=None):
     callback = request.GET.get('callback')
     if callback:
         print 'ajax'
@@ -440,8 +448,8 @@ def sso_authorize(request, user_email):
     short = parsed_referer.netloc
     data_dict = {'referer': referer,
                  'referer_short': short,
-                 'user_email': user_email}
-    form_data = {'username': user_email}
+                 'user_email': user.email}
+    form_data = {'username': user.email}
     if request.method == 'POST':
         login_form = CustomAuthForm(data=form_data, auto_id=False)
         data_dict['login_form'] = login_form
@@ -462,11 +470,9 @@ def sso_authorize(request, user_email):
                               context_instance=RequestContext(request))
 
 
-@user_is_allowed(keep_email=True)
-def unsubscribe_all(request, user_email):
-    user = User.objects.get_email_owner(user_email)
-    if not user:
-        raise Http404
+@user_is_allowed(pass_user=True)
+def unsubscribe_all(request, user=None):
+    user = user or request.user
     user.opt_in_myjobs = False
     user.save()
 
