@@ -1130,6 +1130,20 @@ form input[type='checkbox'] {
     border-top:0;
 }
 
+#candidate-completion {
+    margin-right: 30px;
+}
+
+#candidate-progress {
+    height: 15px;
+}
+
+#candidate-progress-mobile {
+    margin-top: 5px;
+    height: 8px;
+    width: 50%
+}
+
 .details-heading {
     background-color: #d2cfc7;
     font-size: 1.3em;
