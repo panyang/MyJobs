@@ -32,7 +32,7 @@
             <a class="href-small-icon" href="mailto:{{the_user.email}}">{{ the_user.email }}</a>
 	    <br />		
 	    <div class="progress" id="candidate-progress-mobile">
-		<div class="bar bar-{% completion_level user.profile_completion %}" id="initial-bar" style="width: {{ the_user.profile_completion}}%;"></div>
+		<div class="bar bar-{% completion_level the_user.profile_completion %}" id="initial-bar" style="width: {{ the_user.profile_completion}}%;"></div>
 	    </div>
         </div>
         <div class="clear"></div>
@@ -47,7 +47,7 @@
 		<div class="pull-right" id="candidate-completion">
 			<b><div >Profile is <span id="highlight" class="initial-highlight">{{ the_user.profile_completion }}% complete</span></div></b>
 			<div class="progress" id="candidate-progress">
-				<div class="bar bar-{% completion_level user.profile_completion %}" id="initial-bar" style="width: {{ the_user.profile_completion}}%;"></div>
+				<div class="bar bar-{% completion_level the_user.profile_completion %}" id="initial-bar" style="width: {{ the_user.profile_completion}}%;"></div>
 			</div>
 		</div>
             <br />

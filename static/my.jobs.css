@@ -36,6 +36,10 @@ a:hover {
     width: 100px;
 }
 
+.site-progress {
+    margin-bottom: 0px;
+}
+
 /*Candidate Activity mobile desktop hide*/
 .candidate-activity-mobile {
     display: none;
