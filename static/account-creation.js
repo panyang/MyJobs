@@ -1,6 +1,9 @@
 var current_url = ""; //init current_url as global
 var profile_url = "/profile/";
 $(document).ready(function() {
+    $( "input[id$='date']" ).datepicker({dateFormat: window.dateFormat,
+                                                     constrainInput: false});
+
     // perform display modifications for fields on initial profile form
     $("#newAccountData #id_name-primary").hide()
     $("#newAccountData label[for=id_name-primary]").hide()
@@ -126,7 +129,7 @@ $(document).on("change", "#newAccountData", function() {
         profile_completion += 1;
     }
     if($("#id_edu-organization_name").val() != "" && $("#id_edu-degree_date").val() != "" &&
-       $("#id_edu-education_level_code").val() >= 3 && $("#id_edu-degree_name").val() != "") {
+       $("#id_edu-education_level_code").val() >= 3) {
         profile_completion += 1;
     }
     if ($("#id_ph-area_dialing").val() != "" || $("#id_ph-number").val() != "" ||
