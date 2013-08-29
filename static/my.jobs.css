@@ -1135,7 +1135,8 @@ form input[type='checkbox'] {
 }
 
 #candidate-completion {
-    margin-right: 30px;
+    margin-right: 32px;
+    font-size: 13px;
 }
 
 #candidate-progress {
