@@ -17,7 +17,7 @@
                     <a href="{% url 'candidate_information' %}?company={{ company_id }}&url={{ microsite_url }}&user={{ candidate.user.id }}" class="pull-left">{{candidate.user}}</a><br>
                     <div class="progress activity-progress site-progress">
                         <div class="bar bar-{% completion_level candidate.user.profile_completion %}" id="initial-bar" style="width: {{ candidate.user.profile_completion}}%;"></div>
-                    </div>                                 
+                    </div>
                     <div class="pull-left">{{candidate.url|url_domain}}<br>
                     {{candidate.created_on.date}}</div>
                 </td>
@@ -28,10 +28,10 @@
                 </td>
                 <td>
                 <div class="candidate-name-bold pull-left">{{candidate.user|get_name_obj}}</div>
-                    <a href="{% url 'candidate_information' %}?company={{ company_id }}&url={{ microsite_url }}&user={{ candidate.user.id }}" class="candidate-activity-mobile pull-left">{{candidate.user}}</a>
+                    <a href="{% url 'candidate_information' %}?company={{ company_id }}&url={{ microsite_url }}&user={{ candidate.user.id }}" class="candidate-activity-mobile pull-left">{{candidate.user}}</a><br>
                     <div class="progress activity-progress site-progress">
                         <div class="bar bar-{% completion_level candidate.user.profile_completion %}" id="initial-bar" style="width: {{ candidate.user.profile_completion}}%;"></div>
-                    </div>     
+                    </div>
                     <div class="pull-left">{{candidate.url|url_domain}}<br>
                     {{candidate.created_on.date}}</div>
                 </td>

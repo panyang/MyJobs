@@ -37,7 +37,7 @@ a:hover {
 }
 
 .site-progress {
-    margin-bottom: 0px;
+    margin-bottom: 0;
 }
 
 /*Candidate Activity mobile desktop hide*/
@@ -1183,6 +1183,10 @@ form input[type='checkbox'] {
 }
 
 @media screen and (max-width: 1024px) {
+    .site-progress {
+        margin-top: 20px;
+    }
+
     .topbar-inner {
         height: 50px;        
         border-bottom: 20px solid #c44e34;
@@ -1369,6 +1373,10 @@ form input[type='checkbox'] {
 }
 
 @media screen and (max-width: 500px) {
+    .site-progress {
+        margin-top: 0;
+    }
+
     #profile-completion {
         display: none;
     }
