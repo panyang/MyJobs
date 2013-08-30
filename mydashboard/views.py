@@ -10,7 +10,8 @@ from django.shortcuts import render_to_response
 
 from mydashboard.helpers import saved_searches
 from mydashboard.models import *
-from myjobs.models import User, PrimaryNameProfileUnitManager
+from myjobs.models import User
+from myprofile.models import PrimaryNameProfileUnitManager
 from mysearches.models import SavedSearch
 from endless_pagination.decorators import page_template
 
@@ -275,7 +276,9 @@ def candidate_information(request):
     if not urls:
         raise Http404
 
-    manager = PrimaryNameProfileUnitManager()
+    manager = PrimaryNameProfileUnitManager(order=['employmenthistory',
+                                                   'education',
+                                                   'militaryservice'])
     models = manager.displayed_units(user.profileunits_set.all())
 
     try:

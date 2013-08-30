@@ -3,6 +3,7 @@ import datetime
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
+from collections import OrderedDict
 
 from registration import signals as reg_signals
 from registration.models import ActivationProfile
@@ -361,15 +362,111 @@ models.signals.pre_delete.connect(delete_secondary_activation,
                                   dispatch_uid='delete_secondary_activation')
 
 
-class Profile(models.Model):
-    name = models.CharField(max_length=30)
-    user = models.ForeignKey(User)
-    profile_units = models.ManyToManyField(ProfileUnits)
-    display_order = models.CommaSeparatedIntegerField(max_length=255, blank=True,
-                                                      null=True)
+class BaseProfileUnitManager(object):
+    """
+    Class for managing how profile units are displayed
 
-    class Meta:
-        unique_together = (("name", "user"),)
+    Visible units are returned by displayed_units
 
-    def __unicode__(self):
-        return self.name
+    Displayed and excluded models are defined as lists of model names
+
+    Child classes can define custom display logic per model in
+    <model_name>_is_displayed methods
+        i.e.
+            def name_is_displayed(self, unit):
+                return unit.is_primary()
+
+    Each input accepts a list of model names as strings i.e. ['name','address']
+    Inputs:
+    :displayed: List of units one wants to be displayed
+    :excluded:  List of units one would want to exclud from being displayed
+    :order:     List of units to order the output for displayed_units
+    """
+    def __init__(self, displayed=None, excluded=None, order=None):
+        self.displayed = displayed or []
+        self.excluded = excluded or []
+        self.order = order or []
+
+    def is_displayed(self, unit):
+        """
+        Returns True if a unit should be displayed
+        Input:
+        :unit: An instance of ProfileUnit
+        """
+        try:
+            field_is_displayed = getattr(self, unit.get_model_name() + '_is_displayed')
+            if field_is_displayed:
+                return field_is_displayed(unit)
+        except:
+            pass
+        if not self.displayed and not self.excluded:
+            return True
+        elif self.displayed and self.excluded:
+            return unit.get_model_name() in self.displayed \
+                and unit.get_model_name() not in self.excluded
+        elif self.excluded:
+            return unit.get_model_name() not in self.excluded
+        elif self.displayed:
+            return unit.get_model_name() in self.displayed
+        else:
+            return True
+
+    def order_units(self, profileunits, order):
+        """
+        Sorts the dictionary from displayed_units
+
+        Inputs:
+        :profileunits:  Dict of profileunits made in displayed_units
+        :order:         List of model names (as strings)
+
+        Outputs:
+        Returns an OrderedDict of the sorted list
+        """
+        sorted_units = []
+        units_map = {item[0]: item for item in profileunits.items()}
+        for item in order:
+            try:
+                sorted_units.append(units_map[item])
+                units_map.pop(item)
+            except KeyError:
+                pass
+        sorted_units.extend(units_map.values())
+        return OrderedDict(sorted_units)
+
+    def displayed_units(self, profileunits):
+        """
+        Returns a dictionary of {model_names:[profile units]} to be displayed
+
+         Inputs:
+        :profileunits:  The default value is .all() profileunits, but you can
+                        input your own QuerySet of profileunits if you are
+                        using specific filters
+
+        Outputs:
+        :models:        Returns a dictionary of profileunits, an example:
+                        {u'name': [<Name: Foo Bar>, <Name: Bar Foo>]}
+        """
+        models = {}
+
+        for unit in profileunits:
+            if self.is_displayed(unit):
+                models.setdefault(unit.get_model_name(), []).append(
+                    getattr(unit, unit.get_model_name()))
+
+        if self.order:
+            models = self.order_units(models, self.order)
+
+        return models
+
+
+class PrimaryNameProfileUnitManager(BaseProfileUnitManager):
+    """
+    Excludes primary name from displayed_units and sets self.primary_name
+    """
+    def __init__(self, displayed=None, excluded=None, order=None):
+        super(PrimaryNameProfileUnitManager, self).__init__(displayed, excluded, order)
+
+    def name_is_displayed(self, profileunit):
+        if profileunit.name.primary:
+            self.primary_name = profileunit.name.get_full_name()
+        return False
