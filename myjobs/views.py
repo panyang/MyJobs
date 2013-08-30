@@ -201,7 +201,8 @@ def contact(request):
                                  'Job Seeker': {'id': '12901'},
                                  'Employer': {'id': '12900'},
                                  'Partner': {'id': '12902'}, }
-                components.append(component_ids.get(reason))
+                if component_ids.get(reason):
+                    components.append(component_ids.get(reason))
                 components.append(component_ids.get(contact_type))
 
                 issue_dict = {
