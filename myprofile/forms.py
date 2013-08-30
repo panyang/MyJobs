@@ -163,6 +163,31 @@ class WebsiteForm(BaseUserForm):
         model = Website
         widgets = generate_custom_widgets(model)
         widgets['description'] = Textarea(attrs={'rows': 5, 'cols': 24})
+
+
+class SummaryForm(BaseUserForm):
+
+    def __init__(self, *args, **kwargs):
+        try:
+            self.user = kwargs['user']
+        except KeyError:
+            pass
+        super(SummaryForm, self).__init__(*args, **kwargs)
+
+    def clean(self):
+        summary_model = self.user.profileunits_set.filter(
+            content_type__name="summary")
+
+        if not summary_model:
+            return self.cleaned_data
+        else:
+            raise ValidationError(_('Summary already exists'))
+
+    class Meta:
+        form_name = _('Summary')
+        model = Summary
+        widgets = generate_custom_widgets(model)
+        widgets['the_summary'] = Textarea(attrs={'rows': 5, 'cols': 24})
     
 
 class InitialForm(BaseUserForm):

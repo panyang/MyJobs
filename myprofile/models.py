@@ -339,13 +339,14 @@ class License(ProfileUnits):
 
 
 class Summary(ProfileUnits):
-    headline = models.TextField(max_length=100, verbose_name="Headline",
+    headline = models.CharField(max_length=100, verbose_name="Headline",
                                 help_text='How you describe your profession.' +
                                           ' ie "Experienced accounting ' +
                                           'professional"')
-    summary = models.TextField(max_length=2000, verbose_name="Summary",
-                               help_text='A short summary of your strengths' +
-                                         'and career to date.')
+    the_summary = models.TextField(max_length=2000, verbose_name="Summary",
+                                   blank=True,
+                                   help_text='A short summary of your ' +
+                                             'strength and career to date.')
 
 
 def delete_secondary_activation(sender, **kwargs):
