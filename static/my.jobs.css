@@ -36,6 +36,10 @@ a:hover {
     width: 100px;
 }
 
+.site-progress {
+    margin-bottom: 0;
+}
+
 /*Candidate Activity mobile desktop hide*/
 .candidate-activity-mobile {
     display: none;
@@ -1130,6 +1134,21 @@ form input[type='checkbox'] {
     border-top:0;
 }
 
+#candidate-completion {
+    margin-right: 32px;
+    font-size: 13px;
+}
+
+#candidate-progress {
+    height: 15px;
+}
+
+#candidate-progress-mobile {
+    margin-top: 5px;
+    height: 8px;
+    width: 50%
+}
+
 .details-heading {
     background-color: #d2cfc7;
     font-size: 1.3em;
@@ -1164,6 +1183,10 @@ form input[type='checkbox'] {
 }
 
 @media screen and (max-width: 1024px) {
+    .site-progress {
+        margin-top: 20px;
+    }
+
     .topbar-inner {
         height: 50px;        
         border-bottom: 20px solid #c44e34;
@@ -1350,6 +1373,10 @@ form input[type='checkbox'] {
 }
 
 @media screen and (max-width: 500px) {
+    .site-progress {
+        margin-top: 0;
+    }
+
     #profile-completion {
         display: none;
     }
