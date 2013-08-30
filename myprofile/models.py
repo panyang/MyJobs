@@ -379,7 +379,7 @@ class BaseProfileUnitManager(object):
     Each input accepts a list of model names as strings i.e. ['name','address']
     Inputs:
     :displayed: List of units one wants to be displayed
-    :excluded:  List of units one would want to exclud from being displayed
+    :excluded:  List of units one would want to exclude from being displayed
     :order:     List of units to order the output for displayed_units
     """
     def __init__(self, displayed=None, excluded=None, order=None):
@@ -394,10 +394,11 @@ class BaseProfileUnitManager(object):
         :unit: An instance of ProfileUnit
         """
         try:
-            field_is_displayed = getattr(self, unit.get_model_name() + '_is_displayed')
+            field_is_displayed = getattr(self,
+                                         unit.get_model_name()+'_is_displayed')
             if field_is_displayed:
                 return field_is_displayed(unit)
-        except:
+        except AttributeError:
             pass
         if not self.displayed and not self.excluded:
             return True
@@ -464,7 +465,8 @@ class PrimaryNameProfileUnitManager(BaseProfileUnitManager):
     Excludes primary name from displayed_units and sets self.primary_name
     """
     def __init__(self, displayed=None, excluded=None, order=None):
-        super(PrimaryNameProfileUnitManager, self).__init__(displayed, excluded, order)
+        super(PrimaryNameProfileUnitManager, self).__init__(displayed,
+                                                            excluded, order)
 
     def name_is_displayed(self, profileunit):
         if profileunit.name.primary:

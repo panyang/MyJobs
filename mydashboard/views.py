@@ -258,9 +258,6 @@ def candidate_information(request):
     user_id = request.REQUEST.get('user')
     company_id = request.REQUEST.get('company')
 
-    # gets returned with response to request
-    primary_name = "Name not given"
-
     # user gets pulled out from id
     try:
         user = User.objects.get(id=user_id)
@@ -281,10 +278,7 @@ def candidate_information(request):
                                                    'militaryservice'])
     models = manager.displayed_units(user.profileunits_set.all())
 
-    try:
-        primary_name = manager.primary_name
-    except:
-        pass
+    primary_name = getattr(manager, 'primary_name', 'Name not given')
 
     if request.REQUEST.get('url'):
         microsite_url = request.REQUEST.get('url')
