@@ -286,30 +286,6 @@ class User(AbstractBaseUser):
         group = Group.objects.get(name='Job Seeker')
         self.groups.add(group.pk)
 
-    def profileunits_dict(self, profileunits=None):
-        """
-        Inputs:
-        :profileunits:  The default value is .all() profileunits, but you can
-                        input your own QuerySet of profileunits if you are
-                        using specific filters
-
-        Outputs:
-        :models:        Returns a dictionary of profileunits, an example:
-                        {u'name': [<Name: Foo Bar>, <Name: Bar Foo>]}
-        """
-        if not profileunits:
-            units = self.profileunits_set.all()
-        else:
-            units = profileunits
-
-        models = {}
-
-        for unit in units:
-            models.setdefault(unit.get_model_name(), []).append(
-                getattr(unit, unit.get_model_name()))
-
-        return models
-
 
 class EmailLog(models.Model):
     email = models.EmailField(max_length=254)
