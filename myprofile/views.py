@@ -29,9 +29,9 @@ def edit_profile(request):
     user.update_profile_completion()
 
     manager = BaseProfileUnitManager(order=['name', 'employmenthistory',
-                                            'education', 'military', 'license',
-                                            'secondaryemail', 'website',
-                                            'address'])
+                                            'education', 'militaryservice', 
+                                            'license', 'secondaryemail', 
+                                            'website', 'address'])
     profile_config = manager.displayed_units(user.profileunits_set.all())
 
     empty_units = [model for model in ProfileUnits.__subclasses__()]
