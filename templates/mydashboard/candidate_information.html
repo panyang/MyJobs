@@ -2,6 +2,7 @@
 
 {% load i18n %}
 {% load user_ops %}
+{% load common_tags %}
 
 {% block meta-extra %}
 <script src="http://js.nlx.org/framework/v2/js/def.ui.bootstrap.tabs.js" type="text/javascript"></script>
@@ -28,9 +29,11 @@
         <div id="mobile-name-heading">
             <span id="name-flag">{{primary_name}}</span>
             <br />
-            <span id="candidate-flag">Candidate Information</span>
-            <br />
-            <a class="href-small-icon" href="mailto:{{the_user.email}}"><img id="email-img" src="{{STATIC_URL}}images/rsz_1envelope4.jpg" /></a>
+            <a class="href-small-icon" href="mailto:{{the_user.email}}">{{ the_user.email }}</a>
+	    <br />		
+	    <div class="progress" id="candidate-progress-mobile">
+		<div class="bar bar-{% completion_level the_user.profile_completion %}" id="initial-bar" style="width: {{ the_user.profile_completion}}%;"></div>
+	    </div>
         </div>
         <div class="clear"></div>
         <a class="btn primary" href="{% url 'dashboard' %}">Back to Company Dashboard</a>
@@ -40,7 +43,13 @@
     <br />
     <div class="row" id="candidate-content">
         <div class="span4 default-heading-candidate-view">
-			<img src="{{the_user.get_gravatar_url}}&s=100">
+		<img src="{{the_user.get_gravatar_url}}&s=100">
+		<div class="pull-right" id="candidate-completion">
+			<b><div >Profile is <span id="highlight" class="initial-highlight">{{ the_user.profile_completion }}% complete</span></div></b>
+			<div class="progress" id="candidate-progress">
+				<div class="bar bar-{% completion_level the_user.profile_completion %}" id="initial-bar" style="width: {{ the_user.profile_completion}}%;"></div>
+			</div>
+		</div>
             <br />
             <p>
                 <a class="href-small-icon" href="mailto:{{the_user.email}}"><img src="{{STATIC_URL}}images/rsz_1envelope4.jpg" /><span style="margin-top:5px; margin-left:5px;">{{the_user.email}}</span></a>
