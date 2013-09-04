@@ -95,6 +95,7 @@ def sso_authorize(request):
         # Only anonymous users can reach this point. This is not inside an else
         # block so that it can catch users who were logged out above.
         login_form = CustomAuthForm(auto_id=True)
+        login_form.fields.pop('remember_me')
         data['login_form'] = login_form
         return render_to_response('sso/sso_auth.html',
                                   data,
@@ -111,6 +112,7 @@ def sso_authorize(request):
         callback = urlparse.urlparse(callback)
         if action == 'login':
             login_form = CustomAuthForm(data=request.POST, auto_id=False)
+            login_form.fields.pop('remember_me')
             if login_form.is_valid():
                 user = authenticate(
                     username=login_form.cleaned_data['username'],
