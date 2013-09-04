@@ -7,6 +7,7 @@ from mysearches.views import *
 urlpatterns = patterns('',
     url(r'^view/delete$', delete_saved_search, name='delete_saved_search'),
     url(r'^$', RedirectView.as_view(url='/saved-search/view/')),
+    url(r'^view$', saved_search_main, name='saved_search_main_query'),
     url(r'^view/$', saved_search_main, name='saved_search_main'),
     url(r'^view/feed$', view_full_feed, name='view_full_feed'),
     url(r'^view/more-results/$', more_feed_results, name='more_feed_results'),

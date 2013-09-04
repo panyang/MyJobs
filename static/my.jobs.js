@@ -1,11 +1,4 @@
-/******
-Document Level Actions
-*******/
 $(document).ready(function(){
-    $("#id_email").attr("placeholder", "Email");
-    $( "input[id$='date']" ).datepicker({dateFormat: window.dateFormat,
-                                         constrainInput: false});
-
     var offset = 0;
 
     $(this).ajaxStart(function () {
@@ -28,26 +21,88 @@ $(document).ready(function(){
         $(this).dialog("close");
     });
     $(this).ajaxError(function (e, xhr) {
-        if (xhr.status == 403 || xhr.status == 404) {
-            /*
-            Redirects the user to the home page when various error types occur
-            403: the user is trying to access a protected page but is not
-                logged in
-            404: the user is trying to access a page using another user's
-                email address
-            */
+        if (xhr.status == 403) {
+            // redirect to the home page on 403
             window.location = '/';
         }
     });
     
     /*Explicit control of main menu, primarily for mobile but also provides
     non hover and cover option if that becomes an issue.*/
-    $("#nav .main-nav").click(function(){
+    $("#nav .main-nav").click(function(e){
+        e.preventDefault();
+        
         $("#nav").toggleClass("active");
-        return false;
+        $(".company-nav-item").addClass("no-show");
+        $(".settings-nav-item").addClass("no-show");
+        $("#back-btn-li").addClass("no-show");
+        
+        $("#logged-in-li").removeClass("no-show");
+        $("#profile-link").removeClass("no-show");
+        $("#savedsearch-link").removeClass("no-show");
+        $("#candidate-link").removeClass("no-show");
+        $('#settings-link').removeClass("no-show");
     });
+
     $("#pop-menu").mouseleave(function(){
         $("#nav").removeClass("active");
+    });   
+    
+    // Handles sub-menu displaying/hiding.
+    $('#candidate-link').click(function(e) {
+        $(".company-nav-item").removeClass("no-show");
+        $("#back-btn-li").removeClass("no-show");
+        
+        $("#settings-link").addClass("no-show");
+        $("#logged-in-li").addClass("no-show");
+        $("#profile-link").addClass("no-show");
+        $("#savedsearch-link").addClass("no-show");
+        $("#candidate-link").addClass("no-show"); 
+        $("#account-link").addClass("no-show");
+        $("#logout-link").addClass("no-show"); 
+    });
+    $('#settings-link').click(function(e) {
+        $(".settings-nav-item").removeClass("no-show");
+        $("#back-btn-li").removeClass("no-show");
+        
+        $("#settings-link").addClass("no-show");
+        $("#logged-in-li").addClass("no-show");
+        $("#profile-link").addClass("no-show");
+        $("#savedsearch-link").addClass("no-show");
+        $("#candidate-link").addClass("no-show"); 
+        $("#account-link").addClass("no-show");
+        $("#logout-link").addClass("no-show"); 
+    });    
+    $("#back-btn").click(function(e){
+        e.preventDefault();
+        
+        $(".company-nav-item").addClass("no-show");
+        $(".settings-nav-item").addClass("no-show");
+        $("#back-btn-li").addClass("no-show");
+        
+        $("#logged-in-li").removeClass("no-show");
+        $("#profile-link").removeClass("no-show");
+        $("#savedsearch-link").removeClass("no-show");
+        $("#candidate-link").removeClass("no-show");
+        $("#settings-link").removeClass("no-show"); 
+    });
+
+    // Displays/hides and highlights/unhighlights candidate dropdown 
+    // depending on hover.
+    $("#company-dropdown").mouseover(function(){
+        $("#company-menu").removeClass("no-show");
+        $("#candidate-tab").addClass("show");
+    });
+    $("#company-dropdown").mouseleave(function(){
+        $("#company-menu").addClass("no-show");
+        $("#candidate-tab").removeClass("show");
+    });
+    
+    $('#disable-account').click(function(){
+        var answer = confirm('Are you sure you want to disable your account?');
+        if (answer == true) {
+            window.location = '/account/disable';
+        }
     });
 
     $('a.account-menu-item').click(function(e) {
