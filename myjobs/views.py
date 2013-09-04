@@ -1,5 +1,7 @@
 import base64
 import datetime
+from hashlib import sha1
+import hmac
 import json
 import logging
 import urllib2
@@ -422,52 +424,6 @@ def check_name_obj(user):
     if name:
         initial_dict.update(model_to_dict(name))
     return initial_dict
-
-
-@user_is_allowed(pass_user=True)
-def sso_authorize(request, user=None):
-    callback = request.GET.get('callback')
-    if callback:
-        print 'ajax'
-        session = request.GET.get('myjobssession')
-        if session:
-            print 'session'
-            try:
-                session = Session.objects.get(session_key=session)
-            except Session.DoesNotExist:
-                print 'no session'
-                raise Http404
-            return HttpResponse(status=200)
-        raise Http404
-
-    referer = request.POST.get('referer') or request.META.get('HTTP_REFERER')
-    if not referer:
-        raise Http404
-
-    parsed_referer = urllib2.urlparse.urlparse(referer)
-    short = parsed_referer.netloc
-    data_dict = {'referer': referer,
-                 'referer_short': short,
-                 'user_email': user.email}
-    form_data = {'username': user.email}
-    if request.method == 'POST':
-        login_form = CustomAuthForm(data=form_data, auto_id=False)
-        data_dict['login_form'] = login_form
-
-        if login_form.is_valid():
-            expire_login(request, login_form.get_user())
-
-            response = redirect(referer)
-            response['Location'] += '?myjobssession={}'.format(
-                request.session.session_key)
-            return response
-    else:
-        login_form = CustomAuthForm(data=request.REQUEST, auto_id=False)
-        data_dict['login_form'] = login_form
-
-    return render_to_response('myjobs/sso_auth.html',
-                              data_dict,
-                              context_instance=RequestContext(request))
 
 
 @user_is_allowed(pass_user=True)

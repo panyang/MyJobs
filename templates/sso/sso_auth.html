@@ -1,0 +1,34 @@
+{% extends 'base.html' %}
+
+{% load form_tags %}
+
+{% block content %}
+<div class="row">
+    <div class="span12">
+        <h1>Authorize <small>{{referer_short}}</small></h1>
+    </div>
+</div>
+<div class="row">
+    <div class="span8 offset2">
+        <form method="POST" action="{% url 'sso_authorize' %}">
+            {% csrf_token %}
+            <input type="hidden" name="referer" value="{{referer}}" />
+            <input type="hidden" name="callback" value="{{callback}}" />
+
+            <p>Authorize {{referer_short}} to make use of your My.jobs account?</p>
+
+            {% if login_form %}
+            <p>Logging in will automatically redirect you back to {{referer_short}}</p>
+            {% include 'includes/form-error-highlight.html' with form=login_form %}
+            <div class="actions">
+                <button type="submit" name="action" value="login" class="btn primary">Login and Authorize</button>
+            </div>
+            {% else %}
+            <div class="actions">
+                <button type="submit" name="action" value="authorize" class="btn primary">Authorize</button>
+            </div>
+            {% endif %}
+        </form>
+    </div>
+</div>
+{% endblock %}

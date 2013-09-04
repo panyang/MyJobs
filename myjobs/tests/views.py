@@ -495,34 +495,6 @@ class MyJobsViewsTests(TestCase):
         jira = JIRA(options=options, basic_auth=my_agent_auth)
         self.assertIsNotNone(jira)
 
-    def test_sso_auth(self):
-        response = self.client.get(reverse('sso_authorize') + \
-                                   '?id=%s' % self.user.email)
-        self.assertEqual(response.status_code, 404)
-
-        response = self.client.get(reverse('sso_authorize') + \
-                                   '?id=%s' % self.user.email,
-                                   HTTP_REFERER='http://jobs.jobs')
-        self.assertTemplateUsed(response, 'myjobs/sso_auth.html')
-
-    def test_sso_auth_sessions(self):
-        response = self.client.get(reverse('sso_authorize') + \
-                                   '?id=%s' % self.user.email)
-        self.assertEqual(response.status_code, 404)
-
-        response = self.client.get(reverse('sso_authorize') + \
-                                   '?id=%s' % self.user.email,
-                                   data={'session': 'bad_session_key',
-                                         'callback': 'jsonpcallback'})
-        self.assertEqual(response.status_code, 404)
-
-        session = Session.objects.all()[0]
-        response = self.client.get(reverse('sso_authorize') + \
-                                   '?id=%s' % self.user.email,
-                                   data={'myjobssession': session.session_key,
-                                         'callback': 'jsonpcallback'})
-        self.assertEqual(response.status_code, 200)
-
     def test_anonymous_unsubscribe_all_myjobs_emails(self):
         Session.objects.all().delete()
         self.assertTrue(self.user.opt_in_myjobs)
