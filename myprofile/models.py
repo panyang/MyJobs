@@ -352,13 +352,20 @@ class Summary(ProfileUnits):
                                              'strength and career to date.')
 
     def save(self, *args, **kwargs):
-        summary_model = self.user.profileunits_set.get(
-            content_type__name="summary")
+        try:
+            summary_model = self.user.profileunits_set.get(
+                content_type__name="summary")
+        except ProfileUnits.DoesNotExist:
+            summary_model = None
 
         if not summary_model:
             super(Summary, self).save(*args, **kwargs)
-        if self.id == summary_model.id:
-            super(Summary, self).save(*args, **kwargs)
+        else:
+            if self.id == summary_model.id:
+                super(Summary, self).save(*args, **kwargs)
+            else:
+                raise ValidationError("A summary already exists")
+
 
 
 def delete_secondary_activation(sender, **kwargs):
