@@ -174,15 +174,6 @@ class SummaryForm(BaseUserForm):
             pass
         super(SummaryForm, self).__init__(*args, **kwargs)
 
-    def clean(self):
-        summary_model = self.user.profileunits_set.filter(
-            content_type__name="summary")
-
-        if not summary_model:
-            return self.cleaned_data
-        else:
-            raise ValidationError(_('Summary already exists'))
-
     class Meta:
         form_name = _('Summary')
         model = Summary

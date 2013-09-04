@@ -1,5 +1,7 @@
 import datetime
 
+from django.core.validators import ValidationError
+
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
@@ -347,6 +349,15 @@ class Summary(ProfileUnits):
                                    blank=True,
                                    help_text='A short summary of your ' +
                                              'strength and career to date.')
+
+    def save(self, *args, **kwargs):
+        summary_model = self.user.profileunits_set.get(
+            content_type__name="summary")
+
+        if not summary_model:
+            super(Summary, self).save(*args, **kwargs)
+        if self.id == summary_model.id:
+            super(Summary, self).save(*args, **kwargs)
 
 
 def delete_secondary_activation(sender, **kwargs):
