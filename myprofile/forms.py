@@ -166,14 +166,6 @@ class WebsiteForm(BaseUserForm):
 
 
 class SummaryForm(BaseUserForm):
-
-    def __init__(self, *args, **kwargs):
-        try:
-            self.user = kwargs['user']
-        except KeyError:
-            pass
-        super(SummaryForm, self).__init__(*args, **kwargs)
-
     class Meta:
         form_name = _('Summary')
         model = Summary
