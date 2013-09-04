@@ -3,6 +3,7 @@
 {% load common_tags %}
 {% block topbarlogin %}{% endblock topbarlogin %}
 {% block meta-extra %}
+<script> var num_modules = {{ num_modules }}; </script>
 <script type="text/javascript" src="{{STATIC_URL}}account-creation.js{% cache_buster %}"></script>
 {% endblock %}
 

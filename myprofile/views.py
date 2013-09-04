@@ -10,7 +10,7 @@ from django.shortcuts import render_to_response, get_object_or_404
 from myjobs.decorators import user_is_allowed
 from myjobs.models import User
 from myjobs.helpers import *
-from myprofile.models import ProfileUnits
+from myprofile.models import ProfileUnits, BaseProfileUnitManager
 
 
 @user_is_allowed()
@@ -28,7 +28,11 @@ def edit_profile(request):
 
     user.update_profile_completion()
 
-    profile_config = user.profileunits_dict()
+    manager = BaseProfileUnitManager(order=['name', 'employmenthistory',
+                                            'education', 'militaryservice', 
+                                            'license', 'secondaryemail', 
+                                            'website', 'address'])
+    profile_config = manager.displayed_units(user.profileunits_set.all())
 
     empty_units = [model for model in ProfileUnits.__subclasses__()]
 
