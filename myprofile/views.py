@@ -28,6 +28,8 @@ def edit_profile(request):
 
     user.update_profile_completion()
 
+    user.make_guid()
+
     manager = BaseProfileUnitManager(order=['name', 'employmenthistory',
                                             'education', 'militaryservice', 
                                             'license', 'secondaryemail', 
