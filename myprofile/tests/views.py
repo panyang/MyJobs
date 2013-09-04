@@ -117,8 +117,8 @@ class MyProfileViewsTests(TestCase):
         """
         summary_instance = SummaryFactory(user=self.user)
         summary_instance.save()
-        resp = self.client.post(reverse('handle_form'),
-                                data={'module': 'Summary'})
+        resp = self.client.get(reverse('handle_form'),
+                               data={'module': 'Summary'})
         self.assertRedirects(resp, reverse(
             'handle_form')+'?id=%s&module=Summary' % summary_instance.id)
 
