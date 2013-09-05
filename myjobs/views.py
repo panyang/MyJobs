@@ -6,6 +6,7 @@ import urllib2
 
 from django.contrib.auth import authenticate, logout
 from django.contrib.auth.decorators import user_passes_test
+from django.conf import settings
 from django.core.mail import EmailMessage
 from django.forms.models import model_to_dict
 from django.http import HttpResponse, Http404
@@ -70,7 +71,8 @@ def home(request):
     work_form = InitialWorkForm(prefix="work")
     address_form = InitialAddressForm(prefix="addr")
 
-    data_dict = {'registrationform': registrationform,
+    data_dict = {'num_modules': len(settings.PROFILE_COMPLETION_MODULES),
+                 'registrationform': registrationform,
                  'loginform': loginform,
                  'name_form': name_form,
                  'phone_form': phone_form,
@@ -115,14 +117,28 @@ def home(request):
         elif request.POST.get('action') == "save_profile":
             name_form = InitialNameForm(request.POST, prefix="name",
                                         user=request.user)
+            if not name_form.changed_data:
+                name_form = InitialNameForm(prefix="name")
+
             education_form = InitialEducationForm(request.POST, prefix="edu",
                                                   user=request.user)
+            if not education_form.changed_data:
+                education_form = InitialEducationForm(prefix="edu")
+
             phone_form = InitialPhoneForm(request.POST, prefix="ph",
                                           user=request.user)
+            if not phone_form.changed_data:
+                phone_form = InitialPhoneForm(prefix="ph")
+
             work_form = InitialWorkForm(request.POST, prefix="work",
                                         user=request.user)
+            if not work_form.changed_data:
+                work_form = InitialWorkForm(prefix="work")
+
             address_form = InitialAddressForm(request.POST, prefix="addr",
                                               user=request.user)
+            if not address_form.changed_data:
+                address_form = InitialAddressForm(prefix="addr")
 
             forms = [name_form, education_form, phone_form, work_form,
                      address_form]
@@ -134,18 +150,19 @@ def home(request):
 
             if not invalid_forms:
                 for form in valid_forms:
-                    form.save(commit=False)
-                    form.user = request.user
-                    form.save_m2m()
+                    if form.changed_data:
+                        form.save(commit=False)
+                        form.user = request.user
+                        form.save_m2m()
                 return HttpResponse('valid')
             else:
                 return render_to_response('includes/initial-profile-form.html',
-                                          {'name_form': name_form,
-                                           'phone_form': phone_form,
-                                           'address_form': address_form,
-                                           'work_form': work_form,
-                                           'education_form': education_form},
-                                          context_instance=RequestContext(request))
+                          {'name_form': name_form,
+                           'phone_form': phone_form,
+                           'address_form': address_form,
+                           'work_form': work_form,
+                           'education_form': education_form},
+                           context_instance=RequestContext(request))
 
     return render_to_response('index.html', data_dict, RequestContext(request))
 
@@ -184,7 +201,8 @@ def contact(request):
                                  'Job Seeker': {'id': '12901'},
                                  'Employer': {'id': '12900'},
                                  'Partner': {'id': '12902'}, }
-                components.append(component_ids.get(reason))
+                if component_ids.get(reason):
+                    components.append(component_ids.get(reason))
                 components.append(component_ids.get(contact_type))
 
                 issue_dict = {

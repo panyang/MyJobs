@@ -3,6 +3,7 @@
 {% load common_tags %}
 {% block topbarlogin %}{% endblock topbarlogin %}
 {% block meta-extra %}
+<script> var num_modules = {{ num_modules }}; </script>
 <script type="text/javascript" src="{{STATIC_URL}}account-creation.js{% cache_buster %}"></script>
 {% endblock %}
 
@@ -72,7 +73,6 @@
               	    <h2>{% trans "Profile" %}</h2>
 		            <div class="centered">
                         <img id="gravatar"><br>{# src attr is set in account-creation.js #}
-    		            <a href="http://www.gravatar.com" target="_blank">Change your profile image on gravatar.com</a>
       		            <p>
                             <b class="newUserEmail"></b><br/>account status: <b class="pendingText">Pending activation</b>
     		            </p>
@@ -83,6 +83,13 @@
                        an activation link for your account. While you wait, go
                        ahead and add some data modules to your profile.
                     </p>
+                    <div class="profile-unit">
+                        <b><div class="pull-right">Your profile is <span id="highlight" class="initial-highlight">0% complete</span></div></b><br>
+                        <div class="progress">
+                            <div class="bar" id="initial-bar" style="width: 0%;"></div>
+                        </div>
+                        Adding more information will help you match with employers and make it easier for you to apply to future jobs.
+                    </div>
                 </div>
             </div>
             {% include "includes/initial-profile-form.html" %}
