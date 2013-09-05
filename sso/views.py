@@ -16,27 +16,30 @@ def sso_authorize(request):
     """
     Authorizes specific web sites to utilize an existing My.jobs account
     """
+
+    # Common between GET and POST, both referer and callback are required.
+    referer = request.META.get('HTTP_REFERER') or request.POST.get('referer')
+    auth_callback = request.GET.get('auth_callback') or \
+        request.POST.get('auth_callback')
+    data = {'referer': referer,
+            'auth_callback': auth_callback}
+
+    if referer and auth_callback:
+        # referer and callback are required
+        referer = urlparse.urlparse(referer)
+        auth_callback = unquote(auth_callback)
+        auth_callback = urlparse.urlparse(auth_callback)
+        if not (referer.netloc and auth_callback.netloc) or \
+                referer.netloc != auth_callback.netloc:
+            # If the base urls of referer and callback are not truthy,
+            # the urls are malformed somehow.
+            # These are expected to be truthy and equal to one another.
+            raise Http404
+    else:
+        raise Http404
+
     if request.method == 'GET':
         # Initial view after being redirected from an external site
-        referer = request.META.get('HTTP_REFERER')
-        auth_callback = request.GET.get('auth_callback')
-        data = {'referer': referer,
-                'auth_callback': auth_callback}
-
-        if referer and auth_callback:
-            # referer and callback are required
-            referer = urlparse.urlparse(referer)
-            auth_callback = unquote(auth_callback)
-            auth_callback = urlparse.urlparse(auth_callback)
-            if not (referer.netloc and auth_callback.netloc) or \
-                    referer.netloc != auth_callback.netloc:
-                # If the base urls of referer and callback are not truthy,
-                # the urls are malformed somehow.
-                # These are expected to be truthy and equal to one another.
-                raise Http404
-        else:
-            raise Http404
-
         data['referer_short'] = referer.netloc
 
         if not request.user.is_anonymous():
@@ -104,12 +107,6 @@ def sso_authorize(request):
     else:
         # Form was posted.
         action = request.POST.get('action')
-        referer = request.POST.get('referer')
-        auth_callback = request.POST.get('auth_callback')
-        data = {'referer': referer,
-                'auth_callback': auth_callback}
-        referer = urlparse.urlparse(referer)
-        auth_callback = urlparse.urlparse(auth_callback)
         if action == 'login':
             login_form = CustomAuthForm(data=request.POST, auto_id=False)
             login_form.fields.pop('remember_me')
