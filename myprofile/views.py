@@ -116,6 +116,16 @@ def handle_form(request):
     else:
         if item_id == 'new':
             form_instance = form(user=request.user, auto_id=False)
+            if data_dict['module'] == 'Summary':
+                try:
+                    summary = request.user.profileunits_set.get(
+                        content_type__name='summary')
+                except ProfileUnits.DoesNotExist:
+                    summary = None
+                if summary:
+                    return HttpResponseRedirect(reverse('handle_form') +
+                                                '?id='+str(summary.id) +
+                                                '&module='+data_dict['module'])
         else:
             form_instance = form(instance=item, auto_id=False)
             if data_dict['module'] == 'SecondaryEmail':

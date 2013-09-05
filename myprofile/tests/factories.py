@@ -95,6 +95,7 @@ class MilitaryServiceFactory(factory.Factory):
     service_start_date = datetime.date(2005, 1, 2)
     service_end_date = datetime.date(2007, 1, 2)
     end_rank = "E-7"
+    user = factory.SubFactory(UserFactory)
 
 
 class WebsiteFactory(factory.Factory):
@@ -105,6 +106,7 @@ class WebsiteFactory(factory.Factory):
     uri_active = True
     description = "The site we work on."
     site_type = "Other"
+    user = factory.SubFactory(UserFactory)
 
 
 class LicenseFactory(factory.Factory):
@@ -112,3 +114,12 @@ class LicenseFactory(factory.Factory):
     
     license_type = "Type"
     license_name = "Name"
+    user = factory.SubFactory(UserFactory)
+
+
+class SummaryFactory(factory.Factory):
+    FACTORY_FOR = Summary
+
+    headline = 'My Summary'
+    the_summary = "One day I knew I'd work for Mr. Wrench"
+    user = factory.SubFactory(UserFactory)
