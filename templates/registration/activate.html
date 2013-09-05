@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load i18n %}
+{% load common_tags %}
 {% comment %}
 **registration/activate.html**
 
@@ -17,7 +18,7 @@ Used to check if registration was successful.
         </div>
         <div class="row" id="profileTitleRow">                
             <div class="span2">
-                <img src="{{activated.get_gravatar_url}}&s=140">
+                <img src="{% get_gravatar activated '140' %}>
             </div>
             <div class="span6" id="profileTitleBar">
                 <h2>{{activated.email}}</h2>

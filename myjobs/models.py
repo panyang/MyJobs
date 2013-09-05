@@ -257,7 +257,7 @@ class User(AbstractBaseUser):
 
     def get_gravatar_url(self, size=20):
         gravatar_url = GRAVATAR_URL_PREFIX + hashlib.md5(self.gravatar.lower()).hexdigest() + "?"
-        gravatar_url += urllib.urlencode({'d':GRAVATAR_URL_DEFAULT,
+        gravatar_url += urllib.urlencode({'d':404,
                                           's':str(size)})
         return gravatar_url
 

@@ -127,3 +127,8 @@ def active_tab(context, view_name):
     """
     
     return "active" if context.get('view_name', '') == view_name else ""
+
+@register.simple_tag
+def get_gravatar(user, size=20):
+    return user.get_gravatar_url(size)
+
