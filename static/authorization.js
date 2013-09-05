@@ -6,7 +6,7 @@ correct, it redirects to the provided url. If not, it adds errors to the form.
 $(document).on('click', 'button#auth-login', function(e) {
     e.preventDefault();
     var form = $('#auth-form');
-    var action = form.find('button').attr('value')
+    var action = form.find('button').attr('value');
     var url = form.attr('action');
     form = form.serialize() + '&action=' + action;
     $.ajax({

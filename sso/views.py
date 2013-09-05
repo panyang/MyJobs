@@ -15,8 +15,16 @@ from sso.models import AuthorizedClient
 def sso_authorize(request):
     """
     Authorizes specific web sites to utilize an existing My.jobs account
-    """
 
+    Required on HTTP GET:
+    :auth_callback: GET parameter - Desired return url when authorization
+        succeeds
+    :HTTP_REFERER: Header - Originator of authorization request
+
+    Required on HTTP POST:
+    :referer: POST parameter, copy of :HTTP_REFERER: header
+    :auth_callback: POST parameter, copy of :auth_callback: GET parameter
+    """
     # Common between GET and POST, both referer and callback are required.
     referer = request.META.get('HTTP_REFERER') or request.POST.get('referer')
     auth_callback = request.GET.get('auth_callback') or \
@@ -120,7 +128,8 @@ def sso_authorize(request):
                 # preauthenticated users
             else:
                 if request.is_ajax():
-                    return HttpResponse(json.dumps({'errors': login_form.errors.items()}))
+                    return HttpResponse(json.dumps(
+                        {'errors': login_form.errors.items()}))
                 else:
                     data['login_form'] = login_form
                     data['referer_short'] = referer.netloc

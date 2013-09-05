@@ -16,7 +16,7 @@ module("authorization.js Tests - Login", {
                                     value: 'wrongpass'}));
         form.append($('<button />', {id: 'auth-login',
                                      type: 'submit'}));
-        fixture.append(form)
+        fixture.append(form);
 
         ajax = $.ajax;
         $.ajax = function(params) {
@@ -24,11 +24,12 @@ module("authorization.js Tests - Login", {
             var data = {};
             for (var index = 0; index < scratch.length; index++) {
                 scratch[index] = scratch[index].split('=');
-                data[scratch[index][0]] = scratch[index][1]
+                data[scratch[index][0]] = scratch[index][1];
             }
             if (data.username == 'alice%40example.com') {
                 if (data.password == 'secret') {
-                    params.success('{"url":"http://jobs.jobs/?key=key_here"}', 'prevent-redirect');
+                    params.success('{"url":"http://jobs.jobs/?key=key_here"}',
+                                   'prevent-redirect');
                 } else {
                     params.success('{"errors":[["password",["Required"]]]}');
                 }
@@ -36,16 +37,17 @@ module("authorization.js Tests - Login", {
                 if (data.password == 'secret') {
                     params.success('{"errors":[["username",["Required"]]');
                 } else {
-                    params.success('{"errors":[["password",["Required"]],["username",["Required"]]]}');
+                    params.success('{"errors":[["password",["Required"]],' +
+                                   '["username",["Required"]]]}');
                 }
             }
-        }
+        };
     }, teardown: function() {
         $.ajax = ajax;
     }
 });
 test('invalid form', function() {
-    expect(4)
+    expect(4);
 
     equal($('.required-border').length, 0,
           'before clicking, no inputs have error markup');
