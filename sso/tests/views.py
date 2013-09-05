@@ -1,3 +1,5 @@
+import json
+
 from django.core.urlresolvers import reverse
 from django.test import TestCase
 
@@ -48,24 +50,36 @@ class SSOViewTests(TestCase):
         """
         Anonymous users must first login before being redirected.
 
-        This redirection happens automatically.
+        This redirection happens automatically if JavaScript is disabled. JSON
+        is returned and the redirect takes place via JavaScript otherwise.
         """
+        login_data = {'username': self.user.email,
+                      'password': 'secret',
+                      'callback': self.callback_url,
+                      'referer': self.referer,
+                      'action': 'login'}
+
         self.client.logout()
         self.assertEqual(AuthorizedClient.objects.count(), 0)
         self.assertTrue(self.client.session.get('key') is None)
 
         response = self.client.post(reverse('sso_authorize'),
-                                    {'username': self.user.email,
-                                     'password': 'secret',
-                                     'callback': self.callback_url,
-                                     'referer': self.referer,
-                                     'action': 'login'})
+                                    login_data)
 
         self.assertEqual(AuthorizedClient.objects.count(), 1)
         self.assertTrue(self.client.session.get('key') is not None)
         self.assertEqual(response.get('Location'),
                          self.callback_url + '?key=%s' %
                          self.client.session.get('key'))
+
+        self.client.logout()
+        response = self.client.post(reverse('sso_authorize'),
+                                    login_data,
+                                    HTTP_X_REQUESTED_WITH='XMLHttpRequest')
+
+        content = json.loads(response.content)
+        self.assertEqual(content['url'], self.callback_url +
+                         '?key=%s' % self.client.session['key'])
 
     def test_authenticated_auth(self):
         """

@@ -122,10 +122,14 @@ def sso_authorize(request):
                 # User was logged in. Fall through to code common to
                 # preauthenticated users
             else:
-                data['login_form'] = login_form
-                data['referer_short'] = referer.netloc
-                return render_to_response('sso/sso_auth.html', data,
-                                          RequestContext(request))
+                if request.is_ajax():
+                    return HttpResponse(json.dumps({'errors': login_form.errors.items()}))
+                else:
+                    data['login_form'] = login_form
+                    data['referer_short'] = referer.netloc
+
+                    return render_to_response('sso/sso_auth.html', data,
+                                              RequestContext(request))
 
         # Ensure that an AuthorizedClient instance exists for the current user
         # and the site that is requesting authorization.
@@ -139,4 +143,9 @@ def sso_authorize(request):
         q = urlparse.parse_qs(callback.query)
         q.update({'key': request.session.get('key')})
         callback = callback._replace(query=urlencode(q))
-        return redirect(urlparse.urlunparse(callback))
+        callback = urlparse.urlunparse(callback)
+        if request.is_ajax():
+
+            return HttpResponse(json.dumps({'url': callback}))
+        else:
+            return redirect(callback)
