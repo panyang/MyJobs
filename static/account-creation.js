@@ -198,7 +198,8 @@ function setPrimaryName(){
 
 function removeRequiredChanges(){
     // remove current errors
-    $('[class*=required-border]').removeClass('required-border')
+    $('[class*=required-border]').css('border', '');
+    $('[class*=required-border]').removeClass('required-border');
 
     // remove IE specific errors, if IE
     if($.browser.msie){

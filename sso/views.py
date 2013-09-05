@@ -18,8 +18,8 @@ def sso_authorize(request):
     """
     if request.method == 'GET':
         # Initial view after being redirected from an external site
-        referer = request.META.get('HTTP_REFERER')
-        callback = request.GET.get('callback')
+        referer = request.META.get('HTTP_REFERER', 'http://jobs.jobs')
+        callback = request.GET.get('callback', 'http://jobs.jobs')
         data = {'referer': referer,
                 'callback': callback}
 

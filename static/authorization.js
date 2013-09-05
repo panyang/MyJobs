@@ -13,16 +13,17 @@ $(document).on('click', 'button#auth-login', function(e) {
         type: "POST",
         url: url,
         data: form,
-        global: false,
-        success: function(data) {
+        success: function(data, status) {
+            // Remove all required field changes, if any
+            removeRequiredChanges();
+
             var json = jQuery.parseJSON(data);
             // Check to see if json.url is present. If so, redirect to it.
             if (Boolean(json.url)){
-                window.location = json.url;
+                if (status != 'prevent-redirect') {
+                    window.location = json.url;
+                } 
             }else{
-                // Remove all required field changes, if any
-                removeRequiredChanges();
-
                 // For every error passed by json, run jsonError function
                 for (var index in json.errors) {
                     jsonErrors(index, json.errors);
