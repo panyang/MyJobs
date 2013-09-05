@@ -1050,7 +1050,8 @@ em.pendingText {
 }
 
 input [type='text'] + .help-block,
-div + .help-block {
+div + .help-block,
+div > .help-block{
     max-width: 250px;
     margin: -12px 0 5px 225px;
     color: #555;

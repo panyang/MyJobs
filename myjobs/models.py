@@ -64,7 +64,7 @@ class CustomUserManager(BaseUserManager):
                 password = self.make_random_password(length=8)
             user.set_password(password)
             user.is_active = False
-            user.gravatar = user.email
+            user.gravatar = 'none'
             user.save(using=self._db)
             user.add_default_group()
             created = True
@@ -91,7 +91,7 @@ class CustomUserManager(BaseUserManager):
             raise ValueError('Email address required.')
         user = self.model(email=CustomUserManager.normalize_email(email))
         user.is_active = True
-        user.gravatar = user.email
+        user.gravatar = 'none'
         user.set_password(password)
         user.save(using=self._db)
         user.add_default_group()

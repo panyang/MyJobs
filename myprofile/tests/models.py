@@ -268,3 +268,11 @@ class MyProfileTests(TestCase):
         ms_object = ProfileUnits.objects.filter(
             content_type__name="website").count()
         self.assertEqual(ms_object, 1)
+
+    def test_add_summary(self):
+        summary_instance = SummaryFactory(user=self.user)
+        summary_instance.save()
+
+        ms_object = ProfileUnits.objects.filter(
+            content_type__name="summary").count()
+        self.assertEqual(ms_object, 1)
