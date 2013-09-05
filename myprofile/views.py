@@ -1,3 +1,4 @@
+import csv
 import json
 import re
 
@@ -155,3 +156,22 @@ def get_details(request):
     data_dict['view_name'] = 'My Profile'
     return render_to_response('myprofile/profile_details.html',
                               data_dict, RequestContext(request))
+
+
+@user_passes_test(User.objects.not_disabled)
+def to_csv(request):
+    manager = BaseProfileUnitManager()
+    units = manager.displayed_units(request.user.profileunits_set.all())
+    response = HttpResponse(mimetype='text/csv')
+    response['Content-Disposition'] = ('attachment; filename=profile.csv')
+
+    writer = csv.writer(response)
+    for unit_type in units:
+        writer.writerow([unit_type])
+        fields = [field for field in units[unit_type][0]._meta.get_all_field_names()
+                  if unicode(field) not in [u'id', u'user', u'profileunits_ptr', u'content_type', u'date_created', u'date_updated']]
+        writer.writerow(fields)
+        for unit in units[unit_type]:
+            field_vals = [getattr(unit, field) for field in fields]
+            writer.writerow(field_vals)
+    return response

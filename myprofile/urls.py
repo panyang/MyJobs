@@ -8,4 +8,5 @@ urlpatterns = patterns('MyJobs.myprofile.views',
     url(r'^view/delete$', 'delete_item', name='delete_item'),
     url(r'^view/edit$', 'handle_form', name='handle_form'),
     url(r'^view/details$', 'get_details', name='get_details'),
+    url(r'^export/profile.csv$', 'to_csv', name='to_csv'),
 )
