@@ -66,7 +66,7 @@ class EditAccountForm(Form):
                                               widget=Select(attrs=
                                               {'id':'id_gravatar'}),
                                               choices=self.choices,
-                                              initial=self.choices[-1][-1])
+                                              initial=self.choices[0][0])
 
     def clean(self):
         cleaned_data = super(EditAccountForm, self).clean()
