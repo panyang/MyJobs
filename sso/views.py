@@ -18,18 +18,18 @@ def sso_authorize(request):
     """
     if request.method == 'GET':
         # Initial view after being redirected from an external site
-        referer = request.META.get('HTTP_REFERER', 'http://jobs.jobs')
-        callback = request.GET.get('callback', 'http://jobs.jobs')
+        referer = request.META.get('HTTP_REFERER')
+        auth_callback = request.GET.get('auth_callback')
         data = {'referer': referer,
-                'callback': callback}
+                'auth_callback': auth_callback}
 
-        if referer and callback:
+        if referer and auth_callback:
             # referer and callback are required
             referer = urlparse.urlparse(referer)
-            callback = unquote(callback)
-            callback = urlparse.urlparse(callback)
-            if not (referer.netloc and callback.netloc) or \
-                    referer.netloc != callback.netloc:
+            auth_callback = unquote(auth_callback)
+            auth_callback = urlparse.urlparse(auth_callback)
+            if not (referer.netloc and auth_callback.netloc) or \
+                    referer.netloc != auth_callback.netloc:
                 # If the base urls of referer and callback are not truthy,
                 # the urls are malformed somehow.
                 # These are expected to be truthy and equal to one another.
@@ -57,11 +57,11 @@ def sso_authorize(request):
                             # callback url, and redirect to it.
                             request.session.set_expiry(None)
 
-                            q = urlparse.parse_qs(callback.query)
+                            q = urlparse.parse_qs(auth_callback.query)
                             q.update({'key': good_key})
-                            callback = callback._replace(
+                            auth_callback = auth_callback._replace(
                                 query=urlencode(q))
-                            return redirect(urlparse.urlunparse(callback))
+                            return redirect(urlparse.urlunparse(auth_callback))
                         else:
                             # The user at one time authorized this site but it
                             # was revoked (potential future functionality?).
@@ -105,11 +105,11 @@ def sso_authorize(request):
         # Form was posted.
         action = request.POST.get('action')
         referer = request.POST.get('referer')
-        callback = request.POST.get('callback')
+        auth_callback = request.POST.get('auth_callback')
         data = {'referer': referer,
-                'callback': callback}
+                'auth_callback': auth_callback}
         referer = urlparse.urlparse(referer)
-        callback = urlparse.urlparse(callback)
+        auth_callback = urlparse.urlparse(auth_callback)
         if action == 'login':
             login_form = CustomAuthForm(data=request.POST, auto_id=False)
             login_form.fields.pop('remember_me')
@@ -140,12 +140,12 @@ def sso_authorize(request):
             request.session['key'] = AuthorizedClient.create_key(request.user)
 
         # Add the user's key to the callback url and redirect to it.
-        q = urlparse.parse_qs(callback.query)
+        q = urlparse.parse_qs(auth_callback.query)
         q.update({'key': request.session.get('key')})
-        callback = callback._replace(query=urlencode(q))
-        callback = urlparse.urlunparse(callback)
+        auth_callback = auth_callback._replace(query=urlencode(q))
+        auth_callback = urlparse.urlunparse(auth_callback)
         if request.is_ajax():
 
-            return HttpResponse(json.dumps({'url': callback}))
+            return HttpResponse(json.dumps({'url': auth_callback}))
         else:
-            return redirect(callback)
+            return redirect(auth_callback)

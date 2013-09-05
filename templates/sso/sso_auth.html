@@ -18,7 +18,7 @@
         <form method="POST" action="{% url 'sso_authorize' %}" id="auth-form">
             {% csrf_token %}
             <input type="hidden" name="referer" value="{{referer}}" />
-            <input type="hidden" name="callback" value="{{callback}}" />
+            <input type="hidden" name="auth_callback" value="{{auth_callback}}" />
 
             <p>Authorize {{referer_short}} to make use of your My.jobs account?</p>
 

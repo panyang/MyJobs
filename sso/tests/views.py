@@ -13,8 +13,8 @@ class SSOViewTests(TestCase):
     def setUp(self):
         self.user = UserFactory()
         self.referer = 'http://my.jobs'
-        self.callback_url = self.referer + '/account'
-        self.callback = '?callback=%s' % self.callback_url
+        self.auth_callback_url = self.referer + '/account'
+        self.auth_callback = '?auth_callback=%s' % self.auth_callback_url
         self.key_qs = '%s&key=%s'
 
         self.client = TestClient()
@@ -26,7 +26,7 @@ class SSOViewTests(TestCase):
         HTTP referer. Anything else will display a 404 page.
         """
         response = self.client.get(reverse('sso_authorize') +
-                                   '?callback=http://jobs.jobs',
+                                   '?auth_callback=http://jobs.jobs',
                                    HTTP_REFERER=self.referer)
         self.assertEqual(response.status_code, 404)
 
@@ -35,14 +35,16 @@ class SSOViewTests(TestCase):
         A callback url and HTTP referer are required. If one is missing,
         dispaly a 404 page.
         """
-        response = self.client.get(reverse('sso_authorize') + self.callback)
+        response = self.client.get(reverse('sso_authorize') +
+                                   self.auth_callback)
         self.assertEqual(response.status_code, 404)
 
         response = self.client.get(reverse('sso_authorize'),
                                    HTTP_REFERER=self.referer)
         self.assertEqual(response.status_code, 404)
 
-        response = self.client.get(reverse('sso_authorize') + self.callback,
+        response = self.client.get(reverse('sso_authorize') +
+                                   self.auth_callback,
                                    HTTP_REFERER=self.referer)
         self.assertTemplateUsed(response, 'sso/sso_auth.html')
 
@@ -55,7 +57,7 @@ class SSOViewTests(TestCase):
         """
         login_data = {'username': self.user.email,
                       'password': 'secret',
-                      'callback': self.callback_url,
+                      'auth_callback': self.auth_callback_url,
                       'referer': self.referer,
                       'action': 'login'}
 
@@ -69,7 +71,7 @@ class SSOViewTests(TestCase):
         self.assertEqual(AuthorizedClient.objects.count(), 1)
         self.assertTrue(self.client.session.get('key') is not None)
         self.assertEqual(response.get('Location'),
-                         self.callback_url + '?key=%s' %
+                         self.auth_callback_url + '?key=%s' %
                          self.client.session.get('key'))
 
         self.client.logout()
@@ -78,7 +80,7 @@ class SSOViewTests(TestCase):
                                     HTTP_X_REQUESTED_WITH='XMLHttpRequest')
 
         content = json.loads(response.content)
-        self.assertEqual(content['url'], self.callback_url +
+        self.assertEqual(content['url'], self.auth_callback_url +
                          '?key=%s' % self.client.session['key'])
 
     def test_authenticated_auth(self):
@@ -93,21 +95,22 @@ class SSOViewTests(TestCase):
         self.assertTrue(self.client.session.get('key') is None)
 
         response = self.client.post(reverse('sso_authorize'),
-                                    {'callback': self.callback_url,
+                                    {'auth_callback': self.auth_callback_url,
                                      'referer': self.referer,
                                      'action': 'authorize'})
 
         self.assertEqual(self.user.authorizedclient_set.count(), 1)
         self.assertTrue(self.client.session.get('key') is not None)
         self.assertEqual(response.get('Location'),
-                         self.callback_url + '?key=%s' %
+                         self.auth_callback_url + '?key=%s' %
                          self.client.session.get('key'))
 
-        good_qs = self.key_qs % (self.callback, self.client.session.get('key'))
+        good_qs = self.key_qs % (self.auth_callback,
+                                 self.client.session.get('key'))
         response = self.client.get(reverse('sso_authorize') + good_qs,
                                    HTTP_REFERER=self.referer)
         self.assertEqual(response.get('Location'),
-                         self.callback_url + '?key=%s' %
+                         self.auth_callback_url + '?key=%s' %
                          self.client.session.get('key'))
 
     def test_bad_key(self):
@@ -120,7 +123,7 @@ class SSOViewTests(TestCase):
         have a key defined.
         """
         # no key
-        no_key = self.key_qs % (self.callback,
+        no_key = self.key_qs % (self.auth_callback,
                                 AuthorizedClient.create_key(self.user))
         response = self.client.get(reverse('sso_authorize') + no_key,
                                    HTTP_REFERER=self.referer)
@@ -137,7 +140,7 @@ class SSOViewTests(TestCase):
         session.save()
 
         # key is a hex string; we can invalidate it by taking a substring
-        wrong_key = self.key_qs % (self.callback,
+        wrong_key = self.key_qs % (self.auth_callback,
                                    AuthorizedClient.create_key(self.user)[:-1])
 
         AuthorizedClientFactory(user=self.user)
