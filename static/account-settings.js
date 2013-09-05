@@ -11,6 +11,7 @@ $(document).ready(function() {
 });
 
 $(function() {
+    var gravatar_email = $("#id_gravatar").val();
     var AppView = Backbone.View.extend({
         el: $("body"),
         events: {
@@ -77,9 +78,15 @@ $(function() {
                         if (auto_user) {
                             window.location.href='/';
                         } else {
+                            new_gravatar_email = $("#id_gravatar").val();  
                             $("a[id^='account-']")
                                 .removeClass("password-required");
-                            $('.form-status').html('<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Your information has been updated.</div>');                       }
+                            if (section_name == 'basic' && gravatar_email != new_gravatar_email) {
+                                $('.form-status').html('<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Your information has been updated. <a href="javascript:history.go(0);">Refresh the page to see the results.<a/></div>');
+                            } else {
+                                $('.form-status').html('<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Your information has been updated.</div>');
+                            }
+                        }
                     } else {
                         var json = jQuery.parseJSON(data);
 
