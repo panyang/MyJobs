@@ -1204,6 +1204,10 @@ td .gravatar-blank,
     border-radius: 0 !important;
 }
 
+.form-label .gravatar-blank {
+    margin-left: 220px;
+}
+
 .gravatar-blank {
     font-weight: bold;
     color: #333;
@@ -1961,6 +1965,11 @@ td .gravatar-blank,
         width: 30px;
         height: 20px;
     }
+
+    #profileTitleBar {
+        padding-right: 30px;
+        margin-top: -30px;
+    }
 }
 
 /* Account Settings */
@@ -2152,7 +2161,7 @@ body.modal-open {
     right: -15%;
 }
 
-.gravatar-warning {
+.gravatar-message {
     width: 150px;
     position: relative;
     margin-bottom: 50px;

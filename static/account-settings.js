@@ -82,7 +82,7 @@ $(function() {
                             $("a[id^='account-']")
                                 .removeClass("password-required");
                             if (section_name == 'basic' && gravatar_email != new_gravatar_email) {
-                                $('.form-status').html('<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Your information has been updated. <a href="javascript:history.go(0);">Refresh the page to see the results.<a/></div>');
+                                $('.form-status').html('<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Your information has been updated. <a href="javascript:history.go(0);">Refresh the page to see the results.</a></div>');
                             } else {
                                 $('.form-status').html('<div class="alert alert-success"><button type="button" class="close" data-dismiss="alert">&times;</button>Your information has been updated.</div>');
                             }
