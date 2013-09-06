@@ -1,6 +1,7 @@
 import datetime
 import urllib
 import hashlib
+import uuid
 
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, _user_has_perm, Group
 from django.core.mail import EmailMessage
@@ -67,6 +68,7 @@ class CustomUserManager(BaseUserManager):
             user.gravatar = 'none'
             user.save(using=self._db)
             user.add_default_group()
+            user.make_guid()
             created = True
             custom_signals.email_created.send(sender=self,user=user,
                                               email=email)
@@ -95,6 +97,7 @@ class CustomUserManager(BaseUserManager):
         user.set_password(password)
         user.save(using=self._db)
         user.add_default_group()
+        user.make_guid()
         return user
         
     def create_superuser(self, **kwargs):
@@ -110,6 +113,7 @@ class CustomUserManager(BaseUserManager):
         u.set_password(password)
         u.save(using=self._db)
         u.add_default_group()
+        u.make_guid()
         return u
 
     def not_disabled(self, user):
@@ -200,6 +204,8 @@ class User(AbstractBaseUser):
     password_change = models.BooleanField(_('Password must be changed on next \
                                             login'), default=False)
 
+    user_guid = models.CharField(max_length=100, db_index=True, unique=True)
+
     USERNAME_FIELD = 'email'
     objects = CustomUserManager()
 
@@ -285,6 +291,18 @@ class User(AbstractBaseUser):
     def add_default_group(self):
         group = Group.objects.get(name='Job Seeker')
         self.groups.add(group.pk)
+
+    def make_guid(self):
+        """
+        Creates a uuid for the User only if the User does not currently has
+        a user_guid.  After the uuid is made it is checked to make sure there
+        are no duplicates. If no duplicates, save the GUID.
+        """
+        if not self.user_guid:
+            self.user_guid = uuid.uuid4()
+            if User.objects.filter(user_guid=self.user_guid):
+                self.make_guid()
+            self.save()
 
 
 class EmailLog(models.Model):
