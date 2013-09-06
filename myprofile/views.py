@@ -28,6 +28,7 @@ def edit_profile(request):
 
     user.update_profile_completion()
 
+    # if a user still doesn't have a guid one is made for them here.
     user.make_guid()
 
     manager = BaseProfileUnitManager(order=['name', 'employmenthistory',

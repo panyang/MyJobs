@@ -204,7 +204,7 @@ class User(AbstractBaseUser):
     password_change = models.BooleanField(_('Password must be changed on next \
                                             login'), default=False)
 
-    u_guid = models.CharField(max_length=100, blank=True, unique=True)
+    user_guid = models.CharField(max_length=100, blank=True, unique=True)
 
     USERNAME_FIELD = 'email'
     objects = CustomUserManager()
@@ -293,8 +293,8 @@ class User(AbstractBaseUser):
         self.groups.add(group.pk)
 
     def make_guid(self):
-        if not self.u_guid:
-            self.u_guid = uuid.uuid4()
+        if not self.user_guid:
+            self.user_guid = uuid.uuid4()
             self.save()
 
 
