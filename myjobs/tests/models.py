@@ -24,7 +24,6 @@ class UserManagerTests(TestCase):
         self.failUnless(new_user.check_password('complicated_password'))
         self.failUnless(new_user.groups.filter(name='Job Seeker').count() == 1)
         self.assertIsNotNone(new_user.user_guid)
-        print new_user.user_guid
 
     def test_active_user_creation(self):
         new_user = User.objects.create_user(**self.user_info)
