@@ -293,6 +293,11 @@ class User(AbstractBaseUser):
         self.groups.add(group.pk)
 
     def make_guid(self):
+        """
+        Creates a uuid for the User only if the User does not currently has
+        a user_guid.  After the uuid is made it is checked to make sure there
+        are no duplicates. If no duplicates, save the GUID.
+        """
         if not self.user_guid:
             self.user_guid = uuid.uuid4()
             if User.objects.filter(user_guid=self.user_guid):
