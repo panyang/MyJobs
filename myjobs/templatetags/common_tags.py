@@ -3,6 +3,7 @@ from django import template
 from myjobs import version
 from myprofile.models import ProfileUnits
 from myjobs.models import User
+from myjobs.helpers import get_completion
 from mydashboard.models import CompanyUser
 from django.db.models.loading import get_model
 
@@ -25,14 +26,7 @@ def completion_level(level):
     A string containing the bootstrap bar type
     """
     
-    if level <= 20:
-        return "danger"
-    elif level <= 40:
-        return "warning"
-    elif level <= 60:
-        return "info"
-    else:
-        return "success"
+    return get_completion(level)
 
 
 @register.simple_tag

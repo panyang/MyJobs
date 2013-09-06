@@ -8,10 +8,10 @@ from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.conf import settings
+from django.http import HttpResponse
 
 from default_settings import GRAVATAR_URL_PREFIX, GRAVATAR_URL_DEFAULT
 from registration import signals as custom_signals
-
 
 class CustomUserManager(BaseUserManager):
     def get_email_owner(self, email):
@@ -256,9 +256,50 @@ class User(AbstractBaseUser):
         return self.email
 
     def get_gravatar_url(self, size=20):
-        gravatar_url = GRAVATAR_URL_PREFIX + hashlib.md5(self.gravatar.lower()).hexdigest() + "?"
+        """
+        Gets the container for the gravatar/initials block.
+
+        inputs:
+        :self: A user.
+        :size: The height and width the resulting block should be.
+
+        outputs:
+        :gravatar_url: Either an image tag with a src = to a valid gravatar, or
+                       a div tag for the initials block.
+        """
+
+        gravatar_url = GRAVATAR_URL_PREFIX + \
+                       hashlib.md5(self.gravatar.lower()).hexdigest() + "?"
         gravatar_url += urllib.urlencode({'d':404,
                                           's':str(size)})
+        
+        if urllib.urlopen(gravatar_url).getcode() == 404:
+            # Determine background color for initials block based on the
+            # same formula used for profile completion bars.
+            from helpers import get_completion
+
+            color = get_completion(self.profile_completion)
+
+            try:
+                text = self.profileunits_set.get(content_type__name="name",
+                                                 name__primary=True).name
+                if not text.given_name and not text.family_name:
+                    text = self.email[0]
+                else:
+                    text = "%s%s" % (text.given_name[0], text.family_name[0])
+            except:
+                text = self.email[0]
+
+            font_size = int(size)
+            font_size = font_size * .65
+            gravatar_url = ("<div class='gravatar-blank gravatar-%s' "
+                            "style='height: %spx; width: %spx'>"
+                            "<span class='gravatar-text' style='font-size:"
+                            "%spx;'>%s</span></div>" %
+                            (color, size, size, font_size, text.upper()))
+        else:
+            gravatar_url = "<img src='%s' id='id_gravatar'>" % gravatar_url
+
         return gravatar_url
 
     def disable(self):

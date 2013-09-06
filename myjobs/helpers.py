@@ -43,3 +43,24 @@ def expire_login(request, *args, **kwargs):
             # Session expires in 900 seconds (5 mins)
             request.session.set_expiry(900)
     return auth.login(request, *args, **kwargs)
+
+def get_completion(level):
+    """
+    Determines the bootstraps bar color associated with the completion level.
+    
+    inputs:
+    :level: The completion percentage of a user's profile.
+    
+    outputs:
+    A string containing the bootstrap bar type.
+    """
+    
+    if level <= 20:
+        return "danger"
+    elif level <= 40:
+        return "warning"
+    elif level <= 60:
+        return "info"
+    else:
+        return "success"
+

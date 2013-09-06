@@ -25,7 +25,7 @@
     	</span>
     </div>
     <div class="span4 mobile-heading-candidate-view">
-        <img class="pull-left" src="{% get_gravatar the_user '75' %}">
+        <span class=pull-left>{% get_gravatar the_user '75' %}</span>
         <div id="mobile-name-heading">
             <span id="name-flag">{{primary_name}}</span>
             <br />
@@ -43,13 +43,15 @@
     <br />
     <div class="row" id="candidate-content">
         <div class="span4 default-heading-candidate-view">
-		<img src="{% get_gravatar the_user '100' %}">
-		<div class="pull-right" id="candidate-completion">
+		<table><tr>
+		<td>{% get_gravatar the_user '100' %}</td>
+		<td><div id="candidate-completion">
 			<b><div >Profile is <span id="highlight" class="initial-highlight">{{ the_user.profile_completion }}% complete</span></div></b>
 			<div class="progress" id="candidate-progress">
 				<div class="bar bar-{% completion_level the_user.profile_completion %}" id="initial-bar" style="width: {{ the_user.profile_completion}}%;"></div>
 			</div>
-		</div>
+		</div></td>
+		</tr></table>
             <br />
             <p>
                 <a class="href-small-icon" href="mailto:{{the_user.email}}"><img src="{{STATIC_URL}}images/rsz_1envelope4.jpg" /><span style="margin-top:5px; margin-left:5px;">{{the_user.email}}</span></a>
