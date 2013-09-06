@@ -1,44 +1,5 @@
 @import url(http://css.nlx.org/framework/v2/css/def.ui.css);
 
-#gravatar {
-    padding-left: 55px;
-}
-
-.gravatar-text {
-    display: table-cell;
-    vertical-align: middle;
-    position: static;
-}
-
-td .gravatar-blank,
-.main-nav .gravatar-blank,
-.gravatar .gravatar-blank {
-    border-radius: 0 !important;
-}
-.gravatar-blank {
-    font-weight: bold;
-    color: #333;
-    border: 1px solid #333;
-    border-radius: 4px;
-    text-align: center;
-    display: table;
-}
-.gravatar-danger {
-    background-color: #dd514c;
-}
-
-.gravatar-warning {
-    background-color: #faa732;
-}
-
-.gravatar-info {
-    background-color: #4bb1cf;
-}
-
-.gravatar-success {
-    background-color: #5eb95e;
-}
-
 /*Main Styles*/
 body {
     background-color: #574e44;
@@ -1224,6 +1185,48 @@ form input[type='checkbox'] {
 
 .mobile-heading-candidate-view {
     display:none;
+}
+
+/* Initials block gravatar replacement */
+#gravatar {
+    padding-left: 55px;
+}
+
+.gravatar-text {
+    display: table-cell;
+    vertical-align: middle;
+    position: static;
+}
+
+td .gravatar-blank,
+.main-nav .gravatar-blank,
+.gravatar .gravatar-blank {
+    border-radius: 0 !important;
+}
+
+.gravatar-blank {
+    font-weight: bold;
+    color: #333;
+    border: 1px solid #333;
+    border-radius: 4px;
+    text-align: center;
+    display: table;
+}
+
+.gravatar-danger {
+    background-color: #dd514c;
+}
+
+.gravatar-warning {
+    background-color: #faa732;
+}
+
+.gravatar-info {
+    background-color: #4bb1cf;
+}
+
+.gravatar-success {
+    background-color: #5eb95e;
 }
 
 @media screen and (max-width: 1024px) {

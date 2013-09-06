@@ -124,5 +124,9 @@ def active_tab(context, view_name):
 
 @register.simple_tag
 def get_gravatar(user, size=20):
+    """
+    Gets the img or div tag for the gravatar or initials block.
+    """
+    
     return user.get_gravatar_url(size)
 
