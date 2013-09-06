@@ -1,5 +1,7 @@
 import datetime
 
+from django.core.validators import ValidationError
+
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
@@ -337,6 +339,33 @@ class License(ProfileUnits):
     license_type = models.CharField(max_length=255, verbose_name="License Type")
     description = models.CharField(max_length=255, verbose_name="Description",
                                    blank=True)
+
+
+class Summary(ProfileUnits):
+    headline = models.CharField(max_length=100, verbose_name="Headline",
+                                help_text='How you describe your profession.' +
+                                          ' ie "Experienced accounting ' +
+                                          'professional"')
+    the_summary = models.TextField(max_length=2000, verbose_name="Summary",
+                                   blank=True,
+                                   help_text='A short summary of your ' +
+                                             'strength and career to date.')
+
+    def save(self, *args, **kwargs):
+        try:
+            summary_model = self.user.profileunits_set.get(
+                content_type__name="summary")
+        except ProfileUnits.DoesNotExist:
+            summary_model = None
+
+        if not summary_model:
+            super(Summary, self).save(*args, **kwargs)
+        else:
+            if self.id == summary_model.id:
+                super(Summary, self).save(*args, **kwargs)
+            else:
+                raise ValidationError("A summary already exists")
+
 
 
 def delete_secondary_activation(sender, **kwargs):
