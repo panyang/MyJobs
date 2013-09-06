@@ -1204,7 +1204,8 @@ td .gravatar-blank,
     border-radius: 0 !important;
 }
 
-.form-label .gravatar-blank {
+.form-label .gravatar-blank,
+.form-label #id_gravatar {
     margin-left: 220px;
 }
 
@@ -1969,6 +1970,16 @@ td .gravatar-blank,
     #profileTitleBar {
         padding-right: 30px;
     }
+    .form-label .gravatar-blank,
+    .form-label #id_gravatar {
+        margin-left: 0 !important;
+        margin-bottom: 10px;
+    }
+
+    .form-label #id_gravatar {
+        margin-right: 315px;
+    }
+
 }
 
 /* Account Settings */
