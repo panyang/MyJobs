@@ -2,6 +2,7 @@ import datetime
 import urllib
 import hashlib
 
+from django.utils.safestring import mark_safe
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, _user_has_perm, Group
 from django.core.mail import EmailMessage
 from django.db import models
@@ -292,13 +293,14 @@ class User(AbstractBaseUser):
 
             font_size = int(size)
             font_size = font_size * .65
-            gravatar_url = ("<div class='gravatar-blank gravatar-%s' "
-                            "style='height: %spx; width: %spx'>"
+            gravatar_url = mark_safe("<div class='gravatar-blank gravatar-%s'"
+                            " style='height: %spx; width: %spx'>"
                             "<span class='gravatar-text' style='font-size:"
                             "%spx;'>%s</span></div>" %
                             (color, size, size, font_size, text.upper()))
         else:
-            gravatar_url = "<img src='%s' id='id_gravatar'>" % gravatar_url
+            gravatar_url = mark_safe("<img src='%s' id='id_gravatar'>"
+                                     % gravatar_url)
 
         return gravatar_url
 
