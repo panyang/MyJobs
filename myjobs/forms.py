@@ -10,9 +10,11 @@ from myjobs.models import User
 from myprofile.models import Name, SecondaryEmail
 
 def make_choices(user):
-    choices = [(user.email, user.email)]
-    for email in SecondaryEmail.objects.filter(user=user, verified=True):
-        choices.append((email.email, email.email))
+    choices = [('none', 'Do not use gravatar')]
+    if user.is_active:
+        choices.append((user.email, user.email))
+        for email in SecondaryEmail.objects.filter(user=user, verified=True):
+            choices.append((email.email, email.email))
     return choices
 
 class BaseUserForm(ModelForm):
@@ -62,7 +64,7 @@ class EditAccountForm(Form):
         super(EditAccountForm, self).__init__(*args, **kwargs)
         self.fields["gravatar"] = ChoiceField(label=_("Gravatar Email"),
                                               widget=Select(attrs=
-                                            {'id':'id_gravatar'}),
+                                              {'id':'id_gravatar'}),
                                               choices=self.choices,
                                               initial=self.choices[0][0])
 

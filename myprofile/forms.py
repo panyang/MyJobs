@@ -163,6 +163,14 @@ class WebsiteForm(BaseUserForm):
         model = Website
         widgets = generate_custom_widgets(model)
         widgets['description'] = Textarea(attrs={'rows': 5, 'cols': 24})
+
+
+class SummaryForm(BaseUserForm):
+    class Meta:
+        form_name = _('Summary')
+        model = Summary
+        widgets = generate_custom_widgets(model)
+        widgets['the_summary'] = Textarea(attrs={'rows': 5, 'cols': 24})
     
 
 class InitialForm(BaseUserForm):

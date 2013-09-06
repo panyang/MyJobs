@@ -109,6 +109,19 @@ class MyProfileViewsTests(TestCase):
         self.assertEqual(Name.objects.filter(given_name='Susy',
                                              family_name='Smith').count(), 1)
 
+    def test_handle_form_redirect_summary(self):
+        """
+        When a user has a summary already if they try to make a new summary
+        handle form should redirect the user to edit the summary they already
+        have. User is only allowed one summary per account.
+        """
+        summary_instance = SummaryFactory(user=self.user)
+        summary_instance.save()
+        resp = self.client.get(reverse('handle_form'),
+                               data={'module': 'Summary'})
+        self.assertRedirects(resp, reverse(
+            'handle_form')+'?id=%s&module=Summary' % summary_instance.id)
+
     def test_delete_item(self):
         """
         Invoking the delete_item view deletes the item and returns
