@@ -270,7 +270,7 @@ class User(AbstractBaseUser):
 
         gravatar_url = GRAVATAR_URL_PREFIX + \
                        hashlib.md5(self.gravatar.lower()).hexdigest() + "?"
-        gravatar_url += urllib.urlencode({'d':404,
+        gravatar_url += urllib.urlencode({'d':GRAVATAR_URL_DEFAULT,
                                           's':str(size)})
         
         if urllib.urlopen(gravatar_url).getcode() == 404:
