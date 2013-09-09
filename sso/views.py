@@ -26,7 +26,7 @@ def sso_authorize(request):
     :auth_callback: POST parameter, copy of :auth_callback: GET parameter
     """
     # Common between GET and POST, both referer and callback are required.
-    referer = request.META.get('HTTP_REFERER') or request.POST.get('referer')
+    referer = request.POST.get('referer') or request.META.get('HTTP_REFERER')
     auth_callback = request.GET.get('auth_callback') or \
         request.POST.get('auth_callback')
     data = {'referer': referer,
