@@ -10,7 +10,7 @@
             {% for candidate in candidates %}                    
             <tr class="hide-mobile" onclick="document.location = '{% url 'candidate_information' %}?company={{ company_id }}&url={{ microsite_url }}&user={{ candidate.user.id }}';">
                 <td>
-                    <img src="{{candidate.user.get_gravatar_url}}&s=65" class="gravatar pull-left">
+                    <span class="gravatar pull-left">{% get_gravatar candidate.user '65' %}</span> 
                 </td>
                 <td>
                     <div class="candidate-name-bold pull-left">{{candidate.user|get_name_obj}}</div><br>
@@ -24,7 +24,7 @@
             <tr>
             <tr class="candidate-activity-mobile">
                 <td>
-                    <img src="{{candidate.user.get_gravatar_url}}&s=45" class="gravatar pull-left"> 
+                    <span class="gravatar pull-left">{% get_gravatar candidate.user '55' %}</span> 
                 </td>
                 <td>
                 <div class="candidate-name-bold pull-left">{{candidate.user|get_name_obj}}</div>

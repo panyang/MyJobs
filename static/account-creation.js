@@ -43,7 +43,7 @@ $(document).on("click", "button#register", function(e) {
                 setTimeout(function(){                            
                     $("#account-page-2").show('slide',{direction: 'right'},250);
                 }, 250);
-                $("#gravatar").attr("src",gravatar_url);
+                $("#gravatar").append(gravatar_url);
                 clearForm("form#registration-form");
                 $(".newUserEmail").html(user_email); 
             }else{

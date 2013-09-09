@@ -888,6 +888,9 @@ em.pendingText {
     border-right: 6px solid #999;
     border-left: 0;
     margin-top: 6px;
+    margin-top: -15px;
+    margin-left: 30px;
+    margin-bottom: 12px;
 }
 
 .topbar #nav:hover .arrow {
@@ -1138,6 +1141,7 @@ form input[type='checkbox'] {
 #candidate-completion {
     margin-right: 32px;
     font-size: 13px;
+    padding-left: 6px;
 }
 
 #candidate-progress {
@@ -1183,6 +1187,53 @@ form input[type='checkbox'] {
     display:none;
 }
 
+/* Initials block gravatar replacement */
+#gravatar {
+    padding-left: 55px;
+}
+
+.gravatar-text {
+    display: table-cell;
+    vertical-align: middle;
+    position: static;
+}
+
+td .gravatar-blank,
+.main-nav .gravatar-blank,
+.gravatar .gravatar-blank {
+    border-radius: 0 !important;
+}
+
+.form-label .gravatar-blank,
+.form-label #id_gravatar {
+    margin-left: 220px;
+}
+
+.gravatar-blank {
+    font-weight: bold;
+    color: #333;
+    border: 1px solid #333;
+    border-radius: 4px;
+    text-align: center;
+    display: table;
+}
+
+.gravatar-danger {
+    background-color: #dd514c;
+}
+
+.gravatar-warning {
+    background-color: #faa732;
+}
+
+.gravatar-info {
+    background-color: #4bb1cf;
+}
+
+.gravatar-success {
+    background-color: #5eb95e;
+}
+
 @media screen and (max-width: 1024px) {
     .site-progress {
         margin-top: 20px;
@@ -1222,6 +1273,7 @@ form input[type='checkbox'] {
         display: none;
     }
 
+    .topbar .gravatar-blank,
     .topbar #nav img {
         display: none;
     }
@@ -1370,6 +1422,10 @@ form input[type='checkbox'] {
 
     .modal-footer div.actions .btn {
         margin-left: 0;
+    }
+
+    #gravatar {
+        padding-left: 100px;
     }
 }
 
@@ -1910,6 +1966,20 @@ form input[type='checkbox'] {
         width: 30px;
         height: 20px;
     }
+
+    #profileTitleBar {
+        padding-right: 30px;
+    }
+    .form-label .gravatar-blank,
+    .form-label #id_gravatar {
+        margin-left: 0 !important;
+        margin-bottom: 10px;
+    }
+
+    .form-label #id_gravatar {
+        margin-right: 315px;
+    }
+
 }
 
 /* Account Settings */
@@ -2101,7 +2171,7 @@ body.modal-open {
     right: -15%;
 }
 
-.gravatar-warning {
+.gravatar-message {
     width: 150px;
     position: relative;
     margin-bottom: 50px;
