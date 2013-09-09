@@ -41,6 +41,7 @@ $(document).ready(function(){
         $("#profile-link").removeClass("no-show");
         $("#savedsearch-link").removeClass("no-show");
         $("#candidate-link").removeClass("no-show");
+        $("#candidate-link-one").removeClass("no-show"); 
         $('#settings-link').removeClass("no-show");
     });
 
@@ -57,7 +58,8 @@ $(document).ready(function(){
         $("#logged-in-li").addClass("no-show");
         $("#profile-link").addClass("no-show");
         $("#savedsearch-link").addClass("no-show");
-        $("#candidate-link").addClass("no-show"); 
+        $("#candidate-link").addClass("no-show");
+        $("#candidate-link-one").addClass("no-show"); 
         $("#account-link").addClass("no-show");
         $("#logout-link").addClass("no-show"); 
     });
@@ -69,7 +71,8 @@ $(document).ready(function(){
         $("#logged-in-li").addClass("no-show");
         $("#profile-link").addClass("no-show");
         $("#savedsearch-link").addClass("no-show");
-        $("#candidate-link").addClass("no-show"); 
+        $("#candidate-link").addClass("no-show");
+        $("#candidate-link-one").addClass("no-show"); 
         $("#account-link").addClass("no-show");
         $("#logout-link").addClass("no-show"); 
     });    
@@ -84,6 +87,7 @@ $(document).ready(function(){
         $("#profile-link").removeClass("no-show");
         $("#savedsearch-link").removeClass("no-show");
         $("#candidate-link").removeClass("no-show");
+        $("#candidate-link-one").removeClass("no-show");
         $("#settings-link").removeClass("no-show"); 
     });
 
