@@ -6,6 +6,7 @@ class UserFactory(factory.Factory):
     email = 'alice@example.com'
     gravatar = 'alice@example.com'
     password = 'secret'
+    user_guid = factory.LazyAttribute(lambda n: '{0}'.format(uuid.uuid4()))
 
     @classmethod
     def _prepare(cls, create, **kwargs):

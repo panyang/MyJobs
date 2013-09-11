@@ -1,17 +1,19 @@
 import datetime
 import urllib
 import hashlib
+import uuid
 
+from django.utils.safestring import mark_safe
 from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, _user_has_perm, Group
 from django.core.mail import EmailMessage
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
 from django.core.validators import MaxValueValidator, MinValueValidator
 from django.conf import settings
+from django.http import HttpResponse
 
 from default_settings import GRAVATAR_URL_PREFIX, GRAVATAR_URL_DEFAULT
 from registration import signals as custom_signals
-
 
 class CustomUserManager(BaseUserManager):
     def get_email_owner(self, email):
@@ -67,6 +69,7 @@ class CustomUserManager(BaseUserManager):
             user.gravatar = 'none'
             user.save(using=self._db)
             user.add_default_group()
+            user.make_guid()
             created = True
             custom_signals.email_created.send(sender=self,user=user,
                                               email=email)
@@ -95,6 +98,7 @@ class CustomUserManager(BaseUserManager):
         user.set_password(password)
         user.save(using=self._db)
         user.add_default_group()
+        user.make_guid()
         return user
         
     def create_superuser(self, **kwargs):
@@ -110,6 +114,7 @@ class CustomUserManager(BaseUserManager):
         u.set_password(password)
         u.save(using=self._db)
         u.add_default_group()
+        u.make_guid()
         return u
 
     def not_disabled(self, user):
@@ -200,6 +205,8 @@ class User(AbstractBaseUser):
     password_change = models.BooleanField(_('Password must be changed on next \
                                             login'), default=False)
 
+    user_guid = models.CharField(max_length=100, db_index=True, unique=True)
+
     USERNAME_FIELD = 'email'
     objects = CustomUserManager()
 
@@ -256,9 +263,51 @@ class User(AbstractBaseUser):
         return self.email
 
     def get_gravatar_url(self, size=20):
-        gravatar_url = GRAVATAR_URL_PREFIX + hashlib.md5(self.gravatar.lower()).hexdigest() + "?"
+        """
+        Gets the container for the gravatar/initials block.
+
+        inputs:
+        :self: A user.
+        :size: The height and width the resulting block should be.
+
+        outputs:
+        :gravatar_url: Either an image tag with a src = to a valid gravatar, or
+                       a div tag for the initials block.
+        """
+
+        gravatar_url = GRAVATAR_URL_PREFIX + \
+                       hashlib.md5(self.gravatar.lower()).hexdigest() + "?"
         gravatar_url += urllib.urlencode({'d':GRAVATAR_URL_DEFAULT,
                                           's':str(size)})
+        
+        if urllib.urlopen(gravatar_url).getcode() == 404:
+            # Determine background color for initials block based on the
+            # same formula used for profile completion bars.
+            from helpers import get_completion
+
+            color = get_completion(self.profile_completion)
+
+            try:
+                text = self.profileunits_set.get(content_type__name="name",
+                                                 name__primary=True).name
+                if not text.given_name and not text.family_name:
+                    text = self.email[0]
+                else:
+                    text = "%s%s" % (text.given_name[0], text.family_name[0])
+            except:
+                text = self.email[0]
+
+            font_size = int(size)
+            font_size = font_size * .65
+            gravatar_url = mark_safe("<div class='gravatar-blank gravatar-%s'"
+                            " style='height: %spx; width: %spx'>"
+                            "<span class='gravatar-text' style='font-size:"
+                            "%spx;'>%s</span></div>" %
+                            (color, size, size, font_size, text.upper()))
+        else:
+            gravatar_url = mark_safe("<img src='%s' id='id_gravatar'>"
+                                     % gravatar_url)
+
         return gravatar_url
 
     def disable(self):
@@ -285,6 +334,18 @@ class User(AbstractBaseUser):
     def add_default_group(self):
         group = Group.objects.get(name='Job Seeker')
         self.groups.add(group.pk)
+
+    def make_guid(self):
+        """
+        Creates a uuid for the User only if the User does not currently has
+        a user_guid.  After the uuid is made it is checked to make sure there
+        are no duplicates. If no duplicates, save the GUID.
+        """
+        if not self.user_guid:
+            self.user_guid = uuid.uuid4()
+            if User.objects.filter(user_guid=self.user_guid):
+                self.make_guid()
+            self.save()
 
 
 class EmailLog(models.Model):
