@@ -42,6 +42,8 @@ def custom_template(module):
     """
     m_type = module.content_type.name
     try:
-        return loader.get_template('myprofile/modules/%s.html' % m_type)
+        loaded = loader.get_template('myprofile/modules/%s.html' % m_type)
+        if loaded:
+            return 'myprofile/modules/%s.html' % m_type
     except loader.TemplateDoesNotExist:
         return None

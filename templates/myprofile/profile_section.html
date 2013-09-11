@@ -4,8 +4,8 @@
 <div class="formBox profile-mobile" id="{{module.0.get_model_name}}_items">
     <h4 id="{{module.0.get_model_name}}-verbose">{{ module.0.get_verbose }}</h4>
 
-    {% if custom_template %}
-        {# include custom template #}
+    {% if c_template %}
+        {% include ""|add:c_template %}
     {% else %}
 
     <table class="table table-bordered table-striped small-margin">

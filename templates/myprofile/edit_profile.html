@@ -37,7 +37,7 @@
 
             {% for module in profile_config.values %}
 
-            {% with module.0|custom_template as custom_template %}
+            {% with module.0|custom_template as c_template %}
                 {% include "myprofile/profile_section.html" %}
             {% endwith %}
 
