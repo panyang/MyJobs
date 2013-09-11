@@ -1,9 +1,12 @@
 {% load i18n %}
 {% load model_fields %}
+
 <div class="formBox profile-mobile" id="{{module.0.get_model_name}}_items">
     <h4 id="{{module.0.get_model_name}}-verbose">{{ module.0.get_verbose }}</h4>
 
-    {% if module.0 %}
+    {% if custom_template %}
+        {# include custom template #}
+    {% else %}
 
     <table class="table table-bordered table-striped small-margin">
         <thead>
@@ -47,7 +50,8 @@
     </table>
 
     {% endif %}
-    <a class="btn primary pull-right add-module-btn" 
+
+    <a class="btn primary pull-right add-module-btn"
         href="{% url 'handle_form' %}?module={{ module.0.get_verbose.title }}">
         {% trans 'Add' %} <span>{{ module.0.get_verbose.title }}</span>
     </a>
