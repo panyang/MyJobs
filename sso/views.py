@@ -19,36 +19,28 @@ def sso_authorize(request):
     Required on HTTP GET:
     :auth_callback: GET parameter - Desired return url when authorization
         succeeds
-    :HTTP_REFERER: Header - Originator of authorization request
 
     Required on HTTP POST:
-    :referer: POST parameter, copy of :HTTP_REFERER: header
     :auth_callback: POST parameter, copy of :auth_callback: GET parameter
     """
-    # Common between GET and POST, both referer and callback are required.
-    referer = request.POST.get('referer') or request.META.get('HTTP_REFERER')
+    # Common between GET and POST, callback is required.
     auth_callback = request.GET.get('auth_callback') or \
         request.POST.get('auth_callback')
-    data = {'referer': referer,
-            'auth_callback': auth_callback}
+    data = {'auth_callback': auth_callback}
 
-    if referer and auth_callback:
-        # referer and callback are required
-        referer = urlparse.urlparse(referer)
+    if auth_callback:
         auth_callback = unquote(auth_callback)
         auth_callback = urlparse.urlparse(auth_callback)
-        if not (referer.netloc and auth_callback.netloc) or \
-                referer.netloc != auth_callback.netloc:
-            # If the base urls of referer and callback are not truthy,
-            # the urls are malformed somehow.
-            # These are expected to be truthy and equal to one another.
+        if not auth_callback.netloc:
+            # If the base url of the callback is not truthy, the url
+            # must be malformed somehow
             raise Http404
     else:
         raise Http404
 
     if request.method == 'GET':
         # Initial view after being redirected from an external site
-        data['referer_short'] = referer.netloc
+        data['auth_callback_short'] = auth_callback.netloc
 
         if not request.user.is_anonymous():
             # Process logged in users first; Certain criteria may cause the
@@ -62,7 +54,7 @@ def sso_authorize(request):
                     # potentially already authorized this site.
                     if test_key == good_key:
                         if request.user.authorizedclient_set.filter(
-                                site=referer.netloc):
+                                site=auth_callback.netloc):
                             # The user has authorized this site; Reset the
                             # current session expiry, add the key to the
                             # callback url, and redirect to it.
@@ -132,14 +124,14 @@ def sso_authorize(request):
                         {'errors': login_form.errors.items()}))
                 else:
                     data['login_form'] = login_form
-                    data['referer_short'] = referer.netloc
+                    data['auth_callback_short'] = auth_callback.netloc
 
                     return render_to_response('sso/sso_auth.html', data,
                                               RequestContext(request))
 
         # Ensure that an AuthorizedClient instance exists for the current user
         # and the site that is requesting authorization.
-        request.user.authorizedclient_set.get_or_create(site=referer.netloc)
+        request.user.authorizedclient_set.get_or_create(site=auth_callback.netloc)
 
         # Ensure that the current user has a key.
         if not request.session.get('key'):

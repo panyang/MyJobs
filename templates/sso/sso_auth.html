@@ -10,20 +10,19 @@
 {% block content %}
 <div class="row">
     <div class="span12">
-        <h1>Authorize <small>{{referer_short}}</small></h1>
+        <h1>Authorize <small>{{auth_callback_short}}</small></h1>
     </div>
 </div>
 <div class="row">
     <div class="span10 offset1">
         <form method="POST" action="{% url 'sso_authorize' %}" id="auth-form">
             {% csrf_token %}
-            <input type="hidden" name="referer" value="{{referer}}" />
             <input type="hidden" name="auth_callback" value="{{auth_callback}}" />
 
-            <p>Authorize {{referer_short}} to make use of your My.jobs account?</p>
+            <p>Allow {{auth_callback_short}} to make use of your My.jobs account?</p>
 
             {% if login_form %}
-            <p>Logging in will automatically redirect you back to {{referer_short}}</p>
+            <p>Logging in will automatically redirect you back to {{auth_callback_short}}</p>
             {% include 'includes/form-error-highlight.html' with form=login_form %}
             <div class="actions">
                 <div class="form-label pull-left">&nbsp;</div>

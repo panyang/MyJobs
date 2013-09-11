@@ -12,41 +12,12 @@ from sso.tests.factories import AuthorizedClientFactory
 class SSOViewTests(TestCase):
     def setUp(self):
         self.user = UserFactory()
-        self.referer = 'http://my.jobs'
-        self.auth_callback_url = self.referer + '/account'
+        self.auth_callback_url = 'http://my.jobs/account'
         self.auth_callback = '?auth_callback=%s' % self.auth_callback_url
         self.key_qs = '%s&key=%s'
 
         self.client = TestClient()
         self.client.login_user(self.user)
-
-    def test_mismatched_referer_callback(self):
-        """
-        The callback url is expected to be from the same domain as the
-        HTTP referer. Anything else will display a 404 page.
-        """
-        response = self.client.get(reverse('sso_authorize') +
-                                   '?auth_callback=http://jobs.jobs',
-                                   HTTP_REFERER=self.referer)
-        self.assertEqual(response.status_code, 404)
-
-    def test_unbalanced_referer_callback(self):
-        """
-        A callback url and HTTP referer are required. If one is missing,
-        dispaly a 404 page.
-        """
-        response = self.client.get(reverse('sso_authorize') +
-                                   self.auth_callback)
-        self.assertEqual(response.status_code, 404)
-
-        response = self.client.get(reverse('sso_authorize'),
-                                   HTTP_REFERER=self.referer)
-        self.assertEqual(response.status_code, 404)
-
-        response = self.client.get(reverse('sso_authorize') +
-                                   self.auth_callback,
-                                   HTTP_REFERER=self.referer)
-        self.assertTemplateUsed(response, 'sso/sso_auth.html')
 
     def test_anonymous_auth(self):
         """
@@ -58,7 +29,6 @@ class SSOViewTests(TestCase):
         login_data = {'username': self.user.email,
                       'password': 'secret',
                       'auth_callback': self.auth_callback_url,
-                      'referer': self.referer,
                       'action': 'login'}
 
         self.client.logout()
@@ -96,7 +66,6 @@ class SSOViewTests(TestCase):
 
         response = self.client.post(reverse('sso_authorize'),
                                     {'auth_callback': self.auth_callback_url,
-                                     'referer': self.referer,
                                      'action': 'authorize'})
 
         self.assertEqual(self.user.authorizedclient_set.count(), 1)
@@ -107,8 +76,7 @@ class SSOViewTests(TestCase):
 
         good_qs = self.key_qs % (self.auth_callback,
                                  self.client.session.get('key'))
-        response = self.client.get(reverse('sso_authorize') + good_qs,
-                                   HTTP_REFERER=self.referer)
+        response = self.client.get(reverse('sso_authorize') + good_qs)
         self.assertEqual(response.get('Location'),
                          self.auth_callback_url + '?key=%s' %
                          self.client.session.get('key'))
@@ -125,8 +93,7 @@ class SSOViewTests(TestCase):
         # no key
         no_key = self.key_qs % (self.auth_callback,
                                 AuthorizedClient.create_key(self.user))
-        response = self.client.get(reverse('sso_authorize') + no_key,
-                                   HTTP_REFERER=self.referer)
+        response = self.client.get(reverse('sso_authorize') + no_key)
         self.assertEqual(AuthorizedClient.objects.count(), 0)
 
         # Ensure that user was logged out
@@ -145,8 +112,7 @@ class SSOViewTests(TestCase):
 
         AuthorizedClientFactory(user=self.user)
 
-        response = self.client.get(reverse('sso_authorize') + wrong_key,
-                                   HTTP_REFERER=self.referer)
+        response = self.client.get(reverse('sso_authorize') + wrong_key)
         # Ensure that user was logged out again
         response = self.client.get(reverse('view_profile'))
         self.assertRedirects(response, reverse('home'))
