@@ -1,5 +1,6 @@
 {% extends "base.html" %}
 {% load common_tags %}
+{% load model_fields %}
 {% block site-title %}
     {% with name_obj=user|get_name_obj %}
         <title>{% if name_obj %}{{ name_obj }} on{% else %}&nbsp;{% endif %} My.jobs</title>
@@ -31,12 +32,17 @@
     </div>{# /profileTitleRow #}
     <div class="row">
         <div class="span8" id="moduleColumn">
+
             {% csrf_token %}
+
             {% for module in profile_config.values %}
-            {% if module %}
-            {% include "myprofile/profile_section.html" %}
-            {% endif %}
+
+            {% with module.0|custom_template as c_template %}
+                {% include "myprofile/profile_section.html" %}
+            {% endwith %}
+
             {% endfor %}
+
         </div>
         
         <div class="scroller_anchor"></div>
