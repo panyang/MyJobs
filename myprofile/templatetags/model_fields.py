@@ -41,6 +41,7 @@ def custom_template(module):
                 boolean check reasons.
     """
     m_type = module.content_type.name
+    m_type = m_type.replace(" ", "")
     try:
         loaded = loader.get_template('myprofile/modules/%s.html' % m_type)
         if loaded:
