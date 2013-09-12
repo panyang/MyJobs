@@ -9,7 +9,7 @@ from mysignon.models import AuthorizedClient
 from mysignon.tests.factories import AuthorizedClientFactory
 
 
-class SSOViewTests(TestCase):
+class MySignOn(TestCase):
     def setUp(self):
         self.user = UserFactory()
         self.auth_callback_url = 'http://my.jobs/account'

@@ -69,7 +69,7 @@ def sso_authorize(request):
                             # The user at one time authorized this site but it
                             # was revoked (potential future functionality?).
                             # Ask for authorization again.
-                            return render_to_response('sso/sso_auth.html',
+                            return render_to_response('mysignon/sso_auth.html',
                                                       data,
                                                       RequestContext(request))
                     else:
@@ -78,7 +78,7 @@ def sso_authorize(request):
                         logout(request)
                 else:
                     # No key was provided; Proceed to authorization normally.
-                    return render_to_response('sso/sso_auth.html',
+                    return render_to_response('mysignon/sso_auth.html',
                                               data,
                                               RequestContext(request))
             else:
@@ -91,7 +91,7 @@ def sso_authorize(request):
                     logout(request)
                 else:
                     # No key was provided; Proceed to authorization.
-                    return render_to_response('sso/sso_auth.html',
+                    return render_to_response('mysignon/sso_auth.html',
                                               data,
                                               RequestContext(request))
 
@@ -100,7 +100,7 @@ def sso_authorize(request):
         login_form = CustomAuthForm(auto_id=True)
         login_form.fields.pop('remember_me')
         data['login_form'] = login_form
-        return render_to_response('sso/sso_auth.html',
+        return render_to_response('mysignon/sso_auth.html',
                                   data,
                                   RequestContext(request))
 
@@ -126,7 +126,7 @@ def sso_authorize(request):
                     data['login_form'] = login_form
                     data['auth_callback_short'] = auth_callback.netloc
 
-                    return render_to_response('sso/sso_auth.html', data,
+                    return render_to_response('mysignon/sso_auth.html', data,
                                               RequestContext(request))
 
         # Ensure that an AuthorizedClient instance exists for the current user
