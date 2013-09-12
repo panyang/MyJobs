@@ -250,7 +250,7 @@ function add_date_button() {
 
 $(document).ready(function() {
     $('#id_militaryservice-country_code').trigger('change');
-    $('#summary_items').children('a').hide();
+    $('#summary_items').children('.add-module-btn').hide();
     if($(window).width() >= 501) {
         // This function will be executed when the user scrolls the page.
         $(window).scroll(function(e) {
