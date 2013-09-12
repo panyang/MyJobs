@@ -461,8 +461,10 @@ fieldset select {
 }
 
 fieldset textarea,
-.profile-form-input input[type="text"] {
+.profile-form-input input[type="text"],
+.profile-form-input input[type="password"] {
     width: 248px;
+}
 }
 
 #title {

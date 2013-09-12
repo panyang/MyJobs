@@ -37,7 +37,6 @@ def user_is_allowed(model=None, pk_name=None, pass_user=False):
         def wrap(request, *args, **kwargs):
             email = request.GET.get('verify-email', '')
             user = User.objects.get_email_owner(email)
-
             if request.user.is_anonymous() and not email:
                 return HttpResponseRedirect(reverse('home'))
 
