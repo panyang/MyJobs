@@ -24,5 +24,5 @@ urlpatterns = patterns('',
         include('MyJobs.mysearches.urls')),
     url(r'^api/', include(v1_api.urls)),
     url(r'^admin/', include(admin.site.urls)),
-    url(r'^authorize/', include('MyJobs.sso.urls')),
+    url(r'^authorize/', include('MyJobs.mysignon.urls')),
 )

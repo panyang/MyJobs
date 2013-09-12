@@ -1,7 +1,7 @@
 import factory
 
 from myjobs.tests.factories import UserFactory
-from sso.models import AuthorizedClient
+from mysignon.models import AuthorizedClient
 
 
 class AuthorizedClientFactory(factory.Factory):

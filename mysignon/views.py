@@ -9,7 +9,7 @@ from django.template import RequestContext
 from django.shortcuts import render_to_response, redirect
 
 from registration.forms import CustomAuthForm
-from sso.models import AuthorizedClient
+from mysignon.models import AuthorizedClient
 
 
 def sso_authorize(request):

@@ -9,23 +9,23 @@ class Migration(SchemaMigration):
 
     def forwards(self, orm):
         # Adding model 'AuthorizedClient'
-        db.create_table(u'sso_authorizedclient', (
+        db.create_table(u'mysignon_authorizedclient', (
             (u'id', self.gf('django.db.models.fields.AutoField')(primary_key=True)),
             ('user', self.gf('django.db.models.fields.related.ForeignKey')(to=orm['myjobs.User'])),
             ('site', self.gf('django.db.models.fields.CharField')(max_length=255)),
         ))
-        db.send_create_signal(u'sso', ['AuthorizedClient'])
+        db.send_create_signal(u'mysignon', ['AuthorizedClient'])
 
         # Adding unique constraint on 'AuthorizedClient', fields ['user', 'site']
-        db.create_unique(u'sso_authorizedclient', ['user_id', 'site'])
+        db.create_unique(u'mysignon_authorizedclient', ['user_id', 'site'])
 
 
     def backwards(self, orm):
         # Removing unique constraint on 'AuthorizedClient', fields ['user', 'site']
-        db.delete_unique(u'sso_authorizedclient', ['user_id', 'site'])
+        db.delete_unique(u'mysignon_authorizedclient', ['user_id', 'site'])
 
         # Deleting model 'AuthorizedClient'
-        db.delete_table(u'sso_authorizedclient')
+        db.delete_table(u'mysignon_authorizedclient')
 
 
     models = {
@@ -66,9 +66,10 @@ class Migration(SchemaMigration):
             'opt_in_myjobs': ('django.db.models.fields.BooleanField', [], {'default': 'True'}),
             'password': ('django.db.models.fields.CharField', [], {'max_length': '128'}),
             'password_change': ('django.db.models.fields.BooleanField', [], {'default': 'False'}),
-            'profile_completion': ('django.db.models.fields.IntegerField', [], {'default': '0'})
+            'profile_completion': ('django.db.models.fields.IntegerField', [], {'default': '0'}),
+            'user_guid': ('django.db.models.fields.CharField', [], {'unique': 'True', 'max_length': '100', 'db_index': 'True'})
         },
-        u'sso.authorizedclient': {
+        u'mysignon.authorizedclient': {
             'Meta': {'unique_together': "(('user', 'site'),)", 'object_name': 'AuthorizedClient'},
             u'id': ('django.db.models.fields.AutoField', [], {'primary_key': 'True'}),
             'site': ('django.db.models.fields.CharField', [], {'max_length': '255'}),
@@ -76,4 +77,4 @@ class Migration(SchemaMigration):
         }
     }
 
-    complete_apps = ['sso']
+    complete_apps = ['mysignon']

@@ -5,8 +5,8 @@ from django.test import TestCase
 
 from myjobs.tests.factories import UserFactory
 from myjobs.tests.views import TestClient
-from sso.models import AuthorizedClient
-from sso.tests.factories import AuthorizedClientFactory
+from mysignon.models import AuthorizedClient
+from mysignon.tests.factories import AuthorizedClientFactory
 
 
 class SSOViewTests(TestCase):
