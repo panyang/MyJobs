@@ -126,7 +126,7 @@ class SummaryFactory(factory.Factory):
 
 
 class VolunteerHistoryFactory(factory.Factory):
-    FACTORY_FOR = EmploymentHistory
+    FACTORY_FOR = VolunteerHistory
 
     position_title = "Title"
     organization_name = "DirectEmployers"
