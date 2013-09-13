@@ -20,6 +20,7 @@
             </td>
             <td>
                 <a class="btn pull-right" href="{% url 'handle_form' %}?id={{ item.id }}&module={{ item.get_verbose.title }}">{% trans 'Edit' %}</a>
+                <a class="btn pull-right" href="{% url 'get_details' %}?id={{ item.id }}&module={{ item.get_verbose.title }}">{% trans 'Details' %}</a>
             </td>
         </tr>
     {% endfor %}
