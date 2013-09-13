@@ -276,3 +276,11 @@ class MyProfileTests(TestCase):
         ms_object = ProfileUnits.objects.filter(
             content_type__name="summary").count()
         self.assertEqual(ms_object, 1)
+
+    def test_add_volunteer_history(self):
+        vh_instance = VolunteerHistoryFactory(user=self.user)
+        vh_instance.save()
+
+        ms_object = ProfileUnits.objects.filter(
+            content_type__name="volunteer history").count()
+        self.assertEqual(ms_object, 1)

@@ -171,6 +171,20 @@ class SummaryForm(BaseUserForm):
         model = Summary
         widgets = generate_custom_widgets(model)
         widgets['the_summary'] = Textarea(attrs={'rows': 5, 'cols': 24})
+
+
+class VolunteerHistoryForm(BaseUserForm):
+    def __init__(self, *args, **kwargs):
+        super(VolunteerHistoryForm, self).__init__(*args, **kwargs)
+        self.fields['start_date'].input_formats = settings.DATE_INPUT_FORMATS
+        self.fields['end_date'].input_formats = settings.DATE_INPUT_FORMATS
+
+    class Meta:
+        form_name = _("Most Recent Volunteer History")
+        model = VolunteerHistory
+        widgets = generate_custom_widgets(model)
+        widgets['start_date'].attrs['placeholder'] = 'ie 05/30/2005'
+        widgets['end_date'].attrs['placeholder'] = 'ie 06/01/2007'
     
 
 class InitialForm(BaseUserForm):

@@ -12,13 +12,14 @@ class CompanyFactory(factory.Factory):
 
 
 class MicrositeFactory(factory.Factory):
-	FACTORY_FOR = Microsite
+    FACTORY_FOR = Microsite
 
-	url = 'http://test.jobs'
-	company = factory.SubFactory(CompanyFactory)
+    url = 'http://test.jobs'
+    company = factory.SubFactory(CompanyFactory)
+
 
 class CompanyUserFactory(factory.Factory):
-	FACTORY_FOR = CompanyUser
+    FACTORY_FOR = CompanyUser
 
-	user = factory.SubFactory(UserFactory)
-	company = factory.SubFactory(CompanyFactory)
+    user = factory.SubFactory(UserFactory)
+    company = factory.SubFactory(CompanyFactory)
