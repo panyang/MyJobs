@@ -1503,6 +1503,14 @@ td .gravatar-blank,
         text-align:left;
     }
 
+    .profile-mobile td{
+        border: none;
+        border-bottom: 1px solid #eee;
+        position: relative;
+        white-space: normal;
+        text-align:left;
+    }
+
     .profile-mobile td:before {
         position: absolute;
         top: 6px;
