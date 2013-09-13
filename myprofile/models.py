@@ -374,7 +374,8 @@ class VolunteerHistory(ProfileUnits):
                                          verbose_name=_("Organization"))
     start_date = models.DateField(verbose_name=_("Start Date"))
     current_indicator = models.BooleanField(default=False,
-                                            verbose_name=_("I still work here"))
+                                            verbose_name=_(
+                                                "I still volunteer here"))
 
     # Optional fields
     end_date = models.DateField(blank=True, null=True)
