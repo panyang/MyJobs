@@ -1494,11 +1494,19 @@ td .gravatar-blank,
         border: 1px solid #ccc; 
     }
 
-    .profile-mobile td {    
+    .profile-mobile thead + tbody > tr > td {
         border: none;
         border-bottom: 1px solid #eee; 
         position: relative;
         padding-left: 50%; 
+        white-space: normal;
+        text-align:left;
+    }
+
+    .profile-mobile td{
+        border: none;
+        border-bottom: 1px solid #eee;
+        position: relative;
         white-space: normal;
         text-align:left;
     }
