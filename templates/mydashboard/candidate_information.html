@@ -91,7 +91,7 @@
                                                 <li>{{item.organization_name}}</li>
                                                 <li>{{item.degree_date}}</li>
                                                 
-                                                {% elif item.content_type.name == "employment history" %}
+                                                {% elif item.content_type.name == "employment history" or item.content_type.name == "volunteer history" %}
                                                     
                                                 <li><b>{{item.position_title}}</b></li>
                                                 <li>{{item.organization_name}}</li>

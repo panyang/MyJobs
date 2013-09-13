@@ -30,7 +30,8 @@ def edit_profile(request):
 
     manager = BaseProfileUnitManager(order=['summary', 'name',
                                             'employmenthistory', 'education',
-                                            'militaryservice', 'license',
+                                            'militaryservice',
+                                            'volunteerhistory', 'license',
                                             'secondaryemail', 'website',
                                             'address'])
     profile_config = manager.displayed_units(user.profileunits_set.all())
