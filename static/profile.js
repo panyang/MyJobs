@@ -127,7 +127,6 @@ $(function() {
         with a form input
         */
         datepickerButton: function(e) {
-            console.log('Function')
             e.stopPropagation();    
             e.preventDefault();
             that = $(e.target).parents('.input-append');
