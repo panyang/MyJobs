@@ -1494,7 +1494,7 @@ td .gravatar-blank,
         border: 1px solid #ccc; 
     }
 
-    .profile-mobile td {    
+    .profile-mobile thead + tbody > tr > td {
         border: none;
         border-bottom: 1px solid #eee; 
         position: relative;
