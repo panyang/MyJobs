@@ -12,7 +12,7 @@ from mysignon.tests.factories import AuthorizedClientFactory
 class MySignOn(TestCase):
     def setUp(self):
         self.user = UserFactory()
-        self.auth_callback_url = 'http://my.jobs/account'
+        self.auth_callback_url = 'https://secure.my.jobs/account'
         self.auth_callback = '?auth_callback=%s' % self.auth_callback_url
         self.key_qs = '%s&key=%s'
 
