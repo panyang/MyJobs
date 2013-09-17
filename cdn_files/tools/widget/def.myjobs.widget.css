@@ -6,7 +6,7 @@
     color: #000;
 }
 #direct_savedsearch h3{
-    background: url(http://my.jobs/files/static/images/myjobs_logo.png) 
+    background: url(//d2e48ltfsb5exy.cloudfront.net/myjobs/tools/common/myjobs_logo.png) 
         transparent center left no-repeat;
     text-indent: -9000px;
     padding: 10px 0;
@@ -33,7 +33,7 @@
     background: #5a6d81;
 }
 #direct_savedsearch .loading{
-    background: url('http://png.nlx.org/content_ms/files/ui-anim_basic_16x16.gif') center left no-repeat;
+    background: url('//d2e48ltfsb5exy.cloudfront.net/myjobs/tools/common/ui-anim_basic_16x16.gif') center left no-repeat;
     padding: 20px
 }
 #direct_savedsearch .success,

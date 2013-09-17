@@ -1,6 +1,10 @@
 $(document).ready(function(){    
-    var str = '<div id="direct_savedsearch" class="direct_rightColBox"><a href="http://my.jobs/"><h3>Save This Search</h3></a>';
-    str += '<div id="savedsearch_form"></div><em class="subtext">Cancel Anytime</em></div></div>';
+    var str = '<link rel="stylesheet" type="text/css" ';
+    str+='href="//d2e48ltfsb5exy.cloudfront.net/myjobs/tools/widget/def.myjobs.widget.css">'; 
+    str+= '<div id="direct_savedsearch"><a href="https://secure.my.jobs/">';
+    str+= '<h3>Save This Search</h3></a>';
+    str += '<div id="savedsearch_form"></div><em class="subtext">Cancel ';
+    str+= 'Anytime</em></div></div>';
     document.getElementById('de-myjobs-widget').innerHTML = str;
 
     form = savedsearch_object($("#savedsearch_form"));
