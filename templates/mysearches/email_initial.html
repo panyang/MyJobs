@@ -29,11 +29,11 @@
         <p>If you created this saved search, then you can disregard this email. However, if this search was not
             created by you then you may use the link below to delete this saved search.</p>
         <div style="text-align: center">
-            <a href="http://my.jobs{% url 'delete_saved_search' %}?id={{ saved_search.id }}&verify-email={{saved_search.user.email}}" style="line-height: 20px;vertical-align: middle;cursor: pointer;display:inline-block;padding: 4px 12px;border: 1px solid #bbb; border-radius: 5px; background-color: #b34529; background-image: -webkit-linear-gradient(#db5938,#b34529); background-image: linear-gradient(#db5938,#b34529);filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#db5938', endColorstr='#b34529', GradientType=0);margin-top: 2px;padding-left: 25px;padding-right: 25px;color: #fff !important;text-decoration: none !important; margin-left: auto !important; margin-right:auto !important; text-align: center; font-size: 1.1em; font-weight: bold;margin-bottom: 10px !important;">
+            <a href="https://secure.my.jobs{% url 'delete_saved_search' %}?id={{ saved_search.id }}&verify-email={{saved_search.user.email}}" style="line-height: 20px;vertical-align: middle;cursor: pointer;display:inline-block;padding: 4px 12px;border: 1px solid #bbb; border-radius: 5px; background-color: #b34529; background-image: -webkit-linear-gradient(#db5938,#b34529); background-image: linear-gradient(#db5938,#b34529);filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#db5938', endColorstr='#b34529', GradientType=0);margin-top: 2px;padding-left: 25px;padding-right: 25px;color: #fff !important;text-decoration: none !important; margin-left: auto !important; margin-right:auto !important; text-align: center; font-size: 1.1em; font-weight: bold;margin-bottom: 10px !important;">
                 Delete "{{ saved_search.label.title }}"
             </a>
             <br>
-            <a href="http://my.jobs{% url 'view_full_feed' %}?id={{ saved_search.id }}&verify-email={{saved_search.user.email}}" style="line-height: 20px;vertical-align: middle;cursor: pointer;display:inline-block;padding: 4px 12px;border: 1px solid #bbb; border-radius: 5px; background-color: #e6e6e6;background-image: -webkit-linear-gradient(#ffffff,#e6e6e6); background-image: linear-gradient(#ffffff,#e6e6e6);filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#ffe6e6e6', GradientType=0);margin-top: 2px;padding-left: 25px;padding-right: 25px;color: #333 !important;text-decoration: none !important; margin-left: auto !important; margin-right:auto !important; text-align: center; font-size: 1.1em;font-weight: bold; margin-bottom: 30px !important;">
+            <a href="https://secure.my.jobs{% url 'view_full_feed' %}?id={{ saved_search.id }}&verify-email={{saved_search.user.email}}" style="line-height: 20px;vertical-align: middle;cursor: pointer;display:inline-block;padding: 4px 12px;border: 1px solid #bbb; border-radius: 5px; background-color: #e6e6e6;background-image: -webkit-linear-gradient(#ffffff,#e6e6e6); background-image: linear-gradient(#ffffff,#e6e6e6);filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#ffffffff', endColorstr='#ffe6e6e6', GradientType=0);margin-top: 2px;padding-left: 25px;padding-right: 25px;color: #333 !important;text-decoration: none !important; margin-left: auto !important; margin-right:auto !important; text-align: center; font-size: 1.1em;font-weight: bold; margin-bottom: 30px !important;">
                 View "{{ saved_search.label.title }}" on My.Jobs
             </a>
             <br>
@@ -46,5 +46,5 @@
 {% block footer %}
     Sent to: {{saved_searches.0.0.email}}<br>
     Sent as Digest: No<br>
-    <a href="http://my.jobs{% url 'unsubscribe' %}?id={{ saved_searches.0.0.id }}&verify-email={{saved_searches.0.0.user.email}}">unsubscribe</a><br>
+    <a href="https://secure.my.jobs{% url 'unsubscribe' %}?id={{ saved_searches.0.0.id }}&verify-email={{saved_searches.0.0.user.email}}">unsubscribe</a><br>
 {% endblock %}
