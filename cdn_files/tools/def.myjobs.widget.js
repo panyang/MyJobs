@@ -78,7 +78,7 @@ function savedsearch_object(ss_box){
     ssearch.new_user = false;
     ssearch.msg = "";
     ssearch.email = "";
-    ssearch.api_root = "https://secure.my.jobs:80"
+    ssearch.api_root = "http://secure.my.jobs:80"
 
     ssearch.create_form = function(obj){
         obj.box.hide();
