@@ -53,18 +53,18 @@ function savedsearch_object(ss_box){
     // HTML for successful save (new user)
     str = '<em class="success">Success</em><p>We will send you results from ';
     str+= 'this search to <b>****</b> once per day. You can manage this saved ';
-    str+= 'search at <a href="http://my.jobs/" target="_blank">My.jobs</a>.</p>';
+    str+= 'search at <a href="https://secure.my.jobs/" target="_blank">My.jobs</a>.</p>';
     str+= '<p>Check your email for login and email verification instructions.</p>';
     ssearch.new_user_msg = str;
     // HTML for successful save (existing user)
     str = '<em class="success">Success</em><p>We will send you results from this search to <b>****</b> once ';
     str+= 'per day. You can manage this saved search by logging in to ';
-    str+= '<a href="http://my.jobs/" target="_blank">My.jobs</a>.</p>';
+    str+= '<a href="https://secure.my.jobs/" target="_blank">My.jobs</a>.</p>';
     ssearch.existing_user_msg = str;
     // HTML for pre-existing saved search
     str = '<em class="warning">Saved Search Exists!</em><p>There is already a ';
     str+= 'saved search for this url for <b>****</b>. To edit that saved search';
-    str+= ', <a href="http://my.jobs/" target="_blank">please login to ';
+    str+= ', <a href="https://secure.my.jobs/" target="_blank">please login to ';
     str+= 'My.jobs</a>.</p><p><button id="reset_savedsearch">Try a different ';
     str+= 'email</button></p>';
     ssearch.existing_search_msg = str;
