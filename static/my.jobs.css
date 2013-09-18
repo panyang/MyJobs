@@ -2,7 +2,7 @@
 
 /*Main Styles*/
 body {
-    background-color: #574e44;
+    background-color: #ddd;
     font-family: Arial, Helvetica, sans-serif;
 }
 
@@ -25,10 +25,10 @@ body {
 }
 
 a {
-    color: #c44e34;
+    color: #5a6d81;
 }
 a:hover {
-    color: #a42e14;
+    color: #4B5661;
 }
 
 .activity-progress {
@@ -82,10 +82,10 @@ label[for^='id_sort_by'], label[for^='id_edit_sort_by'] {
 }
 #profileTitleRow img{
     border-radius:5px;
-    border: 2px solid #b34529;
+    border: 2px solid #873f3d;
 }
 #profileTitleBar{
-    border-bottom: 2px solid #b34529;
+    border-bottom: 2px solid #873f3d;
 }
 
 .profile-form-input input[type!=checkbox] {
@@ -108,7 +108,7 @@ label[for^='id_sort_by'], label[for^='id_edit_sort_by'] {
 }
 
 #highlight {
-    color: #b34529;    
+    color: #a95051;
 }
 
 #moduleColumn .add-module-btn {
@@ -279,16 +279,21 @@ table#row-link-table {
     
 /* bootstrap .table-striped class */
 .table-striped thead th {
-    background-color: #FFF;   
+    background-color: #FFF;
     color: #000;
 }    
 
 .table-striped tbody tr:nth-child(even) td {
-    background-color: #d2cfc7 !important;
+    background-color: #cbcbcb !important;
 }
 
 .table-striped tbody tr:nth-child(odd) td {
-    background-color: #eae6de !important;
+    background-color: #ddd !important;
+}
+
+.table-bordered th,
+.table-bordered td{
+    border-left: 1px solid #E5E5E5;
 }
 
 /*New Account initial form*/
@@ -441,11 +446,11 @@ ul.ui-autocomplete {
 
 .topbar .menu-tabs a:hover {
     color: #FFF;
-    background-color: #b34529;
+    background-color: #a95051;
 }
 
 .menu-tabs .active a {
-    background-color: #b34529 !important;
+    background-color: #a95051 !important;
 }
 
 .formBox select {
@@ -495,18 +500,18 @@ fieldset textarea,
 }
 
 .formBox {
-    background-color: #e4e0d5;
+    background-color: #f2f2f2;
     padding: 5px 5px 10px 5px;
-    border-left: 1px solid #d5d4d0;
-    border-right: 1px solid #d5d4d0;
-    border-bottom: 1px solid #d5d4d0;
+    border-left: 1px solid #e6e6e6;
+    border-right: 1px solid #e6e6e6;
+    border-bottom: 1px solid #e6e6e6;
     border-radius: 5px;    
 }
 
 .loginBox {
-    background-color: #f4f1ea;
+    background-color: #f2f2f2;
     padding: 10px 10px 30px 10px;
-    border: 2px solid #a3aeb1;
+    border: 2px solid #e6e6e6;
     border-radius: 5px;    
 }
 
@@ -560,11 +565,11 @@ fieldset textarea,
 }
 
 .loginBox a {
-    color: #333;
+    color: #5a6d81;
 }
 
 .loginBox a:hover {
-    color: #333;
+    color: #5a6d81;
 }
 
 .loginBox .btn:hover {
@@ -704,8 +709,16 @@ fieldset textarea,
 
 /*form styles*/
 .btn {
-    color: #000;
-    text-shadow: 0 1px 1px rgba(0, 0, 0, .75) !important;
+    background-color: #cccccc;
+    background-image: none;
+    background-image: -moz-linear-gradient(#f2f2f2,#e1e1e1);
+    background-image: -webkit-gradient(linear, left top, left bottom, #f2f2f2, #e1e1e1);
+    background-image: -webkit-linear-gradient(#f2f2f2,#e1e1e1);
+    background-image: -o-linear-gradient(#f2f2f2,#e1e1e1);
+    background-image: linear-gradient(#f2f2f2,#e1e1e1);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f2f2f2', endColorstr='#e1e1e1', GradientType=0);
+    color: #5e6c82;
+    text-shadow: 0 1px 1px rgba(114, 114, 114, .75) !important;
 }
 
 .btn + .btn {
@@ -717,20 +730,29 @@ fieldset textarea,
 }
 
 .btn.primary {
-    background-color: #b34529;
+    background-color: #5f6c82;
     background-image: none;
-    background-image: -moz-linear-gradient(#db5938,#b34529);
-    background-image: -webkit-gradient(linear, left top, left bottom, #db5938, #b34529); 
-    background-image: -webkit-linear-gradient(#db5938,#b34529);  
-    background-image: -o-linear-gradient(#db5938,#b34529); 
-    background-image: linear-gradient(#db5938,#b34529);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#db5938', endColorstr='#b34529', GradientType=0);
+    background-image: -moz-linear-gradient(#8c96a1,#5f6c82);
+    background-image: -webkit-gradient(linear, left top, left bottom, #8c96a1, #5f6c82);
+    background-image: -webkit-linear-gradient(#8c96a1,#5f6c82);
+    background-image: -o-linear-gradient(#8c96a1,#5f6c82);
+    background-image: linear-gradient(#8c96a1,#5f6c82);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#8c96a1', endColorstr='#5f6c82', GradientType=0);
     margin-top: 2px;
     padding-left: 25px;
     padding-right: 25px;
     font-weight:bold;
     font-size: 1.1em;
     color: #fff
+}
+
+.btn-link{
+    color: #5e6c82;
+    padding: 0 15px;
+}
+
+.btn-link:hover{
+    color: #4B5661;
 }
 
 .profile-form-input textarea {
@@ -755,7 +777,7 @@ fieldset textarea,
 }
 
 .alert-error a {
-    color: #b94a48;
+    color: #a95051;
 }
 
 .input-prepend .add-on {
@@ -1023,14 +1045,14 @@ em.pendingText {
 
 #moduleBank a:hover {
     color:#fff;
-    background-color: #b34529;
+    background-color: #5f6c82;
     background-image: none;
-    background-image: -moz-linear-gradient(#db5938,#b34529);
-    background-image: -webkit-gradient(linear, left top, left bottom, #db5938, #b34529); 
-    background-image: -webkit-linear-gradient(#db5938,#b34529);  
-    background-image: -o-linear-gradient(#db5938,#b34529); 
-    background-image: linear-gradient(#db5938,#b34529);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#db5938', endColorstr='#b34529', GradientType=0);
+    background-image: -moz-linear-gradient(#8c96a1,#5f6c82);
+    background-image: -webkit-gradient(linear, left top, left bottom, #8c96a1, #5f6c82);
+    background-image: -webkit-linear-gradient(#8c96a1,#5f6c82);
+    background-image: -o-linear-gradient(#8c96a1,#5f6c82);
+    background-image: linear-gradient(#8c96a1,#5f6c82);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#8c96a1', endColorstr='#5f6c82', GradientType=0);
     margin: 0;
     text-decoration: none;
 }
@@ -1047,7 +1069,7 @@ em.pendingText {
 }
 
 .footer a {
-    color: #FFF;
+    color: #666;
     padding: 10px;
 }
 
@@ -1260,7 +1282,13 @@ td .gravatar-blank,
     #pop-menu {
         height: 100%;
     }
-    
+
+    .btn-link{
+        display: block !important;
+        text-align: center;
+        border: 1px solid #5a6d81;
+        margin: 2px 0;
+    }
 
     #logo-block {
         margin-top: 10px;
@@ -1538,11 +1566,32 @@ td .gravatar-blank,
     }
     
     .add-module-btn,
-    .profile-mobile a.btn {        
+    .profile-mobile a.btn{
         display: block;
         float: none;
         margin: 5px 0;
         width: auto;
+    }
+
+    .btn-link{
+        display: block !important;
+        background-color: #cccccc;
+        background-image: none;
+        background-image: -moz-linear-gradient(#f2f2f2,#e1e1e1);
+        background-image: -webkit-gradient(linear, left top, left bottom, #f2f2f2, #e1e1e1);
+        background-image: -webkit-linear-gradient(#f2f2f2,#e1e1e1);
+        background-image: -o-linear-gradient(#f2f2f2,#e1e1e1);
+        background-image: linear-gradient(#f2f2f2,#e1e1e1);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f2f2f2', endColorstr='#e1e1e1', GradientType=0);
+        color: #5e6c82;
+        border-color:rgba(0,0,0,0.15) rgba(0,0,0,0.15) rgba(0,0,0,0.25);
+        text-shadow: 0 1px 1px rgba(114, 114, 114, .75) !important;
+        margin: 5px 0;
+        text-align: center;
+    }
+
+    .sum-edit{
+        float: none;
     }
     
     #moduleBank {
