@@ -11,7 +11,7 @@ body {
 }
 
 #titleRow {
-    background: #FFF url('/files/static/images/homepage_bg.png') no-repeat center top;
+    background: #FFF;
     margin-top: -26px;
     margin-bottom: -20px;
     min-height: 598px;     
@@ -399,8 +399,8 @@ ul.ui-autocomplete {
 /*Topbar Styles*/
 .topbar #topbar-logo {
     height: 30px;
-    width: 90px;
-    background: transparent url(/files/static/images/myjobs_logo.png) center left no-repeat;
+    width: 60px;
+    background: transparent url(//d2e48ltfsb5exy.cloudfront.net/myjobs/logos/myjobs_logo_white_small.png) center left no-repeat;
     text-indent: -9000px;
 }
 
@@ -474,8 +474,9 @@ fieldset textarea,
 #title h1 {
     text-indent: -9000px;    
     display: block;
-    height: 81px;
-    background: transparent url('/files/static/images/mydotjobs_home_logo.png') 65px 3px no-repeat;
+    height: 149px;
+    margin-top: 40px;
+    background: transparent url('//d2e48ltfsb5exy.cloudfront.net/myjobs/logos/myjobs_logo.png') 120px 0px no-repeat;
 }
 
 #subtitle {
