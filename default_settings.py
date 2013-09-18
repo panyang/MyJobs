@@ -63,10 +63,6 @@ STATICFILES_DIRS = (
 STATIC_ROOT = os.path.join(_PATH, 'files', 'static')
 STATIC_URL = '/files/'
 
-STATICFILES_DIRS = (
-    os.path.join(PROJ_ROOT, 'static'),
-)
-
 STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.FileSystemFinder',
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
@@ -163,7 +159,7 @@ INSTALLED_APPS = (
 # Add all MyJobs apps here. This separation ensures that automated Jenkins tests
 # only run on these apps
 PROJECT_APPS = ('myjobs','myprofile','mysearches','registration',
-                'mydashboard', 'mysignon')
+                'mydashboard', 'mysignon', 'myanalytics')
 
 INSTALLED_APPS += PROJECT_APPS
 
