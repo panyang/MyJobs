@@ -11,8 +11,8 @@
                 {{ item.degree_date }}
             </td>
             <td class="action">
-                <a class="btn" href="{% url 'get_details' %}?id={{ item.id }}&module={{ item.get_verbose.title }}">{% trans 'Details' %}</a>
-                <a class="btn" href="{% url 'handle_form' %}?id={{ item.id }}&module={{ item.get_verbose.title }}">{% trans 'Edit' %}</a>
+                <a class="btn-link" href="{% url 'get_details' %}?id={{ item.id }}&module={{ item.get_verbose.title }}">{% trans 'Details' %}</a>
+                <a class="btn-link" href="{% url 'handle_form' %}?id={{ item.id }}&module={{ item.get_verbose.title }}">{% trans 'Edit' %}</a>
             </td>
         </tr>
     {% endfor %}
