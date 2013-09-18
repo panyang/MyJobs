@@ -1265,7 +1265,7 @@ td .gravatar-blank,
 
     .topbar-inner {
         height: 50px;        
-        border-bottom: 20px solid #c44e34;
+        border-bottom: 20px solid #a95051;
     }
 
     #logged-in-li {
@@ -1309,7 +1309,7 @@ td .gravatar-blank,
     }
 
     #nav .main-nav {
-        background: #C44E34 url(/files/static/images/superbutton.png) no-repeat;
+        background: #a95051 url(/files/static/images/superbutton.png) no-repeat;
         position: absolute;
         right: 10px;
         top: 10px;
@@ -2263,7 +2263,7 @@ body.modal-open {
     display: none !important;
 }
 .show {
-    background: #b34529 !important;
+    background: #a95051 !important;
 }
 #company-menu {
     margin: 0;
