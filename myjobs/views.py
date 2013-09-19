@@ -25,8 +25,6 @@ from captcha.fields import ReCaptchaField
 from secrets import RECAPTCHA_PUBLIC_KEY, RECAPTCHA_PRIVATE_KEY, EMAIL_TO_ADMIN
 from secrets import options, my_agent_auth
 
-from tastypie.models import ApiKey
-
 from myjobs.decorators import user_is_allowed
 from myjobs.models import User, EmailLog
 from myjobs.forms import *
