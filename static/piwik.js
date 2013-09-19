@@ -427,7 +427,6 @@ if (typeof JSON2 !== 'object') {
     addListener, enableLinkTracking, setLinkTrackingTimer,
     setHeartBeatTimer, killFrame, redirectFile, setCountPreRendered,
     trackGoal, trackLink, trackPageView, trackSiteSearch,
-    setEcommerceView, addEcommerceItem, trackEcommerceOrder, trackEcommerceCartUpdate
  */
 /*global _paq:true */
 /*members push */
@@ -461,9 +460,6 @@ if (typeof Piwik !== 'object') {
             navigatorAlias = navigator,
             screenAlias = screen,
             windowAlias = window,
-
-            /* performance timing */
-            performanceAlias = windowAlias.performance || windowAlias.mozPerformance || windowAlias.msPerformance || windowAlias.webkitPerformance,
 
             /* DOM Ready */
             hasLoaded = false,
@@ -765,6 +761,17 @@ if (typeof Piwik !== 'object') {
         }
 
         /************************************************************
+         * uuid4
+         * - based on uuid from broofa.com/2008/09/javascript-uuid-function/ (MIT / GPL)
+         ************************************************************/
+        function uuid4() {
+            return 'xxxxxxxx-xxxx-4xxx-yxxx-xxxxxxxxxxxx'.replace(/[xy]/g, function(c) {
+                var r = Math.random() * 16 | 0, v = c == 'x' ? r : (r&0x3|0x8);
+                return v.toString(16);
+            });
+        }
+
+        /************************************************************
          * sha1
          * - based on sha1 from http://phpjs.org/functions/sha1:512 (MIT / GPL v2)
          ************************************************************/
@@ -983,13 +990,6 @@ if (typeof Piwik !== 'object') {
              ************************************************************/
 
             var
-/*<DEBUG>*/
-                /*
-                 * registered test hooks
-                 */
-                registeredHooks = {},
-/*</DEBUG>*/
-
                 // Current URL and Referrer URL
                 locationArray = urlFixup(documentAlias.domain, windowAlias.location.href, getReferrer()),
                 domainAlias = domainFixup(locationArray[0]),
@@ -1085,12 +1085,6 @@ if (typeof Piwik !== 'object') {
                 // Life of the referral cookie (in milliseconds)
                 configReferralCookieTimeout = 15768000000, // 6 months
 
-                // Is performance tracking enabled
-                configPerformanceTrackingEnabled = true,
-
-                // Generation time set from the server
-                configPerformanceGenerationTime = 0,
-
                 // Custom Variables read from cookie, scope "visit"
                 customVariables = false,
 
@@ -1099,9 +1093,6 @@ if (typeof Piwik !== 'object') {
 
                 // Custom Variables names and values are each truncated before being sent in the request or recorded in the cookie
                 customVariableMaximumLength = 200,
-
-                // Ecommerce items
-                ecommerceItems = {},
 
                 // Browser features via client-side data collection
                 browserFeatures = {},
@@ -1253,7 +1244,7 @@ if (typeof Piwik !== 'object') {
                 var image = new Image(1, 1);
 
                 image.onload = function () { };
-                image.src = configTrackerUrl + (configTrackerUrl.indexOf('?') < 0 ? '?' : '&') + request;
+                image.src = configTrackerUrl + 'pixel.png' + (configTrackerUrl.indexOf('?') < 0 ? '?' : '&') + request + '&req=1';
             }
 
             /*
@@ -1382,8 +1373,8 @@ if (typeof Piwik !== 'object') {
              * Sets the Visitor ID cookie: either the first time loadVisitorIdCookie is called
              * or when there is a new visit or a new page view
              */
-            function setVisitorIdCookie(uuid, createTs, visitCount, nowTs, lastVisitTs, lastEcommerceOrderTs) {
-                setCookie(getCookieName('id'), uuid + '.' + createTs + '.' + visitCount + '.' + nowTs + '.' + lastVisitTs + '.' + lastEcommerceOrderTs, configVisitorCookieTimeout, configCookiePath, configCookieDomain);
+            function setVisitorIdCookie(uuid, createTs, visitCount, nowTs, lastVisitTs) {
+                setCookie(getCookieName('id'), uuid + '.' + createTs + '.' + visitCount + '.' + nowTs + '.' + lastVisitTs, configVisitorCookieTimeout, configCookiePath, configCookieDomain);
             }
 
             /*
@@ -1404,11 +1395,7 @@ if (typeof Piwik !== 'object') {
                     // uuid - generate a pseudo-unique ID to fingerprint this user;
                     // note: this isn't a RFC4122-compliant UUID
                     if (!visitorUUID) {
-                        visitorUUID = hash(
-                            (navigatorAlias.userAgent || '') +
-                                (navigatorAlias.platform || '') +
-                                JSON2.stringify(browserFeatures) + nowTs
-                        ).slice(0, 16); // 16 hexits = 64 bits
+                        visitorUUID = uuid4()
                     }
 
                     tmpContainer = [
@@ -1428,9 +1415,6 @@ if (typeof Piwik !== 'object') {
                         nowTs,
 
                         // last visit timestamp - blank = no previous visit
-                        '',
-
-                        // last ecommerce order timestamp
                         ''
                     ];
                 }
@@ -1490,7 +1474,7 @@ if (typeof Piwik !== 'object') {
              * with the standard parameters (plugins, resolution, url, referrer, etc.).
              * Sends the pageview and browser settings with every request in case of race conditions.
              */
-            function getRequest(request, customData, pluginMethod, currentEcommerceOrderTs) {
+            function getRequest(request, customData, pluginMethod) {
                 var i,
                     now = new Date(),
                     nowTs = Math.round(now.getTime() / 1000),
@@ -1500,7 +1484,6 @@ if (typeof Piwik !== 'object') {
                     createTs,
                     currentVisitTs,
                     lastVisitTs,
-                    lastEcommerceOrderTs,
                     referralTs,
                     referralUrl,
                     referralUrlMaxLength = 1024,
@@ -1535,12 +1518,6 @@ if (typeof Piwik !== 'object') {
                 // case migrating from pre-1.5 cookies
                 if (!isDefined(id[6])) {
                     id[6] = "";
-                }
-
-                lastEcommerceOrderTs = id[6];
-
-                if (!isDefined(currentEcommerceOrderTs)) {
-                    currentEcommerceOrderTs = "";
                 }
 
                 // send charset if document charset is not utf-8. sometimes encoding
@@ -1618,8 +1595,7 @@ if (typeof Piwik !== 'object') {
                     }
                 }
                 // build out the rest of the request
-                request += '&idsite=' + configTrackerSiteId +
-                    '&rec=1' +
+                request += '&rec=1' +
                     '&r=' + String(Math.random()).slice(2, 8) + // keep the string to a minimum
                     '&h=' + now.getHours() + '&m=' + now.getMinutes() + '&s=' + now.getSeconds() +
                     '&url=' + encodeWrapper(purify(currentUrl)) +
@@ -1630,7 +1606,6 @@ if (typeof Piwik !== 'object') {
                     (campaignKeywordDetected.length ? '&_rck=' + encodeWrapper(campaignKeywordDetected) : '') +
                     '&_refts=' + referralTs +
                     '&_viewts=' + lastVisitTs +
-                    (String(lastEcommerceOrderTs).length ? '&_ects=' + lastEcommerceOrderTs : '') +
                     (String(referralUrl).length ? '&_ref=' + encodeWrapper(purify(referralUrl.slice(0, referralUrlMaxLength))) : '') +
                     (charSet ? '&cs=' + encodeWrapper(charSet) : '');
 
@@ -1676,16 +1651,8 @@ if (typeof Piwik !== 'object') {
                     setCookie(cvarname, JSON2.stringify(customVariables), configSessionCookieTimeout, configCookiePath, configCookieDomain);
                 }
 
-                // performance tracking
-                if (configPerformanceTrackingEnabled && configPerformanceGenerationTime) {
-                    request += '&gt_ms=' + configPerformanceGenerationTime;
-                } else if (configPerformanceTrackingEnabled && performanceAlias && performanceAlias.timing
-                        && performanceAlias.timing.requestStart && performanceAlias.timing.responseEnd) {
-                    request += '&gt_ms=' + (performanceAlias.timing.responseEnd - performanceAlias.timing.requestStart);
-                }
-
                 // update cookies
-                setVisitorIdCookie(uuid, createTs, visitCount, nowTs, lastVisitTs, isDefined(currentEcommerceOrderTs) && String(currentEcommerceOrderTs).length ? currentEcommerceOrderTs : lastEcommerceOrderTs);
+                setVisitorIdCookie(uuid, createTs, visitCount, nowTs, lastVisitTs);
                 setCookie(sesname, '*', configSessionCookieTimeout, configCookiePath, configCookieDomain);
 
                 // tracker plugin hook
@@ -1695,84 +1662,6 @@ if (typeof Piwik !== 'object') {
                     request += '&' + configAppendToTrackingUrl;
                 }
                 return request;
-            }
-
-            function logEcommerce(orderId, grandTotal, subTotal, tax, shipping, discount) {
-                var request = 'idgoal=0',
-                    lastEcommerceOrderTs,
-                    now = new Date(),
-                    items = [],
-                    sku;
-
-                if (String(orderId).length) {
-                    request += '&ec_id=' + encodeWrapper(orderId);
-                    // Record date of order in the visitor cookie
-                    lastEcommerceOrderTs = Math.round(now.getTime() / 1000);
-                }
-
-                request += '&revenue=' + grandTotal;
-
-                if (String(subTotal).length) {
-                    request += '&ec_st=' + subTotal;
-                }
-
-                if (String(tax).length) {
-                    request += '&ec_tx=' + tax;
-                }
-
-                if (String(shipping).length) {
-                    request += '&ec_sh=' + shipping;
-                }
-
-                if (String(discount).length) {
-                    request += '&ec_dt=' + discount;
-                }
-
-                if (ecommerceItems) {
-                    // Removing the SKU index in the array before JSON encoding
-                    for (sku in ecommerceItems) {
-                        if (Object.prototype.hasOwnProperty.call(ecommerceItems, sku)) {
-                            // Ensure name and category default to healthy value
-                            if (!isDefined(ecommerceItems[sku][1])) {
-                                ecommerceItems[sku][1] = "";
-                            }
-
-                            if (!isDefined(ecommerceItems[sku][2])) {
-                                ecommerceItems[sku][2] = "";
-                            }
-
-                            // Set price to zero
-                            if (!isDefined(ecommerceItems[sku][3])
-                                    || String(ecommerceItems[sku][3]).length === 0) {
-                                ecommerceItems[sku][3] = 0;
-                            }
-
-                            // Set quantity to 1
-                            if (!isDefined(ecommerceItems[sku][4])
-                                    || String(ecommerceItems[sku][4]).length === 0) {
-                                ecommerceItems[sku][4] = 1;
-                            }
-
-                            items.push(ecommerceItems[sku]);
-                        }
-                    }
-                    request += '&ec_items=' + encodeWrapper(JSON2.stringify(items));
-                }
-                request = getRequest(request, configCustomData, 'ecommerce', lastEcommerceOrderTs);
-                sendRequest(request, configTrackerPause);
-            }
-
-            function logEcommerceOrder(orderId, grandTotal, subTotal, tax, shipping, discount) {
-                if (String(orderId).length
-                        && isDefined(grandTotal)) {
-                    logEcommerce(orderId, grandTotal, subTotal, tax, shipping, discount);
-                }
-            }
-
-            function logEcommerceCartUpdate(grandTotal) {
-                if (isDefined(grandTotal)) {
-                    logEcommerce("", grandTotal, "", "", "", "");
-                }
             }
 
             /*
@@ -2068,53 +1957,9 @@ if (typeof Piwik !== 'object') {
              * Browser features (plugins, resolution, cookies)
              */
             function detectBrowserFeatures() {
-                var i,
-                    mimeType,
-                    pluginMap = {
-                        // document types
-                        pdf: 'application/pdf',
-
-                        // media players
-                        qt: 'video/quicktime',
-                        realp: 'audio/x-pn-realaudio-plugin',
-                        wma: 'application/x-mplayer2',
-
-                        // interactive multimedia
-                        dir: 'application/x-director',
-                        fla: 'application/x-shockwave-flash',
-
-                        // RIA
-                        java: 'application/x-java-vm',
-                        gears: 'application/x-googlegears',
-                        ag: 'application/x-silverlight'
-                    },
-                    devicePixelRatio = (new RegExp('Mac OS X.*Safari/')).test(navigatorAlias.userAgent) ? windowAlias.devicePixelRatio || 1 : 1;
+                var devicePixelRatio = (new RegExp('Mac OS X.*Safari/')).test(navigatorAlias.userAgent) ? windowAlias.devicePixelRatio || 1 : 1;
 
                 if (!((new RegExp('MSIE')).test(navigatorAlias.userAgent))) {
-                    // general plugin detection
-                    if (navigatorAlias.mimeTypes && navigatorAlias.mimeTypes.length) {
-                        for (i in pluginMap) {
-                            if (Object.prototype.hasOwnProperty.call(pluginMap, i)) {
-                                mimeType = navigatorAlias.mimeTypes[pluginMap[i]];
-                                browserFeatures[i] = (mimeType && mimeType.enabledPlugin) ? '1' : '0';
-                            }
-                        }
-                    }
-
-                    // Safari and Opera
-                    // IE6/IE7 navigator.javaEnabled can't be aliased, so test directly
-                    if (typeof navigator.javaEnabled !== 'unknown' &&
-                            isDefined(navigatorAlias.javaEnabled) &&
-                            navigatorAlias.javaEnabled()) {
-                        browserFeatures.java = '1';
-                    }
-
-                    // Firefox
-                    if (isFunction(windowAlias.GearsFactory)) {
-                        browserFeatures.gears = '1';
-                    }
-
-                    // other browser features
                     browserFeatures.cookie = hasCookies();
                 }
 
@@ -2122,31 +1967,8 @@ if (typeof Piwik !== 'object') {
                 // - only Apple reports screen.* in device-independent-pixels (dips)
                 // - devicePixelRatio is always 2 on MacOSX+Retina regardless of resolution set in Display Preferences
                 browserFeatures.res = screenAlias.width * devicePixelRatio + 'x' + screenAlias.height * devicePixelRatio;
+                browserFeatures.ua = encodeWrapper(navigatorAlias.userAgent);
             }
-
-/*<DEBUG>*/
-            /*
-             * Register a test hook. Using eval() permits access to otherwise
-             * privileged members.
-             */
-            function registerHook(hookName, userHook) {
-                var hookObj = null;
-
-                if (isString(hookName) && !isDefined(registeredHooks[hookName]) && userHook) {
-                    if (isObject(userHook)) {
-                        hookObj = userHook;
-                    } else if (isString(userHook)) {
-                        try {
-                            eval('hookObj =' + userHook);
-                        } catch (e) { }
-                    }
-
-                    registeredHooks[hookName] = hookObj;
-                }
-
-                return hookObj;
-            }
-/*</DEBUG>*/
 
             /************************************************************
              * Constructor
@@ -2158,28 +1980,11 @@ if (typeof Piwik !== 'object') {
             detectBrowserFeatures();
             updateDomainHash();
 
-/*<DEBUG>*/
-            /*
-             * initialize test plugin
-             */
-            executePluginMethod('run', registerHook);
-/*</DEBUG>*/
-
             /************************************************************
              * Public data and methods
              ************************************************************/
 
             return {
-/*<DEBUG>*/
-                /*
-                 * Test hook accessors
-                 */
-                hook: registeredHooks,
-                getHook: function (hookName) {
-                    return registeredHooks[hookName];
-                },
-/*</DEBUG>*/
-
                 /**
                  * Get visitor ID (from first party cookie)
                  *
@@ -2652,23 +2457,6 @@ if (typeof Piwik !== 'object') {
                 },
 
                 /**
-                 * Disable automatic performance tracking
-                 */
-                disablePerformanceTracking: function () {
-                    configPerformanceTrackingEnabled = false;
-                },
-
-                /**
-                 * Set the server generation time.
-                 * If set, the browser's performance.timing API in not used anymore to determine the time.
-                 * 
-                 * @param int generationTime
-                 */
-                setGenerationTimeMs: function(generationTime) {
-                    configPerformanceGenerationTime = parseInt(generationTime, 10);
-                },
-
-                /**
                  * Set heartbeat (in seconds)
                  *
                  * @param int minimumVisitLength
@@ -2759,101 +2547,6 @@ if (typeof Piwik !== 'object') {
                         logSiteSearch(keyword, category, resultsCount);
                     });
                 },
-
-
-                /**
-                 * Used to record that the current page view is an item (product) page view, or a Ecommerce Category page view.
-                 * This must be called before trackPageView() on the product/category page.
-                 * It will set 3 custom variables of scope "page" with the SKU, Name and Category for this page view.
-                 * Note: Custom Variables of scope "page" slots 3, 4 and 5 will be used.
-                 *
-                 * On a category page, you can set the parameter category, and set the other parameters to empty string or false
-                 *
-                 * Tracking Product/Category page views will allow Piwik to report on Product & Categories
-                 * conversion rates (Conversion rate = Ecommerce orders containing this product or category / Visits to the product or category)
-                 *
-                 * @param string sku Item's SKU code being viewed
-                 * @param string name Item's Name being viewed
-                 * @param string category Category page being viewed. On an Item's page, this is the item's category
-                 * @param float price Item's display price, not use in standard Piwik reports, but output in API product reports.
-                 */
-                setEcommerceView: function (sku, name, category, price) {
-                    if (!isDefined(category) || !category.length) {
-                        category = "";
-                    } else if (category instanceof Array) {
-                        category = JSON2.stringify(category);
-                    }
-
-                    customVariablesPage[5] = ['_pkc', category];
-
-                    if (isDefined(price) && String(price).length) {
-                        customVariablesPage[2] = ['_pkp', price];
-                    }
-
-                    // On a category page, do not track Product name not defined
-                    if ((!isDefined(sku) || !sku.length)
-                            && (!isDefined(name) || !name.length)) {
-                        return;
-                    }
-
-                    if (isDefined(sku) && sku.length) {
-                        customVariablesPage[3] = ['_pks', sku];
-                    }
-
-                    if (!isDefined(name) || !name.length) {
-                        name = "";
-                    }
-
-                    customVariablesPage[4] = ['_pkn', name];
-                },
-
-                /**
-                 * Adds an item (product) that is in the current Cart or in the Ecommerce order.
-                 * This function is called for every item (product) in the Cart or the Order.
-                 * The only required parameter is sku.
-                 *
-                 * @param string sku (required) Item's SKU Code. This is the unique identifier for the product.
-                 * @param string name (optional) Item's name
-                 * @param string name (optional) Item's category, or array of up to 5 categories
-                 * @param float price (optional) Item's price. If not specified, will default to 0
-                 * @param float quantity (optional) Item's quantity. If not specified, will default to 1
-                 */
-                addEcommerceItem: function (sku, name, category, price, quantity) {
-                    if (sku.length) {
-                        ecommerceItems[sku] = [ sku, name, category, price, quantity ];
-                    }
-                },
-
-                /**
-                 * Tracks an Ecommerce order.
-                 * If the Ecommerce order contains items (products), you must call first the addEcommerceItem() for each item in the order.
-                 * All revenues (grandTotal, subTotal, tax, shipping, discount) will be individually summed and reported in Piwik reports.
-                 * Parameters orderId and grandTotal are required. For others, you can set to false if you don't need to specify them.
-                 *
-                 * @param string|int orderId (required) Unique Order ID.
-                 *                   This will be used to count this order only once in the event the order page is reloaded several times.
-                 *                   orderId must be unique for each transaction, even on different days, or the transaction will not be recorded by Piwik.
-                 * @param float grandTotal (required) Grand Total revenue of the transaction (including tax, shipping, etc.)
-                 * @param float subTotal (optional) Sub total amount, typically the sum of items prices for all items in this order (before Tax and Shipping costs are applied)
-                 * @param float tax (optional) Tax amount for this order
-                 * @param float shipping (optional) Shipping amount for this order
-                 * @param float discount (optional) Discounted amount in this order
-                 */
-                trackEcommerceOrder: function (orderId, grandTotal, subTotal, tax, shipping, discount) {
-                    logEcommerceOrder(orderId, grandTotal, subTotal, tax, shipping, discount);
-                },
-
-                /**
-                 * Tracks a Cart Update (add item, remove item, update item).
-                 * On every Cart update, you must call addEcommerceItem() for each item (product) in the cart, including the items that haven't been updated since the last cart update.
-                 * Then you can call this function with the Cart grandTotal (typically the sum of all items' prices)
-                 *
-                 * @param float grandTotal (required) Items (products) amount in the Cart
-                 */
-                trackEcommerceCartUpdate: function (grandTotal) {
-                    logEcommerceCartUpdate(grandTotal);
-                }
-
             };
         }
 
