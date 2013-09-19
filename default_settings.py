@@ -240,7 +240,7 @@ LOGGING = {
     }
 }
 
-GRAVATAR_URL_PREFIX = "http://www.gravatar.com/avatar/"
+GRAVATAR_URL_PREFIX = "//www.gravatar.com/avatar/"
 GRAVATAR_URL_DEFAULT = 404
 
 CAPTCHA_AJAX = True
