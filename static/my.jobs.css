@@ -476,7 +476,11 @@ fieldset textarea,
     margin-top: 40px;
     background: transparent url('//d2e48ltfsb5exy.cloudfront.net/myjobs/logos/myjobs_logo.png') 120px 0px no-repeat;
 }
-
+#title h2{
+    text-indent: 120px;
+    color: #a95051;
+    text-shadow: 1px 1px #ccc;
+}
 #subtitle {
     font-size: 1.85em;
     line-height: 1.1em;
