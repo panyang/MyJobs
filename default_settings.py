@@ -54,7 +54,7 @@ USE_I18N = True
 USE_L10N = True
 
 MEDIA_ROOT = os.path.join(_PATH, 'files', 'media')
-MEDIA_URL = 'http://src.nlx.org/myjobs/admin/'
+MEDIA_URL = '//d2e48ltfsb5exy.cloudfront.net/myjobs/admin/'
 
 STATICFILES_DIRS = (
     os.path.join(PROJ_ROOT, 'static'),
@@ -68,7 +68,7 @@ STATICFILES_FINDERS = (
     'django.contrib.staticfiles.finders.AppDirectoriesFinder',
 )
 
-ADMIN_MEDIA_PREFIX = 'http://src.nlx.org/myjobs/admin/'
+ADMIN_MEDIA_PREFIX = '//d2e48ltfsb5exy.cloudfront.net/myjobs/admin/'
 
 TEMPLATE_LOADERS = (
     'django.template.loaders.filesystem.Loader',
@@ -236,7 +236,7 @@ LOGGING = {
     }
 }
 
-GRAVATAR_URL_PREFIX = "http://www.gravatar.com/avatar/"
+GRAVATAR_URL_PREFIX = "https://secure.gravatar.com/avatar/"
 GRAVATAR_URL_DEFAULT = 404
 
 CAPTCHA_AJAX = True
