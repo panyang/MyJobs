@@ -1244,7 +1244,7 @@ if (typeof Piwik !== 'object') {
                 var image = new Image(1, 1);
 
                 image.onload = function () { };
-                image.src = configTrackerUrl + 'pixel.png' + (configTrackerUrl.indexOf('?') < 0 ? '?' : '&') + request + '&req=1';
+                image.src = configTrackerUrl + (configTrackerUrl.indexOf('?') < 0 ? '?' : '&') + request + '&req=1';
             }
 
             /*
