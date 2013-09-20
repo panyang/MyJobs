@@ -408,7 +408,7 @@ if (typeof JSON2 !== 'object') {
     exec,
     res, width, height, devicePixelRatio,
     pdf, qt, realp, wma, dir, fla, java, gears, ag,
-    hook, getHook, getVisitorId, getVisitorInfo, setTrackerUrl, appendToTrackingUrl, setSiteId,
+    hook, getHook, getVisitorId, getVisitorInfo, setTrackerUrl, appendToTrackingUrl,
     getAttributionInfo, getAttributionCampaignName, getAttributionCampaignKeyword,
     getAttributionReferrerTimestamp, getAttributionReferrerUrl,
     setCustomData, getCustomData,
@@ -979,11 +979,11 @@ if (typeof Piwik !== 'object') {
         /*
          * Piwik Tracker class
          *
-         * trackerUrl and trackerSiteId are optional arguments to the constructor
+         * trackerUrl is an optional argument to the constructor
          *
-         * See: Tracker.setTrackerUrl() and Tracker.setSiteId()
+         * See: Tracker.setTrackerUrl()
          */
-        function Tracker(trackerUrl, siteId) {
+        function Tracker(trackerUrl) {
 
             /************************************************************
              * Private members
@@ -1007,9 +1007,6 @@ if (typeof Piwik !== 'object') {
 
                 // This string is appended to the Tracker URL Request (eg. to send data that is not handled by the existin setters/getters)
                 configAppendToTrackingUrl = '',
-
-                // Site ID
-                configTrackerSiteId = siteId || '',
 
                 // Document URL
                 configCustomUrl,
@@ -1304,7 +1301,7 @@ if (typeof Piwik !== 'object') {
             function getCookieName(baseName) {
                 // NOTE: If the cookie name is changed, we must also update the PiwikTracker.php which
                 // will attempt to discover first party cookies. eg. See the PHP Client method getVisitorId()
-                return configCookieNamePrefix + baseName + '.' + configTrackerSiteId + '.' + domainHash;
+                return configCookieNamePrefix + baseName + '.' + domainHash;
             }
 
             /*
@@ -2065,15 +2062,6 @@ if (typeof Piwik !== 'object') {
                 },
 
                 /**
-                 * Specify the site ID
-                 *
-                 * @param int|string siteId
-                 */
-                setSiteId: function (siteId) {
-                    configTrackerSiteId = siteId;
-                },
-
-                /**
                  * Pass custom data to the server
                  *
                  * Examples:
@@ -2574,10 +2562,9 @@ if (typeof Piwik !== 'object') {
 
         asyncTracker = new Tracker();
 
-        // find the call to setTrackerUrl or setSiteid (if any) and call them first
+        // find the call to setTrackerUrl (if any) and call them first
         for (i = 0; i < _paq.length; i++) {
-            if (_paq[i][0] === 'setTrackerUrl'
-                    || _paq[i][0] === 'setSiteId') {
+            if (_paq[i][0] === 'setTrackerUrl') {
                 apply(_paq[i]);
                 delete _paq[i];
             }
@@ -2612,11 +2599,10 @@ if (typeof Piwik !== 'object') {
              * Get Tracker (factory method)
              *
              * @param string piwikUrl
-             * @param int|string siteId
              * @return Tracker
              */
-            getTracker: function (piwikUrl, siteId) {
-                return new Tracker(piwikUrl, siteId);
+            getTracker: function (piwikUrl) {
+                return new Tracker(piwikUrl);
             },
 
             /**
@@ -2655,12 +2641,11 @@ if (typeof Piwik !== 'object') {
  * Track page visit
  *
  * @param string documentTitle
- * @param int|string siteId
  * @param string piwikUrl
  * @param mixed customData
  */
 if (typeof piwik_log !== 'function') {
-    piwik_log = function (documentTitle, siteId, piwikUrl, customData) {
+    piwik_log = function (documentTitle, piwikUrl, customData) {
         'use strict';
 
         function getOption(optionName) {
@@ -2673,7 +2658,7 @@ if (typeof piwik_log !== 'function') {
 
         // instantiate the tracker
         var option,
-            piwikTracker = Piwik.getTracker(piwikUrl, siteId);
+            piwikTracker = Piwik.getTracker(piwikUrl);
 
         // initialize tracker
         piwikTracker.setDocumentTitle(documentTitle);
@@ -2714,12 +2699,10 @@ if (typeof piwik_log !== 'function') {
              * Track click manually (function is defined below)
              *
              * @param string sourceUrl
-             * @param int|string siteId
              * @param string piwikUrl
              * @param string linkType
              */
-            piwik_track = function (sourceUrl, siteId, piwikUrl, linkType) {
-                piwikTracker.setSiteId(siteId);
+            piwik_track = function (sourceUrl, piwikUrl, linkType) {
                 piwikTracker.setTrackerUrl(piwikUrl);
                 piwikTracker.trackLink(sourceUrl, linkType);
             };

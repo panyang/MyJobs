@@ -67,13 +67,20 @@
         </div>{# /span4 #}
     </div>{# /row #}
 </div>{# /wrapper #}
+{% comment %}
+<button id="savedsearch_button" onclick="javascript:try{_paq.push(['trackLink', 'new search', 'link']);}catch(e){}">btn</button>
+<button id="savedsearch_button">btn</button>
 <script>
     var _paq = _paq || [];
     (function() { var u = (("https:" == document.location.protocol) ? "https://localhost:8000/analytics/track" : "http://localhost:8000/analytics/track");
-        //_paq.push(['setSiteId', 1]);
         _paq.push(['setTrackerUrl', u]);
-        _paq.push(['trackPageView']);
+        _paq.push(['setDocumentTitle',
+                   document.domain + '/' + document.title]);
+        $('#savedsearch_button').click(function() {
+            _paq.push(['trackGoal', 'saved search goal']);
+        });
         _paq.push(['enableLinkTracking'])
+        _paq.push(['trackPageView']);
         var d = document,
             g = d.createElement('script'),
             s = d.getElementsByTagName('script')[0];
@@ -82,6 +89,7 @@
         g.async=true;
         g.src="{{STATIC_URL}}piwik.js";
         s.parentNode.insertBefore(g,s);
-})();
+    })();
 </script>
+{% endcomment %}
 {% endblock %}
