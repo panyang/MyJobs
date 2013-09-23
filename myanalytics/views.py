@@ -13,10 +13,10 @@ def track(request):
     # Ensure that the request is not tracked multiple times
     if not cache.get(rand):
         aguid = request.REQUEST.get('_id')
-        user_id = request.user.id
+        user = None if request.user.is_anonymous() else request.user
 
         viewer = SiteViewer.objects.get_or_create(aguid=aguid,
-                                                  myjobs_id=user_id)[0]
+                                                  user=user)[0]
         viewer.view_count = viewer.view_count + 1
         viewer.save()
 
