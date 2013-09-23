@@ -2159,6 +2159,10 @@ table td, table th {
     display: inline-block;
 }
 
+#digest-option {
+    padding: 0 10px;
+}
+
 #digest-option #id_digest_email,
 #digest-option #id_digest_active,
 #digest-option #id_send_if_none {
