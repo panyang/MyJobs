@@ -11,7 +11,7 @@ body {
 }
 
 #titleRow {
-    background: #FFF url('/files/static/images/homepage_bg.png') no-repeat center top;
+    background: #FFF;
     margin-top: -26px;
     margin-bottom: -20px;
     min-height: 598px;     
@@ -354,7 +354,7 @@ table#row-link-table {
 }
 
 #newAccountData .errorlist li {
-    color: #c44e34;
+    color: #a95051;
 }
 
 /* Contact Form Styles */
@@ -404,8 +404,8 @@ ul.ui-autocomplete {
 /*Topbar Styles*/
 .topbar #topbar-logo {
     height: 30px;
-    width: 90px;
-    background: transparent url(/files/static/images/myjobs_logo.png) center left no-repeat;
+    width: 100px;
+    background: transparent url(//d2e48ltfsb5exy.cloudfront.net/myjobs/logos/myjobs_logo_white_small.png) center left no-repeat;
     text-indent: -9000px;
 }
 
@@ -423,20 +423,13 @@ ul.ui-autocomplete {
     padding-bottom: 2px;
 }
 
-.topbar #alpha-flag {
-    display: block;
-    float: left;
-    color: #fff;
-    font-size: .8em;
-}
-
 .menu-tabs {
     border-bottom: 0 solid #333;
 }
 
 .topbar .menu-tabs a {
     border: 1px solid #333 !important;
-    background-color: #333;
+    background-color: transparent;
     color: #FFF;
     font-weight: bold;
     text-decoration: none;
@@ -479,10 +472,15 @@ fieldset textarea,
 #title h1 {
     text-indent: -9000px;    
     display: block;
-    height: 81px;
-    background: transparent url('/files/static/images/mydotjobs_home_logo.png') 65px 3px no-repeat;
+    height: 149px;
+    margin-top: 40px;
+    background: transparent url('//d2e48ltfsb5exy.cloudfront.net/myjobs/logos/myjobs_logo.png') 120px 0px no-repeat;
 }
-
+#title h2{
+    text-indent: 120px;
+    color: #a95051;
+    text-shadow: 1px 1px #ccc;
+}
 #subtitle {
     font-size: 1.85em;
     line-height: 1.1em;
@@ -589,7 +587,7 @@ fieldset textarea,
 
 .profileBox + .profileBox {
     margin-top: 20px;
-    border-color: #C44E34;
+    border-color: #A95051;
 }
 
 .profileBox p {
@@ -831,7 +829,7 @@ fieldset textarea,
 
 /*Alert and text styles*/
 .pendingText {
-    color: #c44e34;
+    color: #a95051;
     padding-left: 20px;
 }
 
@@ -893,7 +891,7 @@ em.pendingText {
 
 
 #nav ul#pop-menu {
-    background:#333;
+    background:#444;
     padding: 0;
     margin: 3px 0 0 -2px;
     position:absolute;
@@ -1014,7 +1012,7 @@ em.pendingText {
 
 #nav.active ul#pop-menu li a:hover,
 #nav li:hover ul#pop-menu li a:hover {
-	background:#333;
+	background:#444;
 	color: #fff;
 	text-decoration:none;
 }
@@ -1263,6 +1261,7 @@ td .gravatar-blank,
     }
 
     .topbar-inner {
+        background: #444;
         height: 50px;        
         border-bottom: 20px solid #a95051;
     }
@@ -1330,7 +1329,7 @@ td .gravatar-blank,
 
     #topbar-login #nav.active + form,
     #topbar-login #nav:hover + form {
-        background:#333;
+        background:#444;
         padding: 10px 0 10px 0;
         margin: 3px 0 0 0;
         position:absolute;
@@ -1352,7 +1351,7 @@ td .gravatar-blank,
     }
 
     .topbar #nav ul#pop-menu {
-        border-top: 20px solid #c44e34;
+        border-top: 20px solid #a95051;
         position: absolute;
         left: 0;
         width: 100%;
@@ -2274,7 +2273,7 @@ body.modal-open {
     border-width: 1px 0 0 0 !important;
 }
 #company-menu a:hover {
-    background: #333 !important;
+    background: #444 !important;
 }
 #candidate-tab {
     width: 78px;
