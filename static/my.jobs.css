@@ -2044,7 +2044,11 @@ td .gravatar-blank,
     padding: 0;
     margin: 0;
     min-height: 354px;
-    border: 1px solid #b34529
+    border: 1px solid #574E44
+}
+
+.account-box .row {
+    margin-left: 0px;
 }
 
 .settings-nav {
@@ -2064,7 +2068,11 @@ td .gravatar-blank,
 .account-settings {
     padding-top: 20px;
     padding-right: 20px;
-    width: 580px;
+    width: 595px;
+}
+
+.account-settings fieldset {
+    min-height: 277px;
 }
 
 .settings-nav ul {
@@ -2080,7 +2088,7 @@ td .gravatar-blank,
 }
 
 .settings-nav li:hover {
-    background: #c54c2d;
+    background: #5a6d81;
     color: #FFF;
 }
 
@@ -2090,9 +2098,16 @@ td .gravatar-blank,
 
 .account-settings input[type="text"],
 .account-settings input[type="password"] {
-    width: 250px;
+    width: 361px;
 }
 
+@media screen and (max-width: 500px) {
+.account-settings input[type="text"],
+.account-settings input[type="password"] {
+    width: 100%;
+}
+
+}
 .account-menu-item.password-required {
     display: none;
 }
@@ -2212,6 +2227,7 @@ body.modal-open {
 .account-captcha {
     text-align: center;
     padding-bottom: 30px;
+    min-height: 247px;
 }
 
 #captcha_modal {
