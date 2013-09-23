@@ -190,12 +190,12 @@ class User(AbstractBaseUser):
     # Communication Settings
 
     # opt_in_myjobs is current hidden on the top level, refer to forms.py
-    opt_in_myjobs = models.BooleanField(_('My.jobs can send me emails'),
+    opt_in_myjobs = models.BooleanField(_('Opt-in to non-account emails and Saved Search:'),
                                         default=True,
                                         help_text=_('Checking this enables my.jobs\
                                                     to send email updates to you.'))
 
-    opt_in_employers = models.BooleanField(_('Email Preferences:'),
+    opt_in_employers = models.BooleanField(_('Email is visible to Employers:'),
                                            default=True,
                                            help_text=_("Employers can message me."))
     
