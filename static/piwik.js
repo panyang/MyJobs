@@ -1963,7 +1963,8 @@ if (typeof Piwik !== 'object') {
                 // screen resolution
                 // - only Apple reports screen.* in device-independent-pixels (dips)
                 // - devicePixelRatio is always 2 on MacOSX+Retina regardless of resolution set in Display Preferences
-                browserFeatures.res = screenAlias.width * devicePixelRatio + 'x' + screenAlias.height * devicePixelRatio;
+                browserFeatures.res_w = screenAlias.width * devicePixelRatio;
+                browserFeatures.res_h = screenAlias.height * devicePixelRatio;
                 browserFeatures.ua = encodeWrapper(navigatorAlias.userAgent);
             }
 

@@ -4,17 +4,20 @@ from django.db import models
 
 
 class SiteViewer(models.Model):
-    aguid = models.CharField(max_length=32)
+    aguid = models.CharField(max_length=36)
     myjobs_id = models.IntegerField(blank=True, null=True)
+    view_count = models.IntegerField(default=0, blank=True)
 
 
 class SiteView(models.Model):
     ip = models.GenericIPAddressField()
     viewed = models.DateTimeField()
-    site_url = models.CharField(max_length=255)
-    search_parameters = models.CharField(max_length=255, blank=True)
+    site_url = models.TextField()
+    search_parameters = models.TextField(blank=True)
     source_codes = models.CharField(max_length=300, blank=True)
     view_source = models.IntegerField(blank=True, null=True)
+    goal = models.CharField(max_length=11, blank=True)
+    goal_url = models.TextField(blank=True)
 
     # 32767x32767 ought to be enough for anybody
     resolution_w = models.PositiveSmallIntegerField()

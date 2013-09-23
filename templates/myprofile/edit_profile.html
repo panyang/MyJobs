@@ -67,9 +67,9 @@
         </div>{# /span4 #}
     </div>{# /row #}
 </div>{# /wrapper #}
-{% comment %}
-<button id="savedsearch_button" onclick="javascript:try{_paq.push(['trackLink', 'new search', 'link']);}catch(e){}">btn</button>
 <button id="savedsearch_button">btn</button>
+<div id="direct_applyButton"><a href='foo' onclick="javascript: return false">foo</a></div>
+<div id="direct_applyButtonBottom"><a href='foo' onclick="javascript: return false">foo</a></div>
 <script>
     var _paq = _paq || [];
     (function() { var u = (("https:" == document.location.protocol) ? "https://localhost:8000/analytics/track" : "http://localhost:8000/analytics/track");
@@ -77,7 +77,11 @@
         _paq.push(['setDocumentTitle',
                    document.domain + '/' + document.title]);
         $('#savedsearch_button').click(function() {
-            _paq.push(['trackGoal', 'saved search goal']);
+            _paq.push(['trackGoal', 'save search']);
+        });
+        $('[id^=direct_applyButton]').click(function() {
+            _paq.push(['setCustomVariable', 1, 'url', $(this).children('a')[0].href])
+            _paq.push(['trackGoal', 'apply']);
         });
         _paq.push(['enableLinkTracking'])
         _paq.push(['trackPageView']);
@@ -91,5 +95,4 @@
         s.parentNode.insertBefore(g,s);
     })();
 </script>
-{% endcomment %}
 {% endblock %}
