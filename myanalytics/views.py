@@ -10,7 +10,7 @@ from myanalytics.models import SiteViewer, SiteView, UserAgent
 
 def track(request):
     rand = request.REQUEST.get('r')
-    # Ensure that the user is not tracked multiple times
+    # Ensure that the request is not tracked multiple times
     if not cache.get(rand):
         aguid = request.REQUEST.get('_id')
         user_id = request.user.id
@@ -19,7 +19,6 @@ def track(request):
                                                   myjobs_id=user_id)[0]
         viewer.view_count = viewer.view_count + 1
         viewer.save()
-        print viewer.view_count
 
         ua = request.REQUEST.get('ua')
         user_agent = UserAgent.objects.get_or_create(user_agent=ua)[0]
@@ -47,7 +46,6 @@ def track(request):
                     # KeyError: cvar at index '1' was not provided
                     # TypeError: json.loads received bad data; cvar was not provided?
                     apply_url = 'error'
-                print apply_url
                 view_data['goal_url'] = apply_url
             elif goal == 'save search':
                 # What do we want to do with this information?
