@@ -2,7 +2,7 @@
 
 /*Main Styles*/
 body {
-    background-color: #574e44;
+    background-color: #ddd;
     font-family: Arial, Helvetica, sans-serif;
 }
 
@@ -11,7 +11,7 @@ body {
 }
 
 #titleRow {
-    background: #FFF url('/files/static/images/homepage_bg.png') no-repeat center top;
+    background: #FFF;
     margin-top: -26px;
     margin-bottom: -20px;
     min-height: 598px;     
@@ -25,10 +25,10 @@ body {
 }
 
 a {
-    color: #c44e34;
+    color: #5a6d81;
 }
 a:hover {
-    color: #a42e14;
+    color: #4B5661;
 }
 
 .activity-progress {
@@ -82,10 +82,10 @@ label[for^='id_sort_by'], label[for^='id_edit_sort_by'] {
 }
 #profileTitleRow img{
     border-radius:5px;
-    border: 2px solid #b34529;
+    border: 2px solid #873f3d;
 }
 #profileTitleBar{
-    border-bottom: 2px solid #b34529;
+    border-bottom: 2px solid #873f3d;
 }
 
 .profile-form-input input[type!=checkbox] {
@@ -108,7 +108,7 @@ label[for^='id_sort_by'], label[for^='id_edit_sort_by'] {
 }
 
 #highlight {
-    color: #b34529;    
+    color: #a95051;
 }
 
 #moduleColumn .add-module-btn {
@@ -279,16 +279,21 @@ table#row-link-table {
     
 /* bootstrap .table-striped class */
 .table-striped thead th {
-    background-color: #FFF;   
+    background-color: #FFF;
     color: #000;
 }    
 
 .table-striped tbody tr:nth-child(even) td {
-    background-color: #d2cfc7 !important;
+    background-color: #cbcbcb !important;
 }
 
 .table-striped tbody tr:nth-child(odd) td {
-    background-color: #eae6de !important;
+    background-color: #ddd !important;
+}
+
+.table-bordered th,
+.table-bordered td{
+    border-left: 1px solid #E5E5E5;
 }
 
 /*New Account initial form*/
@@ -349,7 +354,7 @@ table#row-link-table {
 }
 
 #newAccountData .errorlist li {
-    color: #c44e34;
+    color: #a95051;
 }
 
 /* Contact Form Styles */
@@ -399,8 +404,8 @@ ul.ui-autocomplete {
 /*Topbar Styles*/
 .topbar #topbar-logo {
     height: 30px;
-    width: 90px;
-    background: transparent url(/files/static/images/myjobs_logo.png) center left no-repeat;
+    width: 100px;
+    background: transparent url(//d2e48ltfsb5exy.cloudfront.net/myjobs/logos/myjobs_logo_white_small.png) center left no-repeat;
     text-indent: -9000px;
 }
 
@@ -418,20 +423,13 @@ ul.ui-autocomplete {
     padding-bottom: 2px;
 }
 
-.topbar #alpha-flag {
-    display: block;
-    float: left;
-    color: #fff;
-    font-size: .8em;
-}
-
 .menu-tabs {
     border-bottom: 0 solid #333;
 }
 
 .topbar .menu-tabs a {
     border: 1px solid #333 !important;
-    background-color: #333;
+    background-color: transparent;
     color: #FFF;
     font-weight: bold;
     text-decoration: none;
@@ -441,11 +439,11 @@ ul.ui-autocomplete {
 
 .topbar .menu-tabs a:hover {
     color: #FFF;
-    background-color: #b34529;
+    background-color: #a95051;
 }
 
 .menu-tabs .active a {
-    background-color: #b34529 !important;
+    background-color: #a95051 !important;
 }
 
 .formBox select {
@@ -474,10 +472,15 @@ fieldset textarea,
 #title h1 {
     text-indent: -9000px;    
     display: block;
-    height: 81px;
-    background: transparent url('/files/static/images/mydotjobs_home_logo.png') 65px 3px no-repeat;
+    height: 149px;
+    margin-top: 40px;
+    background: transparent url('//d2e48ltfsb5exy.cloudfront.net/myjobs/logos/myjobs_logo.png') 120px 0px no-repeat;
 }
-
+#title h2{
+    text-indent: 120px;
+    color: #a95051;
+    text-shadow: 1px 1px #ccc;
+}
 #subtitle {
     font-size: 1.85em;
     line-height: 1.1em;
@@ -495,18 +498,18 @@ fieldset textarea,
 }
 
 .formBox {
-    background-color: #e4e0d5;
+    background-color: #f2f2f2;
     padding: 5px 5px 10px 5px;
-    border-left: 1px solid #d5d4d0;
-    border-right: 1px solid #d5d4d0;
-    border-bottom: 1px solid #d5d4d0;
+    border-left: 1px solid #e6e6e6;
+    border-right: 1px solid #e6e6e6;
+    border-bottom: 1px solid #e6e6e6;
     border-radius: 5px;    
 }
 
 .loginBox {
-    background-color: #f4f1ea;
+    background-color: #f2f2f2;
     padding: 10px 10px 30px 10px;
-    border: 2px solid #a3aeb1;
+    border: 2px solid #e6e6e6;
     border-radius: 5px;    
 }
 
@@ -560,11 +563,11 @@ fieldset textarea,
 }
 
 .loginBox a {
-    color: #333;
+    color: #5a6d81;
 }
 
 .loginBox a:hover {
-    color: #333;
+    color: #5a6d81;
 }
 
 .loginBox .btn:hover {
@@ -584,7 +587,7 @@ fieldset textarea,
 
 .profileBox + .profileBox {
     margin-top: 20px;
-    border-color: #C44E34;
+    border-color: #A95051;
 }
 
 .profileBox p {
@@ -704,8 +707,16 @@ fieldset textarea,
 
 /*form styles*/
 .btn {
-    color: #000;
-    text-shadow: 0 1px 1px rgba(0, 0, 0, .75) !important;
+    background-color: #cccccc;
+    background-image: none;
+    background-image: -moz-linear-gradient(#f2f2f2,#e1e1e1);
+    background-image: -webkit-gradient(linear, left top, left bottom, #f2f2f2, #e1e1e1);
+    background-image: -webkit-linear-gradient(#f2f2f2,#e1e1e1);
+    background-image: -o-linear-gradient(#f2f2f2,#e1e1e1);
+    background-image: linear-gradient(#f2f2f2,#e1e1e1);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f2f2f2', endColorstr='#e1e1e1', GradientType=0);
+    color: #5e6c82;
+    text-shadow: 0 1px 1px rgba(114, 114, 114, .75) !important;
 }
 
 .btn + .btn {
@@ -717,20 +728,29 @@ fieldset textarea,
 }
 
 .btn.primary {
-    background-color: #b34529;
+    background-color: #5f6c82;
     background-image: none;
-    background-image: -moz-linear-gradient(#db5938,#b34529);
-    background-image: -webkit-gradient(linear, left top, left bottom, #db5938, #b34529); 
-    background-image: -webkit-linear-gradient(#db5938,#b34529);  
-    background-image: -o-linear-gradient(#db5938,#b34529); 
-    background-image: linear-gradient(#db5938,#b34529);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#db5938', endColorstr='#b34529', GradientType=0);
+    background-image: -moz-linear-gradient(#8c96a1,#5f6c82);
+    background-image: -webkit-gradient(linear, left top, left bottom, #8c96a1, #5f6c82);
+    background-image: -webkit-linear-gradient(#8c96a1,#5f6c82);
+    background-image: -o-linear-gradient(#8c96a1,#5f6c82);
+    background-image: linear-gradient(#8c96a1,#5f6c82);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#8c96a1', endColorstr='#5f6c82', GradientType=0);
     margin-top: 2px;
     padding-left: 25px;
     padding-right: 25px;
     font-weight:bold;
     font-size: 1.1em;
     color: #fff
+}
+
+.btn-link{
+    color: #5e6c82;
+    padding: 0 15px;
+}
+
+.btn-link:hover{
+    color: #4B5661;
 }
 
 .profile-form-input textarea {
@@ -755,7 +775,7 @@ fieldset textarea,
 }
 
 .alert-error a {
-    color: #b94a48;
+    color: #a95051;
 }
 
 .input-prepend .add-on {
@@ -809,7 +829,7 @@ fieldset textarea,
 
 /*Alert and text styles*/
 .pendingText {
-    color: #c44e34;
+    color: #a95051;
     padding-left: 20px;
 }
 
@@ -871,7 +891,7 @@ em.pendingText {
 
 
 #nav ul#pop-menu {
-    background:#333;
+    background:#444;
     padding: 0;
     margin: 3px 0 0 -2px;
     position:absolute;
@@ -992,7 +1012,7 @@ em.pendingText {
 
 #nav.active ul#pop-menu li a:hover,
 #nav li:hover ul#pop-menu li a:hover {
-	background:#333;
+	background:#444;
 	color: #fff;
 	text-decoration:none;
 }
@@ -1023,14 +1043,14 @@ em.pendingText {
 
 #moduleBank a:hover {
     color:#fff;
-    background-color: #b34529;
+    background-color: #5f6c82;
     background-image: none;
-    background-image: -moz-linear-gradient(#db5938,#b34529);
-    background-image: -webkit-gradient(linear, left top, left bottom, #db5938, #b34529); 
-    background-image: -webkit-linear-gradient(#db5938,#b34529);  
-    background-image: -o-linear-gradient(#db5938,#b34529); 
-    background-image: linear-gradient(#db5938,#b34529);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#db5938', endColorstr='#b34529', GradientType=0);
+    background-image: -moz-linear-gradient(#8c96a1,#5f6c82);
+    background-image: -webkit-gradient(linear, left top, left bottom, #8c96a1, #5f6c82);
+    background-image: -webkit-linear-gradient(#8c96a1,#5f6c82);
+    background-image: -o-linear-gradient(#8c96a1,#5f6c82);
+    background-image: linear-gradient(#8c96a1,#5f6c82);
+    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#8c96a1', endColorstr='#5f6c82', GradientType=0);
     margin: 0;
     text-decoration: none;
 }
@@ -1047,7 +1067,7 @@ em.pendingText {
 }
 
 .footer a {
-    color: #FFF;
+    color: #666;
     padding: 10px;
 }
 
@@ -1241,8 +1261,9 @@ td .gravatar-blank,
     }
 
     .topbar-inner {
+        background: #444;
         height: 50px;        
-        border-bottom: 20px solid #c44e34;
+        border-bottom: 20px solid #a95051;
     }
 
     #logged-in-li {
@@ -1260,7 +1281,13 @@ td .gravatar-blank,
     #pop-menu {
         height: 100%;
     }
-    
+
+    .btn-link{
+        display: block !important;
+        text-align: center;
+        border: 1px solid #5a6d81;
+        margin: 2px 0;
+    }
 
     #logo-block {
         margin-top: 10px;
@@ -1280,7 +1307,7 @@ td .gravatar-blank,
     }
 
     #nav .main-nav {
-        background: #C44E34 url(/files/static/images/superbutton.png) no-repeat;
+        background: #a95051 url(/files/static/images/superbutton.png) no-repeat;
         position: absolute;
         right: 10px;
         top: 10px;
@@ -1302,7 +1329,7 @@ td .gravatar-blank,
 
     #topbar-login #nav.active + form,
     #topbar-login #nav:hover + form {
-        background:#333;
+        background:#444;
         padding: 10px 0 10px 0;
         margin: 3px 0 0 0;
         position:absolute;
@@ -1324,7 +1351,7 @@ td .gravatar-blank,
     }
 
     .topbar #nav ul#pop-menu {
-        border-top: 20px solid #c44e34;
+        border-top: 20px solid #a95051;
         position: absolute;
         left: 0;
         width: 100%;
@@ -1538,11 +1565,32 @@ td .gravatar-blank,
     }
     
     .add-module-btn,
-    .profile-mobile a.btn {        
+    .profile-mobile a.btn{
         display: block;
         float: none;
         margin: 5px 0;
         width: auto;
+    }
+
+    .btn-link{
+        display: block !important;
+        background-color: #cccccc;
+        background-image: none;
+        background-image: -moz-linear-gradient(#f2f2f2,#e1e1e1);
+        background-image: -webkit-gradient(linear, left top, left bottom, #f2f2f2, #e1e1e1);
+        background-image: -webkit-linear-gradient(#f2f2f2,#e1e1e1);
+        background-image: -o-linear-gradient(#f2f2f2,#e1e1e1);
+        background-image: linear-gradient(#f2f2f2,#e1e1e1);
+        filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f2f2f2', endColorstr='#e1e1e1', GradientType=0);
+        color: #5e6c82;
+        border-color:rgba(0,0,0,0.15) rgba(0,0,0,0.15) rgba(0,0,0,0.25);
+        text-shadow: 0 1px 1px rgba(114, 114, 114, .75) !important;
+        margin: 5px 0;
+        text-align: center;
+    }
+
+    .sum-edit{
+        float: none;
     }
     
     #moduleBank {
@@ -1996,7 +2044,11 @@ td .gravatar-blank,
     padding: 0;
     margin: 0;
     min-height: 354px;
-    border: 1px solid #b34529
+    border: 1px solid #574E44
+}
+
+.account-box .row {
+    margin-left: 0px;
 }
 
 .settings-nav {
@@ -2016,7 +2068,11 @@ td .gravatar-blank,
 .account-settings {
     padding-top: 20px;
     padding-right: 20px;
-    width: 580px;
+    width: 595px;
+}
+
+.account-settings fieldset {
+    min-height: 277px;
 }
 
 .settings-nav ul {
@@ -2032,7 +2088,7 @@ td .gravatar-blank,
 }
 
 .settings-nav li:hover {
-    background: #c54c2d;
+    background: #5a6d81;
     color: #FFF;
 }
 
@@ -2042,9 +2098,16 @@ td .gravatar-blank,
 
 .account-settings input[type="text"],
 .account-settings input[type="password"] {
-    width: 250px;
+    width: 361px;
 }
 
+@media screen and (max-width: 500px) {
+.account-settings input[type="text"],
+.account-settings input[type="password"] {
+    width: 100%;
+}
+
+}
 .account-menu-item.password-required {
     display: none;
 }
@@ -2094,6 +2157,10 @@ table td, table th {
 .digest_error {
     background-color: #f00;
     display: inline-block;
+}
+
+#digest-option {
+    padding: 0 10px;
 }
 
 #digest-option #id_digest_email,
@@ -2164,6 +2231,7 @@ body.modal-open {
 .account-captcha {
     text-align: center;
     padding-bottom: 30px;
+    min-height: 247px;
 }
 
 #captcha_modal {
@@ -2213,7 +2281,7 @@ body.modal-open {
     display: none !important;
 }
 .show {
-    background: #b34529 !important;
+    background: #a95051 !important;
 }
 #company-menu {
     margin: 0;
@@ -2225,7 +2293,7 @@ body.modal-open {
     border-width: 1px 0 0 0 !important;
 }
 #company-menu a:hover {
-    background: #333 !important;
+    background: #444 !important;
 }
 #candidate-tab {
     width: 78px;
