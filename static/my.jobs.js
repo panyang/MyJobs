@@ -125,6 +125,21 @@ $(document).ready(function(){
         e.preventDefault();
         contactForm();
     });
+
+    $('[class*=message-]').click(function(){
+        var name = $(this).attr('class').split(' ').pop();
+        var csrf_token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+        var data = "name="+name+"&csrfmiddlewaretoken="+csrf_token
+        $.ajax({
+            type: 'POST',
+            url: '/message/',
+            data: data,
+            dataType: 'json',
+            success: function(data) {
+                $('[class*=message-]').parent().hide()
+            }
+        })
+    });
 });
              
 function clearForm(form) {
@@ -144,7 +159,6 @@ function clearForm(form) {
 // Validation for contact form
 function contactForm(){
     var form = $('#captcha-form');
-
     var data = form.serialize();
     $.ajax({
         type: 'POST',

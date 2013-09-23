@@ -167,6 +167,26 @@
                             </div>
 
                             {% endif %}
+
+                            {% if user.messages_unread %}
+
+                            {% with user|get_messages as messages %}
+
+                            {% for message in messages %}
+
+                            <div class="alert alert-error mail-alert hide-mobile">
+                                <button type="button" class="close message-{{ message.id }}-{{ user.id }}" data-dismiss="alert">&times;</button>
+                                <b>{{ message.subject }}</b>
+                                <br>
+                                {{ message.body|safe }}
+                            </div>
+
+                            {% endfor %}
+
+                            {% endwith %}
+
+                            {% endif %}
+
                         {% endif %}
                         {% endblock%}
                         

@@ -15,6 +15,7 @@ from django.http import HttpResponse
 from default_settings import GRAVATAR_URL_PREFIX, GRAVATAR_URL_DEFAULT
 from registration import signals as custom_signals
 
+
 class CustomUserManager(BaseUserManager):
     def get_email_owner(self, email):
         """
@@ -346,6 +347,19 @@ class User(AbstractBaseUser):
             if User.objects.filter(user_guid=self.user_guid):
                 self.make_guid()
             self.save()
+
+    def messages_unread(self):
+        from mymessages.models import Message
+        to_show_messages = []
+        m = Message.objects.filter(user=self).exclude(read=True, expired=True)
+        if m:
+            for message in m:
+                if message.expired_time():
+                    continue
+                else:
+                    to_show_messages.append(message)
+            if to_show_messages:
+                return True
 
 
 class EmailLog(models.Model):

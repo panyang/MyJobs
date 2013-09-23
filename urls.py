@@ -25,4 +25,5 @@ urlpatterns = patterns('',
     url(r'^api/', include(v1_api.urls)),
     url(r'^admin/', include(admin.site.urls)),
     url(r'^authorize/', include('MyJobs.mysignon.urls')),
+    url(r'^message/', include('MyJobs.mymessages.urls')),
 )

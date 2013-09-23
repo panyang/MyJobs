@@ -5,6 +5,8 @@ from myprofile.models import ProfileUnits
 from myjobs.models import User
 from myjobs.helpers import get_completion
 from mydashboard.models import CompanyUser
+from mymessages.models import Message
+
 from django.db.models.loading import get_model
 
 register=template.Library()
@@ -130,3 +132,11 @@ def get_gravatar(user, size=20):
     
     return user.get_gravatar_url(size)
 
+@register.filter(name='get_messages')
+def get_messages(user):
+    """
+    Gets messages associated to the users that are marked as unread.
+    """
+
+    return Message.objects.filter(user=user)\
+        .exclude(read=True).exclude(expired=True)
