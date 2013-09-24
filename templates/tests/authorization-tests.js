@@ -28,7 +28,7 @@ module("authorization.js Tests - Login", {
             }
             if (data.username == 'alice%40example.com') {
                 if (data.password == 'secret') {
-                    params.success('{"url":"http://jobs.jobs/?key=key_here"}',
+                    params.success('{"url":"http://www.my.jobs/?key=key_here"}',
                                    'prevent-redirect');
                 } else {
                     params.success('{"errors":[["password",["Required"]]]}');

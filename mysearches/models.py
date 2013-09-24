@@ -93,6 +93,19 @@ class SavedSearch(models.Model):
             msg.send()
     
     def send_update_email(self,msg):
+        """
+        This function is meant to be called from the shell. It sends a notice to
+        the user that their saved search has been updated by the system or an 
+        admin.
+        
+        Inputs:
+        :msg:   The description of the update. Passed through verbatim to the
+                template.
+                
+        Returns:
+        nothing
+        
+        """
         context_dict = {
             'saved_searches': [(self,)],
             'message': msg
