@@ -13,7 +13,6 @@ class SavedSearchModelsTests(TestCase):
         self.user = UserFactory()
 
     def test_send_search_email(self):
-        search = SavedSearchFactory(user=self.user)
         search = SavedSearchFactory(user=self.user, is_active=False,
                                     url='www.my.jobs/search?q=new+search')
         search.send_email()
@@ -52,7 +51,6 @@ class SavedSearchModelsTests(TestCase):
         self.assertEqual(len(mail.outbox), 1)
     
     def test_send_initial_email(self):
-        search = SavedSearchFactory(user=self.user)
         search = SavedSearchFactory(user=self.user, is_active=False,
                                     url='www.my.jobs/search?q=new+search')
         search.send_initial_email()
@@ -66,7 +64,6 @@ class SavedSearchModelsTests(TestCase):
         self.assertTrue(email.to[0] in email.body)
     
     def test_send_update_email(self):
-        search = SavedSearchFactory(user=self.user)
         search = SavedSearchFactory(user=self.user, is_active=False,
                                     url='www.my.jobs/search?q=new+search')
         search.send_update_email('Your search is updated')
