@@ -59,7 +59,7 @@ class SavedSearchResourceTests(TestCase):
         super(SavedSearchResourceTests, self).setUp()
         self.user = UserFactory()
         self.client = TestClient()
-        self.data = {'email':'alice@example.com', 'url':'jobs.jobs/jobs'}
+        self.data = {'email':'alice@example.com', 'url':'www.my.jobs/jobs'}
         create_api_key(User, instance=self.user, created=True)
 
         self.credentials = (self.user.email, self.user.api_key.key)
@@ -86,8 +86,8 @@ class SavedSearchResourceTests(TestCase):
         return response
 
     def test_new_search_existing_user(self):
-        for data in [('alice@example.com', 'jobs.jobs/search?q=django'),
-                     ('ALICE@EXAMPLE.COM', 'jobs.jobs/search?q=python')]:
+        for data in [('alice@example.com', 'www.my.jobs/search?q=django'),
+                     ('ALICE@EXAMPLE.COM', 'www.my.jobs/search?q=python')]:
             self.data['email'] = data[0]
             self.data['url'] = data[1]
             self.data['username'] = self.user.email
@@ -101,11 +101,11 @@ class SavedSearchResourceTests(TestCase):
             self.assertTrue(content['new_search'])
         self.assertEqual(SavedSearch.objects.filter(user=self.user).count(), 2)
 
-        self.data['url'] = 'http://jobs.jobs/jobs'
+        self.data['url'] = 'http://www.my.jobs/jobs'
         response = self.make_response(self.data)
 
         for search in SavedSearch.objects.all():
-            self.assertTrue('jobs.jobs' in search.notes)
+            self.assertTrue('www.my.jobs' in search.notes)
 
     def test_new_search_new_user(self):
         self.data['email'] = 'new@example.com'

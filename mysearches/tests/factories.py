@@ -7,14 +7,14 @@ class SavedSearchFactory(factory.Factory):
     FACTORY_FOR = SavedSearch
     user = factory.SubFactory(UserFactory)
 
-    url = "http://jobs.jobs/jobs"
+    url = "http://www.my.jobs/jobs"
     label = "All Jobs"
-    feed = "http://jobs.jobs/jobs/feed/rss?"
+    feed = "http://www.my.jobs/jobs/feed/rss?"
     is_active = True
     email = "alice@example.com"
     frequency = "W"
     day_of_week = "1"
-    notes = "All jobs from jobs.jobs"
+    notes = "All jobs from www.my.jobs"
     sort_by = "Relevance"
 
 

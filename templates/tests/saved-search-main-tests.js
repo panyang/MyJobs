@@ -87,7 +87,7 @@ test("save_form", function() {
                       'href': 'new' }));
     $('#id_is_active').prop('checked', true);
     $.ajax = function(params) {
-        if (params.data.indexOf('jobs.jobs%2Fjobs') >= 0 &&
+        if (params.data.indexOf('wwww.my.jobs%2Fjobs') >= 0 &&
             params.data.indexOf('is_active=True') >= 0 &&
             params.data.indexOf('id=new') >= 0) {
             params.success('<td></td>');
@@ -102,7 +102,7 @@ test("save_form", function() {
     equal($('#id_url').parent().attr('class'), 'required',
           "After clicking, #id_url's parent should be a required field indicator");
 
-    $('#id_url').val('jobs.jobs/jobs');
+    $('#id_url').val('www.my.jobs/jobs');
     $('#new_search').click();
     equal($('[class="label label-important"]').length, 0,
           "Error label should be removed");
@@ -123,7 +123,7 @@ test("validate", function() {
                                { id: 'id_label', type: 'text' }));
     $('#saved-search-form').append($('<div />', { id: 'validated' }));
     $.ajax = function(params) {
-        if (params.data.url == 'jobs.jobs/jobs') {
+        if (params.data.url == 'www.my.jobs/jobs') {
             params.success(
                 '{"url_status":"valid","feed_title":"foo","rss_url":"bar"}');
         } else {
@@ -145,7 +145,7 @@ test("validate", function() {
     equal($('#id_label').text(), '',
           "With an invalid url, #id_label should be empty");
 
-    $('#id_url').val('jobs.jobs/jobs');
+    $('#id_url').val('www.my.jobs/jobs');
     $('.refresh').click();
     equal($('#validated').text(), 'valid',
           "Running validate with a valid url returns 'valid'");

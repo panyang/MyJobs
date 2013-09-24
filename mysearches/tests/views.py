@@ -23,8 +23,8 @@ class MySearchViewTests(TestCase):
         self.user = UserFactory()
         self.client.login_user(self.user)
         self.new_form_data = {
-            'url': 'jobs.jobs/jobs',
-            'feed': 'http://jobs.jobs/jobsfeed/rss?',
+            'url': 'www.my.jobs/jobs',
+            'feed': 'http://www.my.jobs/jobsfeed/rss?',
             'label': 'Jobs Label',
             'email': self.user.email,
             'frequency': 'D',
@@ -91,7 +91,7 @@ class MySearchViewTests(TestCase):
 
         self.new_form_data['frequency'] = 'W'
         self.new_form_data['day_of_week'] = 1
-        self.new_form_data['url'] = 'jobs.jobs/search?'
+        self.new_form_data['url'] = 'www.my.jobs/search?'
         self.new_form_data['search_id'] = search_id
 
         new_form = forms.SavedSearchForm(user=self.user,
@@ -115,7 +115,7 @@ class MySearchViewTests(TestCase):
                                     data={'url': self.new_form_data['url']},
                                     HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         self.assertEqual(response.status_code, 200)
-        data = {'rss_url': 'http://jobs.jobs/jobs/feed/rss',
+        data = {'rss_url': 'http://www.my.jobs/jobs/feed/rss',
                 'feed_title': 'Jobs',
                 'url_status': 'valid'}
         self.assertEqual(json.loads(response.content), data)
@@ -175,7 +175,7 @@ class MySearchViewTests(TestCase):
         """
         digest = SavedSearchDigestFactory(user=self.user)
         searches = []
-        for url in ['jobs.jobs/search?q=python', 'jobs.jobs/search?q=django']:
+        for url in ['www.my.jobs/search?q=python', 'jobs.jobs/search?q=django']:
             searches.append(SavedSearchFactory(url=url, user=self.user))
 
         for search in searches:
@@ -244,7 +244,7 @@ class MySearchViewTests(TestCase):
         """
         digest = SavedSearchDigestFactory(user=self.user)
         searches = []
-        for url in ['jobs.jobs/search?q=python', 'jobs.jobs/search?q=django']:
+        for url in ['www.my.jobs/search?q=python', 'jobs.jobs/search?q=django']:
             searches.append(SavedSearchFactory(url=url, user=self.user))
 
         self.assertEqual(models.SavedSearch.objects.count(), 2)
