@@ -4,10 +4,12 @@ from urlparse import urlparse
 
 from django.core.cache import cache
 from django.http import HttpResponse
+from django.views.decorators.csrf import csrf_exempt
 
 from myanalytics.models import SiteViewer, SiteView, UserAgent
 
 
+@csrf_exempt
 def track(request):
     rand = request.REQUEST.get('r')
     # Ensure that the request is not tracked multiple times
