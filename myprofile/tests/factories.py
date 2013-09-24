@@ -123,3 +123,13 @@ class SummaryFactory(factory.Factory):
     headline = 'My Summary'
     the_summary = "One day I knew I'd work for Mr. Wrench"
     user = factory.SubFactory(UserFactory)
+
+
+class VolunteerHistoryFactory(factory.Factory):
+    FACTORY_FOR = VolunteerHistory
+
+    position_title = "Title"
+    organization_name = "DirectEmployers"
+    start_date = datetime.date(2005, 3, 4)
+    current_indicator = True
+    user = factory.SubFactory(UserFactory)

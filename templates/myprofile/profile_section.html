@@ -1,9 +1,12 @@
 {% load i18n %}
 {% load model_fields %}
+
 <div class="formBox profile-mobile" id="{{module.0.get_model_name}}_items">
     <h4 id="{{module.0.get_model_name}}-verbose">{{ module.0.get_verbose }}</h4>
 
-    {% if module.0 %}
+    {% if c_template %}
+        {% include c_template %}
+    {% else %}
 
     <table class="table table-bordered table-striped small-margin">
         <thead>
@@ -32,10 +35,9 @@
                     {% endfor %}
                 {% endwith %}
                 <td class="action">
-                    <a class="btn" href="{% url 'get_details' %}?id={{ item.id }}&module={{ item.get_verbose.title }}">
-                        {% trans 'Details' %}
-                    </a>
-                    <a class="btn" href="{% url 'handle_form' %}?id={{ item.id }}&module={{ item.get_verbose.title }}">
+                    <a class="btn-link" href="{% url 'get_details' %}?id={{ item.id }}&module={{ item.get_verbose.title }}">
+                        {% trans 'Details' %}</a>
+                    <a class="btn-link" href="{% url 'handle_form' %}?id={{ item.id }}&module={{ item.get_verbose.title }}">
                         {% trans 'Edit' %}
                     </a>
                 </td>
@@ -47,7 +49,8 @@
     </table>
 
     {% endif %}
-    <a class="btn primary pull-right add-module-btn" 
+
+    <a class="btn primary pull-right add-module-btn"
         href="{% url 'handle_form' %}?module={{ module.0.get_verbose.title }}">
         {% trans 'Add' %} <span>{{ module.0.get_verbose.title }}</span>
     </a>

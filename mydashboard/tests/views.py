@@ -1,6 +1,5 @@
 from bs4 import BeautifulSoup
 from datetime import timedelta
-from celery.utils import text
 
 from django.contrib.auth.models import Group
 from django.core.urlresolvers import reverse
@@ -8,10 +7,8 @@ from django.test import TestCase
 
 from mydashboard.models import CompanyUser
 from mydashboard.tests.factories import CompanyFactory, CompanyUserFactory, MicrositeFactory
-from myjobs.models import User
 from myjobs.tests.views import TestClient
 from myjobs.tests.factories import UserFactory
-from myprofile.models import ProfileUnits
 from myprofile.tests.factories import PrimaryNameFactory, SecondaryEmailFactory, EducationFactory
 from myprofile.tests.factories import AddressFactory, TelephoneFactory, EmploymentHistoryFactory
 from mysearches.models import SavedSearch

@@ -43,7 +43,7 @@ $(document).on("click", "button#register", function(e) {
                 setTimeout(function(){                            
                     $("#account-page-2").show('slide',{direction: 'right'},250);
                 }, 250);
-                $("#gravatar").attr("src",gravatar_url);
+                $("#gravatar").append(gravatar_url);
                 clearForm("form#registration-form");
                 $(".newUserEmail").html(user_email); 
             }else{
@@ -198,7 +198,8 @@ function setPrimaryName(){
 
 function removeRequiredChanges(){
     // remove current errors
-    $('[class*=required-border]').removeClass('required-border')
+    $('[class*=required-border]').css('border', '');
+    $('[class*=required-border]').removeClass('required-border');
 
     // remove IE specific errors, if IE
     if($.browser.msie){

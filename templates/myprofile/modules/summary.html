@@ -1,0 +1,6 @@
+{% load i18n %}
+<b>{{ module.0.headline }}</b>
+<div class="clear"></div>
+<div>{{ module.0.the_summary }}</div>
+<div class="clear"></div>
+<a class="btn-link pull-right sum-edit" href="{% url 'handle_form' %}?id={{ module.0.id }}&module={{ module.0.get_verbose.title }}">{% trans 'Edit' %}</a>

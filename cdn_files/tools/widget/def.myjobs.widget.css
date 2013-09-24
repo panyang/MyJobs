@@ -1,0 +1,72 @@
+#direct_savedsearch{
+    min-height: 115px;
+}
+#direct_savedsearch label{
+    font-weight: bold;
+    color: #000;
+}
+#direct_savedsearch h3{
+    background: url(//d2e48ltfsb5exy.cloudfront.net/myjobs/logos/myjobs_logo_white_small.png) #5a6d81 center center no-repeat;
+    text-indent: -9000px;
+    padding: 10px 0;
+    height: 10px;
+    margin-left: -15px;
+    margin-right: -15px;
+    border-top-left-radius: 4px;
+    border-top-right-radius: 4px;
+    margin-top: -4px;
+    margin-bottom: 5px;
+}
+#direct_savedsearch input,
+#direct_savedsearch button{
+    display: block;
+}
+#direct_savedsearch input{
+    width: 100%;
+    padding: 5px 0;
+    text-indent: 5px;
+}
+#direct_savedsearch button{
+    width: 100%;
+    padding: 10px;
+    border-radius: 4px;
+    background: #fff;
+    font-weight: bold;
+    border: 1px solid #5a6d81;
+    color: #5a6d81; 
+}
+#direct_savedsearch button:hover{
+    color: #fff;
+    background: #5a6d81;
+}
+#direct_savedsearch .loading{
+    background: url('//d2e48ltfsb5exy.cloudfront.net/myjobs/tools/common/ui-anim_basic_16x16.gif') center left no-repeat;
+    padding: 20px
+}
+#direct_savedsearch .success,
+#direct_savedsearch .warning{
+    font-weight: bold;
+    color: #090;
+    font-size: 1.2em;
+}
+#direct_savedsearch .warning{
+    color: #F30;
+}
+#direct_savedsearch .fielderror{
+    font-weight: bold;
+    color: #fff;
+    background: #D00;
+    display: block;
+    margin: -10px 20px 10px 20px;
+    border-bottom-left-radius: 4px;
+    border-bottom-right-radius: 4px;
+    text-align: center;
+}
+#direct_savedsearch .subtext{
+    color: #999;
+    padding-top: 5px;
+    font-size: .9em;
+    display: block;
+    text-align: center;
+    font-style: normal;
+}

@@ -1,0 +1,27 @@
+{% load i18n %}
+<table class="table table-bordered table-striped small-margin">
+    {% for item in module %}
+        <tr id="{{item.get_model_name}}-{{item.id}}-item">
+            <td>
+                <b>{{ item.position_title}}</b>
+                <br>
+                {{ item.organization_name }}
+            </td>
+            <td>
+                {% if item.current_indicator == True %}
+
+                {{item.start_date}} - Present
+
+                {%else%}
+
+                {{item.start_date}} - {{item.end_date}}
+
+                {%endif%}
+            </td>
+            <td class='action'>
+                <a class="btn-link" href="{% url 'get_details' %}?id={{ item.id }}&module={{ item.get_verbose.title }}">{% trans 'Details' %}</a>
+                <a class="btn-link" href="{% url 'handle_form' %}?id={{ item.id }}&module={{ item.get_verbose.title }}">{% trans 'Edit' %}</a>
+            </td>
+        </tr>
+    {% endfor %}
+</table>

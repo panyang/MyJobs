@@ -23,6 +23,7 @@ class UserManagerTests(TestCase):
         self.assertEqual(new_user.email, 'alice@example.com')
         self.failUnless(new_user.check_password('complicated_password'))
         self.failUnless(new_user.groups.filter(name='Job Seeker').count() == 1)
+        self.assertIsNotNone(new_user.user_guid)
 
     def test_active_user_creation(self):
         new_user = User.objects.create_user(**self.user_info)
@@ -32,6 +33,7 @@ class UserManagerTests(TestCase):
         self.assertEqual(new_user.email, 'alice@example.com')
         self.failUnless(new_user.check_password('complicated_password'))
         self.failUnless(new_user.groups.filter(name='Job Seeker').count() == 1)
+        self.assertIsNotNone(new_user.user_guid)
 
     def test_superuser_creation(self):
         new_user = User.objects.create_superuser(
@@ -43,6 +45,7 @@ class UserManagerTests(TestCase):
         self.assertEqual(new_user.email, 'alice@example.com')
         self.failUnless(new_user.check_password('complicated_password'))
         self.failUnless(new_user.groups.filter(name='Job Seeker').count() == 1)
+        self.assertIsNotNone(new_user.user_guid)
 
     def test_gravatar_url(self):
         """
@@ -51,8 +54,12 @@ class UserManagerTests(TestCase):
         user = UserFactory()
         static_gravatar_url = "http://www.gravatar.com/avatar/c160f8cc69a4f0b" \
                               "f2b0362752353d060?s=20&d=mm"
+        no_gravatar_url = ("<div class='gravatar-blank gravatar-danger' "
+                               "style='height: 20px; width: 20px'>"
+                               "<span class='gravatar-text' "
+                               "style='font-size:13.0px;'>A</span></div>")
         generated_gravatar_url = user.get_gravatar_url()
-        self.assertEqual(static_gravatar_url, generated_gravatar_url)
+        self.assertEqual(no_gravatar_url, generated_gravatar_url)
         status_code = urllib.urlopen(static_gravatar_url).getcode()
         self.assertEqual(status_code, 200)
 

@@ -39,12 +39,10 @@
             <div class="wrapper">
                 <div class="row">
                     <div class="span2" id="logo-block">
-                        <a href="/">
+                        <a href="http://www.my.jobs/">
                             <h3 id="topbar-logo" class="pull-left">my.jobs</h3>
                         </a>
-                        <span id="alpha-flag">beta</span>
                     </div>
-                    <div class="inline-inputs">
 
                         {% if user.is_authenticated %}
 
@@ -79,7 +77,7 @@
                                 <ul id="nav" class="pull-right">
                                     <li>
                                         <a href="" class="main-nav">
-                                            <img src="{{user.get_gravatar_url}}">
+                                            {% get_gravatar user %}
                                             <span class="arrow"></span>
                                         </a>
                                         <ul class="span4" id="pop-menu">
@@ -134,8 +132,6 @@
                         </div>
 
                         {% endif %}
-
-                    </div>{# /inline-inputs #}
                 </div>
             </div>
         </div>{# /topbar-inner #}
@@ -209,9 +205,9 @@
                     labels:"Dot Jobs"
                 };
             </script>
-            <script type="text/javascript" src="http://edge.quantserve.com/quant.js"></script>
+            <script type="text/javascript" src="//edge.quantserve.com/quant.js"></script>
             <noscript>
-                <img src="http://pixel.quantserve.com/pixel/p-f4sayuhJjqv_Q.gif" style="display: none;" border="0" height="1" width="1" alt="Quantcast"/>
+                <img src="//pixel.quantserve.com/pixel/p-f4sayuhJjqv_Q.gif" style="display: none;" border="0" height="1" width="1" alt="Quantcast"/>
             </noscript>
             {# End Quantcast tag #}
             {% endblock %}

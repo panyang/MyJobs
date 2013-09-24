@@ -13,11 +13,11 @@ class SavedSearchFormTests(TestCase):
     def setUp(self):
         super(SavedSearchFormTests, self).setUp()
         self.user = UserFactory()
-        self.data = {'url': 'http://jobs.jobs/jobs',
-                     'feed': 'http://jobs.jobs/jobs/feed/rss?',
+        self.data = {'url': 'http://www.my.jobs/jobs',
+                     'feed': 'http://www.my.jobs/jobs/feed/rss?',
                      'email': 'alice@example.com',
                      'frequency': 'D',
-                     'label': 'All jobs from jobs.jobs',
+                     'label': 'All jobs from www.my.jobs',
                      'sort_by': 'Relevance'}
 
         self.r = Replacer()

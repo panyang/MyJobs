@@ -81,7 +81,7 @@ class DigestForm(BaseUserForm):
                                            choices=choices,
                                            initial=choices[0][0])
 
-    is_active = BooleanField(label=_('Send my results in a single digest email to:'),
+    is_active = BooleanField(label=_('Send digest results to:'),
                              widget=CheckboxInput(attrs={'id': 'id_digest_active'}),
                              required=False)
     

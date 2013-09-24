@@ -6,7 +6,7 @@
     <meta name="title" content="Account Settings - My.jobs">
 {% endblock %}
 {% block meta-extra %}
-<script type="text/javascript" src="http://www.google.com/recaptcha/api/js/recaptcha_ajax.js"></script>
+<script type="text/javascript" src="//www.google.com/recaptcha/api/js/recaptcha_ajax.js"></script>
 <script src="{{ STATIC_URL }}account-settings.js"></script>
 <script type="text/javascript">
     var auto_user = {% if user.password_change %}true{% else %}false{% endif %}
@@ -29,7 +29,8 @@
             {% endif %}
             <div class="span12">
                 <h1>{% trans "Account " %}<small>{% trans "Settings"%}</small></h1>
-                <div class="account-box">                    
+                <div class="account-box">
+                    <div class="row">
                     <div class="span4 pull-left settings-nav">
                         <ul>
                         <a href="" class="account-menu-item {{user.password_change|display}}" id="account-basic"><li><h4 class="account-menu-header">{% trans "Personal Information" %}</h4>
@@ -42,7 +43,7 @@
                         </ul>
                     </div>  
 
-                    <div class="span7 account-settings">
+                    <div class="span8 account-settings">
                         {% block edit-main %}
                         {% if user.password_change %}
                             <p>Welcome to my.jobs. Before doing anything else, you need to change your password from the one we created for you.</p>
@@ -59,6 +60,7 @@
                         </form>
 
                         {% endblock%}
+                    </div>
                     </div>
                 </div>
             </div>

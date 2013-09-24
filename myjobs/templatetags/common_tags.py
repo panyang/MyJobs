@@ -3,6 +3,7 @@ from django import template
 from myjobs import version
 from myprofile.models import ProfileUnits
 from myjobs.models import User
+from myjobs.helpers import get_completion
 from mydashboard.models import CompanyUser
 from django.db.models.loading import get_model
 
@@ -25,14 +26,7 @@ def completion_level(level):
     A string containing the bootstrap bar type
     """
     
-    if level <= 20:
-        return "danger"
-    elif level <= 40:
-        return "warning"
-    elif level <= 60:
-        return "info"
-    else:
-        return "success"
+    return get_completion(level)
 
 
 @register.simple_tag
@@ -127,3 +121,12 @@ def active_tab(context, view_name):
     """
     
     return "active" if context.get('view_name', '') == view_name else ""
+
+@register.simple_tag
+def get_gravatar(user, size=20):
+    """
+    Gets the img or div tag for the gravatar or initials block.
+    """
+    
+    return user.get_gravatar_url(size)
+

@@ -124,9 +124,8 @@ form -- the rest of the form.
         {% if field.html_name == "gravatar" %}
 
         <div class="form-label pull-left">
-            <img src="{{ gravatar_100 }}" id="gravatar-img">
+            {{ gravatar_100 }}
         </div>
-        <a href="http://www.gravatar.com" target="_blank" id="gravatar-link">Change your profile image on gravatar.com</a>
         <div class="clear"></div>
 
         {% endif %}

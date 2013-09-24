@@ -56,7 +56,11 @@
 <div class="row">
     <div class="formBox span7">
     <h5>Digest Options</h5>
-    <p>Each day, you will receive a digest email containing the results of your saved searches that would have otherwise sent you results.</p>
+    <p>
+    Check the box below if you would like to receive a single digest email 
+    containing the results of each of your saved searches. This will be in place 
+    of separate emails for each active saved search.
+    </p>
     <form method="post" action="{% url 'save_digest_form' %}" id="digest-option">
         {% csrf_token %}
         <div>

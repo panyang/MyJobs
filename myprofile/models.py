@@ -367,6 +367,25 @@ class Summary(ProfileUnits):
                 raise ValidationError("A summary already exists")
 
 
+class VolunteerHistory(ProfileUnits):
+    position_title = models.CharField(max_length=255,
+                                      verbose_name=_("Position Title"))
+    organization_name = models.CharField(max_length=255,
+                                         verbose_name=_("Organization"))
+    start_date = models.DateField(verbose_name=_("Start Date"))
+    current_indicator = models.BooleanField(default=False,
+                                            verbose_name=_(
+                                                "I still volunteer here"))
+
+    # Optional fields
+    end_date = models.DateField(blank=True, null=True)
+    city_name = models.CharField(max_length=255, blank=True)
+    country_sub_division_code = models.CharField(max_length=5, blank=True,
+                                                 verbose_name=_("State/Region"))
+    country_code = models.CharField(max_length=3, blank=True,
+                                    verbose_name=_("country"))
+    description = models.TextField(blank=True)
+
 
 def delete_secondary_activation(sender, **kwargs):
     """

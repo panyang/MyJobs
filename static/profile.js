@@ -18,15 +18,18 @@ $(function() {
             "click [class$='calendar']": "datepickerButton",
 
             // targets "I still work here" checkbox in Employment History
-            "click #id_employmenthistory-current_indicator": "hideEndDate",
+            "click #id_employmenthistory-current_indicator": "hideEndDateEmployment",
 
-            "change [id='id_militaryservice-country_code']": 'auto_complete_rankings',
+            // targets "I still work here" checkbox in Volunteer History
+            "click #id_volunteerhistory-current_indicator": "hideEndDateVolunteer",
+
+            "change [id='id_militaryservice-country_code']": 'auto_complete_rankings'
         },
 
         /*
         Hides the end date if the "I still work here" checkbox is checked
         */
-        hideEndDate: function() {
+        hideEndDateEmployment: function() {
             var label = $('[for="id_employmenthistory-end_date"]');
             var input = $('#id_employmenthistory-end_date');
 
@@ -35,6 +38,24 @@ $(function() {
             checked status
             */
             var no_show = $('#id_employmenthistory-current_indicator')
+            no_show = no_show.is(':not(:checked)')
+
+            label.closest('div').toggle(no_show)
+            input.closest('div').toggle(no_show)
+        },
+
+        /*
+        Hides the end date if the "I still work here" checkbox is checked
+        */
+        hideEndDateVolunteer: function() {
+            var label = $('[for="id_volunteerhistory-end_date"]');
+            var input = $('#id_volunteerhistory-end_date');
+
+            /*
+            Visibility status should be the inverse of this element's
+            checked status
+            */
+            var no_show = $('#id_volunteerhistory-current_indicator')
             no_show = no_show.is(':not(:checked)')
 
             label.closest('div').toggle(no_show)
@@ -250,7 +271,9 @@ function add_date_button() {
 
 $(document).ready(function() {
     $('#id_militaryservice-country_code').trigger('change');
-    $('#summary_items').children('a').hide();
+    $('#summary_items').children('.add-module-btn').hide();
+    $( "input[id$='date']" ).datepicker({dateFormat: window.dateFormat,
+                                                     constrainInput: false});
     if($(window).width() >= 501) {
         // This function will be executed when the user scrolls the page.
         $(window).scroll(function(e) {

@@ -91,7 +91,34 @@ class SavedSearch(models.Model):
                                [self.email])
             msg.content_subtype = 'html'
             msg.send()
+    
+    def send_update_email(self,msg):
+        """
+        This function is meant to be called from the shell. It sends a notice to
+        the user that their saved search has been updated by the system or an 
+        admin.
+        
+        Inputs:
+        :msg:   The description of the update. Passed through verbatim to the
+                template.
+                
+        Returns:
+        nothing
+        
+        """
+        context_dict = {
+            'saved_searches': [(self,)],
+            'message': msg
+        }
+        subject = "My.jobs Saved Search Updated - %s" % self.label.strip()
+        message = render_to_string("mysearches/email_update.html",
+                                   context_dict)
 
+        msg = EmailMessage(subject, message, settings.SAVED_SEARCH_EMAIL,
+                           [self.email])
+        msg.content_subtype = 'html'
+        msg.send()
+        
     def create(self, *args, **kwargs):
         """
         On creation, check if that same URL exists for the user and raise

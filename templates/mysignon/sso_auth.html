@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+{% load common_tags %}
+{% load form_tags %}
+
+{% block meta-extra %}
+<script type="text/javascript" src="{{STATIC_URL}}account-creation.js{% cache_buster %}"></script>
+<script type="text/javascript" src="{{STATIC_URL}}authorization.js{% cache_buster %}"></script>
+{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="span12">
+        <h1>Authorize <small>{{auth_callback_short}}</small></h1>
+    </div>
+</div>
+<div class="row">
+    <div class="span10 offset1">
+        <form method="POST" action="{% url 'sso_authorize' %}" id="auth-form">
+            {% csrf_token %}
+            <input type="hidden" name="auth_callback" value="{{auth_callback}}" />
+
+            <p>Allow {{auth_callback_short}} to make use of your My.jobs account?</p>
+
+            {% if login_form %}
+            <p>Logging in will automatically redirect you back to {{auth_callback_short}}</p>
+            {% include 'includes/form-error-highlight.html' with form=login_form %}
+            <div class="actions">
+                <div class="form-label pull-left">&nbsp;</div>
+                <button type="submit" name="action" value="login" class="btn primary" id="auth-login">Login and Authorize</button>
+            </div>
+            {% else %}
+            <div class="actions">
+                <div class="form-label pull-left">&nbsp;</div>
+                <button type="submit" name="action" value="authorize" class="btn primary">Authorize</button>
+            </div>
+            {% endif %}
+        </form>
+    </div>
+</div>
+{% endblock %}
