@@ -91,7 +91,21 @@ class SavedSearch(models.Model):
                                [self.email])
             msg.content_subtype = 'html'
             msg.send()
+    
+    def send_update_email(self,msg):
+        context_dict = {
+            'saved_searches': [(self,)],
+            'message': msg
+        }
+        subject = "My.jobs Saved Search Updated - %s" % self.label.strip()
+        message = render_to_string("mysearches/email_update.html",
+                                   context_dict)
 
+        msg = EmailMessage(subject, message, settings.SAVED_SEARCH_EMAIL,
+                           [self.email])
+        msg.content_subtype = 'html'
+        msg.send()
+        
     def create(self, *args, **kwargs):
         """
         On creation, check if that same URL exists for the user and raise
