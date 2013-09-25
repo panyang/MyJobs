@@ -43,15 +43,27 @@ def track(request):
             view_data['goal'] = goal
             if goal == 'apply':
                 try:
-                    apply_url = json.loads(request.REQUEST.get('_cvar'))['1'][1]
+                    apply_url = json.loads(request.REQUEST.get(
+                        '_cvar'))['1'][1]
                 except (KeyError, TypeError):
                     # KeyError: cvar at index '1' was not provided
-                    # TypeError: json.loads received bad data; cvar was not provided?
+                    # TypeError: json.loads received bad data; cvar was
+                    #   not provided?
                     apply_url = 'error'
                 view_data['goal_url'] = apply_url
             elif goal == 'save search':
                 # What do we want to do with this information?
                 pass
+            elif goal == 'share':
+                try:
+                    share_site = json.loads(request.REQUEST.get(
+                        '_cvar'))['1'][1]
+                except (KeyError, TypeError):
+                    # KeyError: cvar at index '1' was not provided
+                    # TypeError: json.loads received bad data; cvar was
+                    #   not provided?
+                    share_site = 'error'
+                view_data['share_site'] = share_site
 
         site_view = SiteView.objects.create(**view_data)
 

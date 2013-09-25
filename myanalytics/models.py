@@ -37,6 +37,9 @@ class SiteView(models.Model):
     goal_url = models.TextField(blank=True,
                                 help_text="A URL related to the above goal "
                                           "(e.g. a specific job url)")
+    share_site = models.CharField(max_length=30, blank=True,
+                                  help_text="Where a link was shared if the "
+                                            'goal type is "share"')
 
     # 32767x32767 ought to be enough for anybody
     resolution_w = models.PositiveSmallIntegerField(
