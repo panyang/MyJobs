@@ -351,7 +351,7 @@ class User(AbstractBaseUser):
     def messages_unread(self):
         from mymessages.models import Message
         to_show_messages = []
-        m = Message.objects.filter(user=self).exclude(read=True, expired=True)
+        m = Message.objects.filter(user=self).exclude(read=True).exclude(expired=True)
         if m:
             for message in m:
                 if message.expired_time():

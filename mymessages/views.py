@@ -13,5 +13,4 @@ def read(request):
         message, user = request.POST.get('name').split('-')[1:]
         m = Message.objects.get(id=message)
         m.mark_read()
-        m.save()
         return HttpResponse('')

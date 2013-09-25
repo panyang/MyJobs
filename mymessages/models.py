@@ -28,31 +28,37 @@ class Message(models.Model):
     expired = models.BooleanField(default=False, db_index=True)
     expired_on = models.DateTimeField('expired on', null=True)
 
+    def __unicode__(self):
+        return self.subject
+
     def is_unread(self):
         return bool(self.read_at is None)
 
     def mark_unread(self):
         self.read = False
         self.read_at = None
+        self.save()
 
     def mark_read(self):
         self.read = True
         self.read_at = datetime.datetime.now()
-
-    def __unicode__(self):
-        return self.subject
+        self.save()
 
     def send_message(self, user):
         self.user = user
         self.save()
 
     def mark_expired(self):
-        self.read = True
+        self.read = False
         self.expired = True
         self.expired_at = datetime.datetime.now()
+        self.save()
 
     def expired_time(self):
         now = timezone.now()
+        if timezone.is_naive(self.expire_at):
+            self.expire_at = timezone.make_aware(self.expire_at,
+                                                 timezone.UTC())
         date_expired = (self.expire_at - self.sent_at) + self.sent_at
         if now > date_expired:
             self.mark_expired()
