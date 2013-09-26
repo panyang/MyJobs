@@ -199,6 +199,7 @@ class Name(ProfileUnits):
         """
         if len(Name.objects.filter(user=self.user)) == 0:
             self.primary = True
+            super(Name, self).save(*args, **kwargs)
 
         duplicate_names = Name.objects.filter(user=self.user,
                                               given_name=self.given_name,
