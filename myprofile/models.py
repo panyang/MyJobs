@@ -149,7 +149,7 @@ class Telephone(ProfileUnits):
 class EmploymentHistory(ProfileUnits):
     position_title = models.CharField(max_length=255,
                                       verbose_name=_("Position Title"))
-    organization_name = models.CharField(max_length=255,
+    organization_name = models.CharField(max_length=255, blank=True,
                                          verbose_name=_("Company"))
     start_date = models.DateField(verbose_name=_("Start Date"))
     current_indicator = models.BooleanField(default=False,
