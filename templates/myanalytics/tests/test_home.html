@@ -1,5 +1,15 @@
+{% load staticfiles %}
+
+<html>
+<head>
+    <!--<link rel="icon" type="image/png" href="{{ STATIC_URL }}favicon.ico">-->
+    <link rel="icon" type="image/png" href="{% static 'favicon.ico' %}">
+    <script src="//d2e48ltfsb5exy.cloudfront.net/framework/v2/secure/js/def.ui.core.js"></script>
+</head>
+<body>
+<script>
 var _paq = _paq || [];
-(function() { var u = (("https:" == document.location.protocol) ? "https://secure.my.jobs/analytics/track" : "http://secure.my.jobs/analytics/track")
+(function() { var u = "http://localhost:8081/analytics/track";
     _paq.push(['setTrackerUrl', u]);
     _paq.push(['setDocumentTitle',
                document.domain + '/' + document.title]);
@@ -40,6 +50,9 @@ var _paq = _paq || [];
     g.type='text/javascript';
     g.defer=true;
     g.async=true;
-    g.src="//d2e48ltfsb5exy.cloudfront.net/myjobs/tools/piwik.js";
+    g.src="http://d2e48ltfsb5exy.cloudfront.net/myjobs/analytics/piwik.js";
     s.parentNode.insertBefore(g,s);
 })();
+</script>
+</body>
+</html>
