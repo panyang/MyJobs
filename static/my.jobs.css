@@ -2294,6 +2294,7 @@ body.modal-open {
 }
 #company-menu {
     margin: 0;
+    position: absolute;
 }
 #company-menu a {
     display: block;
