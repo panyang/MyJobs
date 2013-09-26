@@ -12,9 +12,8 @@ class SiteViewer(models.Model):
     """
     aguid = models.CharField(max_length=36,
                              help_text="Anonymous UUID for the user")
-    user  = models.ForeignKey('myjobs.User', blank=True, null=True,
-                                    help_text="User's MyJobs account, "
-                                              "if one exists")
+    user = models.ForeignKey('myjobs.User', blank=True, null=True,
+                             help_text="User's MyJobs account, if one exists")
     view_count = models.IntegerField(default=0, blank=True,
                                      help_text="Number of views for this user")
 

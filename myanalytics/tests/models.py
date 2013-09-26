@@ -17,9 +17,11 @@ class MyAnalyticsCombinedTests(LiveServerTestCase):
         self.selenium.get(self.live_server_url)
         WebDriverWait(self.selenium, 5).until(
             lambda driver: driver.find_element_by_tag_name('body'))
-        username_field = self.selenium.find_element_by_xpath('//input[@id="id_username"]')
+        username_field = self.selenium.find_element_by_xpath(
+            '//input[@id="id_username"]')
         username_field.send_keys(username)
-        password_field = self.selenium.find_element_by_xpath('//input[@id="id_password"]')
+        password_field = self.selenium.find_element_by_xpath(
+            '//input[@id="id_password"]')
         password_field.send_keys(password)
         self.selenium.find_element_by_id('login').click()
 
