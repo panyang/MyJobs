@@ -64,8 +64,9 @@
                                                 {% for company in company_name %}
                                                     <li><a id="company-item" href="{% url 'dashboard' %}?company={{ company.id }}">{{ company }}</a></li>
                                                 {% endfor %}
+                                                </ul>
                                             {% endif %}
-                                            </ul>{# /company-menu #}
+                                            {# /company-menu #}
                                         </li>
                                     {% endif %}
                                 {% endif %}
@@ -120,7 +121,11 @@
                         </div>{# /pull-right #}
 
                         {% else %}
-
+                        <div class="span8">
+                            <ul class="nav nav-tabs pull-left menu-tabs">
+                                <li><a href="http://www.my.jobs/">{% trans "Search Jobs" %}</a></li>
+                            </ul>{# /nav nav-tabs pull-left menu-tabs #}
+                        </div>{# /span8 #}
                         <div class="span10 pagination-right" id="topbar-login">
                             {% block topbarlogin %}
                             <ul id="nav" class="navbar pull-right">
