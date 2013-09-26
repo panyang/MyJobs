@@ -4,7 +4,7 @@ import hashlib
 import uuid
 
 from django.utils.safestring import mark_safe
-from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, _user_has_perm, Group
+from django.contrib.auth.models import AbstractBaseUser, BaseUserManager, _user_has_perm, Group, PermissionsMixin
 from django.core.mail import EmailMessage
 from django.db import models
 from django.utils.translation import ugettext_lazy as _
@@ -160,7 +160,7 @@ class CustomUserManager(BaseUserManager):
 
 
 # New in Django 1.5. This is now the default auth user table. 
-class User(AbstractBaseUser):
+class User(AbstractBaseUser, PermissionsMixin):
     email = models.EmailField(verbose_name=_("email address"),
                               max_length=255, unique=True, db_index=True)
     date_joined = models.DateTimeField(_('date joined'), auto_now_add=True)
@@ -180,12 +180,7 @@ class User(AbstractBaseUser):
                                     help_text=_("Designates whether this user " +\
                                                 "should be treated as active. " +\
                                                 "Unselect this instead of deleting accounts."))
-    is_superuser = models.BooleanField(_('superuser status'), default=False,
-                                       help_text=_("Designates that this user " +\
-                                                   "has all permissions without " +\
-                                                   "explicitly assigning them."))
     is_disabled = models.BooleanField(_('disabled'), default=False)
-    groups = models.ManyToManyField(Group, blank=True, null=True)
 
     # Communication Settings
 
@@ -217,44 +212,6 @@ class User(AbstractBaseUser):
         msg = EmailMessage(subject, message, from_email, [self.email])
         msg.content_subtype = 'html'
         msg.send()
-
-    def has_perm(self, perm, obj=None):
-        """
-        Returns True if the user has the specified permission. This method
-        queries all available auth backends, but returns immediately if any
-        backend returns True. Thus, a user who has permission from a single
-        auth backend is assumed to have permission in general. If an object is
-        provided, permissions for this specific object are checked.
-        """
-
-        # Active superusers have all permissions.
-        if self.is_active and self.is_superuser:
-            return True
-
-        # Otherwise we need to check the backends.
-        return _user_has_perm(self, perm, obj)
-
-    def has_perms(self, perm_list, obj=None):
-        """
-        Returns True if the user has each of the specified permissions. If
-        object is passed, it checks if the user has all required perms for this
-        object.
-        """
-        for perm in perm_list:
-            if not self.has_perm(perm, obj):
-                return False
-        return True
-
-    def has_module_perms(self, app_label):
-        """
-        Returns True if the user has any permissions in the given app label.
-        Uses pretty much the same logic as has_perm, above.
-        """
-        # Active superusers have all permissions.
-        if self.is_active and self.is_superuser:
-            return True
-
-        return _user_has_module_perms(self, app_label)
 
     def get_username(self):
         return self.email
