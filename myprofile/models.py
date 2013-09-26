@@ -197,6 +197,10 @@ class Name(ProfileUnits):
         has one primary=True. We avoid a race condition by locking the transaction
         using select_for_update.
         """
+        if len(Name.objects.filter(user=self.user)) == 0:
+            self.primary = True
+            super(Name, self).save(*args, **kwargs)
+
         duplicate_names = Name.objects.filter(user=self.user,
                                               given_name=self.given_name,
                                               family_name=self.family_name)
