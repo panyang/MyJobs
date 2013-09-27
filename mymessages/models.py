@@ -43,6 +43,9 @@ class Message(models.Model):
 
 
 class MessageInfo(models.Model):
+    """
+    Through model for Message.
+    """
     user = models.ForeignKey(User)
     message = models.ForeignKey(Message)
     read = models.BooleanField(default=False, db_index=True)
@@ -85,13 +88,20 @@ class MessageInfo(models.Model):
                        message.start_on
         if now > date_expired:
             self.mark_expired()
-            self.save()
             return True
         else:
             return False
 
 
 def get_messages():
+    """
+    Gathers all Messages. Checks when they start, expire against current time.
+
+    Outputs:
+    :active_messages:   A list of messages that starts before the current
+                        time and expires after the current time. 'active'
+                        messages.
+    """
     messages = Message.objects.all()
     active_messages = []
     now = timezone.now()

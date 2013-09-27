@@ -349,6 +349,15 @@ class User(AbstractBaseUser):
             self.save()
 
     def check_messages(self):
+        """
+        Gets all messages that are currently active. For each message
+        see if the User has this message, if it is not found create it.
+        If the User has the message already or it was created add it to
+        message_infos.
+
+        Outputs:
+        :message_infos: Is a list of MessageInfo
+        """
         from mymessages.models import get_messages, MessageInfo
         messages = get_messages()
         message_infos = []
@@ -364,6 +373,14 @@ class User(AbstractBaseUser):
         return message_infos
 
     def messages_unread(self):
+        """
+        Gets a list of active MessageInfo from checkmessages(). If the
+        MessageInfo has been read already or is expired, ignore it, otherwise
+        add it to 'to_show_messages'.
+
+        Output:
+        :to_show_messages:  A list of Messages to be shown to the User.
+        """
         messages = self.check_messages()
         to_show_messages = []
         if messages:

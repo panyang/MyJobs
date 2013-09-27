@@ -33,7 +33,9 @@ class AdminMessage(admin.ModelAdmin):
 
     def save_model(self, request, obj, form, change):
         """
-        Magic
+        Saves Message Object.  For each Message.groups gather the users in
+        that group and create a MessageInfo connecting the user to the Message
+        if that user currently does not have this Message.
         """
         groups = form.cleaned_data['group']
         obj.save()
