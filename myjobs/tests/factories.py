@@ -1,6 +1,7 @@
 import factory
 from myjobs.models import *
 
+
 class UserFactory(factory.Factory):
     FACTORY_FOR = User
     email = 'alice@example.com'

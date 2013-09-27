@@ -3,7 +3,7 @@ from django.http import HttpResponse
 
 from myjobs.decorators import user_is_allowed
 from myjobs.models import User
-from mymessages.models import Message
+from mymessages.models import MessageInfo
 
 
 @user_is_allowed()
@@ -11,6 +11,6 @@ from mymessages.models import Message
 def read(request):
     if request.POST:
         message, user = request.POST.get('name').split('-')[1:]
-        m = Message.objects.get(id=message)
+        m = MessageInfo.objects.get(user=user, message__id=message)
         m.mark_read()
         return HttpResponse('')

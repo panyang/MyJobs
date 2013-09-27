@@ -135,8 +135,7 @@ def get_gravatar(user, size=20):
 @register.filter(name='get_messages')
 def get_messages(user):
     """
-    Gets messages associated to the users that are marked as unread.
+    Gets messages associated to the users that are marked as not read.
     """
 
-    return Message.objects.filter(user=user)\
-        .exclude(read=True).exclude(expired=True)
+    return user.messages_unread()

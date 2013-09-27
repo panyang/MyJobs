@@ -127,16 +127,17 @@ $(document).ready(function(){
     });
 
     $('[class*=message-]').click(function(){
+        var message_box = $(this);
         var name = $(this).attr('class').split(' ').pop();
         var csrf_token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
-        var data = "name="+name+"&csrfmiddlewaretoken="+csrf_token
+        var data = "name="+name+"&csrfmiddlewaretoken="+csrf_token;
         $.ajax({
             type: 'POST',
             url: '/message/',
             data: data,
             dataType: 'json',
             success: function(data) {
-                $('[class*=message-]').parent().hide()
+                message_box.parent().hide();
             }
         })
     });

@@ -348,18 +348,33 @@ class User(AbstractBaseUser):
                 self.make_guid()
             self.save()
 
+    def check_messages(self):
+        from mymessages.models import Message, MessageInfo
+        messages = set(Message.objects.filter(active=True,
+                                          group__in=self.groups.values_list(
+                                              'id')))
+        message_infos = []
+        for message in messages:
+            try:
+                m = MessageInfo.objects.get(user=self, message=message)
+            except MessageInfo.DoesNotExist:
+                new = MessageInfo(user=self, message=message)
+                new.save()
+                message_infos.append(new)
+            else:
+                message_infos.append(m)
+        return message_infos
+
     def messages_unread(self):
-        from mymessages.models import Message
+        messages = self.check_messages()
         to_show_messages = []
-        m = Message.objects.filter(user=self).exclude(read=True).exclude(expired=True)
-        if m:
-            for message in m:
-                if message.expired_time():
+        if messages:
+            for message in messages:
+                if message.read or message.expired_time():
                     continue
                 else:
                     to_show_messages.append(message)
-            if to_show_messages:
-                return True
+            return to_show_messages
 
 
 class EmailLog(models.Model):

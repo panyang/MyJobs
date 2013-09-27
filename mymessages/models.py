@@ -2,8 +2,13 @@ import datetime
 
 from django.db import models
 from django.utils import timezone
+from django.contrib.auth.models import Group
 
 from myjobs.models import User
+
+
+def start_default():
+    return datetime.datetime.now()
 
 
 def expire_default():
@@ -14,22 +19,57 @@ class Message(models.Model):
     """
     Message
     """
-    user = models.ForeignKey(User)
+    TYPE_OF_MESSAGES = (
+        ('error', 'Error'),
+        ('info', 'Info'),
+        ('block', 'Notice'),
+        ('success', 'Success'),
+    )
+    group = models.ManyToManyField(Group)
+    users = models.ManyToManyField(User, through='MessageInfo')
     subject = models.CharField("Subject", max_length=200)
+    message_type = models.CharField("Type of message", choices=TYPE_OF_MESSAGES,
+                                    max_length=200)
     body = models.TextField('Body')
-    sent_at = models.DateTimeField('sent at')
-    read = models.BooleanField(default=False, db_index=True)
-    read_at = models.DateTimeField('read at', null=True)
+    start_on = models.DateTimeField('start on', default=start_default)
+    active = models.BooleanField(default=False, db_index=True)
     expire_at = models.DateTimeField('expire at',
                                      default=expire_default,
                                      null=True,
                                      help_text="Default is two weeks " +
                                                "after message is sent.")
+
+    def __unicode__(self):
+        return self.subject
+
+    def activate_message(self):
+        now = timezone.now()
+        if self.expire_at > now > self.start_on:
+            self.active = True
+            self.save()
+        else:
+            if self.active:
+                self.deactivate_message()
+
+    def deactivate_message(self):
+        self.active = False
+        self.save()
+
+    def send_messages(self, user):
+        self.user = user
+        self.save()
+
+
+class MessageInfo(models.Model):
+    user = models.ForeignKey(User)
+    message = models.ForeignKey(Message)
+    read = models.BooleanField(default=False, db_index=True)
+    read_at = models.DateTimeField('read at', null=True)
     expired = models.BooleanField(default=False, db_index=True)
     expired_on = models.DateTimeField('expired on', null=True)
 
     def __unicode__(self):
-        return self.subject
+        return self.message.subject
 
     def is_unread(self):
         return bool(self.read_at is None)
@@ -44,25 +84,29 @@ class Message(models.Model):
         self.read_at = datetime.datetime.now()
         self.save()
 
-    def send_message(self, user):
-        self.user = user
-        self.save()
-
     def mark_expired(self):
         self.read = False
         self.expired = True
-        self.expired_at = datetime.datetime.now()
+        self.expired_on = datetime.datetime.now()
         self.save()
 
     def expired_time(self):
+        message = self.message
         now = timezone.now()
-        if timezone.is_naive(self.expire_at):
-            self.expire_at = timezone.make_aware(self.expire_at,
-                                                 timezone.UTC())
-        date_expired = (self.expire_at - self.sent_at) + self.sent_at
+        if timezone.is_naive(self.message.expire_at):
+            message.expire_at = timezone.make_aware(
+                message.expire_at, timezone.UTC())
+        if timezone.is_naive(self.message.start_on):
+            message.start_on = timezone.make_aware(
+                message.start_on, timezone.UTC())
+        date_expired = (message.expire_at - message.start_on) + \
+                       message.start_on
         if now > date_expired:
             self.mark_expired()
             self.save()
+            if message.active:
+                message.active = False
+                message.save()
             return True
         else:
             return False
