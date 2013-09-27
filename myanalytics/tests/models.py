@@ -127,6 +127,8 @@ class MyAnalyticsCombinedTests(LiveServerTestCase):
         WebDriverWait(self.selenium, 5).until(
             lambda driver: driver.find_element_by_tag_name('body'))
         self.selenium.find_elements_by_class_name('at15nc')[0].click()
+        WebDriverWait(self.selenium, 5).until(
+            lambda driver: driver.execute_script('return document.readyState == "complete"'))
 
         self.assertEqual(SiteView.objects.count(), 2)
         view = SiteView.objects.all()[1]
@@ -134,6 +136,8 @@ class MyAnalyticsCombinedTests(LiveServerTestCase):
         self.assertEqual(view.share_site, 'Twitter')
 
         self.selenium.find_elements_by_class_name('at16nc')[0].click()
+        WebDriverWait(self.selenium, 5).until(
+            lambda driver: driver.execute_script('return document.readyState == "complete"'))
 
         self.assertEqual(SiteView.objects.count(), 3)
         view = SiteView.objects.all()[2]
@@ -151,7 +155,7 @@ class MyAnalyticsCombinedTests(LiveServerTestCase):
             lambda driver: driver.find_element_by_tag_name('body'))
         self.selenium.find_element_by_id('direct_applyButton').click()
         WebDriverWait(self.selenium, 5).until(
-            lambda driver: driver.find_element_by_tag_name('body'))
+            lambda driver: driver.execute_script('return document.readyState == "complete"'))
 
         self.assertEqual(SiteView.objects.count(), 2)
         view = SiteView.objects.all()[1]
