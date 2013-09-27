@@ -37,6 +37,7 @@ class Message(models.Model):
                                      null=True,
                                      help_text="Default is two weeks " +
                                                "after message is sent.")
+    btn_text = models.CharField('Button Text', max_length=100, default='Okay')
 
     def __unicode__(self):
         return self.subject

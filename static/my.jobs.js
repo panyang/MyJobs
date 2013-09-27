@@ -126,22 +126,26 @@ $(document).ready(function(){
         contactForm();
     });
 
-    $('[class*=message-]').click(function(){
-        var message_box = $(this);
-        var name = $(this).attr('class').split(' ').pop();
-        var csrf_token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
-        var data = "name="+name+"&csrfmiddlewaretoken="+csrf_token;
-        $.ajax({
-            type: 'POST',
-            url: '/message/',
-            data: data,
-            dataType: 'json',
-            success: function(data) {
-                message_box.parent().hide();
-            }
-        })
+    $('[class*=mymessage-]').click(function(){
+        readMessage(this);
     });
 });
+
+function readMessage(button){
+    var message_box = $(button);
+    var name = $(button).attr('class').split(' ').pop();
+    var csrf_token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+    var data = "name="+name+"&csrfmiddlewaretoken="+csrf_token;
+    $.ajax({
+        type: 'POST',
+        url: '/message/',
+        data: data,
+        dataType: 'json',
+        success: function(data) {
+            message_box.parent().hide();
+        }
+    })
+}
              
 function clearForm(form) {
     // clear the inputted form of existing data
@@ -155,7 +159,7 @@ function clearForm(form) {
         else if (tag == 'select')
             this.selectedIndex = -1;
     });
-};
+}
 
 // Validation for contact form
 function contactForm(){

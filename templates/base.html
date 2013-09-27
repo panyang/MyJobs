@@ -173,10 +173,12 @@
                             {% for message_info in messages %}
 
                             <div class="alert alert-{{ message_info.message.message_type }} mail-alert hide-mobile">
-                                <button type="button" class="close message-{{ message_info.message.id }}-{{ user.id }}" data-dismiss="alert">&times;</button>
                                 <b>{{ message_info.message.subject }}</b>
                                 <br>
                                 {{ message_info.message.body|safe }}
+                                <div class="clear"></div>
+                                <button class="btn pull-right mymessage-{{ message_info.message.id }}-{{ user.id }}">{{ message_info.message.btn_text }}</button>
+                                <div class="clear"></div>
                             </div>
 
                             {% endfor %}

@@ -21,7 +21,7 @@ class AdminMessage(admin.ModelAdmin):
         }),
         ('Message', {
             'fields': (
-                'message_type', 'subject', 'body'
+                'message_type', 'subject', 'body', 'btn_text',
             ),
         }),
         (None, {
