@@ -1,57 +1,91 @@
 {% load staticfiles %}
 
 <html>
-<head>
-    <link rel="icon" type="image/png" href="{% static 'favicon.ico' %}">
-    <script src="//d2e48ltfsb5exy.cloudfront.net/framework/v2/secure/js/def.ui.core.js"></script>
-</head>
-<body>
-<script>
-var _paq = _paq || [];
-(function() { var u = "http://localhost:8081/analytics/track";
-    _paq.push(['setTrackerUrl', u]);
-    _paq.push(['setDocumentTitle',
-               document.domain + '/' + document.title]);
-    $('#savedsearch_button').click(function() {
-        _paq.push(['trackGoal', 'save search']);
-    });
-    $('[id^=direct_applyButton]').click(function() {
-        _paq.push(['setCustomVariable', 1, 'url',
-                   $(this).children('a')[0].href])
-        _paq.push(['trackGoal', 'apply']);
-    });
-    $('[class*=at16nc]').click(function() {
-        var text = $(this).html();
-        if (text.indexOf('More...') == 0) {
-            _paq.push(['setCustomVariable', 1, 'share', 'Other'])
-        } else if (text.indexOf('Settings...') == 0) {
-            return;
-        } else {
-            _paq.push(['setCustomVariable', 1, 'share', $(this).html()]);
-        }
-        _paq.push(['trackGoal', 'share']);
-    });
-    $('[class*=at15nc]').click(function() {
-        var text = $(this).children('span')[0];
-        if (text !== undefined) {
-            text = $(text).html();
-            if (text !== null && text.indexOf('Share on ') == 0) {
-                _paq.push(['setCustomVariable', 1, 'share', text.substr(9)]);
-                _paq.push(['trackGoal', 'share']);
-            }
-        }
-    })
-    _paq.push(['enableLinkTracking'])
-    _paq.push(['trackPageView']);
-    var d = document,
-        g = d.createElement('script'),
-        s = d.getElementsByTagName('script')[0];
-    g.type='text/javascript';
-    g.defer=true;
-    g.async=true;
-    g.src="http://d2e48ltfsb5exy.cloudfront.net/myjobs/analytics/piwik.js";
-    s.parentNode.insertBefore(g,s);
-})();
-</script>
-</body>
+    <head>
+        <link rel="icon" type="image/png" href="{% static 'favicon.ico' %}">
+        <script src="//d2e48ltfsb5exy.cloudfront.net/framework/v2/secure/js/def.ui.core.js"></script>
+    </head>
+    <body>
+        <span class="at16nc">
+            Facebook
+        </span>
+        <span class="at15nc">
+            <span>
+                Share on Twitter
+            </span>
+        </span>
+        <div id="direct_applyButton">
+            <a href="http://example.com/apply_here">Job</a>
+        </div>
+        <script>
+            var _paq = _paq || [];
+            (function() {
+                // url that tracking data will be sent to
+                //var u = (("https:" == document.location.protocol) ? "https:" : "http:") + "//secure.my.jobs/analytics/track"
+                // For testing
+                var u = 'http://localhost:8081/analytics/track';
+                _paq.push(['setTrackerUrl', u]);
+                _paq.push(['setDocumentTitle',
+                           document.domain + '/' + document.title]);
+
+                // Track saving a search
+                $('#savedsearch_button').click(function() {
+                    _paq.push(['trackGoal', 'save search']);
+                });
+
+                // Track apply button clicks
+                $('[id^=direct_applyButton]').click(function() {
+                    _paq.push(['setCustomVariable', 1, 'url',
+                               $(this).children('a')[0].href])
+                    _paq.push(['trackGoal', 'apply']);
+                });
+
+                // Track social share clicks
+                // Main share buttons (Facebook, Twitter, LinkedIn, G+, email)
+                var share_main = document.getElementsByClassName('at16nc')
+                for (var i = 0; i < share_main.length; i++) {
+                    var share_btn = share_main[i];
+                    share_btn.onclick = function() {
+                        var text = this.innerHTML.replace(/^\s+|\s+$/g, '');
+                        if (text.indexOf('More...') == 0) {
+                            _paq.push(['setCustomVariable', 1, 'share', 'Other'])
+                        } else if (text.indexOf('Settings...') == 0) {
+                            return;
+                        } else {
+                            _paq.push(['setCustomVariable', 1, 'share', text]);
+                        }
+                        _paq.push(['trackGoal', 'share']);
+                    }
+                }
+
+                // "More" sharing; includes sites from previous set and a couple hundred more
+                var share_extra = document.getElementsByClassName('at15nc')
+                for (var i = 0; i < share_extra.length; i++) {
+                    var share_btn = share_extra[i];
+                    share_btn.onclick = function() {
+                        var text = this.children[0];
+                        if (text !== undefined) {
+                            text = text.innerHTML.replace(/^\s+|\s+$/g, '');
+                            if (text !== null && text.indexOf('Share on ') == 0) {
+                                _paq.push(['setCustomVariable', 1, 'share', text.substr(9)]);
+                                _paq.push(['trackGoal', 'share']);
+                            }
+                        }
+                    }
+                }
+
+                // Tracks outbound links
+                //_paq.push(['enableLinkTracking'])
+                _paq.push(['trackPageView']);
+                var d = document,
+                    g = d.createElement('script'),
+                    s = d.getElementsByTagName('script')[0];
+                g.type='text/javascript';
+                g.defer=true;
+                g.async=true;
+                g.src="http://d2e48ltfsb5exy.cloudfront.net/myjobs/analytics/piwik.js";
+                s.parentNode.insertBefore(g,s);
+            })();
+        </script>
+    </body>
 </html>

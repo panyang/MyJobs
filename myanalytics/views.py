@@ -19,7 +19,7 @@ def track(request):
 
         viewer = SiteViewer.objects.get_or_create(aguid=aguid,
                                                   user=user)[0]
-        viewer.view_count = viewer.view_count + 1
+        viewer.view_count = (viewer.view_count or 0) + 1
         viewer.save()
 
         ua = request.REQUEST.get('ua')
