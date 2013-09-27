@@ -13,8 +13,7 @@ class MessageViewTests(TestCase):
         self.user = UserFactory()
         self.message = Message(subject='subject',
                                body='body',
-                               message_type='success',
-                               active=True)
+                               message_type='success')
         self.message.save()
         for group in Group.objects.all():
             self.message.group.add(group.pk)

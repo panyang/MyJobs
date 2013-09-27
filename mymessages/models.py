@@ -32,7 +32,6 @@ class Message(models.Model):
                                     max_length=200)
     body = models.TextField('Body')
     start_on = models.DateTimeField('start on', default=start_default)
-    active = models.BooleanField(default=False, db_index=True)
     expire_at = models.DateTimeField('expire at',
                                      default=expire_default,
                                      null=True,
@@ -41,23 +40,6 @@ class Message(models.Model):
 
     def __unicode__(self):
         return self.subject
-
-    def activate_message(self):
-        now = timezone.now()
-        if self.expire_at > now > self.start_on:
-            self.active = True
-            self.save()
-        else:
-            if self.active:
-                self.deactivate_message()
-
-    def deactivate_message(self):
-        self.active = False
-        self.save()
-
-    def send_messages(self, user):
-        self.user = user
-        self.save()
 
 
 class MessageInfo(models.Model):
@@ -104,9 +86,16 @@ class MessageInfo(models.Model):
         if now > date_expired:
             self.mark_expired()
             self.save()
-            if message.active:
-                message.active = False
-                message.save()
             return True
         else:
             return False
+
+
+def get_messages():
+    messages = Message.objects.all()
+    active_messages = []
+    now = timezone.now()
+    for message in messages:
+        if message.start_on < now < message.expire_at:
+            active_messages.append(message)
+    return active_messages

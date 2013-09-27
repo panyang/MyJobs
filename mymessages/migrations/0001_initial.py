@@ -15,7 +15,6 @@ class Migration(SchemaMigration):
             ('message_type', self.gf('django.db.models.fields.CharField')(max_length=200)),
             ('body', self.gf('django.db.models.fields.TextField')()),
             ('start_on', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2013, 9, 27, 0, 0))),
-            ('active', self.gf('django.db.models.fields.BooleanField')(default=False, db_index=True)),
             ('expire_at', self.gf('django.db.models.fields.DateTimeField')(default=datetime.datetime(2013, 10, 11, 0, 0), null=True)),
         ))
         db.send_create_signal(u'mymessages', ['Message'])
@@ -95,7 +94,6 @@ class Migration(SchemaMigration):
         },
         u'mymessages.message': {
             'Meta': {'object_name': 'Message'},
-            'active': ('django.db.models.fields.BooleanField', [], {'default': 'False', 'db_index': 'True'}),
             'body': ('django.db.models.fields.TextField', [], {}),
             'expire_at': ('django.db.models.fields.DateTimeField', [], {'default': 'datetime.datetime(2013, 10, 11, 0, 0)', 'null': 'True'}),
             'group': ('django.db.models.fields.related.ManyToManyField', [], {'to': u"orm['auth.Group']", 'symmetrical': 'False'}),

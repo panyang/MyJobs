@@ -349,10 +349,8 @@ class User(AbstractBaseUser):
             self.save()
 
     def check_messages(self):
-        from mymessages.models import Message, MessageInfo
-        messages = set(Message.objects.filter(active=True,
-                                          group__in=self.groups.values_list(
-                                              'id')))
+        from mymessages.models import get_messages, MessageInfo
+        messages = get_messages()
         message_infos = []
         for message in messages:
             try:

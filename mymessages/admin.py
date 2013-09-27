@@ -12,7 +12,7 @@ class AdminMessageForm(forms.ModelForm):
 
 class AdminMessage(admin.ModelAdmin):
     form = AdminMessageForm
-    list_display = ('subject', 'start_on', 'active')
+    list_display = ('subject', 'start_on', 'expire_at')
     fieldsets = (
         ('Send to', {
             'fields': (
@@ -47,7 +47,6 @@ class AdminMessage(admin.ModelAdmin):
                     new.save()
                 else:
                     continue
-        obj.activate_message()
 
 
 admin.site.register(Message, AdminMessage)
