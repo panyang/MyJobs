@@ -716,17 +716,12 @@ fieldset textarea,
 
 /*form styles*/
 .btn {
-    background-color: #cccccc;
-    background-image: none;
-    background-image: -moz-linear-gradient(#f2f2f2,#e1e1e1);
-    background-image: -webkit-gradient(linear, left top, left bottom, #f2f2f2, #e1e1e1);
-    background-image: -webkit-linear-gradient(#f2f2f2,#e1e1e1);
-    background-image: -o-linear-gradient(#f2f2f2,#e1e1e1);
-    background-image: linear-gradient(#f2f2f2,#e1e1e1);
-    filter: progid:DXImageTransform.Microsoft.gradient(startColorstr='#f2f2f2', endColorstr='#e1e1e1', GradientType=0);
     color: #5e6c82;
     text-shadow: 0 1px 1px rgba(114, 114, 114, .75) !important;
+    background-color: #cccccc;
 }
+
+
 
 .btn + .btn {
     margin-left: 10px;
