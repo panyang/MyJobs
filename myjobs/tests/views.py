@@ -478,15 +478,14 @@ class MyJobsViewsTests(TestCase):
 
     def test_case_insensitive_login(self):
         """
-        Test that emails are case-insensitive when logging in and test
-        guid cookies
+        Test that emails are case-insensitive when logging in
         """
         for email in [self.user.email, self.user.email.upper()]:
             response = self.client.post(reverse('home'),
                                         data={'username': email,
                                               'password': 'secret',
                                               'action': 'login'})
-            
+
             self.assertEqual(response.status_code, 200)
             self.assertEqual(response.content, '{"url": "undefined",' +
                                                ' "validation": "valid"}')
@@ -494,21 +493,24 @@ class MyJobsViewsTests(TestCase):
             self.client.get(reverse('auth_logout'))
 
     def test_guid_cookies_login_and_off(self):
-        for email in [self.user.email, self.user.email.upper()]:
-            response = self.client.post(reverse('home'),
-                                        data={'username': email,
-                                              'password': 'secret',
-                                              'action': 'login'})
+        """
+        Tests logging in and recieving a guid cookie. Logging out deletes guid
+        cookie.
+        """
+        response = self.client.post(reverse('home'),
+                                    data={'username': self.user.email,
+                                          'password': 'secret',
+                                          'action': 'login'})
 
-            self.assertTrue(response.cookies['myguid'])
-            cookie_guid = response.cookies['myguid']
-            guid = cookie_guid.value
-            self.assertEqual(guid, self.user.user_guid)
+        self.assertTrue(response.cookies['myguid'])
+        cookie_guid = response.cookies['myguid']
+        guid = cookie_guid.value
+        self.assertEqual(guid, self.user.user_guid)
 
-            resp_logoff = self.client.post(reverse('auth_logout'))
-            cookie_guid_off = resp_logoff.cookies['myguid']
-            guid_off = cookie_guid_off.value
-            self.assertEqual(guid_off, '')
+        resp_logoff = self.client.post(reverse('auth_logout'))
+        cookie_guid_off = resp_logoff.cookies['myguid']
+        guid_off = cookie_guid_off.value
+        self.assertEqual(guid_off, '')
 
     def test_jira_login(self):
         jira = JIRA(options=options, basic_auth=my_agent_auth)
