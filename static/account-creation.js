@@ -48,7 +48,7 @@ $(document).on("click", "button#register", function(e) {
                 $(".newUserEmail").html(user_email);
                 var date = new Date();
                 date.setDate(date.getDate()+365);
-                document.cookie = 'myguid='+json.guid+'; expires='+date.toUTCString();
+                document.cookie = 'myguid='+json.guid+'; expires='+date.toUTCString()+'; domain=.my.jobs';
             }else{
                 // Remove all required field changes, if any
                 removeRequiredChanges();
