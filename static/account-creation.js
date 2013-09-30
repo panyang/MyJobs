@@ -81,6 +81,9 @@ $(document).on("click", "button#login", function(e) {
                     jsonErrors(index, json.errors);
                 }
             } else {
+                var date = new Date();
+                date.setDate(date.getDate()+365);
+                document.cookie = 'myguid='+json.guid+'; expires='+date.toUTCString()+'; domain=.my.jobs';
                 if(json.url == 'undefined'){
                     window.location = profile_url;
                 }else{

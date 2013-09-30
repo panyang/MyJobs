@@ -107,13 +107,16 @@ def home(request):
             loginform = CustomAuthForm(data=request.POST)
             if loginform.is_valid():
                 expire_login(request, loginform.get_user())
+
                 try:
                     url = request.environ.get('HTTP_REFERER')
                     url = url.split('=')
                     url = urllib2.unquote(url[1])
                 except:
                     url = 'undefined'
-                response_data = {'validation': 'valid', 'url': url}
+
+                response_data = {'validation': 'valid', 'url': url,
+                                 'guid': loginform.get_user().user_guid}
                 return HttpResponse(json.dumps(response_data))
             else:
                 return HttpResponse(json.dumps({'errors':

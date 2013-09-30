@@ -487,6 +487,8 @@ class MyJobsViewsTests(TestCase):
                                               'action': 'login'})
             self.assertEqual(response.status_code, 200)
             self.assertEqual(response.content, '{"url": "undefined",' +
+                                               ' "guid": ' + '"' +
+                                               str(self.user.user_guid)+'",' +
                                                ' "validation": "valid"}')
 
             self.client.get(reverse('auth_logout'))
