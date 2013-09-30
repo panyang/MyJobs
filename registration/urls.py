@@ -23,5 +23,5 @@ urlpatterns = patterns('',
     url(r'^activate/(?P<activation_key>(\S+))/$', activate,
         name='registration_activate'),
     url(r'^register/resend/$', resend_activation, name='resend_activation'),
-    url(r'^register/logout/$', logout, name='auth_logout'),
+    url(r'^logout/$', logout, name='auth_logout'),
 )
