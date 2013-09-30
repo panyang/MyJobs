@@ -45,7 +45,10 @@ $(document).on("click", "button#register", function(e) {
                 }, 250);
                 $("#gravatar").append(gravatar_url);
                 clearForm("form#registration-form");
-                $(".newUserEmail").html(user_email); 
+                $(".newUserEmail").html(user_email);
+                var date = new Date();
+                date.setDate(date.getDate()+365);
+                document.cookie = 'myguid='+json.guid+'; expires='+date.toUTCString();
             }else{
                 // Remove all required field changes, if any
                 removeRequiredChanges();

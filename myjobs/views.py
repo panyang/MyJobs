@@ -97,7 +97,8 @@ def home(request):
                 expire_login(request, user_cache)
                 # pass in gravatar url once user is logged in. Image generated
                 # on AJAX success
-                data = {'gravatar_url': new_user.get_gravatar_url(size=100)}
+                data = {'gravatar_url': new_user.get_gravatar_url(size=100),
+                        'guid': str(new_user.user_guid)}
                 return HttpResponse(json.dumps(data))
             else:
                 return HttpResponse(json.dumps(
