@@ -6,8 +6,7 @@ from registration.views import *
 
 urlpatterns = patterns('',
     # Authorization URLS
-    url(r'^logout/$', auth_views.logout, {'next_page': '/'},
-        name='auth_logout'),
+
     url(r'^password/reset/$', auth_views.password_reset,
         {'password_reset_form': CustomPasswordResetForm},
         name='auth_password_reset'),
@@ -24,4 +23,5 @@ urlpatterns = patterns('',
     url(r'^activate/(?P<activation_key>(\S+))/$', activate,
         name='registration_activate'),
     url(r'^register/resend/$', resend_activation, name='resend_activation'),
+    url(r'^logout/$', logout, name='auth_logout'),
 )

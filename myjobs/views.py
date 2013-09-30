@@ -98,7 +98,10 @@ def home(request):
                 # pass in gravatar url once user is logged in. Image generated
                 # on AJAX success
                 data = {'gravatar_url': new_user.get_gravatar_url(size=100)}
-                return HttpResponse(json.dumps(data))
+                response = HttpResponse(json.dumps(data))
+                response.set_cookie('myguid', new_user.user_guid,
+                                    expires=365*24*60*60, domain='.my.jobs')
+                return response
             else:
                 return HttpResponse(json.dumps(
                     {'errors': registrationform.errors.items()}))
@@ -107,14 +110,19 @@ def home(request):
             loginform = CustomAuthForm(data=request.POST)
             if loginform.is_valid():
                 expire_login(request, loginform.get_user())
+
                 try:
                     url = request.environ.get('HTTP_REFERER')
                     url = url.split('=')
                     url = urllib2.unquote(url[1])
                 except:
                     url = 'undefined'
+
                 response_data = {'validation': 'valid', 'url': url}
-                return HttpResponse(json.dumps(response_data))
+                response = HttpResponse(json.dumps(response_data))
+                response.set_cookie('myguid', loginform.get_user().user_guid,
+                                    expires=365*24*60*60, domain='.my.jobs')
+                return response
             else:
                 return HttpResponse(json.dumps({'errors':
                                                 loginform.errors.items()}))
