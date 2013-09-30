@@ -66,5 +66,5 @@ def logout(request):
     log_out(request)
     response = redirect('home')
     if 'myguid' in request.COOKIES:
-        response.delete_cookie(key='myguid')
+        response.delete_cookie(key='myguid', domain='.my.jobs')
     return response
