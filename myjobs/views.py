@@ -470,7 +470,7 @@ def toolbar(request):
             name = user.email
         employer = (True if user.groups.filter(name='Employer')
                     else False)
-        data = {"user_fullname": (("(%s...)" % name[:17]) if len(name) > 20
+        data = {"user_fullname": (("%s..." % name[:17]) if len(name) > 20
                                   else name),
                 "user_gravatar": user.get_gravatar_url(),
                 "employer": employer}
