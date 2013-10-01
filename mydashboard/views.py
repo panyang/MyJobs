@@ -55,6 +55,7 @@ def dashboard(request, template="mydashboard/mydashboard.html",
     
     # Removes main user from admin list to display other admins
     admins = admins.exclude(user=request.user)
+    
     requested_microsite = request.REQUEST.get('microsite', company.name)
     requested_after_date = request.REQUEST.get('after', False)
     requested_before_date = request.REQUEST.get('before', False)
@@ -257,6 +258,9 @@ def candidate_information(request):
 
     user_id = request.REQUEST.get('user')
     company_id = request.REQUEST.get('company')
+    anchor_id = request.REQUEST.get('anchor')
+    after = request.REQUEST.get('after', False)
+    before = request.REQUEST.get('before', False)
 
     # user gets pulled out from id
     try:
@@ -290,6 +294,9 @@ def candidate_information(request):
 
     data_dict = {'user_info': models,
                  'company_id': company_id,
+                 'anchor_id': anchor_id,
+                 'after': after,
+                 'before': before,
                  'primary_name': primary_name,
                  'the_user': user,
                  'searches': searches,
