@@ -32,6 +32,7 @@ from myjobs.models import User, EmailLog
 from myjobs.forms import *
 from myjobs.helpers import *
 from myjobs.templatetags.common_tags import get_name_obj
+from myprofile.models import ProfileUnits
 from registration.forms import *
 
 logger = logging.getLogger('__name__')
@@ -445,3 +446,34 @@ def unsubscribe_all(request, user=None):
 
     return render_to_response('myjobs/unsubscribe_all.html',
                               context_instance=RequestContext(request))
+
+
+def toolbar(request):
+    user = request.user
+    if not user or user.is_anonymous():
+        guid = request.COOKIES.get('myguid')
+        try:
+            user = User.objects.get(user_guid=guid)
+        except User.DoesNotExist:
+            pass
+    if not user or user.is_anonymous():
+        data = {"user_fullname": "",
+                "user_gravatar": "",
+                "employer": ""}
+    else:
+        try:
+            name = user.profileunits_set.get(content_type__name="name",
+                                         name__primary=True).name
+            if not name.get_full_name():
+                name = user.email
+        except ProfileUnits.DoesNotExist:
+            name = user.email
+        employer = (True if user.groups.filter(name='Employer')
+                    else False)
+        data = {"user_fullname": (("(%s...)" % name[:17]) if len(name) > 20
+                                  else name),
+                "user_gravatar": user.get_gravatar_url(),
+                "employer": employer}
+    callback = request.GET.get('callback', '')
+    response = '%s(%s);' % (callback, json.dumps(data))
+    return HttpResponse(response, content_type="text/javascript")

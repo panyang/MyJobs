@@ -30,4 +30,5 @@ urlpatterns = patterns('MyJobs.myjobs.views',
     url(r'^account/', include(accountpatterns)),
     url(r'^account/edit/', include(editpatterns)),
     url(r'^send/$', 'continue_sending_mail', name='continue_sending_mail'),
+    url(r'^toolbar/$', 'toolbar', name='toolbar'),
 )
