@@ -35,8 +35,6 @@
 
             {% csrf_token %}
 
-            <a href="../django_messages/base.html">Inbox</a>
-
             {% for module in profile_config.values %}
 
             {% with module.0|custom_template as c_template %}
