@@ -81,6 +81,7 @@ class XsSharing(object):
 
         return response 
 
+
 class NewRelic(object):
     """
     Manages New Relic tracking.

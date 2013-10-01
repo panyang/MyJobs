@@ -154,7 +154,6 @@ INSTALLED_APPS = (
     'widget_tweaks',
     'south',
     'django_nose',
-    'django_messages',
     'tastypie',
     'captcha',
     'endless_pagination'
@@ -163,7 +162,7 @@ INSTALLED_APPS = (
 # Add all MyJobs apps here. This separation ensures that automated Jenkins tests
 # only run on these apps
 PROJECT_APPS = ('myjobs','myprofile','mysearches','registration',
-                'mydashboard', 'mysignon')
+                'mydashboard', 'mysignon', 'mymessages')
 
 INSTALLED_APPS += PROJECT_APPS
 
@@ -254,5 +253,6 @@ PROFILE_COMPLETION_MODULES = (
     'education',
     'secondaryemail',
     'name', 
-    'employmenthistory'
+    'employmenthistory',
+    'summary'
 )
