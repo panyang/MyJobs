@@ -547,3 +547,16 @@ class MyJobsViewsTests(TestCase):
         response = self.client.get(reverse('unsubscribe_all'))
         self.user = User.objects.get(id=self.user.id)
         self.assertFalse(self.user.opt_in_myjobs)
+
+    def test_toolbar_logged_in(self):
+        self.client.login_user(self.user)
+        response = self.client.get(reverse('toolbar'))
+        expected_response = '"user_fullname": "alice@example.com"'
+        self.assertIn(expected_response, response.content)
+
+    def test_toolbar_not_logged_in(self):
+        Session.objects.all().delete()
+        response = self.client.get(reverse('toolbar'))
+        expected_response = '({"user_fullname": "", "user_gravatar": '\
+                            '"", "employer": ""});'
+        self.assertEqual(response.content, expected_response)
