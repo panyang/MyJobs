@@ -253,7 +253,7 @@ def save_primary(sender, instance, created, **kwargs):
             instance.save()
 
 
-post_save.connect(save_primary, sender=Name)
+post_save.connect(save_primary, sender=Name, dispatch_uid="save_primary")
 
 
 class SecondaryEmail(ProfileUnits):
