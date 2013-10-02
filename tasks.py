@@ -7,6 +7,7 @@ from celery.schedules import crontab
 
 from django.conf import settings
 from django.template.loader import render_to_string
+from django.db.models import Q
 
 from myjobs.models import EmailLog, User
 from myprofile.models import SecondaryEmail
@@ -106,22 +107,17 @@ def process_batch_events():
     # These users have not responded in a month. Send them an email if they
     # own any saved searches
     inactive = User.objects.select_related('savedsearch_set')
-    inactive_30 = inactive.filter(last_response=now-timedelta(days=30))
-    inactive_36 = inactive.filter(last_response=now-timedelta(days=36))
+    import ipdb
+    ipdb.set_trace()
+    inactive = inactive.filter(Q(last_response=now-timedelta(days=30)) |
+                               Q(last_response=now-timedelta(days=36)))
 
-    for user in inactive_30:
+    for user in inactive:
         if user.savedsearch_set.exists():
+            time = (now - user.last_response).days
             message = render_to_string('myjobs/email_inactive.html',
                                        {'user': user,
-                                        'time': 30})
-            user.email_user('Account Inactivity', message,
-                            settings.DEFAULT_FROM_EMAIL)
-
-    for user in inactive_36:
-        if user.savedsearch_set.exists():
-            message = render_to_string('myjobs/email_inactive.html',
-                                       {'user': user,
-                                        'time': 36})
+                                        'time': time})
             user.email_user('Account Inactivity', message,
                             settings.DEFAULT_FROM_EMAIL)
 
