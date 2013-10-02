@@ -4,18 +4,22 @@
 {% if candidates %}
                 
     {% load endless %}
-    {% paginate candidates %}                                            
+    
+        {% paginate candidates %}     
+    
                    
         <table id="row-link-table">  
             {% for candidate in candidates %}                    
             <tr class="hide-mobile" onclick="document.location = '{% url 'candidate_information' %}?company={{ company_id }}&user={{ candidate.user.id }}&anchor={{ forloop.counter }}&before={{ before|date:'m/d/Y' }}&after={{ after|date:'m/d/Y' }}';">
                 <td>
-                    <span class="gravatar pull-left">{% get_gravatar candidate.user '55' %}</span>                        
+                    <span class="gravatar pull-left">{% get_gravatar candidate.user '55' %}</span>
+                    {{ pages }}<br>
+                    {{ page_number }}
                 </td>
                 <td>
                     <div class="candidate-name">{{candidate.user|get_name_obj}}</div>
                     <a name="{{ forloop.counter }}"></a>
-                    <a href="{% url 'candidate_information' %}?company={{ company_id }}&user={{ candidate.user.id }}&anchor={{ forloop.counter }}&before={{ before|date:'m/d/Y' }}&after={{ after|date:'m/d/Y' }}">{{candidate.user}}</a>
+                    <a href="{% url 'candidate_information' %}?company={{ company_id }}&user={{ candidate.user.id }}&anchor={{ forloop.counter }}&page={{ pages }}&before={{ before|date:'m/d/Y' }}&after={{ after|date:'m/d/Y' }}">{{candidate.user}}</a>
                     <div class="progress activity-progress">
                         <div class="bar bar-{% completion_level candidate.user.profile_completion %}" style="width: {{ candidate.user.profile_completion }}%"></div>
                     </div>
