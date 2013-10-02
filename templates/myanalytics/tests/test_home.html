@@ -18,26 +18,27 @@
             <a href="http://example.com/apply_here">Job</a>
         </div>
         <script>
-            var _paq = _paq || [];
+            var _myaq = _myaq || [];
             (function() {
                 // url that tracking data will be sent to
-                //var u = (("https:" == document.location.protocol) ? "https:" : "http:") + "//secure.my.jobs/analytics/track"
-                // For testing
-                var u = 'http://localhost:8081/analytics/track';
-                _paq.push(['setTrackerUrl', u]);
-                _paq.push(['setDocumentTitle',
+                // var u = (("https:" == document.location.protocol) ? "https:" : "http:") + "//secure.my.jobs/analytics/track"
+                var u = "http://localhost:8081/analytics/track"
+                _myaq.push(['setTrackerUrl', u]);
+                _myaq.push(['setDocumentTitle',
                            document.domain + '/' + document.title]);
+                //_myaq.push(['setCookieDomain', '*.my.jobs']);
+                _myaq.push(['setCookieDomain', '.localhost']);
 
                 // Track saving a search
                 $('#savedsearch_button').click(function() {
-                    _paq.push(['trackGoal', 'save search']);
+                    _myaq.push(['trackGoal', 'save search']);
                 });
 
                 // Track apply button clicks
                 $('[id^=direct_applyButton]').click(function() {
-                    _paq.push(['setCustomVariable', 1, 'url',
+                    _myaq.push(['setCustomVariable', 1, 'url',
                                $(this).children('a')[0].href])
-                    _paq.push(['trackGoal', 'apply']);
+                    _myaq.push(['trackGoal', 'apply']);
                 });
 
                 // Track social share clicks
@@ -48,13 +49,13 @@
                     share_btn.onclick = function() {
                         var text = this.innerHTML.replace(/^\s+|\s+$/g, '');
                         if (text.indexOf('More...') == 0) {
-                            _paq.push(['setCustomVariable', 1, 'share', 'Other'])
+                            _myaq.push(['setCustomVariable', 1, 'share', 'Other'])
                         } else if (text.indexOf('Settings...') == 0) {
                             return;
                         } else {
-                            _paq.push(['setCustomVariable', 1, 'share', text]);
+                            _myaq.push(['setCustomVariable', 1, 'share', text]);
                         }
-                        _paq.push(['trackGoal', 'share']);
+                        _myaq.push(['trackGoal', 'share']);
                     }
                 }
 
@@ -67,23 +68,23 @@
                         if (text !== undefined) {
                             text = text.innerHTML.replace(/^\s+|\s+$/g, '');
                             if (text !== null && text.indexOf('Share on ') == 0) {
-                                _paq.push(['setCustomVariable', 1, 'share', text.substr(9)]);
-                                _paq.push(['trackGoal', 'share']);
+                                _myaq.push(['setCustomVariable', 1, 'share', text.substr(9)]);
+                                _myaq.push(['trackGoal', 'share']);
                             }
                         }
                     }
                 }
 
                 // Tracks outbound links
-                //_paq.push(['enableLinkTracking'])
-                _paq.push(['trackPageView']);
+                //_myaq.push(['enableLinkTracking'])
+                _myaq.push(['trackPageView']);
                 var d = document,
                     g = d.createElement('script'),
                     s = d.getElementsByTagName('script')[0];
                 g.type='text/javascript';
                 g.defer=true;
                 g.async=true;
-                g.src="http://d2e48ltfsb5exy.cloudfront.net/myjobs/analytics/piwik.js";
+                g.src="http://analytics.my.jobs/myjobs/ma.js";
                 s.parentNode.insertBefore(g,s);
             })();
         </script>

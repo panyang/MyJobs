@@ -428,7 +428,7 @@ if (typeof JSON2 !== 'object') {
     setHeartBeatTimer, killFrame, redirectFile, setCountPreRendered,
     trackGoal, trackLink, trackPageView, trackSiteSearch,
  */
-/*global _paq:true */
+/*global _myaq:true */
 /*members push */
 /*global Piwik:true */
 /*members addPlugin, getTracker, getAsyncTracker */
@@ -437,8 +437,8 @@ if (typeof JSON2 !== 'object') {
 /*members amd */
 
 // asynchronous tracker (or proxy)
-if (typeof _paq !== 'object') {
-    _paq = [];
+if (typeof _myaq !== 'object') {
+    _myaq = [];
 }
 
 // Piwik singleton and namespace
@@ -2541,7 +2541,7 @@ if (typeof Piwik !== 'object') {
 
         /************************************************************
          * Proxy object
-         * - this allows the caller to continue push()'ing to _paq
+         * - this allows the caller to continue push()'ing to _myaq
          *   after the Tracker has been initialized and loaded
          ************************************************************/
 
@@ -2564,22 +2564,22 @@ if (typeof Piwik !== 'object') {
         asyncTracker = new Tracker();
 
         // find the call to setTrackerUrl (if any) and call them first
-        for (i = 0; i < _paq.length; i++) {
-            if (_paq[i][0] === 'setTrackerUrl') {
-                apply(_paq[i]);
-                delete _paq[i];
+        for (i = 0; i < _myaq.length; i++) {
+            if (_myaq[i][0] === 'setTrackerUrl') {
+                apply(_myaq[i]);
+                delete _myaq[i];
             }
         }
 
         // apply the queue of actions
-        for (i = 0; i < _paq.length; i++) {
-            if (_paq[i]) {
-                apply(_paq[i]);
+        for (i = 0; i < _myaq.length; i++) {
+            if (_myaq[i]) {
+                apply(_myaq[i]);
             }
         }
 
         // replace initialization array with proxy object
-        _paq = new TrackerProxy();
+        _myaq = new TrackerProxy();
 
         /************************************************************
          * Public data and methods
