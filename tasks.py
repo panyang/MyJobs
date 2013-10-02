@@ -107,8 +107,6 @@ def process_batch_events():
     # These users have not responded in a month. Send them an email if they
     # own any saved searches
     inactive = User.objects.select_related('savedsearch_set')
-    import ipdb
-    ipdb.set_trace()
     inactive = inactive.filter(Q(last_response=now-timedelta(days=30)) |
                                Q(last_response=now-timedelta(days=36)))
 
