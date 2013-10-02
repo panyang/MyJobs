@@ -45,7 +45,7 @@ $(document).on("click", "button#register", function(e) {
                 }, 250);
                 $("#gravatar").append(gravatar_url);
                 clearForm("form#registration-form");
-                $(".newUserEmail").html(user_email); 
+                $(".newUserEmail").html(user_email);
             }else{
                 // Remove all required field changes, if any
                 removeRequiredChanges();

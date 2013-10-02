@@ -485,11 +485,32 @@ class MyJobsViewsTests(TestCase):
                                         data={'username': email,
                                               'password': 'secret',
                                               'action': 'login'})
+
             self.assertEqual(response.status_code, 200)
             self.assertEqual(response.content, '{"url": "undefined",' +
                                                ' "validation": "valid"}')
 
             self.client.get(reverse('auth_logout'))
+
+    def test_guid_cookies_login_and_off(self):
+        """
+        Tests logging in and recieving a guid cookie. Logging out deletes guid
+        cookie.
+        """
+        response = self.client.post(reverse('home'),
+                                    data={'username': self.user.email,
+                                          'password': 'secret',
+                                          'action': 'login'})
+
+        self.assertTrue(response.cookies['myguid'])
+        cookie_guid = response.cookies['myguid']
+        guid = cookie_guid.value
+        self.assertEqual(guid, self.user.user_guid)
+
+        resp_logoff = self.client.post(reverse('auth_logout'))
+        cookie_guid_off = resp_logoff.cookies['myguid']
+        guid_off = cookie_guid_off.value
+        self.assertEqual(guid_off, '')
 
     def test_jira_login(self):
         jira = JIRA(options=options, basic_auth=my_agent_auth)
@@ -526,3 +547,16 @@ class MyJobsViewsTests(TestCase):
         response = self.client.get(reverse('unsubscribe_all'))
         self.user = User.objects.get(id=self.user.id)
         self.assertFalse(self.user.opt_in_myjobs)
+
+    def test_toolbar_logged_in(self):
+        self.client.login_user(self.user)
+        response = self.client.get(reverse('toolbar'))
+        expected_response = '"user_fullname": "alice@example.com"'
+        self.assertIn(expected_response, response.content)
+
+    def test_toolbar_not_logged_in(self):
+        Session.objects.all().delete()
+        response = self.client.get(reverse('toolbar'))
+        expected_response = '({"user_fullname": "", "user_gravatar": '\
+                            '"", "employer": ""});'
+        self.assertEqual(response.content, expected_response)

@@ -22,6 +22,7 @@
         var _gaq = _gaq || [];
         _gaq.push(['_setAccount', 'UA-16316580-1']);
         _gaq.push(['_trackPageview']);
+        _gaq.push(['_setCustomVar', 2, 'View Source', 'Dot Jobs (88)', 2]);
 
         (function() {
             var ga = document.createElement('script'); ga.type = 'text/javascript'; ga.async = true;
@@ -169,6 +170,24 @@
                             </div>
 
                             {% endif %}
+
+                            {% with user.messages_unread as messages %}
+
+                            {% for message_info in messages %}
+
+                            <div class="alert alert-{{ message_info.message.message_type }} mail-alert hide-mobile">
+                                <b>{{ message_info.message.subject }}</b>
+                                <br>
+                                {{ message_info.message.body|safe }}
+                                <div class="clear"></div>
+                                <button class="btn pull-right mymessage-{{ message_info.message.id }}-{{ user.id }}">{{ message_info.message.btn_text }}</button>
+                                <div class="clear"></div>
+                            </div>
+
+                            {% endfor %}
+
+                            {% endwith %}
+
                         {% endif %}
                         {% endblock%}
                         

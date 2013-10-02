@@ -8,6 +8,8 @@
 static-files/100x50
 static-files/content_profile
 dev_*
+.idea
+
 # Editor aritfacts
 *~
 *-

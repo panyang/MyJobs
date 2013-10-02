@@ -30,6 +30,7 @@ from myjobs.models import User, EmailLog
 from myjobs.forms import *
 from myjobs.helpers import *
 from myjobs.templatetags.common_tags import get_name_obj
+from myprofile.models import ProfileUnits
 from registration.forms import *
 
 logger = logging.getLogger('__name__')
@@ -96,7 +97,10 @@ def home(request):
                 # pass in gravatar url once user is logged in. Image generated
                 # on AJAX success
                 data = {'gravatar_url': new_user.get_gravatar_url(size=100)}
-                return HttpResponse(json.dumps(data))
+                response = HttpResponse(json.dumps(data))
+                response.set_cookie('myguid', new_user.user_guid,
+                                    expires=365*24*60*60, domain='.my.jobs')
+                return response
             else:
                 return HttpResponse(json.dumps(
                     {'errors': registrationform.errors.items()}))
@@ -105,14 +109,19 @@ def home(request):
             loginform = CustomAuthForm(data=request.POST)
             if loginform.is_valid():
                 expire_login(request, loginform.get_user())
+
                 try:
                     url = request.environ.get('HTTP_REFERER')
                     url = url.split('=')
                     url = urllib2.unquote(url[1])
                 except:
                     url = 'undefined'
+
                 response_data = {'validation': 'valid', 'url': url}
-                return HttpResponse(json.dumps(response_data))
+                response = HttpResponse(json.dumps(response_data))
+                response.set_cookie('myguid', loginform.get_user().user_guid,
+                                    expires=365*24*60*60, domain='.my.jobs')
+                return response
             else:
                 return HttpResponse(json.dumps({'errors':
                                                 loginform.errors.items()}))
@@ -435,3 +444,35 @@ def unsubscribe_all(request, user=None):
 
     return render_to_response('myjobs/unsubscribe_all.html',
                               context_instance=RequestContext(request))
+
+
+def toolbar(request):
+    user = request.user
+    if not user or user.is_anonymous():
+        guid = request.COOKIES.get('myguid')
+        try:
+            user = User.objects.get(user_guid=guid)
+        except User.DoesNotExist:
+            pass
+    if not user or user.is_anonymous():
+        data = {"user_fullname": "",
+                "user_gravatar": "",
+                "employer": ""}
+    else:
+        try:
+            name_obj = user.profileunits_set.get(content_type__name="name",
+                                         name__primary=True).name
+            name = name_obj.get_full_name()
+            if not name_obj.get_full_name():
+                name = user.email
+        except ProfileUnits.DoesNotExist:
+            name = user.email
+        employer = (True if user.groups.filter(name='Employer')
+                    else False)
+        data = {"user_fullname": (("%s..." % name[:17]) if len(name) > 20
+                                  else name),
+                "user_gravatar": user.get_gravatar_url(),
+                "employer": employer}
+    callback = request.GET.get('callback', '')
+    response = '%s(%s);' % (callback, json.dumps(data))
+    return HttpResponse(response, content_type="text/javascript")

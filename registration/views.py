@@ -1,7 +1,9 @@
-from django.contrib.auth import authenticate, login
-from django.contrib.auth import views as auth_views
+import json
+
+from django.contrib.auth import authenticate
+from django.contrib.auth import logout as log_out
 from django.http import HttpResponseRedirect, HttpResponse
-from django.shortcuts import render_to_response
+from django.shortcuts import render_to_response, redirect
 from django.template import RequestContext
 from django.views.generic import TemplateView
 
@@ -58,3 +60,11 @@ def activate(request, activation_key):
     ctx = {'activated': activated}
     return render_to_response('registration/activate.html',
                               ctx, context_instance=RequestContext(request))
+
+
+def logout(request):
+    log_out(request)
+    response = redirect('home')
+    if 'myguid' in request.COOKIES:
+        response.delete_cookie(key='myguid', domain='.my.jobs')
+    return response

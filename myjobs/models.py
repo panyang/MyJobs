@@ -15,6 +15,7 @@ from django.http import HttpResponse
 from default_settings import GRAVATAR_URL_PREFIX, GRAVATAR_URL_DEFAULT
 from registration import signals as custom_signals
 
+
 class CustomUserManager(BaseUserManager):
     def get_email_owner(self, email):
         """
@@ -303,6 +304,49 @@ class User(AbstractBaseUser, PermissionsMixin):
             if User.objects.filter(user_guid=self.user_guid):
                 self.make_guid()
             self.save()
+
+    def check_messages(self):
+        """
+        Gets all messages that are currently active. For each message
+        see if the User has this message, if it is not found create it.
+        If the User has the message already or it was created add it to
+        message_infos.
+
+        Outputs:
+        :message_infos: Is a list of MessageInfo
+        """
+        from mymessages.models import get_messages, MessageInfo
+        messages = get_messages()
+        message_infos = []
+        for message in messages:
+            try:
+                m = MessageInfo.objects.get(user=self, message=message)
+            except MessageInfo.DoesNotExist:
+                new = MessageInfo(user=self, message=message)
+                new.save()
+                message_infos.append(new)
+            else:
+                message_infos.append(m)
+        return message_infos
+
+    def messages_unread(self):
+        """
+        Gets a list of active MessageInfo from checkmessages(). If the
+        MessageInfo has been read already or is expired, ignore it, otherwise
+        add it to 'to_show_messages'.
+
+        Output:
+        :to_show_messages:  A list of Messages to be shown to the User.
+        """
+        messages = self.check_messages()
+        to_show_messages = []
+        if messages:
+            for message in messages:
+                if message.read or message.expired_time():
+                    continue
+                else:
+                    to_show_messages.append(message)
+            return to_show_messages
 
 
 class EmailLog(models.Model):
