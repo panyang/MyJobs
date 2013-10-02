@@ -1257,6 +1257,12 @@ td .gravatar-blank,
     background-color: #5eb95e;
 }
 
+.truste {
+    display: inline-block;
+    float: right;
+    margin-top: 14px;
+}
+
 @media screen and (max-width: 1024px) {
     .site-progress {
         margin-top: 20px;
