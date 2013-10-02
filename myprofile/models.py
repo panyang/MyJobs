@@ -244,7 +244,7 @@ class Name(ProfileUnits):
 
 def save_primary(sender, instance, created, **kwargs):
     user = instance.user
-    if len(Name.objects.filter(user=user)) == 1:
+    if len(Name.objects.filter(user=user)) == 1 and created:
         try:
             user.profileunits_set.get(content_type__name="name",
                                           name__primary=True)
