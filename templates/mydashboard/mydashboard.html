@@ -55,7 +55,10 @@ $(document).ready(function()
             icon.removeClass('icon-minus');
             icon.addClass('icon-plus');
         });
-    }); 
+    });
+    
+    var _href = $("a.endless_more").attr("href");
+    $("a.endless_more").attr("href", _href + '&before={{ before|date:'m/d/Y' }}&after={{ after|date:'m/d/Y' }}');
    
 });
 </script>

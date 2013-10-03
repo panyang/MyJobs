@@ -58,8 +58,15 @@ def dashboard(request, template="mydashboard/mydashboard.html",
     requested_microsite = request.REQUEST.get('microsite', company.name)
     requested_after_date = request.REQUEST.get('after', False)
     requested_before_date = request.REQUEST.get('before', False)
-    requested_date_button = request.REQUEST.get('date_button', False)    
-                
+    requested_date_button = request.REQUEST.get('date_button', False)
+    candidate_pages = request.REQUEST.get('page', 1)
+    
+    if candidate_pages > 1:     
+        total_candidates = int(candidate_pages) * 10
+    
+    else:
+        total_candidates = 10
+        
     # the url value for 'All' in the select box is company name 
     # which then gets replaced with all microsite urls for that company
     site_name = ''
@@ -137,6 +144,8 @@ def dashboard(request, template="mydashboard/mydashboard.html",
                'site_name': site_name,
                'view_name': 'Company Dashboard',
                'date_button': requested_date_button,
+               'candidate_pages': candidate_pages,
+               'total_candidates': total_candidates,               
                }
     
     if extra_context is not None:
@@ -257,7 +266,11 @@ def candidate_information(request):
 
     user_id = request.REQUEST.get('user')
     company_id = request.REQUEST.get('company')
-
+    anchor_id = request.REQUEST.get('anchor')
+    after = request.REQUEST.get('after', False)
+    before = request.REQUEST.get('before', False)
+    page = request.REQUEST.get('pages', False)
+    
     # user gets pulled out from id
     try:
         user = User.objects.get(id=user_id)
@@ -293,6 +306,10 @@ def candidate_information(request):
                  'primary_name': primary_name,
                  'the_user': user,
                  'searches': searches,
+                 'after': after,
+                 'anchor': anchor_id,
+                 'before': before,
+                 'page': page,
                  'coming_from': coming_from}
 
     return render_to_response('mydashboard/candidate_information.html',

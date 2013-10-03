@@ -3,18 +3,19 @@
 
 {% if candidates %}
                 
-    {% load endless %}
-    {% paginate candidates %}                                            
-                   
+    {% load endless %}    
+    {% paginate candidates %}
+                       
         <table id="row-link-table">  
             {% for candidate in candidates %}                    
-            <tr class="hide-mobile" onclick="document.location = '{% url 'candidate_information' %}?company={{ company_id }}&user={{ candidate.user.id }}';">
+            <tr class="hide-mobile" onclick="document.location = '{% url 'candidate_information' %}?company={{ company_id }}&user={{ candidate.user.id }}&anchor={{ forloop.counter }}&pages={{ candidate_pages }}&before={{ before|date:'m/d/Y' }}&after={{ after|date:'m/d/Y' }}';">
                 <td>
                     <span class="gravatar pull-left">{% get_gravatar candidate.user '55' %}</span>                        
                 </td>
                 <td>
                     <div class="candidate-name">{{candidate.user|get_name_obj}}</div>
-                    <a href="{% url 'candidate_information' %}?company={{ company_id }}&user={{ candidate.user.id }}">{{candidate.user}}</a>
+                    <a name="{{ forloop.counter }}"></a>
+                    <a href="{% url 'candidate_information' %}?company={{ company_id }}&user={{ candidate.user.id }}&anchor={{ forloop.counter }}&pages={{ candidate_pages }}&before={{ before|date:'m/d/Y' }}&after={{ after|date:'m/d/Y' }}">{{candidate.user}}</a>
                     <div class="progress activity-progress">
                         <div class="bar bar-{% completion_level candidate.user.profile_completion %}" style="width: {{ candidate.user.profile_completion }}%"></div>
                     </div>
@@ -31,7 +32,7 @@
                 </td>
                 <td>
                     <div class="candidate-name pull-left">{{candidate.user|get_name_obj}}</div>
-                    <a href="{% url 'candidate_information' %}?company={{ company_id }}&user={{ candidate.user.id }}" class="candidate-activity-mobile pull-left">{{candidate.user}}</a>
+                    <a href="{% url 'candidate_information' %}?company={{ company_id }}&user={{ candidate.user.id }}&before={{ before|date:'m/d/Y' }}&after={{ after|date:'m/d/Y' }}" class="candidate-activity-mobile pull-left">{{candidate.user}}</a>
                     <br>
                     <div class="progress activity-progress">
                         <div class="bar bar-{% completion_level candidate.user.profile_completion %}" style="width: {{ candidate.user.profile_completion }}%"></div>
@@ -41,7 +42,8 @@
              {% endfor %}                    
          </table>
          
-         {% show_more %}      
+         {% show_more %}
+         
          <script>
          /*Add btn classes to the endless paging links*/
          $(".endless_container a").addClass("btn");
