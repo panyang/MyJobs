@@ -307,12 +307,12 @@ class User(AbstractBaseUser, PermissionsMixin):
 
     def messages_unread(self):
         """
-        Gets a list of active MessageInfo from checkmessages(). If the
-        MessageInfo has been read already or is expired, ignore it, otherwise
-        add it to 'to_show_messages'.
+        Gets a list of active Messages from get_messages. Then gets or creates
+        MessageInfo based on user a Message. If the MessageInfo has been read
+        already or is expired, ignore it, otherwise add it to 'message_infos'.
 
         Output:
-        :to_show_messages:  A list of Messages to be shown to the User.
+        :message_infos:  A list of Messages to be shown to the User.
         """
         from mymessages.models import get_messages, MessageInfo
         messages = get_messages(self)
