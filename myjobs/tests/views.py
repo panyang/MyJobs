@@ -562,7 +562,10 @@ class MyJobsViewsTests(TestCase):
         self.assertEqual(response.content, expected_response)
     
     def test_p3p(self):
-        # make sure the P3P headers are being set
+        """
+        make sure the P3P headers are being set
+        
+        """
         self.client.login_user(self.user)
         response = self.client.get(reverse('toolbar'))
         p3p = str(response["P3P"])
