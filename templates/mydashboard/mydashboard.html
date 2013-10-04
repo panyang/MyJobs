@@ -58,8 +58,9 @@ $(document).ready(function()
     });
     
     var _href = $("a.endless_more").attr("href");
-    $("a.endless_more").attr("href", _href + '&before={{ before|date:'m/d/Y' }}&after={{ after|date:'m/d/Y' }}');
-   
+    if (_href.length < 100) {
+        $("a.endless_more").attr("href", _href + '&before={{ before|date:'m/d/Y' }}&after={{ after|date:'m/d/Y' }}');
+    }
 });
 </script>
 {% endblock %}

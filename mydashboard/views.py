@@ -58,15 +58,9 @@ def dashboard(request, template="mydashboard/mydashboard.html",
     requested_microsite = request.REQUEST.get('microsite', company.name)
     requested_after_date = request.REQUEST.get('after', False)
     requested_before_date = request.REQUEST.get('before', False)
-    requested_date_button = request.REQUEST.get('date_button', False)
-    candidate_pages = request.REQUEST.get('page', 1)
-    
-    if candidate_pages > 1:     
-        total_candidates = int(candidate_pages) * 10
-    
-    else:
-        total_candidates = 10
-        
+    requested_date_button = request.REQUEST.get('date_button', False)    
+    candidates_page = request.REQUEST.get('page', 1)
+       
     # the url value for 'All' in the select box is company name 
     # which then gets replaced with all microsite urls for that company
     site_name = ''
@@ -144,8 +138,7 @@ def dashboard(request, template="mydashboard/mydashboard.html",
                'site_name': site_name,
                'view_name': 'Company Dashboard',
                'date_button': requested_date_button,
-               'candidate_pages': candidate_pages,
-               'total_candidates': total_candidates,               
+               'candidates_page': candidates_page,                              
                }
     
     if extra_context is not None:
@@ -268,8 +261,8 @@ def candidate_information(request):
     company_id = request.REQUEST.get('company')
     anchor_id = request.REQUEST.get('anchor')
     after = request.REQUEST.get('after', False)
-    before = request.REQUEST.get('before', False)
-    page = request.REQUEST.get('pages', False)
+    before = request.REQUEST.get('before', False)    
+    candidates_page = request.REQUEST.get('page', False)
     
     # user gets pulled out from id
     try:
@@ -308,8 +301,8 @@ def candidate_information(request):
                  'searches': searches,
                  'after': after,
                  'anchor': anchor_id,
-                 'before': before,
-                 'page': page,
+                 'before': before,                 
+                 'candidates_page': candidates_page,
                  'coming_from': coming_from}
 
     return render_to_response('mydashboard/candidate_information.html',
