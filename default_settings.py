@@ -91,6 +91,7 @@ MIDDLEWARE_CLASSES = (
     'middleware.RedirectMiddleware',
     'middleware.XsSharing',
     'django.middleware.locale.LocaleMiddleware',
+    'middleware.CompactP3PMiddleware',
     )
 
 AUTHENTICATION_BACKENDS = (

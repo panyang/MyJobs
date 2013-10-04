@@ -99,3 +99,12 @@ class NewRelic(object):
             newrelic.agent.add_custom_parameter('user_id', request.user.id)
         else:
             newrelic.agent.add_custom_parameter('user_id', 'anonymous')
+
+class CompactP3PMiddleware(object):
+    """
+    Adds a compact privacy policy to site headers
+    
+    """
+    def process_response(self, request, response):
+        response['P3P'] = 'CP="ALL DSP COR CURa IND PHY UNR"'
+        return response
