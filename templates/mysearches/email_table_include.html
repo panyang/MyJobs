@@ -6,12 +6,12 @@
         <th style="text-align: right;"><p style="font-size: 10px; color: 555;">Frequency: {{saved_search.frequency|make_verbose_frequency}} {% if digest %}(Digest){% else %}(Individual){% endif %}</p></th>
     </tr>
 
-    {% with odd="background-color: #eae6de;" even="background-color: #d2cfc7;" %}
+    {% with odd="background-color: #ddd;" even="background-color: #cbcbcb;" %}
         {% if saved_search.1 %}
             {% for item in saved_search.1 %}
             
             <tr>
-                <td colspan=2 style="border-left: 1px solid #ddd; padding: 8px; line-height: 20px; border-top: 1px solid #ddd; {% if forloop.counter|divisibleby:2 %}{{even}}{% else %}{{odd}}{% endif %}">
+                <td colspan=2 style="border-left: 1px solid #e5e5e5; padding: 8px; line-height: 20px; border-top: 1px solid #e5e5e5; {% if forloop.counter|divisibleby:2 %}{{even}}{% else %}{{odd}}{% endif %}">
                     <a href="{{item.link}}" style="text-decoration: none; color: #333;">
                         <b>{{item.title}}</b><br>
                         {{item.description|truncatechars:200}}<br>
