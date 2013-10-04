@@ -305,30 +305,6 @@ class User(AbstractBaseUser, PermissionsMixin):
                 self.make_guid()
             self.save()
 
-    def check_messages(self):
-        """
-        Gets all messages that are currently active. For each message
-        see if the User has this message, if it is not found create it.
-        If the User has the message already or it was created add it to
-        message_infos.
-
-        Outputs:
-        :message_infos: Is a list of MessageInfo
-        """
-        from mymessages.models import get_messages, MessageInfo
-        messages = get_messages()
-        message_infos = []
-        for message in messages:
-            try:
-                m = MessageInfo.objects.get(user=self, message=message)
-            except MessageInfo.DoesNotExist:
-                new = MessageInfo(user=self, message=message)
-                new.save()
-                message_infos.append(new)
-            else:
-                message_infos.append(m)
-        return message_infos
-
     def messages_unread(self):
         """
         Gets a list of active MessageInfo from checkmessages(). If the
@@ -338,15 +314,20 @@ class User(AbstractBaseUser, PermissionsMixin):
         Output:
         :to_show_messages:  A list of Messages to be shown to the User.
         """
-        messages = self.check_messages()
-        to_show_messages = []
-        if messages:
-            for message in messages:
-                if message.read or message.expired_time():
+        from mymessages.models import get_messages, MessageInfo
+        messages = get_messages(self)
+        message_infos = []
+        for message in messages:
+            m, created = MessageInfo.objects.get_or_create(user=self,
+                                                           message=message)
+            if not created:
+                if m.read or m.expired_time():
                     continue
                 else:
-                    to_show_messages.append(message)
-            return to_show_messages
+                    message_infos.append(m)
+            else:
+                message_infos.append(m)
+        return message_infos
 
 
 class EmailLog(models.Model):

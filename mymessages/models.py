@@ -94,18 +94,22 @@ class MessageInfo(models.Model):
             return False
 
 
-def get_messages():
+def get_messages(user):
     """
     Gathers all Messages. Checks when they start, expire against current time.
+
+    Inputs:
+    :user:              User obj to get user's groups
 
     Outputs:
     :active_messages:   A list of messages that starts before the current
                         time and expires after the current time. 'active'
                         messages.
     """
-    messages = Message.objects.all()
-    active_messages = []
     now = timezone.now()
+    groups = Group.objects.filter(user=user)
+    messages = set(Message.objects.filter(group__in=groups, expire_at__gt=now))
+    active_messages = []
     for message in messages:
         if message.start_on < now < message.expire_at:
             active_messages.append(message)
