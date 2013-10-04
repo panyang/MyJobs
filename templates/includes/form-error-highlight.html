@@ -27,17 +27,7 @@ form -- the rest of the form.
 
             {% endif %}
 
-            {# Don't show placeholder text if auto_id is True #}
-            {% if form.auto_id %}
-
-                <div class='span3 form-label pull-left {{field.auto_id}}'>
-                    {% add_required_label field %}
-                </div>
-                <div class="profile-form-input">
-                    {{ field|attr:"placeholder:" }}
-                </div>
-
-            {% elif is_select %}
+            {% if is_select %}
 
                 {% if field.html_name == "use_code" %}
 
