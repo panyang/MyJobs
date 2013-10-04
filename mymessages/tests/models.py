@@ -32,7 +32,7 @@ class MessageTests(TestCase):
         n_u = User.objects.get(email="Best@best.com")
         n_u.groups.add(Group.objects.get(id=1).pk)
         n_u.save()
-        n_u.check_messages()
+        n_u.messages_unread()
         message_info = MessageInfo.objects.all().count()
         self.assertEqual(m, 1)
         self.assertEqual(message_info, 2)
