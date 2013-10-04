@@ -182,6 +182,7 @@ def microsite_activity(request, template="mydashboard/microsite_activity.html",
     requested_date_button = request.REQUEST.get('date_button', False)
     requested_after_date = request.REQUEST.get('after', False)
     requested_before_date = request.REQUEST.get('before', False)
+    candidates_page = request.REQUEST.get('page', 1)
     
     if not requested_microsite:
         requested_microsite = request.REQUEST.get('microsite-hide', company.name)
@@ -240,6 +241,7 @@ def microsite_activity(request, template="mydashboard/microsite_activity.html",
                'company_name': company.name,
                'company_id': company.id,
                'date_button': requested_date_button,
+               'candidates_page': candidates_page,
                'saved_search_count': saved_search_count}
     
     if extra_context is not None:
