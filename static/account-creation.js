@@ -61,9 +61,9 @@ $(document).on("click", "button#register", function(e) {
 
 $(document).on("click", "button#login", function(e) {
     e.preventDefault();
-    csrf_token = document.getElementsByName('csrfmiddlewaretoken')[0].value;
+    var next = document.getElementsByName('next')[0].value;
     var form = $('form#login-form');
-    var json_data = form.serialize()+'&action=login&csrfmiddlewaretoken='+csrf_token;
+    var json_data = form.serialize()+'&nexturl='+next+'&action=login';
     $.ajax({
         type: "POST",
         url: current_url,
@@ -81,7 +81,7 @@ $(document).on("click", "button#login", function(e) {
                     jsonErrors(index, json.errors);
                 }
             } else {
-                if(json.url == 'undefined'){
+                if(json.url == 'None'){
                     window.location = profile_url;
                 }else{
                     window.location = json.url;

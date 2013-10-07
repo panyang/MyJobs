@@ -76,6 +76,10 @@ def home(request):
     phone_form = InitialPhoneForm(prefix="ph")
     work_form = InitialWorkForm(prefix="work")
     address_form = InitialAddressForm(prefix="addr")
+    nexturl = request.GET.get('next')
+    if nexturl:
+        nexturl = urllib2.unquote(nexturl)
+        nexturl = urllib2.quote(nexturl)
 
     data_dict = {'num_modules': len(settings.PROFILE_COMPLETION_MODULES),
                  'registrationform': registrationform,
@@ -84,7 +88,8 @@ def home(request):
                  'phone_form': phone_form,
                  'address_form': address_form,
                  'work_form': work_form,
-                 'education_form': education_form}
+                 'education_form': education_form,
+                 'nexturl': nexturl}
 
     if request.method == "POST":
         if request.POST.get('action') == "register":
@@ -112,12 +117,7 @@ def home(request):
             if loginform.is_valid():
                 expire_login(request, loginform.get_user())
 
-                try:
-                    url = request.environ.get('HTTP_REFERER')
-                    url = url.split('=')
-                    url = urllib2.unquote(url[1])
-                except:
-                    url = 'undefined'
+                url = request.POST.get('nexturl')
 
                 response_data = {'validation': 'valid', 'url': url}
                 response = HttpResponse(json.dumps(response_data))

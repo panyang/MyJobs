@@ -98,7 +98,8 @@ class MySignOn(TestCase):
 
         # Ensure that user was logged out
         response = self.client.get(reverse('view_profile'))
-        self.assertRedirects(response, reverse('home'))
+        path = response.request.get('PATH_INFO')
+        self.assertRedirects(response, reverse('home')+'?next='+path)
 
         # wrong key
         self.client.login_user(self.user)
@@ -115,4 +116,5 @@ class MySignOn(TestCase):
         response = self.client.get(reverse('sso_authorize') + wrong_key)
         # Ensure that user was logged out again
         response = self.client.get(reverse('view_profile'))
-        self.assertRedirects(response, reverse('home'))
+        path = response.request.get('PATH_INFO')
+        self.assertRedirects(response, reverse('home')+'?next='+path)

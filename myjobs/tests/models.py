@@ -75,7 +75,8 @@ class UserManagerTests(TestCase):
 
         #Anonymous user
         resp = client.get(reverse('view_profile'))
-        self.assertRedirects(resp, reverse('home'))
+        path = resp.request.get('PATH_INFO')
+        self.assertRedirects(resp, reverse('home')+'?next='+path)
 
         # This is ugly, but it is an artifact of the way Django redirects
         # users who fail the `user_passes_test` decorator.

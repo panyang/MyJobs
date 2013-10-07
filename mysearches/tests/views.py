@@ -196,7 +196,8 @@ class MySearchViewTests(TestCase):
         # Navigating to the 'unsubscribe' page while logged out...
         response = self.client.get(
             reverse('unsubscribe')+'?id='+str(search.id))
-        self.assertRedirects(response, reverse('home'))
+        path = response.request.get('PATH_INFO') + "?id=" + str(search.id)
+        self.assertRedirects(response, reverse('home')+'?next='+path)
         # or with the wrong email address...
         response = self.client.get(
             reverse('unsubscribe') + '?id='+str(
@@ -261,7 +262,8 @@ class MySearchViewTests(TestCase):
         # Navigating to the 'delete saved search' page while logged out...
         response = self.client.get(
             reverse('delete_saved_search')+'?id='+str(search.id))
-        self.assertRedirects(response, reverse('home'))
+        path = response.request.get('PATH_INFO') + "?id=" + str(search.id)
+        self.assertRedirects(response, reverse('home')+'?next='+path)
         self.assertEqual(models.SavedSearch.objects.count(), 1)
         # or with the wrong email address...
         response = self.client.get(

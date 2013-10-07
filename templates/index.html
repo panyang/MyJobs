@@ -58,6 +58,7 @@
                     {% include "includes/widget-user-registration.html" with form=registrationform%}
                     <div class="clear"></div>                                                
                     <h3 class="non-top">Sign In</h3>
+                    <input type="hidden" name="next" value="{{ nexturl }}">
                     {% include "includes/widget-login-username.html" with form=loginform %}
 
                 {% endif %}
