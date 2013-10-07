@@ -25,7 +25,6 @@ Used to check if registration was successful.
                 <p>
                 {% if activated.is_authenticated %}
                     {% trans "Your account hass been successfully activated, and you are now logged in."%}
-                    {% include "includes/initial-profile-form.html" %}
                 {%else%}
                     {% trans "Your account hass been successfully activated, but you need to login before you use it."%}
                 {%endif%}
