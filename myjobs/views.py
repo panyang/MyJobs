@@ -118,8 +118,6 @@ def home(request):
                 expire_login(request, loginform.get_user())
 
                 url = request.POST.get('nexturl')
-                if url == 'None':
-                    url = 'undefined'
 
                 response_data = {'validation': 'valid', 'url': url}
                 response = HttpResponse(json.dumps(response_data))
