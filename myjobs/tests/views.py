@@ -404,7 +404,8 @@ class MyJobsViewsTests(TestCase):
 
         # Navigating to the 'continue sending email' page while logged out...
         response = self.client.get(reverse('continue_sending_mail'))
-        self.assertRedirects(response, reverse('home'))
+        path = response.request.get('PATH_INFO')
+        self.assertRedirects(response, reverse('home')+'?next='+path)
 
         # or with the wrong email address...
         response = self.client.get(reverse('continue_sending_mail') +
