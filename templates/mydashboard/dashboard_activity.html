@@ -1,10 +1,60 @@
 {% load user_ops %}
 {% load common_tags %}
 
+{% block extra_pages %}
+
+<script>
+jQuery(function(){
+    If ({{ candidates_page}} < {{ previous }}) {
+        jQuery('.endless_more').click();
+    }
+});
+//$(document).ready(function()
+//{
+    //var x = 1
+    //if (3 > x) {
+        //var x = 1
+        //while (x<3)
+        //{
+        //$("a.endless_more").trigger('click');
+        //x++;
+        //return false;
+        //return false;
+        //}        
+    //}
+    //var x = 2
+    //while ({{ candidates_page}} < {{ previous }}) {
+        //$("a.endless_more").trigger('click');
+        
+        
+        //x++;   
+        
+        //return false;
+        //return false;
+    //};       
+    //do {
+ 
+        //$("a.endless_more").trigger('click');
+        //x=x+1;
+ 
+    //} while ( x<3 )
+    //var x = 1;
+    //if ({{ candidates_page}} < {{ previous }}) {
+    //if (x<4) {
+        //$("a.endless_more").trigger('click');
+        //x++;
+        //alert(x);
+        //return false;
+    //}   
+//});
+</script>
+
+{% endblock %}
+
 {% if candidates %}
                 
     {% load endless %}    
-    {% paginate candidates %}    
+    {% paginate 5 candidates %}    
                        
         <table id="row-link-table">  
             {% for candidate in candidates %}                    
@@ -23,7 +73,8 @@
                 <td>
                     <strong>{% if candidate.label %}{{candidate.label}}{% else %}Unlabeled{% endif %}</strong><br>
                     {{candidate.url|url_domain}}<br>
-                    {{candidate.created_on.date}}                    
+                    {{candidate.created_on.date}}<br>
+{{ candidates_page}}                    
                 </td>
              </tr>
              <tr class="candidate-activity-mobile">
