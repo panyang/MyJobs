@@ -468,6 +468,10 @@ fieldset textarea,
     width: 248px;
 }
 
+.reset-pass-input{
+    width: 100% !important;
+}
+
 #title {
     padding-top: 60px;
     padding-bottom: 60px;
@@ -512,8 +516,8 @@ fieldset textarea,
 
 .loginBox {
     background-color: #f2f2f2;
-    padding-bottom: 30px;
-    border-radius: 5px;    
+    padding: 10px 10px 30px 10px;
+    border-radius: 5px;
 }
 
 .formBox h2, 

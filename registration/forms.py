@@ -71,6 +71,12 @@ class CustomPasswordResetForm(PasswordResetForm):
     """
     Custom password reset form validates even when user is not active.
     """
+    email = forms.CharField(error_messages={'required':'Email is required.'},
+                               label=_("Email"), required=True,
+                               widget=forms.TextInput(
+                                   attrs={'placeholder': _('Email'),
+                                          'id':'id_email',
+                                          'class': 'reset-pass-input'}))
     def __init__(self, *args, **kwargs):
         super(CustomPasswordResetForm, self).__init__(*args, **kwargs)
 
