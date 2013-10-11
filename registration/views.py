@@ -11,7 +11,10 @@ from myjobs.decorators import user_is_allowed
 from myjobs.helpers import expire_login
 from myjobs.models import *
 from registration.models import ActivationProfile
-from registration.forms import RegistrationForm
+from registration.forms import RegistrationForm, CustomAuthForm
+from myprofile.forms import (InitialNameForm, InitialAddressForm,
+                             InitialPhoneForm, InitialEducationForm,
+                             InitialWorkForm)
 
 
 # New in Django 1.5. Class based template views for static pages
@@ -56,8 +59,28 @@ def activate(request, activation_key):
     Inputs:
     :activation_key: string representing an activation key for a user
     """
+    logged_in = True
+    if request.user.is_anonymous():
+        logged_in = False
     activated = ActivationProfile.objects.activate_user(activation_key)
-    ctx = {'activated': activated}
+
+    loginform = CustomAuthForm(auto_id=False)
+
+    name_form = InitialNameForm(prefix="name")
+    education_form = InitialEducationForm(prefix="edu")
+    phone_form = InitialPhoneForm(prefix="ph")
+    work_form = InitialWorkForm(prefix="work")
+    address_form = InitialAddressForm(prefix="addr")
+
+    ctx = {'activated': activated,
+           'logged_in': logged_in,
+           'loginform': loginform,
+           'name_form': name_form,
+           'phone_form': phone_form,
+           'address_form': address_form,
+           'work_form': work_form,
+           'education_form': education_form,
+           'num_modules': len(settings.PROFILE_COMPLETION_MODULES)}
     return render_to_response('registration/activate.html',
                               ctx, context_instance=RequestContext(request))
 
