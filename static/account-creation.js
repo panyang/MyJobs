@@ -114,7 +114,6 @@ $(document).on("click", "button.activation-login", function(e) {
                     jsonErrors(index, json.errors);
                 }
             } else {
-                console.log(json);
                 // perform the visual transition to page 2
                 if (json.units == true){
                     window.location = profile_url
