@@ -89,7 +89,53 @@ $(document).on("click", "button#login", function(e) {
             }
         }
     });
-    
+});
+
+$(document).on("click", "button.activation-login", function(e) {
+    e.preventDefault();
+    var user_email = document.getElementById('user_email');
+    var form = $('form#login-form');
+    var json_data = form.serialize()+'&action=login';
+    $.ajax({
+        type: "POST",
+        url: current_url,
+        data: json_data,
+        global: false,
+        success: function(data) {
+            // converts json to javascript object
+            var json = jQuery.parseJSON(data);
+            if (json.validation != 'valid') {
+                // Remove all required field changes, if any
+                removeRequiredChanges();
+
+                // For every error passed by json, run jsonError function
+                for (var index in json.errors) {
+                    jsonErrors(index, json.errors);
+                }
+            } else {
+                // perform the visual transition to page 2
+                if (json.units == true){
+                    window.location = profile_url
+                }else{
+                    if (Boolean(json.gravatar_url)){
+                        $("#gravatar").append(json.gravatar_url);
+                    }
+                    $("#page-1").hide()
+                    $("label[for=id_name-primary]").hide()
+                    $("#titleRow").hide( 'slide',{direction: 'left'},250 );
+                    $("#topbar-login").fadeOut(250);
+                    setTimeout(function(){
+                        $("#account-page-2").show('slide',{direction: 'right'},250);
+                    }, 250);
+                    clearForm("form#registration-form");
+                    $(".newUserEmail").html(user_email);
+                    $(".pendingText").html('Account Activated');
+                    $("#send-act-text").html('');
+                }
+            }
+        }
+    });
+
 });
 
 $(document).on("click", "button#save", function(e) {            
