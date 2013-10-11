@@ -72,7 +72,6 @@ $(document).on("click", "button#login", function(e) {
         success: function(data) {
             // converts json to javascript object
             var json = jQuery.parseJSON(data);
-            console.log(json);
             if (json.validation != 'valid') {
                 // Remove all required field changes, if any
                 removeRequiredChanges();
