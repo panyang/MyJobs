@@ -38,7 +38,12 @@ def user_is_allowed(model=None, pk_name=None, pass_user=False):
             email = request.GET.get('verify-email', '')
             user = User.objects.get_email_owner(email)
             if request.user.is_anonymous() and not email:
-                return HttpResponseRedirect(reverse('home'))
+                next_url = request.path
+                if ((next_url == "/saved-search/view/delete" or
+                     next_url == "/saved-search/view/unsubscribe") and
+                     request.GET.get('id') != "None"):
+                        next_url += '?id='+str(request.GET.get('id'))
+                return HttpResponseRedirect(reverse('home')+'?next='+next_url)
 
             if email:
                 user = User.objects.get_email_owner(email)

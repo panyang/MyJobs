@@ -9,83 +9,108 @@ Used to check if registration was successful.
 {% block activation_message %}{% if activated %}{% else %}{{ block.super }}{% endif %}{% endblock %}
 
 {% block content %}
-    <div class="wrapper">
+    <div class="wrapper" id="page-1">
+
     {% if activated %}
-        <div class="row">
-            <div class="span12">
-                <h1>{% trans "Account Activated" %}
-            </div>
+
+    <div class="row">
+        <div class="span12" id="profileTitleRow">
+            <h1>{% trans "Account Activated" %}</h1>
         </div>
-        <div class="row" id="profileTitleRow">                
-            <div class="span2">
+    </div>
+    <div class="row" id="profileTitleRow">
+        <div class="span2" id="gravatar-1">
                {% get_gravatar activated '140' %}
-            </div>
-            <div class="span6" id="profileTitleBar">
-                <h2>{{activated.email}}</h2>
-                <p>
-                {% if activated.is_authenticated %}
-                    {% trans "Your account hass been successfully activated, and you are now logged in."%}
-                {%else%}
-                    {% trans "Your account hass been successfully activated, but you need to login before you use it."%}
-                {%endif%}
-                <br/>
-                <a href="{% url 'edit_account' %}">{% trans "Account Settings" %}</a>
-                </p>
-            </div>
-            <div class="span4">
-                <div class="formBox" id="moduleBank"> 
-                    <h2>Next Steps:</h2>
-                    <table class="table table-bordered tables-striped">
-                    {% if activated.is_authenticated %}
-                        <tr class="profile-section">
-                            <td><a href="{% url 'view_profile' %}">Add to your profile</a></td>
-                        </tr>
-                        <tr class="profile-section">
-                            <td><a href="{% url 'saved_search_main' %}">Manage your saved searches</a></td>
-                        </tr>
-                        <tr class="profile-section">
-                            <td><a href="{% url 'edit_account' %}">Manage your account</a></td>
-                        </tr>
-                    {% else %}
-                        <tr class="profile-section">
-                            <td><a href="/">Login</a></td>
-                        </tr>
-                    {% endif %}
-                    </table>
-                </div>
-            </div>
-        </div>  
-    {% else %}
-        <div class="row">
-            <div class="span12">
-                <h1>{% trans "Activation failed" %}</h1>
+        </div>
+        <div class="span6" id="profileTitleBar">
+            <h2 id="user_email">{{activated.email}}</h2>
+            <p>
+            {% if logged_in %}
+            {% trans "Your account hass been successfully activated, and you are now logged in."%}
+            {% else %}
+            {% trans "Your account hass been successfully activated, but you need to login before you use it."%}
+            {% endif %}
+            </p>
+        </div>
+
+        {% if logged_in %}
+
+        <div class="span4">
+            <div class="formBox" id="moduleBank">
+                <h2>Next Steps:</h2>
+                <table class="table table-bordered tables-striped">
+                    <tr class="profile-section">
+                        <td><a href="{% url 'view_profile' %}">Add to your profile</a></td>
+                    </tr>
+                    <tr class="profile-section">
+                        <td><a href="{% url 'saved_search_main' %}">Manage your saved searches</a></td>
+                    </tr>
+                    <tr class="profile-section">
+                        <td><a href="{% url 'edit_account' %}">Manage your account</a></td>
+                    </tr>
+                </table>
+            </div> {# /formBox #}
+        </div> {# /span4 #}
+
+        {% else %}
+        <style>
+        .formBox input{
+            width: 100%;
+        }
+        </style>
+        <script>
+        $(document).ready(function(){
+            $('button#login').addClass('activation-login');
+            $('button#login').removeAttr('id');
+        });
+        var num_modules = {{ num_modules }};
+        </script>
+        <div class="span4" id="active-login">
+            <div class="loginBox formBox">
+                <h3>Sign In</h3>
+                {% include "includes/widget-login-username.html" with form=loginform %}
             </div>
         </div>
-        <div class="row">
-            <div class="span8">        
+        <input type="hidden" name="next" value="None">
+
+        {% endif %}
+
+    </div> {# /.row#profileTitleRow #}
+    {% else %}
+
+    <div class="row">
+        <div class="span12">
+            <h1>{% trans "Activation failed" %}</h1>
+        </div>
+    </div>
+    <div class="row">
+        <div class="span8">
             <p>
             {% trans "Something went wrong while activating your account. "%}
             {% trans "This might mean that:"%}
-            <ul>
-                <li>{% trans "The activation code was wrong" %}</li>
-                <li>{% trans "Your account has already been activated" %}</li>
-                <li>{% trans "You waited longer than 2 weeks to activate your account" %}</li>
+                <ul>
+                    <li>{% trans "The activation code was wrong" %}</li>
+                    <li>{% trans "Your account has already been activated" %}</li>
+                    <li>{% trans "You waited longer than 2 weeks to activate your account" %}</li>
+                </ul>
             </p>
+        </div>
+        <div class="span4">
+            <div class="formBox" id="moduleBank">
+                <h2>What now:</h2>
+                <table class="table table-bordered tables-striped">
+                    <tr class="profile-section">
+                        <td><a href="/">Try to login</a></td>
+                    </tr>
+                    <tr class="profile-section">
+                        <td><a href="{% url 'contact' %}">Contact us</a></td>
+                    </tr>
+                </table>
             </div>
-            <div class="span4">
-                <div class="formBox" id="moduleBank"> 
-                    <h2>What now:</h2>
-                    <table class="table table-bordered tables-striped">
-                        <tr class="profile-section">
-                            <td><a href="/">Try to login</a></td>
-                        </tr>
-                        <tr class="profile-section">
-                            <td><a href="/contact">Contact us</a></td>
-                        </tr>
-                    </table>
-                </div>
-            </div>
+        </div>
             
     {% endif %}
+
     </div>
+    {% include "includes/account-page-2.html" %}
 {% endblock %}

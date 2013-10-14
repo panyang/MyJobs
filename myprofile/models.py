@@ -4,6 +4,7 @@ from django.core.validators import ValidationError
 
 from django.contrib.contenttypes.models import ContentType
 from django.db import models
+from django.db.models.signals import post_save
 from django.utils.translation import ugettext_lazy as _
 from collections import OrderedDict
 
@@ -197,10 +198,6 @@ class Name(ProfileUnits):
         has one primary=True. We avoid a race condition by locking the transaction
         using select_for_update.
         """
-        if len(Name.objects.filter(user=self.user)) == 0:
-            self.primary = True
-            super(Name, self).save(*args, **kwargs)
-
         duplicate_names = Name.objects.filter(user=self.user,
                                               given_name=self.given_name,
                                               family_name=self.family_name)
@@ -243,6 +240,20 @@ class Name(ProfileUnits):
             temp.primary = False
             temp.save()
             super(Name, self).save(*args, **kwargs)
+
+
+def save_primary(sender, instance, created, **kwargs):
+    user = instance.user
+    if len(Name.objects.filter(user=user)) == 1 and created:
+        try:
+            user.profileunits_set.get(content_type__name="name",
+                                          name__primary=True)
+        except ProfileUnits.DoesNotExist:
+            instance.primary = True
+            instance.save()
+
+
+post_save.connect(save_primary, sender=Name, dispatch_uid="save_primary")
 
 
 class SecondaryEmail(ProfileUnits):

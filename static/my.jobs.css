@@ -468,6 +468,10 @@ fieldset textarea,
     width: 248px;
 }
 
+.reset-pass-input{
+    width: 100% !important;
+}
+
 #title {
     padding-top: 60px;
     padding-bottom: 60px;
@@ -495,9 +499,9 @@ fieldset textarea,
 
 /*Content Box Styles*/
 .profileBox {
-    background-color: #f4f1ea;
+    background-color: #FAFAFA;
     padding: 10px 10px 30px 10px;
-    border: 2px solid #574E44;
+    border: 2px solid #e6e6e6;
     border-radius: 5px;
 }
 
@@ -512,8 +516,8 @@ fieldset textarea,
 
 .loginBox {
     background-color: #f2f2f2;
-    padding-bottom: 30px;
-    border-radius: 5px;    
+    padding: 10px 10px 30px 10px;
+    border-radius: 5px;
 }
 
 .formBox h2, 
@@ -705,8 +709,8 @@ fieldset textarea,
 }
 
 .profile-unit {
-    background: #EFEADE;
-    border: 1px solid #a3aeb1;
+    background-color: #f2f2f2;
+    border: 1px solid #e6e6e6;
     padding: 10px;
     margin-bottom: 10px;
     -moz-border-radius: 4px;

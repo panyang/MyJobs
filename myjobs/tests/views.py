@@ -404,7 +404,8 @@ class MyJobsViewsTests(TestCase):
 
         # Navigating to the 'continue sending email' page while logged out...
         response = self.client.get(reverse('continue_sending_mail'))
-        self.assertRedirects(response, reverse('home'))
+        path = response.request.get('PATH_INFO')
+        self.assertRedirects(response, reverse('home')+'?next='+path)
 
         # or with the wrong email address...
         response = self.client.get(reverse('continue_sending_mail') +
@@ -487,7 +488,7 @@ class MyJobsViewsTests(TestCase):
                                               'action': 'login'})
 
             self.assertEqual(response.status_code, 200)
-            self.assertEqual(response.content, '{"url": "undefined",' +
+            self.assertEqual(response.content, '{"url": null,' +
                                                ' "validation": "valid"}')
 
             self.client.get(reverse('auth_logout'))
@@ -522,7 +523,8 @@ class MyJobsViewsTests(TestCase):
 
         # Navigating to the unsubscribe page while logged out...
         response = self.client.get(reverse('unsubscribe_all'))
-        self.assertRedirects(response, reverse('home'))
+        path = response.request.get('PATH_INFO')
+        self.assertRedirects(response, reverse('home')+'?next='+path)
         # or with the wrong email address...
         response = self.client.get(reverse('unsubscribe_all') +
                                    '?verify-email=wrong@example.com')
@@ -560,3 +562,13 @@ class MyJobsViewsTests(TestCase):
         expected_response = '({"user_fullname": "", "user_gravatar": '\
                             '"", "employer": ""});'
         self.assertEqual(response.content, expected_response)
+    
+    def test_p3p(self):
+        """
+        make sure the P3P headers are being set
+        
+        """
+        self.client.login_user(self.user)
+        response = self.client.get(reverse('toolbar'))
+        p3p = str(response["P3P"])
+        self.assertEqual('CP="ALL' in p3p, True)
