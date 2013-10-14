@@ -60,11 +60,7 @@ def dashboard(request, template="mydashboard/mydashboard.html",
     requested_before_date = request.REQUEST.get('before', False)
     requested_date_button = request.REQUEST.get('date_button', False)    
     candidates_page = request.REQUEST.get('page', 1)    
-    previous_pages = request.REQUEST.get('previous', False)
-    
-    #if previous_pages:
-        #candidates_page = previous_pages    
-       
+          
     # the url value for 'All' in the select box is company name 
     # which then gets replaced with all microsite urls for that company
     site_name = ''
@@ -142,8 +138,7 @@ def dashboard(request, template="mydashboard/mydashboard.html",
                'site_name': site_name,
                'view_name': 'Company Dashboard',
                'date_button': requested_date_button,
-               'candidates_page': candidates_page,
-               'previous': previous_pages,
+               'candidates_page': candidates_page,               
                }
     
     if extra_context is not None:

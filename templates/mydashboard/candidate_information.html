@@ -21,7 +21,7 @@
     </div>
     <div class="row default-heading-candidate-view">
     	<span class="span6">
-    		<a class="btn primary" href="{% if coming_from.path == 'view' %}{% url 'dashboard' %}?company={{ company_id }}&previous={{ candidates_page }}&before={{ before }}&after={{ after }}#{{ anchor }}{% else %}{% url 'microsite_activity' %}?company={{ company_id }}&page={{ candidates_page }}&url={{ coming_from.url }}&before={{ before }}&after={{ after }}#{{ anchor }}{% endif %}">{% if coming_from.path == 'view' %}{% trans 'Back to Company Dashboard' %}{% else %}{% trans 'Back to Microsite Dashboard' %}{% endif %}</a>
+    		<a class="btn primary" href="{% if coming_from.path == 'view' %}{% url 'dashboard' %}?company={{ company_id }}&before={{ before }}&after={{ after }}#{{ anchor }}{% else %}{% url 'microsite_activity' %}?company={{ company_id }}&url={{ coming_from.url }}&before={{ before }}&after={{ after }}#{{ anchor }}{% endif %}">{% if coming_from.path == 'view' %}{% trans 'Back to Company Dashboard' %}{% else %}{% trans 'Back to Microsite Dashboard' %}{% endif %}</a>
     	</span>    	
     </div>
     <div class="span4 mobile-heading-candidate-view">

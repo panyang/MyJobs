@@ -59,23 +59,11 @@ $(document).ready(function()
     
     var _href = $("a.endless_more").attr("href");
     if (_href.length < 100) {
-        $("a.endless_more").attr("href", _href + '&before={{ before|date:'m/d/Y' }}&after={{ after|date:'m/d/Y' }}&previous={{ previous }}');
+        $("a.endless_more").attr("href", _href + '&before={{ before|date:'m/d/Y' }}&after={{ after|date:'m/d/Y' }}');
     }
-    //while ({{ candidates_page}} < {{ previous }}) {
-        //$("a.endless_more").trigger('click');
-        
-        
-        //x++;   
-        
-        //return false;
-        //return false;
-    //};  
+   
 });
 </script>
-{% endblock %}
-
-{% block extra_pages %}
-
 {% endblock %}
 
 {% block content %}

@@ -14,8 +14,8 @@
                 </td>
                 <td>
                     <div class="candidate-name-bold pull-left">{{candidate.user|get_name_obj}}</div><br>
-                    <a name="{{ forloop.counter }}"></a>
-                    <a href="{% url 'candidate_information' %}?company={{ company_id }}&url={{ microsite_url }}&user={{ candidate.user.id }}&anchor={{ forloop.counter }}&page={{ candidates_page }}&before={{ before|date:'m/d/Y' }}&after={{ after|date:'m/d/Y' }}" class="pull-left">{{candidate.user}}</a><br>
+                    <a name="{{ candidate.user.id }}{% if candidate.label %}{{candidate.label}}{% else %}Unlabeled{% endif %}"></a>
+                    <a href="{% url 'candidate_information' %}?company={{ company_id }}&url={{ microsite_url }}&user={{ candidate.user.id }}&anchor={{ candidate.user.id }}{% if candidate.label %}{{candidate.label}}{% else %}Unlabeled{% endif %}&page={{ candidates_page }}&before={{ before|date:'m/d/Y' }}&after={{ after|date:'m/d/Y' }}" class="pull-left">{{candidate.user}}</a><br>
                     <div class="progress activity-progress site-progress">
                         <div class="bar bar-{% completion_level candidate.user.profile_completion %}" id="initial-bar" style="width: {{ candidate.user.profile_completion}}%;"></div>
                     </div>

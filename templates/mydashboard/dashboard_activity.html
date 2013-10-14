@@ -1,60 +1,10 @@
 {% load user_ops %}
 {% load common_tags %}
 
-{% block extra_pages %}
-
-<script>
-jQuery(function(){
-    If ({{ candidates_page}} < {{ previous }}) {
-        jQuery('.endless_more').click();
-    }
-});
-//$(document).ready(function()
-//{
-    //var x = 1
-    //if (3 > x) {
-        //var x = 1
-        //while (x<3)
-        //{
-        //$("a.endless_more").trigger('click');
-        //x++;
-        //return false;
-        //return false;
-        //}        
-    //}
-    //var x = 2
-    //while ({{ candidates_page}} < {{ previous }}) {
-        //$("a.endless_more").trigger('click');
-        
-        
-        //x++;   
-        
-        //return false;
-        //return false;
-    //};       
-    //do {
- 
-        //$("a.endless_more").trigger('click');
-        //x=x+1;
- 
-    //} while ( x<3 )
-    //var x = 1;
-    //if ({{ candidates_page}} < {{ previous }}) {
-    //if (x<4) {
-        //$("a.endless_more").trigger('click');
-        //x++;
-        //alert(x);
-        //return false;
-    //}   
-//});
-</script>
-
-{% endblock %}
-
 {% if candidates %}
                 
     {% load endless %}    
-    {% paginate 5 candidates %}    
+    {% paginate candidates %}    
                        
         <table id="row-link-table">  
             {% for candidate in candidates %}                    
@@ -64,8 +14,8 @@ jQuery(function(){
                 </td>
                 <td>
                     <div class="candidate-name">{{candidate.user|get_name_obj}}</div>
-                    <a name="{{ forloop.counter }}"></a>
-                    <a href="{% url 'candidate_information' %}?company={{ company_id }}&user={{ candidate.user.id }}&anchor={{ forloop.counter }}&page={{ candidates_page }}&before={{ before|date:'m/d/Y' }}&after={{ after|date:'m/d/Y' }}">{{candidate.user}}</a>
+                    <a name="{{ candidate.user.id }}{% if candidate.label %}{{candidate.label}}{% else %}Unlabeled{% endif %}"></a>
+                    <a href="{% url 'candidate_information' %}?company={{ company_id }}&user={{ candidate.user.id }}&anchor={{ candidate.user.id }}{% if candidate.label %}{{candidate.label}}{% else %}Unlabeled{% endif %}&page={{ candidates_page }}&before={{ before|date:'m/d/Y' }}&after={{ after|date:'m/d/Y' }}">{{candidate.user}}</a>
                     <div class="progress activity-progress">
                         <div class="bar bar-{% completion_level candidate.user.profile_completion %}" style="width: {{ candidate.user.profile_completion }}%"></div>
                     </div>
@@ -73,8 +23,7 @@ jQuery(function(){
                 <td>
                     <strong>{% if candidate.label %}{{candidate.label}}{% else %}Unlabeled{% endif %}</strong><br>
                     {{candidate.url|url_domain}}<br>
-                    {{candidate.created_on.date}}<br>
-{{ candidates_page}}                    
+                    {{candidate.created_on.date}}                    
                 </td>
              </tr>
              <tr class="candidate-activity-mobile">
