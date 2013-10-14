@@ -261,7 +261,7 @@ def candidate_information(request):
 
     user_id = request.REQUEST.get('user')
     company_id = request.REQUEST.get('company')
-    anchor_id = request.REQUEST.get('anchor')
+    anchor_id = request.REQUEST.get('anchor', False)
     after = request.REQUEST.get('after', False)
     before = request.REQUEST.get('before', False)    
     candidates_page = request.REQUEST.get('page', False)
