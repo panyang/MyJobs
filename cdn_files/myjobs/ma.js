@@ -1595,10 +1595,7 @@ if (typeof Piwik !== 'object') {
                 request += '&rec=1' +
                     '&r=' + String(Math.random()).slice(2, 8) + // keep the string to a minimum
                     '&h=' + now.getHours() + '&m=' + now.getMinutes() + '&s=' + now.getSeconds() +
-                    '&url=' + encodeWrapper(purify(currentUrl)) +
-                    (configReferrerUrl.length ? '&urlref=' + encodeWrapper(purify(configReferrerUrl)) : '') +
                     '&_id=' + uuid + '&_idts=' + createTs + '&_idvc=' + visitCount +
-                    '&_idn=' + newVisitor + // currently unused
                     (campaignNameDetected.length ? '&_rcn=' + encodeWrapper(campaignNameDetected) : '') +
                     (campaignKeywordDetected.length ? '&_rck=' + encodeWrapper(campaignKeywordDetected) : '') +
                     '&_refts=' + referralTs +
@@ -1965,7 +1962,6 @@ if (typeof Piwik !== 'object') {
                 // - devicePixelRatio is always 2 on MacOSX+Retina regardless of resolution set in Display Preferences
                 browserFeatures.res_w = screenAlias.width * devicePixelRatio;
                 browserFeatures.res_h = screenAlias.height * devicePixelRatio;
-                browserFeatures.ua = encodeWrapper(navigatorAlias.userAgent);
             }
 
             /************************************************************
