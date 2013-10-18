@@ -7,7 +7,7 @@
             </td>
             <td>
                 {# One liner because django likes to add spaces if there are more than one line. #}
-                {% if item.country_dialing %}{{ item.country_dialing }}-{% endif %}{% if item.area_dialing %}{{ item.area_dialing }}-{% endif %}{% if item.country_dialing == "1" %}{{ item.number|slice:":3" }}-{{ item.number|slice:"3:" }}{% else %}{{ item.number }}{% endif %}
+                {% if item.country_dialing %}{{ item.country_dialing }}-{% endif %}{% if item.area_dialing %}{{ item.area_dialing }}-{% endif %}{{ item.number }}
 
                 {% if item.extension %}
 
