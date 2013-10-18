@@ -114,7 +114,7 @@ class TelephoneForm(BaseUserForm):
         widgets['country_dialing'].attrs['value'] = "1"
         widgets['area_dialing'].attrs['placeholder'] = "555"
         widgets['number'].attrs['placeholder'] = "555-5555"
-        widgets['extension'].attrs['placeholder'] = "x1234"
+        widgets['extension'].attrs['placeholder'] = "1234"
 
 
 class AddressForm(BaseUserForm):
