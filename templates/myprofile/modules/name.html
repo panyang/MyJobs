@@ -5,15 +5,17 @@
             <td>
                 <b>{{ item.given_name }} {{ item.family_name }}</b>
             </td>
-
-            {% if not item.primary %}
-
             <td>
+                {% if not item.primary %}
+
                 Not Primary
+
+                {% else %}
+
+                Primary
+
+                {% endif %}
             </td>
-
-            {% endif %}
-
             <td class='action'>
                 <a class="btn-link" href="{% url 'get_details' %}?id={{ item.id }}&module={{ item.get_verbose.title }}">{% trans 'Details' %}</a>
                 <a class="btn-link" href="{% url 'handle_form' %}?id={{ item.id }}&module={{ item.get_verbose.title }}">{% trans 'Edit' %}</a>
