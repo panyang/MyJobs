@@ -24,14 +24,16 @@ class MyProfileViewsTests(TestCase):
         items in the main content section and a list of profile sections that
         don't have data filled out in the sidebar.
         """
+        self.education = EducationFactory(user=self.user)
+        self.education.save()
         resp = self.client.get(reverse('view_profile'))
         soup = BeautifulSoup(resp.content)
-        item_id = Name.objects.all()[0].id
+        item_id = Education.objects.all()[0].id
 
         # The existing name object should be rendered on the main content
         # section
         self.assertIsNotNone(soup.find('tr',
-                                       id='name-' + str(item_id) + '-item'))
+                                       id='education-' + str(item_id) + '-item'))
         # profile-section contains the name of a profile section that has no
         # information filled out yet and shows up in the sidebar
         self.assertTrue(soup.findAll('tr', {'class': 'profile-section'}))
