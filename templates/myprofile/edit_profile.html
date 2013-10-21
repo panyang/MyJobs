@@ -30,6 +30,11 @@
         </div>
     </div>{# /profileTitleRow #}
     <div class="row">
+        <div class="span8 offset2">
+            <a href="{% url 'to_csv' %}">Export (CSV)</a>
+        </div>
+    </div>
+    <div class="row">
         <div class="span8" id="moduleColumn">
             {% csrf_token %}
             {% for module in profile_config.values %}
