@@ -12,6 +12,7 @@ $(document).ready(function() {
 
 $(function() {
     var gravatar_email = $("#id_gravatar").val();
+    createAddSecNameLink();
     var AppView = Backbone.View.extend({
         el: $("body"),
         events: {
@@ -32,6 +33,9 @@ $(function() {
                 url: "/account/edit/" + section_name,
                 success: function(data) {
                     $('div.account-settings').html(data);
+                    if(section_name == 'basic'){
+                        createAddSecNameLink();
+                    }
                 }
             });
             if($.browser.msie){
@@ -141,5 +145,11 @@ $(function() {
         if($.browser.msie){
             $('[class*=msieError]').remove();
         }
+    }
+
+    function createAddSecNameLink(){
+        var form = $('[id$=-basic]');
+        var field = form.find($('[id$=id_family_name]'));
+        field.after('<a class="pull-right acc-name-link" href="/profile/view/edit?module=Name">Add Secondary Name</a>');
     }
 });

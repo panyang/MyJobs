@@ -231,6 +231,22 @@ table#row-link-table {
     text-align: center;
 }
 
+.h1-clickable-link{
+    color: #900;
+}
+
+.h1-clickable-link:hover{
+    cursor: pointer;
+    text-decoration: none;
+    color: #900;
+}
+
+.h1-icon-edit{
+    margin-top:12px;
+    margin-left: 5px;
+    zoom: 1.3;
+}
+
 /* Django Endless paging style modifications */
 .endless_container .btn {
     padding-left: 0px;
@@ -628,7 +644,6 @@ fieldset textarea,
 }
 
 .loginBox input, .profileBox input {
-    /*display: block;*/
     padding: 4px 0;
     text-indent: 4px;
 }
@@ -833,6 +848,11 @@ fieldset textarea,
     display: inline;
 }
 
+.acc-name-link {
+    margin-top: -5px;
+    margin-bottom: 10px;
+}
+
 /*Alert and text styles*/
 .pendingText {
     color: #a95051;
@@ -848,10 +868,6 @@ em.pendingText {
     padding: 5px 10px;
     margin-left: -10px;
     margin-right: -10px;
-}
-
-.alert-message.block-message.error label {
-    /*text-shadow: 1px 1px 1px #000;*/
 }
     
 /* Topbar Dropdown Styles*/
@@ -966,8 +982,6 @@ em.pendingText {
 .sub-nav-item {
     margin-left: 40px;
 }
-
-
 
 #ui-datepicker-div {
     position: relative;
@@ -1674,7 +1688,10 @@ td .gravatar-blank,
     #date-range {
         position: absolute;
         margin-top: -115px;
-    }    
+    }
+    .h1-icon-edit{
+        margin-top: 0;
+    }
     
     /* Microsite Activity Page*/
     #candidate-activity-details-table {
