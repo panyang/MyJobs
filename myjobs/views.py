@@ -14,7 +14,7 @@ from django.core.mail import EmailMessage
 from django.forms.models import model_to_dict
 from django.http import HttpResponse, Http404
 from django.template import RequestContext
-from django.shortcuts import render_to_response, redirect
+from django.shortcuts import render_to_response, redirect, render
 from django.views.decorators.csrf import csrf_exempt
 from django.views.generic import TemplateView
 
@@ -52,6 +52,12 @@ class Terms(TemplateView):
 
 class CaptchaForm(Form):
     captcha = ReCaptchaField(label="", attrs={'theme': 'white'})
+
+
+def error_500(request):
+    response = render(request, "500.html")
+    response.status_code = 500
+    return response
 
 
 def home(request):
