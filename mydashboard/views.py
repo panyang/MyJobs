@@ -60,7 +60,8 @@ def dashboard(request, template="mydashboard/mydashboard.html",
     requested_after_date = request.REQUEST.get('after', False)
     requested_before_date = request.REQUEST.get('before', False)
     requested_date_button = request.REQUEST.get('date_button', False)    
-                
+    candidates_page = request.REQUEST.get('page', 1)    
+          
     # the url value for 'All' in the select box is company name 
     # which then gets replaced with all microsite urls for that company
     site_name = ''
@@ -139,6 +140,7 @@ def dashboard(request, template="mydashboard/mydashboard.html",
                'site_name': site_name,
                'view_name': 'Company Dashboard',
                'date_button': requested_date_button,
+               'candidates_page': candidates_page,               
                }
     
     if extra_context is not None:
@@ -184,6 +186,7 @@ def microsite_activity(request, template="mydashboard/microsite_activity.html",
     requested_date_button = request.REQUEST.get('date_button', False)
     requested_after_date = request.REQUEST.get('after', False)
     requested_before_date = request.REQUEST.get('before', False)
+    candidates_page = request.REQUEST.get('page', 1)
     
     if not requested_microsite:
         requested_microsite = request.REQUEST.get('microsite-hide', company.name)
@@ -240,6 +243,7 @@ def microsite_activity(request, template="mydashboard/microsite_activity.html",
                'company_name': company.name,
                'company_id': company.id,
                'date_button': requested_date_button,
+               'candidates_page': candidates_page,
                'saved_search_count': saved_search_count}
     
     if extra_context is not None:
@@ -259,7 +263,11 @@ def candidate_information(request):
 
     user_id = request.REQUEST.get('user')
     company_id = request.REQUEST.get('company')
-
+    anchor_id = request.REQUEST.get('anchor', False)
+    after = request.REQUEST.get('after', False)
+    before = request.REQUEST.get('before', False)    
+    candidates_page = request.REQUEST.get('page', False)
+    
     # user gets pulled out from id
     try:
         user = User.objects.get(id=user_id)
@@ -295,6 +303,10 @@ def candidate_information(request):
                  'primary_name': primary_name,
                  'the_user': user,
                  'searches': searches,
+                 'after': after,
+                 'anchor': anchor_id,
+                 'before': before,                 
+                 'candidates_page': candidates_page,
                  'coming_from': coming_from}
 
     return render_to_response('mydashboard/candidate_information.html',
