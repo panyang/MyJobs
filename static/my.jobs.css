@@ -2148,13 +2148,6 @@ table td, table th {
     padding: 7px;
 }
 
-#digest-option label[for=id_digest_active],
-#digest-option label[for=id_digest_email],
-#digest-option label[for=id_send_if_none] {
-    display: inline-block;
-    margin-right: 10px;
-}
-
 #saved-search-form #id_day_of_month,
 #saved-search-form #id_day_of_week,
 #saved-search-form #id_edit_day_of_month,
@@ -2175,9 +2168,22 @@ table td, table th {
     padding: 0 10px;
 }
 
+#digest-option label[for=id_digest_active],
+#digest-option label[for=id_digest_email],
+#digest-option label[for=id_send_if_none],
+#digest-option label[for=id_frequency],
+#digest-option label[for=id_day_of_week],
+#digest-option label[for=id_day_of_month] {
+    display: inline-block;
+    margin-right: 10px;
+}
+
 #digest-option #id_digest_email,
 #digest-option #id_digest_active,
-#digest-option #id_send_if_none {
+#digest-option #id_send_if_none,
+#digest-option #id_frequency,
+#digest-option #id_day_of_week,
+#digest-option #id_day_of_month {
     margin-bottom: 5px !important;
     display: inline-block;
     margin-right: 5px;

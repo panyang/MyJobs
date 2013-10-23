@@ -7,7 +7,6 @@
     <meta name="title" content="Saved Search - My.jobs">
 {% endblock %}
 {% block meta-extra %}
-<script src="{{ STATIC_URL }}saved-search-main-ready.js{% cache_buster %}"></script>
 <script src="{{ STATIC_URL }}saved-search-main.js{% cache_buster %}"></script>
 {% endblock %}
 
@@ -63,13 +62,8 @@
     </p>
     <form method="post" action="{% url 'save_digest_form' %}" id="digest-option">
         {% csrf_token %}
-        <div>
-            {{ form.is_active}}{{form.is_active.label_tag}}
-            {{form.email}}
-        </div>
-        <div>
-            {{ form.send_if_none }}{{form.send_if_none.label_tag}}
-        </div>
+        {% include 'includes/form-error-highlight.html' %}
+        <div class="clear"></div>
         <div class="pull-right">
             <span id="saved"></span>
             <button type="submit" class="btn primary" id="digest_submit">{% trans 'Save' %}</button>

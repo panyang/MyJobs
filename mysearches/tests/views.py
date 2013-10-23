@@ -35,6 +35,8 @@ class MySearchViewTests(TestCase):
             'is_active': 'True',
             'user': self.user,
             'email': self.user.email,
+            'frequency': 'M',
+            'day_of_month': 1,
         }
         self.new_form = forms.SavedSearchForm(user=self.user,
                                               data=self.new_form_data)
@@ -132,14 +134,14 @@ class MySearchViewTests(TestCase):
                                     self.new_digest_data,
                                     HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.content, 'success')
+        self.assertEqual(response.content, '')
 
         del self.new_digest_data['email']
         response = self.client.post(reverse('save_digest_form'),
                                     self.new_digest_data,
                                     HTTP_X_REQUESTED_WITH='XMLHttpRequest')
         self.assertEqual(response.status_code, 200)
-        self.assertEqual(response.content, 'failure')
+        self.assertEqual(response.content, '{"email": ["This field is required."]}')
 
     def test_unsubscribe_owned_search(self):
         """

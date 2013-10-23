@@ -9,21 +9,22 @@ from django.template.loader import render_to_string
 from mysearches.helpers import parse_rss, url_sort_options
 
 
+FREQUENCY_CHOICES = (
+    ('D', _('Daily')),
+    ('W', _('Weekly')),
+    ('M', _('Monthly')))
+
+DOM_CHOICES = [(i, i) for i in range(1, 31)]
+DOW_CHOICES = (('1', _('Monday')),
+               ('2', _('Tuesday')),
+               ('3', _('Wednesday')),
+               ('4', _('Thursday')),
+               ('5', _('Friday')),
+               ('6', _('Saturday')),
+               ('7', _('Sunday')))
+
 class SavedSearch(models.Model):
 
-    FREQUENCY_CHOICES = (
-        ('D', _('Daily')),
-        ('W', _('Weekly')),
-        ('M', _('Monthly')))
-
-    DOM_CHOICES = [(i, i) for i in range(1, 31)]
-    DOW_CHOICES = (('1', _('Monday')),
-                   ('2', _('Tuesday')),
-                   ('3', _('Wednesday')),
-                   ('4', _('Thursday')),
-                   ('5', _('Friday')),
-                   ('6', _('Saturday')),
-                   ('7', _('Sunday')))
     SORT_CHOICES = (('Relevance', _('Relevance')),
                     ('Date', _('Date')))
 
@@ -149,13 +150,18 @@ class SavedSearch(models.Model):
 
 
 class SavedSearchDigest(models.Model):
-    is_active = models.BooleanField(default=False,
-                                    verbose_name=_("Would you like to receive"
-                                                   " all your saved searches"
-                                                   " as one email?"))
+    is_active = models.BooleanField(default=False)
     user = models.OneToOneField('myjobs.User', editable=False)
-    email = models.EmailField(max_length=255,
-                              verbose_name=_("Send results to"))
+    email = models.EmailField(max_length=255)
+    frequency = models.CharField(max_length=2, choices=FREQUENCY_CHOICES,
+                                 default='D',
+                                 verbose_name=_("How often:"))
+    day_of_month = models.IntegerField(choices=DOM_CHOICES,
+                                       blank=True, null=True,
+                                       verbose_name=_("on"))
+    day_of_week = models.CharField(max_length=2, choices=DOW_CHOICES,
+                                   blank=True, null=True,
+                                   verbose_name=_("on"))
 
     # For now, emails will only be sent if they have searches; When this
     # functionality is added, remove `editable=False` to show this option on

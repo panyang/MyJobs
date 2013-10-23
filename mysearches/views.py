@@ -126,9 +126,9 @@ def save_digest_form(request):
                           instance=digest_obj)
         if form.is_valid():
             form.save()
-            data = "success"
+            data = ""
         else:
-            data = "failure"
+            data = json.dumps(form.errors)
 
         if request.is_ajax():
             # If this is an ajax request, we can return success/failure
