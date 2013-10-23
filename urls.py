@@ -12,6 +12,8 @@ v1_api = Api(api_name='v1')
 v1_api.register(UserResource())
 v1_api.register(SavedSearchResource())
 
+handler500 = "myjobs.views.error_500"
+
 
 urlpatterns = patterns('',
     url('', include('MyJobs.myjobs.urls')),
