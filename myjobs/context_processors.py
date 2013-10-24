@@ -16,7 +16,7 @@ def current_site_info(request):
     try:
         current_site = Site.objects.get_current()
         values = {
-            'site_domain': current_site.domain,
+            'domain': current_site.domain,
             'site_name': current_site.name,
             'description': 'My.jobs is a platform that was designed to make' \
                         ' finding emplyoment easier. Job seekers can control their data,' \
