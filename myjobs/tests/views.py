@@ -489,6 +489,10 @@ class MyJobsViewsTests(TestCase):
 
             self.assertEqual(response.status_code, 200)
             self.assertEqual(response.content, '{"url": null,' +
+                                               ' "units": false,' +
+                                               ' "gravatar_url": "' +
+                                               self.user.get_gravatar_url(
+                                                   size=100)+'",' +
                                                ' "validation": "valid"}')
 
             self.client.get(reverse('auth_logout'))

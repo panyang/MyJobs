@@ -41,7 +41,8 @@ def dashboard(request, template="mydashboard/mydashboard.html",
             raise Http404
 
     context = {
-        'candidates': SavedSearch.objects.all(),
+        'candidates': SavedSearch.objects.all().exclude(
+            user__opt_in_employers=False),
     }
 
     if not company:
@@ -59,7 +60,8 @@ def dashboard(request, template="mydashboard/mydashboard.html",
     requested_after_date = request.REQUEST.get('after', False)
     requested_before_date = request.REQUEST.get('before', False)
     requested_date_button = request.REQUEST.get('date_button', False)    
-                
+    candidates_page = request.REQUEST.get('page', 1)    
+          
     # the url value for 'All' in the select box is company name 
     # which then gets replaced with all microsite urls for that company
     site_name = ''
@@ -81,10 +83,6 @@ def dashboard(request, template="mydashboard/mydashboard.html",
     
     # All searches saved on the employer's company microsites       
     candidate_searches = SavedSearch.objects.select_related('user')
-    try:
-        candidate_searches = candidate_searches.filter(reduce(operator.or_, q_list))
-    except:
-        raise Http404
         
     # Pre-set Date ranges
     if 'today' in request.REQUEST:
@@ -121,8 +119,13 @@ def dashboard(request, template="mydashboard/mydashboard.html",
                 before = datetime.now()
     
     # Specific microsite searches saved between two dates
-    candidate_searches = candidate_searches.filter(
-        created_on__range=[after, before]).order_by('-created_on')
+    try:
+        candidate_searches = candidate_searches.filter(reduce(
+            operator.or_, q_list)).filter(
+                created_on__range=[after, before]).exclude(
+                    user__opt_in_employers=False).order_by('-created_on')
+    except:
+        raise Http404
     
     admin_you = request.user
     
@@ -137,6 +140,7 @@ def dashboard(request, template="mydashboard/mydashboard.html",
                'site_name': site_name,
                'view_name': 'Company Dashboard',
                'date_button': requested_date_button,
+               'candidates_page': candidates_page,               
                }
     
     if extra_context is not None:
@@ -160,8 +164,10 @@ def microsite_activity(request, template="mydashboard/microsite_activity.html",
     Returns:
     :render_to_response:    renders template with context dict
     """
-    context = {'candidates': SavedSearch.objects.all(),
-               }
+    context = {
+        'candidates': SavedSearch.objects.all().exclude(
+            user__opt_in_employers=False),
+    }
 
     company_id = request.REQUEST.get('company')
     if company_id is None:
@@ -180,6 +186,7 @@ def microsite_activity(request, template="mydashboard/microsite_activity.html",
     requested_date_button = request.REQUEST.get('date_button', False)
     requested_after_date = request.REQUEST.get('after', False)
     requested_before_date = request.REQUEST.get('before', False)
+    candidates_page = request.REQUEST.get('page', 1)
     
     if not requested_microsite:
         requested_microsite = request.REQUEST.get('microsite-hide', company.name)
@@ -220,13 +227,11 @@ def microsite_activity(request, template="mydashboard/microsite_activity.html",
             else:
                 # Defaults to the date and time that the page is accessed
                 before = datetime.now()
-    
-    # All searches saved on the employer's company microsites       
-    candidate_searches = SavedSearch.objects.filter(url__contains=requested_microsite)
         
     # Specific microsite searches saved between two dates
-    candidate_searches = candidate_searches.filter(
-        created_on__range=[after, before]).order_by('-created_on')
+    candidate_searches = SavedSearch.objects.filter(
+        created_on__range=[after, before]).filter(
+            url__contains=requested_microsite).order_by('-created_on')
     
     saved_search_count = candidate_searches.count()      
     
@@ -238,6 +243,7 @@ def microsite_activity(request, template="mydashboard/microsite_activity.html",
                'company_name': company.name,
                'company_id': company.id,
                'date_button': requested_date_button,
+               'candidates_page': candidates_page,
                'saved_search_count': saved_search_count}
     
     if extra_context is not None:
@@ -257,7 +263,11 @@ def candidate_information(request):
 
     user_id = request.REQUEST.get('user')
     company_id = request.REQUEST.get('company')
-
+    anchor_id = request.REQUEST.get('anchor', False)
+    after = request.REQUEST.get('after', False)
+    before = request.REQUEST.get('before', False)    
+    candidates_page = request.REQUEST.get('page', False)
+    
     # user gets pulled out from id
     try:
         user = User.objects.get(id=user_id)
@@ -293,6 +303,10 @@ def candidate_information(request):
                  'primary_name': primary_name,
                  'the_user': user,
                  'searches': searches,
+                 'after': after,
+                 'anchor': anchor_id,
+                 'before': before,                 
+                 'candidates_page': candidates_page,
                  'coming_from': coming_from}
 
     return render_to_response('mydashboard/candidate_information.html',
