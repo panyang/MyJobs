@@ -54,12 +54,12 @@ class SavedSearch(models.Model):
     last_sent = models.DateTimeField(blank=True, null=True, editable=False)
 
     def get_verbose_frequency(self):
-        for choice in self.FREQUENCY_CHOICES:
+        for choice in FREQUENCY_CHOICES:
             if choice[0] == self.frequency:
                 return choice[1]
 
     def get_verbose_dow(self):
-        for choice in self.DOW_CHOICES:
+        for choice in DOW_CHOICES:
             if choice[0] == self.day_of_week:
                 return choice[1]
 
