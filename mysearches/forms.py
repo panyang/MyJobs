@@ -79,11 +79,24 @@ class DigestForm(BaseUserForm):
         self.fields["email"] = ChoiceField(widget=Select(attrs={
                                            'id': 'id_digest_email'}),
                                            choices=choices,
-                                           initial=choices[0][0])
+                                           initial=choices[0][0],
+                                           label=_('Send digest results to:'))
 
-    is_active = BooleanField(label=_('Send digest results to:'),
+    is_active = BooleanField(label=_('Send as a digest:'),
                              widget=CheckboxInput(attrs={'id': 'id_digest_active'}),
                              required=False)
-    
+
+    def clean_day_of_week(self):
+        if self.cleaned_data.get('frequency', None) == 'W':
+            if not self.cleaned_data['day_of_week']:
+                raise ValidationError(_("This field is required."))
+        return self.cleaned_data['day_of_week']
+
+    def clean_day_of_month(self):
+        if self.cleaned_data.get('frequency', None) == 'M':
+            if not self.cleaned_data['day_of_month']:
+                raise ValidationError(_("This field is required."))
+        return self.cleaned_data['day_of_month']
+
     class Meta:
         model = SavedSearchDigest

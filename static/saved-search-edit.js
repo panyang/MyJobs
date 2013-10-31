@@ -117,27 +117,6 @@ $(function() {
     EditSearch.render();
 });
 
-function add_errors(data) {
-    // remove color from labels of current errors
-    $('[class*=required]').prev().children().css('color', '#000');
-
-    // remove current errors
-    $('[class*=required]').children().unwrap();
-
-    errors = jQuery.parseJSON(data)
-    for (var key in errors) {
-        if (key == 'day_of_week' || key == 'day_of_month') {
-            $('label[for$="frequency"]').parent().next().wrap('<span class="required" />');
-            $('label[for$="frequency"]').css('color', '#900');
-            $('label[for$="'+key+'"]').parent().next().wrap('<span class="required" />');
-        } else {
-            $('label[for$="'+key+'"]').parent().next().wrap('<span class="required" />');
-            $('label[for$="'+key+'"]').parent().next().children().attr("placeholder","Required Field");
-            $('label[for$="'+key+'"]').css('color', '#900');
-        }
-    }
-}
-
 function add_refresh_btn() {
     $('[id$="url"]').parent().addClass('input-append');
     $('[id$="url"]').after('<span class="btn add-on refresh"><i class="icon icon-refresh">');
@@ -193,31 +172,4 @@ function enable_fields() {
     $('label[for$="day_of_week"]').show();
     $('label[for$="day_of_month"]').show();
     $('.save').show();
-}
-
-function date_select() {
-    show_dates();
-
-    $('[id$="frequency"]').on('change', function() {
-        show_dates();
-    });
-
-    function show_dates() {
-        if ($('[id$="frequency"]').attr('value') == 'D') {
-            $('label[for$="day_of_month"]').hide();
-            $('label[for$="day_of_week"]').hide();
-            $('[id$="day_of_month"]').hide();
-            $('[id$="day_of_week"]').hide();
-        } else if ($('[id$="frequency"]').attr('value') == 'M') { 
-            $('label[for$="day_of_week"]').hide();
-            $('label[for$="day_of_month"]').show();
-            $('[id$="day_of_week"]').hide();
-            $('[id$="day_of_month"]').show();
-        } else if ($('[id$="frequency"]').attr('value') == 'W') {
-            $('label[for$="day_of_month"]').hide();
-            $('label[for$="day_of_week"]').show();
-            $('[id$="day_of_month"]').hide();
-            $('[id$="day_of_week"]').show();
-        }
-    }
 }

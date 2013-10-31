@@ -24,12 +24,12 @@ test("save_digest_form", function() {
     $.ajax = function(params) {
         if (params.data.is_active == 'True') {
             if (params.data.email == '') {
-                params.success('fail');
+                params.success('{"email": ["This field is required."]}');
             } else {
-                params.success('success');
+                params.success('');
             }
         } else {
-            params.success('success');
+            params.success('');
         }
     }
     $('#digest_submit').click();
