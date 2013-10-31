@@ -23,16 +23,20 @@ $(function() {
                             is_active: $('#id_digest_active').prop('checked')?
                                                                    'True':'False',
                             email: $('#id_digest_email').val(),
+                            frequency: $('#id_frequency').val(),
+                            day_of_week: $('#id_day_of_week').val(),
+                            day_of_month: $('#id_day_of_month').val(),
                             send_if_none: $('#id_send_if_none').prop('checked')?
                                                                      'True':'False' },
                     type: 'POST',
                     url: 'save-digest/',
                     success: function(data) {
-                        if (data == 'success') {
+                        if (data == '') {
                             form_status('Saved!');
                         } else {
                             form_status('Something went wrong');
                         }
+                        add_errors(data);
                     }
                 });
 
@@ -52,6 +56,7 @@ $(function() {
 
     var Search = new SearchView;
 
+    date_select();
 
     /*
     Targets event fired when "Search Name" column is clicked
@@ -65,3 +70,52 @@ $(function() {
         }
     });
 });
+
+function add_errors(data) {
+    // remove color from labels of current errors
+    $('[class*=required]').prev().children().css('color', '#000');
+
+    // remove current errors
+    $('[class*=required]').children().unwrap();
+
+    errors = jQuery.parseJSON(data)
+    for (var key in errors) {
+        if (key == 'day_of_week' || key == 'day_of_month') {
+            $('label[for$="frequency"]').parent().next().wrap('<span class="required" />');
+            $('label[for$="frequency"]').css('color', '#900');
+            $('label[for$="'+key+'"]').parent().next().wrap('<span class="required" />');
+            $('label[for$="'+key+'"]').css('color', '#900');
+        } else {
+            $('label[for$="'+key+'"]').parent().next().wrap('<span class="required" />');
+            $('label[for$="'+key+'"]').parent().next().children().attr("placeholder","Required Field");
+            $('label[for$="'+key+'"]').css('color', '#900');
+        }
+    }
+}
+
+function date_select() {
+    show_dates();
+
+    $('[id$="frequency"]').on('change', function() {
+        show_dates();
+    });
+
+    function show_dates() {
+        if ($('[id$="frequency"]').attr('value') == 'D') {
+            $('label[for$="day_of_month"]').hide();
+            $('label[for$="day_of_week"]').hide();
+            $('[id$="day_of_month"]').hide();
+            $('[id$="day_of_week"]').hide();
+        } else if ($('[id$="frequency"]').attr('value') == 'M') {
+            $('label[for$="day_of_week"]').hide();
+            $('label[for$="day_of_month"]').show();
+            $('[id$="day_of_week"]').hide();
+            $('[id$="day_of_month"]').show();
+        } else if ($('[id$="frequency"]').attr('value') == 'W') {
+            $('label[for$="day_of_month"]').hide();
+            $('label[for$="day_of_week"]').show();
+            $('[id$="day_of_month"]').hide();
+            $('[id$="day_of_week"]').show();
+        }
+    }
+}

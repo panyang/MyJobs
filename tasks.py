@@ -27,12 +27,29 @@ def send_search_digests():
     Catches and logs any exceptions that occur while sending emails.
     """
 
-    today = datetime.today()
-    day_of_week = today.isoweekday()
+    def filter_by_time(qs):
+        """
+        Filters the provided query set for emails that should be sent today
+
+        Inputs:
+        :qs: query set to be filtered
+
+        Outputs:
+        :qs: filtered query set containing today's outgoing emails
+        """
+        today = datetime.today()
+        day_of_week = today.isoweekday()
+
+        daily = qs.filter(frequency='D')
+        weekly = qs.filter(frequency='W', day_of_week=str(day_of_week))
+        monthly = qs.filter(frequency='M', day_of_month=today.day)
+        return chain(daily, weekly, monthly)
+
 
     log_text = '{exception} - user: {user_id}, {object_type}: {object_id}'
 
     digest = SavedSearchDigest.objects.filter(is_active=True)
+    digest = filter_by_time(digest)
     for obj in digest:
         try:
             obj.send_email()
@@ -44,15 +61,9 @@ def send_search_digests():
 
     not_digest = SavedSearchDigest.objects.filter(is_active=False)
     for item in not_digest:
-        saved_searches = item.user.savedsearch_set.all()
-        daily = saved_searches.filter(frequency='D', is_active=True)
-        weekly = saved_searches.filter(day_of_week=str(day_of_week),
-                                       is_active=True)
-        monthly = saved_searches.filter(day_of_month=today.day,
-                                        is_active=True)
-
-        saved_search_objs = chain(daily, weekly, monthly)
-        for search_obj in saved_search_objs:
+        saved_searches = item.user.savedsearch_set.filter(is_active=True)
+        saved_searches = filter_by_time(saved_searches)
+        for search_obj in saved_searches:
             try:
                 search_obj.send_email()
             except Exception, e:
