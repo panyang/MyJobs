@@ -6,7 +6,7 @@
     {% load endless %}    
     {% paginate candidates %}    
                        
-        <table id="row-link-table">  
+        <table id="row-link-table">
             {% for candidate in candidates %}                    
             <tr class="hide-mobile" onclick="document.location = '{% url 'candidate_information' %}?company={{ company_id }}&user={{ candidate.user.id }}&anchor={{ forloop.counter }}&page={{ candidates_page }}&before={{ before|date:'m/d/Y' }}&after={{ after|date:'m/d/Y' }}';">
                 <td>

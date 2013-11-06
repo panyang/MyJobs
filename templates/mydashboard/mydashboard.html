@@ -82,7 +82,7 @@ $(document).ready(function()
 <div class="wrapper"> 
     <div class="row" id="profileTitleRow">        
         <div class="span12" id="profileTitleBar">
-            <h1>{{company_name}}</h1>            
+            <h1>{{company_name}}</h1>
         </div>
         <div class="span12" id="profileSubtitleBar">
             &nbsp;
@@ -105,19 +105,22 @@ $(document).ready(function()
                         <input class="btn" type="submit" name="today" id="today" value="Today">&nbsp;<input class="btn" type="submit" name="seven_days" id="seven_days" value="7 Days">&nbsp;<input class="btn" type="submit" name="thirty_days" id="thirty_days" value="30 days">                        
                     </div>
                     <div class="hide-mobile">
-                    <br>
-                    <div class="span3 form-label"><strong>Filter by site:</strong></div> 
-                    <select name="microsite" class="microsite-list btn">
-                        <option value="{{ company_name }}">All</option>                        
-                        {% for url in company_microsites %}
-                            {% ifequal site_name url.url %}
-                            <option value="{{ url.url|cut:'http://' }}" selected="selected">{{ url.url|url_domain }}</option>
-                            {% else %}
-                            <option value="{{ url.url|cut:'http://' }}">{{ url.url|url_domain }}</option>
-                            {% endifequal %}
-                        {% endfor %}
-                    </select>
-                    <br>
+                        <br>
+                        <div class="span3 form-label"><strong>Filter by site:</strong></div>
+                        <select name="microsite" class="microsite-list btn">
+                            <option value="{{ company_name }}">All</option>
+                            {% for url in company_microsites %}
+                                {% ifequal site_name url.url %}
+                                <option value="{{ url.url|cut:'http://' }}" selected="selected">{{ url.url|url_domain }}</option>
+                                {% else %}
+                                <option value="{{ url.url|cut:'http://' }}">{{ url.url|url_domain }}</option>
+                                {% endifequal %}
+                            {% endfor %}
+                        </select>
+                        <br>
+                        <br>
+                        <div class="span3 form-label"><strong>Export:</strong></div>
+                        <a class="btn" href="{% url 'export_candidates' %}?company={{ company_id }}&ex-t=csv">CSV</a>
                     </div>
                     <div class="span2 pull-right primary-btn-padding hide-mobile"><input type="submit" class="btn primary" value="View Activity"></div>
                 </form>

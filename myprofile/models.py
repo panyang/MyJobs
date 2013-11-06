@@ -63,6 +63,86 @@ class ProfileUnits(models.Model):
         return self.content_type.name.title()
 
 
+class Name(ProfileUnits):
+    given_name = models.CharField(max_length=30,
+                                  verbose_name=_("first name"))
+    family_name = models.CharField(max_length=30,
+                                   verbose_name=_("last name"))
+    primary = models.BooleanField(default=False,
+                                  verbose_name=_("Is primary name?"))
+
+    def get_full_name(self):
+        """
+        Returns the first_name plus the last_name, with a space in between.
+        """
+
+        full_name = '%s %s' % (self.given_name, self.family_name)
+        return full_name.strip()
+
+    def save(self, *args, **kwargs):
+        """
+        Custom name save method to ensure only one name object per user
+        has one primary=True. We avoid a race condition by locking the transaction
+        using select_for_update.
+        """
+        duplicate_names = Name.objects.filter(user=self.user,
+                                              given_name=self.given_name,
+                                              family_name=self.family_name)
+        if duplicate_names:
+            if self.primary:
+                if self.id in [name.id for name in duplicate_names]:
+                    self.switch_primary_name()
+                else:
+                    duplicate = duplicate_names[0]
+                    if duplicate.primary is False:
+                        try:
+                            current_primary = Name.objects.select_for_update().get(
+                                primary=True, user=self.user)
+                        except Name.DoesNotExist:
+                            duplicate.primary = True
+                            duplicate.save()
+                        else:
+                            current_primary.primary = False
+                            current_primary.save()
+                            duplicate.primary = True
+                            duplicate.save()
+            elif self.id in [name.id for name in duplicate_names]:
+                super(Name, self).save(*args, **kwargs)
+        else:
+            if self.primary:
+                self.switch_primary_name()
+            else:
+                super(Name, self).save(*args, **kwargs)
+
+    def __unicode__(self):
+        return self.get_full_name()
+
+    def switch_primary_name(self, *args, **kwargs):
+        try:
+            temp = Name.objects.select_for_update().get(primary=True,
+                                                        user=self.user)
+        except Name.DoesNotExist:
+            super(Name, self).save(*args, **kwargs)
+        else:
+            temp.primary = False
+            temp.save()
+            super(Name, self).save(*args, **kwargs)
+
+
+def save_primary(sender, instance, created, **kwargs):
+    user = instance.user
+    if len(Name.objects.filter(user=user)) == 1 and created:
+        try:
+            user.profileunits_set.get(content_type__name="name",
+                                          name__primary=True)
+        except ProfileUnits.DoesNotExist:
+            instance.primary = True
+            instance.save()
+
+
+post_save.connect(save_primary, sender=Name, dispatch_uid="save_primary")
+
+
 class Education(ProfileUnits):
     EDUCATION_LEVEL_CHOICES = (
         ('', _('Education Level')),
@@ -174,86 +254,6 @@ class EmploymentHistory(ProfileUnits):
                                          editable=False)
     onet_code = models.CharField(max_length=255, blank=True, null=True,
                                  editable=False)
-
-
-class Name(ProfileUnits):
-    given_name = models.CharField(max_length=30,
-                                  verbose_name=_("first name"))
-    family_name = models.CharField(max_length=30, 
-                                   verbose_name=_("last name"))
-    primary = models.BooleanField(default=False,
-                                  verbose_name=_("Is primary name?"))
-    
-    def get_full_name(self):
-        """
-        Returns the first_name plus the last_name, with a space in between.
-        """
-
-        full_name = '%s %s' % (self.given_name, self.family_name)
-        return full_name.strip()
-
-    def save(self, *args, **kwargs):
-        """
-        Custom name save method to ensure only one name object per user
-        has one primary=True. We avoid a race condition by locking the transaction
-        using select_for_update.
-        """
-        duplicate_names = Name.objects.filter(user=self.user,
-                                              given_name=self.given_name,
-                                              family_name=self.family_name)
-        if duplicate_names:
-            if self.primary:
-                if self.id in [name.id for name in duplicate_names]:
-                    self.switch_primary_name()
-                else:
-                    duplicate = duplicate_names[0]
-                    if duplicate.primary is False:
-                        try:
-                            current_primary = Name.objects.select_for_update().get(
-                                primary=True, user=self.user)
-                        except Name.DoesNotExist:
-                            duplicate.primary = True
-                            duplicate.save()
-                        else:
-                            current_primary.primary = False
-                            current_primary.save()
-                            duplicate.primary = True
-                            duplicate.save()
-            elif self.id in [name.id for name in duplicate_names]:
-                super(Name, self).save(*args, **kwargs)
-        else:
-            if self.primary:
-                self.switch_primary_name()
-            else:
-                super(Name, self).save(*args, **kwargs)
-
-    def __unicode__(self):
-        return self.get_full_name()
-
-    def switch_primary_name(self, *args, **kwargs):
-        try:
-            temp = Name.objects.select_for_update().get(primary=True,
-                                                        user=self.user)
-        except Name.DoesNotExist:
-            super(Name, self).save(*args, **kwargs)
-        else:
-            temp.primary = False
-            temp.save()
-            super(Name, self).save(*args, **kwargs)
-
-
-def save_primary(sender, instance, created, **kwargs):
-    user = instance.user
-    if len(Name.objects.filter(user=user)) == 1 and created:
-        try:
-            user.profileunits_set.get(content_type__name="name",
-                                          name__primary=True)
-        except ProfileUnits.DoesNotExist:
-            instance.primary = True
-            instance.save()
-
-
-post_save.connect(save_primary, sender=Name, dispatch_uid="save_primary")
 
 
 class SecondaryEmail(ProfileUnits):

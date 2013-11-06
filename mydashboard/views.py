@@ -1,17 +1,21 @@
 import operator
+import csv
+import itertools
 
 from datetime import datetime, timedelta
+from collections import Counter
 
 from django.contrib.auth.decorators import user_passes_test
 from django.db.models import Q
-from django.http import Http404
+from django.http import Http404, HttpResponse
 from django.template import RequestContext
 from django.shortcuts import render_to_response
 
 from mydashboard.helpers import saved_searches
 from mydashboard.models import *
 from myjobs.models import User
-from myprofile.models import PrimaryNameProfileUnitManager
+from myprofile.models import (PrimaryNameProfileUnitManager,
+                              ProfileUnits)
 from mysearches.models import SavedSearch
 from endless_pagination.decorators import page_template
 
@@ -311,3 +315,173 @@ def candidate_information(request):
 
     return render_to_response('mydashboard/candidate_information.html',
                               data_dict, RequestContext(request))
+
+
+def filter_candidates(request):
+    """
+    Some default filtering for company/microsite. This function will
+    be changing with solr docs update and filtering addition.
+    """
+    candidates = []
+    company_id = request.REQUEST.get('company')
+    try:
+        company = Company.objects.get(id=company_id)
+    except Company.DoesNotExist:
+        raise Http404
+    requested_microsite = request.REQUEST.get('microsite', company.name)
+    authorized_microsites = Microsite.objects.filter(company=company.id)
+    # the url value for 'All' in the select box is company name
+    # which then gets replaced with all microsite urls for that company
+    site_name = ''
+    if requested_microsite != company.name:
+        if requested_microsite.find('//') == -1:
+            requested_microsite = '//' + requested_microsite
+        active_microsites = authorized_microsites.filter(
+            url__contains=requested_microsite)
+
+    else:
+        active_microsites = authorized_microsites
+        site_name = company.name
+
+    microsite_urls = [microsite.url for microsite in active_microsites]
+    if not site_name:
+        site_name = microsite_urls[0]
+
+    q_list = [Q(url__contains=ms) for ms in microsite_urls]
+
+    # All searches saved on the employer's company microsites
+    candidate_searches = SavedSearch.objects.select_related('user')
+
+    # Specific microsite searches saved between two dates
+    candidate_searches = candidate_searches.filter(reduce(
+        operator.or_, q_list)).exclude(
+            user__opt_in_employers=False).order_by('-created_on')
+    for search in candidate_searches:
+        candidates.append(search.user)
+    return set(candidates)
+
+
+@user_passes_test(lambda u: User.objects.is_group_member(u, 'Employer'))
+def export_candidates(request):
+    """
+    This function will be handling which export type to execute.
+    Only function accessible through url.
+    """
+    try:
+        if request.GET['ex-t'] == 'csv':
+            candidates = filter_candidates(request)
+            response = export_csv(request, candidates)
+    except:
+        raise Http404
+    return response
+
+
+def export_csv(request, candidates, models_excluded=[], fields_excluded=[]):
+    """
+    Exports comma-separated values file. Function is seperated into two parts:
+    creation of the header, creating user data.
+
+    Header creation uses a tuple and a Counter to determine the max amount
+    of each module type (education, employmenthistory, etc). Then the header
+    is created in the format of [model]_[field_name]_[count] excluding models
+    and or fields in either lists (models_excluded and fields_excluded). The
+    header is always the first line in the csv.
+
+    User data creation iterates through the list of candidates and references
+    the header to determine what model and field to use getattr. Each user has
+    their own line in the csv.
+
+    Inputs:
+    :candidates:        A set list of Users
+    :models_excluded:   List of strings that represents profileunits
+                        content_type model names
+    :fields_excluded:   List of strings that would target specific fields
+
+    Outputs:
+    :response:          Sends a .csv file to the user.
+    """
+    response = HttpResponse(mimetype='text/csv')
+    time = datetime.now().strftime('%m%d%Y')
+    company_id = request.REQUEST.get('company')
+    try:
+        company = Company.objects.get(id=company_id)
+    except Company.DoesNotExist:
+        raise Http404
+    response['Content-Disposition'] = ('attachment; filename=' +
+                                       company.name+"_DE_"+time+'.csv')
+    writer = csv.writer(response)
+    users_units = ProfileUnits.objects.filter(
+        user__in=candidates).select_related('user__id', 'content_type__name')
+
+    # Creating header for CSV
+    headers = ["primary_email"]
+    models = [model for model in
+              ProfileUnits.__subclasses__() if model._meta.module_name
+              not in models_excluded]
+
+    tup = [(x.user.id, x.content_type.name) for x in users_units]
+    tup_counter = Counter(tup)
+    final_count = {}
+    module_names = [x._meta.module_name for x in models]
+    tup_most_common = tup_counter.most_common()
+    for module_name in module_names:
+        for counted_model in tup_most_common:
+            if (counted_model[0][1].replace(" ", "") == unicode(module_name)
+                    and counted_model[0][1].replace(" ", "")
+                    not in final_count):
+                final_count[module_name] = counted_model[1]
+    for model in models:
+        module_count = 0
+        current_count = 1
+        if model._meta.module_name in final_count:
+            module_count = final_count[model._meta.module_name]
+        while current_count <= module_count:
+            models_with_fields = []
+            fields = [field for field in
+                      model._meta.get_all_field_names() if unicode(field) not
+                      in [u'id', u'user', u'profileunits_ptr', u'date_created',
+                      u'date_updated', u'content_type']]
+            for field in fields:
+                if field not in fields_excluded:
+                    ufield = model._meta.module_name + "_" + field + "_" + str(
+                        current_count)
+                else:
+                    continue
+                if ufield:
+                    models_with_fields.append(ufield)
+            headers.extend(models_with_fields)
+            current_count += 1
+    writer.writerow(headers)
+
+    # Making user info rows
+    for user in candidates:
+        grouped_units = {}
+        user_fields = [user.email]
+        units = users_units.filter(user=user)
+        for k, v in itertools.groupby(units, lambda x: x.content_type.name):
+            grouped_units[k.replace(" ", "")] = list(v)
+        if units:
+            for header in headers[1:]:
+                header_split = header.split('_')
+                model = header_split[0]
+                num = header_split[-1]
+                field = "_".join(header_split[1:-1])
+                if model in grouped_units:
+                    try:
+                        pu_instance = grouped_units[model][int(num)-1]
+                        instance = getattr(
+                            pu_instance, pu_instance.content_type.name.replace(
+                                " ", ""))
+                    except IndexError:
+                        instance = None
+
+                value = getattr(instance, field, '')
+                value = unicode(value).encode('utf8')
+                user_fields.append(value)
+        else:
+            for header in headers[1:]:
+                user_fields.append('--')
+        writer.writerow(user_fields)
+
+    return response
+

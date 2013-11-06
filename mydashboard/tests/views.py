@@ -159,3 +159,9 @@ class MyDashboardViewsTests(TestCase):
 
         self.assertFalse(info)
         self.assertEqual(response.status_code, 404)
+
+    def test_export_csv(self):
+        response = self.client.post(
+            reverse('export_candidates')+'?company=' +
+            str(self.company.id)+'&ex-t=csv')
+        self.assertEqual(response.status_code, 200)
