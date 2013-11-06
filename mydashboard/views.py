@@ -361,7 +361,7 @@ def filter_candidates(request):
     return set(candidates)
 
 
-@user_passes_test(lambda u: User.objects.is_group_member(u, 'Employer'))
+#@user_passes_test(lambda u: User.objects.is_group_member(u, 'Employer'))
 def export_candidates(request):
     """
     This function will be handling which export type to execute.
@@ -410,6 +410,7 @@ def export_csv(request, candidates, models_excluded=[], fields_excluded=[]):
     response['Content-Disposition'] = ('attachment; filename=' +
                                        company.name+"_DE_"+time+'.csv')
     writer = csv.writer(response)
+
     users_units = ProfileUnits.objects.filter(
         user__in=candidates).select_related('user__id', 'content_type__name')
 
@@ -475,12 +476,12 @@ def export_csv(request, candidates, models_excluded=[], fields_excluded=[]):
                     except IndexError:
                         instance = None
 
-                value = getattr(instance, field, '')
+                value = getattr(instance, field, u'')
                 value = unicode(value).encode('utf8')
-                user_fields.append(value)
+                user_fields.append('"%s"' % value.replace('\r\n', ''))
         else:
             for header in headers[1:]:
-                user_fields.append('--')
+                user_fields.append('""')
         writer.writerow(user_fields)
 
     return response
