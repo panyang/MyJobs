@@ -361,7 +361,7 @@ def filter_candidates(request):
     return set(candidates)
 
 
-#@user_passes_test(lambda u: User.objects.is_group_member(u, 'Employer'))
+@user_passes_test(lambda u: User.objects.is_group_member(u, 'Employer'))
 def export_candidates(request):
     """
     This function will be handling which export type to execute.
