@@ -39,43 +39,31 @@
         <div class="topbar-inner">
             <div class="wrapper">
                 <div class="row">
-                    <div class="span2" id="logo-block">
+                    <div class="span5" id="logo-block">
                         <a href="http://www.my.jobs/">
                             <h3 id="topbar-logo" class="pull-left">my.jobs</h3>
                         </a>
+
+                        {% get_ms_name as last_name %}
+                        {% if last_name %}
+
+                        <div id="last-microsite">
+                            <a href="{% get_ms_url %}">
+                                <span id="last-microsite-name">
+                                    {{ last_name }}
+                                </span>
+                                <span class="arrow pull-left"></span>
+                            </a>
+                        </div>
+
+                        {% endif %}
+
                     </div>
 
                         {% if user.is_authenticated %}
 
-                        <div class="span8">
-                            <ul class="nav nav-tabs pull-left menu-tabs">
-
-                                {% is_a_group_member user "Employer" as group_member %}
-                                {% get_company_name user as company_name %}
-                                <li class="{% active_tab 'My Profile' %}"><a href="{% url 'view_profile' %}">{% trans "Profile" %}</a></li>
-                                {% if user.is_active %}
-                                    <li class="{% active_tab 'Saved Searches' %}"><a href="{% url 'saved_search_main' %}">{% trans "Saved Searches" %}</a></li>
-                                    {% if group_member and company_name|length >= 1 %}
-                                        <li class="{% active_tab 'Company Dashboard' %}" id="company-dropdown">
-                                            {% if company_name|length == 1 %}
-                                                <a id="candidate-tab" href="{% url 'dashboard' %}?company={{ company_name.0.id }}">{% trans "Candidates" %}</a>
-                                            {% else %}
-                                                <a id="candidate-tab">{% trans "Candidates" %}</a>
-                                                <ul id="company-menu" class="no-show">
-                                                {% for company in company_name %}
-                                                    <li><a id="company-item" href="{% url 'dashboard' %}?company={{ company.id }}">{{ company }}</a></li>
-                                                {% endfor %}
-                                                </ul>
-                                            {% endif %}
-                                            {# /company-menu #}
-                                        </li>
-                                    {% endif %}
-                                {% endif %}
-                                <li><a href="http://www.my.jobs/">{% trans "Search Jobs" %}</a></li>
-                            </ul>{# /nav nav-tabs pull-left menu-tabs #}
-                        </div>{# /span8 #}
-                        <div class="pull-right">
-                            <div class="menu-bar span2 pagination-right">
+                        <div class="pull-right span7">
+                            <div class="menu-bar pagination-right pull-right">
                                 <ul id="nav" class="pull-right">
                                     <li>
                                         <a href="" class="main-nav">
@@ -88,45 +76,70 @@
                                                 <b>
 
                                                     {% with short_email=user.email|truncatechars:"20" %}
-                                                        {% with name_obj=user|get_name_obj:short_email %}
-                                                            {{ name_obj }}
-                                                        {% endwith %}
+                                                    {% with name_obj=user|get_name_obj:short_email %}
+                                                    {{ name_obj }}
+                                                    {% endwith %}
                                                     {% endwith %}
 
                                                 </b>
                                             </li>
                                             <li id="back-btn-li" class="no-show"><a id="back-btn"><span class="arrow-left"></span></a></li>
                                             {% if not user.is_disabled %}
-                                                <li><a id="profile-link" href="{% url 'view_profile' %}">{% trans "Profile" %}</a></li>
-                                                {% if user.is_active %}
-                                                    <li><a id="savedsearch-link" href="{% url 'saved_search_main' %}">{% trans "Saved Searches" %}</a></li>
-                                                        {% if group_member and user.is_active and company_name|length == 1  %}
-                                                            <li><a id="candidate-link-one" href="{% url 'dashboard' %}?company={{ company_name.0.id }}">{% trans "Candidates" %}</a></li>
-                                                        {% elif group_member and user.is_active and company_name|length >= 2 %}
-                                                            <li><a id="candidate-link">{% trans "Candidates" %}</a></li>
-                                                        {% endif %}
-                                                {% endif %}
-                                                <li><a id="account-link" href="{% url 'edit_account' %}">{% trans "Account Settings" %}</a></li>
-                                                <li><a id="settings-link">{% trans "Settings" %}</a></li>
+                                            <li><a id="profile-link" href="{% url 'view_profile' %}">{% trans "Profile" %}</a></li>
+                                            {% if user.is_active %}
+                                            <li><a id="savedsearch-link" href="{% url 'saved_search_main' %}">{% trans "Saved Searches" %}</a></li>
+                                            {% if group_member and user.is_active and company_name|length == 1  %}
+                                            <li><a id="candidate-link-one" href="{% url 'dashboard' %}?company={{ company_name.0.id }}">{% trans "Candidates" %}</a></li>
+                                            {% elif group_member and user.is_active and company_name|length >= 2 %}
+                                            <li><a id="candidate-link">{% trans "Candidates" %}</a></li>
+                                            {% endif %}
+                                            {% endif %}
+                                            <li><a id="account-link" href="{% url 'edit_account' %}">{% trans "Account Settings" %}</a></li>
+                                            <li><a id="settings-link">{% trans "Settings" %}</a></li>
                                             {% endif %}
                                             <li><a id="logout-link" href="{% url 'auth_logout' %}">Log Out</a></li>
                                             {% for company in company_name %}
-                                                <li><a class="company-nav-item sub-nav-item no-show" href="{% url 'dashboard' %}?company={{ company.id }}">{{ company|truncatechars:"20" }}</a></li>
+                                            <li><a class="company-nav-item sub-nav-item no-show" href="{% url 'dashboard' %}?company={{ company.id }}">{{ company|truncatechars:"20" }}</a></li>
                                             {% endfor %}
                                             <li><a class="settings-nav-item sub-nav-item no-show" href="{% url 'edit_account' %}">{% trans "Account Settings" %}</a></li>
                                             <li><a class="settings-nav-item sub-nav-item no-show" href="{% url 'auth_logout' %}">Log Out</a></li>
                                         </ul>{# /pop-menu #}
                                     </li>
                                 </ul>{# /nav #}
-                            </div>{# /menu-bar span2 pagination-right #}
-                        </div>{# /pull-right #}
+                            </div>{# /menu-bar pagination-right pull-right #}
+                            <ul class="nav nav-tabs pull-right menu-tabs">
+
+                                {% is_a_group_member user "Employer" as group_member %}
+                                {% get_company_name user as company_name %}
+                                <li class="{% active_tab 'My Profile' %}"><a href="{% url 'view_profile' %}">{% trans "Profile" %}</a></li>
+                                {% if user.is_active %}
+                                <li class="{% active_tab 'Saved Searches' %}"><a href="{% url 'saved_search_main' %}">{% trans "Saved Searches" %}</a></li>
+                                {% if group_member and company_name|length >= 1 %}
+                                <li class="{% active_tab 'Company Dashboard' %}" id="company-dropdown">
+                                    {% if company_name|length == 1 %}
+                                    <a id="candidate-tab" href="{% url 'dashboard' %}?company={{ company_name.0.id }}">{% trans "Candidates" %}</a>
+                                    {% else %}
+                                    <a id="candidate-tab">{% trans "Candidates" %}</a>
+                                    <ul id="company-menu" class="no-show">
+                                        {% for company in company_name %}
+                                        <li><a id="company-item" href="{% url 'dashboard' %}?company={{ company.id }}">{{ company }}</a></li>
+                                        {% endfor %}
+                                    </ul>
+                                    {% endif %}
+                                    {# /company-menu #}
+                                </li>
+                                {% endif %}
+                                {% endif %}
+                                <li><a href="{% get_ms_url %}">{% trans "Search Jobs" %}</a></li>
+                            </ul>{# /nav nav-tabs pull-right menu-tabs #}
+                        </div>{# /pull-right span7 #}
 
                         {% else %}
-                        <div class="span8">
-                            <ul class="nav nav-tabs pull-left menu-tabs">
-                                <li><a href="http://www.my.jobs/">{% trans "Search Jobs" %}</a></li>
+                        <div class="pull-right span7">
+                            <ul class="nav nav-tabs pull-right menu-tabs">
+                                <li><a href="{% get_ms_url %}">{% trans "Search Jobs" %}</a></li>
                             </ul>{# /nav nav-tabs pull-left menu-tabs #}
-                        </div>{# /span8 #}
+                        </div>{# /span7 #}
                         <div class="span10 pagination-right" id="topbar-login">
                             {% block topbarlogin %}
                             <ul id="nav" class="navbar pull-right">

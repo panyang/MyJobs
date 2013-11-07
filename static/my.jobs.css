@@ -415,7 +415,7 @@ ul.ui-autocomplete {
 
 .topbar input {
     width: 100px;
-    margin-right: 10px;  
+    margin-right: 10px;
 }
 
 .topbar input.text {
@@ -431,7 +431,8 @@ ul.ui-autocomplete {
     border-bottom: 0 solid #444;
 }
 
-.topbar .menu-tabs a {
+.topbar .menu-tabs a,
+.topbar #last-microsite-name {
     border: 1px solid transparent !important;
     background-color: transparent;
     color: #FFF;
@@ -439,6 +440,10 @@ ul.ui-autocomplete {
     text-decoration: none;
     padding-top: 4px !important;
     padding-bottom: 5px !important;
+}
+
+.topbar #last-microsite-name {
+    margin-left: 10px;
 }
 
 .topbar .menu-tabs a:hover {
@@ -907,7 +912,7 @@ em.pendingText {
     width: 275px;
 }
 
-.topbar #nav .arrow {
+.topbar .arrow {
     float: right;
     display: block;
     width: 0;
@@ -927,6 +932,18 @@ em.pendingText {
     position: relative;
     left: 2px;
     top: 2px;
+}
+
+.topbar #last-microsite .arrow {
+    float: left;
+    margin-left: 2px;
+    border-right: 0px;
+    border-left: 6px solid #fff;
+}
+
+.topbar #last-microsite {
+    float: left;
+    margin-top: 5px;
 }
 
 #pop-menu li {

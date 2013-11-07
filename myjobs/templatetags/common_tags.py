@@ -139,3 +139,26 @@ def get_messages(user):
     """
 
     return user.messages_unread()
+
+@register.assignment_tag(takes_context=True)
+def get_ms_name(context):
+    """
+    Gets the site name for the user's last-visited microsite, if one exists
+    """
+    request = context.get('request')
+    cookie = request.COOKIES.get('lastmicrositename')
+    if cookie and len(cookie) > 33:
+        cookie = cookie[:30] + '...'
+    return cookie
+
+@register.simple_tag(takes_context=True)
+def get_ms_url(context):
+    """
+    Gets the url for the user's last-visited microsite from a cookie,
+    or www.my.jobs if that cookie does not exist.
+    """
+    request = context.get('request')
+    cookie = request.COOKIES.get('lastmicrosite')
+    if cookie:
+        return cookie
+    return 'http://www.my.jobs'

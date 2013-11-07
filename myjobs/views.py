@@ -5,6 +5,7 @@ import hmac
 import json
 import logging
 import urllib2
+from urlparse import urlparse
 
 from django.contrib.auth import authenticate, logout
 from django.contrib.sessions.models import Session
@@ -491,4 +492,19 @@ def toolbar(request):
                 "employer": employer}
     callback = request.GET.get('callback', '')
     response = '%s(%s);' % (callback, json.dumps(data))
-    return HttpResponse(response, content_type="text/javascript")
+    response = HttpResponse(response, content_type="text/javascript")
+    referer = request.META.get('HTTP_REFERER', '')
+    referer = urlparse(referer)
+    if referer.netloc.endswith('.jobs') and referer.netloc != 'www.my.jobs':
+        max_age = 30 * 24 * 60 * 60
+        last_name = request.REQUEST.get('site_name', referer.netloc)
+        print last_name
+        response.set_cookie(key='lastmicrosite',
+                            value='%s://%s' % (referer.scheme, referer.netloc),
+                            max_age=max_age,
+                            domain='.my.jobs')
+        response.set_cookie(key='lastmicrositename',
+                            value=last_name,
+                            max_age=max_age,
+                            domain='.my.jobs')
+    return response
